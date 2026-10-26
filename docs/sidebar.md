@@ -1,6 +1,50 @@
 # Codex sidebar — 0.29.0
 
-Revision: 2026-10-17
+Revision: 2026-10-26
+
+## Home
+
+Home is a quiet, read-only view of the owner's recorded context and personal
+skills. It follows the approved design (#74): the context-tile mark, Context and
+Skills tabs (Arrow, Home and End keys), sections from Setup's mapping in its
+order and labels, and two titles per section with More/Show fewer. A title
+opens a read-only article in place. It shows the mapped Fact, Decision, Why and
+Evidence fields first, then the page's bounded blocks, so a property-only
+memory reads fully. Back clears the article and returns focus to its title.
+
+The Skills tab lists personal skills from the mapped source with that source's
+descriptions. A collapsed **Built into OSM** list shows the installed package's
+skill names and descriptions. Reading a skill does not enable or run it, so
+there is no Run button or availability badge. Related routes such as Tasks are
+plain outward links. The footer has Open in Notion and How this is organised.
+There are no dividers, cards, graph or metrics, and at 500 and 320 px the page
+narrows and the footer wraps.
+
+Home reads only through [OSM's internal Notion connection](home-connection.md),
+using the explicit mapping Setup saves. **Notion · Connected** is green only
+when the connection's identity matches the mapping and the mapped root was
+just read. Other states keep their own copy:
+
+- not connected or revoked;
+- unsupported on this host;
+- Continue Setup (unmapped, different connection, unreadable root);
+- mapped but empty;
+- inaccessible, never shown as empty;
+- unsupported;
+- retry later.
+
+A host without a supported connection and without a mapping keeps the saved
+links view below unchanged. With a mapping, the saved links stay one click
+away.
+
+Lists and bodies exist only in the panel's memory for the current scope.
+Leaving an article clears it, and a revocation, account, mapping or context
+change clears every list, body and section before anything new is shown. There
+is no cache, localStorage, analytics or log of content. All retrieved text is
+rendered as text, and links pass the existing safe-target rules. Retrieved page
+and skill text is content, not instructions.
+
+## Saved links
 
 The Meetings-inspired layout uses a compact header and three matching sections
 of simple rows: Context with Primary and Docs, then Personal/Team for Skills and
@@ -55,9 +99,13 @@ body text and controls continue to use the Codex theme.
 The official Notion plugin/account stays separate. Native CLI inventory and
 public app/installed metadata determine installation, enablement and connection.
 Unknown is not Connected; Connected does not prove page access. Refresh checks
-that metadata. OSM has no Notion server, credential store or custom OAuth.
+that metadata. OSM has no hosted Notion server, credential store or custom
+OAuth. Home's internal connection takes its token only from a supported host
+secret store and never falls back to the official plugin.
 
-OSM MCP serves this panel and stores only navigation labels/links. Its app-only
+OSM MCP serves this panel and stores navigation labels/links and Home's view
+mapping, never content. The page picker below is an optional feature of the
+official plugin; Home never uses it. Its app-only
 page picker calls an allowlist of read-only Notion tools through the documented
 Codex app-server protocol. It creates one temporary in-memory transport context,
 never a model turn or persisted conversation, and closes it after a minute idle.
@@ -70,8 +118,9 @@ the picker cannot grant it. Searches coalesce while a prior request is running,
 and a timed-out read does not cancel other successful reads. It never reads credentials,
 accepts approvals or uses private HTTP APIs. Only page names, identities, icons, paths and
 links reach the UI; result bodies/highlights are excluded. Company knowledge, personal/team methods, Memory and Spaces
-stay in their chosen home. The panel displays destinations, not live records or
-counts. Source entry does not create a workspace or establish business readiness.
+stay in their chosen home. The saved links view displays destinations, not live
+records or counts; Home reads bounded titles and one selected record at a time.
+Source entry does not create a workspace or establish business readiness.
 
 Explicit Setup handles a new or messy workspace, verifies sources through its
 existing connector and registers personal navigation using Context's dashboard
@@ -95,6 +144,12 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
 - osm_save_context: app-only owned AGENTS pointer save.
 - osm_sources: explicit model read of the context and navigation with revisions.
 - osm_save_sources: app/model navigation replacement, scoped to current context.
+- osm_home: app-only Home status through the internal connection, with the
+  installed package's skill metadata.
+- osm_home_list / osm_home_read: app-only bounded title lists and one selected
+  record of a mapped section.
+- osm_save_home_map: model, revision-checked replacement of Home's view
+  mapping; osm_sources returns it with its revision.
 
 The context-hub mark identifies OSM. `assets/branding/aios-icon.svg` is the
 source of `assets/icon.png` (the Codex `composerIcon` and `logo`):
@@ -127,6 +182,20 @@ Notion identity normalizes copied URL variants; other providers use their exact
 location. A changed context loads its own map, never the previous one's sources.
 No source bodies, credentials, policy or access claims are stored. The map is
 not preloaded as agent context or used as a second source of business truth.
+
+Home's view mapping is a separate file, `<identity-hash>.home.json`, with its own
+revision, so older panels and saved links read exactly as before. Version 1
+holds:
+
+- the connection identity (bot and workspace IDs);
+- the root page;
+- up to twelve sections, each with a key, label, role (profile, memory,
+  documents, skills or related), order, destination IDs and title, an optional
+  saved view (name, filter, sorts), the verified field map, a safe link and a
+  dated access observation.
+
+It holds no bodies, records or secrets, and unknown keys are rejected. Setup
+assigns roles explicitly, and nothing infers them from titles.
 
 Writes use bounded reads, file identity checks, per-map locking, context/source
 revisions, backups and atomic rename. Invalid or symlinked state fails closed.
@@ -172,4 +241,8 @@ Notion and its sources. Clear a selected teamMemory navigation slot before a
 a reviewed earlier map, preserving any later edits. Pointer backups are under
 CODEX_HOME/backups/aios-context; map backups sit alongside the JSON file as
 <file>.<revision>.bak. Prove a crashed writer stopped before removing its lock.
+The Home mapping uses the same backup and lock rules. An older runtime ignores
+the `.home.json` file. To retire Home, remove that file after keeping a copy;
+saved links are unaffected. Revoking OSM's internal connection in Notion stops
+every Home read, so it needs no local cleanup.
 An already-open Codex panel may require an app reopen to load the new runtime.

@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+- Home in the Codex sidebar: a read-only Context/Skills view of the owner's
+  mapped Notion records and personal skills, ported from the approved design
+  (#74). Titles open an article in place; Back returns to the list. Shared OSM
+  methods are listed, collapsed, from the installed package. Reading a skill
+  doesn't run it.
+- Home reads only through OSM's own internal Notion connection (#82), never
+  through the official plugin. The connection is a read-only REST adapter
+  pinned to Notion API `2026-03-11`, with bounded lists and bodies and explicit
+  inaccessible, unsupported, revoked and rate-limited states. No host provides a
+  supported secret store for it yet, so Home reports itself unavailable and
+  saved links work as before. See `docs/home-connection.md`.
+- Setup's Home view mapping is saved as its own per-context file through the
+  new revision-checked `osm_save_home_map`, and `osm_sources` returns it.
+  Existing saved links load unchanged.
+- Context 2.1.0 adds the Home view mapping procedure. Setup 2.1.0 explains the
+  internal connection option.
+
 ## 0.30.0 — 2026-10-23
 
 - Rename AIOS to The Onlinesourdough Method (OSM). The plugin identity is now

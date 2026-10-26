@@ -1,6 +1,6 @@
 # Ownership
 
-Revision: 2026-10-11
+Revision: 2026-10-26
 
 | Responsibility | Owner and canonical truth |
 | --- | --- |
@@ -21,6 +21,7 @@ Revision: 2026-10-11
 | Customer or externally owned documentation | Its source system; OSM may retain only a scoped pointer and freshness boundary |
 | Native installation, connections, and cutover | Authorized client or lead using native controls and readback |
 | Codex sidebar source and bundled runtime | `apps/sidebar` and reproducible `runtime/sidebar` in this repository; Codex owns launch, account access and UI placement |
+| Home reader and OSM's internal Notion connection | The sidebar reads; Setup writes the view mapping; Notion grants define what is readable; the host's documented secret store owns the token (none supported yet, see [Home connection](home-connection.md)); native grant and revocation proof stays with approved native holders |
 | Projects and optional specialists | Their own working files, deliverables, dependencies, proof and recovery; Git and native project controls are selected when useful, without mandatory OSM registration |
 | Software engineering foundation (setup, checks, CI/delivery, engineering documents) | A separately selected method such as [Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation); the project owns the resulting files. OSM neither ships, installs nor depends on it |
 | Design and content methods and helpers | Built-in domain skills; project files remain owned by the project. Design owns semantic direction and the selected companion; existing tokens/components/code own implementation truth. Review Design checks actual selected proof; Human Writing and Write Code retain prose and implementation responsibilities |

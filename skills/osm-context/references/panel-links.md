@@ -25,6 +25,30 @@ After authorized personal onboarding or a requested source-route change:
    A revision conflict requires fresh inspection, not a blind retry. Do not
    hand-edit plugin caches or the navigation files to bypass these tools.
 
+## Home view mapping
+
+Home is a read-only Context/Skills view that reads through OSM's own internal
+Notion connection, never the official plugin. Save its mapping only when
+`osm_home` reports a verified connection, and never ask for a token in chat.
+On a host reporting `unsupported_host`, leave the mapping unsaved and say Home is
+unavailable there; saved links keep working.
+
+1. Use the model's actual routes. For each section record a short `key`, the
+   owner's display `label`, an explicit `role` (`profile`, `memory`,
+   `documents`, `skills` or `related`) and `order`. Never infer a role from a
+   title or force the owner's model into fixed names.
+2. Destinations are real IDs: a data source with a verified field map (`title`;
+   optional `description`; for memory `fact`, `decision`, `why`, `evidence`),
+   up to six named pages, or for `related` only a link. Map only fields that
+   exist; omit what is missing. Add an existing saved filter or sort only when
+   the model names it.
+3. Record the connection identity and dated `observed` access per readable
+   section. A linked external database needs its own grant; record it as
+   `inaccessible` rather than claiming the root covers it.
+4. Call `osm_save_home_map` with the context target, `expectedContextRevision`
+   and `home.revision` from `osm_sources`; read back. No bodies, records,
+   generated descriptions or secrets.
+
 If the panel tools are unavailable, the verified context home still works.
 Report the missing panel registration; do not claim that a fresh install has
 loaded new tools. Reopen Codex when its old runtime is still active.
