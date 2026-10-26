@@ -14,9 +14,10 @@ rollback to the reviewed 0.20.0 tag removes this Codex runtime and keeps the
 existing home and pointer. Preserve any later customer edits. See
 [sidebar boundaries](sidebar.md).
 
-Home's view mapping is a separate per-context file beside the links, with the
+Home's projection is a separate per-context file beside the links, with the
 same backups, and older runtimes ignore it. If Home shows the wrong sources,
-rerun Setup to save a corrected mapping; never hand-edit it. To stop Home
+correct the AI Operating Model definition and let Setup regenerate the
+projection from its new revision; never hand-edit it. To stop Home
 reading, revoke OSM's internal connection in Notion. Never copy a token to
 repair it. See [Home connection](home-connection.md).
 

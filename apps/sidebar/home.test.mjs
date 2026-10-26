@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createNotionClient, notionVersion, readBlocks, readLimits } from './notion-internal.mjs';
 import { createHomeService, hostCredential, readBuiltinSkills } from './home-service.mjs';
-import { normalizeHomeMap, readHomeMap, saveHomeMap } from './home-map.mjs';
+import { normalizeProjection, readHomeProjection, saveHomeProjection, projectionFormat } from './home-map.mjs';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources } from './sources.mjs';
 
@@ -15,7 +15,7 @@ const credentialA = 'placeholder-credential-for-tests-only';
 const hex = n => n.toString(16).padStart(32, '0');
 const ids = { bot: hex(0xb01), botB: hex(0xb02), ws: hex(0xa01), wsB: hex(0xa02), root: hex(1), about: hex(2), ways: hex(3),
   memoryDb: hex(4), memory: hex(5), skillsDb: hex(6), skills: hex(7), docsDb: hex(8), docs: hex(9), outside: hex(10),
-  sharedOuter: hex(11), childPage: hex(12), childDb: hex(13), deep: hex(14) };
+  sharedOuter: hex(11), childPage: hex(12), childDb: hex(13), deep: hex(14), definition: hex(15), rules: hex(16), snapshot: hex(17), evidence: hex(18) };
 const dashed = id => `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
 const rich = text => [{ type: 'text', plain_text: text, text: { content: text } }];
 const titled = text => ({ Name: { type: 'title', title: rich(text) } });
@@ -121,7 +121,10 @@ function fakeNotion() {
 const at = '2026-10-26T12:00:00.000Z';
 const seen = { at, access: 'readable', capabilities: ['read_content'] };
 const notionLink = id => `https://www.notion.so/${id}`;
-const studioMap = () => ({
+// A fictional projection in OSM's product format, generated from a fictional definition.
+const studioProjection = () => ({
+  definition: { id: ids.definition, title: 'Fictional AI Operating Model', revision: 'fictional-r1', generatedAt: at },
+  selectedMode: 'internal_selected_pages',
   connection: { kind: 'notion-internal', botId: ids.bot, workspaceId: ids.ws, workspaceName: 'Fictional workspace' },
   root: { id: ids.root, title: 'Fictional Studio OSM', link: notionLink(ids.root), observed: seen },
   sections: [
@@ -139,8 +142,8 @@ const studioMap = () => ({
   ],
 });
 // OSM holds credential A; the fake revokes it by accepting a different one.
-function service(fake, map = studioMap(), revision = 'r1', credential = () => ({ state: 'available', token: credentialA })) {
-  return createHomeService({ credential, transport: fake.transport, readMap: async () => map ? { state: 'saved', revision, map: normalizeHomeMap(map) } : { state: 'missing' } });
+function service(fake, map = studioProjection(), revision = 'r1', credential = () => ({ state: 'available', token: credentialA })) {
+  return createHomeService({ credential, transport: fake.transport, readProjection: async () => map ? { state: 'saved', revision, projection: normalizeProjection(map) } : { state: 'missing' } });
 }
 const reveals = (value, ...needles) => needles.some(needle => JSON.stringify(value).includes(needle));
 
@@ -209,34 +212,34 @@ test('revocation, a changed account and a changed mapping are reported, with no 
   for (const result of [await home.status(), await home.list({ key: 'memory' }), await home.read({ key: 'about', id: ids.about })]) {
     assert.equal(result.state, 'not_connected'); assert.equal(result.items ?? result.record ?? result.sections, undefined);
   }
-  home = service(fake, studioMap(), 'r1', () => ({ state: 'available', token: 'placeholder-credential-rotated' }));
+  home = service(fake, studioProjection(), 'r1', () => ({ state: 'available', token: 'placeholder-credential-rotated' }));
   fake.state.bot = ids.botB;
   assert.equal((await home.status()).state, 'account_changed');
   assert.equal((await home.read({ key: 'about', id: ids.about })).record, undefined);
   fake.state.bot = ids.bot;
-  const rescoped = await service(fake, studioMap(), 'r2', () => ({ state: 'available', token: 'placeholder-credential-rotated' })).status();
+  const rescoped = await service(fake, studioProjection(), 'r2', () => ({ state: 'available', token: 'placeholder-credential-rotated' })).status();
   assert.equal(rescoped.state, 'ready'); assert.notEqual(rescoped.scope, ready.scope);
   // Removing the root grant makes Home unreadable even with the right identity.
   fake.state.grants.clear();
-  assert.equal((await service(fake, studioMap(), 'r2', () => ({ state: 'available', token: 'placeholder-credential-rotated' })).status()).state, 'root_inaccessible');
+  assert.equal((await service(fake, studioProjection(), 'r2', () => ({ state: 'available', token: 'placeholder-credential-rotated' })).status()).state, 'root_inaccessible');
 });
 
 test('this release declares no host secret mechanism, so no request is made', async () => {
   const fake = fakeNotion();
   assert.deepEqual(hostCredential(), { state: 'unsupported_host' });
-  const home = createHomeService({ transport: fake.transport, readMap: async () => ({ state: 'saved', revision: 'r', map: normalizeHomeMap(studioMap()) }) });
+  const home = createHomeService({ transport: fake.transport, readProjection: async () => ({ state: 'saved', revision: 'r', projection: normalizeProjection(studioProjection()) }) });
   assert.equal((await home.status()).state, 'unsupported_host');
   assert.equal((await home.list({ key: 'memory' })).state, 'unsupported_host');
   assert.equal(fake.requests.length, 0);
-  const missing = createHomeService({ credential: () => ({ state: 'missing' }), transport: fake.transport, readMap: async () => ({ state: 'missing' }) });
+  const missing = createHomeService({ credential: () => ({ state: 'missing' }), transport: fake.transport, readProjection: async () => ({ state: 'missing' }) });
   assert.equal((await missing.status()).state, 'not_connected');
-  const unmapped = createHomeService({ credential: () => ({ state: 'available', token: credentialA }), transport: fake.transport, readMap: async () => ({ state: 'missing' }) });
+  const unmapped = createHomeService({ credential: () => ({ state: 'available', token: credentialA }), transport: fake.transport, readProjection: async () => ({ state: 'missing' }) });
   const status = await unmapped.status();
   assert.equal(status.state, 'unmapped'); assert.equal(status.sections, undefined);
 });
 
 test('a second company model keeps its own section names and order', async () => {
-  const fake = fakeNotion(), map = studioMap();
+  const fake = fakeNotion(), map = studioProjection();
   map.sections = [
     { ...map.sections[3], key: 'playbooks', label: 'Playbooks', order: 9 },
     { ...map.sections[1], key: 'decisions', label: 'Decisions', order: 2 },
@@ -293,7 +296,7 @@ test('a rate limit returns once with a bounded wait; transport errors never echo
   assert.deepEqual(limited, { state: 'rate_limited', retryAfter: 60 });
   assert.equal(fake.requests.length - before, 1);
   const leaky = createHomeService({ credential: () => ({ state: 'available', token: credentialA }),
-    transport: async ({ headers }) => { throw new Error(`connect failed with ${headers.Authorization}`); }, readMap: async () => ({ state: 'missing' }) });
+    transport: async ({ headers }) => { throw new Error(`connect failed with ${headers.Authorization}`); }, readProjection: async () => ({ state: 'missing' }) });
   const outcome = await leaky.status();
   assert.equal(outcome.state, 'unavailable');
   assert.equal(reveals(outcome, credentialA), false);
@@ -307,9 +310,9 @@ test('the credential is absent from every result, error and saved mapping', asyn
   await client.page(ids.outside).catch(error => outputs.push({ message: error.message, state: error.state, stack: error.stack }));
   for (const value of outputs) assert.equal(reveals(value, credentialA), false);
   const { options, args } = await contextFixture(t);
-  await saveHomeMap({ ...args, map: studioMap() }, options);
+  await saveHomeProjection({ ...args, projection: studioProjection() }, options);
   for (const name of await readdir(join(options.codexHome, 'aios/panel'))) assert.equal((await readFile(join(options.codexHome, 'aios/panel', name), 'utf8')).includes(credentialA), false);
-  assert.throws(() => normalizeHomeMap({ ...studioMap(), connection: { ...studioMap().connection, token: credentialA } }), /connection/);
+  assert.throws(() => normalizeProjection({ ...studioProjection(), connection: { ...studioProjection().connection, token: credentialA } }), /connection/);
 });
 
 test('blocks are read from the selected page only', async () => {
@@ -325,7 +328,7 @@ async function contextFixture(t) {
   const codexHome = await mkdtemp(join(tmpdir(), 'osm-home-test-')); t.after(() => rm(codexHome, { recursive: true, force: true }));
   const options = { codexHome, bridge };
   const route = await saveContextRoute({ target: context, expectedRevision: (await readContextRoute(options)).revision }, options);
-  const home = await readHomeMap(context, options);
+  const home = await readHomeProjection(context, options);
   return { options, route, args: { target: context, expectedContextRevision: route.revision, expectedRevision: home.revision } };
 }
 
@@ -333,12 +336,12 @@ test('the Home mapping is a separate revisioned file; saved links keep loading u
   const { options, route, args } = await contextFixture(t);
   const links = { memory: { title: 'Decisions', target: 'https://example.com/memory' } };
   const sources = await saveSources({ target: context, expectedContextRevision: route.revision, expectedRevision: (await readSources(context, options)).revision, title: 'Our OSM', links }, options);
-  assert.equal((await readHomeMap(context, options)).state, 'missing');
-  const saved = await saveHomeMap({ ...args, map: studioMap() }, options);
-  assert.equal(saved.state, 'saved'); assert.equal(saved.map.sections.length, 5);
+  assert.equal((await readHomeProjection(context, options)).state, 'missing');
+  const saved = await saveHomeProjection({ ...args, projection: studioProjection() }, options);
+  assert.equal(saved.state, 'saved'); assert.equal(saved.projection.sections.length, 5);
   assert.deepEqual(await readSources(context, options), sources);
-  assert.deepEqual(await saveHomeMap({ ...args, expectedRevision: saved.revision, map: studioMap() }, options), saved);
-  await assert.rejects(saveHomeMap({ ...args, map: studioMap() }, options), /changed/);
+  assert.deepEqual(await saveHomeProjection({ ...args, expectedRevision: saved.revision, projection: studioProjection() }, options), saved);
+  await assert.rejects(saveHomeProjection({ ...args, projection: studioProjection() }, options), /changed/);
   const names = await readdir(join(options.codexHome, 'aios/panel'));
   assert.equal(names.filter(name => name.endsWith('.home.json')).length, 1); assert.equal(names.filter(name => name.endsWith('.json')).length, 2);
   const file = JSON.parse(await readFile(join(options.codexHome, 'aios/panel', names.find(name => name.endsWith('.home.json'))), 'utf8'));
@@ -346,7 +349,7 @@ test('the Home mapping is a separate revisioned file; saved links keep loading u
 });
 
 test('the mapping rejects bodies, secrets, inferred roles, unsafe links and unbounded input', async () => {
-  const base = studioMap();
+  const base = studioProjection();
   const variants = [
     map => { map.sections[1].body = 'Lead with a fixed-scope project.'; },
     map => { map.token = 'x'; },
@@ -356,22 +359,22 @@ test('the mapping rejects bodies, secrets, inferred roles, unsafe links and unbo
     map => { map.root.link = '/Users/fictional/notes'; },
     map => { map.sections[1].fields.title = undefined; },
     map => { map.sections[1].fields.summary = 'Summary'; },
-    map => { map.sections = Array.from({ length: 13 }, (_, n) => ({ ...base.sections[4], key: `s${n}` })); },
+    map => { map.sections = Array.from({ length: 17 }, (_, n) => ({ ...base.sections[4], key: `s${n}` })); },
     map => { map.sections[1].view.filter = { or: Array.from({ length: 400 }, () => ({ property: 'Name', rich_text: { contains: 'x' } })) }; },
     map => { map.sections[1].observed.at = 'yesterday'; },
     map => { map.sections[4].view = { name: 'All' }; },
     map => { map.sections[0].key = 'About'; },
   ];
-  for (const change of variants) { const map = structuredClone(base); change(map); assert.throws(() => normalizeHomeMap(map), /Invalid Home mapping/); }
-  assert.equal(normalizeHomeMap(base).sections[4].observed, undefined);
+  for (const change of variants) { const map = structuredClone(base); change(map); assert.throws(() => normalizeProjection(map), /Invalid Home projection/); }
+  assert.equal(normalizeProjection(base).sections[4].observed, undefined);
 });
 
 test('a changed context cannot reuse or overwrite another context mapping', async t => {
   const { options, route, args } = await contextFixture(t);
-  await saveHomeMap({ ...args, map: studioMap() }, options);
+  await saveHomeProjection({ ...args, projection: studioProjection() }, options);
   await saveContextRoute({ target: 'https://example.com/client', expectedRevision: route.revision }, options);
-  assert.equal((await readHomeMap('https://example.com/client', options)).state, 'missing');
-  await assert.rejects(saveHomeMap({ ...args, map: studioMap() }, options), /context changed/);
+  assert.equal((await readHomeProjection('https://example.com/client', options)).state, 'missing');
+  await assert.rejects(saveHomeProjection({ ...args, projection: studioProjection() }, options), /context changed/);
 });
 
 test('built-in methods come from the installed package skill metadata', async () => {
@@ -379,4 +382,129 @@ test('built-in methods come from the installed package skill metadata', async ()
   assert.ok(skills.length >= 20);
   const setup = skills.find(skill => skill.name === 'osm-setup');
   assert.match(setup.description, /^Set up, resume or move OSM/);
+});
+
+// Contract delta 1: one definition, explicit mode, support material, schema honesty, read counts.
+test('the projection is replaced only by a new definition revision and refused without one', async t => {
+  const { options, args } = await contextFixture(t);
+  const first = await saveHomeProjection({ ...args, projection: studioProjection() }, options);
+  const file = name => readFile(join(options.codexHome, 'aios/panel', name), 'utf8');
+  const name = (await readdir(join(options.codexHome, 'aios/panel'))).find(item => item.endsWith('.home.json'));
+  const saved = JSON.parse(await file(name));
+  assert.equal(saved.format, projectionFormat); assert.equal(saved.projection.definition.revision, 'fictional-r1');
+  console.log(`PROJECTION_BYTES ${Buffer.byteLength(await file(name))}`);
+  // Regenerating the same revision later is a no-op; editing it under that revision is refused.
+  const regenerated = studioProjection(); regenerated.definition.generatedAt = '2026-10-26T13:00:00.000Z';
+  assert.deepEqual(await saveHomeProjection({ ...args, expectedRevision: first.revision, projection: regenerated }, options), first);
+  const edited = studioProjection(); edited.sections[1].label = 'Edited by hand';
+  await assert.rejects(saveHomeProjection({ ...args, expectedRevision: first.revision, projection: edited }, options), /new definition revision/);
+  const next = studioProjection(); next.definition.revision = 'fictional-r2'; next.sections = next.sections.slice(1);
+  const replaced = await saveHomeProjection({ ...args, expectedRevision: first.revision, projection: next }, options);
+  assert.equal(replaced.projection.definition.revision, 'fictional-r2'); assert.equal(replaced.projection.sections.some(item => item.key === 'about'), false);
+  for (const change of [p => { delete p.definition.revision; }, p => { p.definition.revision = ''; }, p => { delete p.definition; }, p => { delete p.selectedMode; },
+    p => { p.selectedMode = 'automatic'; }, p => { p.definition.generatedAt = 'now'; }]) {
+    const projection = studioProjection(); change(projection);
+    assert.throws(() => normalizeProjection(projection), /Invalid Home projection/);
+  }
+});
+
+test('an official_notion_user projection reports its own state and never reads through either connection', async () => {
+  const fake = fakeNotion(), projection = studioProjection();
+  projection.selectedMode = 'official_notion_user'; delete projection.connection;
+  const home = service(fake, projection);
+  const status = await home.status();
+  assert.deepEqual({ state: status.state, mapping: status.mapping, mode: status.selectedMode, revision: status.definitionRevision },
+    { state: 'official_mode', mapping: 'saved', mode: 'official_notion_user', revision: 'fictional-r1' });
+  assert.equal(status.sections, undefined);
+  assert.equal((await home.list({ key: 'memory' })).state, 'official_mode');
+  assert.equal((await home.read({ key: 'about', id: ids.about })).state, 'official_mode');
+  assert.equal(fake.requests.length, 0);
+  assert.throws(() => normalizeProjection({ ...projection, connection: studioProjection().connection }), /official mode/);
+  // An internal projection denied by Notion stays denied; it never tries the official route.
+  const denied = await service(fake).list({ key: 'docs' });
+  assert.equal(denied.state, 'inaccessible');
+});
+
+function withSupport() {
+  const projection = studioProjection();
+  projection.sections.push(
+    { key: 'rules', label: 'Core rules', role: 'support', kind: 'core_rules', order: 5, destination: { type: 'pages', title: 'Rules', link: notionLink(ids.rules), pages: [{ id: ids.rules, title: 'Core rules', link: notionLink(ids.rules) }] } },
+    { key: 'snapshot', label: 'Recovery snapshot', role: 'support', kind: 'recovery_snapshot', order: 6, destination: { type: 'pages', title: 'Snapshot', link: notionLink(ids.snapshot), pages: [{ id: ids.snapshot, title: 'Snapshot', link: notionLink(ids.snapshot) }] } },
+    { key: 'evidence', label: 'Access evidence', role: 'support', kind: 'evidence', order: 7, destination: { type: 'data_source', id: ids.evidence, title: 'Evidence', link: notionLink(ids.evidence) } });
+  return projection;
+}
+test('support material in the projection is never listed, read or shown as Context', async () => {
+  const fake = fakeNotion(), home = service(fake, withSupport());
+  const status = await home.status();
+  assert.deepEqual(status.sections.map(item => item.key), ['about', 'memory', 'docs', 'skills', 'tasks']);
+  assert.equal(status.supportHidden, 3);
+  const before = fake.requests.length;
+  for (const key of ['rules', 'snapshot', 'evidence']) {
+    assert.equal((await home.list({ key })).state, 'unmapped');
+    assert.equal((await home.read({ key, id: ids.rules })).state, 'inaccessible');
+  }
+  assert.deepEqual([...new Set(fake.requests.slice(before).map(request => request.path))], ['/v1/users/me']);
+  assert.equal(reveals(status, 'Core rules', 'Recovery snapshot', 'Access evidence', ids.rules, ids.snapshot), false);
+  // A support source cannot also be mapped as a Context source.
+  const overlap = withSupport(); overlap.sections[0].destination.pages.push({ id: ids.snapshot, title: 'Snapshot', link: notionLink(ids.snapshot) });
+  assert.throws(() => normalizeProjection(overlap), /support source also mapped as context/);
+  const unlabelled = withSupport(); delete unlabelled.sections[5].kind;
+  assert.throws(() => normalizeProjection(unlabelled), /support kind/);
+});
+
+test('fixtures use synthetic identities only and ship no default projection', async () => {
+  for (const value of Object.values(ids)) assert.match(value, /^0{29}[0-9a-f]{3}$/);
+  const source = await readFile(new URL('./home-map.mjs', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /[0-9a-f]{32}/i);
+  assert.doesNotMatch(source, /owner-preview\/|definition_revision/);
+});
+
+// Source and body reads per case, so later comparisons can use the same cases.
+test('source and body reads are counted per case', async () => {
+  const kinds = request => request.path === '/v1/users/me' ? 'identity' : request.path.endsWith('/children') ? 'body'
+    : request.path.endsWith('/query') ? 'query' : request.path.startsWith('/v1/pages/') ? 'page' : 'schema';
+  const cases = [
+    ['status: identity and mapped root', ['root page'], home => home.status()],
+    ['list profile pages', ['About', 'Soul'], home => home.list({ key: 'about' })],
+    ['list memory titles', ['Memory data source'], home => home.list({ key: 'memory' })],
+    ['read property-only memory', ['one Memory record'], home => home.read({ key: 'memory', id: hex(0x100) })],
+    ['read About with nested blocks', ['About page'], home => home.read({ key: 'about', id: ids.about })],
+    ['outside page via page list', [], home => home.read({ key: 'about', id: ids.outside })],
+    ['outside page via data source', [], home => home.read({ key: 'memory', id: ids.outside })],
+    ['support material', [], home => home.read({ key: 'snapshot', id: ids.snapshot })],
+  ];
+  const table = [];
+  for (const [name, needed, run] of cases) {
+    const fake = fakeNotion();
+    await run(service(fake, withSupport()));
+    const counts = { identity: 0, page: 0, schema: 0, query: 0, body: 0 };
+    for (const request of fake.requests) counts[kinds(request)]++;
+    table.push({ case: name, needed: needed.length, ...counts });
+  }
+  console.log('READS ' + JSON.stringify(table));
+  assert.deepEqual(table.map(({ case: name, ...counts }) => [name, Object.values(counts).join(' ')]), [
+    ['status: identity and mapped root', '1 1 1 0 0 0'],
+    ['list profile pages', '2 1 2 0 0 0'],
+    ['list memory titles', '1 1 0 1 1 0'],
+    ['read property-only memory', '1 1 1 0 0 1'],
+    ['read About with nested blocks', '1 1 1 0 0 3'],
+    ['outside page via page list', '0 1 0 0 0 0'],
+    ['outside page via data source', '0 1 1 0 0 0'],
+    ['support material', '0 1 0 0 0 0'],
+  ]);
+  // The official mode reads nothing at all for the same cases.
+  const fake = fakeNotion(), official = studioProjection(); official.selectedMode = 'official_notion_user'; delete official.connection;
+  for (const [, , run] of cases) await run(service(fake, official));
+  assert.equal(fake.requests.length, 0);
+});
+
+test('saved links record the definition revision they were generated from; a panel edit drops the claim', async t => {
+  const { options, route } = await contextFixture(t);
+  const links = { memory: { title: 'Decisions', target: 'https://example.com/memory' } };
+  const base = { target: context, expectedContextRevision: route.revision, title: 'Our OSM', links };
+  const generated = await saveSources({ ...base, expectedRevision: (await readSources(context, options)).revision, definitionRevision: 'fictional-r1' }, options);
+  assert.equal(generated.definitionRevision, 'fictional-r1');
+  const edited = await saveSources({ ...base, expectedRevision: generated.revision }, options);
+  assert.equal(edited.definitionRevision, undefined); assert.deepEqual(edited.links, links);
+  await assert.rejects(saveSources({ ...base, expectedRevision: edited.revision, definitionRevision: '<bad>' }, options), /definition revision/);
 });

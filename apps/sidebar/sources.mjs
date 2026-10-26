@@ -19,6 +19,8 @@ export function contextIdentity(target) {
   }
   return route.target;
 }
+// Links generated from a definition revision say which one; older runtimes ignore it.
+const definitionRevision = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:-]{0,59}$/.test(value) ? value : undefined;
 export function normalizeSources({ title, links }) {
   if (typeof title !== 'string' || title.length > 100 || /[\x00-\x1f\x7f]/.test(title)
       || !links || typeof links !== 'object' || Array.isArray(links) || Object.keys(links).some(key => !roles.includes(key))) throw new Error('Invalid source links.');
@@ -34,7 +36,7 @@ export function normalizeSources({ title, links }) {
   return { title: title.trim(), links: clean };
 }
 // Each context has its own files here: <hash>.json for navigation links and,
-// since the Home reader, <hash>.home.json for its view mapping.
+// since the Home reader, <hash>.home.json for its generated projection.
 export async function location(codexHome, target, create = false, suffix = '.json') {
   let folder = codexHome;
   for (const name of ['aios', 'panel']) {
@@ -96,24 +98,26 @@ function decode(value, target) {
   if (value.text === null) return { state: 'missing', revision: value.revision, title: '', links: {} };
   const data = JSON.parse(value.text);
   if (data.version !== 1 || data.contextIdentity !== contextIdentity(target)) throw new Error(unavailable);
-  return { state: 'saved', revision: value.revision, ...normalizeSources(data) };
+  const generated = definitionRevision(data.definitionRevision);
+  return { state: 'saved', revision: value.revision, ...normalizeSources(data), ...(generated && { definitionRevision: generated }) };
 }
 export async function readSources(target, { codexHome = home() } = {}) {
   try { return decode(await snapshot(await location(codexHome, target)), target); }
   catch { return { state: 'unavailable', title: '', links: {} }; }
 }
-export async function saveSources({ target, expectedContextRevision, expectedRevision, title, links }, { codexHome = home() } = {}) {
+export async function saveSources({ target, expectedContextRevision, expectedRevision, title, links, definitionRevision: generatedFrom }, { codexHome = home() } = {}) {
   const clean = normalizeSources({ title, links });
+  if (generatedFrom != null && !definitionRevision(generatedFrom)) throw new Error('Invalid definition revision.');
   const current = () => readContextRoute({ codexHome });
   const matches = context => context.state === 'configured' && context.revision === expectedContextRevision
     && contextIdentity(context.target) === contextIdentity(target);
   if (!matches(await current())) throw new Error('Your context changed. Refresh before saving source links.');
   const path = await location(codexHome, target, true);
-  const text = JSON.stringify({ version: 1, contextIdentity: contextIdentity(target), ...clean }, null, 2) + '\n';
+  const text = JSON.stringify({ version: 1, contextIdentity: contextIdentity(target), ...clean, ...(generatedFrom && { definitionRevision: generatedFrom }) }, null, 2) + '\n';
   let previous;
   const written = await replaceState(path, { expectedRevision, text,
     decode: value => (previous = decode(value, target)),
-    same: value => value.state === 'saved' && JSON.stringify({ title: value.title, links: value.links }) === JSON.stringify(clean),
+    same: value => value.state === 'saved' && value.definitionRevision === (generatedFrom || undefined) && JSON.stringify({ title: value.title, links: value.links }) === JSON.stringify(clean),
     matches: async () => matches(await current()),
     copy: { busy: 'Another source update is in progress. Try again when it finishes.', changed: 'Source links changed. Refresh before saving again.',
       backup: 'Could not back up source links. No changes were made.' } });

@@ -1,9 +1,9 @@
-// Home: a read-only Context/Skills view over Setup's mapping, read through OSM's own
+// Home: a read-only Context/Skills view over Setup's generated projection, read through OSM's own
 // internal Notion connection. Lists and bodies live only in this closure for the
 // current scope: Back clears the body, and any account, scope, access or context
 // change clears every list, body and section. Nothing is cached or stored; all
 // retrieved text is rendered as text.
-export function createHome({ $, call, open, changed }) {
+export function createHome({ $, call, open, changed, linksRevision = () => undefined }) {
   const copy = {
     unsupported_host: 'OSM’s own Notion connection is not supported on this host yet.',
     not_connected: 'OSM’s Notion connection is not connected or was revoked.',
@@ -18,7 +18,7 @@ export function createHome({ $, call, open, changed }) {
     unmapped: ['Continue OSM Setup', 'Your connection is ready. Ask OSM Setup in chat to locate or prepare your AI Operating Model.'],
     account_changed: ['Continue OSM Setup', 'This Home was set up for a different Notion connection, so nothing from it is shown. Ask OSM Setup in chat to map it again.'],
     root_inaccessible: ['Continue OSM Setup', 'Your OSM page can’t be read with the current connection. Share it with OSM’s connection, or ask OSM Setup in chat.'],
-    mapping_unavailable: ['Continue OSM Setup', 'The Home mapping needs attention. It has been left unchanged.'],
+    mapping_unavailable: ['Continue OSM Setup', 'The Home projection needs attention. It has been left unchanged.'],
     rate_limited: ['Notion asked OSM to wait', copy.rate_limited],
     unavailable: ['Notion could not be read', copy.unavailable],
   };
@@ -34,9 +34,11 @@ export function createHome({ $, call, open, changed }) {
   const button = (text, cls, onClick) => { const node = el('button', text, cls); node.setAttribute('type', 'button'); node.addEventListener('click', onClick); return node; };
   const sections = () => data?.state === 'ready' ? data.sections : [];
   function clear() { lists = new Map(); reader = null; openers = new Map(); builtinOpen = false; }
-  // Without a mapping, Home appears only for a supported host's connect or Continue Setup
-  // step; otherwise, including a failed check, the saved links view stays as it was.
-  const available = () => Boolean(data && (data.mapping !== 'missing' || ['not_connected', 'unmapped'].includes(data.state)));
+  // Without a projection, Home appears only for a supported host's connect or Continue Setup
+  // step; otherwise, including a failed check, the saved links view stays as it was. An
+  // official_notion_user projection keeps the links view with its own note: this view
+  // can't read through that connection yet, and it never switches to the internal one.
+  const available = () => Boolean(data && data.state !== 'official_mode' && (data.mapping !== 'missing' || ['not_connected', 'unmapped'].includes(data.state)));
   const shown = () => available() && !showLinks;
 
   async function load() {
@@ -207,6 +209,14 @@ export function createHome({ $, call, open, changed }) {
 
   function render(locked) {
     document.body?.setAttribute?.('data-view', shown() ? 'home' : 'links');
+    $('home-note').hidden = data?.state !== 'official_mode';
+    $('home-note').textContent = 'Home can’t read through your official Notion connection in this view yet. Your saved links below open each source in Notion.';
+    // Saved links are a partial compatibility view of the projection's definition revision.
+    const revision = data?.mapping === 'saved' ? data.definitionRevision : undefined;
+    $('links-note').hidden = !revision;
+    if (revision) $('links-note').textContent = linksRevision() === revision
+      ? `Saved links: a partial view of your AI Operating Model, revision ${revision}.`
+      : `Saved links: a partial view saved separately; it may not match your AI Operating Model revision ${revision}.`;
     $('brand-mark').hidden = !shown(); $('home').hidden = !shown();
     $('show-home').hidden = !available() || !showLinks;
     const status = $('home-status');
@@ -234,7 +244,9 @@ export function createHome({ $, call, open, changed }) {
     panel.replaceChildren(); openers = new Map();
     $('home-footer').hidden = Boolean(reader); $('organisation').hidden ||= Boolean(reader);
     if (reader) renderReader(panel); else if (tab === 'context') renderContext(panel); else renderSkills(panel);
-    $('organisation-copy').textContent = 'This Home maps ' + sections().map(item => `${item.label} to ${roleText[item.role]}`).join(', ') + '. Setup chose these sources and names; Home does not infer them.';
+    $('organisation-copy').textContent = 'This Home maps ' + sections().map(item => `${item.label} to ${roleText[item.role]}`).join(', ')
+      + `. Setup generated this from your AI Operating Model, revision ${data.definitionRevision}; Home does not infer sources or names.`
+      + (data.supportHidden ? ' Rules, procedures, evidence and recovery snapshots stay in Notion and are not shown as context.' : '');
   }
 
   $('context-tab').addEventListener('click', () => choose('context'));

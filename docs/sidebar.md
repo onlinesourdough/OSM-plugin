@@ -6,7 +6,7 @@ Revision: 2026-10-26
 
 Home is a quiet, read-only view of the owner's recorded context and personal
 skills. It follows the approved design (#74): the context-tile mark, Context and
-Skills tabs (Arrow, Home and End keys), sections from Setup's mapping in its
+Skills tabs (Arrow, Home and End keys), sections from Setup's projection in its
 order and labels, and two titles per section with More/Show fewer. A title
 opens a read-only article in place. It shows the mapped Fact, Decision, Why and
 Evidence fields first, then the page's bounded blocks, so a property-only
@@ -20,10 +20,21 @@ plain outward links. The footer has Open in Notion and How this is organised.
 There are no dividers, cards, graph or metrics, and at 500 and 320 px the page
 narrows and the footer wraps.
 
-Home reads only through [OSM's internal Notion connection](home-connection.md),
-using the explicit mapping Setup saves. **Notion · Connected** is green only
-when the connection's identity matches the mapping and the mapped root was
-just read. Other states keep their own copy:
+Home's sources come from one place: the AI Operating Model's Data and Context
+Definition. Setup generates Home's projection from one revision of it; Home never
+edits it. The projection records the owner's `selectedMode`, and Home reads only
+through that mode, never switching after a denial. This release reads only
+through [OSM's internal Notion connection](home-connection.md)
+(`internal_selected_pages`). For `official_notion_user`, Home says it can't read
+through that connection in this view yet and shows the saved links; it never
+shows Connect or unsupported-host copy for a working official connection.
+Support material the definition names (core rules, the source index, writing,
+access and evidence procedures, maintenance, recovery snapshots) is never
+listed, read or shown as context.
+
+**Notion · Connected** is green only when the internal connection's identity
+matches the projection and the mapped root was just read. Other states keep
+their own copy:
 
 - not connected or revoked;
 - unsupported on this host;
@@ -33,12 +44,14 @@ just read. Other states keep their own copy:
 - unsupported;
 - retry later.
 
-A host without a supported connection and without a mapping keeps the saved
-links view below unchanged. With a mapping, the saved links stay one click
-away.
+A host without a supported connection and without a projection keeps the saved
+links view below unchanged. With a projection, the saved links stay one click
+away and are labelled a partial compatibility view of its definition revision,
+or as saved separately when they weren't generated from it. They are not
+another map and not proof of native YAML support.
 
 Lists and bodies exist only in the panel's memory for the current scope.
-Leaving an article clears it, and a revocation, account, mapping or context
+Leaving an article clears it, and a revocation, account, projection or context
 change clears every list, body and section before anything new is shown. There
 is no cache, localStorage, analytics or log of content. All retrieved text is
 rendered as text, and links pass the existing safe-target rules. Retrieved page
@@ -104,7 +117,7 @@ OAuth. Home's internal connection takes its token only from a supported host
 secret store and never falls back to the official plugin.
 
 OSM MCP serves this panel and stores navigation labels/links and Home's view
-mapping, never content. The page picker below is an optional feature of the
+projection, never content. The page picker below is an optional feature of the
 official plugin; Home never uses it. Its app-only
 page picker calls an allowlist of read-only Notion tools through the documented
 Codex app-server protocol. It creates one temporary in-memory transport context,
@@ -148,8 +161,10 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
   installed package's skill metadata.
 - osm_home_list / osm_home_read: app-only bounded title lists and one selected
   record of a mapped section.
-- osm_save_home_map: model, revision-checked replacement of Home's view
-  mapping; osm_sources returns it with its revision.
+- osm_save_home_projection: model, revision-checked whole replacement of Home's
+  generated projection; content changes only with a new definition revision.
+  osm_sources returns it with its revision. osm_save_sources accepts the
+  definitionRevision that generated links came from.
 
 The context-hub mark identifies OSM. `assets/branding/aios-icon.svg` is the
 source of `assets/icon.png` (the Codex `composerIcon` and `logo`):
@@ -183,19 +198,27 @@ location. A changed context loads its own map, never the previous one's sources.
 No source bodies, credentials, policy or access claims are stored. The map is
 not preloaded as agent context or used as a second source of business truth.
 
-Home's view mapping is a separate file, `<identity-hash>.home.json`, with its own
-revision, so older panels and saved links read exactly as before. Version 1
-holds:
+Home's projection is a separate file, `<identity-hash>.home.json`, with its own
+revision, so older panels and saved links read exactly as before. Format
+`osm-home-projection/1` is OSM's reviewed product contract; owner-preview
+schemas, legacy and custom models map into it through Setup, and no private
+identity ships as a default. It holds:
 
-- the connection identity (bot and workspace IDs);
+- the definition's ID, title, revision and generation time, and the selected
+  mode;
+- for the internal mode, the connection identity (bot and workspace IDs);
 - the root page;
-- up to twelve sections, each with a key, label, role (profile, memory,
+- up to twelve context sections, each with a key, label, role (profile, memory,
   documents, skills or related), order, destination IDs and title, an optional
   saved view (name, filter, sorts), the verified field map, a safe link and a
-  dated access observation.
+  dated access observation;
+- support sections by kind, which Home never reads; a support source can't also
+  be a context source.
 
-It holds no bodies, records or secrets, and unknown keys are rejected. Setup
-assigns roles explicitly, and nothing infers them from titles.
+It holds no bodies, records or secrets, and unknown keys are rejected. A
+projection without a revision is refused, and the same revision with different
+content is refused; regenerating it unchanged is a no-op. Setup assigns roles
+explicitly, and nothing infers them from titles.
 
 Writes use bounded reads, file identity checks, per-map locking, context/source
 revisions, backups and atomic rename. Invalid or symlinked state fails closed.
@@ -241,7 +264,7 @@ Notion and its sources. Clear a selected teamMemory navigation slot before a
 a reviewed earlier map, preserving any later edits. Pointer backups are under
 CODEX_HOME/backups/aios-context; map backups sit alongside the JSON file as
 <file>.<revision>.bak. Prove a crashed writer stopped before removing its lock.
-The Home mapping uses the same backup and lock rules. An older runtime ignores
+The Home projection uses the same backup and lock rules. An older runtime ignores
 the `.home.json` file. To retire Home, remove that file after keeping a copy;
 saved links are unaffected. Revoking OSM's internal connection in Notion stops
 every Home read, so it needs no local cleanup.

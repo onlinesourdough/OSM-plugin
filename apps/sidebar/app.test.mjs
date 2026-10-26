@@ -687,9 +687,9 @@ function homeHost() {
   const wrap = (kind, value) => ({ content: [], _meta: { 'osm/kind': kind, [`osm/${kind}`]: value } });
   const handler = (name, args) => {
     if (name === 'osm_home') return wrap('home', s.state === 'ready'
-      ? { state: 'ready', mapping: 'saved', scope: s.scope, verifiedAt: '2026-10-26T12:00:00.000Z', checkedAt: '2026-10-26T12:00:00.000Z', root: { title: 'Fictional OSM', link: link('root') }, sections: sections(),
+      ? { state: 'ready', mapping: 'saved', definitionRevision: 'fictional-r1', selectedMode: 'internal_selected_pages', scope: s.scope, verifiedAt: '2026-10-26T12:00:00.000Z', checkedAt: '2026-10-26T12:00:00.000Z', root: { title: 'Fictional OSM', link: link('root') }, sections: sections(),
         builtin: [{ name: 'osm-setup', description: 'Set up, resume or move OSM.' }, { name: 'osm-context', description: 'Manage the chosen context home.' }] }
-      : { state: s.state, mapping: s.mapping, builtin: [] });
+      : { state: s.state, mapping: s.mapping, builtin: [], ...(s.mapping === 'saved' && { definitionRevision: 'fictional-r1' }) });
     if (name === 'osm_home_list') {
       if (s.listState) return wrap('home-list', { state: s.listState, ...(s.listScope && { scope: s.listScope }) });
       if (args.section === 'docs') return wrap('home-list', { state: 'inaccessible', scope: s.scope });
@@ -857,4 +857,28 @@ test('a failed Home check without a mapping keeps the saved links; a supported h
   const u = await homeUi(host);
   assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Connect your Notion');
   assert.equal(u.text('home-status-label'), 'Notion · Not connected');
+});
+
+test('an official-mode projection keeps the saved links with its own note, never a connect or unsupported gate', async () => {
+  const host = homeHost(); Object.assign(host.s, { state: 'official_mode', mapping: 'saved' });
+  const u = await homeUi(host);
+  assert.equal(u.shown('dashboard'), true); assert.equal(u.shown('home'), false); assert.equal(u.shown('home-status'), false);
+  assert.equal(u.text('home-note'), 'Home can’t read through your official Notion connection in this view yet. Your saved links below open each source in Notion.');
+  assert.equal(u.shown('home-note'), true);
+  const page = u.get('dashboard').textContent + u.get('home').textContent;
+  assert.equal(/Connect your Notion|not supported on this host|isn’t available here/.test(u.get('dashboard').textContent), false);
+  assert.equal(u.shown('home-gate'), false); assert.ok(page.includes('Primary'));
+  assert.deepEqual(u.homeCalls.map(call => call.name), ['osm_home']);
+  await u.click('open-context'); assert.deepEqual(u.links, [target]);
+});
+
+test('saved links are labelled a partial view of the projection revision, or as saved separately', async () => {
+  for (const [sources, expected] of [[{ ...homeSources, definitionRevision: 'fictional-r1' }, 'Saved links: a partial view of your AI Operating Model, revision fictional-r1.'],
+    [homeSources, 'Saved links: a partial view saved separately; it may not match your AI Operating Model revision fictional-r1.']]) {
+    const host = homeHost(); Object.assign(host.s, { state: 'official_mode', mapping: 'saved' });
+    const u = await ui(configured(), sources, { home: host.handler }); await settle();
+    assert.equal(u.text('links-note'), expected); assert.equal(u.shown('links-note'), true);
+  }
+  const u = await ui(configured(), homeSources); await settle();
+  assert.equal(u.shown('links-note'), false); assert.equal(u.shown('home-note'), false);
 });

@@ -35,13 +35,15 @@ export async function readBuiltinSkills(root) {
   return skills;
 }
 
-// Reads for Home go only through OSM's internal connection, only for the identity and
-// destinations in the saved mapping. A denial is reported as such; there is no
-// fallback to the official Notion plugin or any other connection.
-export function createHomeService({ credential = hostCredential, transport, readMap }) {
-  // Every call checks the current credential and connection identity against the mapping.
+// Home reads only through the projection's selected connection mode and never moves to
+// another mode or connection after a denial or when the mode is unavailable. This
+// release reads through OSM's internal connection only: an official_notion_user
+// projection reports official_mode and makes no request.
+export function createHomeService({ credential = hostCredential, transport, readProjection }) {
+  // Every call checks the mode, then the current credential and identity against the projection.
   async function open() {
-    const mapping = await readMap();
+    const mapping = await readProjection();
+    if (mapping.state === 'saved' && mapping.projection.selectedMode !== 'internal_selected_pages') return { mapping, state: 'official_mode' };
     const secret = await credential();
     if (secret?.state === 'unsupported_host') return { mapping, state: 'unsupported_host' };
     if (secret?.state !== 'available') return { mapping, state: 'not_connected' };
@@ -50,28 +52,32 @@ export function createHomeService({ credential = hostCredential, transport, read
     catch (error) { return { mapping, ...failed(error) }; }
     if (mapping.state === 'missing') return { mapping, identity, state: 'unmapped' };
     if (mapping.state !== 'saved') return { mapping, identity, state: 'mapping_unavailable' };
-    const expected = mapping.map.connection;
+    const expected = mapping.projection.connection;
     if (expected.botId !== identity.botId || expected.workspaceId !== identity.workspaceId) return { mapping, identity, state: 'account_changed' };
     return { mapping, identity, client, state: 'ready', scope: scopeOf(identity, mapping.revision) };
   }
-  const section = (session, key) => session.mapping.map.sections.find(item => item.key === key && item.role !== 'related');
+  // Related links are never read and support material is never Context.
+  const readable = item => !['related', 'support'].includes(item.role);
+  const section = (session, key) => session.mapping.projection.sections.find(item => item.key === key && readable(item));
 
   async function status() {
     const checkedAt = new Date().toISOString();
     const session = await open();
-    const mapped = session.mapping.state === 'saved' ? 'saved' : session.mapping.state;
-    const base = { mapping: mapped, checkedAt, ...(session.identity && { workspaceName: session.identity.workspaceName }) };
+    const saved = session.mapping.state === 'saved' ? session.mapping.projection : null;
+    const base = { mapping: session.mapping.state, checkedAt, ...(session.identity && { workspaceName: session.identity.workspaceName }),
+      ...(saved && { definitionRevision: saved.definition.revision, selectedMode: saved.selectedMode }) };
     if (session.state !== 'ready') return { ...base, state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
-    const { root, sections } = session.mapping.map;
+    const { root, sections } = saved;
     // Connected requires this identity and a successful read of the mapped root now.
     try { await session.client.page(root.id); }
     catch (error) {
       const problem = failed(error);
       return { ...base, state: problem.state === 'inaccessible' ? 'root_inaccessible' : problem.state, ...(problem.retryAfter && { retryAfter: problem.retryAfter }) };
     }
+    const support = sections.filter(item => item.role === 'support').length;
     return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: root.title, link: root.link },
-      sections: sections.map(item => ({ key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
-        ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) })) };
+      sections: sections.filter(item => item.role !== 'support').map(item => ({ key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
+        ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) })), ...(support && { supportHidden: support }) };
   }
 
   async function list({ key, cursor }) {

@@ -5,19 +5,28 @@ import { readContextRoute } from './context-route.mjs';
 import { contextIdentity, location, snapshot, stateRevision, replaceState } from './sources.mjs';
 import { notionId } from './notion-internal.mjs';
 
-// Setup's bounded view mapping for Home, saved beside the context's navigation links
-// as aios/panel/<hash>.home.json with its own revision. It names real destinations,
-// roles, labels, order, verified fields, safe links, the connection identity and dated
-// observations. It never holds page bodies, records, credentials or policy.
-export const homeRoles = ['profile', 'memory', 'documents', 'skills', 'related'];
+// Home's view state is a generated projection of one revision of the AI Operating
+// Model's Data and Context Definition, which alone owns source and query identities.
+// Setup generates it; it is replaced whole when that revision changes, refused
+// without a revision, and never edited here or field by field. It is saved beside the
+// context's navigation links as aios/panel/<hash>.home.json. Format
+// osm-home-projection/1 is OSM's reviewed product contract; owner-preview schemas and
+// legacy or custom models map into it through Setup. It holds identities, labels,
+// verified field names, safe links, the selected connection mode and dated
+// observations, never page bodies, records, credentials or policy.
+export const projectionFormat = 'osm-home-projection/1';
+export const contextRoles = ['profile', 'memory', 'documents', 'skills', 'related'];
+// Support material the definition names but Home never lists, reads or shows as context.
+export const supportKinds = ['core_rules', 'source_index', 'writing_procedure', 'access', 'evidence', 'maintenance', 'recovery_snapshot'];
+export const modes = ['official_notion_user', 'internal_selected_pages'];
 export const fieldKeys = { profile: ['description'], documents: ['description'], skills: ['description'],
   memory: ['description', 'fact', 'decision', 'why', 'evidence'] };
 const accessStates = ['readable', 'inaccessible', 'unsupported'];
 const capabilities = ['read_content', 'insert_content', 'update_content', 'read_comments'];
 const limit = 32768;
-const unavailable = 'The Home mapping is unavailable. It has been left unchanged.';
+const unavailable = 'The Home projection is unavailable. It has been left unchanged.';
 const home = () => process.env.CODEX_HOME || join(homedir(), '.codex');
-const invalid = what => { throw new Error(`Invalid Home mapping: ${what}.`); };
+const invalid = what => { throw new Error(`Invalid Home projection: ${what}.`); };
 const record = value => value && typeof value === 'object' && !Array.isArray(value);
 const only = (value, keys, what) => { if (!record(value) || Object.keys(value).some(key => !keys.includes(key))) invalid(what); };
 function text(value, max, what, optional = false) {
@@ -31,9 +40,10 @@ function link(value, what) {
   if (!route || route.kind === 'path' || /[<>]/.test(route.target)) invalid(what);
   return route.target;
 }
+const date = (value, what) => typeof value === 'string' && value.length <= 40 && !Number.isNaN(Date.parse(value)) ? new Date(value).toISOString() : invalid(what);
 function observed(value, what) {
   only(value, ['at', 'access', 'capabilities'], what);
-  const at = typeof value.at === 'string' && value.at.length <= 40 && !Number.isNaN(Date.parse(value.at)) ? new Date(value.at).toISOString() : invalid(what + ' date');
+  const at = date(value.at, what + ' date');
   if (!accessStates.includes(value.access)) invalid(what + ' access');
   const caps = value.capabilities ?? [];
   if (!Array.isArray(caps) || caps.length > capabilities.length || caps.some(cap => !capabilities.includes(cap))) invalid(what + ' capabilities');
@@ -85,73 +95,100 @@ function destination(value, role, key) {
 }
 function fields(value, role, type, key) {
   const what = `section ${key} fields`;
-  if (role === 'related' || type === 'pages') { if (value != null) invalid(what); return undefined; }
+  if (role === 'related' || role === 'support' || type === 'pages') { if (value != null) invalid(what); return undefined; }
   only(value, ['title', ...fieldKeys[role]], what);
   const clean = { title: text(value.title, 100, what + ' title') };
   for (const name of fieldKeys[role]) if (value[name] != null) clean[name] = text(value[name], 100, `${what} ${name}`);
   return clean;
 }
-export function normalizeHomeMap(map) {
-  only(map, ['connection', 'root', 'sections'], 'shape');
-  only(map.connection, ['kind', 'botId', 'workspaceId', 'workspaceName'], 'connection');
-  if (map.connection.kind !== 'notion-internal') invalid('connection kind');
-  const connection = { kind: 'notion-internal', botId: id(map.connection.botId, 'connection bot'), workspaceId: id(map.connection.workspaceId, 'connection workspace'),
-    ...(map.connection.workspaceName != null && { workspaceName: text(map.connection.workspaceName, 100, 'workspace name') }) };
-  only(map.root, ['id', 'title', 'link', 'observed'], 'root');
-  const root = { id: id(map.root.id, 'root id'), title: text(map.root.title, 100, 'root title'), link: link(map.root.link, 'root link'), observed: observed(map.root.observed, 'root observation') };
-  if (!Array.isArray(map.sections) || !map.sections.length || map.sections.length > 12) invalid('sections');
-  const sections = map.sections.map(section => {
-    only(section, ['key', 'label', 'role', 'order', 'destination', 'view', 'fields', 'observed'], 'section');
+const identities = section => section.destination.type === 'pages' ? section.destination.pages.map(page => page.id)
+  : section.destination.id ? [section.destination.id, ...(section.destination.databaseId ? [section.destination.databaseId] : [])] : [];
+export function normalizeProjection(projection) {
+  only(projection, ['definition', 'selectedMode', 'connection', 'root', 'sections'], 'shape');
+  only(projection.definition, ['id', 'title', 'revision', 'generatedAt'], 'definition');
+  const revision = typeof projection.definition.revision === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:-]{0,59}$/.test(projection.definition.revision)
+    ? projection.definition.revision : invalid('definition revision');
+  const definition = { id: id(projection.definition.id, 'definition id'), title: text(projection.definition.title, 100, 'definition title'),
+    revision, generatedAt: date(projection.definition.generatedAt, 'generation time') };
+  if (!modes.includes(projection.selectedMode)) invalid('selected mode');
+  const selectedMode = projection.selectedMode;
+  // The internal connection's identity is part of an internal projection only.
+  let connection;
+  if (selectedMode === 'internal_selected_pages') {
+    only(projection.connection, ['kind', 'botId', 'workspaceId', 'workspaceName'], 'connection');
+    if (projection.connection.kind !== 'notion-internal') invalid('connection kind');
+    connection = { kind: 'notion-internal', botId: id(projection.connection.botId, 'connection bot'), workspaceId: id(projection.connection.workspaceId, 'connection workspace'),
+      ...(projection.connection.workspaceName != null && { workspaceName: text(projection.connection.workspaceName, 100, 'workspace name') }) };
+  } else if (projection.connection != null) invalid('connection for the official mode');
+  only(projection.root, ['id', 'title', 'link', 'observed'], 'root');
+  const root = { id: id(projection.root.id, 'root id'), title: text(projection.root.title, 100, 'root title'), link: link(projection.root.link, 'root link'), observed: observed(projection.root.observed, 'root observation') };
+  if (!Array.isArray(projection.sections) || !projection.sections.length || projection.sections.length > 16) invalid('sections');
+  const sections = projection.sections.map(section => {
+    only(section, ['key', 'label', 'role', 'kind', 'order', 'destination', 'view', 'fields', 'observed'], 'section');
     const key = typeof section.key === 'string' && /^[a-z0-9-]{1,40}$/.test(section.key) ? section.key : invalid('section key');
-    if (!homeRoles.includes(section.role)) invalid(`section ${key} role`);
+    if (section.role === 'support') { if (!supportKinds.includes(section.kind)) invalid(`section ${key} support kind`); }
+    else if (!contextRoles.includes(section.role) || section.kind != null) invalid(`section ${key} role`);
     if (!Number.isInteger(section.order) || section.order < 0 || section.order > 99) invalid(`section ${key} order`);
     const target = destination(section.destination, section.role, key);
-    if (section.role !== 'related' && section.view != null && target.type !== 'data_source') invalid(`section ${key} view`);
-    const clean = { key, label: text(section.label, 60, `section ${key} label`), role: section.role, order: section.order, destination: target };
-    const saved = section.role === 'related' ? (section.view != null ? invalid(`section ${key} view`) : undefined) : view(section.view);
+    const clean = { key, label: text(section.label, 60, `section ${key} label`), role: section.role, ...(section.kind != null && { kind: section.kind }), order: section.order, destination: target };
+    if (section.view != null && (target.type !== 'data_source' || section.role === 'support')) invalid(`section ${key} view`);
+    const saved = view(section.view);
     if (saved) clean.view = saved;
     const mapped = fields(section.fields, section.role, target.type, key);
     if (mapped) clean.fields = mapped;
-    if (target.type === 'data_source' && !mapped) invalid(`section ${key} fields`);
-    if (section.role !== 'related') clean.observed = observed(section.observed, `section ${key} observation`);
+    if (target.type === 'data_source' && section.role !== 'support' && !mapped) invalid(`section ${key} fields`);
+    if (!['related', 'support'].includes(section.role)) clean.observed = observed(section.observed, `section ${key} observation`);
     else if (section.observed != null) invalid(`section ${key} observation`);
     return clean;
   });
   if (new Set(sections.map(section => section.key)).size !== sections.length) invalid('duplicate section key');
   if (sections.filter(section => section.role === 'skills').length > 1) invalid('more than one skills source');
+  if (sections.filter(section => !['related', 'support'].includes(section.role)).length > 12) invalid('more than twelve context sections');
+  // Support material can never also be a source of Context records.
+  const support = new Set(sections.filter(section => section.role === 'support').flatMap(identities));
+  if (sections.some(section => section.role !== 'support' && identities(section).some(value => support.has(value)))) invalid('support source also mapped as context');
   sections.sort((a, b) => a.order - b.order || a.key.localeCompare(b.key));
-  return { connection, root, sections };
+  return { definition, selectedMode, ...(connection && { connection }), root, sections };
 }
 
 function decode(value, target) {
   if (value.text === null) return { state: 'missing', revision: value.revision };
   const data = JSON.parse(value.text);
-  if (data.version !== 1 || data.contextIdentity !== contextIdentity(target)) throw new Error(unavailable);
-  return { state: 'saved', revision: value.revision, map: normalizeHomeMap(data.map) };
+  if (data.format !== projectionFormat || data.contextIdentity !== contextIdentity(target)) throw new Error(unavailable);
+  return { state: 'saved', revision: value.revision, projection: normalizeProjection(data.projection) };
 }
-export async function readHomeMap(target, { codexHome = home() } = {}) {
+export async function readHomeProjection(target, { codexHome = home() } = {}) {
   try { return decode(await snapshot(await location(codexHome, target, false, '.home.json'), limit), target); }
   catch { return { state: 'unavailable' }; }
 }
-// Revision-checked whole-mapping replacement for the current context, like saveSources.
-export async function saveHomeMap({ target, expectedContextRevision, expectedRevision, map }, { codexHome = home() } = {}) {
-  const clean = normalizeHomeMap(map);
+const content = projection => JSON.stringify({ ...projection, definition: { ...projection.definition, generatedAt: undefined } });
+// Whole replacement for the current context, revision-checked like saveSources. Content
+// can change only with a new definition revision; regenerating the same revision is a
+// no-op, and a different body under the same revision is refused.
+export async function saveHomeProjection({ target, expectedContextRevision, expectedRevision, projection }, { codexHome = home() } = {}) {
+  const clean = normalizeProjection(projection);
   const matches = context => context.state === 'configured' && context.revision === expectedContextRevision
     && contextIdentity(context.target) === contextIdentity(target);
-  if (!matches(await readContextRoute({ codexHome }))) throw new Error('Your context changed. Refresh before saving the Home mapping.');
+  if (!matches(await readContextRoute({ codexHome }))) throw new Error('Your context changed. Refresh before saving the Home projection.');
   const path = await location(codexHome, target, true, '.home.json');
-  const text = JSON.stringify({ version: 1, contextIdentity: contextIdentity(target), map: clean }, null, 2) + '\n';
+  const text = JSON.stringify({ format: projectionFormat, contextIdentity: contextIdentity(target), projection: clean }, null, 2) + '\n';
   if (text.length > limit) invalid('too large');
   let previous;
   const written = await replaceState(path, { expectedRevision, text, limit,
-    decode: value => (previous = decode(value, target)),
-    same: value => value.state === 'saved' && JSON.stringify(value.map) === JSON.stringify(clean),
+    decode: value => {
+      previous = decode(value, target);
+      const before = previous.projection?.definition;
+      if (before && before.id === clean.definition.id && before.revision === clean.definition.revision && content(previous.projection) !== content(clean))
+        throw new Error('This definition revision already has a different Home projection. Regenerate it from a new definition revision.');
+      return previous;
+    },
+    same: value => value.state === 'saved' && content(value.projection) === content(clean),
     matches: async () => matches(await readContextRoute({ codexHome })),
-    copy: { busy: 'Another Home mapping update is in progress. Try again when it finishes.', changed: 'The Home mapping changed. Refresh before saving again.',
-      backup: 'Could not back up the Home mapping. No changes were made.' } });
+    copy: { busy: 'Another Home projection update is in progress. Try again when it finishes.', changed: 'The Home projection changed. Refresh before saving again.',
+      backup: 'Could not back up the Home projection. No changes were made.' } });
   if (!written) return previous;
-  const after = await readHomeMap(target, { codexHome });
-  if (after.revision !== stateRevision(text)) throw new Error('The Home mapping changed again. Refresh to inspect it.');
-  if (!matches(await readContextRoute({ codexHome }))) throw new Error('Your context changed. The mapping was saved for the previous context only.');
+  const after = await readHomeProjection(target, { codexHome });
+  if (after.revision !== stateRevision(text)) throw new Error('The Home projection changed again. Refresh to inspect it.');
+  if (!matches(await readContextRoute({ codexHome }))) throw new Error('Your context changed. The projection was saved for the previous context only.');
   return after;
 }

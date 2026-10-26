@@ -16,7 +16,7 @@ try {
   await client.connect(transport);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources',
-    'osm_home', 'osm_home_list', 'osm_home_read', 'osm_save_home_map']);
+    'osm_home', 'osm_home_list', 'osm_home_read', 'osm_save_home_projection']);
   assert.deepEqual(tools[0]._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
   for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_home', 'osm_home_list', 'osm_home_read']) {
     assert.deepEqual(tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
@@ -81,13 +81,16 @@ try {
   assert.ok(home._meta['osm/home'].builtin.some(skill => skill.name === 'osm-setup'));
   assert.equal((await client.callTool({ name: 'osm_home_list', arguments: { section: 'memory' } }))._meta['osm/home-list'].state, 'unsupported_host');
   const at = '2026-10-26T12:00:00.000Z', fictional = n => n.toString(16).padStart(32, '0');
-  const map = { connection: { kind: 'notion-internal', botId: fictional(0xb01), workspaceId: fictional(0xa01) },
+  const projection = { definition: { id: fictional(0xd01), title: 'Fictional AI Operating Model', revision: 'fictional-r1', generatedAt: at },
+    selectedMode: 'official_notion_user',
     root: { id: fictional(1), title: 'Fictional OSM', link: `https://www.notion.so/${fictional(1)}`, observed: { at, access: 'readable' } },
     sections: [{ key: 'tasks', label: 'Tasks', role: 'related', order: 0, destination: { title: 'Tasks', link: 'https://www.notion.so/fictional-tasks' } }] };
-  const mapped = await client.callTool({ name: 'osm_save_home_map', arguments: { target, expectedContextRevision: read._meta['osm/status'].context.revision,
-    expectedRevision: JSON.parse(metadata.content[0].text).home.revision, map } });
+  const mapped = await client.callTool({ name: 'osm_save_home_projection', arguments: { target, expectedContextRevision: read._meta['osm/status'].context.revision,
+    expectedRevision: JSON.parse(metadata.content[0].text).home.revision, projection } });
   assert.equal(mapped.isError, undefined);
-  assert.equal(JSON.parse((await client.callTool({ name: 'osm_sources', arguments: {} })).content[0].text).home.map.sections[0].label, 'Tasks');
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_sources', arguments: {} })).content[0].text).home.projection.sections[0].label, 'Tasks');
+  // The official mode is reported as such; it is never read here or switched to the internal connection.
+  assert.equal((await client.callTool({ name: 'osm_home', arguments: {} }))._meta['osm/home'].state, 'official_mode');
   assert.deepEqual(JSON.parse((await client.callTool({ name: 'osm_sources', arguments: {} })).content[0].text).sources.links, links);
   console.log('PASS: bundled stdio server, global entrypoint, fullscreen resource, Home mapping and isolated first run.');
 } finally { await client.close(); await rm(scratch, { recursive: true, force: true }); }

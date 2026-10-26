@@ -25,29 +25,38 @@ After authorized personal onboarding or a requested source-route change:
    A revision conflict requires fresh inspection, not a blind retry. Do not
    hand-edit plugin caches or the navigation files to bypass these tools.
 
-## Home view mapping
+## Home projection
 
-Home is a read-only Context/Skills view that reads through OSM's own internal
-Notion connection, never the official plugin. Save its mapping only when
-`osm_home` reports a verified connection, and never ask for a token in chat.
-On a host reporting `unsupported_host`, leave the mapping unsaved and say Home is
-unavailable there; saved links keep working.
+The AI Operating Model's Data and Context Definition is the one place that holds
+source and query identities. Home stores only a projection generated from one of
+its revisions; never edit that projection or keep it as a second map.
 
-1. Use the model's actual routes. For each section record a short `key`, the
-   owner's display `label`, an explicit `role` (`profile`, `memory`,
-   `documents`, `skills` or `related`) and `order`. Never infer a role from a
-   title or force the owner's model into fixed names.
-2. Destinations are real IDs: a data source with a verified field map (`title`;
-   optional `description`; for memory `fact`, `decision`, `why`, `evidence`),
-   up to six named pages, or for `related` only a link. Map only fields that
-   exist; omit what is missing. Add an existing saved filter or sort only when
-   the model names it.
-3. Record the connection identity and dated `observed` access per readable
-   section. A linked external database needs its own grant; record it as
-   `inaccessible` rather than claiming the root covers it.
-4. Call `osm_save_home_map` with the context target, `expectedContextRevision`
-   and `home.revision` from `osm_sources`; read back. No bodies, records,
-   generated descriptions or secrets.
+1. Read the definition and its revision. Record the owner's `selectedMode`:
+   `official_notion_user` or `internal_selected_pages`. Never switch it, and
+   never create the internal connection only to fill Home. Home reads only
+   through the internal connection; an official projection shows saved links
+   with a note that Home can't read through it yet.
+2. Project each route the definition names into a section: a short `key`, the
+   owner's `label`, an explicit `role` (`profile`, `memory`, `documents`,
+   `skills` or `related`) and `order`. Record core rules, the source index,
+   writing, access and evidence procedures, maintenance and recovery snapshots as
+   `role: support` with their `kind`, so Home never shows them as context. Never
+   infer a role from a title.
+3. Use the definition's real IDs: a data source with its verified field map
+   (`title`; optional `description`; for memory `fact`, `decision`, `why`,
+   `evidence`), up to six named pages, or for `related` only a link. Add a
+   saved filter or sort only when the definition names it.
+4. For `internal_selected_pages`, call `osm_home` first and save only after it
+   reports a verified connection; record that identity and dated `observed`
+   access per readable section. A linked external database needs its own grant;
+   record it as `inaccessible`. Never ask for a token in chat.
+5. Call `osm_save_home_projection` with the definition's `id`, `title`,
+   `revision` and `generatedAt`, the context target, `expectedContextRevision`
+   and `home.revision` from `osm_sources`; read back. Content changes only with
+   a new definition revision. When regenerating saved links from the same
+   revision, pass `definitionRevision` to `osm_save_sources`; they stay a partial
+   compatibility view, not native YAML proof. No bodies, records, generated
+   descriptions, private defaults or secrets.
 
 If the panel tools are unavailable, the verified context home still works.
 Report the missing panel registration; do not claim that a fresh install has

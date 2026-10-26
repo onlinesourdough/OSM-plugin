@@ -84,7 +84,8 @@ const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Pa
   }, onEdit: () => render() });
 $('setup-context').append(setupContextPicker.root);
 // Home reads only through OSM's own tools; it never uses the page picker's connection.
-const home = createHome({ $, call: (name, args) => app.callServerTool({ name, arguments: args }), open: target => open(target), changed: () => render() });
+const home = createHome({ $, call: (name, args) => app.callServerTool({ name, arguments: args }), open: target => open(target), changed: () => render(),
+  linksRevision: () => status?.sources?.definitionRevision });
 
 function feedback(text, error = false) { message = { text, error }; paintFeedback(); }
 function paintFeedback() {

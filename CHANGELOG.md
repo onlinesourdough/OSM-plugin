@@ -13,10 +13,15 @@
   inaccessible, unsupported, revoked and rate-limited states. No host provides a
   supported secret store for it yet, so Home reports itself unavailable and
   saved links work as before. See `docs/home-connection.md`.
-- Setup's Home view mapping is saved as its own per-context file through the
-  new revision-checked `osm_save_home_map`, and `osm_sources` returns it.
-  Existing saved links load unchanged.
-- Context 2.1.0 adds the Home view mapping procedure. Setup 2.1.0 explains the
+- Home's sources come from the AI Operating Model definition. Setup generates a
+  projection of one definition revision (`osm-home-projection/1`) and saves it
+  as its own per-context file through `osm_save_home_projection`; it changes
+  only with a new revision. It records the owner's connection mode. An
+  `official_notion_user` projection shows saved links with a note that Home
+  can't read through that connection yet; the mode is never switched. Support
+  material such as core rules and recovery snapshots is never shown as context.
+  Existing saved links load unchanged and are labelled a partial view.
+- Context 2.1.0 adds the Home projection procedure. Setup 2.1.0 explains the
   internal connection option.
 
 ## 0.30.0 — 2026-10-23

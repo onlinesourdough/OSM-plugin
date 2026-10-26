@@ -2,10 +2,14 @@
 
 Revision: 2026-10-26
 
-Home reads the owner's mapped Notion records through OSM's own internal
-connection (#82, #74). It is separate from the official Notion plugin, which
-stays an optional installation for the user. OSM never routes a Home read
-through that plugin or any other connection, including after a denial.
+Home reads the owner's mapped Notion records through the connection mode the
+projection records (#82, #74). This release implements one mode,
+`internal_selected_pages`: OSM's own internal connection. The other mode,
+`official_notion_user`, uses the separate official Notion plugin, which stays
+an optional installation for the user; Home shows that it can't read through it
+in this view yet. That transport is a separate decision tied to #61. Home never
+switches mode, and never routes a read through another connection, including
+after a denial.
 
 ## What the connection is
 
