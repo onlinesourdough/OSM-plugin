@@ -33,7 +33,9 @@ export function normalizeSources({ title, links }) {
   }
   return { title: title.trim(), links: clean };
 }
-async function location(codexHome, target, create = false) {
+// Each context has its own files here: <hash>.json for navigation links and,
+// since the Home reader, <hash>.home.json for its view mapping.
+export async function location(codexHome, target, create = false, suffix = '.json') {
   let folder = codexHome;
   for (const name of ['aios', 'panel']) {
     folder = join(folder, name);
@@ -41,25 +43,54 @@ async function location(codexHome, target, create = false) {
     try { if (!(await lstat(folder)).isDirectory()) throw new Error(unavailable); }
     catch (error) { if (error.code !== 'ENOENT' || create) throw error; }
   }
-  return join(folder, digest(contextIdentity(target)) + '.json');
+  return join(folder, digest(contextIdentity(target)) + suffix);
 }
-async function snapshot(path) {
+export async function snapshot(path, limit = 16384) {
   let handle;
   try {
     const info = await lstat(path);
-    if (!info.isFile() || info.nlink !== 1 || info.size > 16384) throw new Error(unavailable);
+    if (!info.isFile() || info.nlink !== 1 || info.size > limit) throw new Error(unavailable);
     handle = await open(path, 'r');
     const opened = await handle.stat();
     if (opened.ino !== info.ino || opened.dev !== info.dev) throw new Error(unavailable);
-    const buffer = Buffer.alloc(16385);
+    const buffer = Buffer.alloc(limit + 1);
     const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
-    if (bytesRead > 16384) throw new Error(unavailable);
+    if (bytesRead > limit) throw new Error(unavailable);
     const text = new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, bytesRead));
     return { text, revision: revision(text) };
   } catch (error) {
     if (error.code === 'ENOENT') return { text: null, revision: revision(null) };
     throw new Error(unavailable);
   } finally { await handle?.close(); }
+}
+export const stateRevision = revision;
+// One guarded replacement of a panel state file: per-file lock, revision check,
+// backup of the prior bytes, atomic rename and a recheck of the caller's context.
+// Returns false when the decoded state already matches and nothing was written.
+export async function replaceState(path, { expectedRevision, decode, same, text, matches, limit, copy }) {
+  let lock, temporary;
+  try {
+    try { lock = await open(path + '.lock', 'wx', 0o600); }
+    catch { throw new Error(copy.busy); }
+    const before = await snapshot(path, limit), previous = decode(before);
+    if (before.revision !== expectedRevision) throw new Error(copy.changed);
+    if (same(previous)) return false;
+    if (before.text !== null) {
+      let backup;
+      try { backup = await open(path + '.' + before.revision + '.bak', 'wx', 0o600); await backup.writeFile(before.text); await backup.sync(); }
+      catch (error) { if (error.code !== 'EEXIST' || (await snapshot(path + '.' + before.revision + '.bak', limit)).text !== before.text) throw new Error(copy.backup); }
+      finally { await backup?.close(); }
+    }
+    temporary = path + '.' + randomUUID() + '.tmp';
+    const file = await open(temporary, 'wx', 0o600);
+    try { await file.writeFile(text); await file.sync(); } finally { await file.close(); }
+    if (!(await matches()) || (await snapshot(path, limit)).revision !== before.revision) throw new Error('Your setup changed. Refresh before saving again.');
+    await rename(temporary, path); temporary = undefined;
+    return true;
+  } finally {
+    if (temporary) await unlink(temporary).catch(() => {});
+    if (lock) { await lock.close(); await unlink(path + '.lock'); }
+  }
 }
 function decode(value, target) {
   if (value.text === null) return { state: 'missing', revision: value.revision, title: '', links: {} };
@@ -78,31 +109,17 @@ export async function saveSources({ target, expectedContextRevision, expectedRev
     && contextIdentity(context.target) === contextIdentity(target);
   if (!matches(await current())) throw new Error('Your context changed. Refresh before saving source links.');
   const path = await location(codexHome, target, true);
-  let lock, temporary;
-  try {
-    try { lock = await open(path + '.lock', 'wx', 0o600); }
-    catch { throw new Error('Another source update is in progress. Try again when it finishes.'); }
-    const before = await snapshot(path), previous = decode(before, target);
-    if (before.revision !== expectedRevision) throw new Error('Source links changed. Refresh before saving again.');
-    if (previous.state === 'saved' && JSON.stringify({ title: previous.title, links: previous.links }) === JSON.stringify(clean)) return previous;
-    const text = JSON.stringify({ version: 1, contextIdentity: contextIdentity(target), ...clean }, null, 2) + '\n';
-    if (before.text !== null) {
-      let backup;
-      try { backup = await open(path + '.' + before.revision + '.bak', 'wx', 0o600); await backup.writeFile(before.text); await backup.sync(); }
-      catch (error) { if (error.code !== 'EEXIST' || (await snapshot(path + '.' + before.revision + '.bak')).text !== before.text) throw new Error('Could not back up source links. No changes were made.'); }
-      finally { await backup?.close(); }
-    }
-    temporary = path + '.' + randomUUID() + '.tmp';
-    const file = await open(temporary, 'wx', 0o600);
-    try { await file.writeFile(text); await file.sync(); } finally { await file.close(); }
-    if (!matches(await current()) || (await snapshot(path)).revision !== before.revision) throw new Error('Your setup changed. Refresh before saving again.');
-    await rename(temporary, path); temporary = undefined;
-    const after = await readSources(target, { codexHome });
-    if (after.revision !== revision(text)) throw new Error('Saved links changed again. Refresh to inspect them.');
-    if (!matches(await current())) throw new Error('Your context changed. Links were saved for the previous context only.');
-    return after;
-  } finally {
-    if (temporary) await unlink(temporary).catch(() => {});
-    if (lock) { await lock.close(); await unlink(path + '.lock'); }
-  }
+  const text = JSON.stringify({ version: 1, contextIdentity: contextIdentity(target), ...clean }, null, 2) + '\n';
+  let previous;
+  const written = await replaceState(path, { expectedRevision, text,
+    decode: value => (previous = decode(value, target)),
+    same: value => value.state === 'saved' && JSON.stringify({ title: value.title, links: value.links }) === JSON.stringify(clean),
+    matches: async () => matches(await current()),
+    copy: { busy: 'Another source update is in progress. Try again when it finishes.', changed: 'Source links changed. Refresh before saving again.',
+      backup: 'Could not back up source links. No changes were made.' } });
+  if (!written) return previous;
+  const after = await readSources(target, { codexHome });
+  if (after.revision !== revision(text)) throw new Error('Saved links changed again. Refresh to inspect them.');
+  if (!matches(await current())) throw new Error('Your context changed. Links were saved for the previous context only.');
+  return after;
 }

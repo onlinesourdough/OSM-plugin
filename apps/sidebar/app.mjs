@@ -4,6 +4,7 @@ import { sourceRoles, roleLabels, readStatus, draftFrom, isDirty, isCurrent, set
 import { createPicker } from './picker.mjs';
 import { pageIcon, notionPageId } from './page-icons.mjs';
 import { sourceLabel } from './source-label.mjs';
+import { createHome } from './home.mjs';
 
 const app = new App({ name: 'osm', version: __OSM_VERSION__ }, { availableDisplayModes: ['fullscreen'] });
 const $ = id => document.getElementById(id);
@@ -82,6 +83,8 @@ const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Pa
     selectedContext = null; $('target').value = route.target; confirmSwitch = false; feedback(''); render();
   }, onEdit: () => render() });
 $('setup-context').append(setupContextPicker.root);
+// Home reads only through OSM's own tools; it never uses the page picker's connection.
+const home = createHome({ $, call: (name, args) => app.callServerTool({ name, arguments: args }), open: target => open(target), changed: () => render() });
 
 function feedback(text, error = false) { message = { text, error }; paintFeedback(); }
 function paintFeedback() {
@@ -118,10 +121,13 @@ function render() {
   const locked = saving || refreshing;
   $('loading').hidden = true;
   $('heading').textContent = dashboard ? 'OSM' : 'Get started';
-  $('setup').hidden = dashboard; $('dashboard').hidden = !dashboard;
+  home.sync(dashboard ? status.context.target : null);
+  const homeView = dashboard && home.shown();
+  $('setup').hidden = dashboard; $('dashboard').hidden = !dashboard || homeView;
   $('settings').hidden = !dashboard; $('settings').disabled = locked;
   $('version').textContent = `v${__OSM_VERSION__}`;
-  renderConnection(dashboard, locked);
+  renderConnection(dashboard && !homeView, locked);
+  home.render(locked);
   if (dashboard) renderDashboard(locked); else renderSetup(locked);
   if (settingsOpen) renderSettings(locked);
   paintFeedback();
@@ -240,8 +246,10 @@ async function refresh() {
   if (refreshing || saving) return;
   ++iconGeneration; icons.clear(); requestedIcons.clear();
   refreshing = true; feedback(''); render();
-  try { apply(await app.callServerTool({ name: 'osm_status', arguments: {} })); }
-  catch {
+  try {
+    apply(await app.callServerTool({ name: 'osm_status', arguments: {} }));
+    if (status.context.state === 'configured') void home.reload();
+  } catch {
     checkedAt = Math.max(checkedAt + 1, Date.now());
     if (status) status = { ...status, notion: { state: 'unknown' } };
     feedback('Could not check the connection. Try refreshing again.', true);
@@ -378,7 +386,7 @@ async function switchContext(value, title) {
 function reload() { fillDraft(); feedback(''); render(); }
 
 app.ontoolresult = result => {
-  if (result?._meta?.['osm/pages'] || ['pages', 'icons'].includes(result?._meta?.['osm/kind'])) return;
+  if (result?._meta?.['osm/pages'] || ['pages', 'icons', 'home', 'home-list', 'home-record'].includes(result?._meta?.['osm/kind'])) return;
   try { apply(result); if (result?._meta?.['osm/view'] === 'settings') openSettings(); }
   catch (error) {
     checkedAt = Math.max(checkedAt + 1, Date.now());

@@ -4,8 +4,9 @@
 <body>
 <main>
   <header class="page-header">
-    <h1 id="heading" tabindex="-1">Get started</h1>
+    <div class="brand"><span id="brand-mark" class="brand-mark" aria-hidden="true" hidden><svg width="29" height="29" viewBox="0 0 512 512"><rect width="512" height="512" rx="104" fill="#2B1B12"/><rect x="100" y="100" width="94" height="94" rx="10" fill="#B86F36"/><rect x="207" y="100" width="94" height="94" rx="10" fill="#D8B995"/><rect x="314" y="100" width="94" height="94" rx="10" fill="#B86F36"/><rect x="100" y="207" width="94" height="94" rx="10" fill="#D8B995"/><rect x="207" y="207" width="94" height="94" rx="10" fill="#FFF2DF"/><rect x="314" y="207" width="94" height="94" rx="10" fill="#AC7750"/><rect x="100" y="314" width="94" height="94" rx="10" fill="#8A5A36"/><rect x="207" y="314" width="94" height="94" rx="10" fill="#D8B995"/><rect x="314" y="314" width="94" height="94" rx="10" fill="#B86F36"/></svg></span><h1 id="heading" tabindex="-1">Get started</h1></div>
     <div class="header-actions">
+      <span id="home-status" class="home-status" data-state="neutral" hidden><span class="dot" aria-hidden="true"></span><span id="home-status-label"></span></span>
       <span id="badge" class="badge" hidden>Connected</span>
       <button id="help" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Open OSM on GitHub" title="Open OSM on GitHub"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 3.5h11A1.5 1.5 0 0 1 17 5v7.5a1.5 1.5 0 0 1-1.5 1.5H9.5L6 17v-3H4.5A1.5 1.5 0 0 1 3 12.5V5a1.5 1.5 0 0 1 1.5-1.5Z"/></svg></button>
       <button id="settings" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Settings" title="Settings" hidden><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m8 2-.5 2-2 1-2-.5-1.5 3 1.5 1.5v2L2 12.5l1.5 3 2-.5 2 1 .5 2h4l.5-2 2-1 2 .5 1.5-3-1.5-1.5v-2L18 7.5l-1.5-3-2 .5-2-1-.5-2Z"/><circle cx="10" cy="10" r="2.7"/></svg></button>
@@ -72,6 +73,24 @@
       <button id="open-memory" class="row cursor-interaction" type="button"><span class="row-title">Personal</span><span id="memory-meta" class="row-meta"></span></button>
       <button id="open-teamMemory" class="row cursor-interaction" type="button"><span class="row-title">Team</span><span id="teamMemory-meta" class="row-meta"></span></button>
     </section>
+    <button id="show-home" class="text-button cursor-interaction" type="button" hidden>Back to Home</button>
+  </div>
+
+  <div id="home" hidden>
+    <div id="home-workspace">
+      <h2 class="home-title">Your context</h2>
+      <div id="home-tabs" class="tabs" role="tablist" aria-label="Home sections"><button id="context-tab" class="tab" type="button" role="tab" aria-selected="true" aria-controls="home-panel">Context</button><button id="skills-tab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="home-panel" tabindex="-1">Skills</button></div>
+      <section id="home-panel" role="tabpanel" aria-labelledby="context-tab" tabindex="0"></section>
+      <div id="home-footer" class="home-footer"><button id="home-open" class="text-button open" type="button">Open in Notion ↗</button><button id="organisation-toggle" class="text-button" type="button" aria-expanded="false" aria-controls="organisation">How this is organised +</button></div>
+      <section id="organisation" class="organisation" aria-label="How this is organised" hidden>
+        <h3>From your AI Operating Model</h3>
+        <p id="organisation-copy"></p>
+        <p>The model points to the sources shown here. OSM’s own Notion connection controls what can be read; this view does not expand that access. Another Notion connection an agent can use is not limited by it.</p>
+        <p>Personal skills stay in Notion; shared OSM methods stay in the plugin. Reading a skill doesn’t enable or run it.</p>
+        <button id="show-links" class="text-button" type="button">Show saved links</button>
+      </section>
+    </div>
+    <section id="home-gate" class="gate" hidden><h2 id="gate-title"></h2><p id="gate-copy"></p><button id="gate-action" class="primary cursor-interaction" type="button"></button></section>
   </div>
 
   <div id="feedback" class="feedback" hidden><span id="feedback-text" role="status" aria-live="polite"></span><button id="reload-draft" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>
