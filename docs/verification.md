@@ -1,5 +1,48 @@
 # Verification
 
+On 2026-10-26, contract delta 1 (`5559d7f` on
+`feat/osm-home-internal-notion-74-82`) made Home a generated projection of one
+AI Operating Model definition revision, with an explicit connection mode and
+support material excluded. Saved-text sizes, fixture results and native proof
+are recorded separately below and support different claims.
+
+**Saved-text size.** The fictional fixture projection (`osm-home-projection/1`,
+five context sections) saves as 4,198 bytes against a 32,768-byte limit. This is
+a size observation only. The owner's 53.6% entry and 50.0% source-index
+reductions are recorded in #69; this repository did not measure them.
+
+**Fixture results.** The build passed with no `runtime/sidebar` diff, 123/123
+sidebar unit tests passed, and the stdio smoke passed, including a saved
+official-mode projection reporting `official_mode`. Validation
+(`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+continuity and skill-version checks all passed on a clean clone of `5559d7f`, and
+`git diff --check` passed. New tests cover:
+
+- the projection being replaced only by a new revision and refused without one;
+- official mode making no request;
+- support material never shown as context;
+- synthetic fixture IDs;
+- generated links' revision and the partial-view label.
+
+Reads per case against the fictional workspace (fake transport, internal mode):
+
+| Case | Needed sources | Identity | Page | Schema | Query | Body |
+| --- | --- | --- | --- | --- | --- | --- |
+| Status (identity and mapped root) | 1 | 1 | 1 | 0 | 0 | 0 |
+| List profile pages | 2 | 1 | 2 | 0 | 0 | 0 |
+| List memory titles | 1 | 1 | 0 | 1 | 1 | 0 |
+| Read property-only memory | 1 | 1 | 1 | 0 | 0 | 1 |
+| Read About with nested blocks | 1 | 1 | 1 | 0 | 0 | 3 |
+| Outside page via page list | 0 | 1 | 0 | 0 | 0 | 0 |
+| Outside page via data source | 0 | 1 | 1 | 0 | 0 | 0 |
+| Support material | 0 | 1 | 0 | 0 | 0 | 0 |
+
+The same cases in official mode make no request.
+
+**Native proof.** None. This proves no native Codex or Claude behaviour, native
+YAML support, internal-connection boundary in a real workspace, official-route
+reading or daily run. Those remain open under #61, #69 and #82.
+
 On 2026-10-26 the Home reader and internal Notion connection candidate
 (`bbedf80` on `feat/osm-home-internal-notion-74-82`, from `main` `314dcf1`) was
 checked with Node 26.12.0 and Python 3. npm was not installed, so the existing
