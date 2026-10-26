@@ -1,5 +1,43 @@
 # Verification
 
+On 2026-10-26 the Home reader and internal Notion connection candidate
+(`bbedf80` on `feat/osm-home-internal-notion-74-82`, from `main` `314dcf1`) was
+checked with Node 26.12.0 and Python 3. npm was not installed, so the existing
+dependencies were used with `node build.mjs`, `node --test *.test.mjs` and
+`node smoke.mjs`.
+
+Results:
+
+- **Build:** passed, and the committed `runtime/sidebar` has no diff.
+- **Sidebar unit tests:** 115/115 passed, 18 of them in `home.test.mjs` and 12
+  new Home DOM tests.
+- **Bundled stdio smoke:** passed, including the new tools, `unsupported_host`
+  and a mapping save and readback.
+- **Rehearsals:** the footprint, documentation, onboarding, layout, continuity
+  and skill-version rehearsals passed.
+- **`git diff --check 314dcf1 HEAD`:** passed.
+- **`validate.py --baseline 314dcf1`:** passed on a clean clone of `bbedf80`. In
+  the writer worktree it fails on a sandbox device file at `.mcp.json`, which is
+  not part of the repository.
+- **Discrimination check:** removing the data-source parent fence from a temp
+  copy failed exactly the outside-page test.
+
+The fixtures cover:
+
+- allowed root, child and database reads;
+- an outside page denied for fetch, query and linked source, without leaking;
+- a linked external database denied until it is granted;
+- revocation, account change and scope change clearing everything;
+- property-only memory and a second model's names;
+- paging and block bounds, and unsupported blocks;
+- hostile text;
+- the absence of the token from every result;
+- old saved links loading unchanged;
+- tab keys, Back focus, More, the gates, and the 500/320 px styles.
+
+No live Notion request, token, grant or native Codex or Claude run was made.
+Those remain with the approved native holders.
+
 After lead Review on 2026-10-23, the candidate renames the new-customer Notion
 template to `notion-osm.md` (page **OSM**, no operating-system framing) and
 makes the `aios` → `osm` switch disable `aios` before fresh-session acceptance,
