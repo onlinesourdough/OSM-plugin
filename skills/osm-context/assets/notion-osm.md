@@ -1,5 +1,9 @@
 # Adapting the OSM page
 
+Superseded default for new setups: they use the neutral
+[Data & Context root](data-and-context-root.md). This layout remains supported
+for existing pages until an explicit migration.
+
 This is the shared starting layout for one customer-owned page. Setup fills it
 from verified sources; the customer need not understand database IDs or design
 the structure. Roughly 80% common / 20% local is a design intention, not a quota.

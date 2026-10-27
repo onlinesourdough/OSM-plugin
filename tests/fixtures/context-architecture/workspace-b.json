@@ -1,0 +1,48 @@
+{
+  "name": "Harborlight Surveys (fictional)",
+  "example": "skills/osm-context/assets/examples/workspace-b.md",
+  "layout": "migrated-separate-entry",
+  "root": {"id": "fict-b-root", "title": "Survey Data & Context"},
+  "roles": {
+    "profile": "fict-b-root",
+    "knowledge": "fict-b-knowledge",
+    "memory": "fict-b-memory",
+    "methods": "fict-b-skills",
+    "operational": ["fict-b-field-jobs"],
+    "control": "fict-b-maintenance"
+  },
+  "definitions": [
+    {"id": "fict-b-root#definition", "active": true},
+    {"id": "fict-b-old-entry#definition", "active": false}
+  ],
+  "scoped_destination": {"id": "fict-b-knowledge", "parent": "fict-b-root", "reason": "access-inheritance",
+                         "widened_databases": []},
+  "human_originals": [
+    {"id": "fict-b-business-docs", "before_sha": "b1", "after_sha": "b1"},
+    {"id": "fict-b-proposal-12", "before_sha": "b2", "after_sha": "b2"}
+  ],
+  "protected": [{"id": "fict-b-mapping", "role": "mapping-table", "inside": "fict-b-knowledge"}],
+  "excerpt": {
+    "source_id": "fict-b-proposal-12", "target_id": "fict-b-knowledge/harbour-wall-scope",
+    "authority": "signed proposal", "provenance": "collector route fict-b-route-docs",
+    "revision": "v3", "source_date": "2026-05-14",
+    "meaning": "agreed survey boundary for the harbour wall job", "uncertainty": "appendix B unread",
+    "coverage": "section 2 only", "refresh_state": "checked 2026-10-21",
+    "route": {"kind": "collector", "read_only": true, "qualified": true}
+  },
+  "migration": {
+    "old_entry": "fict-b-old-entry", "old_entry_state": "maintenance-container",
+    "notice_points_to": "fict-b-root", "automatic_adoption": false,
+    "procedure_children": ["fict-b-proc-1", "fict-b-proc-2"],
+    "old_links": [
+      {"id": "fict-b-link-1", "resolves_to": "fict-b-old-entry"},
+      {"id": "fict-b-link-2", "resolves_to": "fict-b-old-entry"}
+    ]
+  },
+  "relocation_candidate": "fict-b-reloc-1",
+  "finance": {"source": "Tallyhouse (fictional)", "coverage": "2026-02..", "credit_notes": false},
+  "readiness": {
+    "minutely": "configured", "tallyhouse": "unknown", "scans": "blocked",
+    "survey-archive": "deferred", "payroll": "excluded"
+  }
+}

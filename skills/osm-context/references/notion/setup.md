@@ -15,6 +15,10 @@ Use [operating boundaries](operating.md) throughout the setup.
 OSM Setup leads this route. Accept an ordinary request such as
 “Use OSM Setup to set up my Notion; start at [URL].” Stay in this flow; the owner
 need not invoke Context, Manage Skills or Check separately.
+Superseded default: the official plugin as the setup route. New setups use the
+internal root-only connection in the [architecture](../architecture.md#access-roles)
+and Setup's [bootstrap](../../../osm-setup/references/bootstrap.md); the official
+route below stays an explicit alternative, never a fallback.
 OSM and the official Notion plugin are separate. Use native installation,
 enablement and connection status plus available tools; do not create a second MCP, login page,
 token store or connection tracker. If status is unavailable, say unknown and
@@ -57,7 +61,9 @@ needs only one area. Reuse actual methods and allow Memory to start empty.
 ## Establish the destinations
 
 Verify the connected workspace/account and available tools. Reuse the owner's
-Business home, work destinations and memory structure when suitable. Inspect
+work destinations and memory structure when suitable. A human Business home or
+Docs library keeps its structure and is no longer a curation destination; see
+[human originals](../architecture.md#human-originals-and-selected-excerpts). Inspect
 canonical pages and database schemas, not only keyword search. If none exists,
 create the smallest useful home, memory destination and personal-skill route
 within the authorized scope. Use native Notion skills, not an ordinary database
@@ -106,8 +112,9 @@ supporting file and repair references before retiring an old registration.
 Begin with one real workflow and its outcome, source owner and review point.
 Inspect the selected home and relevant databases, not the whole workspace.
 Record exact IDs: two pages called Docs need not be the same destination.
-Reuse the suitable Document Hub, native Skills and Memory; create only missing
-destinations under the agreed home. Existing unclassified documents stay usable
+Reuse suitable native Skills and Memory; a human Document Hub stays a human
+library, not the curation destination. Create only missing destinations under
+the agreed root. Existing unclassified documents stay usable
 without bulk tagging, moving or declaring them authoritative. Link the few
 relevant sources and fill genuine context gaps from documented evidence.
 
@@ -122,8 +129,11 @@ transactional data. Cleanup of unrelated clutter is a separate scope.
 
 ## Establish ongoing use
 
-Create or update one short entry using the packaged
-[OSM page](../../assets/notion-osm.md). Keep the familiar
+For a new setup, create the root from the neutral
+[Data & Context template](../../assets/data-and-context-root.md); its native
+children need no second link list. Superseded default: the packaged
+[OSM page](../../assets/notion-osm.md) as the entry. An existing OSM page keeps
+working until an explicit [migration](../migration.md). For such a page, keep the familiar
 layout: where Docs, Skills and Memory are, where business topics are covered,
 what Spaces mean, how to start work
 and where results go. Fill the customer-specific links, Space map, sources,
@@ -137,8 +147,8 @@ how to use them. The customer does not have to copy a long setup prompt or build
 an instruction page from scratch. The page is the everyday map after onboarding;
 installation instructions and test receipts belong in the setup handoff.
 
-Prefer linking the host directly to this short entry to avoid reading the whole
-Business home or Docs database each session. Neither page name is mandatory.
+Link the host directly to the root entry to avoid reading a whole library or
+database each session. No page name is mandatory.
 Keep detailed source, schema and skill procedures in the shared plugin; retain
 only the owner's actual mappings and exceptions in the guide.
 

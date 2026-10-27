@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up, resume or move OSM, from installation to a useful first task.
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # OSM:setup
@@ -22,6 +22,7 @@ alone needs no home creation or global instruction edit.
 Carry the choice forward: [Notion setup](../osm-context/references/notion/setup.md),
 [existing-home adaptation](../osm-context/references/existing-home.md), or the
 managed AIOS file procedure below. An Obsidian vault is not that file format.
+A new Notion root uses [bootstrap](references/bootstrap.md) and the [architecture](../osm-context/references/architecture.md).
 
 ## File-home setup
 

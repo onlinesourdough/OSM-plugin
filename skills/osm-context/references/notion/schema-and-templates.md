@@ -33,18 +33,21 @@ Keep technical identity, provenance and import metadata in page details.
 
 | Destination | Useful fields | Meaning |
 | --- | --- | --- |
-| Docs | Title, Space, Type, Status; Key and Source for managed context | Knowledge and useful outputs |
+| Knowledge (an existing Docs label is kept) | Title, Space, Summary, Kind, temporal scope, evidence basis, source period, Status; Key and Source for managed context; existing Type/Category kept | One useful business topic or delivered result, with evidence |
 | Native Skills | Native name, Description and supporting files; Space, Status, Audience, Owner, Key and Source | Personal and team methods |
 | Memory | Title, Space, Status, Key, Source and known source date | Durable decisions, reasons and corrections |
 
-Suggested Docs Type values: Context (reusable facts/constraints), Source (an
-original business reference), Document (a plan, proposal, research or other
-output). Keep an existing Category if it describes useful document formats;
-do not require people to maintain overlapping classifications.
+Superseded default: the suggested Docs Type values Context, Source and Document
+were an abstract taxonomy. Map the [knowledge metadata](../architecture.md#knowledge-metadata)
+onto compatible fields instead: Kind says what the content is, never its source
+type; temporal scope is Ongoing or Historical; evidence basis follows actual
+provenance. Keep existing Type/Category values and hide obsolete dimensions
+rather than deleting values. Do not require overlapping classifications.
 
-Suggested Status values: Current (selected for use), Needs review (incomplete or
-uncertain), Superseded (retained history). Current is not a fresh verification
-of every fact. Keep unclassified existing documents available without silently
+Status is the selection/quality state: Current (selected for use), Needs review
+(useful uncertainty, never age alone), Superseded (replaced; retained history).
+Keep it apart from temporal scope: Historical is not Superseded, and Current
+does not mean Ongoing. Current is not a fresh verification of every fact. Keep unclassified existing documents available without silently
 promoting them to current context. Do not invent empty mandatory profile,
 strategy or department pages; add a topic when real work requires it.
 
@@ -78,9 +81,9 @@ Reuse useful templates. Suggested additions, only where missing:
 
 | Template | Defaults | Body prompts |
 | --- | --- | --- |
-| Document / existing New doc | Type = Document; Needs review | Existing useful structure; preserve it |
-| Context | Type = Context; Needs review | Facts/constraints, applicability, sources and uncertainty |
-| Source | Type = Source; Needs review | What it owns, original content or exact source, currency/limits |
+| Document / existing New doc | Existing defaults; Needs review | Existing useful structure; preserve it |
+| Knowledge entry | Kind and temporal scope left for the entry; Needs review | Summary, facts/constraints, evidence basis, source period and uncertainty |
+| Source (existing layouts) | Existing Type kept; Needs review | What it owns, original content or exact source, currency/limits |
 | Personal skill | Needs review; Audience = Personal | Trigger, inputs, procedure, output/checks, references and limits |
 | Team skill (when needed) | Needs review; Audience = Team; accountable Owner | Trigger, procedure, output/checks, references and change authority |
 | Decision | Needs review | Decision, reason/source, effect and review trigger |

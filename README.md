@@ -290,9 +290,10 @@ For a new or messy workspace, explicitly use the plugin's **Set up** skill or as
 > Use OSM Setup to set up my Notion. Start here: [page link]. Help me choose
 > the first useful task and reuse what I already have.
 
-Setup guides the Notion connection when missing, identifies useful existing databases and fills the
-bundled [OSM page](skills/osm-context/assets/notion-osm.md)
-with your links, Spaces and working agreements. It checks where Offers, Demand
+Setup guides the Notion connection when missing, identifies useful existing databases and adapts the
+neutral [Data & Context root](skills/osm-context/assets/data-and-context-root.md)
+(see the [Context Architecture](skills/osm-context/references/architecture.md); an existing
+[OSM page](skills/osm-context/assets/notion-osm.md) keeps working) with your Spaces and working agreements. It checks where Offers, Demand
 and Operations are covered and asks only about gaps that affect the first task.
 After verifying the entry, it adds the short instruction at the appropriate app
 scope and tests a real task with you. Memory can start empty and grows through use.

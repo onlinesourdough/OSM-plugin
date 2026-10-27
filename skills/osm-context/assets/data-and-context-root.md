@@ -1,0 +1,70 @@
+# Adapting the Data & Context root
+
+The neutral starting layout for one customer-owned root. Setup fills it from
+verified sources under the [Context Architecture](../references/architecture.md);
+it does not copy that contract into the page. Replace every bracketed
+instruction or omit its optional line before use. The title is the owner's
+choice; "Data & Context" is only the default. If a root or an older entry already
+exists, adapt it: keep its identity, title, icon, local wording and compatible
+definition fields, and never regenerate owner choices from this template.
+
+Native child pages and databases (the knowledge store, Memory, Skills and the
+maintenance pages) appear on the root itself. Do not add a second manual link
+list to them; the definition names them by exact ID.
+
+The page starts at the next heading.
+
+# Data & Context
+
+[One or two sentences: whose context this is and what it is used for.]
+
+## How to work here
+
+- Ask for a useful result. The agent reads the definition below, then only the
+  sources the task needs.
+- Records here are curated: evidence, meaning and dates are kept; originals stay
+  in their own systems and libraries.
+- Your own documents and libraries stay as you organised them. The agent changes
+  one only when you ask for that specific edit.
+- Access comes from the connection's actual grants, not from links or labels.
+
+## Essential rules
+
+[The owner's complete essential operating rules: action authority, what may be
+written where, review points, exclusions and forget requests. Keep them short;
+link deeper procedures instead of pasting them.]
+
+## Data and Context Definition
+
+```yaml
+definition:
+  version: 1
+  root:
+    title: "[exact root title]"
+    role: data-and-context-root
+  contract: osm-context-architecture  # plugin reference; not copied here
+  destinations:  # native children by exact ID; labels are the owner's
+    knowledge: {label: "Knowledge", id: "[id]"}
+    memory: {id: "[id]"}
+    skills: {id: "[id]"}
+    maintenance: {id: "[id]"}  # pipeline agreements and other control records
+  protected: ["[exact IDs or roles of control records]"]
+  areas:
+    business-and-relationships: {coverage: "[source keys or gap]"}
+    work-and-knowledge: {coverage: "[source keys or gap]"}
+    communication: {coverage: "[source keys or gap]"}
+    finance: {coverage: "[source keys, gap or deferred]"}
+    products-market-operations: {coverage: "[source keys or gap]"}
+  sources:
+    - key: "[stable source key]"
+      area: "[area]"
+      provider: "[provider]"
+      scope: "[selected scope by identity]"
+      lifecycle: "[current-recurring | historical-one-off | deferred | excluded]"
+      placement: "[direct | projection | both]"
+      reader: "[route that reads it, or none]"
+      agreement: "[pipeline agreement ID, or none]"
+      # Readiness is observed state, kept in progress records, never here.
+  references:
+    - "[deeper domain contract or supporting page by ID]"
+```

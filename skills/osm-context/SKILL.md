@@ -2,7 +2,7 @@
 name: osm-context
 description: Manage the chosen context home for setup, relevant retrieval, durable updates or a context audit. Formerly AIOS Context. Keep independent repository work local.
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # OSM:context
@@ -11,6 +11,8 @@ Own the context-home contract and select one provider route. The host's short
 instruction points to the chosen context entry; its short guide holds the
 owner's destinations, Spaces and working policy. OSM supplies shared methods,
 not company data. A skill guides the running agent; it is not a background sync.
+The [Context Architecture](references/architecture.md) is the one root, storage,
+access and readiness contract; "guide" in these references means its root entry.
 
 Use the current selected home or verified host pointer. Consult
 [provider selection](references/providers.md) only when unresolved; carry the
@@ -35,7 +37,7 @@ templates and source responsibilities in the owner's guide, outside this plugin.
 
 | Requested work | Procedure owner |
 | --- | --- |
-| Read relevant context | Fetch the selected guide once per session. Use [Notion operating](references/notion/operating.md), managed-file AIOS.md and its relevant routes, or the [existing-home procedure](references/existing-home.md) for another home |
+| Read relevant context | Fetch the root entry once per session. Use [Notion operating](references/notion/operating.md), managed-file AIOS.md and its relevant routes, or the [existing-home procedure](references/existing-home.md) for another home |
 | Set up or move the home | [Notion setup](references/notion/setup.md), [managed-file Setup](../osm-setup/SKILL.md) or [existing-home adaptation](references/existing-home.md); Setup also owns native installation |
 | Save a durable fact, decision or correction | [Maintain Context](../osm-maintain-context/SKILL.md) using the resolved provider; unchanged information produces no write |
 | Inspect context health | [Check](../osm-check/SKILL.md) using the home contract and selected provider checks; read-only unless repair is separately authorized |

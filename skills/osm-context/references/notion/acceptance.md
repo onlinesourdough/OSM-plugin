@@ -3,6 +3,9 @@
 Report PASS, FAIL or NOT VERIFIED with concrete observations. Read-only Check
 does not create test data; onboarding authority may include a clearly scoped
 test artifact. Do not confuse these observations with future reliability.
+For a Data & Context root, also report the architecture's
+[readiness states](../architecture.md#readiness-and-evidence) separately;
+"guide" below means the root entry.
 
 | Claim | Required observation |
 | --- | --- |

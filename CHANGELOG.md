@@ -1,5 +1,35 @@
 # Changelog
 
+## Unreleased
+
+- The OSM Context Architecture (`skills/osm-context/references/architecture.md`)
+  is the one shared contract for a customer's Data & Context root. It covers:
+  - one neutral root with one definition;
+  - five coverage areas versus distinct storage roles, with a configurable
+    Knowledge store and its metadata;
+  - meaning, times and validity, including the rule that a date-only value is
+    one calendar date;
+  - finance completeness;
+  - the preparation lifecycle and its versioned pipeline agreement;
+  - placement and source lifecycle choices, selected excerpts and access roles;
+  - protected control records;
+  - the host-bridge distinctions;
+  - root navigation without duplicate links;
+  - separate readiness states, two diagrams and a table of superseded defaults.
+- New supporting files:
+  - a migration and relocation procedure;
+  - Setup's bootstrap sequence;
+  - a neutral root template;
+  - two fictional example workspaces;
+  - an offline fixture rehearsal (`tests/context-architecture-rehearsal.py`).
+- Superseded for new setups and still supported in existing layouts: the
+  separate model page and OSM page entry, human Docs as the curation destination,
+  the official plugin as the setup route, and the abstract Docs Type taxonomy.
+- Claude project-instruction guidance now records version-gated `AGENTS.md`
+  loading and requires observed loading evidence.
+- Skill versions: Context 2.1.0, Setup 2.1.0, Maintain Context 2.0.1, Check
+  3.0.1, Update 3.0.1.
+
 ## 0.30.0 — 2026-10-23
 
 - Rename AIOS to The Onlinesourdough Method (OSM). The plugin identity is now

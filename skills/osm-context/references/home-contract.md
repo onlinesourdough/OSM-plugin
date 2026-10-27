@@ -2,6 +2,8 @@
 
 This contract describes responsibilities, not a mandatory schema. Use it for
 setup, moves and structural audits. Ordinary tasks read only relevant routes.
+For a Notion root, the [Context Architecture](architecture.md) is the binding
+contract; "guide" below means the root entry and its one definition.
 
 | Responsibility | Record in the owner's guide |
 | --- | --- |

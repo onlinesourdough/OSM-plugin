@@ -2,7 +2,7 @@
 name: osm-check
 description: Verify OSM installation, owner format and native skill discovery without changes.
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # OSM:check
@@ -10,6 +10,7 @@ metadata:
 For requested context inspection, use the resolved [provider](../osm-context/references/providers.md)
 and [home contract](../osm-context/references/home-contract.md), then the selected
 provider checks. Read-only Check never creates pages, templates or test records.
+A root is checked read-only against the [Context Architecture](../osm-context/references/architecture.md).
 Missing AIOS_FORMAT/local folders are not failures for other homes. Product-only
 installation checks do not require fetching owner context.
 

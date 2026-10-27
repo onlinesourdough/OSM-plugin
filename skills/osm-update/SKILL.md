@@ -2,7 +2,7 @@
 name: osm-update
 description: Update selected optional specialists or adopt or roll back a reviewed OSM package.
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # OSM:update
@@ -18,6 +18,7 @@ inspect the requested immutable release, current installed identity and source,
 owner-format compatibility, discovery origins and recovery path. Use
 [native adapters](../osm-setup/references/adapters.md) for supported package
 operations. A source checkout is not an installed release.
+Updates preserve owner choices and extensions under the [Context Architecture](../osm-context/references/architecture.md).
 
 ## Choose the adoption path
 

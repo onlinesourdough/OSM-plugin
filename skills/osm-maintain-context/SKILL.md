@@ -2,7 +2,7 @@
 name: osm-maintain-context
 description: Curate owner facts, memory and routes, or perform explicitly requested OSM continuity Sync.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:maintain-context
@@ -17,6 +17,7 @@ guide/mapping, [Context](../osm-context/SKILL.md) owns setup of that gap. No
 provider failure falls through to file maintenance or creates a second home.
 
 For Notion, follow its guide and [operating route](../osm-context/references/notion/operating.md).
+What curation may write follows the [Context Architecture](../osm-context/references/architecture.md).
 For another existing document/vault home, use the [existing-home procedure](../osm-context/references/existing-home.md).
 Curate durable decisions, reasons and corrections within current-task or standing
 write authority. Update the owning record, preserve provenance, verify writes
