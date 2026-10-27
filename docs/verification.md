@@ -1,5 +1,41 @@
 # Verification
 
+On 2026-10-27 the Sol r1 repairs (`3ca28a6` on
+`feat/osm-home-internal-notion-74-82`, on top of the reviewed `d7ba06f`) fixed
+five findings.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 130/130 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `3ca28a6`,
+  and `git diff --check` passed.
+- **Discrimination:** the new tests run against the reviewed `d7ba06f` sources
+  in a temporary export failed exactly the tests for F1 (internal Home), F2,
+  F3, F4, F5 and the updated read-count table. The tests that pin unchanged
+  icon behaviour for an official-mode projection and without a projection
+  passed there too.
+
+The findings and their tests:
+
+- **F1:** internal Home makes no `osm_notion_icons` call, including before
+  `osm_home` resolves. Official mode, no projection, and links the user chooses
+  keep their icons.
+- **F2:** a support row inside a Memory data source isn't listed, and a read is
+  refused with only the identity request.
+- **F3:** a listed record that becomes inaccessible clears its titles with one
+  status recheck and no loop. An initially inaccessible source makes no extra
+  call.
+- **F4:** a trashed root is `root_inaccessible`.
+- **F5:** a property over 4,000 characters marks the article as partial.
+
+The per-case read table gains "Read support row inside Memory": identity 1, all
+others 0.
+
+**Native proof.** None, as before. Official-route icon behaviour in a real
+Codex panel and real Notion trash and access changes remain unverified.
+
 On 2026-10-26, contract delta 1 (`5559d7f` on
 `feat/osm-home-internal-notion-74-82`) made Home a generated projection of one
 AI Operating Model definition revision, with an explicit connection mode and
