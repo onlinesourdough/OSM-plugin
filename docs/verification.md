@@ -1,5 +1,51 @@
 # Verification
 
+On 2026-10-27 the Sol r5 correction (`4289942` on
+`feat/osm-home-internal-notion-74-82`, on top of `7ff9e18`) re-armed Home's
+automatic recovery.
+
+**Cause.** The run 72 brief said the budget "resets only on an explicit refresh,
+Try again/retry, or a context change". That wording did not restate the
+positive rule, and `7ff9e18` followed it. After one automatic recovery, every
+later independent invalidation therefore cleared Home and showed the gate with
+no automatic reload.
+
+**Now (R5-1, I2):** one automatic status reload per independent invalidation
+episode. `revoke()` spends the budget and marks a recovery active. The budget is
+re-armed only when that recovery has settled successfully:
+
+- its status loaded as ready;
+- every section it requested answered for the current generation with current
+  valid data;
+- none of those sections is still pending, failed or invalid.
+
+A ready status alone, or one healthy sibling, is not enough. Refresh, Try again
+(the gate's or a section's) and a context change re-arm explicitly. No timer,
+store or transport was added.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 156/156 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `4289942`,
+  and `git diff --check` passed.
+- **Fail-first on the `7ff9e18` sources:** the two "distinct invalidation
+  reloads once more" tests and the section Try again test failed their
+  assertions. The four negative controls passed there, because the old code
+  never re-arms:
+  - ready status alone;
+  - one healthy sibling;
+  - alternating answers;
+  - context change.
+- **The negative controls still discriminate.** On temporary copies with naive
+  variants, each control failed or timed out by looping:
+  - re-arming on any accepted list result;
+  - re-arming on a ready status;
+  - not resetting on a context change.
+
+**Native proof.** None.
+
 On 2026-10-27 the Sol r4 core corrections (`841e86e` on
 `feat/osm-home-internal-notion-74-82`, on top of `fba8dcb`) fixed four cases:
 
@@ -9,7 +55,8 @@ On 2026-10-27 the Sol r4 core corrections (`841e86e` on
 - **R4-2, I3.** Links the user chose allow icon reads only on a resolved ready
   status.
 - **R4-3, I2.** Accepted results no longer reset the automatic recovery budget;
-  only Refresh, Try again or a context change does.
+  only Refresh, Try again or a context change does. That was too narrow:
+  recovery was never re-armed. Corrected in run 73; see the entry above.
 - **R4-4, I1.** The ancestry bound counts every hop per item, cached or not.
 
 No read was added. (a) and (d) remain unresolved, pending an owner decision.
@@ -21,7 +68,12 @@ No read was added. (a) and (d) remain unresolved, pending an owner decision.
   (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
   continuity and skill-version checks all passed on a clean clone of `841e86e`,
   and `git diff --check` passed.
-- **Read table:** unchanged. Counting cached hops changes no request count.
+- **Read table:** the published read-table cases keep their exact counts.
+  Corrected in run 73: counting a hop before the cache lookup can make a deeper
+  chain stop earlier with fewer reads. For one such chain, Sol r5 traced 7 page
+  reads at `fba8dcb` and 6 at head. That figure is from Sol's source trace and
+  its own receipt for the earlier count, not a result of these checks; Sol's
+  receipt for the head count was lost to a read-only filesystem.
 
 Fail-first on the `fba8dcb` sources:
 
