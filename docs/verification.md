@@ -1,5 +1,43 @@
 # Verification
 
+On 2026-10-27 the Sol r6 correction (`df5ee99` on
+`feat/osm-home-internal-notion-74-82`, on top of `74908c6`) brought reads into
+Home's recovery settlement.
+
+**The three request paths.** `osm_home` (`load()`), `osm_home_list` (`list()`,
+including Load more), and `osm_home_read` (`read()`). Each now takes part in
+settlement:
+
+- A current-generation read that is pending, or that failed (`unavailable` or
+  `rate_limited`), keeps the recovery unsettled. This holds even after Back or
+  another selection.
+- `rearm()` runs again after a read answers validly.
+
+No request, timer, store or transport was added.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 163/163 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `df5ee99`,
+  and `git diff --check` passed.
+- **Fail-first on the `74908c6` sources:** each new test was run alone and
+  matched exactly one test. The pending-read tests (with and without Back) and
+  the failed-read tests (`unavailable`, `rate_limited`) failed their assertions.
+  Three tests passed there as coverage only:
+  - the successful-last-read test;
+  - the old-generation answers test;
+  - the section Try again test.
+- **Targeted variants on copies:** each coverage-only test failed its assertion
+  under the variant it targets:
+  - no re-check after a read;
+  - no generation check;
+  - a section Try again without a reset.
+- **No timeouts or runner errors** occurred in this run.
+
+**Native proof.** None.
+
 On 2026-10-27 the Sol r5 correction (`4289942` on
 `feat/osm-home-internal-notion-74-82`, on top of `7ff9e18`) re-armed Home's
 automatic recovery.
@@ -32,11 +70,13 @@ store or transport was added.
   and `git diff --check` passed.
 - **Fail-first on the `7ff9e18` sources:** the two "distinct invalidation
   reloads once more" tests and the section Try again test failed their
-  assertions. The four negative controls passed there, because the old code
-  never re-arms:
+  assertions. Four negative controls passed there, because the old code never
+  re-arms:
   - ready status alone;
   - one healthy sibling;
-  - alternating answers;
+  - the FIRST version of the alternating-answers test (corrected in run 74: the
+    final, strengthened version was not rerun on `7ff9e18`; only the naive
+    variants below exercise it);
   - context change.
 - **The negative controls still discriminate.** On temporary copies with naive
   variants, each control failed or timed out by looping:
