@@ -1,8 +1,54 @@
 # Verification
 
-On 2026-10-27 the Sol r2 repairs (`121d626` on
-`feat/osm-home-internal-notion-74-82`, on top of the reviewed `80b220d`) completed
-F1–F3, which Sol r2 found only partly resolved. F4 and F5 were resolved in r1.
+On 2026-10-27 the Sol r3 repairs (`bf083bc` on
+`feat/osm-home-internal-notion-74-82`, on top of the reviewed `65c816d`) enforced
+four rules, one shared place each.
+
+- **I1, support containment:** one predicate for every list and read path.
+- **I2, invalidation:** `current()` classifies every service state.
+- **I3, automatic official reads:** these need positive resolved evidence.
+- **I4, persistence:** the reader's UTF-8 byte bound applies before any
+  replacement.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 143/143 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `bf083bc`,
+  and `git diff --check` passed.
+- **Discrimination:** the new and updated tests run against the `65c816d` sources
+  failed exactly the I1 to I4 tests and the read table. The 89 tests that already
+  existed, including the F1 positive control, passed there.
+
+The fixture changed in two places to match the service and API contracts:
+
+- **Scripted results carry scope.** Scripted list and read results now carry the
+  scope they were read under, as the service's ready results do.
+- **Data sources carry `database_parent`.** Fictional data sources now include
+  this documented required field.
+
+**Read counts.** A data-source record read now also reads its source's schema:
+`read property-only memory` goes from schema 0 to 1. This is the bounded I1
+check, which uses the data source's `database_parent`, not a database read. New
+rows:
+
+| Case | Reads |
+| --- | --- |
+| List with support ancestry (5 mapped pages) | 10 page reads, 1 returned |
+| Read a page under a support row | 2 page reads |
+| Read a page three levels below the root | 4 page reads and 1 body |
+| List a data source in a support database | 1 schema read and no query |
+
+**Consequence of refusing unresolved containment.** An external database shared
+without its parent page is not listed until that page is shared too. Pages under
+block parents or more than three levels below the root are withheld.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r2 repairs (`121d626`, on top of `80b220d`) addressed the
+variants Sol r2 named. Sol r3 found F1 and F2 still incomplete; see the entry
+above. F4 and F5 were resolved in r1.
 
 **Fixture results.**
 
