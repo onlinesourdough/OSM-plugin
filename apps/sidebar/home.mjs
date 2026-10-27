@@ -26,7 +26,12 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     account_changed: 'Notion · Different connection', not_connected: 'Notion · Not connected', unsupported_host: 'Notion · Not available here',
     mapping_unavailable: 'Notion · Needs attention' };
   const roleText = { profile: 'profile', memory: 'retained facts and decisions', documents: 'documents', skills: 'personal skills', related: 'outward links' };
-  const resets = ['not_connected', 'account_changed', 'unsupported_host', 'unmapped', 'mapping_unavailable', 'root_inaccessible'];
+  // I2: every service state a list or read can return, classified once. Section states
+  // keep the view when they carry the current scope; every other state, including
+  // not_connected, account_changed, unsupported_host, unmapped, mapping_unavailable,
+  // root_inaccessible and official_mode (another mode), is invalidation, and so is a
+  // result without the current scope.
+  const sectionStates = new Set(['listed', 'empty', 'read', 'inaccessible', 'unsupported', 'rate_limited', 'unavailable']);
   let data = null, context = null, showLinks = false, loading = false, generation = 0, recoveries = 0;
   let tab = 'context', reader = null, builtinOpen = false, lists = new Map(), openers = new Map();
 
@@ -38,7 +43,10 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // step; otherwise, including a failed check, the saved links view stays as it was. An
   // official_notion_user projection keeps the links view with its own note: this view
   // can't read through that connection yet, and it never switches to the internal one.
-  const available = () => Boolean(data && data.state !== 'official_mode' && (data.mapping !== 'missing' || ['not_connected', 'unmapped'].includes(data.state)));
+  // A status without a mapping field (a failed check or the server's error fallback) shows
+  // the saved links, but is no evidence for anything else.
+  const available = () => Boolean(data && data.state !== 'official_mode'
+    && ((data.mapping && data.mapping !== 'missing') || ['not_connected', 'unmapped'].includes(data.state)));
   const shown = () => available() && !showLinks;
 
   async function load() {
@@ -50,7 +58,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (mine !== generation) return;
     loading = false;
     const next = value && typeof value.state === 'string' ? value
-      : { state: 'unavailable', mapping: data?.mapping ?? 'missing', builtin: [], failed: true, ...(data?.selectedMode && { selectedMode: data.selectedMode }) };
+      : { state: 'unavailable', ...(data?.mapping && { mapping: data.mapping }), builtin: [], failed: true, ...(data?.selectedMode && { selectedMode: data.selectedMode }) };
     if (next.state !== 'ready' || next.scope !== data?.scope) clear();
     data = next; changed();
   }
@@ -71,11 +79,15 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (++recoveries > 1) { ++generation; loading = false; return; }
     void load();
   }
-  // A result for another scope, or a connection-level state, invalidates the whole view.
-  function current(result, mine) {
+  // The shared invalidation path for list and read results, before anything else uses
+  // them. `listed` says the result concerns a source or record already shown; a denial
+  // for it is an access change. A source denied from its first read keeps its
+  // placeholder.
+  function current(result, mine, listed = false) {
     if (mine !== generation) return false;
-    if (!result || resets.includes(result.state) || (result.scope && result.scope !== data?.scope)) { revoke(); return false; }
-    if (result.scope) recoveries = 0;
+    if (!result || !sectionStates.has(result.state) || !result.scope || result.scope !== data?.scope
+        || (listed && result.state === 'inaccessible')) { revoke(); return false; }
+    recoveries = 0;
     return true;
   }
 
@@ -86,9 +98,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     lists.set(key, { ...entry, loading: true }); changed();
     let result;
     try { result = (await call('osm_home_list', { section: key, ...(more && entry.cursor && { cursor: entry.cursor }) }))?._meta?.['osm/home-list']; } catch { result = { state: 'unavailable' }; }
-    if (!current(result, mine)) return changed();
-    // A source that had listed and is now denied is an access change, not a placeholder.
-    if (result.state === 'inaccessible' && entry.state === 'listed') { revoke(); return changed(); }
+    if (!current(result, mine, entry.state === 'listed')) return changed();
     const items = more ? [...(entry.items || []), ...(result.items || [])].slice(0, 50) : result.items || [];
     lists.set(key, { state: result.state, items, cursor: result.cursor, hasMore: Boolean(result.hasMore) && items.length < 50, partial: result.partial,
       withheld: result.withheld, expanded: more || entry.expanded, retryAfter: result.retryAfter });
@@ -100,10 +110,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     $('reader-title')?.focus();
     let result;
     try { result = (await call('osm_home_read', { section: key, id }))?._meta?.['osm/home-record']; } catch { result = { state: 'unavailable' }; }
-    if (!current(result, mine)) return changed();
-    // A listed record that is now denied invalidates its titles and navigation too, also
-    // when the reader was left before the answer arrived.
-    if (result.state === 'inaccessible' && lists.get(key)?.items?.some(item => item.id === id)) { revoke(); return changed(); }
+    // Invalidation comes first, also when the reader was left before the answer arrived.
+    if (!current(result, mine, Boolean(lists.get(key)?.items?.some(item => item.id === id)))) return changed();
     if (reader?.id !== id) return changed();
     reader = { key, id, state: result.state, record: result.record };
     changed(); $('reader-title')?.focus();
@@ -282,10 +290,18 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // projection, or links the user chose. Never while internal Home is shown, and never
   // while a status check (refresh, retry, recovery or context sync) is still pending:
   // only the resolved current status decides.
+  // I3: only positive evidence from the resolved current status allows them: a resolved
+  // official_mode, a confirmed missing projection, or the saved links the user chose
+  // over a saved projection whose resolved status names its mode (internal included).
+  // Unknown, failed, loading or error-valued status (including the server's fallback,
+  // which has no mapping field) allows nothing. On the dashboard the saved links must
+  // also be the visible view; internal Home itself never allows them.
   function iconsAllowed(dashboard) {
     if (!context) return !dashboard;
-    if (loading || !data || data.failed || data.mapping === 'unavailable') return false;
-    return dashboard ? !shown() : data.selectedMode !== 'internal_selected_pages';
+    if (loading || !data || data.failed) return false;
+    const chosen = dashboard && showLinks && data.mapping === 'saved' && ['official_notion_user', 'internal_selected_pages'].includes(data.selectedMode);
+    const evidence = data.state === 'official_mode' || data.mapping === 'missing' || chosen;
+    return evidence && (!dashboard || !shown());
   }
   return { sync, reload, render, shown, iconsAllowed };
 }

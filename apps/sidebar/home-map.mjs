@@ -172,7 +172,8 @@ export async function saveHomeProjection({ target, expectedContextRevision, expe
   if (!matches(await readContextRoute({ codexHome }))) throw new Error('Your context changed. Refresh before saving the Home projection.');
   const path = await location(codexHome, target, true, '.home.json');
   const text = JSON.stringify({ format: projectionFormat, contextIdentity: contextIdentity(target), projection: clean }, null, 2) + '\n';
-  if (text.length > limit) invalid('too large');
+  // The reader's bound is in UTF-8 bytes; replaceState enforces the same check.
+  if (Buffer.byteLength(text, 'utf8') > limit) invalid('too large');
   let previous;
   const written = await replaceState(path, { expectedRevision, text, limit,
     decode: value => {

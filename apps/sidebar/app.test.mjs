@@ -691,11 +691,12 @@ function homeHost() {
         builtin: [{ name: 'osm-setup', description: 'Set up, resume or move OSM.' }, { name: 'osm-context', description: 'Manage the chosen context home.' }] }
       : { state: s.state, mapping: s.mapping, builtin: [], ...(s.mapping === 'saved' && { definitionRevision: 'fictional-r1' }) });
     if (name === 'osm_home_list') {
-      if (s.listState) return wrap('home-list', { state: s.listState, ...(s.listScope && { scope: s.listScope }) });
+      // Like the service, scripted results carry the scope they were read under.
+      if (s.listState) return wrap('home-list', { state: s.listState, scope: s.listScope || s.scope });
       if (args.section === 'docs') return wrap('home-list', { state: 'inaccessible', scope: s.scope });
       return wrap('home-list', { state: 'listed', scope: s.scope, items: items()[args.section], hasMore: false });
     }
-    if (s.readState) return wrap('home-record', { state: s.readState });
+    if (s.readState) return wrap('home-record', { state: s.readState, scope: s.readScope || s.scope });
     return wrap('home-record', records[args.id] ? { state: 'read', scope: s.scope, record: records[args.id] } : { state: 'inaccessible', scope: s.scope });
   };
   return { s, handler };
@@ -981,4 +982,71 @@ test('a denial that arrives after Back still clears the title with one status re
   assert.equal(statusCalls(), 2);
   await settle(); await settle();
   assert.equal(statusCalls(), 2, 'no reload loop');
+});
+
+// Sol r3 repairs, by invariant.
+const fallback = { content: [], _meta: { 'osm/kind': 'home', 'osm/home': { state: 'unavailable', builtin: [] } } }; // server.mjs error fallback
+test('a list or read answering official_mode invalidates the view and rechecks status once (R3-2, I2)', async () => {
+  for (const via of ['list', 'read']) {
+    const u = await homeUi();
+    const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+    Object.assign(u.host.s, { state: 'official_mode', ...(via === 'list' ? { listState: 'official_mode' } : { readState: 'official_mode' }) });
+    if (via === 'list') { await u.click('skills-tab'); await settle(); } else await u.press('Fixed scope before retainers');
+    await settle();
+    assert.equal(statusCalls(), 2, via); assert.equal(u.shown('home'), false, via); assert.equal(u.shown('dashboard'), true, via);
+    assert.equal(u.shown('home-status'), false, via); assert.equal(u.get('home-panel').textContent, '', via);
+    await settle(); assert.equal(statusCalls(), 2, `${via}: no loop`);
+  }
+});
+
+test('a result without the current scope is invalidation, whatever its state (I2)', async () => {
+  const host = homeHost();
+  const handler = (name, args) => {
+    const result = host.handler(name, args);
+    if (name === 'osm_home_read') delete result._meta['osm/home-record'].scope;
+    return result;
+  };
+  const u = await homeUi({ s: host.s, handler });
+  const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+  await u.press('Fixed scope before retainers');
+  assert.equal(statusCalls(), 2); assert.equal(u.panel().includes('Lead with a fixed-scope project.'), false);
+});
+
+test('icon reads follow positive resolved evidence only (I3)', async () => {
+  // Links chosen over a resolved internal projection: allowed (the F1 positive control).
+  const pending = pendingHomeHost();
+  const u = await ui(configured(), homeSources, { ...iconOptions, home: pending.handler }); await settle();
+  assert.equal(iconCalls(u), 0, 'internal Home visible');
+  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  assert.equal(iconCalls(u), 1, 'links chosen, internal resolved');
+  // Links chosen while the status is pending: none until it resolves.
+  pending.hold(); await u.click('drawer-refresh'); await settle();
+  assert.equal(iconCalls(u), 1, 'links chosen, status pending');
+  pending.release(); await settle();
+  assert.equal(u.shown('dashboard'), true); assert.equal(iconCalls(u), 2, 'links chosen, internal resolved again');
+  // Links chosen, then the server's error fallback: none.
+  let broken = false;
+  const handler = (name, args) => broken && name === 'osm_home' ? fallback : pending.handler(name, args);
+  const v = await ui(configured(), homeSources, { ...iconOptions, home: handler }); await settle();
+  await v.click('organisation-toggle'); await v.click('show-links'); await settle();
+  assert.equal(iconCalls(v), 1);
+  broken = true; await v.click('drawer-refresh'); await settle();
+  assert.equal(v.shown('dashboard'), true); assert.equal(iconCalls(v), 1, 'links chosen, server fallback');
+  // The fallback, a failed check and a failing projection on the dashboard: none.
+  for (const [label, home] of [['server fallback', () => fallback], ['failed check', () => ({ isError: true, content: [] })],
+    ['unavailable projection', () => ({ content: [], _meta: { 'osm/kind': 'home', 'osm/home': { state: 'unavailable', mapping: 'saved', selectedMode: 'internal_selected_pages', builtin: [] } } })]]) {
+    const w = await ui(configured(), homeSources, { ...iconOptions, home }); await settle();
+    assert.equal(iconCalls(w), 0, label);
+  }
+});
+
+test('in setup, icons need a confirmed missing projection; the server fallback allows none (R3-3, I3)', async () => {
+  for (const [label, home, expected] of [['server fallback', () => fallback, false], ['no projection', undefined, true]]) {
+    const u = await ui(undefined, undefined, { ...iconOptions, ...(home && { home }) });
+    await u.input(target); await u.submit(); await settle();
+    assert.equal(u.shown('setup'), true, label);
+    const before = iconCalls(u);
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(iconCalls(u) > 0, expected, label); assert.equal(iconCalls(u) >= before, true);
+  }
 });

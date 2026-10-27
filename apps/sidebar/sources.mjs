@@ -69,7 +69,10 @@ export const stateRevision = revision;
 // One guarded replacement of a panel state file: per-file lock, revision check,
 // backup of the prior bytes, atomic rename and a recheck of the caller's context.
 // Returns false when the decoded state already matches and nothing was written.
-export async function replaceState(path, { expectedRevision, decode, same, text, matches, limit, copy }) {
+// I4: the new bytes must fit the same UTF-8 byte limit snapshot() reads with, checked
+// before anything is locked or written, so a save never leaves a file the reader refuses.
+export async function replaceState(path, { expectedRevision, decode, same, text, matches, limit = 16384, copy }) {
+  if (Buffer.byteLength(text, 'utf8') > limit) throw new Error(copy.large || 'This is too large to save. Nothing was changed.');
   let lock, temporary;
   try {
     try { lock = await open(path + '.lock', 'wx', 0o600); }
@@ -120,7 +123,7 @@ export async function saveSources({ target, expectedContextRevision, expectedRev
     same: value => value.state === 'saved' && value.definitionRevision === (generatedFrom || undefined) && JSON.stringify({ title: value.title, links: value.links }) === JSON.stringify(clean),
     matches: async () => matches(await current()),
     copy: { busy: 'Another source update is in progress. Try again when it finishes.', changed: 'Source links changed. Refresh before saving again.',
-      backup: 'Could not back up source links. No changes were made.' } });
+      backup: 'Could not back up source links. No changes were made.', large: 'These source links are too large to save. No changes were made.' } });
   if (!written) return previous;
   const after = await readSources(target, { codexHome });
   if (after.revision !== revision(text)) throw new Error('Saved links changed again. Refresh to inspect them.');

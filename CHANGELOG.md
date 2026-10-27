@@ -19,16 +19,23 @@
   only with a new revision. It records the owner's connection mode. An
   `official_notion_user` projection shows saved links with a note that Home
   can't read through that connection yet; the mode is never switched. Support
-  material such as core rules and recovery snapshots stays out of context. A
-  support source can't also be mapped as context. Support pages are left out of
-  context database lists and refused on read, and a mapped page whose parent is
-  a support data source is refused before its title or content is used. Existing
-  saved links load unchanged and are labelled a partial view.
-- Page-icon reads, which use the official connection, wait until the current Home
-  status has resolved, including after Refresh, and never run while Home shows
-  the internal connection's view. A denial for something already listed clears
-  it, also when it arrives after Back. A trashed root is not reported connected,
-  and an article says when a long property was shortened.
+  material the definition names, such as core rules and recovery snapshots, is
+  kept out of context by one check for every list and read:
+  - It follows a page's parents for up to three page reads, and a data source's
+    database through its schema; it never reads a database.
+  - It refuses what it can't resolve, so a source whose parent page isn't shared
+    with OSM's connection is not shown.
+  - A support source can't also be mapped as context.
+  Existing saved links load unchanged and are labelled a partial view.
+- Page-icon reads, which use the official connection, need the resolved current
+  Home status to show an official mode, no projection, or saved links the user
+  chose; none run while a check is pending or after a failed or error status.
+  They never run while Home shows the internal connection's view.
+- Any list or read that reports another mode, a connection change or no current
+  scope clears Home and rechecks status once. So does a denial for something
+  already listed, also after Back. A trashed root is not reported connected, an
+  article says when a long property was shortened, and saves that would exceed
+  the reader's byte limit are refused before anything is replaced.
 - Context 2.1.0 adds the Home projection procedure. Setup 2.1.0 explains the
   internal connection option.
 

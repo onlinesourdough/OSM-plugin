@@ -59,6 +59,12 @@ Bounds:
 - Each property shows up to 4,000 characters; a longer one marks the article as
   partial.
 - A trashed root page counts as unreadable, so Home is not reported connected.
+- Support containment reads a record's parent pages, at most three per item.
+  For a data-source record, it also reads the source's schema (`GET
+  /v1/data_sources/{id}`, whose `database_parent` locates the database); it never
+  reads a database. A parent that can't be read leaves the item unresolved and
+  refused. So an external database shared without its parent page stays hidden
+  until that page is shared too.
 
 [Status codes](https://developers.notion.com/reference/status-codes) map to fixed
 states, and no Notion message passes through, since a 404 message can name the

@@ -59,19 +59,50 @@ export function createHomeService({ credential = hostCredential, transport, read
   // Related links are never read and support material is never Context.
   const readable = item => !['related', 'support'].includes(item.role);
   const section = (session, key) => session.mapping.projection.sections.find(item => item.key === key && readable(item));
-  // Pages the definition names as support material stay out of every context list and
-  // read, including when they are rows of a data source mapped as context.
-  const supportPages = session => new Set(session.mapping.projection.sections.filter(item => item.role === 'support' && item.destination.type === 'pages')
-    .flatMap(item => item.destination.pages.map(page => page.id)));
-  // A page whose parent is a support data source (or its database) is support material
-  // too. Only the fetched page shows its parent, so this is checked at read time,
-  // before any title, field or block is used.
-  const supportSources = session => new Set(session.mapping.projection.sections.filter(item => item.role === 'support' && item.destination.type === 'data_source')
-    .flatMap(item => [item.destination.id, ...(item.destination.databaseId ? [item.destination.databaseId] : [])]));
-  const supportRow = (session, page) => {
-    const sources = supportSources(session);
-    return [page?.parent?.data_source_id, page?.parent?.database_id].some(value => notionId(value) && sources.has(notionId(value)));
-  };
+  // I1, support containment: one predicate decides for every list and read path whether
+  // a page or data source is support material or inside it. It walks the parent chain:
+  // page parents through page metadata reads, at most ancestryBound per item (cached
+  // within a call), and a data source through the schema already fetched for its
+  // section (its database and that database's documented `database_parent`). It never
+  // reads a database. It stops clear at the mapped root or the workspace. Anything it
+  // can't resolve within the bound is refused as unresolved: a block parent, an
+  // unreadable parent, a data source without a fetched schema, a database parent of a
+  // database.
+  const ancestryBound = 3;
+  const supportIds = session => new Set(session.mapping.projection.sections.filter(item => item.role === 'support').flatMap(item => item.destination.type === 'pages'
+    ? item.destination.pages.map(page => page.id) : [item.destination.id, ...(item.destination.databaseId ? [item.destination.databaseId] : [])]));
+  const walkFor = (schemas = []) => ({ pages: new Map(), schemas: new Map(schemas) });
+  async function containment(session, id, parent, walk) {
+    const support = supportIds(session), root = session.mapping.projection.root.id;
+    let ids = [id], reads = 0;
+    for (;;) {
+      if (ids.some(value => value && support.has(value))) return 'support';
+      if (ids.includes(root)) return 'clear';
+      switch (parent?.type) {
+        case 'workspace': return 'clear';
+        case 'page_id': {
+          const next = notionId(parent.page_id);
+          if (!next) return 'unresolved';
+          let page = walk.pages.get(next);
+          if (!page && !support.has(next) && next !== root) {
+            if (reads >= ancestryBound) return 'unresolved';
+            reads++;
+            try { page = await session.client.page(next); } catch (error) { if (failed(error).state === 'inaccessible') return 'unresolved'; throw error; }
+            walk.pages.set(next, page);
+          }
+          ids = [next]; parent = page?.parent; continue;
+        }
+        case 'data_source_id': {
+          const source = notionId(parent.data_source_id), schema = walk.schemas.get(source);
+          if ([source, notionId(parent.database_id)].some(value => value && support.has(value))) return 'support';
+          if (!schema) return 'unresolved';
+          ids = [source, notionId(schema.parent?.database_id)]; parent = schema.database_parent; continue;
+        }
+        case 'database_id': return support.has(notionId(parent.database_id)) ? 'support' : 'unresolved';
+        default: return 'unresolved';
+      }
+    }
+  }
 
   async function status() {
     const checkedAt = new Date().toISOString();
@@ -103,11 +134,12 @@ export function createHomeService({ credential = hostCredential, transport, read
       const target = item.destination;
       if (target.type === 'pages') {
         // A page list is the mapped pages themselves, each read under the current grant.
-        const items = []; let denied = 0, excluded = 0;
+        const items = [], walk = walkFor(); let denied = 0, excluded = 0;
         for (const page of target.pages) {
           try {
             const value = await session.client.page(page.id);
-            if (value.in_trash) denied++; else if (supportRow(session, value)) excluded++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled' });
+            const where = value.in_trash ? 'trash' : await containment(session, page.id, value.parent, walk);
+            if (where === 'support') excluded++; else if (where !== 'clear') denied++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled' });
           } catch (error) { if (failed(error).state !== 'inaccessible') throw error; denied++; }
         }
         const notes = excluded ? { supportExcluded: excluded } : {};
@@ -117,22 +149,28 @@ export function createHomeService({ credential = hostCredential, transport, read
       // The data source's schema must still hold the verified fields before any query.
       const schema = await session.client.dataSource(target.id);
       if (target.databaseId && notionId(schema.parent?.database_id) !== target.databaseId) return { state: 'unsupported', scope: session.scope };
+      // A source inside support material, or one whose place can't be resolved, lists nothing.
+      const walk = walkFor([[target.id, schema]]);
+      const where = await containment(session, target.id, { type: 'data_source_id', data_source_id: target.id, database_id: schema.parent?.database_id }, walk);
+      if (where !== 'clear') return { state: 'unsupported', scope: session.scope, contained: where };
       const types = Object.fromEntries(Object.entries(schema.properties || {}).map(([name, value]) => [name, value?.type]));
       if (types[item.fields.title] !== 'title') return { state: 'unsupported', scope: session.scope };
       const description = item.fields.description && textProperties.has(types[item.fields.description]) ? item.fields.description : undefined;
       const result = await session.client.query(target.id, { filter: item.view?.filter, sorts: item.view?.sorts, cursor,
         size: readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
-      const support = supportPages(session);
       const rows = (Array.isArray(result.results) ? result.results : [])
         .filter(page => page?.object === 'page' && !page.in_trash && notionId(page.parent?.data_source_id) === target.id && notionId(page.id));
-      const excluded = rows.filter(page => support.has(notionId(page.id))).length;
-      const items = rows.filter(page => !support.has(notionId(page.id)))
+      // The same predicate per row; rows share the source's chain, so this reads nothing more.
+      const places = [];
+      for (const page of rows) places.push(await containment(session, notionId(page.id), page.parent, walk));
+      const excluded = places.filter(place => place === 'support').length, withheld = places.filter(place => place === 'unresolved').length;
+      const items = rows.filter((page, index) => places[index] === 'clear')
         .slice(0, readLimits.pageSize).map(page => {
           const text = description ? propertyText(page.properties?.[description]).trim().slice(0, 300) : '';
           return { id: notionId(page.id), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
         });
       const next = result.has_more && typeof result.next_cursor === 'string' && result.next_cursor.length <= 200 ? result.next_cursor : undefined;
-      const notes = { ...(result.request_status?.type === 'incomplete' && { partial: true }), ...(excluded && { supportExcluded: excluded }) };
+      const notes = { ...(result.request_status?.type === 'incomplete' && { partial: true }), ...(excluded && { supportExcluded: excluded }), ...(withheld && { withheld }) };
       if (!items.length && !cursor && !next) return { state: 'empty', scope: session.scope, ...notes };
       return { state: 'listed', scope: session.scope, items, hasMore: Boolean(next), ...(next && { cursor: next }), ...notes };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
@@ -145,11 +183,20 @@ export function createHomeService({ credential = hostCredential, transport, read
     if (!item || !recordId) return { state: 'inaccessible', scope: session.scope };
     const target = item.destination;
     // Only mapped pages, or pages whose verified parent is the mapped data source.
-    // Support pages are refused before any request for their content.
-    if ((target.type === 'pages' && !target.pages.some(page => page.id === recordId)) || supportPages(session).has(recordId)) return { state: 'inaccessible', scope: session.scope };
+    // Named support pages are refused before any request.
+    if ((target.type === 'pages' && !target.pages.some(page => page.id === recordId)) || supportIds(session).has(recordId)) return { state: 'inaccessible', scope: session.scope };
     try {
       const page = await session.client.page(recordId);
-      if (page.in_trash || supportRow(session, page) || (target.type === 'data_source' && notionId(page.parent?.data_source_id) !== target.id)) return { state: 'inaccessible', scope: session.scope };
+      if (page.in_trash || (target.type === 'data_source' && notionId(page.parent?.data_source_id) !== target.id)) return { state: 'inaccessible', scope: session.scope };
+      // The list's predicate, before any title, field or block is used: for a data source
+      // record its source's schema is read and checked exactly as the list checks it.
+      let walk = walkFor();
+      if (target.type === 'data_source') {
+        const schema = await session.client.dataSource(target.id);
+        if (target.databaseId && notionId(schema.parent?.database_id) !== target.databaseId) return { state: 'unsupported', scope: session.scope };
+        walk = walkFor([[target.id, schema]]);
+      }
+      if (await containment(session, recordId, page.parent, walk) !== 'clear') return { state: 'inaccessible', scope: session.scope };
       const properties = page.properties || {};
       // Property text over the display bound is cut and the article says it is partial.
       let cut = false;

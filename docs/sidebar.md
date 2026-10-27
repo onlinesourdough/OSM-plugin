@@ -28,18 +28,28 @@ through [OSM's internal Notion connection](home-connection.md)
 (`internal_selected_pages`). For `official_notion_user`, Home says it can't read
 through that connection in this view yet and shows the saved links; it never
 shows Connect or unsupported-host copy for a working official connection.
-Support material the definition names (core rules, the source index, writing,
-access and evidence procedures, maintenance, recovery snapshots) is never
-listed, read or shown as context. Enforcement:
+The definition can name support material: core rules, the source index,
+writing, access and evidence procedures, maintenance and recovery snapshots.
+One containment check, the same for every list and read, keeps it and what lies
+under it out of Context, within these limits:
 
-- A projection that maps a support source or page as context is refused.
-- A support page stored as a row of a data source mapped as context is left out
-  of its list, and a read is refused before any request.
-- A page in a context page list whose parent is a support data source is only
-  known at read time. It is left out of the list, and a read is refused, before
+- A projection that maps a known support page, source or database as context is
+  refused.
+- The check walks a page's parents with page metadata reads, at most three per
+  item. For a data source, it uses the schema already read for the section: its
+  database and that database's `database_parent`. It never reads a database
+  object.
+- The walk stops at the mapped root or the workspace. Anything found to be
+  support, or inside support, is left out of lists and refused on read before
   its title, fields or blocks are used.
+- A data-source section inside support lists nothing.
+- What the check can't resolve is refused as unresolved, never guessed: a block
+  parent, a parent the connection can't read, a data source not mapped as a
+  section, a database inside a database, or more than three ancestors below the
+  root.
 
-Exclusions are counted, never named.
+Exclusions are counted, never named. Support items the definition doesn't name,
+and anything above the mapped root, are outside this check.
 
 **Notion · Connected** is green only when the internal connection's identity
 matches the projection and the mapped root, not in the trash, was just read.
@@ -106,10 +116,10 @@ panel can start the temporary transport for this read, even without a page searc
 are not individually fetched. Unsupported custom/uploaded icons and failed
 icon reads retain a usable text label; no arbitrary external image host is loaded.
 Icon failure does not affect the connection badge or saved source choices.
-Because icon reads use the official connection, they wait until the current
-Home status has resolved, so none run while a refresh, retry, recovery or
-context change is pending. They then run only where the saved links are the
-visible view: an official-mode
+Because icon reads use the official connection, they need positive evidence
+from the resolved current status. None run while a refresh, retry, recovery or
+context change is pending, or after a failed check or the server's error status.
+They then run only where the saved links are the visible view: an official-mode
 projection, no projection, or links the user chose. While Home shows the
 internal connection's view, the panel makes no automatic official-route call.
 
