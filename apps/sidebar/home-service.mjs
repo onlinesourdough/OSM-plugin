@@ -63,6 +63,15 @@ export function createHomeService({ credential = hostCredential, transport, read
   // read, including when they are rows of a data source mapped as context.
   const supportPages = session => new Set(session.mapping.projection.sections.filter(item => item.role === 'support' && item.destination.type === 'pages')
     .flatMap(item => item.destination.pages.map(page => page.id)));
+  // A page whose parent is a support data source (or its database) is support material
+  // too. Only the fetched page shows its parent, so this is checked at read time,
+  // before any title, field or block is used.
+  const supportSources = session => new Set(session.mapping.projection.sections.filter(item => item.role === 'support' && item.destination.type === 'data_source')
+    .flatMap(item => [item.destination.id, ...(item.destination.databaseId ? [item.destination.databaseId] : [])]));
+  const supportRow = (session, page) => {
+    const sources = supportSources(session);
+    return [page?.parent?.data_source_id, page?.parent?.database_id].some(value => notionId(value) && sources.has(notionId(value)));
+  };
 
   async function status() {
     const checkedAt = new Date().toISOString();
@@ -94,13 +103,16 @@ export function createHomeService({ credential = hostCredential, transport, read
       const target = item.destination;
       if (target.type === 'pages') {
         // A page list is the mapped pages themselves, each read under the current grant.
-        const items = []; let denied = 0;
+        const items = []; let denied = 0, excluded = 0;
         for (const page of target.pages) {
-          try { const value = await session.client.page(page.id); if (value.in_trash) denied++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled' }); }
-          catch (error) { if (failed(error).state !== 'inaccessible') throw error; denied++; }
+          try {
+            const value = await session.client.page(page.id);
+            if (value.in_trash) denied++; else if (supportRow(session, value)) excluded++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled' });
+          } catch (error) { if (failed(error).state !== 'inaccessible') throw error; denied++; }
         }
-        if (!items.length) return { state: denied ? 'inaccessible' : 'empty', scope: session.scope };
-        return { state: 'listed', scope: session.scope, items, hasMore: false, ...(denied && { withheld: denied }) };
+        const notes = excluded ? { supportExcluded: excluded } : {};
+        if (!items.length) return { state: denied ? 'inaccessible' : 'empty', scope: session.scope, ...notes };
+        return { state: 'listed', scope: session.scope, items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
       }
       // The data source's schema must still hold the verified fields before any query.
       const schema = await session.client.dataSource(target.id);
@@ -137,7 +149,7 @@ export function createHomeService({ credential = hostCredential, transport, read
     if ((target.type === 'pages' && !target.pages.some(page => page.id === recordId)) || supportPages(session).has(recordId)) return { state: 'inaccessible', scope: session.scope };
     try {
       const page = await session.client.page(recordId);
-      if (page.in_trash || (target.type === 'data_source' && notionId(page.parent?.data_source_id) !== target.id)) return { state: 'inaccessible', scope: session.scope };
+      if (page.in_trash || supportRow(session, page) || (target.type === 'data_source' && notionId(page.parent?.data_source_id) !== target.id)) return { state: 'inaccessible', scope: session.scope };
       const properties = page.properties || {};
       // Property text over the display bound is cut and the article says it is partial.
       let cut = false;

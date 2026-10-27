@@ -30,9 +30,16 @@ through that connection in this view yet and shows the saved links; it never
 shows Connect or unsupported-host copy for a working official connection.
 Support material the definition names (core rules, the source index, writing,
 access and evidence procedures, maintenance, recovery snapshots) is never
-listed, read or shown as context. That includes a support page stored as a row
-of a data source mapped as context: lists leave it out, and a read is refused
-before its content is fetched.
+listed, read or shown as context. Enforcement:
+
+- A projection that maps a support source or page as context is refused.
+- A support page stored as a row of a data source mapped as context is left out
+  of its list, and a read is refused before any request.
+- A page in a context page list whose parent is a support data source is only
+  known at read time. It is left out of the list, and a read is refused, before
+  its title, fields or blocks are used.
+
+Exclusions are counted, never named.
 
 **Notion · Connected** is green only when the internal connection's identity
 matches the projection and the mapped root, not in the trash, was just read.
@@ -55,8 +62,8 @@ another map and not proof of native YAML support.
 Lists and bodies exist only in the panel's memory for the current scope.
 Leaving an article clears it, and a revocation, account, projection or context
 change clears every list, body and section before anything new is shown. So
-does a denial for a source or record that had already listed: Home clears its
-titles and checks status once. A source denied from the first read keeps its
+does a denial for a source or record that had already listed, also when it
+arrives after Back: Home clears its titles and checks status once. A source denied from the first read keeps its
 placeholder without rechecking. An article whose property text is longer than
 Home shows says that part is in Notion. There
 is no cache, localStorage, analytics or log of content. All retrieved text is
@@ -99,8 +106,10 @@ panel can start the temporary transport for this read, even without a page searc
 are not individually fetched. Unsupported custom/uploaded icons and failed
 icon reads retain a usable text label; no arbitrary external image host is loaded.
 Icon failure does not affect the connection badge or saved source choices.
-Because icon reads use the official connection, they wait until Home's mode is
-known and run only where the saved links are the visible view: an official-mode
+Because icon reads use the official connection, they wait until the current
+Home status has resolved, so none run while a refresh, retry, recovery or
+context change is pending. They then run only where the saved links are the
+visible view: an official-mode
 projection, no projection, or links the user chose. While Home shows the
 internal connection's view, the panel makes no automatic official-route call.
 

@@ -934,3 +934,51 @@ test('a property-only article cut at the display bound says it is partial (F5)',
   assert.ok(u.panel().includes('Part of this record is longer than Home shows. The rest is in Notion.'));
   assert.equal(u.panel().includes('no text to show'), false);
 });
+
+// Sol r2 repairs. A host whose next osm_home answers wait until released.
+function pendingHomeHost() {
+  const host = homeHost();
+  let gate = null, release = () => {};
+  const handler = async (name, args) => { if (name === 'osm_home' && gate) await gate; return host.handler(name, args); };
+  return { s: host.s, handler, hold() { gate = new Promise(resolve => { release = () => { gate = null; resolve(); }; }); }, release: () => release() };
+}
+test('Refresh from official to internal makes no icon read while pending or after (R2-2)', async () => {
+  const host = pendingHomeHost(); Object.assign(host.s, { state: 'official_mode', mapping: 'saved' });
+  const u = await ui(configured(), homeSources, { ...iconOptions, home: host.handler }); await settle();
+  assert.equal(iconCalls(u), 1); assert.equal(u.shown('dashboard'), true);
+  Object.assign(host.s, { state: 'ready' }); host.hold();
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(iconCalls(u), 1, 'no icon read while the new status is pending');
+  host.release(); await settle();
+  assert.equal(u.shown('home'), true); assert.equal(iconCalls(u), 1, 'none once internal Home resolves');
+});
+
+test('Refresh from internal to official reads icons only after official resolves (R2-2)', async () => {
+  const host = pendingHomeHost();
+  const u = await ui(configured(), homeSources, { ...iconOptions, home: host.handler }); await settle();
+  assert.equal(u.shown('home'), true); assert.equal(iconCalls(u), 0);
+  Object.assign(host.s, { state: 'official_mode', mapping: 'saved' }); host.hold();
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(iconCalls(u), 0, 'no icon read while the new status is pending');
+  host.release(); await settle();
+  assert.equal(u.shown('dashboard'), true); assert.equal(iconCalls(u), 1);
+});
+
+test('a denial that arrives after Back still clears the title with one status recheck (R2-3)', async () => {
+  const host = homeHost();
+  let release; const pending = new Promise(resolve => { release = resolve; });
+  const handler = async (name, args) => { if (name === 'osm_home_read') await pending; return host.handler(name, args); };
+  const u = await homeUi({ s: host.s, handler });
+  const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+  assert.equal(statusCalls(), 1);
+  const opening = u.buttonNamed('Start emails with the outcome').dispatch('click');
+  await settle();
+  await u.press('← Context');
+  assert.ok(u.panel().includes('Start emails with the outcome'));
+  Object.assign(host.s, { readState: 'inaccessible', listState: 'inaccessible' });
+  release(); await opening; await settle();
+  assert.equal(u.panel().includes('Start emails with the outcome'), false);
+  assert.equal(statusCalls(), 2);
+  await settle(); await settle();
+  assert.equal(statusCalls(), 2, 'no reload loop');
+});

@@ -100,9 +100,11 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     $('reader-title')?.focus();
     let result;
     try { result = (await call('osm_home_read', { section: key, id }))?._meta?.['osm/home-record']; } catch { result = { state: 'unavailable' }; }
-    if (!current(result, mine) || reader?.id !== id) return changed();
-    // A listed record that is now denied invalidates its titles and navigation too.
+    if (!current(result, mine)) return changed();
+    // A listed record that is now denied invalidates its titles and navigation too, also
+    // when the reader was left before the answer arrived.
     if (result.state === 'inaccessible' && lists.get(key)?.items?.some(item => item.id === id)) { revoke(); return changed(); }
+    if (reader?.id !== id) return changed();
     reader = { key, id, state: result.state, record: result.record };
     changed(); $('reader-title')?.focus();
   }
@@ -277,10 +279,12 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   $('show-home').addEventListener('click', () => { showLinks = false; changed(); $('heading').focus(); });
   // Automatic page-icon reads use the official connection. They wait until Home's mode is
   // known and run only where the saved links are the visible view: official mode, no
-  // projection, or links the user chose. Never while internal Home is shown.
+  // projection, or links the user chose. Never while internal Home is shown, and never
+  // while a status check (refresh, retry, recovery or context sync) is still pending:
+  // only the resolved current status decides.
   function iconsAllowed(dashboard) {
     if (!context) return !dashboard;
-    if (!data || data.failed || data.mapping === 'unavailable') return false;
+    if (loading || !data || data.failed || data.mapping === 'unavailable') return false;
     return dashboard ? !shown() : data.selectedMode !== 'internal_selected_pages';
   }
   return { sync, reload, render, shown, iconsAllowed };
