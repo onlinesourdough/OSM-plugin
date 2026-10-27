@@ -1237,3 +1237,89 @@ test('a context change resets the budget (R5-1, I2)', async () => {
   await u.press('Fixed scope before retainers'); await settle();
   assert.equal(status(), spent + 2, 'the new context has its own automatic reload');
 });
+
+// Sol r6 correction (run 74): reads belong to the same recovery settlement.
+const deferred = () => { const entry = {}; entry.promise = new Promise(resolve => { entry.release = resolve; }); return entry; };
+function readHost() {
+  const base = recoveryHost(), held = [], reads = { change: null, hold: false };
+  const handler = async (name, args) => {
+    if (name === 'osm_home_read' && reads.hold) { const entry = deferred(); held.push(entry); await entry.promise; }
+    const result = await base.handler(name, args);
+    if (name === 'osm_home_read' && reads.change) reads.change(result._meta['osm/home-record']);
+    return result;
+  };
+  return { ...base, handler, reads, releaseReads: () => { reads.hold = false; for (const entry of held.splice(0)) entry.release(); } };
+}
+// Starts a recovery (a read answers for scope 2) with Docs held, so its lists are not yet settled.
+async function recoveringWithDocsHeld() {
+  const host = readHost(), u = await homeUi(host), { status } = counts(u);
+  const releaseDocs = host.hold('docs');
+  host.s.scope = 'scope-2';
+  await u.press('About Fictional Studio');
+  assert.equal(status(), 2); assert.ok(u.panel().includes('Fixed scope before retainers'));
+  return { host, u, status, releaseDocs };
+}
+for (const leave of [false, true]) {
+  test(`a read pending while every list settles keeps the recovery unsettled${leave ? ', also after Back' : ''} (R6-1, I2)`, async () => {
+    const { host, u, status, releaseDocs } = await recoveringWithDocsHeld();
+    host.reads.hold = true;
+    const opening = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
+    if (leave) { await u.press('← Context'); assert.equal(u.shown('home-footer'), true); }
+    releaseDocs(); await settle();
+    host.reads.change = value => { value.scope = 'stale-scope'; };
+    host.releaseReads(); await opening; await settle();
+    assert.equal(status(), 2, 'no third automatic reload'); assert.equal(u.shown('home-gate'), true);
+  });
+}
+for (const failure of ['unavailable', 'rate_limited']) {
+  test(`a current-scope ${failure} read keeps the recovery unsettled after the lists settle (R6-1, I2)`, async () => {
+    const { host, u, status, releaseDocs } = await recoveringWithDocsHeld();
+    host.reads.change = value => { value.state = failure; delete value.record; };
+    await u.press('Fixed scope before retainers');
+    host.reads.change = null;
+    releaseDocs(); await settle();
+    host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
+    await u.click('skills-tab'); await settle();
+    assert.equal(status(), 2, 'the failed read keeps the budget spent'); assert.equal(u.shown('home-gate'), true);
+  });
+}
+test('a recovery whose last outstanding request is a successful read settles; a later episode reloads once (R6-1, I2)', async () => {
+  const { host, u, status, releaseDocs } = await recoveringWithDocsHeld();
+  host.reads.hold = true;
+  const opening = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
+  releaseDocs(); await settle();
+  host.releaseReads(); await opening; await settle();
+  assert.equal(u.text('reader-title'), 'Fixed scope before retainers');
+  await u.press('← Context');
+  host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
+  await u.click('skills-tab'); await settle();
+  assert.equal(status(), 3, 'exactly one more reload'); await settle(); assert.equal(status(), 3);
+});
+test('old-generation answers arriving during an active recovery do not re-arm it (R6-1, I2)', async () => {
+  const host = recoveryHost(), gates = [deferred(), deferred()]; let calls = 0;
+  const handler = async (name, args) => {
+    if (name === 'osm_home_list' && args.section === 'memory') { const gate = gates[calls++]; if (gate) await gate.promise; }
+    return host.handler(name, args);
+  };
+  const u = await homeUi({ s: host.s, handler }), { status } = counts(u);
+  host.s.scope = 'scope-2';
+  await u.press('About Fictional Studio');
+  assert.equal(status(), 2); assert.equal(calls, 2, 'memory pending in both generations');
+  gates[0].release(); await settle(); // the first generation's Memory answer, now stale
+  host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
+  await u.click('skills-tab'); await settle();
+  assert.equal(status(), 2, 'not re-armed by the stale answer'); assert.equal(u.shown('home-gate'), true);
+  gates[1].release(); await settle(); assert.equal(status(), 2);
+});
+test('a section Try again resets the budget even when the retry does not settle (R6-1, I2)', async () => {
+  const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
+  host.overrides.set('memory', value => { value.state = 'unavailable'; delete value.items; });
+  host.s.scope = 'scope-2';
+  await u.press('About Fictional Studio');
+  assert.equal(status(), 2);
+  await u.press('Try again');
+  assert.ok(u.panel().includes('Notion could not be read. Try again later.'), 'the retry failed again');
+  host.s.scope = 'scope-3';
+  await u.press('About Fictional Studio');
+  assert.equal(status(), 3, 'the explicit reset alone re-armed the budget');
+});

@@ -35,12 +35,14 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // recoveries: the automatic-reload budget of the current invalidation episode.
   // recovering: an automatic recovery is active and has not yet settled.
   let data = null, context = null, showLinks = false, loading = false, generation = 0, recoveries = 0, recovering = false;
-  let tab = 'context', reader = null, builtinOpen = false, lists = new Map(), openers = new Map();
+  // lists and reads hold this view's requests: lists by section, reads by request (pending
+  // or failed reads only). clear() drops both, so older generations never count.
+  let tab = 'context', reader = null, builtinOpen = false, lists = new Map(), reads = new Map(), openers = new Map();
 
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text) node.textContent = text; if (cls) node.setAttribute('class', cls); return node; };
   const button = (text, cls, onClick) => { const node = el('button', text, cls); node.setAttribute('type', 'button'); node.addEventListener('click', onClick); return node; };
   const sections = () => data?.state === 'ready' ? data.sections : [];
-  function clear() { lists = new Map(); reader = null; openers = new Map(); builtinOpen = false; }
+  function clear() { lists = new Map(); reads = new Map(); reader = null; openers = new Map(); builtinOpen = false; }
   // Without a projection, Home appears only for a supported host's connect or Continue Setup
   // step; otherwise, including a failed check, the saved links view stays as it was. An
   // official_notion_user projection keeps the links view with its own note: this view
@@ -86,13 +88,14 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // The budget is re-armed explicitly (Refresh, Try again, context change), or once an
   // active recovery has fully settled successfully. That means its status loaded as ready
   // and every section it requested answered for the current generation with current valid
-  // data, with none still pending, failed or invalid. A ready status or one healthy
-  // sibling alone is not enough. Invalid siblings revoke instead, and stale callbacks
-  // never reach this check.
+  // data, with none still pending, failed or invalid. Reads count too: a current-generation
+  // read that is pending or failed keeps the recovery unsettled, also after Back or another
+  // selection. A ready status, one healthy sibling or all lists alone is not enough.
+  // Invalid results revoke instead, and stale callbacks never reach this check.
   const settled = new Set(['listed', 'empty', 'inaccessible', 'unsupported']);
   function rearm(explicit = false) {
     if (!explicit) {
-      if (!recovering || loading || data?.state !== 'ready' || !lists.size) return;
+      if (!recovering || loading || data?.state !== 'ready' || !lists.size || reads.size) return;
       for (const entry of lists.values()) if (entry.loading || !settled.has(entry.state)) return;
     }
     recovering = false; recoveries = 0;
@@ -123,13 +126,18 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     changed();
   }
   async function read(key, id) {
-    const mine = generation;
+    const mine = generation, request = {}, outstanding = reads;
+    outstanding.set(request, 'pending');
     reader = { key, id, state: 'loading' }; changed();
     $('reader-title')?.focus();
     let result;
     try { result = (await call('osm_home_read', { section: key, id }))?._meta?.['osm/home-record']; } catch { result = { state: 'unavailable' }; }
     // Invalidation comes first, also when the reader was left before the answer arrived.
     if (!current(result, mine, Boolean(lists.get(key)?.items?.some(item => item.id === id)))) return changed();
+    // This generation's read has answered: a failure keeps the recovery unsettled; a valid
+    // answer may complete it, whether or not the reader is still on this record.
+    if (['unavailable', 'rate_limited'].includes(result.state)) outstanding.set(request, 'failed'); else outstanding.delete(request);
+    rearm();
     if (reader?.id !== id) return changed();
     reader = { key, id, state: result.state, record: result.record };
     changed(); $('reader-title')?.focus();
