@@ -25,6 +25,10 @@ Grants Setup asks the owner for:
 - each existing database the model links to outside that root, such as a team
   Memory or Skills database, shared separately. A link from the model is not a
   grant, and Home reports such a source as inaccessible until it is shared.
+  Even when shared, Home lists it only when its ancestry up to the workspace
+  can be read within the support check's bound. Otherwise it is refused as
+  unresolved. This is item (a), pending an owner decision; see
+  [Home](sidebar.md#home).
 
 A scoped connection limits only itself. If the same agent can also call a
 broader Notion route, such as the official plugin, OSM's scope does not fence
@@ -62,9 +66,10 @@ Bounds:
 - Support containment reads a record's parent pages, at most three per item.
   For a data-source record, it also reads the source's schema (`GET
   /v1/data_sources/{id}`, whose `database_parent` locates the database); it never
-  reads a database. A parent that can't be read leaves the item unresolved and
-  refused. So an external database shared without its parent page stays hidden
-  until that page is shared too.
+  reads a database or a parent data source. A parent that can't be read leaves
+  the item unresolved and refused. So an external database stays hidden until
+  its whole ancestry can be read within three ancestor-page steps. That is item
+  (a), unresolved and pending an owner decision.
 
 [Status codes](https://developers.notion.com/reference/status-codes) map to fixed
 states, and no Notion message passes through, since a 404 message can name the

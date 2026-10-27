@@ -35,18 +35,33 @@ under it out of Context, within these limits:
 
 - A projection that maps a known support page, source or database as context is
   refused.
-- The check walks a page's parents with page metadata reads, at most three per
-  item. For a data source, it uses the schema already read for the section: its
+- The check walks a page's parents with page metadata reads. It takes at most
+  three ancestor-page steps per item, counted whether or not a step was already
+  read for an earlier item. A parent that is the root or a named support item
+  needs no read.
+- For a data source, it uses the schema already read for that section: its
   database and that database's `database_parent`. It never reads a database
-  object.
+  object or a parent data source.
 - The walk stops at the mapped root or the workspace. Anything found to be
   support, or inside support, is left out of lists and refused on read before
-  its title, fields or blocks are used.
-- A data-source section inside support lists nothing.
-- What the check can't resolve is refused as unresolved, never guessed: a block
-  parent, a parent the connection can't read, a data source not mapped as a
-  section, a database inside a database, or more than three ancestors below the
-  root.
+  its title, fields or blocks are used. A data-source section inside support
+  lists nothing.
+- What the check can't resolve is refused as unresolved, never guessed:
+  - a block parent;
+  - a parent the connection can't read;
+  - a database inside a database;
+  - a data source whose parent is a data source that isn't named support;
+  - a chain that needs more than three ancestor-page steps.
+
+Two of these refusals are unresolved pending an owner decision. They are not
+accepted limits:
+
+- **(a)** An external database is listed only when its whole ancestry up to the
+  root or the workspace can be read within that bound. Sharing only its
+  immediate parent page isn't enough if a higher ancestor is unreadable.
+- **(d)** A page in a page list that is a row of a data source is refused, even
+  when that data source is mapped as another section. Only the item's own
+  section schema is used.
 
 Exclusions are counted, never named. Support items the definition doesn't name,
 and anything above the mapped root, are outside this check.

@@ -17,7 +17,8 @@ const ids = { bot: hex(0xb01), botB: hex(0xb02), ws: hex(0xa01), wsB: hex(0xa02)
   memoryDb: hex(4), memory: hex(5), skillsDb: hex(6), skills: hex(7), docsDb: hex(8), docs: hex(9), outside: hex(10),
   sharedOuter: hex(11), childPage: hex(12), childDb: hex(13), deep: hex(14), definition: hex(15), rules: hex(16), snapshot: hex(17), evidence: hex(18), evidenceDb: hex(19), procedureRow: hex(0x300),
   underRules: hex(0x302), underRow: hex(0x303), sibling: hex(20), siblingRow: hex(0x304), innerDb: hex(21), inner: hex(22), innerRow: hex(0x305),
-  inColumn: hex(0x306), deepA: hex(0x307), deepB: hex(0x308), deepC: hex(0x309), deepD: hex(0x30a), deepE: hex(0x30b) };
+  inColumn: hex(0x306), deepA: hex(0x307), deepB: hex(0x308), deepC: hex(0x309), deepD: hex(0x30a), deepE: hex(0x30b),
+  syncedDb: hex(23), synced: hex(24), syncedRow: hex(0x311), synced2: hex(25), synced2Row: hex(0x312) };
 const dashed = id => `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
 const rich = text => [{ type: 'text', plain_text: text, text: { content: text } }];
 const titled = text => ({ Name: { type: 'title', title: rich(text) } });
@@ -77,6 +78,15 @@ function world() {
   page(ids.deepD, 'Fictional level D', under(ids.deepC));
   page(ids.deepE, 'Fictional level E', under(ids.deepD));
   children.set(ids.deepD, [{ object: 'block', id: dashed(hex(0x310)), type: 'paragraph', paragraph: { rich_text: rich('Fictional level D body') }, has_children: false }]);
+  // Externally synced data sources (run 72): the documented parent of a data source can be
+  // another data source. One sits under the support source, one under a context source.
+  add(ids.syncedDb, { object: 'database', data_sources: [{ id: dashed(ids.synced), name: 'Synced' }] }, under(ids.root));
+  add(ids.synced, { object: 'data_source', database_parent: under(ids.root), properties: { Name: { type: 'title' } } },
+    { type: 'data_source_id', data_source_id: dashed(ids.evidence), database_id: dashed(ids.syncedDb) });
+  page(ids.syncedRow, 'Fictional synced support row', { type: 'data_source_id', data_source_id: dashed(ids.synced), database_id: dashed(ids.syncedDb) });
+  add(ids.synced2, { object: 'data_source', database_parent: under(ids.root), properties: { Name: { type: 'title' } } },
+    { type: 'data_source_id', data_source_id: dashed(ids.memory), database_id: dashed(ids.memoryDb) });
+  page(ids.synced2Row, 'Fictional synced row', { type: 'data_source_id', data_source_id: dashed(ids.synced2), database_id: dashed(ids.memoryDb) });
   // The About page body: text, a nested toggle, a child page and database (never opened),
   // unsupported content, a mention of an outside page and nesting beyond the depth bound.
   const block = (id, type, value, more = {}) => ({ object: 'block', id: dashed(id), type, [type]: value, has_children: false, ...more });
@@ -698,4 +708,38 @@ test('oversized multibyte source links are refused and the previous links stay r
   const links = Object.fromEntries(['docs', 'personalSkills', 'teamSkills', 'memory', 'teamMemory'].map(role => [role, { title: 'Fictional', target: folder }]));
   await assert.rejects(saveSources({ ...base, expectedRevision: saved.revision, links }, options), /too large/);
   assert.deepEqual(await readSources(context, options), saved);
+});
+
+// Sol r4 core corrections (run 72).
+function withSynced() {
+  const projection = withContainment();
+  const source = (key, id, order) => ({ key, label: `Synced ${key}`, role: 'documents', order, observed: seen, fields: { title: 'Name' },
+    destination: { type: 'data_source', id, title: 'Synced', link: notionLink(id) } });
+  projection.sections.push(source('synced', ids.synced, 12), source('synced2', ids.synced2, 13));
+  return projection;
+}
+test('a data source whose parent is another data source is support or unresolved, never clear; list and read agree (R4-1, I1)', async () => {
+  const fake = fakeNotion(), home = service(fake, withSynced());
+  for (const [key, row, contained] of [['synced', ids.syncedRow, 'support'], ['synced2', ids.synced2Row, 'unresolved']]) {
+    const before = fake.requests.length, list = await home.list({ key });
+    assert.deepEqual(list, { state: 'unsupported', scope: list.scope, contained }, key);
+    const read = await home.read({ key, id: row });
+    assert.equal(read.state, 'inaccessible', key); assert.equal(read.record, undefined, key);
+    const paths = fake.requests.slice(before).map(request => request.path);
+    assert.equal(paths.some(path => path.endsWith('/query') || path.endsWith('/children')), false, key);
+    // No traversal into the parent source and no database read.
+    assert.equal(paths.some(path => path.includes(dashed(ids.evidence)) || path.includes(dashed(ids.memory)) || path.startsWith('/v1/databases/')), false, key);
+    assert.equal(reveals([list, read], 'Fictional synced support row', 'Fictional synced row'), false, key);
+  }
+});
+
+test('the ancestry bound counts every hop, so list order and a fresh read agree (R4-4, I1)', async () => {
+  const projection = order => { const value = withContainment(); value.sections.find(item => item.key === 'more').destination.pages = order.map(id => ({ id, title: 'Mapped page', link: notionLink(id) })); return value; };
+  const results = [];
+  for (const order of [[ids.deepD, ids.deepE], [ids.deepE, ids.deepD]]) {
+    const list = await service(fakeNotion(), projection(order)).list({ key: 'more' });
+    results.push({ items: list.items.map(item => item.id), withheld: list.withheld });
+  }
+  assert.deepEqual(results, [{ items: [ids.deepD], withheld: 1 }, { items: [ids.deepD], withheld: 1 }]);
+  assert.equal((await service(fakeNotion(), projection([ids.deepD, ids.deepE])).read({ key: 'more', id: ids.deepE })).state, 'inaccessible');
 });

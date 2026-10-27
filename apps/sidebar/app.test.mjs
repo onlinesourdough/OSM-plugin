@@ -689,14 +689,16 @@ function homeHost() {
     if (name === 'osm_home') return wrap('home', s.state === 'ready'
       ? { state: 'ready', mapping: 'saved', definitionRevision: 'fictional-r1', selectedMode: 'internal_selected_pages', scope: s.scope, verifiedAt: '2026-10-26T12:00:00.000Z', checkedAt: '2026-10-26T12:00:00.000Z', root: { title: 'Fictional OSM', link: link('root') }, sections: sections(),
         builtin: [{ name: 'osm-setup', description: 'Set up, resume or move OSM.' }, { name: 'osm-context', description: 'Manage the chosen context home.' }] }
-      : { state: s.state, mapping: s.mapping, builtin: [], ...(s.mapping === 'saved' && { definitionRevision: 'fictional-r1' }) });
+      : { state: s.state, mapping: s.mapping, builtin: [], ...(s.mapping === 'saved' && { definitionRevision: 'fictional-r1',
+        selectedMode: s.state === 'official_mode' ? 'official_notion_user' : 'internal_selected_pages' }) });
     if (name === 'osm_home_list') {
-      // Like the service, scripted results carry the scope they were read under.
-      if (s.listState) return wrap('home-list', { state: s.listState, scope: s.listScope || s.scope });
+      // Like the service, scripted results carry the scope they were read under; null
+      // expresses a result without one.
+      if (s.listState) return wrap('home-list', { state: s.listState, ...(s.listScope !== null && { scope: s.listScope || s.scope }) });
       if (args.section === 'docs') return wrap('home-list', { state: 'inaccessible', scope: s.scope });
       return wrap('home-list', { state: 'listed', scope: s.scope, items: items()[args.section], hasMore: false });
     }
-    if (s.readState) return wrap('home-record', { state: s.readState, scope: s.readScope || s.scope });
+    if (s.readState) return wrap('home-record', { state: s.readState, ...(s.readScope !== null && { scope: s.readScope || s.scope }) });
     return wrap('home-record', records[args.id] ? { state: 'read', scope: s.scope, record: records[args.id] } : { state: 'inaccessible', scope: s.scope });
   };
   return { s, handler };
@@ -1050,3 +1052,63 @@ test('in setup, icons need a confirmed missing projection; the server fallback a
     assert.equal(iconCalls(u) > 0, expected, label); assert.equal(iconCalls(u) >= before, true);
   }
 });
+
+// Sol r4 core corrections (run 72).
+test('a list result without a scope invalidates the view (I2)', async () => {
+  const u = await homeUi();
+  const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+  Object.assign(u.host.s, { listState: 'listed', listScope: null });
+  await u.click('skills-tab'); await settle();
+  assert.equal(statusCalls(), 2); assert.equal(u.panel().includes('Weekly client update'), false);
+});
+
+test('links chosen: only a resolved ready status allows icon reads after Refresh (R4-2, I3)', async () => {
+  for (const state of ['unavailable', 'rate_limited', 'not_connected', 'account_changed', 'unsupported_host', 'root_inaccessible', 'mapping_unavailable']) {
+    const host = homeHost();
+    const u = await ui(configured(), homeSources, { ...iconOptions, home: host.handler }); await settle();
+    await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+    assert.equal(iconCalls(u), 1, `${state}: links chosen, ready`);
+    host.s.state = state; // a resolved non-ready status keeps mapping 'saved' and the internal mode
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(u.shown('dashboard'), true, state); assert.equal(iconCalls(u), 1, `${state}: no icon read`);
+  }
+  // The revoke() placeholder has the same shape: unavailable with mapping and mode.
+  const placeholder = { content: [], _meta: { 'osm/kind': 'home', 'osm/home': { state: 'unavailable', mapping: 'saved', selectedMode: 'internal_selected_pages', builtin: [] } } };
+  const host = homeHost(); let placed = false;
+  const u = await ui(configured(), homeSources, { ...iconOptions, home: (name, args) => placed && name === 'osm_home' ? placeholder : host.handler(name, args) }); await settle();
+  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  placed = true; await u.click('drawer-refresh'); await settle();
+  assert.equal(iconCalls(u), 1, 'placeholder: no icon read');
+});
+
+// One section stays healthy while another keeps answering invalidly.
+function mixedHost(invalid) {
+  const host = homeHost();
+  const handler = (name, args) => {
+    const result = host.handler(name, args);
+    if (host.s.broken && name === 'osm_home_list' && args.section === 'memory') {
+      const value = result._meta['osm/home-list'];
+      if (invalid === 'missing') delete value.scope; else value.scope = 'stale-scope';
+    }
+    return result;
+  };
+  host.s.broken = true;
+  return { s: host.s, handler };
+}
+for (const invalid of ['missing', 'stale']) {
+  test(`a healthy section beside one with a ${invalid} scope reloads automatically once, then waits; Refresh recovers (R4-3, I2)`, async () => {
+    const u = await homeUi(mixedHost(invalid));
+    const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+    const listCalls = () => u.homeCalls.filter(call => call.name === 'osm_home_list').length;
+    await settle(); await settle();
+    assert.equal(statusCalls(), 2, 'exactly one automatic reload');
+    const lists = listCalls();
+    await settle(); await settle();
+    assert.equal(statusCalls(), 2, 'then waits'); assert.equal(listCalls(), lists, 'no list loop');
+    assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Notion could not be read');
+    u.host.s.broken = false;
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(statusCalls(), 3); assert.equal(u.shown('home-gate'), false);
+    assert.ok(u.panel().includes('Fixed scope before retainers'));
+  });
+}

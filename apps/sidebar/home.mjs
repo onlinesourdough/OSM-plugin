@@ -71,8 +71,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   }
   // An explicit refresh rereads everything for the current context.
   function reload() { recoveries = 0; clear(); return load(); }
-  // One automatic status reload per invalidation; a repeat waits for Try again, so a
-  // persistent mismatch cannot loop.
+  // One automatic status reload per budget. The budget is reset only by an explicit
+  // refresh, Try again or a context change, never by an accepted result, so healthy
+  // sections beside a persistently invalid one cannot keep it looping.
   function revoke() {
     clear();
     data = data && { state: 'unavailable', mapping: data.mapping, builtin: data.builtin, ...(data.selectedMode && { selectedMode: data.selectedMode }) };
@@ -87,7 +88,6 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (mine !== generation) return false;
     if (!result || !sectionStates.has(result.state) || !result.scope || result.scope !== data?.scope
         || (listed && result.state === 'inaccessible')) { revoke(); return false; }
-    recoveries = 0;
     return true;
   }
 
@@ -299,7 +299,11 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   function iconsAllowed(dashboard) {
     if (!context) return !dashboard;
     if (loading || !data || data.failed) return false;
-    const chosen = dashboard && showLinks && data.mapping === 'saved' && ['official_notion_user', 'internal_selected_pages'].includes(data.selectedMode);
+    // The chosen-links branch needs the status resolved as ready; the revoke() placeholder
+    // and every other state (unavailable, rate_limited, not_connected, account_changed,
+    // unsupported_host, root_inaccessible, mapping_unavailable, unmapped) allow nothing.
+    const chosen = dashboard && showLinks && data.state === 'ready' && data.mapping === 'saved'
+      && ['official_notion_user', 'internal_selected_pages'].includes(data.selectedMode);
     const evidence = data.state === 'official_mode' || data.mapping === 'missing' || chosen;
     return evidence && (!dashboard || !shown());
   }

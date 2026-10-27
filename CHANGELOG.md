@@ -21,10 +21,12 @@
   can't read through that connection yet; the mode is never switched. Support
   material the definition names, such as core rules and recovery snapshots, is
   kept out of context by one check for every list and read:
-  - It follows a page's parents for up to three page reads, and a data source's
-    database through its schema; it never reads a database.
-  - It refuses what it can't resolve, so a source whose parent page isn't shared
-    with OSM's connection is not shown.
+  - It follows up to three ancestor pages per item, and a data source's
+    database through its schema. It never reads a database or a parent data
+    source.
+  - It refuses what it can't resolve. An external database whose ancestry can't
+    be read, and a page-list page that is a database row, are refused; both are
+    pending an owner decision.
   - A support source can't also be mapped as context.
   Existing saved links load unchanged and are labelled a partial view.
 - Page-icon reads, which use the official connection, need the resolved current

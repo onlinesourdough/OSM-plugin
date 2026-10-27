@@ -74,7 +74,9 @@ export function createHomeService({ credential = hostCredential, transport, read
   const walkFor = (schemas = []) => ({ pages: new Map(), schemas: new Map(schemas) });
   async function containment(session, id, parent, walk) {
     const support = supportIds(session), root = session.mapping.projection.root.id;
-    let ids = [id], reads = 0;
+    // `hops` counts every ancestor page step for this item, cached or not, so the result
+    // never depends on what an earlier item in the same call happened to read.
+    let ids = [id], hops = 0;
     for (;;) {
       if (ids.some(value => value && support.has(value))) return 'support';
       if (ids.includes(root)) return 'clear';
@@ -83,12 +85,15 @@ export function createHomeService({ credential = hostCredential, transport, read
         case 'page_id': {
           const next = notionId(parent.page_id);
           if (!next) return 'unresolved';
-          let page = walk.pages.get(next);
-          if (!page && !support.has(next) && next !== root) {
-            if (reads >= ancestryBound) return 'unresolved';
-            reads++;
-            try { page = await session.client.page(next); } catch (error) { if (failed(error).state === 'inaccessible') return 'unresolved'; throw error; }
-            walk.pages.set(next, page);
+          let page;
+          if (!support.has(next) && next !== root) {
+            if (hops >= ancestryBound) return 'unresolved';
+            hops++;
+            page = walk.pages.get(next);
+            if (!page) {
+              try { page = await session.client.page(next); } catch (error) { if (failed(error).state === 'inaccessible') return 'unresolved'; throw error; }
+              walk.pages.set(next, page);
+            }
           }
           ids = [next]; parent = page?.parent; continue;
         }
@@ -96,7 +101,15 @@ export function createHomeService({ credential = hostCredential, transport, read
           const source = notionId(parent.data_source_id), schema = walk.schemas.get(source);
           if ([source, notionId(parent.database_id)].some(value => value && support.has(value))) return 'support';
           if (!schema) return 'unresolved';
-          ids = [source, notionId(schema.parent?.database_id)]; parent = schema.database_parent; continue;
+          // The schema's own parent: normally its database. An externally synced source
+          // can have another data source as parent; it is support when either ID is, and
+          // otherwise unresolved, since that source is never read.
+          const above = schema.parent;
+          if (above?.type === 'data_source_id') {
+            return [above.data_source_id, above.database_id].some(value => notionId(value) && support.has(notionId(value))) ? 'support' : 'unresolved';
+          }
+          if (above?.type !== 'database_id' || !notionId(above.database_id)) return 'unresolved';
+          ids = [source, notionId(above.database_id)]; parent = schema.database_parent; continue;
         }
         case 'database_id': return support.has(notionId(parent.database_id)) ? 'support' : 'unresolved';
         default: return 'unresolved';
