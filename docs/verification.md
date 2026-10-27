@@ -1,5 +1,40 @@
 # Verification
 
+On 2026-10-27 the Sol r4 core corrections (`841e86e` on
+`feat/osm-home-internal-notion-74-82`, on top of `fba8dcb`) fixed four cases:
+
+- **R4-1, I1.** A data source whose schema parent is another data source is
+  support when either parent ID is support, otherwise unresolved. There is no
+  traversal into that source.
+- **R4-2, I3.** Links the user chose allow icon reads only on a resolved ready
+  status.
+- **R4-3, I2.** Accepted results no longer reset the automatic recovery budget;
+  only Refresh, Try again or a context change does.
+- **R4-4, I1.** The ancestry bound counts every hop per item, cached or not.
+
+No read was added. (a) and (d) remain unresolved, pending an owner decision.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 149/149 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `841e86e`,
+  and `git diff --check` passed.
+- **Read table:** unchanged. Counting cached hops changes no request count.
+
+Fail-first on the `fba8dcb` sources:
+
+- **R4-1 and R4-4:** failed.
+- **R4-2:** failed.
+- **R4-3, both scope variants:** never terminated, which is the unbounded
+  recovery loop itself. Each was killed by its timeout.
+- **F1 positive control:** passed.
+- **Missing scope-less list case:** already handled at `fba8dcb`, so it passed
+  there.
+
+**Native proof.** None.
+
 On 2026-10-27 the Sol r3 repairs (`bf083bc` on
 `feat/osm-home-internal-notion-74-82`, on top of the reviewed `65c816d`) enforced
 four rules, one shared place each.
@@ -40,9 +75,15 @@ rows:
 | Read a page three levels below the root | 4 page reads and 1 body |
 | List a data source in a support database | 1 schema read and no query |
 
-**Consequence of refusing unresolved containment.** An external database shared
-without its parent page is not listed until that page is shared too. Pages under
-block parents or more than three levels below the root are withheld.
+**Consequence of refusing unresolved containment** (as corrected in run 72):
+
+- **(a), pending an owner decision.** An external database is not listed until
+  its whole ancestry can be read within three ancestor-page steps. Sharing its
+  immediate parent alone may not be enough.
+- **(d), pending an owner decision.** A page-list row of a data source is
+  refused, even when that data source is mapped elsewhere.
+- **Withheld as unresolved.** Pages under block parents, and chains needing more
+  than three ancestor-page steps.
 
 **Native proof.** None.
 
