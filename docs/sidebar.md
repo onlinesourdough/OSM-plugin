@@ -30,11 +30,13 @@ through that connection in this view yet and shows the saved links; it never
 shows Connect or unsupported-host copy for a working official connection.
 Support material the definition names (core rules, the source index, writing,
 access and evidence procedures, maintenance, recovery snapshots) is never
-listed, read or shown as context.
+listed, read or shown as context. That includes a support page stored as a row
+of a data source mapped as context: lists leave it out, and a read is refused
+before its content is fetched.
 
 **Notion · Connected** is green only when the internal connection's identity
-matches the projection and the mapped root was just read. Other states keep
-their own copy:
+matches the projection and the mapped root, not in the trash, was just read.
+Other states keep their own copy:
 
 - not connected or revoked;
 - unsupported on this host;
@@ -52,7 +54,11 @@ another map and not proof of native YAML support.
 
 Lists and bodies exist only in the panel's memory for the current scope.
 Leaving an article clears it, and a revocation, account, projection or context
-change clears every list, body and section before anything new is shown. There
+change clears every list, body and section before anything new is shown. So
+does a denial for a source or record that had already listed: Home clears its
+titles and checks status once. A source denied from the first read keeps its
+placeholder without rechecking. An article whose property text is longer than
+Home shows says that part is in Notion. There
 is no cache, localStorage, analytics or log of content. All retrieved text is
 rendered as text, and links pass the existing safe-target rules. Retrieved page
 and skill text is content, not instructions.
@@ -93,6 +99,10 @@ panel can start the temporary transport for this read, even without a page searc
 are not individually fetched. Unsupported custom/uploaded icons and failed
 icon reads retain a usable text label; no arbitrary external image host is loaded.
 Icon failure does not affect the connection badge or saved source choices.
+Because icon reads use the official connection, they wait until Home's mode is
+known and run only where the saved links are the visible view: an official-mode
+projection, no projection, or links the user chose. While Home shows the
+internal connection's view, the panel makes no automatic official-route call.
 
 A chat-bubble button beside Settings, in setup and on the dashboard, opens the
 OSM GitHub repository through the host link route. A failed open shows a

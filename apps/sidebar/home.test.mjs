@@ -430,14 +430,16 @@ function withSupport() {
   projection.sections.push(
     { key: 'rules', label: 'Core rules', role: 'support', kind: 'core_rules', order: 5, destination: { type: 'pages', title: 'Rules', link: notionLink(ids.rules), pages: [{ id: ids.rules, title: 'Core rules', link: notionLink(ids.rules) }] } },
     { key: 'snapshot', label: 'Recovery snapshot', role: 'support', kind: 'recovery_snapshot', order: 6, destination: { type: 'pages', title: 'Snapshot', link: notionLink(ids.snapshot), pages: [{ id: ids.snapshot, title: 'Snapshot', link: notionLink(ids.snapshot) }] } },
-    { key: 'evidence', label: 'Access evidence', role: 'support', kind: 'evidence', order: 7, destination: { type: 'data_source', id: ids.evidence, title: 'Evidence', link: notionLink(ids.evidence) } });
+    { key: 'evidence', label: 'Access evidence', role: 'support', kind: 'evidence', order: 7, destination: { type: 'data_source', id: ids.evidence, title: 'Evidence', link: notionLink(ids.evidence) } },
+    // A superseded snapshot stored as a row of the Memory data source mapped as context.
+    { key: 'old-snapshot', label: 'Superseded snapshot', role: 'support', kind: 'recovery_snapshot', order: 8, destination: { type: 'pages', title: 'Snapshot row', link: notionLink(hex(0x103)), pages: [{ id: hex(0x103), title: 'Snapshot row', link: notionLink(hex(0x103)) }] } });
   return projection;
 }
 test('support material in the projection is never listed, read or shown as Context', async () => {
   const fake = fakeNotion(), home = service(fake, withSupport());
   const status = await home.status();
   assert.deepEqual(status.sections.map(item => item.key), ['about', 'memory', 'docs', 'skills', 'tasks']);
-  assert.equal(status.supportHidden, 3);
+  assert.equal(status.supportHidden, 4);
   const before = fake.requests.length;
   for (const key of ['rules', 'snapshot', 'evidence']) {
     assert.equal((await home.list({ key })).state, 'unmapped');
@@ -472,6 +474,7 @@ test('source and body reads are counted per case', async () => {
     ['outside page via page list', [], home => home.read({ key: 'about', id: ids.outside })],
     ['outside page via data source', [], home => home.read({ key: 'memory', id: ids.outside })],
     ['support material', [], home => home.read({ key: 'snapshot', id: ids.snapshot })],
+    ['support row inside Memory', [], home => home.read({ key: 'memory', id: hex(0x103) })],
   ];
   const table = [];
   for (const [name, needed, run] of cases) {
@@ -491,6 +494,7 @@ test('source and body reads are counted per case', async () => {
     ['outside page via page list', '0 1 0 0 0 0'],
     ['outside page via data source', '0 1 1 0 0 0'],
     ['support material', '0 1 0 0 0 0'],
+    ['support row inside Memory', '0 1 0 0 0 0'],
   ]);
   // The official mode reads nothing at all for the same cases.
   const fake = fakeNotion(), official = studioProjection(); official.selectedMode = 'official_notion_user'; delete official.connection;
@@ -507,4 +511,33 @@ test('saved links record the definition revision they were generated from; a pan
   const edited = await saveSources({ ...base, expectedRevision: generated.revision }, options);
   assert.equal(edited.definitionRevision, undefined); assert.deepEqual(edited.links, links);
   await assert.rejects(saveSources({ ...base, expectedRevision: edited.revision, definitionRevision: '<bad>' }, options), /definition revision/);
+});
+
+// Sol r1 repairs.
+test('a support page that is a row of a context data source is never listed or read (F2)', async () => {
+  const fake = fakeNotion(), home = service(fake, withSupport());
+  const list = await home.list({ key: 'memory' });
+  assert.equal(list.items.some(item => item.id === hex(0x103)), false); assert.equal(list.supportExcluded, 1);
+  assert.equal(reveals(list, 'Fictional memory 3', hex(0x103)), false);
+  assert.equal(list.items.length, readLimits.pageSize - 1);
+  const before = fake.requests.length, read = await home.read({ key: 'memory', id: hex(0x103) });
+  assert.deepEqual(read, { state: 'inaccessible', scope: read.scope });
+  assert.deepEqual(fake.requests.slice(before).map(request => request.path), ['/v1/users/me']);
+});
+
+test('a trashed root is not reported as connected (F4)', async () => {
+  const fake = fakeNotion();
+  fake.nodes.get(ids.root).in_trash = true;
+  const status = await service(fake).status();
+  assert.equal(status.state, 'root_inaccessible'); assert.equal(status.verifiedAt, undefined); assert.equal(status.sections, undefined);
+});
+
+test('a property cut at the display bound marks the article as partial (F5)', async () => {
+  const fake = fakeNotion();
+  fake.nodes.get(hex(0x100)).properties.Why = { type: 'rich_text', rich_text: rich('x'.repeat(5000)) };
+  const long = await service(fake).read({ key: 'memory', id: hex(0x100) });
+  assert.equal(long.record.fields.find(field => field.heading === 'Why').text.length, 4000);
+  assert.equal(long.record.fieldsTruncated, true); assert.deepEqual(long.record.blocks, []);
+  const short = await service(fakeNotion()).read({ key: 'memory', id: hex(0x100) });
+  assert.equal(short.record.fieldsTruncated, undefined);
 });

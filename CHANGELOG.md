@@ -19,8 +19,13 @@
   only with a new revision. It records the owner's connection mode. An
   `official_notion_user` projection shows saved links with a note that Home
   can't read through that connection yet; the mode is never switched. Support
-  material such as core rules and recovery snapshots is never shown as context.
-  Existing saved links load unchanged and are labelled a partial view.
+  material such as core rules and recovery snapshots is never shown as context,
+  even when it is a row of a context database. Existing saved links load
+  unchanged and are labelled a partial view.
+- Page-icon reads, which use the official connection, wait for Home's mode and
+  never run while Home shows the internal connection's view. A denial for
+  something already listed clears it, a trashed root is not reported
+  connected, and an article says when a long property was shortened.
 - Context 2.1.0 adds the Home projection procedure. Setup 2.1.0 explains the
   internal connection option.
 

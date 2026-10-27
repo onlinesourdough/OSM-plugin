@@ -25,8 +25,8 @@ const canBrowse = () => Boolean(status?.features?.notionPages && status.notion.s
 const icons = new Map(), requestedIcons = new Set();
 let loadingIcons = false, iconGeneration = 0;
 const displayed = link => link ? { ...link, icon: icons.get(notionPageId(link.target)) ?? pageIcon(link.icon) } : link;
-async function loadSelectedIcons() {
-  if (!canBrowse() || !status.features.notionIcons || loadingIcons || refreshing) return;
+async function loadSelectedIcons(dashboard) {
+  if (!canBrowse() || !status.features.notionIcons || loadingIcons || refreshing || !home.iconsAllowed(dashboard)) return;
   const links = [{ target: status.context.target }, { target: draft.contextTarget }, selectedContext, ...Object.values(draft.links), ...Object.values(status.sources.links)];
   const targets = [...new Map(links.filter(Boolean).filter(link => notionPageId(link.target)).map(link => [notionPageId(link.target), link.target])).entries()]
     .filter(([id]) => !icons.has(id) && !requestedIcons.has(id)).slice(0, 6);
@@ -122,17 +122,17 @@ function render() {
   const locked = saving || refreshing;
   $('loading').hidden = true;
   $('heading').textContent = dashboard ? 'OSM' : 'Get started';
-  home.sync(dashboard ? status.context.target : null);
+  home.sync(status.context.state === 'configured' ? status.context.target : null);
   const homeView = dashboard && home.shown();
   $('setup').hidden = dashboard; $('dashboard').hidden = !dashboard || homeView;
   $('settings').hidden = !dashboard; $('settings').disabled = locked;
   $('version').textContent = `v${__OSM_VERSION__}`;
   renderConnection(dashboard && !homeView, locked);
-  home.render(locked);
+  home.render(locked, dashboard);
   if (dashboard) renderDashboard(locked); else renderSetup(locked);
   if (settingsOpen) renderSettings(locked);
   paintFeedback();
-  void loadSelectedIcons();
+  void loadSelectedIcons(dashboard);
 }
 function renderConnection(dashboard, locked) {
   const state = status.notion.state, label = refreshing ? 'Checking…' : connectionCopy[state];

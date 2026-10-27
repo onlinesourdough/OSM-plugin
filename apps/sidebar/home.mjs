@@ -49,7 +49,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     try { value = (await call('osm_home', {}))?._meta?.['osm/home']; } catch { value = undefined; }
     if (mine !== generation) return;
     loading = false;
-    const next = value && typeof value.state === 'string' ? value : { state: 'unavailable', mapping: data?.mapping ?? 'missing', builtin: [] };
+    const next = value && typeof value.state === 'string' ? value
+      : { state: 'unavailable', mapping: data?.mapping ?? 'missing', builtin: [], failed: true, ...(data?.selectedMode && { selectedMode: data.selectedMode }) };
     if (next.state !== 'ready' || next.scope !== data?.scope) clear();
     data = next; changed();
   }
@@ -66,7 +67,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // persistent mismatch cannot loop.
   function revoke() {
     clear();
-    data = data && { state: 'unavailable', mapping: data.mapping, builtin: data.builtin };
+    data = data && { state: 'unavailable', mapping: data.mapping, builtin: data.builtin, ...(data.selectedMode && { selectedMode: data.selectedMode }) };
     if (++recoveries > 1) { ++generation; loading = false; return; }
     void load();
   }
@@ -86,6 +87,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     let result;
     try { result = (await call('osm_home_list', { section: key, ...(more && entry.cursor && { cursor: entry.cursor }) }))?._meta?.['osm/home-list']; } catch { result = { state: 'unavailable' }; }
     if (!current(result, mine)) return changed();
+    // A source that had listed and is now denied is an access change, not a placeholder.
+    if (result.state === 'inaccessible' && entry.state === 'listed') { revoke(); return changed(); }
     const items = more ? [...(entry.items || []), ...(result.items || [])].slice(0, 50) : result.items || [];
     lists.set(key, { state: result.state, items, cursor: result.cursor, hasMore: Boolean(result.hasMore) && items.length < 50, partial: result.partial,
       withheld: result.withheld, expanded: more || entry.expanded, retryAfter: result.retryAfter });
@@ -98,6 +101,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     let result;
     try { result = (await call('osm_home_read', { section: key, id }))?._meta?.['osm/home-record']; } catch { result = { state: 'unavailable' }; }
     if (!current(result, mine) || reader?.id !== id) return changed();
+    // A listed record that is now denied invalidates its titles and navigation too.
+    if (result.state === 'inaccessible' && lists.get(key)?.items?.some(item => item.id === id)) { revoke(); return changed(); }
     reader = { key, id, state: result.state, record: result.record };
     changed(); $('reader-title')?.focus();
   }
@@ -169,6 +174,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
         else if (block.text) body.append(el('p', block.text, block.kind === 'item' ? 'item' : block.kind === 'code' ? 'code' : null));
       }
       if (!record.fields.length && !record.blocks.length) body.append(el('p', 'This record has no text to show.', 'muted'));
+      if (record.fieldsTruncated) body.append(el('p', 'Part of this record is longer than Home shows. The rest is in Notion.', 'muted'));
       if (record.truncated) body.append(el('p', 'The rest of this page is in Notion.', 'muted'));
     }
     article.append(body);
@@ -207,8 +213,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     panel.append(root);
   }
 
-  function render(locked) {
-    document.body?.setAttribute?.('data-view', shown() ? 'home' : 'links');
+  function render(locked, active = true) {
+    const visible = active && shown();
+    document.body?.setAttribute?.('data-view', visible ? 'home' : 'links');
     $('home-note').hidden = data?.state !== 'official_mode';
     $('home-note').textContent = 'Home can’t read through your official Notion connection in this view yet. Your saved links below open each source in Notion.';
     // Saved links are a partial compatibility view of the projection's definition revision.
@@ -217,15 +224,15 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (revision) $('links-note').textContent = linksRevision() === revision
       ? `Saved links: a partial view of your AI Operating Model, revision ${revision}.`
       : `Saved links: a partial view saved separately; it may not match your AI Operating Model revision ${revision}.`;
-    $('brand-mark').hidden = !shown(); $('home').hidden = !shown();
+    $('brand-mark').hidden = !visible; $('home').hidden = !visible;
     $('show-home').hidden = !available() || !showLinks;
     const status = $('home-status');
-    status.hidden = !shown();
+    status.hidden = !visible;
     const verified = data?.state === 'ready' && Boolean(data.verifiedAt);
     status.dataset.state = verified ? 'connected' : 'neutral';
     $('home-status-label').textContent = loading && !data ? 'Notion · Checking…' : labels[data?.state] || 'Notion · Could not check';
     status.setAttribute('title', verified ? 'Checked ' + new Date(data.verifiedAt).toLocaleTimeString() : '');
-    if (!shown()) { $('home-panel').replaceChildren(); return; }
+    if (!visible) { $('home-panel').replaceChildren(); return; }
     const gate = data.state === 'ready' ? null : gates[data.state] || gates.unavailable;
     $('home-workspace').hidden = Boolean(gate); $('home-gate').hidden = !gate;
     if (gate) {
@@ -268,5 +275,13 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   });
   for (const id of ['show-links']) $(id).addEventListener('click', () => { showLinks = true; changed(); $('show-home').focus(); });
   $('show-home').addEventListener('click', () => { showLinks = false; changed(); $('heading').focus(); });
-  return { sync, reload, render, shown };
+  // Automatic page-icon reads use the official connection. They wait until Home's mode is
+  // known and run only where the saved links are the visible view: official mode, no
+  // projection, or links the user chose. Never while internal Home is shown.
+  function iconsAllowed(dashboard) {
+    if (!context) return !dashboard;
+    if (!data || data.failed || data.mapping === 'unavailable') return false;
+    return dashboard ? !shown() : data.selectedMode !== 'internal_selected_pages';
+  }
+  return { sync, reload, render, shown, iconsAllowed };
 }

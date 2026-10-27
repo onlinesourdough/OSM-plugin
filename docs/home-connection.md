@@ -56,6 +56,9 @@ Bounds:
   can't be shown here.
 - Mentions show as a placeholder, and relations, rollups, formulas, people and
   files aren't resolved, because any of them can name a source outside the grant.
+- Each property shows up to 4,000 characters; a longer one marks the article as
+  partial.
+- A trashed root page counts as unreadable, so Home is not reported connected.
 
 [Status codes](https://developers.notion.com/reference/status-codes) map to fixed
 states, and no Notion message passes through, since a 404 message can name the

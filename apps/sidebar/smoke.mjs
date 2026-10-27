@@ -92,5 +92,5 @@ try {
   // The official mode is reported as such; it is never read here or switched to the internal connection.
   assert.equal((await client.callTool({ name: 'osm_home', arguments: {} }))._meta['osm/home'].state, 'official_mode');
   assert.deepEqual(JSON.parse((await client.callTool({ name: 'osm_sources', arguments: {} })).content[0].text).sources.links, links);
-  console.log('PASS: bundled stdio server, global entrypoint, fullscreen resource, Home mapping and isolated first run.');
+  console.log('PASS: bundled stdio server, global entrypoint, fullscreen resource, Home projection and isolated first run.');
 } finally { await client.close(); await rm(scratch, { recursive: true, force: true }); }

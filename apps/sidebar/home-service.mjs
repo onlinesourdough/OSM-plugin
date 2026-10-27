@@ -59,6 +59,10 @@ export function createHomeService({ credential = hostCredential, transport, read
   // Related links are never read and support material is never Context.
   const readable = item => !['related', 'support'].includes(item.role);
   const section = (session, key) => session.mapping.projection.sections.find(item => item.key === key && readable(item));
+  // Pages the definition names as support material stay out of every context list and
+  // read, including when they are rows of a data source mapped as context.
+  const supportPages = session => new Set(session.mapping.projection.sections.filter(item => item.role === 'support' && item.destination.type === 'pages')
+    .flatMap(item => item.destination.pages.map(page => page.id)));
 
   async function status() {
     const checkedAt = new Date().toISOString();
@@ -69,7 +73,8 @@ export function createHomeService({ credential = hostCredential, transport, read
     if (session.state !== 'ready') return { ...base, state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
     const { root, sections } = saved;
     // Connected requires this identity and a successful read of the mapped root now.
-    try { await session.client.page(root.id); }
+    // A trashed root is not a readable Home.
+    try { if ((await session.client.page(root.id)).in_trash) return { ...base, state: 'root_inaccessible' }; }
     catch (error) {
       const problem = failed(error);
       return { ...base, state: problem.state === 'inaccessible' ? 'root_inaccessible' : problem.state, ...(problem.retryAfter && { retryAfter: problem.retryAfter }) };
@@ -105,16 +110,19 @@ export function createHomeService({ credential = hostCredential, transport, read
       const description = item.fields.description && textProperties.has(types[item.fields.description]) ? item.fields.description : undefined;
       const result = await session.client.query(target.id, { filter: item.view?.filter, sorts: item.view?.sorts, cursor,
         size: readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
-      const items = (Array.isArray(result.results) ? result.results : [])
-        .filter(page => page?.object === 'page' && !page.in_trash && notionId(page.parent?.data_source_id) === target.id && notionId(page.id))
+      const support = supportPages(session);
+      const rows = (Array.isArray(result.results) ? result.results : [])
+        .filter(page => page?.object === 'page' && !page.in_trash && notionId(page.parent?.data_source_id) === target.id && notionId(page.id));
+      const excluded = rows.filter(page => support.has(notionId(page.id))).length;
+      const items = rows.filter(page => !support.has(notionId(page.id)))
         .slice(0, readLimits.pageSize).map(page => {
           const text = description ? propertyText(page.properties?.[description]).trim().slice(0, 300) : '';
           return { id: notionId(page.id), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
         });
       const next = result.has_more && typeof result.next_cursor === 'string' && result.next_cursor.length <= 200 ? result.next_cursor : undefined;
-      if (!items.length && !cursor) return { state: 'empty', scope: session.scope, ...(result.request_status?.type === 'incomplete' && { partial: true }) };
-      return { state: 'listed', scope: session.scope, items, hasMore: Boolean(next), ...(next && { cursor: next }),
-        ...(result.request_status?.type === 'incomplete' && { partial: true }) };
+      const notes = { ...(result.request_status?.type === 'incomplete' && { partial: true }), ...(excluded && { supportExcluded: excluded }) };
+      if (!items.length && !cursor && !next) return { state: 'empty', scope: session.scope, ...notes };
+      return { state: 'listed', scope: session.scope, items, hasMore: Boolean(next), ...(next && { cursor: next }), ...notes };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
   }
 
@@ -125,12 +133,20 @@ export function createHomeService({ credential = hostCredential, transport, read
     if (!item || !recordId) return { state: 'inaccessible', scope: session.scope };
     const target = item.destination;
     // Only mapped pages, or pages whose verified parent is the mapped data source.
-    if (target.type === 'pages' && !target.pages.some(page => page.id === recordId)) return { state: 'inaccessible', scope: session.scope };
+    // Support pages are refused before any request for their content.
+    if ((target.type === 'pages' && !target.pages.some(page => page.id === recordId)) || supportPages(session).has(recordId)) return { state: 'inaccessible', scope: session.scope };
     try {
       const page = await session.client.page(recordId);
       if (page.in_trash || (target.type === 'data_source' && notionId(page.parent?.data_source_id) !== target.id)) return { state: 'inaccessible', scope: session.scope };
       const properties = page.properties || {};
-      const value = name => name && textProperties.has(properties[name]?.type) ? propertyText(properties[name]).trim().slice(0, 4000) : '';
+      // Property text over the display bound is cut and the article says it is partial.
+      let cut = false;
+      const value = name => {
+        if (!name || !textProperties.has(properties[name]?.type)) return '';
+        const text = propertyText(properties[name]).trim();
+        if (text.length > 4000) cut = true;
+        return text.slice(0, 4000);
+      };
       const title = (item.fields ? value(item.fields.title) : '') || pageTitle(page) || 'Untitled';
       const fields = [];
       if (item.fields) {
@@ -144,7 +160,7 @@ export function createHomeService({ credential = hostCredential, transport, read
       const { blocks, truncated } = await readBlocks(session.client, recordId);
       const noun = roleNouns[item.role];
       return { state: 'read', scope: session.scope, record: { title, meta: noun.toLowerCase() === item.label.toLowerCase() ? item.label : `${item.label} · ${noun}`,
-        fields, blocks, truncated, link: safeLink(page.url, target.link) } };
+        fields, blocks, truncated, ...(cut && { fieldsTruncated: true }), link: safeLink(page.url, target.link) } };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
   }
   return { status, list, read };

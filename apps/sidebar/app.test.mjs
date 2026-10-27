@@ -882,3 +882,55 @@ test('saved links are labelled a partial view of the projection revision, or as 
   const u = await ui(configured(), homeSources); await settle();
   assert.equal(u.shown('links-note'), false); assert.equal(u.shown('home-note'), false);
 });
+
+// Sol r1 repairs.
+const iconOptions = { pages: async () => ({ pages: [], hasMore: false }), icons: async targets => ({ icons: targets.map(target => ({ target, icon: '👾' })), partial: false }) };
+const iconCalls = u => u.names().filter(name => name === 'osm_notion_icons').length;
+test('internal Home makes no official icon reads, even before its mode is known; the links view the user chooses keeps them (F1)', async () => {
+  const host = homeHost();
+  let release; const pending = new Promise(resolve => { release = resolve; });
+  const u = await ui(configured(), homeSources, { ...iconOptions, home: async (name, args) => { await pending; return host.handler(name, args); } });
+  await settle();
+  assert.equal(iconCalls(u), 0, 'before osm_home resolves');
+  release(); await settle();
+  assert.equal(u.shown('home'), true); assert.equal(iconCalls(u), 0, 'internal Home shown');
+  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  assert.equal(u.shown('dashboard'), true); assert.equal(iconCalls(u), 1, 'links view chosen');
+});
+
+test('icon reads keep their behaviour for an official-mode projection and without a projection (F1)', async () => {
+  const host = homeHost(); Object.assign(host.s, { state: 'official_mode', mapping: 'saved' });
+  const official = await ui(configured(), homeSources, { ...iconOptions, home: host.handler }); await settle();
+  assert.equal(official.shown('dashboard'), true); assert.equal(iconCalls(official), 1);
+  assert.deepEqual(official.calls.find(call => call.name === 'osm_notion_icons').args, { targets: [target] });
+  const base = await ui(configured(), homeSources, iconOptions); await settle();
+  assert.equal(base.shown('dashboard'), true); assert.equal(iconCalls(base), 1);
+});
+
+test('a listed record that becomes inaccessible clears its titles with one status recheck (F3)', async () => {
+  const u = await homeUi();
+  const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+  assert.equal(statusCalls(), 1); // The initially inaccessible Docs source keeps its placeholder without rechecks.
+  assert.ok(u.panel().includes('This source can’t be read with the current connection.'));
+  Object.assign(u.host.s, { readState: 'inaccessible', listState: 'inaccessible' });
+  await u.press('Start emails with the outcome'); await settle();
+  assert.equal(statusCalls(), 2);
+  assert.equal(u.panel().includes('Start emails with the outcome'), false); assert.equal(u.panel().includes('Fixed scope before retainers'), false);
+  assert.equal(u.shown('home-gate'), false);
+  await settle(); await settle();
+  assert.equal(statusCalls(), 2, 'no reload loop');
+  // Repeating the denied action is not possible: the title is gone, and later lists show placeholders only.
+  assert.equal(u.buttonNamed('Start emails'), undefined);
+});
+
+test('a property-only article cut at the display bound says it is partial (F5)', async () => {
+  const host = homeHost();
+  const handler = (name, args) => name === 'osm_home_read'
+    ? { content: [], _meta: { 'osm/kind': 'home-record', 'osm/home-record': { state: 'read', scope: host.s.scope, record: { title: 'Long memory', meta: 'Memory',
+      fields: [{ heading: 'Why', text: 'y'.repeat(4000) }], blocks: [], truncated: false, fieldsTruncated: true, link: 'https://www.notion.so/fictional-long' } } } }
+    : host.handler(name, args);
+  const u = await homeUi({ s: host.s, handler });
+  await u.press('Fixed scope before retainers');
+  assert.ok(u.panel().includes('Part of this record is longer than Home shows. The rest is in Notion.'));
+  assert.equal(u.panel().includes('no text to show'), false);
+});
