@@ -1,8 +1,47 @@
 # Verification
 
-On 2026-10-27 the Sol r1 repairs (`3ca28a6` on
-`feat/osm-home-internal-notion-74-82`, on top of the reviewed `d7ba06f`) fixed
-five findings.
+On 2026-10-27 the Sol r2 repairs (`121d626` on
+`feat/osm-home-internal-notion-74-82`, on top of the reviewed `80b220d`) completed
+F1–F3, which Sol r2 found only partly resolved. F4 and F5 were resolved in r1.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 134/134 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `121d626`,
+  and `git diff --check` passed.
+- **Discrimination:** the new tests run against the `80b220d` sources failed
+  exactly R2-1, R2-2 (official to internal), R2-3 and the updated read table. The
+  internal-to-official refresh test pins unchanged behaviour and passed there.
+
+The variants and their tests:
+
+- **R2-1:** a row of a support data source mapped individually in a context page
+  list is not listed (counted, not named) and is refused on read with no block
+  request.
+- **R2-2:** a refresh from official to internal makes no icon read while the new
+  status is pending or after it resolves. A refresh from internal to official
+  reads icons only after official resolves.
+- **R2-3:** a denial arriving after Back clears the title with one status
+  recheck and no loop.
+
+The read table adds the page-list cases: listing one with a support row reads 3
+pages and returns 2; reading that row reads only its page.
+
+**What is enforced for support material.**
+
+- A projection that maps a support source or page as context is refused.
+- Support pages are left out of context database lists and refused before any
+  request.
+- Pages whose parent is a support data source are refused at read time, before
+  their title, fields or blocks are used.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r1 repairs (`3ca28a6`, on top of the reviewed `d7ba06f`)
+addressed five findings. Sol r2 later found F1–F3 only partly resolved; see the
+entry above.
 
 **Fixture results.**
 
