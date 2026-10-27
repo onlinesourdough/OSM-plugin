@@ -1,5 +1,31 @@
 # Verification
 
+On 2026-10-28 the C1 Context Architecture candidate (`ff2cfb5` on
+`feat/osm-context-architecture-c1`, from `main` `314dcf1`) added the shared
+contract, templates, fictional examples and an offline rehearsal. Docs,
+templates and fixtures only.
+
+**Fixture results.**
+
+- **New rehearsal:** `tests/context-architecture-rehearsal.py` passed 48
+  positive fixtures, and all 135 negative fixtures were rejected, each for its
+  stated reason.
+- **Harness check:** on a temporary copy, a disabled check and a wrong expected
+  reason each failed the harness.
+- **Repository checks:** these passed on a clean clone of `ff2cfb5`:
+  - `validate.py --baseline 314dcf1`, including the skill version bumps;
+  - the documentation, onboarding, layout, continuity, skill-version and
+    footprint checks;
+  - `git diff --check`.
+- **Sidebar:** the change touches no sidebar input; the sidebar reads only
+  `skills/osm-context/assets/bridge.md`. Its build and tests were therefore not
+  run.
+
+**Not proved here.** Real grants, inheritance, outside denial, host isolation,
+instruction loading on any host, adapters, Home consumption and actual timed
+success need their own live or native proof. The source-reported reviews in #70
+and #72 are design evidence, not verification.
+
 After lead Review on 2026-10-23, the candidate renames the new-customer Notion
 template to `notion-osm.md` (page **OSM**, no operating-system framing) and
 makes the `aios` → `osm` switch disable `aios` before fresh-session acceptance,
