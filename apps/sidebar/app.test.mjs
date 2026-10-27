@@ -1112,3 +1112,128 @@ for (const invalid of ['missing', 'stale']) {
     assert.ok(u.panel().includes('Fixed scope before retainers'));
   });
 }
+
+// Sol r5 correction (run 73): one automatic reload per independent invalidation episode.
+// The scripted host can hold a section's list answers pending or alter them.
+function recoveryHost() {
+  const host = homeHost(), overrides = new Map(), holds = new Map();
+  host.s.statusCalls = 0;
+  const handler = async (name, args) => {
+    if (name === 'osm_home') host.s.statusCalls++;
+    const hold = name === 'osm_home_list' && holds.get(args.section);
+    if (hold) await hold.promise;
+    const result = host.handler(name, args);
+    const change = name === 'osm_home_list' && overrides.get(args.section);
+    if (change) change(result._meta['osm/home-list']);
+    return result;
+  };
+  const hold = section => { const entry = {}; entry.promise = new Promise(resolve => { entry.release = () => { holds.delete(section); resolve(); }; }); holds.set(section, entry); return entry.release; };
+  return { s: host.s, handler, overrides, hold };
+}
+const counts = u => ({ status: () => u.homeCalls.filter(call => call.name === 'osm_home').length, lists: () => u.homeCalls.filter(call => call.name === 'osm_home_list').length });
+
+test('after a recovery fully settles, a distinct read invalidation reloads once more (R5-1, I2)', async () => {
+  const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
+  assert.equal(status(), 1);
+  host.s.scope = 'scope-2';
+  await u.press('Fixed scope before retainers'); await settle();
+  assert.equal(status(), 2); assert.ok(u.panel().includes('Start emails with the outcome'), 'healthy scope-2 lists');
+  host.s.scope = 'scope-3';
+  await u.press('Start emails with the outcome'); await settle();
+  assert.equal(status(), 3, 'a new episode gets its own automatic reload');
+  await settle(); assert.equal(status(), 3);
+});
+
+test('after a recovery fully settles, a distinct list invalidation reloads once more (R5-1, I2)', async () => {
+  const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
+  host.s.scope = 'scope-2';
+  await u.click('skills-tab'); await settle();
+  assert.equal(status(), 2); assert.ok(u.panel().includes('Weekly client update'));
+  host.s.scope = 'scope-3';
+  await u.click('context-tab'); await settle();
+  assert.equal(status(), 3);
+  await settle(); assert.equal(status(), 3);
+});
+
+test('a ready status alone does not re-arm while every sibling is still pending (R5-1, I2)', async () => {
+  const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
+  const releases = ['about', 'memory', 'docs'].map(section => host.hold(section));
+  host.s.scope = 'scope-2';
+  await u.press('Fixed scope before retainers'); await settle();
+  assert.equal(status(), 2);
+  host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
+  await u.click('skills-tab'); await settle();
+  assert.equal(status(), 2, 'no second automatic reload'); assert.equal(u.shown('home-gate'), true);
+  for (const release of releases) release();
+  await settle();
+  assert.equal(status(), 2, 'stale callbacks neither re-arm nor reload'); assert.equal(u.shown('home-gate'), true);
+  host.overrides.clear(); await u.click('drawer-refresh'); await settle();
+  assert.equal(status(), 3); assert.equal(u.shown('home-gate'), false);
+});
+
+test('one healthy sibling does not re-arm while another is pending (R5-1, I2)', async () => {
+  const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
+  const release = host.hold('memory');
+  host.s.scope = 'scope-2';
+  await u.press('Fixed scope before retainers'); await settle();
+  assert.equal(status(), 2); assert.ok(u.panel().includes('About Fictional Studio'), 'healthy sibling listed');
+  host.overrides.set('skills', value => { delete value.scope; });
+  await u.click('skills-tab'); await settle();
+  assert.equal(status(), 2); assert.equal(u.shown('home-gate'), true);
+  release(); await settle(); assert.equal(status(), 2);
+});
+
+test('a failed sibling does not re-arm; a section Try again or the gate Try again does (R5-1, I2)', async () => {
+  const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
+  host.overrides.set('memory', value => { value.state = 'unavailable'; delete value.items; });
+  host.s.scope = 'scope-2';
+  await u.press('Fixed scope before retainers'); await settle();
+  assert.equal(status(), 2); assert.ok(u.panel().includes('Notion could not be read. Try again later.'));
+  // The section's own Try again is explicit: it resets the budget.
+  host.overrides.clear();
+  await u.press('Try again'); await settle();
+  assert.ok(u.panel().includes('Start emails with the outcome'));
+  host.s.scope = 'scope-3';
+  await u.press('Start emails with the outcome'); await settle();
+  assert.equal(status(), 3, 'reloads after the section Try again');
+  // Without an explicit reset, a failed sibling keeps the budget spent.
+  host.overrides.set('memory', value => { value.state = 'unavailable'; delete value.items; });
+  host.s.scope = 'scope-4';
+  await u.press('Fixed scope before retainers'); await settle();
+  const spent = status();
+  host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
+  await u.click('skills-tab'); await settle();
+  assert.equal(status(), spent, 'failed sibling: not re-armed'); assert.equal(u.shown('home-gate'), true);
+  host.overrides.clear(); await u.click('gate-action'); await settle();
+  assert.equal(status(), spent + 1); assert.equal(u.shown('home-gate'), false);
+});
+
+test('alternating invalid answers do not reopen a loop (R5-1, I2)', async () => {
+  // Memory is invalid in even status rounds and Docs in odd ones, so every round has a
+  // healthy sibling and a different invalid one. An eager re-arm would loop here.
+  const host = recoveryHost();
+  host.overrides.set('memory', value => { if (host.s.statusCalls % 2 === 1) value.scope = 'stale-scope'; });
+  host.overrides.set('docs', value => { if (host.s.statusCalls % 2 === 0) value.scope = 'stale-scope'; });
+  const u = await homeUi(host), { status, lists } = counts(u);
+  await settle(); await settle();
+  const settledStatus = status(), settledLists = lists();
+  await settle(); await settle(); await settle();
+  assert.equal(status(), 2, 'exactly one automatic reload'); assert.equal(status(), settledStatus); assert.equal(lists(), settledLists);
+  assert.equal(u.shown('home-gate'), true);
+});
+
+test('a context change resets the budget (R5-1, I2)', async () => {
+  const host = recoveryHost();
+  host.overrides.set('memory', value => { value.scope = 'stale-scope'; });
+  const u = await homeUi(host), { status } = counts(u);
+  await settle(); await settle();
+  const spent = status();
+  assert.equal(u.shown('home-gate'), true);
+  host.overrides.clear();
+  u.notify({ _meta: { 'osm/status': { ...plain(u.status), context: { state: 'configured', target: other, kind: 'notion', revision: 'e'.repeat(64) }, checkedAt: new Date(999999).toISOString() } } });
+  await settle();
+  assert.equal(status(), spent + 1); assert.equal(u.shown('home-gate'), false);
+  host.s.scope = 'scope-9';
+  await u.press('Fixed scope before retainers'); await settle();
+  assert.equal(status(), spent + 2, 'the new context has its own automatic reload');
+});

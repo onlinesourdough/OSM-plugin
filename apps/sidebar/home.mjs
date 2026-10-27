@@ -32,7 +32,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // root_inaccessible and official_mode (another mode), is invalidation, and so is a
   // result without the current scope.
   const sectionStates = new Set(['listed', 'empty', 'read', 'inaccessible', 'unsupported', 'rate_limited', 'unavailable']);
-  let data = null, context = null, showLinks = false, loading = false, generation = 0, recoveries = 0;
+  // recoveries: the automatic-reload budget of the current invalidation episode.
+  // recovering: an automatic recovery is active and has not yet settled.
+  let data = null, context = null, showLinks = false, loading = false, generation = 0, recoveries = 0, recovering = false;
   let tab = 'context', reader = null, builtinOpen = false, lists = new Map(), openers = new Map();
 
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text) node.textContent = text; if (cls) node.setAttribute('class', cls); return node; };
@@ -66,19 +68,34 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   function sync(target) {
     if (target === context) return;
     context = target; ++generation; clear(); data = null; showLinks = false;
-    recoveries = 0;
+    rearm(true);
     if (target) void load();
   }
-  // An explicit refresh rereads everything for the current context.
-  function reload() { recoveries = 0; clear(); return load(); }
-  // One automatic status reload per budget. The budget is reset only by an explicit
-  // refresh, Try again or a context change, never by an accepted result, so healthy
-  // sections beside a persistently invalid one cannot keep it looping.
+  // An explicit refresh or Try again rereads everything for the current context.
+  function reload() { rearm(true); clear(); return load(); }
+  // One automatic status reload per independent invalidation episode. revoke() spends the
+  // budget and marks a recovery active; a second invalidation while it is spent stops
+  // and waits for an explicit Refresh, Try again or context change.
   function revoke() {
     clear();
     data = data && { state: 'unavailable', mapping: data.mapping, builtin: data.builtin, ...(data.selectedMode && { selectedMode: data.selectedMode }) };
-    if (++recoveries > 1) { ++generation; loading = false; return; }
+    if (++recoveries > 1) { recovering = false; ++generation; loading = false; return; }
+    recovering = true;
     void load();
+  }
+  // The budget is re-armed explicitly (Refresh, Try again, context change), or once an
+  // active recovery has fully settled successfully. That means its status loaded as ready
+  // and every section it requested answered for the current generation with current valid
+  // data, with none still pending, failed or invalid. A ready status or one healthy
+  // sibling alone is not enough. Invalid siblings revoke instead, and stale callbacks
+  // never reach this check.
+  const settled = new Set(['listed', 'empty', 'inaccessible', 'unsupported']);
+  function rearm(explicit = false) {
+    if (!explicit) {
+      if (!recovering || loading || data?.state !== 'ready' || !lists.size) return;
+      for (const entry of lists.values()) if (entry.loading || !settled.has(entry.state)) return;
+    }
+    recovering = false; recoveries = 0;
   }
   // The shared invalidation path for list and read results, before anything else uses
   // them. `listed` says the result concerns a source or record already shown; a denial
@@ -102,6 +119,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const items = more ? [...(entry.items || []), ...(result.items || [])].slice(0, 50) : result.items || [];
     lists.set(key, { state: result.state, items, cursor: result.cursor, hasMore: Boolean(result.hasMore) && items.length < 50, partial: result.partial,
       withheld: result.withheld, expanded: more || entry.expanded, retryAfter: result.retryAfter });
+    rearm();
     changed();
   }
   async function read(key, id) {
@@ -137,7 +155,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (!entry || entry.loading && !entry.items) { box.append(el('p', 'Loading…')); return box; }
     if (entry.state === 'empty') { box.append(el('p', 'Nothing here yet.')); return box; }
     box.append(el('p', copy[entry.state] || copy.unavailable));
-    if (['rate_limited', 'unavailable'].includes(entry.state)) box.append(button('Try again', 'text-button', () => list(section.key)));
+    // A section's Try again is explicit too, so it resets the budget.
+    if (['rate_limited', 'unavailable'].includes(entry.state)) box.append(button('Try again', 'text-button', () => { rearm(true); return list(section.key); }));
     else box.append(button('Open in Notion ↗', 'text-button', () => open(section.link)));
     return box;
   }
