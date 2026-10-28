@@ -660,30 +660,35 @@ def grants(data, ws):
         if not scope["grants"]:
             reasons.append("grants-not-enumerated")
         key = scope.get("workspace")
-        if key not in actual:
+        # Known only as a string naming a loaded workspace; the type is checked before membership.
+        known = isinstance(key, str) and key in actual
+        if not known:
             reasons.append("scope-workspace-missing")
-        else:
-            # Every actual grant of the named workspace is reported, then each one's descendants.
-            own = actual[key]
-            foreign = {parent for other, grants_of in actual.items() if other != key for parent in grants_of} - set(own)
-            if set(own) - {grant.get("parent") for grant in scope["grants"]}:
-                reasons.append("grant-omitted")
-            views = {view["view"] for view in scope["linked_views"]}
-            for grant in scope["grants"]:
-                parent = grant.get("parent")
-                if parent in foreign:
-                    reasons.append("grant-wrong-workspace")
-                    continue
-                if parent in views:
-                    reasons.append("view-as-grant")
-                if parent not in own:
-                    reasons.append("grant-identity-missing")
-                    continue
-                inherited = set(grant["inherited"])
-                if own[parent] - inherited:
-                    reasons.append("descendant-omitted")
-                if inherited - own[parent]:
-                    reasons.append("descendant-not-granted")
+        # Every actual grant of a known workspace is reported, then each one's descendants. The
+        # parent-as-view test needs no actual grants, so it runs for every scope.
+        own = actual[key] if known else {}
+        foreign = ({parent for other, grants_of in actual.items() if other != key for parent in grants_of} - set(own)
+                   if known else set())
+        if known and set(own) - {grant.get("parent") for grant in scope["grants"]}:
+            reasons.append("grant-omitted")
+        views = {view["view"] for view in scope["linked_views"]}
+        for grant in scope["grants"]:
+            parent = grant.get("parent")
+            if parent in foreign:
+                reasons.append("grant-wrong-workspace")
+                continue
+            if parent in views:
+                reasons.append("view-as-grant")
+            if not known:
+                continue
+            if parent not in own:
+                reasons.append("grant-identity-missing")
+                continue
+            inherited = set(grant["inherited"])
+            if own[parent] - inherited:
+                reasons.append("descendant-omitted")
+            if inherited - own[parent]:
+                reasons.append("descendant-not-granted")
         for view in scope["linked_views"]:
             if view["assumed_grant_target"] or not view.get("actual_parent"):
                 reasons.append("view-as-grant")
