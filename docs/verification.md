@@ -3,9 +3,18 @@
 On 2026-10-28 the C1 Context Architecture candidate (`ff2cfb5` on
 `feat/osm-context-architecture-c1`, from `main` `314dcf1`) added the shared
 contract, templates, fictional examples and an offline rehearsal. Docs,
-templates and fixtures only. The C1-r1 repair (`a93b1a6`) made eight rehearsal
-checks reject the review's counterexamples and added the Claude
-`InstructionsLoaded` caveat; it changed no contract or template text.
+templates and fixtures only. The C1-r1 repair (`a93b1a6`) corrected eight
+rehearsal checks: seven now reject the review's counterexamples, and the meaning
+check now accepts the explicit unknown and evidenced values it had wrongly
+rejected. It also added the Claude `InstructionsLoaded` caveat and changed no
+contract or template text. The C1-r2 repair (`b25a019`) completed three of those
+checks, which a correction review found only partly repaired:
+
+- grant enumeration names its fictional workspace and requires all of that
+  workspace's actual grants;
+- the glance check needs all six metadata fields present with meaningful values;
+- the `.claude/rules` exception is matched by path components for both
+  separators.
 
 **Fixture results.**
 
@@ -15,12 +24,24 @@ checks reject the review's counterexamples and added the Claude
 - **Rehearsal at `a93b1a6`:** 48 positives and 5 valid variants pass, and 153
   negatives (the 135 plus 18 new ones) are rejected, each for its stated reason.
   Two positives carry root-approved data corrections (the case 34 rendering and
-  Memory in case 41's broad grant). Ten older negatives gained a second reason;
-  each kept its expected one.
+  Memory in case 41's broad grant). Ten older negatives each gained one
+  additional reason and kept their expected one.
+- **Rehearsal at `b25a019`:** 48 positives and 7 valid variants pass, and 169
+  negatives (the 153 plus 16 new ones) are rejected, each for its stated reason.
+  The root-admitted case 41 data change is the workspace identity on its 11
+  scope records, plus one actual grant record appended to five negatives, so
+  that every older reason set stays exact. No other older input or reason
+  changed.
 - **Harness check:** on a temporary copy, a disabled check and a wrong expected
   reason each failed the harness. For C1-r1, the `8a4a01e` functions accepted
   every new negative and rejected the new case 30 variants. Disabling each of
-  the 16 new rules in turn made exactly its own fixtures fail.
+  the 16 new rules in turn made exactly its own fixtures fail. For C1-r2, the
+  `c716e7a` functions accepted the new grant and blank-metadata negatives and
+  the three rules near-name and boundary negatives, crashed on a missing Summary
+  or Kind, and rejected the Windows rules-file variant. Disabling each of 20
+  rules in the three repaired checks in turn made exactly its own fixtures fail,
+  one by the intended crash; the mutations of the unchanged checks were reused
+  after a source byte-identity proof.
 - **Repository checks:** these passed on a clean clone of `ff2cfb5`, and again
   on a clean clone of `a93b1a6` (layout and continuity were not rerun there:
   the repair touches none of their inputs):
@@ -28,11 +49,18 @@ checks reject the review's counterexamples and added the Claude
   - the documentation, onboarding, layout, continuity, skill-version and
     footprint checks;
   - `git diff --check`.
+
+  On a clean clone of `b25a019`, `validate.py --baseline 314dcf1`, the
+  documentation, skill-version and footprint checks and `git diff --check`
+  passed. Onboarding, layout and continuity were not rerun: the C1-r2 repair
+  touches none of their inputs.
 - **Sidebar:** the change touches no sidebar input; the sidebar reads only
   `skills/osm-context/assets/bridge.md`. Its build and tests were therefore not
   run.
-- **Retained evidence:** the C1-r1 raw logs and their hashes are kept on the
-  author machine in `/tmp/claude-1001/osm-c1-r1-repair-evidence.0afjVF`.
+- **Retained evidence:** the raw logs and their hashes are kept only on the
+  author machine, in machine-local directories that are not portable: C1-r1 in
+  `/tmp/claude-1001/osm-c1-r1-repair-evidence.0afjVF` and C1-r2 in
+  `/tmp/claude-1001/osm-c1-r2-repair-evidence.mGtbyV`.
 
 **Not proved here.** Real grants, inheritance, outside denial, host isolation,
 instruction loading on any host, adapters, Home consumption and actual timed
