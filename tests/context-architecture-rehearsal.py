@@ -455,12 +455,25 @@ MANAGED_CLAUDE_MD = ("/Library/Application Support/ClaudeCode/CLAUDE.md", "/etc/
                      "C:\\Program Files\\ClaudeCode\\CLAUDE.md")
 
 
+def path_parts(path):
+    """Non-empty path components, for both / and \\ separators."""
+    return [part for part in re.split(r"[\\/]", path) if part]
+
+
+def in_rules_directory(parts):
+    """`.claude` directly followed by `rules`, both before the final component (snapshot :176)."""
+    return any(parts[index] == ".claude" and parts[index + 1] == "rules" for index in range(len(parts) - 2))
+
+
 def counts_against_agents(path, rules):
     """A project or ancestor CLAUDE.md, .claude/CLAUDE.md or CLAUDE.local.md, whatever its prefix."""
-    if path in rules["non_counting_files"] or path in MANAGED_CLAUDE_MD or ".claude/rules" in path:
+    if path in rules["non_counting_files"] or path in MANAGED_CLAUDE_MD:
         return False
-    names = {re.split(r"[\\/]", name)[-1] for name in rules["counting_files"]}
-    return re.split(r"[\\/]", path)[-1] in names
+    if in_rules_directory(path_parts(path)):
+        return False
+    names = {path_parts(name)[-1] for name in rules["counting_files"]}
+    parts = path_parts(path)
+    return bool(parts) and parts[-1] in names
 
 
 @check("bridge-loading")
@@ -494,14 +507,30 @@ ABSTRACT = ("", "notes", "context", "document", "misc", "info")
 GLANCE_METADATA = ("summary", "kind", "temporal", "evidence_basis", "source_period", "state")
 
 
+def meaningful_text(value):
+    return isinstance(value, str) and bool(value.strip())
+
+
+def meaningful_list(value):
+    return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item.strip() for item in value)
+
+
+def metadata_complete(entry):
+    """All six fields present: non-blank text, and a non-empty list of non-blank evidence entries."""
+    return all(meaningful_list(entry.get(field)) if field == "evidence_basis" else meaningful_text(entry.get(field))
+               for field in GLANCE_METADATA)
+
+
 @check("glance")
 def glance(data, ws):
     reasons, entries, rendering = [], data["entries"], data["glance_rendering"]
     for entry in entries:
-        summary = entry["summary"].strip()
-        if summary.lower() in ABSTRACT or len(summary) < 20 or entry["kind"] == entry["source_type"]:
-            reasons.append("meaning-needs-body")
-        if any(not entry.get(field) for field in GLANCE_METADATA):
+        summary, kind = entry.get("summary"), entry.get("kind")
+        if isinstance(summary, str) and isinstance(kind, str):
+            summary = summary.strip()
+            if summary.lower() in ABSTRACT or len(summary) < 20 or kind == entry.get("source_type"):
+                reasons.append("meaning-needs-body")
+        if not metadata_complete(entry):
             reasons.append("metadata-incomplete")
     # One rendered item per entry, in order, showing at least its Summary, Kind and temporal scope.
     if not rendering:
@@ -625,24 +654,36 @@ def daily_writes(data, ws):
 def grants(data, ws):
     reasons = []
     # The fictional actual grants and their descendants, described once per workspace.
-    actual = {grant["parent"]: set(grant["descendants"])
-              for w in ws.values() for grant in w["connection_grants"]}
+    actual = {key: {grant["parent"]: set(grant["descendants"]) for grant in w["connection_grants"]}
+              for key, w in ws.items()}
     for scope in data["scopes"]:
         if not scope["grants"]:
             reasons.append("grants-not-enumerated")
-        views = {view["view"] for view in scope["linked_views"]}
-        for grant in scope["grants"]:
-            parent = grant.get("parent")
-            if parent in views:
-                reasons.append("view-as-grant")
-            if parent not in actual:
-                reasons.append("grant-identity-missing")
-                continue
-            inherited = set(grant["inherited"])
-            if actual[parent] - inherited:
-                reasons.append("descendant-omitted")
-            if inherited - actual[parent]:
-                reasons.append("descendant-not-granted")
+        key = scope.get("workspace")
+        if key not in actual:
+            reasons.append("scope-workspace-missing")
+        else:
+            # Every actual grant of the named workspace is reported, then each one's descendants.
+            own = actual[key]
+            foreign = {parent for other, grants_of in actual.items() if other != key for parent in grants_of} - set(own)
+            if set(own) - {grant.get("parent") for grant in scope["grants"]}:
+                reasons.append("grant-omitted")
+            views = {view["view"] for view in scope["linked_views"]}
+            for grant in scope["grants"]:
+                parent = grant.get("parent")
+                if parent in foreign:
+                    reasons.append("grant-wrong-workspace")
+                    continue
+                if parent in views:
+                    reasons.append("view-as-grant")
+                if parent not in own:
+                    reasons.append("grant-identity-missing")
+                    continue
+                inherited = set(grant["inherited"])
+                if own[parent] - inherited:
+                    reasons.append("descendant-omitted")
+                if inherited - own[parent]:
+                    reasons.append("descendant-not-granted")
         for view in scope["linked_views"]:
             if view["assumed_grant_target"] or not view.get("actual_parent"):
                 reasons.append("view-as-grant")
