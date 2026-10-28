@@ -168,12 +168,17 @@ it from a SessionStart hook or tell Claude in words to read it. Call a bridge
 loaded only with the client and version, the instruction files present, the
 Project instructions value and where it was set, and an observed load in a fresh
 session (the `AGENTS.md loaded` session line, or `/memory` from v2.1.280);
-otherwise report it unverified. Instruction loading proves no credential, access,
-permission, ingestion or timed run.
+otherwise report it unverified. `InstructionsLoaded` hooks do not fire for an
+`AGENTS.md` read through Project instructions, but do for one a `CLAUDE.md`
+imports or symlinks to, so a missing hook event is not evidence of non-loading
+and a hook log is not loading evidence for a direct read. Instruction loading
+proves no credential, access, permission, ingestion or timed run.
 
 ## Author verification and evidence limits
 
-Official sources above were checked on 2026-09-13. Installed Claude Code 2.1.139
+Official package and lifecycle sources above, and the Claude Code 2.1.139
+observations that follow, were checked on 2026-09-13; the instruction-loading
+paragraphs above carry their own 2026-10-27 date. Installed Claude Code 2.1.139
 exposes `plugin validate`, `list --json`, `details`, marketplace controls and
 scoped install/update/uninstall. Check local help when versions differ; current
 documentation includes features newer than this CLI.

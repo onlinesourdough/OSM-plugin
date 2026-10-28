@@ -13,6 +13,9 @@
   },
   "definitions": [{"id": "fict-a-root#definition", "active": true}],
   "reused_stores": ["fict-a-clients", "fict-a-projects"],
+  "connection_grants": [
+    {"parent": "fict-a-root", "descendants": ["fict-a-knowledge", "fict-a-memory", "fict-a-skills", "fict-a-maintenance"]}
+  ],
   "human_originals": [
     {"id": "fict-a-handbook", "before_sha": "a1", "after_sha": "a1"}
   ],

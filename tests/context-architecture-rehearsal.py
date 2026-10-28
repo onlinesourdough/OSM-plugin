@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Offline rehearsal of the OSM Context Architecture against fictional fixtures.
 
-Every case has one positive fixture that must pass and at least one negative
-fixture that must be rejected for its stated reason. Each result is printed as
-it is evaluated. This is fixture-level proof only: it does not exercise real
+Every case has one positive fixture that must pass, optional valid variants of
+that positive that must also pass (counted separately), and at least one
+negative fixture that must be rejected for its stated reason. Each result is
+printed as it is evaluated. This is fixture-level proof only: it does not exercise real
 permissions, inheritance, outside denial, host isolation, instruction loading,
 adapters, Home behaviour or timed runs.
 """
@@ -155,17 +156,27 @@ def migration_links(data, ws):
 
 @check("retrieval")
 def retrieval(data, ws):
-    reasons, kinds = [], [step["kind"] for step in data["steps"]]
-    if kinds.count("body") > 3:
+    steps, expected = data["steps"], data["expected"]
+    reasons, kinds = [], [step["kind"] for step in steps]
+    bodies = [index for index, step in enumerate(steps) if step["kind"] == "body"]
+    if len(bodies) > 3:
         reasons.append("too-many-bodies")
+    if any(not steps[index].get("id") for index in bodies):
+        reasons.append("body-without-id")
     if data.get("preload") or "library-bodies" in kinds:
         reasons.append("whole-preload")
     if "body" in kinds and ("metadata" not in kinds or kinds.index("metadata") > kinds.index("body")):
         reasons.append("body-before-metadata")
     if not kinds or kinds[0] != "entry":
         reasons.append("not-from-entry")
-    if data["found"] != data["expected"]:
+    if data["found"] != expected:
         reasons.append("not-found")
+    # The retained result is a body this path read, selected by an earlier metadata step.
+    read = next((index for index in bodies if steps[index].get("id") == expected), None)
+    if read is None:
+        reasons.append("result-not-read")
+    elif not any(step["kind"] == "metadata" and step.get("selected") == expected for step in steps[:read]):
+        reasons.append("result-not-selected")
     return reasons
 
 
@@ -404,14 +415,11 @@ def multipath_replay(data, ws):
     return reasons
 
 
-INVENTED = ("confidence", "cause", "confirmed")
-
-
 @check("meaning")
 def meaning(data, ws):
+    # Unknown stays unknown, also for a confirmation, cause or confidence; any other
+    # value must equal its evidenced source statement.
     for key, value in data["enriched"].items():
-        if key in INVENTED:
-            return ["invented-meaning"]
         if value in (None, "unknown"):
             continue
         if data["evidence"].get(key) in (None, "unknown") or data["evidence"][key] != value:
@@ -442,6 +450,19 @@ def evidence_classes(data, ws):
     return reasons
 
 
+# Managed policy CLAUDE.md locations (memory snapshot :59); like the user file they do not count.
+MANAGED_CLAUDE_MD = ("/Library/Application Support/ClaudeCode/CLAUDE.md", "/etc/claude-code/CLAUDE.md",
+                     "C:\\Program Files\\ClaudeCode\\CLAUDE.md")
+
+
+def counts_against_agents(path, rules):
+    """A project or ancestor CLAUDE.md, .claude/CLAUDE.md or CLAUDE.local.md, whatever its prefix."""
+    if path in rules["non_counting_files"] or path in MANAGED_CLAUDE_MD or ".claude/rules" in path:
+        return False
+    names = {re.split(r"[\\/]", name)[-1] for name in rules["counting_files"]}
+    return re.split(r"[\\/]", path)[-1] in names
+
+
 @check("bridge-loading")
 def bridge_loading(data, ws):
     reasons, rules = [], data["rules"]
@@ -454,7 +475,7 @@ def bridge_loading(data, ws):
         if report.get("claims", {}).get("agents_loaded_by_default"):
             if version(report["version"]) < version(rules["min_direct_agents_version"]):
                 reasons.append("version-gate")
-            counting = set(report["files"]) & set(rules["counting_files"])
+            counting = [path for path in report["files"] if counts_against_agents(path, rules)]
             combined = (pi.get("value") == "claude-md-and-agents-md" and
                         pi.get("location") in rules["combined_value_honoured_in"])
             if counting and not combined and "@AGENTS.md" not in report.get("imports", []):
@@ -469,15 +490,26 @@ def bridge_loading(data, ws):
 
 
 ABSTRACT = ("", "notes", "context", "document", "misc", "info")
+# The six logical knowledge-metadata fields, by their fixture names.
+GLANCE_METADATA = ("summary", "kind", "temporal", "evidence_basis", "source_period", "state")
 
 
 @check("glance")
 def glance(data, ws):
-    reasons = []
-    for entry in data["entries"]:
+    reasons, entries, rendering = [], data["entries"], data["glance_rendering"]
+    for entry in entries:
         summary = entry["summary"].strip()
         if summary.lower() in ABSTRACT or len(summary) < 20 or entry["kind"] == entry["source_type"]:
             reasons.append("meaning-needs-body")
+        if any(not entry.get(field) for field in GLANCE_METADATA):
+            reasons.append("metadata-incomplete")
+    # One rendered item per entry, in order, showing at least its Summary, Kind and temporal scope.
+    if not rendering:
+        reasons.append("rendering-empty")
+    elif len(rendering) != len(entries) or any(
+            not all(str(entry.get(field, "")).lower() in item.lower() for field in ("summary", "kind", "temporal"))
+            for entry, item in zip(entries, rendering)):
+        reasons.append("rendering-mismatch")
     if data["body_reads"]:
         reasons.append("body-read-for-selection")
     if data["selected"] != data["expected"]:
@@ -526,11 +558,27 @@ def claim_strength(data, ws):
     return reasons
 
 
+ORDINALS = ("first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth")
+
+
+def invoice_sequence(claim):
+    """An ordinal followed by "invoice" is an invoice-sequence claim, qualified or not."""
+    text = claim.lower()
+    match = re.search(r"\b(%s|\d+(?:st|nd|rd|th))\s+invoice\b" % "|".join(ORDINALS), text)
+    if not match:
+        return None
+    return {"kind": "invoice-sequence", "ordinal": match.group(1),
+            "qualified": "observed in the covered period" in text}
+
+
 @check("milestone")
 def milestone(data, ws):
-    reasons = []
-    if not data["coverage_complete"] and data["claim"] == "first invoice":
-        reasons.append("first-on-partial")
+    reasons, sequence = [], invoice_sequence(data["claim"])
+    if not data["coverage_complete"] and sequence and not sequence["qualified"]:
+        if sequence["ordinal"] in ("first", "1st"):
+            reasons.append("first-on-partial")
+        else:
+            reasons.append("sequence-on-partial")
     if data["backfill"] and not data["claim_rederived"]:
         reasons.append("milestone-unchanged")
     if data["credit_note"] and not data["credit_note_considered"]:
@@ -559,9 +607,13 @@ def projection(data, ws):
 @check("daily-writes")
 def daily_writes(data, ws):
     reasons, allowlist = [], set(data["allowlist"])
+    # Canonical operational targets come from the workspace definitions, never from the allowlist.
+    canonical = {target for w in ws.values() for target in w["roles"]["operational"]}
     for write in data["writes"]:
         if write["mode"] == "daily" and write["allowed"] and write["target"] not in allowlist:
             reasons.append("daily-operational-write")
+        elif write["mode"] == "daily" and write["allowed"] and write["target"] in canonical:
+            reasons.append("daily-canonical-write")
         if write["mode"] == "projection-writeback" and write["allowed"]:
             reasons.append("implicit-writeback")
         if write["mode"] == "task" and write["route_qualified"] and not write["allowed"]:
@@ -572,9 +624,25 @@ def daily_writes(data, ws):
 @check("grants")
 def grants(data, ws):
     reasons = []
+    # The fictional actual grants and their descendants, described once per workspace.
+    actual = {grant["parent"]: set(grant["descendants"])
+              for w in ws.values() for grant in w["connection_grants"]}
     for scope in data["scopes"]:
         if not scope["grants"]:
             reasons.append("grants-not-enumerated")
+        views = {view["view"] for view in scope["linked_views"]}
+        for grant in scope["grants"]:
+            parent = grant.get("parent")
+            if parent in views:
+                reasons.append("view-as-grant")
+            if parent not in actual:
+                reasons.append("grant-identity-missing")
+                continue
+            inherited = set(grant["inherited"])
+            if actual[parent] - inherited:
+                reasons.append("descendant-omitted")
+            if inherited - actual[parent]:
+                reasons.append("descendant-not-granted")
         for view in scope["linked_views"]:
             if view["assumed_grant_target"] or not view.get("actual_parent"):
                 reasons.append("view-as-grant")
@@ -586,7 +654,7 @@ def grants(data, ws):
             reasons.append("per-page-readonly-claim")
         if not all(scope["report_separates"].get(k) for k in ("grant", "retention", "write")):
             reasons.append("authorities-merged")
-    return reasons
+    return list(dict.fromkeys(reasons))
 
 
 LIFECYCLES = ("current-recurring", "historical-one-off", "deferred", "excluded")
@@ -638,6 +706,9 @@ def creation_metadata(data, ws):
         reasons.append("creation-reset")
         if "native" not in data["verification"]["checked"] and data["verification"]["reported"] == "preserved":
             reasons.append("property-only-check")
+    # Native creation metadata is always verified, whether or not this sample changed.
+    if data["before"].get("created_native") is not None and "native" not in data["verification"]["checked"]:
+        reasons.append("native-unchecked")
     return reasons
 
 
@@ -721,7 +792,7 @@ def main():
     for name in ("architecture.md", "migration.md"):
         text = (REFERENCES / name).read_text()
         headings[name] = {slug(line.lstrip("#")) for line in text.splitlines() if line.startswith("#")}
-    failures, positives, negatives = [], 0, 0
+    failures, positives, variants, negatives = [], 0, 0, 0
 
     for key, workspace in workspaces.items():
         example = ROOT / workspace["example"]
@@ -746,6 +817,13 @@ def main():
         print(f"{label}: positive -> {'PASS' if not found else 'FAIL ' + ','.join(found)}")
         if found:
             failures.append(f"{label}: positive rejected {found}")
+        # A valid variant differs from its positive by one input the contract also accepts.
+        for index, variant in enumerate(case.get("variants", []), 1):
+            variants += 1
+            found = function(merge(case["positive"], variant["override"]), workspaces)
+            print(f"{label}: variant {index} -> {'PASS' if not found else 'FAIL ' + ','.join(found)}")
+            if found:
+                failures.append(f"{label}: valid variant {index} rejected {found}")
         if not case["negatives"]:
             failures.append(f"{label}: no negative fixture")
         for index, negative in enumerate(case["negatives"], 1):
@@ -761,7 +839,7 @@ def main():
             if not ok:
                 failures.append(f"{label}: negative {index} expected {negative['expect']}, got {found}")
 
-    print(f"positives={positives} negatives={negatives} failures={len(failures)}")
+    print(f"positives={positives} variants={variants} negatives={negatives} failures={len(failures)}")
     for failure in failures:
         print(f"FAIL {failure}")
     print("PASS: context architecture fixtures (fixture-level only; no live, native, Home or timed proof)"
