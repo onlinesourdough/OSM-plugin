@@ -16,6 +16,11 @@ checks, which a correction review found only partly repaired:
 - the `.claude/rules` exception is matched by path components for both
   separators.
 
+The C1-r3 repair (`e87667b`) completed the grant check's workspace branch,
+which a second correction review found partly repaired: a missing or unknown
+workspace now keeps the parent-as-view test, and a non-string workspace value is
+reported as missing instead of crashing.
+
 **Fixture results.**
 
 - **New rehearsal at `ff2cfb5`:** `tests/context-architecture-rehearsal.py`
@@ -32,6 +37,9 @@ checks, which a correction review found only partly repaired:
   scope records, plus one actual grant record appended to five negatives, so
   that every older reason set stays exact. No other older input or reason
   changed.
+- **Rehearsal at `e87667b`:** 48 positives and 7 valid variants pass, and 169
+  negatives are rejected; the log is byte-identical to `b25a019`'s, and no
+  fixture changed.
 - **Harness check:** on a temporary copy, a disabled check and a wrong expected
   reason each failed the harness. For C1-r1, the `8a4a01e` functions accepted
   every new negative and rejected the new case 30 variants. Disabling each of
@@ -42,6 +50,17 @@ checks, which a correction review found only partly repaired:
   rules in the three repaired checks in turn made exactly its own fixtures fail,
   one by the intended crash; the mutations of the unchanged checks were reused
   after a source byte-identity proof.
+  For C1-r3, the review's two counterexamples were kept as temporary probes, not
+  committed fixtures. The `2629c5c` function reported only the missing workspace
+  for a linked view given as a grant parent, and raised `TypeError` for a list
+  or object workspace value; the repaired function adds `view-as-grant` and
+  reports `scope-workspace-missing`, and both probe harness runs pass. The
+  committed fixtures do not discriminate this repair: each of the two repair
+  mutations is killed only by its probe. The correction review also found that a
+  mutation relaxing the evidence-list check from every entry to any entry is not
+  killed by them. Both are disclosed coverage limits. Re-running the seven grant
+  mutations, each disabling or weakening one rule, made exactly its own fixtures
+  fail; the other mutations were reused after an AST byte-identity proof.
 - **Repository checks:** these passed on a clean clone of `ff2cfb5`, and again
   on a clean clone of `a93b1a6` (layout and continuity were not rerun there:
   the repair touches none of their inputs):
@@ -54,6 +73,12 @@ checks, which a correction review found only partly repaired:
   documentation, skill-version and footprint checks and `git diff --check`
   passed. Onboarding, layout and continuity were not rerun: the C1-r2 repair
   touches none of their inputs.
+
+  On a clean clone of `e87667b`, the rehearsal (log byte-identical),
+  `validate.py --baseline 314dcf1` and `git diff --check` from `314dcf1` and
+  from `2629c5c` passed. The C1-r3 repair changes only the rehearsal script, so
+  the documentation, skill-version, footprint, onboarding, layout and continuity
+  checks were not rerun for it: none of their inputs changed.
 - **Sidebar:** the change touches no sidebar input; the sidebar reads only
   `skills/osm-context/assets/bridge.md`. Its build and tests were therefore not
   run.
@@ -61,6 +86,8 @@ checks, which a correction review found only partly repaired:
   author machine, in machine-local directories that are not portable: C1-r1 in
   `/tmp/claude-1001/osm-c1-r1-repair-evidence.0afjVF` and C1-r2 in
   `/tmp/claude-1001/osm-c1-r2-repair-evidence.mGtbyV`.
+  C1-r3's are in `/tmp/claude-1001/osm-c1-r3-repair-evidence.F0k1C8`, likewise
+  only on the author machine.
 
 **Not proved here.** Real grants, inheritance, outside denial, host isolation,
 instruction loading on any host, adapters, Home consumption and actual timed
