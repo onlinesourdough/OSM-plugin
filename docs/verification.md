@@ -3,16 +3,27 @@
 On 2026-10-28 the C1 Context Architecture candidate (`ff2cfb5` on
 `feat/osm-context-architecture-c1`, from `main` `314dcf1`) added the shared
 contract, templates, fictional examples and an offline rehearsal. Docs,
-templates and fixtures only.
+templates and fixtures only. The C1-r1 repair (`a93b1a6`) made eight rehearsal
+checks reject the review's counterexamples and added the Claude
+`InstructionsLoaded` caveat; it changed no contract or template text.
 
 **Fixture results.**
 
-- **New rehearsal:** `tests/context-architecture-rehearsal.py` passed 48
-  positive fixtures, and all 135 negative fixtures were rejected, each for its
-  stated reason.
+- **New rehearsal at `ff2cfb5`:** `tests/context-architecture-rehearsal.py`
+  passed 48 positive fixtures, and all 135 negative fixtures were rejected, each
+  for its stated reason. That first run was green; it had no pre-fix failure.
+- **Rehearsal at `a93b1a6`:** 48 positives and 5 valid variants pass, and 153
+  negatives (the 135 plus 18 new ones) are rejected, each for its stated reason.
+  Two positives carry root-approved data corrections (the case 34 rendering and
+  Memory in case 41's broad grant). Ten older negatives gained a second reason;
+  each kept its expected one.
 - **Harness check:** on a temporary copy, a disabled check and a wrong expected
-  reason each failed the harness.
-- **Repository checks:** these passed on a clean clone of `ff2cfb5`:
+  reason each failed the harness. For C1-r1, the `8a4a01e` functions accepted
+  every new negative and rejected the new case 30 variants. Disabling each of
+  the 16 new rules in turn made exactly its own fixtures fail.
+- **Repository checks:** these passed on a clean clone of `ff2cfb5`, and again
+  on a clean clone of `a93b1a6` (layout and continuity were not rerun there:
+  the repair touches none of their inputs):
   - `validate.py --baseline 314dcf1`, including the skill version bumps;
   - the documentation, onboarding, layout, continuity, skill-version and
     footprint checks;
@@ -20,6 +31,8 @@ templates and fixtures only.
 - **Sidebar:** the change touches no sidebar input; the sidebar reads only
   `skills/osm-context/assets/bridge.md`. Its build and tests were therefore not
   run.
+- **Retained evidence:** the C1-r1 raw logs and their hashes are kept on the
+  author machine in `/tmp/claude-1001/osm-c1-r1-repair-evidence.0afjVF`.
 
 **Not proved here.** Real grants, inheritance, outside denial, host isolation,
 instruction loading on any host, adapters, Home consumption and actual timed
