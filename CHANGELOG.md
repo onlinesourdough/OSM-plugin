@@ -1,5 +1,80 @@
 # Changelog
 
+## 0.31.0 — 2026-10-29
+
+- Home in the Codex sidebar: a read-only Context/Skills view of the owner's
+  mapped Notion records and personal skills, ported from the approved design
+  (#74). Titles open an article in place; Back returns to the list. Shared OSM
+  methods are listed, collapsed, from the installed package. Reading a skill
+  doesn't run it.
+- Home reads only through OSM's own internal Notion connection (#82), never
+  through the official plugin. The connection is a read-only REST adapter
+  pinned to Notion API `2026-03-11`, with bounded lists and bodies and explicit
+  inaccessible, unsupported, revoked and rate-limited states. No host provides a
+  supported secret store for it yet, so Home reports itself unavailable and
+  saved links work as before. See `docs/home-connection.md`.
+- Home's sources come from the AI Operating Model definition. Setup generates a
+  projection of one definition revision (`osm-home-projection/1`) and saves it
+  as its own per-context file through `osm_save_home_projection`; it changes
+  only with a new revision. It records the owner's connection mode. An
+  `official_notion_user` projection shows saved links with a note that Home
+  can't read through that connection yet; the mode is never switched. Support
+  material the definition names, such as core rules and recovery snapshots, is
+  kept out of context by one check for every list and read:
+  - It follows up to three ancestor pages per item, and a data source's
+    database through its schema. It never reads a database or a parent data
+    source.
+  - It refuses what it can't resolve. An external database whose ancestry can't
+    be read, and a page-list page that is a database row, are refused; both are
+    pending an owner decision.
+  - A support source can't also be mapped as context.
+  Existing saved links load unchanged and are labelled a partial view.
+- Page-icon reads, which use the official connection, need the resolved current
+  Home status to show an official mode, no projection, or saved links the user
+  chose; none run while a check is pending or after a failed or error status.
+  They never run while Home shows the internal connection's view.
+- Any list or read that reports another mode, a connection change or no current
+  scope clears Home and rechecks status once. So does a denial for something
+  already listed, also after Back. A trashed root is not reported connected, an
+  article says when a long property was shortened, and saves that would exceed
+  the reader's byte limit are refused before anything is replaced.
+- After Home observes that its projection was set up for a different Notion
+  connection, it keeps the saved links out of view until Setup maps it again
+  for the current connection and Home is ready: no Show saved links action,
+  no links view (also one chosen earlier), no saved-link opens, no page-icon
+  reads, and no saved source titles in Settings or setup, where the five
+  source fields are hidden and the context shows without its saved name.
+  Saving source links waits for that mapping. No other status ends this: not
+  an official-mode projection, a missing projection or connection, a failed,
+  pending or transient check, a list or read that reports the change, or a
+  status read for another context; a failed or transient check still offers
+  Try again. While it holds, the context pickers leave saved pages out of
+  their live results, also those already listed, without closing an open
+  list or clearing its search, and a context switch that names a saved page
+  keeps the choice but hides its question. The saved links, edits in
+  progress, an unfinished link and a page chosen in setup are kept and return
+  unchanged. For a configured context, each Home status names the context it
+  was read for, and Home does not apply one that names another context: after
+  the context changes outside this panel, such a status counts as a failed
+  check until Refresh reads the current one. The server's error fallback and
+  a status read without a configured context name no context and apply as
+  before; neither can end a held change. Three limits apply: as on every
+  Refresh, an open list of saved choices closes and a page search typed into
+  it is cleared on its next open; hidden fields keep their content in the
+  page; and nothing changes before Home has observed the change. Home in
+  official mode makes no connection check, so a newly opened panel does not
+  observe the change.
+- An article shows only the answer to its own read, so an older read of a
+  reopened record never replaces it, and it says when a block's text was cut at
+  20,000 characters or 200 text parts.
+- Context's Home projection procedure no longer treats `osm_home` as a
+  verification step: it is app-only, gives no bot or workspace IDs and can't
+  verify the mapped root before the first projection exists, so saving an
+  internal projection needs separately established identity and access
+  evidence in this phase.
+- Context 2.1.0 adds the Home projection procedure. Setup 2.1.0 explains the
+  internal connection option.
+
 ## 0.30.0 — 2026-10-23
 
 - Rename AIOS to The Onlinesourdough Method (OSM). The plugin identity is now

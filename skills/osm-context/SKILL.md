@@ -2,7 +2,7 @@
 name: osm-context
 description: Manage the chosen context home for setup, relevant retrieval, durable updates or a context audit. Formerly AIOS Context. Keep independent repository work local.
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # OSM:context

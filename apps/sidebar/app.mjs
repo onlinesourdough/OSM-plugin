@@ -4,6 +4,7 @@ import { sourceRoles, roleLabels, readStatus, draftFrom, isDirty, isCurrent, set
 import { createPicker } from './picker.mjs';
 import { pageIcon, notionPageId } from './page-icons.mjs';
 import { sourceLabel } from './source-label.mjs';
+import { createHome } from './home.mjs';
 
 const app = new App({ name: 'osm', version: __OSM_VERSION__ }, { availableDisplayModes: ['fullscreen'] });
 const $ = id => document.getElementById(id);
@@ -24,8 +25,8 @@ const canBrowse = () => Boolean(status?.features?.notionPages && status.notion.s
 const icons = new Map(), requestedIcons = new Set();
 let loadingIcons = false, iconGeneration = 0;
 const displayed = link => link ? { ...link, icon: icons.get(notionPageId(link.target)) ?? pageIcon(link.icon) } : link;
-async function loadSelectedIcons() {
-  if (!canBrowse() || !status.features.notionIcons || loadingIcons || refreshing) return;
+async function loadSelectedIcons(dashboard) {
+  if (!canBrowse() || !status.features.notionIcons || loadingIcons || refreshing || !home.iconsAllowed(dashboard)) return;
   const links = [{ target: status.context.target }, { target: draft.contextTarget }, selectedContext, ...Object.values(draft.links), ...Object.values(status.sources.links)];
   const targets = [...new Map(links.filter(Boolean).filter(link => notionPageId(link.target)).map(link => [notionPageId(link.target), link.target])).entries()]
     .filter(([id]) => !icons.has(id) && !requestedIcons.has(id)).slice(0, 6);
@@ -53,11 +54,15 @@ async function loadPages(query) {
   for (const page of pages) if (Object.hasOwn(page, 'icon')) icons.set(notionPageId(page.target), pageIcon(page.icon));
   return { pages, hasMore: Boolean(data.hasMore), partial: Boolean(data.partial) };
 }
+// R9-2: while an observed account change holds, the context lists leave saved pages (the
+// context page and the saved sources) out of their live results, also those already listed.
+const savedPage = page => home.suppressed() && [status.context.target, ...Object.values(status.sources.links).map(link => link.target)]
+  .map(notionPageId).filter(Boolean).includes(notionPageId(page.target));
 
 function sourcePicker(id, role) {
   return createPicker({ id, label: slotLabels[role], loadOptions: loadPages,
     onEdit: () => { feedback(''); render(); },
-    onSelect: link => { setLink(draft, role, link); feedback(''); render(); },
+    onSelect: link => { if (home.suppressed()) return; setLink(draft, role, link); feedback(''); render(); },
     onApply: ({ target, name }) => {
       try { setLink(draft, role, linkFromInput(role, target, name, draft.saved[role])); } catch (error) { return error.message; }
       feedback(''); render();
@@ -69,19 +74,24 @@ for (const role of sourceRoles) {
   settingsPickers[role] = sourcePicker(`settings-${role}-picker`, role); $(`settings-${role}`).append(settingsPickers[role].root);
 }
 const contextPicker = createPicker({ id: 'settings-context-picker', label: 'Context', optional: false, menuLabel: 'Current context',
-  loadOptions: loadPages, confirmSelection: true,
+  loadOptions: loadPages, exclude: savedPage, confirmSelection: true,
   editText: ['Switch context…', 'Switch context…'], applyText: 'Switch context', nameField: false,
   placeholder: 'https://notion.so/… or /path/to/context', onSelect() {}, onEdit: () => render(), onApply: ({ target, name }) => switchContext(target, name) });
 $('settings-context').append(contextPicker.root);
-const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Page', optional: false, loadOptions: loadPages,
+const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Page', optional: false, loadOptions: loadPages, exclude: savedPage,
   nameField: false, onSelect: link => {
-    selectedContext = link.placeholder ? null : link; $('target').value = link.target; confirmSwitch = false; feedback(''); render();
+    // R9-3: choosing the placeholder of the current selection keeps that selection and its title.
+    selectedContext = link.placeholder ? (selectedContext?.target === link.target ? selectedContext : null) : link;
+    $('target').value = link.target; confirmSwitch = false; feedback(''); render();
   }, onApply: ({ target }) => {
     const route = classifyTarget(target);
     if (route?.kind !== 'notion') return 'Enter a Notion page link.';
     selectedContext = null; $('target').value = route.target; confirmSwitch = false; feedback(''); render();
   }, onEdit: () => render() });
 $('setup-context').append(setupContextPicker.root);
+// Home reads only through OSM's own tools; it never uses the page picker's connection.
+const home = createHome({ $, call: (name, args) => app.callServerTool({ name, arguments: args }), open: target => open(target), changed: () => render(),
+  linksRevision: () => status?.sources?.definitionRevision });
 
 function feedback(text, error = false) { message = { text, error }; paintFeedback(); }
 function paintFeedback() {
@@ -118,14 +128,17 @@ function render() {
   const locked = saving || refreshing;
   $('loading').hidden = true;
   $('heading').textContent = dashboard ? 'OSM' : 'Get started';
-  $('setup').hidden = dashboard; $('dashboard').hidden = !dashboard;
+  home.sync(status.context.state === 'configured' ? status.context.target : null);
+  const homeView = dashboard && home.shown();
+  $('setup').hidden = dashboard; $('dashboard').hidden = !dashboard || homeView;
   $('settings').hidden = !dashboard; $('settings').disabled = locked;
   $('version').textContent = `v${__OSM_VERSION__}`;
-  renderConnection(dashboard, locked);
+  renderConnection(dashboard && !homeView, locked);
+  home.render(locked, dashboard);
   if (dashboard) renderDashboard(locked); else renderSetup(locked);
   if (settingsOpen) renderSettings(locked);
   paintFeedback();
-  void loadSelectedIcons();
+  void loadSelectedIcons(dashboard);
 }
 function renderConnection(dashboard, locked) {
   const state = status.notion.state, label = refreshing ? 'Checking…' : connectionCopy[state];
@@ -147,7 +160,7 @@ function summary(step) {
   const roles = stepRoles[step];
   if (step === 1) {
     if (contextEdited() && contextInput() || isDirty(draft, roles)) return draft.contextTarget ? 'Edited' : 'Not saved';
-    return draft.contextTarget ? draft.title || 'Saved' : 'Not set';
+    return draft.contextTarget ? (home.suppressed() ? '' : draft.title) || 'Saved' : 'Not set';
   }
   if (isDirty(draft, roles)) return 'Edited';
   return roles.filter(role => draft.links[role]).map(role => slotLabels[role]).join(' · ') || 'None';
@@ -176,9 +189,15 @@ function renderSetup(locked) {
   const nativePicker = Boolean(status.features?.notionPages && !other);
   $('setup-context').hidden = !nativePicker; $('context-link-field').hidden = nativePicker;
   const notionTarget = classifyTarget(contextInput())?.kind === 'notion' ? contextInput() : null;
-  const selected = notionTarget ? selectedContext?.target === notionTarget ? selectedContext : { title: 'Selected page', target: notionTarget, placeholder: true } : null;
+  const selected = notionTarget ? selectedContext?.target === notionTarget && !home.suppressed() ? selectedContext : { title: 'Selected page', target: notionTarget, placeholder: true } : null;
   setupContextPicker.render({ value: displayed(selected), choices: [], browse: canBrowse(), disabled: locked });
-  for (const role of sourceRoles) setupPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse() && !other, disabled: locked || !ready });
+  // R8-1: an observed account change hides the saved sources; the draft and any open link stay.
+  const hidden = home.suppressed();
+  for (const role of sourceRoles) {
+    $(`setup-${role}`).hidden = hidden;
+    setupPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse() && !other, disabled: locked || !ready || hidden });
+  }
+  if (hidden && sourceRoles.some(role => $(`setup-${role}`).contains(document.activeElement))) $(`continue-${openStep}`).focus();
 }
 // Primary is the context page itself; the row label never renames that page.
 function renderDashboard(locked) {
@@ -199,11 +218,16 @@ function renderDashboard(locked) {
 function renderSettings(locked) {
   const dirty = isDirty(draft);
   const ready = status.context.state === 'configured' && draft.contextTarget === status.context.target && status.sources.state !== 'unavailable';
-  const current = { title: draft.title || 'Context', target: draft.contextTarget };
+  const hidden = home.suppressed(); // R8-1, as in renderSetup
+  const current = { title: (hidden ? '' : draft.title) || 'Context', target: draft.contextTarget };
   contextPicker.render({ value: displayed(current), choices: [displayed(current)], browse: canBrowse(), disabled: locked,
     applyText: sourceChanges() ? 'Discard and switch' : 'Switch context', note: sourceChanges() ? 'Unsaved source changes will be discarded.' : '' });
-  for (const role of sourceRoles) settingsPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse(), disabled: locked || !ready });
-  $('drawer-save').disabled = locked || !dirty || !ready;
+  for (const role of sourceRoles) {
+    $(`settings-${role}`).hidden = hidden;
+    settingsPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse(), disabled: locked || !ready || hidden });
+  }
+  if (hidden && sourceRoles.some(role => $(`settings-${role}`).contains(document.activeElement))) $('drawer-title').focus();
+  $('drawer-save').disabled = locked || !dirty || !ready || hidden;
   $('drawer-save').textContent = saving ? 'Saving…' : 'Save';
   $('drawer-cancel').disabled = saving; $('drawer-close').disabled = saving;
   $('foot-edit').hidden = discardPrompt; $('foot-discard').hidden = !discardPrompt;
@@ -240,8 +264,10 @@ async function refresh() {
   if (refreshing || saving) return;
   ++iconGeneration; icons.clear(); requestedIcons.clear();
   refreshing = true; feedback(''); render();
-  try { apply(await app.callServerTool({ name: 'osm_status', arguments: {} })); }
-  catch {
+  try {
+    apply(await app.callServerTool({ name: 'osm_status', arguments: {} }));
+    if (status.context.state === 'configured') void home.reload();
+  } catch {
     checkedAt = Math.max(checkedAt + 1, Date.now());
     if (status) status = { ...status, notion: { state: 'unknown' } };
     feedback('Could not check the connection. Try refreshing again.', true);
@@ -275,6 +301,8 @@ async function writeContext(target, title) {
   }
 }
 async function saveDraft() {
+  // R8-1: nothing rewrites the saved sources until Setup reconciles an observed account change.
+  if (home.suppressed()) { feedback('Saved source links need attention. They have been left unchanged.', true); return false; }
   if (unfinishedSources()) { feedback('Apply or cancel the open link first.'); return false; }
   if (!current()) return false;
   saving = true; feedback(''); render();
@@ -335,7 +363,7 @@ function openSettings(role) {
   fillDraft(); settingsOpen = true; discardPrompt = false;
   feedback(status.sources.state === 'unavailable' ? 'Saved source links need attention. They have been left unchanged.' : '', status.sources.state === 'unavailable');
   $('drawer').showModal(); render();
-  if (role && status.sources.state !== 'unavailable') {
+  if (role && status.sources.state !== 'unavailable' && !home.suppressed()) {
     if (canBrowse()) settingsPickers[role].open(); else settingsPickers[role].openEditor();
   } else $('drawer-title').focus();
 }
@@ -378,7 +406,7 @@ async function switchContext(value, title) {
 function reload() { fillDraft(); feedback(''); render(); }
 
 app.ontoolresult = result => {
-  if (result?._meta?.['osm/pages'] || ['pages', 'icons'].includes(result?._meta?.['osm/kind'])) return;
+  if (result?._meta?.['osm/pages'] || ['pages', 'icons', 'home', 'home-list', 'home-record'].includes(result?._meta?.['osm/kind'])) return;
   try { apply(result); if (result?._meta?.['osm/view'] === 'settings') openSettings(); }
   catch (error) {
     checkedAt = Math.max(checkedAt + 1, Date.now());
@@ -394,6 +422,8 @@ for (const id of ['reload-draft', 'drawer-reload']) $(id).addEventListener('clic
 $('open-context').addEventListener('click', () => open(status.context.target));
 for (const role of sourceRoles) $(`open-${role}`).addEventListener('click', () => {
   const link = status.sources.links[role];
+  // A demonstrated account change opens no saved target until Setup reconciles it.
+  if (link && home.suppressed()) return;
   return link ? open(link.target) : openSettings(role);
 });
 // One step is always open, so Continue is always reachable.

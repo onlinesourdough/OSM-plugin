@@ -26,7 +26,17 @@ A consultant's client task never changes their personal default or its links.
 Personal/Team source labels grant no access. Keep one suitable Memory source;
 add a separate team destination only when the actual setup needs it.
 
-The panel stores navigation names and links only. Company information remains
+Home's reader uses OSM's own internal Notion connection: a bot limited by Notion
+to the pages and databases explicitly shared with it, and their children. Offer
+it only as the selected-pages option; an owner who chose the official full-user
+connection keeps it and need not create this one. Its token comes only from a supported host secret store, never chat or
+the panel. Hosts without one report Home as unavailable; continue with saved
+links. A scoped connection does not limit any other Notion route the agent can
+use. Record the owner's selected mode and never switch it after a denial. Save
+Home's projection of the definition with Context's
+[dashboard-link procedure](../../osm-context/references/panel-links.md#home-projection).
+
+The panel stores navigation names and links, and the Home projection's identities and labels. Company information remains
 in its source; shared methods remain in the plugin. Its saved link is not an
 approval of retrieved instructions. Context reads the actual entry before use.
 Earlier saves remain after a later failure. Stale edits keep their draft and

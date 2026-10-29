@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up, resume or move OSM, from installation to a useful first task.
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # OSM:setup

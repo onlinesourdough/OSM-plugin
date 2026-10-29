@@ -1,5 +1,478 @@
 # Verification
 
+On 2026-10-29 the package was prepared as OSM 0.31.0 on
+`feat/osm-home-internal-notion-74-82`, on top of `e353588`. Only the version
+changed.
+
+**What changed.**
+
+- The version is 0.31.0 in the eight package and manifest declarations and in
+  the local overview (`docs/osm.md`), and the changelog entry is dated.
+- The rebuilt `runtime/sidebar/index.html` and `runtime/sidebar/server.cjs`
+  differ from `e353588` only in their four version strings.
+
+**Checks.**
+
+- A second build reproduced both runtime files and the notices byte for byte,
+  and the stdio smoke passed.
+- Validation (`--baseline 314dcf1` and `--release-tag v0.31.0`), the
+  onboarding check and `git diff --check` passed on a clean clone of
+  `e353588` carrying exactly these changes.
+- The sidebar unit tests and the documentation, layout, continuity,
+  skill-version and context-footprint checks read none of the changed files
+  and were not rerun; their earlier results stand.
+
+**Not done.** No 0.31.0 tag or release exists yet. Home's internal connection
+still reports `unsupported_host` in this build, so internal-mode Home cannot
+connect on any host; Home's other behaviour is proven at fixture level only.
+
+**Native proof.** None.
+
+On 2026-10-29 the Sol r9 corrections and the L-2 context binding (`c43c5c8` on
+`feat/osm-home-internal-notion-74-82`, on top of `f776dfb`) addressed R9-1 to
+R9-3 and L-2 at fixture level.
+
+**What changed.**
+
+- R9-1: an observed account change now holds until Home observes `ready` with
+  `mapping: saved`. No other status lifts it: not an official-mode projection
+  (which makes no connection check), a missing projection or connection, a
+  failed, pending, mapping-less, `unavailable` or `rate_limited` check, or a
+  list or read that reports `account_changed`. While it holds, Home shows the
+  account-change gate, or for a failed or transient check its own gate with
+  Try again, and reads no page icons. A context change ends it for the new
+  context.
+- R9-2: while it holds, the setup and Settings context pickers leave the
+  context page and the saved source pages out of their live results, also
+  results already listed or searched, without closing an open list or
+  clearing its search. A context switch confirmation that names a saved page
+  keeps the choice but hides its question.
+- R9-3: choosing the 'Selected page' entry of a pending setup selection keeps
+  that selection and its title.
+- L-2: when the context route is configured, every `osm_home` status path
+  names that context, taken from the same context-route read as its
+  projection. Home does not apply a status that names another context: it
+  counts as a failed check, which cannot end a held account change, and
+  Refresh reads the current context. A status without a context field is
+  applied as before. In the product that is the server's error fallback and
+  a status read without a configured context route; neither can end a held
+  change, which needs `ready` with `mapping: saved`. The synthetic test
+  fixtures written before L-2 also carry no context field and stand for the
+  panel's own context. Lists and reads were already bound to their context by
+  their scope.
+
+**Fixture results.**
+
+- **Fail-first:** the seven R9 tests failed their assertions on an inert copy
+  of `f776dfb`. That log's own first-failure check failed (it stopped before
+  Node 26's failing-tests recap) and is kept as failed; the raw output was
+  checked separately. The three L-2 tests then failed their assertions on an
+  inert copy of `f776dfb` with the R9 corrections. No timeouts or runner
+  errors.
+- **Checks:** 182/182 sidebar unit tests passed on the final sources. The
+  build regenerated only `runtime/sidebar/index.html` and
+  `runtime/sidebar/server.cjs`, a second build reproduced both byte for
+  byte, and the stdio smoke passed, including its new check that the bundled
+  server's status names its configured context. Validation
+  (`--baseline 314dcf1`), the onboarding check and `git diff --check` passed
+  on a clean clone of `c43c5c8`. The documentation, layout, continuity,
+  skill-version and context-footprint checks read none of the changed files
+  and were not rerun.
+- **Limits:** as recorded for `efd43df`. Home in official mode makes no
+  connection check, so a newly opened panel does not observe the change. A
+  panel notices a context change made elsewhere only on Refresh; until then
+  it shows its own saved links as before. A status without a context field is
+  not bound. The two residuals disclosed for `efd43df` are corrected.
+
+**Native proof.** None.
+
+On 2026-10-29 the Sol r8 corrections (`efd43df` on
+`feat/osm-home-internal-notion-74-82`, on top of `00a9c61`) addressed R8-1 to
+R8-4 at fixture level.
+
+**What changed.**
+
+- R8-1: after an observed `account_changed`, Home offers no saved-links path
+  and opens no saved target. Settings and setup hide their five saved-source
+  fields and show the context without its saved name; both keep the draft and
+  an unfinished link and refuse to save source links until Home is ready again
+  with a mapping for the current connection. The saved bytes don't change.
+- R8-2: the reader shows only the answer to its own request and section;
+  invalidation and settlement still run first.
+- R8-3: a block text cut at 20,000 characters or 200 rich-text items marks the
+  article truncated, so its notice shows. F5 is unchanged.
+- R8-4: the Context projection procedure states this phase's verification
+  limit instead of citing `osm_home`.
+
+**Changed test expectations.** Two `account_changed` expectations that
+described the old behaviour were removed, and each is replaced by a stronger
+test: the tuple in the gates test (gate action to saved links) and the state in
+the R4-2 test (links view kept after Refresh). The R4-2 removal followed a
+stop: the first full run after the fix failed only that iteration (166/167).
+No other assertion changed; the 41 base test bodies and the F1 icon control are
+byte-identical.
+
+**Fixture results.**
+
+- **Fail-first:** the four R8 tests failed their assertions on the `00a9c61`
+  sources; the links-chosen account-change test failed on an isolated
+  `00a9c61` export; the three Settings and setup tests failed on an inert copy
+  of the uncommitted R8 fix without them; and the setup context picker test
+  failed on an inert copy of the uncommitted fix without its one-expression
+  change. No timeouts or runner errors.
+- **Checks:** 172/172 sidebar unit tests passed on the final sources. The
+  build regenerated only `runtime/sidebar/index.html` and `server.cjs`, a
+  second build reproduced them byte for byte, and the stdio smoke passed.
+  Validation (`--baseline 314dcf1`), footprint, documentation, onboarding,
+  layout, continuity and skill-version checks passed on a clean clone of
+  `efd43df`, and `git diff --check` passed.
+- **Limits:** an open list of saved choices closes as on every Refresh and a
+  typed page search is cleared on its next open; hidden fields and the hidden
+  links view keep their content in the page; the suppression starts only once
+  Home has observed the change.
+- **Disclosed for review:** the context pickers keep listing live pages from
+  the official connection, which can show the context page under its current
+  title; and choosing setup's 'Selected page' entry while suppressed brings
+  the saved name back only at the next status refill. No saved byte changes in
+  either case.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r6 correction (`df5ee99` on
+`feat/osm-home-internal-notion-74-82`, on top of `74908c6`) brought reads into
+Home's recovery settlement.
+
+**The three request paths.** `osm_home` (`load()`), `osm_home_list` (`list()`,
+including Load more), and `osm_home_read` (`read()`). Each now takes part in
+settlement:
+
+- A current-generation read that is pending, or that failed (`unavailable` or
+  `rate_limited`), keeps the recovery unsettled. This holds even after Back or
+  another selection.
+- `rearm()` runs again after a read answers validly.
+
+No request, timer, store or transport was added.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 163/163 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `df5ee99`,
+  and `git diff --check` passed.
+- **Fail-first on the `74908c6` sources:** each new test was run alone and
+  matched exactly one test. The pending-read tests (with and without Back) and
+  the failed-read tests (`unavailable`, `rate_limited`) failed their assertions.
+  Three tests passed there as coverage only:
+  - the successful-last-read test;
+  - the old-generation answers test;
+  - the section Try again test.
+- **Targeted variants on copies:** each coverage-only test failed its assertion
+  under the variant it targets:
+  - no re-check after a read;
+  - no generation check;
+  - a section Try again without a reset.
+- **No timeouts or runner errors** occurred in this run.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r5 correction (`4289942` on
+`feat/osm-home-internal-notion-74-82`, on top of `7ff9e18`) re-armed Home's
+automatic recovery.
+
+**Cause.** The run 72 brief said the budget "resets only on an explicit refresh,
+Try again/retry, or a context change". That wording did not restate the
+positive rule, and `7ff9e18` followed it. After one automatic recovery, every
+later independent invalidation therefore cleared Home and showed the gate with
+no automatic reload.
+
+**Now (R5-1, I2):** one automatic status reload per independent invalidation
+episode. `revoke()` spends the budget and marks a recovery active. The budget is
+re-armed only when that recovery has settled successfully:
+
+- its status loaded as ready;
+- every section it requested answered for the current generation with current
+  valid data;
+- none of those sections is still pending, failed or invalid.
+
+A ready status alone, or one healthy sibling, is not enough. Refresh, Try again
+(the gate's or a section's) and a context change re-arm explicitly. No timer,
+store or transport was added.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 156/156 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `4289942`,
+  and `git diff --check` passed.
+- **Fail-first on the `7ff9e18` sources:** the two "distinct invalidation
+  reloads once more" tests and the section Try again test failed their
+  assertions. Four negative controls passed there, because the old code never
+  re-arms:
+  - ready status alone;
+  - one healthy sibling;
+  - the FIRST version of the alternating-answers test (corrected in run 74: the
+    final, strengthened version was not rerun on `7ff9e18`; only the naive
+    variants below exercise it);
+  - context change.
+- **The negative controls still discriminate.** On temporary copies with naive
+  variants, each control failed or timed out by looping:
+  - re-arming on any accepted list result;
+  - re-arming on a ready status;
+  - not resetting on a context change.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r4 core corrections (`841e86e` on
+`feat/osm-home-internal-notion-74-82`, on top of `fba8dcb`) fixed four cases:
+
+- **R4-1, I1.** A data source whose schema parent is another data source is
+  support when either parent ID is support, otherwise unresolved. There is no
+  traversal into that source.
+- **R4-2, I3.** Links the user chose allow icon reads only on a resolved ready
+  status.
+- **R4-3, I2.** Accepted results no longer reset the automatic recovery budget;
+  only Refresh, Try again or a context change does. That was too narrow:
+  recovery was never re-armed. Corrected in run 73; see the entry above.
+- **R4-4, I1.** The ancestry bound counts every hop per item, cached or not.
+
+No read was added. (a) and (d) remain unresolved, pending an owner decision.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 149/149 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `841e86e`,
+  and `git diff --check` passed.
+- **Read table:** the published read-table cases keep their exact counts.
+  Corrected in run 73: counting a hop before the cache lookup can make a deeper
+  chain stop earlier with fewer reads. For one such chain, Sol r5 traced 7 page
+  reads at `fba8dcb` and 6 at head. That figure is from Sol's source trace and
+  its own receipt for the earlier count, not a result of these checks; Sol's
+  receipt for the head count was lost to a read-only filesystem.
+
+Fail-first on the `fba8dcb` sources:
+
+- **R4-1 and R4-4:** failed.
+- **R4-2:** failed.
+- **R4-3, both scope variants:** never terminated, which is the unbounded
+  recovery loop itself. Each was killed by its timeout.
+- **F1 positive control:** passed.
+- **Missing scope-less list case:** already handled at `fba8dcb`, so it passed
+  there.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r3 repairs (`bf083bc` on
+`feat/osm-home-internal-notion-74-82`, on top of the reviewed `65c816d`) enforced
+four rules, one shared place each.
+
+- **I1, support containment:** one predicate for every list and read path.
+- **I2, invalidation:** `current()` classifies every service state.
+- **I3, automatic official reads:** these need positive resolved evidence.
+- **I4, persistence:** the reader's UTF-8 byte bound applies before any
+  replacement.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 143/143 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `bf083bc`,
+  and `git diff --check` passed.
+- **Discrimination:** the new and updated tests run against the `65c816d` sources
+  failed exactly the I1 to I4 tests and the read table. The 89 tests that already
+  existed, including the F1 positive control, passed there.
+
+The fixture changed in two places to match the service and API contracts:
+
+- **Scripted results carry scope.** Scripted list and read results now carry the
+  scope they were read under, as the service's ready results do.
+- **Data sources carry `database_parent`.** Fictional data sources now include
+  this documented required field.
+
+**Read counts.** A data-source record read now also reads its source's schema:
+`read property-only memory` goes from schema 0 to 1. This is the bounded I1
+check, which uses the data source's `database_parent`, not a database read. New
+rows:
+
+| Case | Reads |
+| --- | --- |
+| List with support ancestry (5 mapped pages) | 10 page reads, 1 returned |
+| Read a page under a support row | 2 page reads |
+| Read a page three levels below the root | 4 page reads and 1 body |
+| List a data source in a support database | 1 schema read and no query |
+
+**Consequence of refusing unresolved containment** (as corrected in run 72):
+
+- **(a), pending an owner decision.** An external database is not listed until
+  its whole ancestry can be read within three ancestor-page steps. Sharing its
+  immediate parent alone may not be enough.
+- **(d), pending an owner decision.** A page-list row of a data source is
+  refused, even when that data source is mapped elsewhere.
+- **Withheld as unresolved.** Pages under block parents, and chains needing more
+  than three ancestor-page steps.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r2 repairs (`121d626`, on top of `80b220d`) addressed the
+variants Sol r2 named. Sol r3 found F1 and F2 still incomplete; see the entry
+above. F4 and F5 were resolved in r1.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 134/134 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `121d626`,
+  and `git diff --check` passed.
+- **Discrimination:** the new tests run against the `80b220d` sources failed
+  exactly R2-1, R2-2 (official to internal), R2-3 and the updated read table. The
+  internal-to-official refresh test pins unchanged behaviour and passed there.
+
+The variants and their tests:
+
+- **R2-1:** a row of a support data source mapped individually in a context page
+  list is not listed (counted, not named) and is refused on read with no block
+  request.
+- **R2-2:** a refresh from official to internal makes no icon read while the new
+  status is pending or after it resolves. A refresh from internal to official
+  reads icons only after official resolves.
+- **R2-3:** a denial arriving after Back clears the title with one status
+  recheck and no loop.
+
+The read table adds the page-list cases: listing one with a support row reads 3
+pages and returns 2; reading that row reads only its page.
+
+**What is enforced for support material.**
+
+- A projection that maps a support source or page as context is refused.
+- Support pages are left out of context database lists and refused before any
+  request.
+- Pages whose parent is a support data source are refused at read time, before
+  their title, fields or blocks are used.
+
+**Native proof.** None.
+
+On 2026-10-27 the Sol r1 repairs (`3ca28a6`, on top of the reviewed `d7ba06f`)
+addressed five findings. Sol r2 later found F1–F3 only partly resolved; see the
+entry above.
+
+**Fixture results.**
+
+- **Checks:** the build passed with no `runtime/sidebar` diff, 130/130 sidebar
+  unit tests passed, and the stdio smoke passed. Validation
+  (`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+  continuity and skill-version checks all passed on a clean clone of `3ca28a6`,
+  and `git diff --check` passed.
+- **Discrimination:** the new tests run against the reviewed `d7ba06f` sources
+  in a temporary export failed exactly the tests for F1 (internal Home), F2,
+  F3, F4, F5 and the updated read-count table. The tests that pin unchanged
+  icon behaviour for an official-mode projection and without a projection
+  passed there too.
+
+The findings and their tests:
+
+- **F1:** internal Home makes no `osm_notion_icons` call, including before
+  `osm_home` resolves. Official mode, no projection, and links the user chooses
+  keep their icons.
+- **F2:** a support row inside a Memory data source isn't listed, and a read is
+  refused with only the identity request.
+- **F3:** a listed record that becomes inaccessible clears its titles with one
+  status recheck and no loop. An initially inaccessible source makes no extra
+  call.
+- **F4:** a trashed root is `root_inaccessible`.
+- **F5:** a property over 4,000 characters marks the article as partial.
+
+The per-case read table gains "Read support row inside Memory": identity 1, all
+others 0.
+
+**Native proof.** None, as before. Official-route icon behaviour in a real
+Codex panel and real Notion trash and access changes remain unverified.
+
+On 2026-10-26, contract delta 1 (`5559d7f` on
+`feat/osm-home-internal-notion-74-82`) made Home a generated projection of one
+AI Operating Model definition revision, with an explicit connection mode and
+support material excluded. Saved-text sizes, fixture results and native proof
+are recorded separately below and support different claims.
+
+**Saved-text size.** The fictional fixture projection (`osm-home-projection/1`,
+five context sections) saves as 4,198 bytes against a 32,768-byte limit. This is
+a size observation only. The owner's 53.6% entry and 50.0% source-index
+reductions are recorded in #69; this repository did not measure them.
+
+**Fixture results.** The build passed with no `runtime/sidebar` diff, 123/123
+sidebar unit tests passed, and the stdio smoke passed, including a saved
+official-mode projection reporting `official_mode`. Validation
+(`--baseline 314dcf1`), footprint, documentation, onboarding, layout,
+continuity and skill-version checks all passed on a clean clone of `5559d7f`, and
+`git diff --check` passed. New tests cover:
+
+- the projection being replaced only by a new revision and refused without one;
+- official mode making no request;
+- support material never shown as context;
+- synthetic fixture IDs;
+- generated links' revision and the partial-view label.
+
+Reads per case against the fictional workspace (fake transport, internal mode):
+
+| Case | Needed sources | Identity | Page | Schema | Query | Body |
+| --- | --- | --- | --- | --- | --- | --- |
+| Status (identity and mapped root) | 1 | 1 | 1 | 0 | 0 | 0 |
+| List profile pages | 2 | 1 | 2 | 0 | 0 | 0 |
+| List memory titles | 1 | 1 | 0 | 1 | 1 | 0 |
+| Read property-only memory | 1 | 1 | 1 | 0 | 0 | 1 |
+| Read About with nested blocks | 1 | 1 | 1 | 0 | 0 | 3 |
+| Outside page via page list | 0 | 1 | 0 | 0 | 0 | 0 |
+| Outside page via data source | 0 | 1 | 1 | 0 | 0 | 0 |
+| Support material | 0 | 1 | 0 | 0 | 0 | 0 |
+
+The same cases in official mode make no request.
+
+**Native proof.** None. This proves no native Codex or Claude behaviour, native
+YAML support, internal-connection boundary in a real workspace, official-route
+reading or daily run. Those remain open under #61, #69 and #82.
+
+On 2026-10-26 the Home reader and internal Notion connection candidate
+(`bbedf80` on `feat/osm-home-internal-notion-74-82`, from `main` `314dcf1`) was
+checked with Node 26.12.0 and Python 3. npm was not installed, so the existing
+dependencies were used with `node build.mjs`, `node --test *.test.mjs` and
+`node smoke.mjs`.
+
+Results:
+
+- **Build:** passed, and the committed `runtime/sidebar` has no diff.
+- **Sidebar unit tests:** 115/115 passed, 18 of them in `home.test.mjs` and 12
+  new Home DOM tests.
+- **Bundled stdio smoke:** passed, including the new tools, `unsupported_host`
+  and a mapping save and readback.
+- **Rehearsals:** the footprint, documentation, onboarding, layout, continuity
+  and skill-version rehearsals passed.
+- **`git diff --check 314dcf1 HEAD`:** passed.
+- **`validate.py --baseline 314dcf1`:** passed on a clean clone of `bbedf80`. In
+  the writer worktree it fails on a sandbox device file at `.mcp.json`, which is
+  not part of the repository.
+- **Discrimination check:** removing the data-source parent fence from a temp
+  copy failed exactly the outside-page test.
+
+The fixtures cover:
+
+- allowed root, child and database reads;
+- an outside page denied for fetch, query and linked source, without leaking;
+- a linked external database denied until it is granted;
+- revocation, account change and scope change clearing everything;
+- property-only memory and a second model's names;
+- paging and block bounds, and unsupported blocks;
+- hostile text;
+- the absence of the token from every result;
+- old saved links loading unchanged;
+- tab keys, Back focus, More, the gates, and the 500/320 px styles.
+
+No live Notion request, token, grant or native Codex or Claude run was made.
+Those remain with the approved native holders.
+
 After lead Review on 2026-10-23, the candidate renames the new-customer Notion
 template to `notion-osm.md` (page **OSM**, no operating-system framing) and
 makes the `aios` → `osm` switch disable `aios` before fresh-session acceptance,

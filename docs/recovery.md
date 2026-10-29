@@ -14,6 +14,13 @@ rollback to the reviewed 0.20.0 tag removes this Codex runtime and keeps the
 existing home and pointer. Preserve any later customer edits. See
 [sidebar boundaries](sidebar.md).
 
+Home's projection is a separate per-context file beside the links, with the
+same backups, and older runtimes ignore it. If Home shows the wrong sources,
+correct the AI Operating Model definition and let Setup regenerate the
+projection from its new revision; never hand-edit it. To stop Home
+reading, revoke OSM's internal connection in Notion. Never copy a token to
+repair it. See [Home connection](home-connection.md).
+
 Git history and reviewed tags/commits preserve earlier package versions and
 removed documentation. Do not keep duplicate historical reports in the active
 tree solely as backups.
