@@ -1,5 +1,57 @@
 # Verification
 
+On 2026-10-29 the Sol r8 corrections (`efd43df` on
+`feat/osm-home-internal-notion-74-82`, on top of `00a9c61`) addressed R8-1 to
+R8-4 at fixture level.
+
+**What changed.**
+
+- R8-1: after an observed `account_changed`, Home offers no saved-links path
+  and opens no saved target. Settings and setup hide their five saved-source
+  fields and show the context without its saved name; both keep the draft and
+  an unfinished link and refuse to save source links until Home is ready again
+  with a mapping for the current connection. The saved bytes don't change.
+- R8-2: the reader shows only the answer to its own request and section;
+  invalidation and settlement still run first.
+- R8-3: a block text cut at 20,000 characters or 200 rich-text items marks the
+  article truncated, so its notice shows. F5 is unchanged.
+- R8-4: the Context projection procedure states this phase's verification
+  limit instead of citing `osm_home`.
+
+**Changed test expectations.** Two `account_changed` expectations that
+described the old behaviour were removed, and each is replaced by a stronger
+test: the tuple in the gates test (gate action to saved links) and the state in
+the R4-2 test (links view kept after Refresh). The R4-2 removal followed a
+stop: the first full run after the fix failed only that iteration (166/167).
+No other assertion changed; the 41 base test bodies and the F1 icon control are
+byte-identical.
+
+**Fixture results.**
+
+- **Fail-first:** the four R8 tests failed their assertions on the `00a9c61`
+  sources; the links-chosen account-change test failed on an isolated
+  `00a9c61` export; the three Settings and setup tests failed on an inert copy
+  of the uncommitted R8 fix without them; and the setup context picker test
+  failed on an inert copy of the uncommitted fix without its one-expression
+  change. No timeouts or runner errors.
+- **Checks:** 172/172 sidebar unit tests passed on the final sources. The
+  build regenerated only `runtime/sidebar/index.html` and `server.cjs`, a
+  second build reproduced them byte for byte, and the stdio smoke passed.
+  Validation (`--baseline 314dcf1`), footprint, documentation, onboarding,
+  layout, continuity and skill-version checks passed on a clean clone of
+  `efd43df`, and `git diff --check` passed.
+- **Limits:** an open list of saved choices closes as on every Refresh and a
+  typed page search is cleared on its next open; hidden fields and the hidden
+  links view keep their content in the page; the suppression starts only once
+  Home has observed the change.
+- **Disclosed for review:** the context pickers keep listing live pages from
+  the official connection, which can show the context page under its current
+  title; and choosing setup's 'Selected page' entry while suppressed brings
+  the saved name back only at the next status refill. No saved byte changes in
+  either case.
+
+**Native proof.** None.
+
 On 2026-10-27 the Sol r6 correction (`df5ee99` on
 `feat/osm-home-internal-notion-74-82`, on top of `74908c6`) brought reads into
 Home's recovery settlement.
