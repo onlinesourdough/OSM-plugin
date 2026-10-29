@@ -17,9 +17,10 @@ import { NotionPages } from './notion-pages.mjs';
 const uri = 'ui://osm/home-v1';
 const notionPages = new NotionPages();
 // Home reads only through OSM's own internal Notion connection, never notionPages.
+// L-2: the mapping names the context it was read for, from this same route read.
 const readProjection = async () => {
   const context = await readContextRoute();
-  return context.state === 'configured' ? readHomeProjection(context.target) : { state: 'missing' };
+  return context.state === 'configured' ? { ...await readHomeProjection(context.target), target: context.target } : { state: 'missing' };
 };
 const home = createHomeService({ credential: hostCredential, transport: fetchTransport, readProjection });
 let builtin;

@@ -1549,3 +1549,250 @@ test('onboarding with the Notion page picker after an account change shows the c
   assert.equal(u.get('setup-context-picker-link').value, other, 'the unfinished link is still there');
   for (const view of [u, w]) assert.deepEqual(view.names().filter(name => name.startsWith('osm_save')), ['osm_save_context']);
 });
+
+// Sol r9 corrections: how long an account change holds, live context results, placeholder selection.
+const r9Page = n => 'https://app.notion.com/p/' + String(n).padStart(32, '0');
+const r9Sources = () => saved({ docs: { title: 'Fictional prior handbook', target: r9Page(3) } }, 'Fictional prior studio');
+const r9Pages = async () => ({ pages: [{ title: 'Fictional prior studio', target }, { title: 'Fictional prior handbook', target: r9Page(3) },
+  { title: 'Fictional other page', target: r9Page(4) }], hasMore: false });
+const r9Titles = (u, picker) => u.options(picker).map(node => node.textContent);
+const r9Requests = u => u.names().filter(name => name === 'osm_notion_pages').length;
+test('an observed account change stays suppressed through failed, pending, mapping-less and transient checks until a ready status (R8-1, R9-1)', async () => {
+  for (const mode of ['fail', 'pending', 'fallback', 'unavailable', 'rate_limited']) {
+    const host = homeHost(), held = deferred();
+    let check = null;
+    const handler = async (name, args) => {
+      if (name === 'osm_home' && check === 'pending') { await held.promise; throw new Error('Fictional failure'); }
+      if (name === 'osm_home' && check === 'fail') throw new Error('Fictional failure');
+      if (name === 'osm_home' && check === 'fallback') return fallback;
+      return host.handler(name, args);
+    };
+    const u = await ui(configured(), p2Sources(), { ...iconOptions, home: handler }); await settle();
+    await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+    assert.equal(u.shown('dashboard'), true, `${mode}: links chosen`); assert.equal(iconCalls(u), 1, `${mode}: icons while ready`);
+    host.s.state = 'account_changed';
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(u.shown('dashboard'), false, `${mode}: hidden after the change`);
+    if (['fail', 'pending', 'fallback'].includes(mode)) check = mode; else host.s.state = mode;
+    await u.click('drawer-refresh'); await settle();
+    if (mode === 'pending') { assert.equal(u.shown('dashboard'), false, 'pending: hidden while the check is pending'); held.release(); await settle(); }
+    assert.equal(u.shown('dashboard'), false, `${mode}: still hidden`);
+    assert.equal(u.shown('gate-action'), true, `${mode}: Try again offered`); assert.equal(u.text('gate-action'), 'Try again');
+    await u.click('open-docs'); assert.deepEqual(u.links, [], `${mode}: no saved target`);
+    await u.click('settings'); await settle();
+    for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `${mode}: ${role} hidden`);
+    await u.click('drawer-close');
+    assert.equal(iconCalls(u), 1, `${mode}: no icon read`);
+    // Setup saves a reconciled mapping for the current connection; the links the user chose return.
+    check = null; host.s.state = 'ready';
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(u.shown('dashboard'), true, `${mode}: the chosen links return`); assert.equal(iconCalls(u), 2, `${mode}: icons once ready`);
+    await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/prior-docs'], `${mode}: saved target once ready`);
+  }
+});
+test('a list or read that reports an account change suppresses saved links at once, also through a failed recovery check (R8-1, R9-1)', async () => {
+  for (const kind of ['list', 'read']) {
+    const host = homeHost(); let fail = false;
+    const handler = (name, args) => { if (fail && name === 'osm_home') throw new Error('Fictional failure'); return host.handler(name, args); };
+    const u = await homeUi({ s: host.s, handler });
+    const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+    fail = true;
+    if (kind === 'list') { Object.assign(host.s, { listState: 'account_changed', listScope: null }); await u.click('skills-tab'); await settle(); }
+    else { Object.assign(host.s, { readState: 'account_changed', readScope: null }); await u.press('Fixed scope before retainers'); }
+    await u.click('settings'); await settle();
+    assert.equal(u.shown('settings-docs'), false, `${kind}: docs field hidden`);
+    await u.click('drawer-close');
+    await u.click('open-docs'); assert.deepEqual(u.links, [], `${kind}: no saved target`);
+    assert.equal(u.shown('home-gate'), true, kind); assert.equal(u.text('gate-action'), 'Try again', kind);
+    const before = statusCalls();
+    await u.click('gate-action'); await settle();
+    assert.equal(statusCalls(), before + 1, `${kind}: Try again rechecks status`); assert.deepEqual(u.links, [], `${kind}: still no saved target`);
+    // Setup saves a reconciled mapping for the current connection.
+    fail = false; Object.assign(host.s, { listState: null, readState: null, listScope: undefined, readScope: undefined });
+    await u.click('gate-action'); await settle();
+    await u.click('settings'); await settle();
+    assert.equal(u.shown('settings-docs'), true, `${kind}: docs field back once ready`);
+    await u.click('drawer-close');
+    await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/docs'], `${kind}: saved target once ready`);
+  }
+});
+test('an official-mode, missing-projection or disconnected status keeps a held account change until ready; a context change resets it (R8-1, R9-1)', async () => {
+  for (const [state, mapping] of [['official_mode', 'saved'], ['unsupported_host', 'missing'], ['not_connected', 'saved']]) {
+    const host = homeHost();
+    const u = await ui(configured(), p2Sources(), { ...iconOptions, home: host.handler }); await settle();
+    await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+    assert.equal(iconCalls(u), 1, `${state}: icons while ready`);
+    host.s.state = 'account_changed';
+    await u.click('drawer-refresh'); await settle();
+    Object.assign(host.s, { state, mapping });
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(u.shown('dashboard'), false, `${state}: still hidden`); assert.equal(u.shown('home-gate'), true, state);
+    assert.equal(u.text('gate-title'), 'Continue OSM Setup', state);
+    assert.equal(u.text('gate-copy'), 'This Home was set up for a different Notion connection, so nothing from it is shown. Ask OSM Setup in chat to map it again.', state);
+    assert.equal(u.shown('gate-action'), false, `${state}: no action`); assert.equal(u.text('home-status-label'), 'Notion · Different connection', state);
+    for (const id of ['gate-action', 'show-links', 'open-docs']) { await u.click(id); await settle(); }
+    assert.equal(u.shown('dashboard'), false, state); assert.deepEqual(u.links, [], `${state}: no saved target`);
+    await u.click('settings'); await settle();
+    for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `${state}: ${role} hidden`);
+    await u.click('drawer-close');
+    assert.equal(iconCalls(u), 1, `${state}: no icon read`);
+    // Setup saves a reconciled mapping for the current connection; the links the user chose return.
+    Object.assign(host.s, { state: 'ready', mapping: 'saved' });
+    await u.click('drawer-refresh'); await settle();
+    assert.equal(u.shown('dashboard'), true, `${state}: the chosen links return`); assert.equal(iconCalls(u), 2, `${state}: icons once ready`);
+    await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/prior-docs'], `${state}: saved target once ready`);
+  }
+  // Onboarding reads no page icon either while the change holds under an official-mode status.
+  const third = homeHost();
+  const w = await ui(undefined, undefined, { ...iconOptions, home: third.handler, recoveredSources: p2Sources() });
+  await w.input(target); await w.submit(); await settle();
+  third.s.state = 'account_changed'; await w.click('refresh'); await settle();
+  third.s.state = 'official_mode'; await w.click('refresh'); await settle();
+  for (const role of p2Roles) assert.equal(w.shown(`setup-${role}`), false, `onboarding: ${role} hidden`);
+  assert.equal(iconCalls(w), 0, 'onboarding: no icon read');
+  // Control: a context change ends a held change for the new context.
+  const fourth = homeHost(); let fail = false;
+  const handler = (name, args) => { if (fail && name === 'osm_home') throw new Error('Fictional failure'); return fourth.handler(name, args); };
+  const v = await ui(configured(), p2Sources(), { home: handler }); await settle();
+  fourth.s.state = 'account_changed';
+  await v.click('drawer-refresh'); await settle();
+  fail = true; await v.click('drawer-refresh'); await settle();
+  await v.click('settings'); await settle();
+  assert.equal(v.shown('settings-docs'), false, 'held for this context');
+  fail = false; Object.assign(fourth.s, { state: 'unmapped', mapping: 'missing' });
+  await v.choose('settings-context-picker', 'Switch context…');
+  v.get('settings-context-picker-link').value = other;
+  await v.click('settings-context-picker-apply'); await settle();
+  assert.equal(v.get('drawer').open, true);
+  for (const role of p2Roles) assert.equal(v.shown(`settings-${role}`), true, `${role} shown for the new context`);
+});
+test('while an account change holds, the context lists never show a saved page, also when searched (R8-1, R9-2)', async () => {
+  const first = homeHost(); Object.assign(first.s, { state: 'account_changed', mapping: 'saved' });
+  const w = await ui(undefined, undefined, { home: first.handler, pages: r9Pages, recoveredSources: r9Sources() });
+  await w.input(target); await w.submit(); await settle();
+  await w.click('setup-context-picker'); await settle();
+  assert.equal(r9Titles(w, 'setup-context-picker').some(text => text.includes('Fictional prior')), false, 'setup: no saved page listed');
+  assert.ok(r9Titles(w, 'setup-context-picker').some(text => text.startsWith('Fictional other page')), 'setup: other live pages stay');
+  const host = homeHost(); Object.assign(host.s, { state: 'account_changed', mapping: 'saved' });
+  const u = await ui(configured(), r9Sources(), { home: host.handler, pages: r9Pages }); await settle();
+  await u.click('settings'); await u.click('settings-context-picker'); await settle();
+  assert.equal(r9Titles(u, 'settings-context-picker').some(text => text.includes('Fictional prior')), false, 'settings: no saved page listed');
+  const search = u.get('settings-context-picker-search'); search.value = 'Fictional prior'; await search.dispatch('input');
+  await new Promise(resolve => setTimeout(resolve, 320)); await settle();
+  assert.equal(r9Titles(u, 'settings-context-picker').some(text => text.includes('Fictional prior')), false, 'settings search: no saved page listed');
+  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional other page')), 'settings search: other live pages stay');
+});
+test('a context list open when the change arrives keeps its search and leaves saved pages out at once, with no new page request (R8-1, R9-2)', async () => {
+  const host = homeHost();
+  const u = await ui(configured(), r9Sources(), { home: host.handler, pages: r9Pages }); await settle();
+  await u.click('settings'); await u.click('settings-context-picker'); await settle();
+  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional prior studio')), 'ready: the context is named');
+  const search = u.get('settings-context-picker-search'); search.value = 'Fictional'; await search.dispatch('input');
+  await new Promise(resolve => setTimeout(resolve, 320)); await settle();
+  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional prior handbook')), 'ready: saved pages are listed');
+  const requests = r9Requests(u);
+  // A list reports the change while the context list is open.
+  Object.assign(host.s, { state: 'account_changed', listState: 'account_changed', listScope: null });
+  await u.click('skills-tab'); await settle();
+  assert.equal(u.get('settings-context-picker').getAttribute('aria-expanded'), 'true', 'the open list stays open');
+  assert.equal(search.value, 'Fictional', 'the typed search is kept');
+  assert.equal(r9Titles(u, 'settings-context-picker').some(text => text.includes('Fictional prior')), false, 'no saved page listed at once');
+  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional other page')), 'other live pages stay');
+  assert.equal(r9Requests(u), requests, 'no new page request');
+  // Refresh keeps its existing behaviour: it closes the list, and the next open starts without the search.
+  Object.assign(host.s, { state: 'ready', listState: null, listScope: undefined });
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(u.get('settings-context-picker').getAttribute('aria-expanded'), 'false', 'Refresh closes the list, as before');
+  await u.click('settings-context-picker'); await settle();
+  assert.equal(search.value, '', 'the next open starts without the search, as before');
+  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional prior handbook')), 'saved pages listed again once ready');
+});
+test('a context switch confirmation that names a saved page keeps the choice but hides its question while the change holds (R8-1, R9-2)', async () => {
+  const host = homeHost();
+  const u = await ui(configured(), r9Sources(), { home: host.handler, pages: r9Pages }); await settle();
+  await u.click('settings'); await u.click('settings-context-picker'); await settle();
+  await u.options('settings-context-picker').find(node => node.textContent.startsWith('Fictional prior handbook')).dispatch('click');
+  const question = () => u.get('settings-context').descendants().find(node => node.tagName === 'P' && node.textContent === 'Switch to Fictional prior handbook?');
+  assert.equal(question()?.hidden, false, 'ready: the question names the page');
+  Object.assign(host.s, { state: 'account_changed', listState: 'account_changed', listScope: null });
+  await u.click('skills-tab'); await settle();
+  assert.equal(question()?.hidden, true, 'the question is hidden while the change holds');
+  // Setup saves a reconciled mapping for the current connection; the question returns and the kept choice applies.
+  Object.assign(host.s, { state: 'ready', listState: null, listScope: undefined });
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(question()?.hidden, false, 'the question returns once ready');
+  await u.click('settings-context-picker-apply'); await settle();
+  assert.equal(u.calls.find(call => call.name === 'osm_save_context')?.args.target, r9Page(3), 'the kept choice switches the context');
+  assert.equal(u.calls.at(-1).name, 'osm_save_sources'); assert.equal(u.calls.at(-1).args.title, 'Fictional prior handbook');
+});
+test('choosing the placeholder of a pending page selection keeps its title through the account change (R8-1, R9-3)', async () => {
+  let listed = [{ title: 'Fictional studio A', target }, { title: 'Fictional page B', target: other }];
+  const host = homeHost();
+  const u = await ui(undefined, undefined, { home: host.handler, pages: async () => ({ pages: listed, hasMore: false }) });
+  await u.input(target); await u.submit(); await settle();
+  await u.click('setup-context-picker'); await settle();
+  await u.options('setup-context-picker').find(node => node.textContent.startsWith('Fictional page B')).dispatch('click');
+  assert.equal(u.text('setup-context-picker'), 'Fictional page B', 'the pending selection');
+  host.s.state = 'account_changed';
+  await u.click('refresh'); await settle();
+  assert.equal(u.text('setup-context-picker'), 'Selected page', 'masked while the change holds');
+  listed = [];
+  await u.click('setup-context-picker'); await settle();
+  await u.options('setup-context-picker').find(node => node.textContent.startsWith('Selected page')).dispatch('click');
+  host.s.state = 'ready';
+  await u.click('refresh'); await settle();
+  assert.equal(u.text('setup-context-picker'), 'Fictional page B', 'the selection keeps its title');
+  await u.submit(); await settle();
+  assert.equal(u.calls.at(-1).name, 'osm_save_sources'); assert.equal(u.calls.at(-1).args.title, 'Fictional page B');
+});
+
+// L-2: Home applies a status only to the context it was read for.
+const l2Host = () => {
+  const host = homeHost(), route = { target };
+  const handler = async (name, args) => {
+    const result = await host.handler(name, args);
+    if (name === 'osm_home') result._meta['osm/home'] = { ...result._meta['osm/home'], context: route.target };
+    return result;
+  };
+  return { s: host.s, handler, route };
+};
+test('a status read for another context never ends a held account change; one for this context does (R8-1, L2-1)', async () => {
+  const host = l2Host();
+  const u = await ui(configured(), p2Sources(), { home: host.handler }); await settle();
+  host.s.state = 'account_changed';
+  await u.click('drawer-refresh'); await settle();
+  host.s.state = 'unavailable';
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(u.text('gate-action'), 'Try again', 'held, with Try again');
+  // The route changes outside this panel, to a context whose Home is ready for the current connection.
+  host.s.state = 'ready'; host.route.target = other;
+  await u.click('gate-action'); await settle();
+  assert.equal(u.shown('home-gate'), true, 'another context: still held');
+  assert.equal(u.shown('gate-action'), true); assert.equal(u.text('gate-action'), 'Try again');
+  await u.click('open-docs'); assert.deepEqual(u.links, [], 'another context: no saved target');
+  await u.click('settings'); await settle();
+  for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `another context: ${role} hidden`);
+  await u.click('drawer-close');
+  // The route names this context again, and its Home is ready for the current connection.
+  host.route.target = target;
+  await u.click('gate-action'); await settle();
+  assert.equal(u.shown('home-gate'), false, 'this context: the hold ends');
+  await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/prior-docs'], 'this context: saved target');
+});
+test('a recovery status read for another context is not applied, so its sections never show (R8-1, L2-2)', async () => {
+  const host = l2Host();
+  const u = await homeUi({ s: host.s, handler: host.handler });
+  assert.ok(u.panel().includes('About your business'), 'this context is shown');
+  // The route changes outside this panel; a section answer without a scope starts the recovery.
+  Object.assign(host.s, { generation: 2, listState: 'unavailable', listScope: null }); host.route.target = other;
+  await u.click('skills-tab'); await settle();
+  assert.equal(u.get('home').textContent.includes('Company handbook'), false, 'no other-context section');
+  assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Notion could not be read');
+  assert.equal(u.text('gate-action'), 'Try again');
+  // Refresh reads this panel's context again.
+  Object.assign(host.s, { generation: 1, listState: null, listScope: undefined }); host.route.target = target;
+  await u.click('drawer-refresh'); await settle();
+  await u.click('context-tab'); await settle();
+  assert.equal(u.shown('home-gate'), false); assert.ok(u.panel().includes('About your business'), 'this context again');
+  assert.equal(u.get('home').textContent.includes('Company handbook'), false, 'still no other-context section');
+});

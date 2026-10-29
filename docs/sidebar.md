@@ -84,21 +84,35 @@ away and are labelled a partial compatibility view of its definition revision,
 or as saved separately when they weren't generated from it. They are not
 another map and not proof of native YAML support.
 
-After Home observes a different connection, it shows only that Continue Setup
-gate. It offers no Show saved links action, keeps the links view hidden (also
-one chosen earlier) and opens no saved link. Settings and setup hide their five
-saved-source fields and show the context without its saved name, and saving
-source links waits with the existing "Saved source links need attention"
-message. The saved links, any edits in progress and an unfinished link are
-kept, and return unchanged once Setup has saved a mapping for the current
-connection and Home is ready again. Three limits apply. An open list of saved
-choices closes, as on every Refresh, and a page search typed into it is cleared
-on its next open. Hidden fields and the hidden links view keep their content in
-the page. And this applies only once Home has observed the change: before its
-first status check returns, the views show as before. The context pickers keep
-listing live pages from the official connection, which can show the context
-page under its current title, and choosing setup's 'Selected page' entry brings
-the saved name back only at the next status refill.
+After Home observes a different connection, it keeps the saved links out of
+view until Setup has saved a mapping for the current connection and Home is
+ready again. It offers no Show saved links action, keeps the links view hidden
+(also one chosen earlier), opens no saved link and reads no page icons.
+Settings and setup hide their five saved-source fields and show the context
+without its saved name, and saving source links waits with the existing "Saved
+source links need attention" message. No other status ends this: not an
+official-mode projection, a missing projection or connection, a failed,
+pending or transient check, a list or read that reports the change, or a
+status read for another context. The gate shows the account-change message,
+or for a failed or transient check its own message with Try again. While it
+holds, the context pickers leave the context page and the saved source pages
+out of their live results, also results already listed, without closing an
+open list or clearing its search, and a context switch that names a saved page
+keeps the choice but hides its question. The saved links, any edits in
+progress, an unfinished link and a page chosen in setup are kept, and return
+unchanged once Home is ready again. For a configured context, each Home status
+names the context it was read for, and Home does not apply one that names
+another context: after the context changes outside this panel, such a status
+counts as a failed check until Refresh reads the current one. The server's
+error fallback and a status read without a configured context name no context
+and apply as before; neither can end a held change, which needs a ready status
+with a saved mapping. Three limits apply. An open list of saved choices
+closes, as on every Refresh, and a page search typed into it is cleared on its
+next open. Hidden fields and the hidden links view keep their content in the
+page. And this applies only once Home has observed the change: before its
+first status check returns, the views show as before, and Home in official
+mode makes no connection check, so a newly opened panel does not observe the
+change.
 
 Lists and bodies exist only in the panel's memory for the current scope.
 Leaving an article clears it, and a revocation, account, projection or context
@@ -220,7 +234,8 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
 - osm_sources: explicit model read of the context and navigation with revisions.
 - osm_save_sources: app/model navigation replacement, scoped to current context.
 - osm_home: app-only Home status through the internal connection, with the
-  installed package's skill metadata.
+  installed package's skill metadata and, for a configured context, the
+  context it was read for.
 - osm_home_list / osm_home_read: app-only bounded title lists and one selected
   record of a mapped section.
 - osm_save_home_projection: model, revision-checked whole replacement of Home's

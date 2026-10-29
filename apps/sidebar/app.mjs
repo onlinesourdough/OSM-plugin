@@ -54,6 +54,10 @@ async function loadPages(query) {
   for (const page of pages) if (Object.hasOwn(page, 'icon')) icons.set(notionPageId(page.target), pageIcon(page.icon));
   return { pages, hasMore: Boolean(data.hasMore), partial: Boolean(data.partial) };
 }
+// R9-2: while an observed account change holds, the context lists leave saved pages (the
+// context page and the saved sources) out of their live results, also those already listed.
+const savedPage = page => home.suppressed() && [status.context.target, ...Object.values(status.sources.links).map(link => link.target)]
+  .map(notionPageId).filter(Boolean).includes(notionPageId(page.target));
 
 function sourcePicker(id, role) {
   return createPicker({ id, label: slotLabels[role], loadOptions: loadPages,
@@ -70,13 +74,15 @@ for (const role of sourceRoles) {
   settingsPickers[role] = sourcePicker(`settings-${role}-picker`, role); $(`settings-${role}`).append(settingsPickers[role].root);
 }
 const contextPicker = createPicker({ id: 'settings-context-picker', label: 'Context', optional: false, menuLabel: 'Current context',
-  loadOptions: loadPages, confirmSelection: true,
+  loadOptions: loadPages, exclude: savedPage, confirmSelection: true,
   editText: ['Switch context…', 'Switch context…'], applyText: 'Switch context', nameField: false,
   placeholder: 'https://notion.so/… or /path/to/context', onSelect() {}, onEdit: () => render(), onApply: ({ target, name }) => switchContext(target, name) });
 $('settings-context').append(contextPicker.root);
-const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Page', optional: false, loadOptions: loadPages,
+const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Page', optional: false, loadOptions: loadPages, exclude: savedPage,
   nameField: false, onSelect: link => {
-    selectedContext = link.placeholder ? null : link; $('target').value = link.target; confirmSwitch = false; feedback(''); render();
+    // R9-3: choosing the placeholder of the current selection keeps that selection and its title.
+    selectedContext = link.placeholder ? (selectedContext?.target === link.target ? selectedContext : null) : link;
+    $('target').value = link.target; confirmSwitch = false; feedback(''); render();
   }, onApply: ({ target }) => {
     const route = classifyTarget(target);
     if (route?.kind !== 'notion') return 'Enter a Notion page link.';

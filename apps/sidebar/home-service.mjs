@@ -121,7 +121,9 @@ export function createHomeService({ credential = hostCredential, transport, read
     const checkedAt = new Date().toISOString();
     const session = await open();
     const saved = session.mapping.state === 'saved' ? session.mapping.projection : null;
-    const base = { mapping: session.mapping.state, checkedAt, ...(session.identity && { workspaceName: session.identity.workspaceName }),
+    // L-2: every status names the context its projection was read for; all returns below spread base.
+    const base = { mapping: session.mapping.state, checkedAt, ...(session.mapping.target && { context: session.mapping.target }),
+      ...(session.identity && { workspaceName: session.identity.workspaceName }),
       ...(saved && { definitionRevision: saved.definition.revision, selectedMode: saved.selectedMode }) };
     if (session.state !== 'ready') return { ...base, state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
     const { root, sections } = saved;

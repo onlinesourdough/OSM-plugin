@@ -77,6 +77,8 @@ try {
   // No host declares a secret mechanism yet: Home reports that and reads nothing.
   const home = await client.callTool({ name: 'osm_home', arguments: {} });
   assert.equal(home._meta['osm/home'].state, 'unsupported_host');
+  // L-2: the bundled server's status names the context it was read for.
+  assert.equal(home._meta['osm/home'].context, target);
   assert.deepEqual(home.content, []);
   assert.ok(home._meta['osm/home'].builtin.some(skill => skill.name === 'osm-setup'));
   assert.equal((await client.callTool({ name: 'osm_home_list', arguments: { section: 'memory' } }))._meta['osm/home-list'].state, 'unsupported_host');

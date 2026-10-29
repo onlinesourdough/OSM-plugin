@@ -39,19 +39,31 @@
   article says when a long property was shortened, and saves that would exceed
   the reader's byte limit are refused before anything is replaced.
 - After Home observes that its projection was set up for a different Notion
-  connection, it shows only the Continue Setup gate until Setup maps it again
-  for the current connection. It offers no Show saved links action, keeps the
-  links view hidden (also one chosen earlier) and opens no saved link.
-  Settings and setup hide their five saved-source fields and show the context
-  without its saved name, and saving source links waits for that mapping. The
-  saved links, edits in progress and an unfinished link are kept and return
-  unchanged. Three limits apply: as on every Refresh, an open list of saved
-  choices closes and a page search typed into it is cleared on its next open;
-  hidden fields keep their content in the page; and nothing changes before
-  Home has observed the change. The context pickers still list live pages from
-  the official connection, which can show the context page under its current
-  title, and choosing setup's 'Selected page' entry brings the saved name back
-  only at the next status refill.
+  connection, it keeps the saved links out of view until Setup maps it again
+  for the current connection and Home is ready: no Show saved links action,
+  no links view (also one chosen earlier), no saved-link opens, no page-icon
+  reads, and no saved source titles in Settings or setup, where the five
+  source fields are hidden and the context shows without its saved name.
+  Saving source links waits for that mapping. No other status ends this: not
+  an official-mode projection, a missing projection or connection, a failed,
+  pending or transient check, a list or read that reports the change, or a
+  status read for another context; a failed or transient check still offers
+  Try again. While it holds, the context pickers leave saved pages out of
+  their live results, also those already listed, without closing an open
+  list or clearing its search, and a context switch that names a saved page
+  keeps the choice but hides its question. The saved links, edits in
+  progress, an unfinished link and a page chosen in setup are kept and return
+  unchanged. For a configured context, each Home status names the context it
+  was read for, and Home does not apply one that names another context: after
+  the context changes outside this panel, such a status counts as a failed
+  check until Refresh reads the current one. The server's error fallback and
+  a status read without a configured context name no context and apply as
+  before; neither can end a held change. Three limits apply: as on every
+  Refresh, an open list of saved choices closes and a page search typed into
+  it is cleared on its next open; hidden fields keep their content in the
+  page; and nothing changes before Home has observed the change. Home in
+  official mode makes no connection check, so a newly opened panel does not
+  observe the change.
 - An article shows only the answer to its own read, so an older read of a
   reopened record never replaces it, and it says when a block's text was cut at
   20,000 characters or 200 text parts.

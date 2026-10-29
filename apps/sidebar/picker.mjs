@@ -24,7 +24,7 @@ function linkKey(link) {
 const sameLink = (a, b) => linkKey(a) === linkKey(b);
 
 export function createPicker({ id, label, optional = true, menuLabel = 'Saved sources', editText = ['Add link…', 'Edit link…'],
-  applyText = 'Apply', nameField = true, placeholder = 'https://… or /path/to/folder', loadOptions, confirmSelection = false,
+  applyText = 'Apply', nameField = true, placeholder = 'https://… or /path/to/folder', loadOptions, exclude = () => false, confirmSelection = false,
   onSelect, onApply, onEdit = () => {} }) {
   const value = node('span', { className: 'picker-value' });
   const button = node('button', { type: 'button', id, className: 'picker', role: 'combobox', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-controls': `${id}-list` }, value);
@@ -60,7 +60,8 @@ export function createPicker({ id, label, optional = true, menuLabel = 'Saved so
     if (browsing()) {
       choices = choices.filter(choice => !search.value.trim() || choice.title.toLowerCase().includes(search.value.trim().toLowerCase()));
       const unique = new Map();
-      for (const choice of [...choices, ...fetched]) {
+      // exclude() is asked on every paint, so a page it leaves out goes at once and the search stays.
+      for (const choice of [...choices, ...fetched.filter(page => !exclude(page))]) {
         const previous = unique.get(linkKey(choice));
         if (!previous || previous.placeholder) unique.set(linkKey(choice), choice);
         else if (Object.hasOwn(choice, 'icon')) unique.set(linkKey(choice), { ...previous, icon: choice.icon });
@@ -216,6 +217,8 @@ export function createPicker({ id, label, optional = true, menuLabel = 'Saved so
     for (const control of [link, name, cancel, apply]) control.disabled = next.disabled;
     apply.textContent = next.applyText || applyText;
     note.textContent = next.note || ''; note.hidden = !next.note || editor.hidden;
+    // A pending switch confirmation keeps its choice; its question shows only while exclude() allows it.
+    if (selectedConfirmation) confirmation.hidden = exclude({ target: link.value });
     if (next.disabled) close();
     else if (expanded) { options = optionList(); paint(); setActive(active); }
   }

@@ -768,3 +768,28 @@ test('a block text cut at 20,000 characters or 200 rich-text items marks the art
     assert.equal(record.truncated, false, `${rich_text.length} items`); assert.equal(record.blocks[0].text.length, length);
   }
 });
+
+// L-2: every Home status names the context its projection was read for.
+test('every Home status path names the context its projection was read for, and none without one (L2-3)', async () => {
+  const fake = fakeNotion(), available = () => ({ state: 'available', token: credentialA });
+  const named = (mapping, credential = available) => createHomeService({ credential, transport: fake.transport, readProjection: async () => ({ ...mapping, target: context }) });
+  const saved = (map = studioProjection()) => ({ state: 'saved', revision: 'r1', projection: normalizeProjection(map) });
+  const official = studioProjection(); official.selectedMode = 'official_notion_user'; delete official.connection;
+  const ready = await named(saved()).status();
+  assert.equal(ready.context, context, 'ready names its context'); assert.equal(ready.state, 'ready');
+  fake.nodes.get(ids.root).in_trash = true;
+  const trashed = await named(saved()).status();
+  fake.nodes.get(ids.root).in_trash = false; fake.state.grants.clear();
+  const unreadable = await named(saved()).status();
+  fake.state.grants.add(ids.root); fake.state.bot = ids.botB;
+  const changed = await named(saved()).status();
+  fake.state.bot = ids.bot; fake.state.token = 'placeholder-credential-rotated';
+  const revoked = await named(saved()).status();
+  fake.state.token = credentialA;
+  const cases = [[trashed, 'root_inaccessible'], [unreadable, 'root_inaccessible'], [changed, 'account_changed'], [revoked, 'not_connected'],
+    [await named(saved(official)).status(), 'official_mode'], [await named(saved(), hostCredential).status(), 'unsupported_host'],
+    [await named(saved(), () => ({ state: 'missing' })).status(), 'not_connected'], [await named({ state: 'missing', revision: 'r0' }).status(), 'unmapped'],
+    [await named({ state: 'unavailable' }).status(), 'mapping_unavailable']];
+  for (const [status, state] of cases) { assert.equal(status.state, state); assert.equal(status.context, context, `${state} names its context`); }
+  assert.equal(Object.hasOwn(await service(fake).status(), 'context'), false, 'no context without a mapping target');
+});

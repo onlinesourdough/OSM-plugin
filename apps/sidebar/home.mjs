@@ -54,8 +54,17 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // R8-1: an observed account change is a demonstrated invalidation. Its gate offers no saved
   // links and no path reveals or opens them until Setup has reconciled the mapping. The saved
   // links themselves are left as they are and return once Home is ready again.
-  const suppressed = () => data?.state === 'account_changed';
-  const shown = () => available() && (!showLinks || suppressed());
+  // R9-1: the change holds until Home observes `ready` with `mapping: saved`, which needs a
+  // projection saved for the current connection. No other status lifts it: not official_mode,
+  // which never checks the connection, nor a failed, pending, transient or mapping-less check,
+  // nor a list or read that reports the change. A context change resets it.
+  let accountChanged = false;
+  const suppressed = () => accountChanged;
+  // While it holds, Home shows the account-change gate; a failed or transient check keeps its
+  // own gate, whose Try again rechecks status and never shows saved links.
+  const retry = () => ['rate_limited', 'unavailable'].includes(data?.state);
+  const gateState = () => suppressed() && !retry() ? 'account_changed' : data?.state;
+  const shown = () => suppressed() || available() && !showLinks;
 
   async function load() {
     const mine = ++generation;
@@ -65,15 +74,19 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     try { value = (await call('osm_home', {}))?._meta?.['osm/home']; } catch { value = undefined; }
     if (mine !== generation) return;
     loading = false;
+    // L-2: a status read for another context (its route changed outside this panel) is not applied;
+    // it counts as a failed check, and Refresh rereads the current context.
+    if (typeof value?.context === 'string' && value.context !== context) value = undefined;
     const next = value && typeof value.state === 'string' ? value
       : { state: 'unavailable', ...(data?.mapping && { mapping: data.mapping }), builtin: [], failed: true, ...(data?.selectedMode && { selectedMode: data.selectedMode }) };
     if (next.state !== 'ready' || next.scope !== data?.scope) clear();
+    if (next.state === 'account_changed') accountChanged = true; else if (next.state === 'ready' && next.mapping === 'saved') accountChanged = false;
     data = next; changed();
   }
   // The app reports its current context; a different one, or none, drops everything.
   function sync(target) {
     if (target === context) return;
-    context = target; ++generation; clear(); data = null; showLinks = false;
+    context = target; ++generation; clear(); data = null; showLinks = false; accountChanged = false;
     rearm(true);
     if (target) void load();
   }
@@ -110,6 +123,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // placeholder.
   function current(result, mine, listed = false) {
     if (mine !== generation) return false;
+    if (result?.state === 'account_changed') accountChanged = true;
     if (!result || !sectionStates.has(result.state) || !result.scope || result.scope !== data?.scope
         || (listed && result.state === 'inaccessible')) { revoke(); return false; }
     return true;
@@ -273,16 +287,16 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     status.hidden = !visible;
     const verified = data?.state === 'ready' && Boolean(data.verifiedAt);
     status.dataset.state = verified ? 'connected' : 'neutral';
-    $('home-status-label').textContent = loading && !data ? 'Notion · Checking…' : labels[data?.state] || 'Notion · Could not check';
+    $('home-status-label').textContent = loading && !data ? 'Notion · Checking…' : labels[gateState()] || 'Notion · Could not check';
     status.setAttribute('title', verified ? 'Checked ' + new Date(data.verifiedAt).toLocaleTimeString() : '');
     if (!visible) { $('home-panel').replaceChildren(); return; }
-    const gate = data.state === 'ready' ? null : gates[data.state] || gates.unavailable;
+    const gate = data.state === 'ready' && !suppressed() ? null : gates[gateState()] || gates.unavailable;
     $('home-workspace').hidden = Boolean(gate); $('home-gate').hidden = !gate;
     if (gate) {
       $('home-panel').replaceChildren(); $('organisation').hidden = true;
       $('gate-title').textContent = gate[0]; $('gate-copy').textContent = gate[1];
-      $('gate-action').textContent = ['rate_limited', 'unavailable'].includes(data.state) ? 'Try again' : 'Show saved links';
-      $('gate-action').disabled = locked || loading; $('gate-action').hidden = suppressed();
+      $('gate-action').textContent = retry() ? 'Try again' : 'Show saved links';
+      $('gate-action').disabled = locked || loading; $('gate-action').hidden = suppressed() && !retry();
       return;
     }
     for (const name of ['context', 'skills']) {
@@ -313,8 +327,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   });
   $('home-open').addEventListener('click', () => data?.root && open(data.root.link));
   $('gate-action').addEventListener('click', () => {
+    if (retry()) return reload();
     if (suppressed()) return;
-    if (['rate_limited', 'unavailable'].includes(data?.state)) return reload();
     showLinks = true; changed(); $('show-home').focus();
   });
   for (const id of ['show-links']) $(id).addEventListener('click', () => { if (suppressed()) return; showLinks = true; changed(); $('show-home').focus(); });
@@ -332,7 +346,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // also be the visible view; internal Home itself never allows them.
   function iconsAllowed(dashboard) {
     if (!context) return !dashboard;
-    if (loading || !data || data.failed) return false;
+    // R9-1: none while an observed account change holds, whatever the later status.
+    if (loading || !data || data.failed || suppressed()) return false;
     // The chosen-links branch needs the status resolved as ready; the revoke() placeholder
     // and every other state (unavailable, rate_limited, not_connected, account_changed,
     // unsupported_host, root_inaccessible, mapping_unavailable, unmapped) allow nothing.
