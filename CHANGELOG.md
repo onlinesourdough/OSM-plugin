@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.31.0 — 2026-10-29
 
 - Home in the Codex sidebar: a read-only Context/Skills view of the owner's
   mapped Notion records and personal skills, ported from the approved design

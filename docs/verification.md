@@ -1,5 +1,33 @@
 # Verification
 
+On 2026-10-29 the package was prepared as OSM 0.31.0 on
+`feat/osm-home-internal-notion-74-82`, on top of `e353588`. Only the version
+changed.
+
+**What changed.**
+
+- The version is 0.31.0 in the eight package and manifest declarations and in
+  the local overview (`docs/osm.md`), and the changelog entry is dated.
+- The rebuilt `runtime/sidebar/index.html` and `runtime/sidebar/server.cjs`
+  differ from `e353588` only in their four version strings.
+
+**Checks.**
+
+- A second build reproduced both runtime files and the notices byte for byte,
+  and the stdio smoke passed.
+- Validation (`--baseline 314dcf1` and `--release-tag v0.31.0`), the
+  onboarding check and `git diff --check` passed on a clean clone of
+  `e353588` carrying exactly these changes.
+- The sidebar unit tests and the documentation, layout, continuity,
+  skill-version and context-footprint checks read none of the changed files
+  and were not rerun; their earlier results stand.
+
+**Not done.** No 0.31.0 tag or release exists yet. Home's internal connection
+still reports `unsupported_host` in this build, so internal-mode Home cannot
+connect on any host; Home's other behaviour is proven at fixture level only.
+
+**Native proof.** None.
+
 On 2026-10-29 the Sol r9 corrections and the L-2 context binding (`c43c5c8` on
 `feat/osm-home-internal-notion-74-82`, on top of `f776dfb`) addressed R9-1 to
 R9-3 and L-2 at fixture level.

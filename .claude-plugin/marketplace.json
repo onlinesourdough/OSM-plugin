@@ -10,7 +10,7 @@
     {
       "name": "osm",
       "source": "./",
-      "version": "0.30.0",
+      "version": "0.31.0",
       "description": "Portable context and skills for planning, content and reviewed delivery."
     }
   ]
