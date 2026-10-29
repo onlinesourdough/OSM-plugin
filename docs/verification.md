@@ -1,5 +1,63 @@
 # Verification
 
+On 2026-10-29 the Sol r9 corrections and the L-2 context binding (`c43c5c8` on
+`feat/osm-home-internal-notion-74-82`, on top of `f776dfb`) addressed R9-1 to
+R9-3 and L-2 at fixture level.
+
+**What changed.**
+
+- R9-1: an observed account change now holds until Home observes `ready` with
+  `mapping: saved`. No other status lifts it: not an official-mode projection
+  (which makes no connection check), a missing projection or connection, a
+  failed, pending, mapping-less, `unavailable` or `rate_limited` check, or a
+  list or read that reports `account_changed`. While it holds, Home shows the
+  account-change gate, or for a failed or transient check its own gate with
+  Try again, and reads no page icons. A context change ends it for the new
+  context.
+- R9-2: while it holds, the setup and Settings context pickers leave the
+  context page and the saved source pages out of their live results, also
+  results already listed or searched, without closing an open list or
+  clearing its search. A context switch confirmation that names a saved page
+  keeps the choice but hides its question.
+- R9-3: choosing the 'Selected page' entry of a pending setup selection keeps
+  that selection and its title.
+- L-2: when the context route is configured, every `osm_home` status path
+  names that context, taken from the same context-route read as its
+  projection. Home does not apply a status that names another context: it
+  counts as a failed check, which cannot end a held account change, and
+  Refresh reads the current context. A status without a context field is
+  applied as before. In the product that is the server's error fallback and
+  a status read without a configured context route; neither can end a held
+  change, which needs `ready` with `mapping: saved`. The synthetic test
+  fixtures written before L-2 also carry no context field and stand for the
+  panel's own context. Lists and reads were already bound to their context by
+  their scope.
+
+**Fixture results.**
+
+- **Fail-first:** the seven R9 tests failed their assertions on an inert copy
+  of `f776dfb`. That log's own first-failure check failed (it stopped before
+  Node 26's failing-tests recap) and is kept as failed; the raw output was
+  checked separately. The three L-2 tests then failed their assertions on an
+  inert copy of `f776dfb` with the R9 corrections. No timeouts or runner
+  errors.
+- **Checks:** 182/182 sidebar unit tests passed on the final sources. The
+  build regenerated only `runtime/sidebar/index.html` and
+  `runtime/sidebar/server.cjs`, a second build reproduced both byte for
+  byte, and the stdio smoke passed, including its new check that the bundled
+  server's status names its configured context. Validation
+  (`--baseline 314dcf1`), the onboarding check and `git diff --check` passed
+  on a clean clone of `c43c5c8`. The documentation, layout, continuity,
+  skill-version and context-footprint checks read none of the changed files
+  and were not rerun.
+- **Limits:** as recorded for `efd43df`. Home in official mode makes no
+  connection check, so a newly opened panel does not observe the change. A
+  panel notices a context change made elsewhere only on Refresh; until then
+  it shows its own saved links as before. A status without a context field is
+  not bound. The two residuals disclosed for `efd43df` are corrected.
+
+**Native proof.** None.
+
 On 2026-10-29 the Sol r8 corrections (`efd43df` on
 `feat/osm-home-internal-notion-74-82`, on top of `00a9c61`) addressed R8-1 to
 R8-4 at fixture level.
