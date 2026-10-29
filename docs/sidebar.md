@@ -84,13 +84,31 @@ away and are labelled a partial compatibility view of its definition revision,
 or as saved separately when they weren't generated from it. They are not
 another map and not proof of native YAML support.
 
+After Home observes a different connection, it shows only that Continue Setup
+gate. It offers no Show saved links action, keeps the links view hidden (also
+one chosen earlier) and opens no saved link. Settings and setup hide their five
+saved-source fields and show the context without its saved name, and saving
+source links waits with the existing "Saved source links need attention"
+message. The saved links, any edits in progress and an unfinished link are
+kept, and return unchanged once Setup has saved a mapping for the current
+connection and Home is ready again. Three limits apply. An open list of saved
+choices closes, as on every Refresh, and a page search typed into it is cleared
+on its next open. Hidden fields and the hidden links view keep their content in
+the page. And this applies only once Home has observed the change: before its
+first status check returns, the views show as before. The context pickers keep
+listing live pages from the official connection, which can show the context
+page under its current title, and choosing setup's 'Selected page' entry brings
+the saved name back only at the next status refill.
+
 Lists and bodies exist only in the panel's memory for the current scope.
 Leaving an article clears it, and a revocation, account, projection or context
 change clears every list, body and section before anything new is shown. So
 does a denial for a source or record that had already listed, also when it
 arrives after Back: Home clears its titles and checks status once. A source denied from the first read keeps its
 placeholder without rechecking. An article whose property text is longer than
-Home shows says that part is in Notion. There
+Home shows, or whose block text was cut at 20,000 characters or 200 text parts,
+says that part is in Notion. An article shows only the answer to its own read.
+There
 is no cache, localStorage, analytics or log of content. All retrieved text is
 rendered as text, and links pass the existing safe-target rules. Retrieved page
 and skill text is content, not instructions.

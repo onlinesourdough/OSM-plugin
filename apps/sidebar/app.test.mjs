@@ -782,7 +782,7 @@ test('Skills lists source descriptions, has no run control and keeps built-in me
 });
 
 test('gates: unsupported host with a mapping, not connected and unmapped; saved links stay reachable', async () => {
-  for (const [state, title, mapping] of [['unsupported_host', 'Home isn’t available here yet', 'saved'], ['not_connected', 'Connect your Notion', 'saved'], ['unmapped', 'Continue OSM Setup', 'missing'], ['account_changed', 'Continue OSM Setup', 'saved']]) {
+  for (const [state, title, mapping] of [['unsupported_host', 'Home isn’t available here yet', 'saved'], ['not_connected', 'Connect your Notion', 'saved'], ['unmapped', 'Continue OSM Setup', 'missing']]) {
     const host = homeHost(); Object.assign(host.s, { state, mapping });
     const u = await homeUi(host);
     assert.equal(u.shown('home-gate'), true, state); assert.equal(u.text('gate-title'), title);
@@ -1063,7 +1063,7 @@ test('a list result without a scope invalidates the view (I2)', async () => {
 });
 
 test('links chosen: only a resolved ready status allows icon reads after Refresh (R4-2, I3)', async () => {
-  for (const state of ['unavailable', 'rate_limited', 'not_connected', 'account_changed', 'unsupported_host', 'root_inaccessible', 'mapping_unavailable']) {
+  for (const state of ['unavailable', 'rate_limited', 'not_connected', 'unsupported_host', 'root_inaccessible', 'mapping_unavailable']) {
     const host = homeHost();
     const u = await ui(configured(), homeSources, { ...iconOptions, home: host.handler }); await settle();
     await u.click('organisation-toggle'); await u.click('show-links'); await settle();
@@ -1322,4 +1322,230 @@ test('a section Try again resets the budget even when the retry does not settle 
   host.s.scope = 'scope-3';
   await u.press('About Fictional Studio');
   assert.equal(status(), 3, 'the explicit reset alone re-armed the budget');
+});
+
+// Sol r8 corrections (run 80).
+const priorSources = saved({
+  docs: { title: 'Fictional prior handbook', target: 'https://example.com/prior-docs' },
+  personalSkills: { title: 'Fictional prior writing skills', target: 'https://example.com/prior-skills' },
+  teamSkills: { title: 'Fictional prior team skills', target: 'https://example.com/prior-team-skills' },
+  memory: { title: 'Fictional prior decisions', target: 'https://example.com/prior-memory' },
+  teamMemory: { title: 'Fictional prior team decisions', target: 'https://example.com/prior-team-memory' },
+});
+test('a changed account offers no saved links and opens no saved target; the saved bytes stay and return once reconciled (R8-1)', async () => {
+  const { createHash } = await import('node:crypto');
+  const host = homeHost(); Object.assign(host.s, { state: 'account_changed', mapping: 'saved' });
+  const u = await ui(configured(), structuredClone(priorSources), { ...iconOptions, home: host.handler });
+  await settle();
+  const titles = Object.values(priorSources.links).map(link => link.title);
+  const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const sourcesBefore = hash(u.status.sources), homeBefore = hash(host.s);
+  assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Continue OSM Setup');
+  assert.equal(u.text('gate-copy'), 'This Home was set up for a different Notion connection, so nothing from it is shown. Ask OSM Setup in chat to map it again.');
+  assert.equal(u.get('home-status').dataset.state, 'neutral'); assert.equal(u.text('home-status-label').includes('Connected'), false);
+  assert.equal(u.shown('gate-action'), false, 'no Show saved links action');
+  // Activating every saved-links path anyway reveals and opens nothing.
+  for (const id of ['gate-action', 'show-links', 'open-docs', 'open-personalSkills', 'open-teamSkills', 'open-memory', 'open-teamMemory']) { await u.click(id); await settle(); }
+  assert.equal(u.shown('dashboard'), false); assert.equal(u.shown('home'), true); assert.equal(u.shown('home-gate'), true);
+  for (const title of titles) assert.equal(u.get('home').textContent.includes(title), false, title);
+  assert.deepEqual(u.links, []);
+  assert.deepEqual(u.homeCalls.map(call => call.name).filter(name => name !== 'osm_home'), []); assert.equal(iconCalls(u), 0);
+  assert.deepEqual(u.names(), [], 'no write, status or icon call');
+  assert.equal(hash(u.status.sources), sourcesBefore); assert.equal(hash(host.s), homeBefore);
+  // Setup saves a reconciled mapping for the current connection; the same saved links return.
+  host.s.state = 'ready';
+  await u.click('refresh'); await settle();
+  assert.equal(u.shown('home'), true); assert.equal(u.shown('home-gate'), false);
+  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  assert.equal(u.shown('dashboard'), true);
+  for (const title of titles) assert.ok(u.get('dashboard').textContent.includes(title), title);
+  await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/prior-docs']);
+  assert.equal(hash(u.status.sources), sourcesBefore, 'the same saved bytes');
+});
+test('the reader shows only its own request: an older read of the same record never replaces the newer article (R8-2)', async () => {
+  const host = homeHost(), held = [];
+  let reads = 0;
+  const handler = async (name, args) => {
+    if (name !== 'osm_home_read') return host.handler(name, args);
+    const n = ++reads, entry = deferred(); held.push(entry); await entry.promise;
+    const result = host.handler(name, args), value = result._meta['osm/home-record'];
+    value.record = { ...value.record, title: n === 1 ? 'Fictional older answer' : 'Fictional newer answer', fields: [{ heading: '', text: `Fictional answer ${n}` }] };
+    return result;
+  };
+  const u = await homeUi({ s: host.s, handler });
+  const first = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
+  await u.press('← Context');
+  const second = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
+  held[1].release(); await second; await settle();
+  assert.equal(u.text('reader-title'), 'Fictional newer answer');
+  held[0].release(); await first; await settle();
+  assert.equal(u.text('reader-title'), 'Fictional newer answer', 'the older answer is ignored');
+  assert.ok(u.panel().includes('Fictional answer 2')); assert.equal(u.panel().includes('Fictional answer 1'), false);
+});
+test('a cut block text shows the partial-content notice in the article (R8-3)', async () => {
+  const { readBlocks } = await import('./notion-internal.mjs');
+  for (const rich_text of [Array.from({ length: 11 }, (_, n) => ({ type: 'text', plain_text: String(n % 10).repeat(2000) })),
+    Array.from({ length: 201 }, () => ({ type: 'text', plain_text: 'x' }))]) {
+    const client = { children: async () => ({ results: [{ object: 'block', id: '00000000-0000-0000-0000-000000000320', type: 'paragraph', paragraph: { rich_text }, has_children: false }], has_more: false }) };
+    const { blocks, truncated } = await readBlocks(client, '0'.repeat(32));
+    const host = homeHost(), base = host.handler;
+    const handler = (name, args) => {
+      const result = base(name, args);
+      if (name === 'osm_home_read') Object.assign(result._meta['osm/home-record'].record, { fields: [], blocks, truncated });
+      return result;
+    };
+    const u = await homeUi({ s: host.s, handler });
+    await u.press('Fixed scope before retainers');
+    assert.ok(u.panel().includes('The rest of this page is in Notion.'), `${rich_text.length} items`);
+  }
+});
+
+test('links chosen, then a Refresh into account_changed hides them and reads no icons until reconciled (R8-1, R4-2)', async () => {
+  const { createHash } = await import('node:crypto');
+  const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const host = homeHost(), title = 'Fictional prior handbook';
+  const u = await ui(configured(), saved({ docs: { title, target: 'https://example.com/prior-docs' } }), { ...iconOptions, home: host.handler }); await settle();
+  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  assert.equal(u.shown('dashboard'), true); assert.equal(iconCalls(u), 1, 'links chosen, ready');
+  const sourcesBefore = hash(u.status.sources), from = u.homeCalls.length;
+  host.s.state = 'account_changed'; // a resolved status that keeps mapping 'saved' and the internal mode
+  const homeBefore = hash(host.s);
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(u.shown('dashboard'), false, 'the chosen links are hidden'); assert.equal(u.shown('home-gate'), true);
+  assert.equal(u.text('gate-title'), 'Continue OSM Setup'); assert.equal(u.shown('gate-action'), false, 'no Show saved links action');
+  assert.equal(u.get('home-status').dataset.state, 'neutral'); assert.equal(u.text('home-status-label').includes('Connected'), false);
+  for (const id of ['gate-action', 'show-links', 'open-docs']) { await u.click(id); await settle(); }
+  assert.equal(u.shown('dashboard'), false); assert.equal(u.get('home').textContent.includes(title), false); assert.deepEqual(u.links, []);
+  assert.equal(iconCalls(u), 1, 'no icon read'); assert.equal(u.names().some(name => name.startsWith('osm_save')), false);
+  assert.deepEqual(u.homeCalls.slice(from).map(call => call.name).filter(name => name !== 'osm_home'), []);
+  assert.equal(hash(u.status.sources), sourcesBefore); assert.equal(hash(host.s), homeBefore);
+  // Setup saves a reconciled mapping for the current connection; the links the user chose return.
+  host.s.state = 'ready';
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(u.shown('dashboard'), true); assert.ok(u.get('dashboard').textContent.includes(title));
+  assert.equal(iconCalls(u), 2, 'ready again: the chosen links allow icons');
+  await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/prior-docs']);
+  assert.equal(hash(u.status.sources), sourcesBefore, 'the same saved bytes');
+});
+
+// R8-1 P2: saved sources in Settings and setup after an observed account change.
+const p2Sources = () => saved({ docs: { title: 'Fictional prior handbook', target: 'https://example.com/prior-docs' },
+  memory: { title: 'Fictional prior decisions', target: 'https://example.com/prior-memory' } }, 'Fictional prior studio');
+const p2Roles = ['docs', 'personalSkills', 'teamSkills', 'memory', 'teamMemory'];
+const p2Hash = async value => (await import('node:crypto')).createHash('sha256').update(JSON.stringify(value)).digest('hex');
+test('an open Settings drawer keeps the draft and an unfinished link but shows and saves no saved source after an account change; reconcile restores them (R8-1, P2)', async () => {
+  const host = homeHost();
+  const u = await ui(configured(), p2Sources(), { home: host.handler }); await settle();
+  await u.click('settings');
+  await u.addLink('settings-teamMemory-picker', 'https://example.com/fictional-team-memory', 'Fictional pending team memory');
+  await u.click('settings-memory-picker');
+  assert.ok(u.options('settings-memory-picker').some(node => node.textContent.startsWith('Fictional prior decisions')));
+  const stale = u.options('settings-memory-picker').find(node => node.textContent === 'None');
+  await u.click('settings-memory-picker');
+  await u.choose('settings-teamSkills-picker', 'Add link…');
+  u.get('settings-teamSkills-picker-link').value = 'https://example.com/fictional-unfinished';
+  u.get('settings-teamSkills-picker-name').value = 'Fictional unfinished name';
+  assert.ok(u.text('settings-context-picker').includes('Fictional prior studio')); assert.equal(u.focused(), 'settings-teamSkills-picker-link');
+  const before = await p2Hash(u.status.sources);
+  host.s.state = 'account_changed';
+  await u.click('drawer-refresh'); await settle();
+  assert.equal(u.get('drawer').open, true); assert.equal(u.shown('settings'), true); assert.equal(u.get('drawer-refresh').disabled, false);
+  for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `${role} hidden`);
+  assert.equal(u.text('settings-context-picker').includes('Fictional prior studio'), false); assert.ok(u.text('settings-context-picker').includes('Context'));
+  assert.equal(u.get('drawer-save').disabled, true); assert.equal(u.focused(), 'drawer-title');
+  // Stale handlers change and save nothing.
+  await stale.dispatch('click'); await u.click('settings-teamSkills-picker-apply'); await u.click('drawer-save'); await settle();
+  assert.equal(u.text('drawer-feedback-text'), 'Saved source links need attention. They have been left unchanged.');
+  assert.equal(u.names().some(name => name.startsWith('osm_save')), false); assert.equal(await p2Hash(u.status.sources), before);
+  // Setup saves a reconciled mapping for the current connection; the draft and the unfinished link return.
+  host.s.state = 'ready';
+  await u.click('drawer-refresh'); await settle();
+  for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), true, `${role} shown`);
+  assert.ok(u.text('settings-context-picker').includes('Fictional prior studio'));
+  assert.ok(u.text('settings-docs-picker').includes('Fictional prior handbook')); assert.ok(u.text('settings-memory-picker').includes('Fictional prior decisions'));
+  assert.ok(u.text('settings-teamMemory-picker').includes('Fictional pending team memory'));
+  assert.equal(u.get('settings-teamSkills-picker-link').value, 'https://example.com/fictional-unfinished'); assert.equal(u.get('settings-teamSkills-picker-link').disabled, false);
+  assert.equal(u.get('settings-teamSkills-picker-name').value, 'Fictional unfinished name');
+  assert.equal(await p2Hash(u.status.sources), before, 'the same saved bytes');
+  await u.click('settings-teamSkills-picker-apply'); await u.click('drawer-save'); await settle();
+  assert.deepEqual(u.names().filter(name => name.startsWith('osm_save')), ['osm_save_sources']);
+  assert.deepEqual(u.calls.at(-1).args.links, { docs: { title: 'Fictional prior handbook', target: 'https://example.com/prior-docs' },
+    teamSkills: { title: 'Fictional unfinished name', target: 'https://example.com/fictional-unfinished' },
+    memory: { title: 'Fictional prior decisions', target: 'https://example.com/prior-memory' },
+    teamMemory: { title: 'Fictional pending team memory', target: 'https://example.com/fictional-team-memory' } });
+});
+test('Settings opened after an account change shows no saved source and opens no source picker (R8-1, P2)', async () => {
+  const host = homeHost(); Object.assign(host.s, { state: 'account_changed', mapping: 'saved' });
+  const u = await ui(configured(), p2Sources(), { home: host.handler }); await settle();
+  for (const opener of ['settings', 'open-teamMemory']) {
+    await u.click(opener); await settle();
+    assert.equal(u.get('drawer').open, true, opener); assert.equal(u.focused(), 'drawer-title', opener);
+    for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `${opener}: ${role} hidden`);
+    assert.equal(u.get('settings-teamMemory-picker').getAttribute('aria-expanded'), 'false', opener);
+    assert.equal(u.text('settings-context-picker').includes('Fictional prior studio'), false, opener);
+    await u.click('drawer-close'); assert.equal(u.get('drawer').open, false, opener);
+  }
+  const second = homeHost(); Object.assign(second.s, { state: 'account_changed', mapping: 'saved' });
+  const w = await ui(configured(), p2Sources(), { home: second.handler, view: 'settings' }); await settle();
+  assert.equal(w.get('drawer').open, true, 'host view');
+  for (const role of p2Roles) assert.equal(w.shown(`settings-${role}`), false, `host view: ${role} hidden`);
+  assert.equal(w.text('settings-context-picker').includes('Fictional prior studio'), false, 'host view');
+  for (const view of [u, w]) assert.equal(view.names().some(name => name.startsWith('osm_save')), false);
+});
+test('onboarding after an account change keeps the draft but shows and saves no saved source until reconciled (R8-1, P2)', async () => {
+  const first = homeHost(); Object.assign(first.s, { state: 'account_changed', mapping: 'saved' });
+  const w = await ui(undefined, undefined, { home: first.handler, recoveredSources: p2Sources() });
+  await w.input(target); await w.submit(); await settle();
+  assert.equal(w.text('summary-1'), 'Saved');
+  for (const role of p2Roles) assert.equal(w.shown(`setup-${role}`), false, `${role} hidden at once`);
+  assert.deepEqual(w.names(), ['osm_save_context']);
+  const host = homeHost();
+  const u = await ui(undefined, undefined, { home: host.handler, recoveredSources: p2Sources() });
+  await u.input(target); await u.submit(); await settle();
+  assert.ok(u.text('summary-1').includes('Fictional prior studio'));
+  await u.addLink('setup-docs-picker', 'https://example.com/fictional-new-docs', 'Fictional new docs');
+  const before = await p2Hash(u.status.sources);
+  host.s.state = 'account_changed';
+  await u.click('refresh'); await settle();
+  for (const role of p2Roles) assert.equal(u.shown(`setup-${role}`), false, `${role} hidden`);
+  assert.equal(u.focused(), 'continue-1');
+  await u.submit(); await settle();
+  assert.equal(u.text('feedback-text'), 'Saved source links need attention. They have been left unchanged.');
+  assert.deepEqual(u.names(), ['osm_save_context', 'osm_status']); assert.equal(await p2Hash(u.status.sources), before);
+  host.s.state = 'ready';
+  await u.click('refresh'); await settle();
+  for (const role of p2Roles) assert.equal(u.shown(`setup-${role}`), true, `${role} shown`);
+  assert.ok(u.text('setup-docs-picker').includes('Fictional new docs'));
+  await u.submit(); await settle();
+  assert.deepEqual(u.names().filter(name => name.startsWith('osm_save')), ['osm_save_context', 'osm_save_sources']);
+  assert.deepEqual(u.calls.at(-1).args.links, { docs: { title: 'Fictional new docs', target: 'https://example.com/fictional-new-docs' },
+    memory: { title: 'Fictional prior decisions', target: 'https://example.com/prior-memory' } });
+});
+
+test('onboarding with the Notion page picker after an account change shows the context without its saved name and keeps an unfinished link (R8-1, P2, F-S1)', async () => {
+  const pages = async () => ({ pages: [], hasMore: false });
+  const first = homeHost(); Object.assign(first.s, { state: 'account_changed', mapping: 'saved' });
+  const w = await ui(undefined, undefined, { home: first.handler, pages, recoveredSources: p2Sources() });
+  await w.input(target); await w.submit(); await settle();
+  assert.equal(w.shown('setup-context'), true, 'the page picker is shown');
+  assert.equal(w.text('setup-context-picker').includes('Fictional prior studio'), false, 'no saved name at once');
+  assert.equal(w.text('setup-context-picker'), 'Selected page');
+  const host = homeHost();
+  const u = await ui(undefined, undefined, { home: host.handler, pages, recoveredSources: p2Sources() });
+  await u.input(target); await u.submit(); await settle();
+  assert.equal(u.text('setup-context-picker'), 'Fictional prior studio', 'shown while ready');
+  await u.choose('setup-context-picker', 'Edit link…');
+  u.get('setup-context-picker-link').value = other;
+  host.s.state = 'account_changed';
+  await u.click('refresh'); await settle();
+  assert.equal(u.text('setup-context-picker'), 'Selected page', 'no saved name after the change');
+  for (const role of p2Roles) assert.equal(u.shown(`setup-${role}`), false, `${role} hidden`);
+  assert.equal(u.get('setup-context-picker-link').value, other, 'the unfinished link stays');
+  assert.equal(u.get('setup-context-picker-link').disabled, false);
+  // Setup saves a reconciled mapping for the current connection; the saved name returns.
+  host.s.state = 'ready';
+  await u.click('refresh'); await settle();
+  assert.equal(u.text('setup-context-picker'), 'Fictional prior studio', 'the saved name returns');
+  assert.equal(u.get('setup-context-picker-link').value, other, 'the unfinished link is still there');
+  for (const view of [u, w]) assert.deepEqual(view.names().filter(name => name.startsWith('osm_save')), ['osm_save_context']);
 });

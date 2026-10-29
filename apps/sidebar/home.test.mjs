@@ -743,3 +743,28 @@ test('the ancestry bound counts every hop, so list order and a fresh read agree 
   assert.deepEqual(results, [{ items: [ids.deepD], withheld: 1 }, { items: [ids.deepD], withheld: 1 }]);
   assert.equal((await service(fakeNotion(), projection([ids.deepD, ids.deepE])).read({ key: 'more', id: ids.deepE })).state, 'inaccessible');
 });
+
+// Sol r8 correction (run 80): a block text cut is reported like every other cut.
+test('a block text cut at 20,000 characters or 200 rich-text items marks the article truncated (R8-3)', async () => {
+  const body = `/v1/blocks/${dashed(hex(0x100))}/children`;
+  const read = async rich_text => {
+    const fake = fakeNotion(), inner = fake.transport;
+    fake.transport = async request => {
+      const reply = await inner(request);
+      return request.path === body && reply.status === 200
+        ? { ...reply, json: { ...reply.json, results: [{ object: 'block', id: dashed(hex(0x320)), type: 'paragraph', paragraph: { rich_text }, has_children: false }], has_more: false } } : reply;
+    };
+    return (await service(fake).read({ key: 'memory', id: hex(0x100) })).record;
+  };
+  const chunks = count => Array.from({ length: count }, (_, n) => ({ type: 'text', plain_text: String(n % 10).repeat(2000) }));
+  const items = count => Array.from({ length: count }, () => ({ type: 'text', plain_text: 'x' }));
+  for (const [rich_text, length] of [[chunks(11), 20000], [items(201), 200]]) {
+    const record = await read(rich_text);
+    assert.equal(record.truncated, true, `${rich_text.length} items`); assert.equal(record.blocks[0].text.length, length);
+  }
+  // Within both bounds nothing is cut and the article is not marked partial.
+  for (const [rich_text, length] of [[chunks(10), 20000], [items(200), 200]]) {
+    const record = await read(rich_text);
+    assert.equal(record.truncated, false, `${rich_text.length} items`); assert.equal(record.blocks[0].text.length, length);
+  }
+});

@@ -46,10 +46,14 @@ its revisions; never edit that projection or keep it as a second map.
    (`title`; optional `description`; for memory `fact`, `decision`, `why`,
    `evidence`), up to six named pages, or for `related` only a link. Add a
    saved filter or sort only when the definition names it.
-4. For `internal_selected_pages`, call `osm_home` first and save only after it
-   reports a verified connection; record that identity and dated `observed`
-   access per readable section. A linked external database needs its own grant;
-   record it as `inaccessible`. Never ask for a token in chat.
+4. For `internal_selected_pages`, `osm_home` is no verification step: it is an
+   app-only Home tool, not a Setup or agent tool, its status gives no bot or
+   workspace IDs, and it cannot verify the mapped root before the first
+   projection exists. In this phase, save such a projection only with
+   separately established identity and access evidence, and record that identity
+   and dated `observed` access per readable section. This is a limitation of
+   this phase, not proof of a grant. A linked external database needs its own
+   grant; record it as `inaccessible`. Never ask for a token in chat.
 5. Call `osm_save_home_projection` with the definition's `id`, `title`,
    `revision` and `generatedAt`, the context target, `expectedContextRevision`
    and `home.revision` from `osm_sources`; read back. Content changes only with

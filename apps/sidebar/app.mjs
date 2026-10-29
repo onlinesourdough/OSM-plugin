@@ -58,7 +58,7 @@ async function loadPages(query) {
 function sourcePicker(id, role) {
   return createPicker({ id, label: slotLabels[role], loadOptions: loadPages,
     onEdit: () => { feedback(''); render(); },
-    onSelect: link => { setLink(draft, role, link); feedback(''); render(); },
+    onSelect: link => { if (home.suppressed()) return; setLink(draft, role, link); feedback(''); render(); },
     onApply: ({ target, name }) => {
       try { setLink(draft, role, linkFromInput(role, target, name, draft.saved[role])); } catch (error) { return error.message; }
       feedback(''); render();
@@ -154,7 +154,7 @@ function summary(step) {
   const roles = stepRoles[step];
   if (step === 1) {
     if (contextEdited() && contextInput() || isDirty(draft, roles)) return draft.contextTarget ? 'Edited' : 'Not saved';
-    return draft.contextTarget ? draft.title || 'Saved' : 'Not set';
+    return draft.contextTarget ? (home.suppressed() ? '' : draft.title) || 'Saved' : 'Not set';
   }
   if (isDirty(draft, roles)) return 'Edited';
   return roles.filter(role => draft.links[role]).map(role => slotLabels[role]).join(' · ') || 'None';
@@ -183,9 +183,15 @@ function renderSetup(locked) {
   const nativePicker = Boolean(status.features?.notionPages && !other);
   $('setup-context').hidden = !nativePicker; $('context-link-field').hidden = nativePicker;
   const notionTarget = classifyTarget(contextInput())?.kind === 'notion' ? contextInput() : null;
-  const selected = notionTarget ? selectedContext?.target === notionTarget ? selectedContext : { title: 'Selected page', target: notionTarget, placeholder: true } : null;
+  const selected = notionTarget ? selectedContext?.target === notionTarget && !home.suppressed() ? selectedContext : { title: 'Selected page', target: notionTarget, placeholder: true } : null;
   setupContextPicker.render({ value: displayed(selected), choices: [], browse: canBrowse(), disabled: locked });
-  for (const role of sourceRoles) setupPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse() && !other, disabled: locked || !ready });
+  // R8-1: an observed account change hides the saved sources; the draft and any open link stay.
+  const hidden = home.suppressed();
+  for (const role of sourceRoles) {
+    $(`setup-${role}`).hidden = hidden;
+    setupPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse() && !other, disabled: locked || !ready || hidden });
+  }
+  if (hidden && sourceRoles.some(role => $(`setup-${role}`).contains(document.activeElement))) $(`continue-${openStep}`).focus();
 }
 // Primary is the context page itself; the row label never renames that page.
 function renderDashboard(locked) {
@@ -206,11 +212,16 @@ function renderDashboard(locked) {
 function renderSettings(locked) {
   const dirty = isDirty(draft);
   const ready = status.context.state === 'configured' && draft.contextTarget === status.context.target && status.sources.state !== 'unavailable';
-  const current = { title: draft.title || 'Context', target: draft.contextTarget };
+  const hidden = home.suppressed(); // R8-1, as in renderSetup
+  const current = { title: (hidden ? '' : draft.title) || 'Context', target: draft.contextTarget };
   contextPicker.render({ value: displayed(current), choices: [displayed(current)], browse: canBrowse(), disabled: locked,
     applyText: sourceChanges() ? 'Discard and switch' : 'Switch context', note: sourceChanges() ? 'Unsaved source changes will be discarded.' : '' });
-  for (const role of sourceRoles) settingsPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse(), disabled: locked || !ready });
-  $('drawer-save').disabled = locked || !dirty || !ready;
+  for (const role of sourceRoles) {
+    $(`settings-${role}`).hidden = hidden;
+    settingsPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse(), disabled: locked || !ready || hidden });
+  }
+  if (hidden && sourceRoles.some(role => $(`settings-${role}`).contains(document.activeElement))) $('drawer-title').focus();
+  $('drawer-save').disabled = locked || !dirty || !ready || hidden;
   $('drawer-save').textContent = saving ? 'Saving…' : 'Save';
   $('drawer-cancel').disabled = saving; $('drawer-close').disabled = saving;
   $('foot-edit').hidden = discardPrompt; $('foot-discard').hidden = !discardPrompt;
@@ -284,6 +295,8 @@ async function writeContext(target, title) {
   }
 }
 async function saveDraft() {
+  // R8-1: nothing rewrites the saved sources until Setup reconciles an observed account change.
+  if (home.suppressed()) { feedback('Saved source links need attention. They have been left unchanged.', true); return false; }
   if (unfinishedSources()) { feedback('Apply or cancel the open link first.'); return false; }
   if (!current()) return false;
   saving = true; feedback(''); render();
@@ -344,7 +357,7 @@ function openSettings(role) {
   fillDraft(); settingsOpen = true; discardPrompt = false;
   feedback(status.sources.state === 'unavailable' ? 'Saved source links need attention. They have been left unchanged.' : '', status.sources.state === 'unavailable');
   $('drawer').showModal(); render();
-  if (role && status.sources.state !== 'unavailable') {
+  if (role && status.sources.state !== 'unavailable' && !home.suppressed()) {
     if (canBrowse()) settingsPickers[role].open(); else settingsPickers[role].openEditor();
   } else $('drawer-title').focus();
 }
@@ -403,6 +416,8 @@ for (const id of ['reload-draft', 'drawer-reload']) $(id).addEventListener('clic
 $('open-context').addEventListener('click', () => open(status.context.target));
 for (const role of sourceRoles) $(`open-${role}`).addEventListener('click', () => {
   const link = status.sources.links[role];
+  // A demonstrated account change opens no saved target until Setup reconciles it.
+  if (link && home.suppressed()) return;
   return link ? open(link.target) : openSettings(role);
 });
 // One step is always open, so Continue is always reachable.

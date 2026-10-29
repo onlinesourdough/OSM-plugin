@@ -92,9 +92,14 @@ export function createNotionClient({ token, transport = fetchTransport }) {
 // Rich text renders as plain text. Mentions are not resolved: a mention can name a
 // page outside the grant, so it shows as a neutral placeholder with no title or ID.
 export function plainText(items) {
-  if (!Array.isArray(items)) return '';
-  return items.slice(0, 200).map(item => item?.type === 'mention' ? (item.mention?.type === 'date' ? String(item.plain_text ?? '') : '[mention]')
-    : typeof item?.plain_text === 'string' ? item.plain_text : '').join('').slice(0, 20000);
+  return clippedText(items).text;
+}
+// The same text, and whether the 200-item or 20,000-character bound cut it.
+function clippedText(items) {
+  if (!Array.isArray(items)) return { text: '', clipped: false };
+  const text = items.slice(0, 200).map(item => item?.type === 'mention' ? (item.mention?.type === 'date' ? String(item.plain_text ?? '') : '[mention]')
+    : typeof item?.plain_text === 'string' ? item.plain_text : '').join('');
+  return { text: text.slice(0, 20000), clipped: items.length > 200 || text.length > 20000 };
 }
 const textBlocks = new Set(['paragraph', 'heading_1', 'heading_2', 'heading_3', 'heading_4', 'bulleted_list_item', 'numbered_list_item',
   'to_do', 'toggle', 'quote', 'callout', 'code']);
@@ -116,8 +121,12 @@ export async function readBlocks(client, pageId) {
         if (blocks.length >= readLimits.blocks) { truncated = true; return; }
         const type = typeof block?.type === 'string' ? block.type : 'unsupported';
         if (block?.in_trash || skipped.has(type)) continue;
-        if (textBlocks.has(type)) blocks.push({ kind: type === 'code' ? 'code' : type.startsWith('heading_') ? 'heading' : type.endsWith('list_item') || type === 'to_do' ? 'item' : 'text',
-          depth, text: plainText(block[type]?.rich_text) });
+        if (textBlocks.has(type)) {
+          // A cut block text makes the article partial, like every other bound.
+          const { text, clipped } = clippedText(block[type]?.rich_text);
+          if (clipped) truncated = true;
+          blocks.push({ kind: type === 'code' ? 'code' : type.startsWith('heading_') ? 'heading' : type.endsWith('list_item') || type === 'to_do' ? 'item' : 'text', depth, text });
+        }
         else if (type === 'child_page' || type === 'child_database') blocks.push({ kind: 'child', depth, text: type === 'child_page' ? 'Sub-page' : 'Database' });
         else if (!containers.has(type)) { blocks.push({ kind: 'unsupported', depth, text: '' }); continue; }
         if (block.has_children && type !== 'child_page' && type !== 'child_database') {

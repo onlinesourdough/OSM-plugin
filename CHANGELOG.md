@@ -38,6 +38,28 @@
   already listed, also after Back. A trashed root is not reported connected, an
   article says when a long property was shortened, and saves that would exceed
   the reader's byte limit are refused before anything is replaced.
+- After Home observes that its projection was set up for a different Notion
+  connection, it shows only the Continue Setup gate until Setup maps it again
+  for the current connection. It offers no Show saved links action, keeps the
+  links view hidden (also one chosen earlier) and opens no saved link.
+  Settings and setup hide their five saved-source fields and show the context
+  without its saved name, and saving source links waits for that mapping. The
+  saved links, edits in progress and an unfinished link are kept and return
+  unchanged. Three limits apply: as on every Refresh, an open list of saved
+  choices closes and a page search typed into it is cleared on its next open;
+  hidden fields keep their content in the page; and nothing changes before
+  Home has observed the change. The context pickers still list live pages from
+  the official connection, which can show the context page under its current
+  title, and choosing setup's 'Selected page' entry brings the saved name back
+  only at the next status refill.
+- An article shows only the answer to its own read, so an older read of a
+  reopened record never replaces it, and it says when a block's text was cut at
+  20,000 characters or 200 text parts.
+- Context's Home projection procedure no longer treats `osm_home` as a
+  verification step: it is app-only, gives no bot or workspace IDs and can't
+  verify the mapped root before the first projection exists, so saving an
+  internal projection needs separately established identity and access
+  evidence in this phase.
 - Context 2.1.0 adds the Home projection procedure. Setup 2.1.0 explains the
   internal connection option.
 

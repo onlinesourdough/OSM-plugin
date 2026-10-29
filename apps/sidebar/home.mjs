@@ -51,7 +51,11 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   // the saved links, but is no evidence for anything else.
   const available = () => Boolean(data && data.state !== 'official_mode'
     && ((data.mapping && data.mapping !== 'missing') || ['not_connected', 'unmapped'].includes(data.state)));
-  const shown = () => available() && !showLinks;
+  // R8-1: an observed account change is a demonstrated invalidation. Its gate offers no saved
+  // links and no path reveals or opens them until Setup has reconciled the mapping. The saved
+  // links themselves are left as they are and return once Home is ready again.
+  const suppressed = () => data?.state === 'account_changed';
+  const shown = () => available() && (!showLinks || suppressed());
 
   async function load() {
     const mine = ++generation;
@@ -128,7 +132,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   async function read(key, id) {
     const mine = generation, request = {}, outstanding = reads;
     outstanding.set(request, 'pending');
-    reader = { key, id, state: 'loading' }; changed();
+    reader = { key, id, state: 'loading', request }; changed();
     $('reader-title')?.focus();
     let result;
     try { result = (await call('osm_home_read', { section: key, id }))?._meta?.['osm/home-record']; } catch { result = { state: 'unavailable' }; }
@@ -138,8 +142,10 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     // answer may complete it, whether or not the reader is still on this record.
     if (['unavailable', 'rate_limited'].includes(result.state)) outstanding.set(request, 'failed'); else outstanding.delete(request);
     rearm();
-    if (reader?.id !== id) return changed();
-    reader = { key, id, state: result.state, record: result.record };
+    // R8-2: only the answer to the reader's own request and section is displayed, so an
+    // older read of a reopened record never replaces the newer article.
+    if (reader?.request !== request || reader.key !== key) return changed();
+    reader = { key, id, state: result.state, record: result.record, request };
     changed(); $('reader-title')?.focus();
   }
   function back() {
@@ -276,7 +282,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       $('home-panel').replaceChildren(); $('organisation').hidden = true;
       $('gate-title').textContent = gate[0]; $('gate-copy').textContent = gate[1];
       $('gate-action').textContent = ['rate_limited', 'unavailable'].includes(data.state) ? 'Try again' : 'Show saved links';
-      $('gate-action').disabled = locked || loading;
+      $('gate-action').disabled = locked || loading; $('gate-action').hidden = suppressed();
       return;
     }
     for (const name of ['context', 'skills']) {
@@ -307,10 +313,11 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   });
   $('home-open').addEventListener('click', () => data?.root && open(data.root.link));
   $('gate-action').addEventListener('click', () => {
+    if (suppressed()) return;
     if (['rate_limited', 'unavailable'].includes(data?.state)) return reload();
     showLinks = true; changed(); $('show-home').focus();
   });
-  for (const id of ['show-links']) $(id).addEventListener('click', () => { showLinks = true; changed(); $('show-home').focus(); });
+  for (const id of ['show-links']) $(id).addEventListener('click', () => { if (suppressed()) return; showLinks = true; changed(); $('show-home').focus(); });
   $('show-home').addEventListener('click', () => { showLinks = false; changed(); $('heading').focus(); });
   // Automatic page-icon reads use the official connection. They wait until Home's mode is
   // known and run only where the saved links are the visible view: official mode, no
@@ -334,5 +341,5 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const evidence = data.state === 'official_mode' || data.mapping === 'missing' || chosen;
     return evidence && (!dashboard || !shown());
   }
-  return { sync, reload, render, shown, iconsAllowed };
+  return { sync, reload, render, shown, suppressed, iconsAllowed };
 }
