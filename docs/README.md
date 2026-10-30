@@ -72,9 +72,10 @@ Use [AGENTS.md](../AGENTS.md) for the working contract and affected checks.
 [skill versioning](skill-versioning.md), [verification](verification.md),
 [recovery](recovery.md) and [security](../SECURITY.md) serve maintainers.
 Open issues and pull requests own unfinished work. The
-[changelog](../CHANGELOG.md) and [releases](https://github.com/onlinesourdough/OSM-plugin/releases)
-record delivered versions; neither an issue nor a passing fixture establishes
-native behavior or installation.
+[changelog](../CHANGELOG.md) records change history, including source candidates;
+[GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases) own
+published versions. Neither an issue, a changelog entry nor a passing fixture
+establishes native behavior or installation.
 
 ## Earlier names and dated evidence
 

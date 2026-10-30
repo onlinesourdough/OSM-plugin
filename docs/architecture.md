@@ -43,12 +43,15 @@ only selects a method. See the [skill index](skills.md),
 
 An optional System is useful for a bounded specialist with independent upkeep,
 such as Power BI and its Windows Desktop workflow. Its repository owns its
-requirements, dependencies, proof and recovery. A script or a long skill alone
-does not require a System. Create Project establishes the appropriate workspace
-and context. A selected repository template is an optional seed; it does not add
-a second project identity or copy OSM phases. Create System is retired;
-reusable methods use Manage Skills. Project Foundation was retired in 0.28.0;
-substantial software engineering foundations use a separately selected method,
+requirements, dependencies, proof and recovery. The
+[system template](https://github.com/onlinesourdough/Agentic-System-Template) is
+for an optional specialist with its own maintenance needs. A script or a long
+skill alone does not require a System. Create Project establishes the
+appropriate workspace and context. A selected repository template is an optional
+seed; it does not add a second project identity or copy OSM phases. Create
+System is retired; reusable methods use Manage Skills. Project Foundation was
+retired in 0.28.0; substantial software engineering foundations use a separately
+selected method,
 such as [Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation),
 or the gap is reported. OSM ships no replacement engineering contract.
 
