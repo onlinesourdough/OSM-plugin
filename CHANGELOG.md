@@ -15,6 +15,13 @@
   - protected control records;
   - the host-bridge distinctions;
   - root navigation without duplicate links;
+  - format-aware source recipes, item and stage failures, independently scoped
+    source credentials, an explicit coverage policy and owner intake exclusions,
+    credentials and host surfaces, configured/empty and deferred sources, and
+    Preview, Home and bootstrap through the selected connection;
+  - numerical fidelity versus completeness, mappings and their future defaults,
+    exact tabular references, original states and attachments, the transition to
+    a recurring feed, and responsibility before relevance;
   - separate readiness states, two diagrams and a table of superseded defaults.
 - New supporting files:
   - a migration and relocation procedure;

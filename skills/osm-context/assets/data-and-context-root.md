@@ -59,7 +59,7 @@ definition:
     - key: "[stable source key]"
       area: "[area]"
       provider: "[provider]"
-      scope: "[selected scope by identity]"
+      scope: "[selected objects, or a deliberately broader account/workspace-visible scope, by identity]"
       lifecycle: "[current-recurring | historical-one-off | deferred | excluded]"
       placement: "[direct | projection | both]"
       reader: "[route that reads it, or none]"
