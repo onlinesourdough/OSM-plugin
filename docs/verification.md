@@ -21,6 +21,14 @@ which a second correction review found partly repaired: a missing or unknown
 workspace now keeps the parent-as-view test, and a non-string workspace value is
 reported as missing instead of crashing.
 
+The C1-A1 addendum (`2f44cec`, from `5c60fad`) extends the contract and its
+fixtures; it is fixture-level only. It adds fourteen subsections to
+`architecture.md`, ten rows to its pipeline-agreement table and one row to its
+superseded-defaults table, eight sentences to `bootstrap.md`, one scope line in
+the Data & Context root template and two `CHANGELOG.md` sub-bullets. It adds
+17 rehearsal checks and cases 49 to 65 to the fixtures. Case 48's closing line
+gains a trailing comma, the only existing fixture line that changes.
+
 **Fixture results.**
 
 - **New rehearsal at `ff2cfb5`:** `tests/context-architecture-rehearsal.py`
@@ -79,15 +87,39 @@ reported as missing instead of crashing.
   from `2629c5c` passed. The C1-r3 repair changes only the rehearsal script, so
   the documentation, skill-version, footprint, onboarding, layout and continuity
   checks were not rerun for it: none of their inputs changed.
+
+  On a clean clone of `2f44cec`, the rehearsal (the same log as in the working
+  tree), `validate.py --baseline 314dcf1`, the documentation, onboarding,
+  layout, continuity, skill-version and footprint checks, and `git diff --check`
+  from `314dcf1` and from `5c60fad` passed. The footprint differs from
+  `5c60fad`'s in one line, the total of working skill markdown bytes, and
+  `git diff --name-only 5c60fad` lists exactly the six paths the code commit
+  touches.
 - **Sidebar:** the change touches no sidebar input; the sidebar reads only
   `skills/osm-context/assets/bridge.md`. Its build and tests were therefore not
   run.
+- **Rehearsal at `2f44cec` (C1-A1):** 65 positives and 32 valid variants pass,
+  and 276 negatives are rejected, each for its one expected reason; the raw
+  exit is 0 with `failures=0`. None of the 224 result rows of `5c60fad`'s log
+  changed or was removed, and 149 rows are added: the 17 positives, 25 variants
+  and 107 negatives of cases 49 to 65. For fail-first, the `5c60fad` harness
+  run on the new fixtures exited 1 with `KeyError: 'source-recipe'` at case 49,
+  after reproducing its 224 baseline rows. With the 17 new check functions
+  stubbed to accept everything, exactly the 107 new negatives failed, each
+  accepted with no reason, while all 65 positives and 32 variants still passed.
+  For mutation, 130 mutations were run on a clean clone, 105 each disabling or
+  weakening one reason rule and 25 each removing one variant's acceptance
+  clause: each changed exactly its expected result rows and no other, 130 of
+  130, and the script was restored byte-identical after every one. These are
+  fixture-level results only.
 - **Retained evidence:** the raw logs and their hashes are kept only on the
   author machine, in machine-local directories that are not portable: C1-r1 in
   `/tmp/claude-1001/osm-c1-r1-repair-evidence.0afjVF` and C1-r2 in
   `/tmp/claude-1001/osm-c1-r2-repair-evidence.mGtbyV`.
   C1-r3's are in `/tmp/claude-1001/osm-c1-r3-repair-evidence.F0k1C8`, likewise
   only on the author machine.
+  C1-A1's are in `/tmp/claude-1001/osm-c1-a1-addendum-evidence.fXtFyd`, also a
+  machine-local location on the author machine only.
 
 **Not proved here.** Real grants, inheritance, outside denial, host isolation,
 instruction loading on any host, adapters, Home consumption and actual timed
