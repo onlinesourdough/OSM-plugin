@@ -884,8 +884,10 @@ def item_pending(data, ws):
         reasons.append("independent-work-blocked")
     at_bound = any(sum(1 for item in open_items if item["source"] == name) >= data["bound"] and not source["paused"]
                    for name, source in sources.items())
-    if data["dropped"] or at_bound:
+    if data["dropped"]:
         reasons.append("pending-overflow-dropped")
+    if at_bound:
+        reasons.append("pending-bound-not-paused")
     if any(source["held"] for source in sources.values() if source["state"] != "credential-failure"):
         reasons.append("hold-not-source-scoped")
     return unique(reasons)
@@ -901,7 +903,7 @@ def dependent_meaning(data, ws):
             reasons.append("dependency-not-reopened")
     if revision["changed"] and not revision["extraction_reopened"]:
         reasons.append("revision-not-reopened")
-    if revision["changed"] and revision["created_topic"]:
+    if revision["changed"] and (revision["created_topic"] or revision["reconciled_into"] != revision["owning_topic"]):
         reasons.append("revision-new-topic")
     if data["deletion"]["handled_by"] != "configured-retention":
         reasons.append("deletion-outside-retention")
@@ -915,9 +917,11 @@ def source_credential_scope(data, ws):
         reasons.append("excess-source-scope")
     if set(data["enforced_by"]) & {"prompt-channel-filter", "tool-confirmation"}:
         reasons.append("prompt-as-enforcement")
-    if data["unattended"]["fallback"] or any(c["broad"] and c["path"] != "interactive" for c in data["connectors"]):
+    if "provider-scopes" not in data["enforced_by"]:
+        reasons.append("provider-scope-not-enforced")
+    if data["unattended"]["fallback"] or any(c["broad"] and (c["path"] != "interactive" or c.get("used_by_unattended")) for c in data["connectors"]):
         reasons.append("broad-unattended-fallback")
-    if any(state != "verified" for state in data["paths"].values()):
+    if {"content", "thread", "attachment"} - set(data["paths"]) or any(state != "verified" for state in data["paths"].values()):
         reasons.append("recipe-path-unverified")
     if data["outside_read"]["denied_by"] not in ("provider", "adapter"):
         reasons.append("denial-unattributed")
@@ -941,10 +945,11 @@ def secret_store(data, ws):
         reasons.append("secret-not-fail-closed")
     if any(lifecycle[step] != "defined" for step in ("refresh", "revocation", "recovery")):
         reasons.append("secret-lifecycle-undefined")
-    if data["refresh"]["writers"] != 1 or not data["refresh"]["atomic"]:
+    if data["refresh"]["writers"] != 1 and not data["refresh"]["atomic"]:
         reasons.append("refresh-not-serialised")
-    wrong_store = data["store"]["kind"] not in PLATFORM_STORES.get(data["platform"], ())
-    if wrong_store or set(data["contract"]["applies_to"]) - {data["platform"]}:
+    store = data["store"]
+    suited = store["kind"] in PLATFORM_STORES.get(data["platform"], ()) or (store.get("class") in ("native", "managed") and data["platform"] in store.get("suited_to", ()))
+    if not suited or set(data["contract"]["applies_to"]) - {data["platform"]}:
         reasons.append("platform-choice-generalised")
     return unique(reasons)
 
@@ -955,7 +960,7 @@ def effective_tool_set(data, ws):
     for harness in data["harnesses"].values():
         if not harness["claimed"]:
             continue
-        if any(state != "checked" for state in harness["inventory"].values()):
+        if any(harness["inventory"].get(key) != "checked" for key in ("inherited_account_connectors", "desktop_delivered_connectors", "local_mcp_plugin_settings")) or any(state != "checked" for state in harness["inventory"].values()):
             reasons.append("inherited-connector-unchecked")
         if any(claim["basis"] == "cli-route-disabled" for claim in harness["exclusion_claims"]):
             reasons.append("cli-disable-as-exclusion")
@@ -993,6 +998,8 @@ def coverage_policy(data, ws):
     if any(cap["name"] != "read" and cap["justified_by"] == "coverage" for cap in data["capabilities"]):
         reasons.append("coverage-as-capability")
     missed = any(ch["eligible"] == "new" and not ch["included"] for ch in channels.values())
+    if policy["kind"] == "broad" and not policy.get("owner_selected"):
+        reasons.append("broad-scope-not-owner-selected")
     if policy["kind"] == "broad" and (policy["static_id_list"] or missed):
         reasons.append("static-list-for-broad-policy")
     if any(ch.get("excluded") and ch["included"] for ch in channels.values()):
@@ -1006,8 +1013,8 @@ def coverage_policy(data, ws):
                    for ch in channels.values())
     if data["claims"]["private"] != "membership-based" or unbacked:
         reasons.append("private-access-overclaimed")
-    bot_feed = data["credential"]["kind"] == "invited-channel-bot" and policy["kind"] == "broad"
-    if bot_feed and not data["setup"]["limitation_shown"]:
+    unrealised = policy["kind"] == "broad" and not data["credential"]["discovers_broader_scope"]
+    if unrealised and (not data["setup"]["limitation_shown"] or data["claims"]["coverage"] == "workspace-wide"):
         reasons.append("bot-as-workspace-feed")
     if set(data["reporting"]["local_filters"]) & set(data["reporting"]["provider_restrictions"]):
         reasons.append("local-filter-as-provider-restriction")
@@ -1032,6 +1039,8 @@ def configured_empty_source(data, ws):
             reasons.append("first-item-unchecked")
         if deferred and source["activated"] and not source["condition_met"]:
             reasons.append("deferred-activated-early")
+        if deferred and source["shown"] != "deferred":
+            reasons.append("deferred-shown-empty")
     if data["unrelated_work"] != "proceeding":
         reasons.append("empty-blocks-unrelated")
     return unique(reasons)
@@ -1052,8 +1061,17 @@ def responsibility_relevance(data, ws):
     if alerts["elevated"] and (not alerts["responsibility_resolved_first"] or derived != "active"):
         reasons.append("alert-before-resolution")
     stale = records["handover"]["present"] and records["tracker"]["status"] == "Active"
-    if stale and not correction and len(data["conflict"]["evidence_shown"]) < 2:
-        reasons.append("conflict-hidden")
+    if stale and not correction:
+        labels = {"handover": "handover record", "tracker": "client tracker"}
+        evidence = data["conflict"]["evidence_shown"]
+
+        def preserved(key):
+            record = records[key]
+            same = [entry for entry in evidence if entry.get("source") == labels[key]]
+            return bool(record.get("date")) and bool(same) and all(entry.get("date") == record["date"] for entry in same)
+
+        if not (preserved("handover") and preserved("tracker")):
+            reasons.append("conflict-hidden")
     if correction and any(correction["adds"].values()):
         reasons.append("invented-engagement-terms")
     if derived == "unknown" and (shown == "current-client" or data["topic"]["state"] != "needs-review"):
@@ -1095,7 +1113,7 @@ def owner_exclusion(data, ws):
 @check("fidelity-completeness")
 def fidelity_completeness(data, ws):
     reasons, fidelity, completeness = [], data["fidelity"], data["completeness"]
-    if completeness["status"] == "complete" and completeness["basis"] != "owner-confirmed-scope":
+    if completeness["status"] == "complete" and not (completeness["basis"] == "owner-confirmed-scope" and completeness["scope_confirmed_by_owner"] and not completeness["gaps"]):
         reasons.append("balance-as-complete")
     if data["reporting"]["merged"]:
         reasons.append("status-merged")
@@ -1114,14 +1132,16 @@ def original_states(data, ws):
     for doc_id, original in data["originals"].items():
         if original["source_status"] == "cancelled" and not original["kept"]:
             reasons.append("cancelled-dropped")
-        if original["source_status"] == "reversed" and not original["relation_kept"]:
+        if original["source_status"] == "reversed" and (not original["relation_kept"] or not original["kept"]):
             reasons.append("reversal-unlinked")
+        if original["source_status"] == "cancelled" and original["opens_item"]:
+            reasons.append("cancelled-as-open")
         if original["source_status"] == "archived" and original["opens_item"]:
             reasons.append("archive-as-open")
-        if original["kept"] and original["kept_status"] != original["source_status"]:
+        if (original["kept"] and original["kept_status"] != original["source_status"]) or (original["source_status"] in ("active", "archived") and not original["kept"]):
             reasons.append("status-collapsed")
         for attachment in original.get("attachments", {}).values():
-            if attachment["creates_object"] or (attachment["late"] and attachment["attached_to"] != doc_id):
+            if attachment["creates_object"] or attachment["attached_to"] != doc_id:
                 reasons.append("attachment-new-object")
             if attachment["matched_by"] != "source-id":
                 reasons.append("attachment-by-title")
@@ -1137,9 +1157,11 @@ def mapping_default(data, ws):
     if mapping["qualified_by"] != "row-review" or any(not row["reviewed"] for row in rows):
         reasons.append("totals-as-mapping-proof")
     default = unseen.get("default") or {}
-    default_ok = unseen["behaviour"] == "owner-default" and bool(default.get("evidence") and default.get("version"))
+    default_ok = unseen["behaviour"] == "owner-default" and bool(default.get("evidence") and default.get("version")) and later["mapped_to"] in (None, default.get("target"))
     if later["mapped_to"] and not default_ok:
         reasons.append("guessed-future-default")
+    if not default_ok and later["mapped_to"] is None and (later["state"] != "pending" or later["original_value"] is None):
+        reasons.append("unseen-original-dropped")
     if unseen["behaviour"] not in ("pending", "owner-default"):
         reasons.append("default-unreviewed")
     if any(row["lossy"] and row["applied"] for row in rows):
@@ -1170,13 +1192,13 @@ def feed_transition(data, ws):
     reasons, overlap, key = [], data["overlap"], data["composite_key"] or {}
     if overlap["created_again"] > 0:
         reasons.append("duplicate-on-transition")
-    if overlap["matched_by_composite_key"] and not (key.get("documented_in_agreement") and key.get("version")):
+    if overlap["matched_by_composite_key"] and not (key.get("documented_in_agreement") and key.get("version") and key.get("fields")):
         reasons.append("composite-key-undocumented")
-    if any(collision["state"] == "merged" for collision in data["collisions"]):
+    if any(collision["state"] != "pending-conflict" for collision in data["collisions"]):
         reasons.append("composite-collision-merged")
     if data["balancing_items"] > 0:
         reasons.append("invented-balancing-item")
-    if any(diff["state"] != "pending" and not diff.get("resolved_by") for diff in data["differences"].values()):
+    if any((diff["state"] != "pending" and not diff.get("resolved_by")) or (diff["state"] == "pending" and not diff.get("reason")) for diff in data["differences"].values()):
         reasons.append("difference-not-pending")
     return unique(reasons)
 

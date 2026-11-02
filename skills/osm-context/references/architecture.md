@@ -363,8 +363,8 @@ all of them.
   identity needs no raw archive mirror and no copy of owner data.
 - A cancelled or reversed original keeps its status and its relation to what it
   cancels or reverses. It is never dropped or silently netted away.
-- Archived originals and extra attachments never automatically become new
-  unprocessed or open items.
+- Cancelled or archived originals and extra attachments never automatically
+  become new unprocessed or open items.
 - Several documents for one object attach to that existing object by the
   source's stable identity, never by title or filename, and add evidence to it
   (reconcile by identity and meaning, above).
