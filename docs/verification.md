@@ -29,6 +29,13 @@ the Data & Context root template and two `CHANGELOG.md` sub-bullets. It adds
 17 rehearsal checks and cases 49 to 65 to the fixtures. Case 48's closing line
 gains a trailing comma, the only existing fixture line that changes.
 
+The C1-A1-r1 repair (`be26bbf`, from `21b8a3f`) corrects twelve of the C1-A1
+checks, which a correction review found did not read every contract-bearing
+field their fixtures model; it is fixture-level only. It adds six reasons,
+seven negatives and three valid variants, corrects the inputs of negatives
+51.4 and 54.5 with their expected reasons unchanged, and makes one
+`architecture.md` sentence name cancelled originals with archived ones.
+
 **Fixture results.**
 
 - **New rehearsal at `ff2cfb5`:** `tests/context-architecture-rehearsal.py`
@@ -112,6 +119,38 @@ gains a trailing comma, the only existing fixture line that changes.
   clause: each changed exactly its expected result rows and no other, 130 of
   130, and the script was restored byte-identical after every one. These are
   fixture-level results only.
+- **Rehearsal at `be26bbf` (C1-A1-r1):** 65 positives and 35 valid variants
+  pass, and 283 negatives are rejected, each for its one expected reason; the
+  raw exit is 0 with `failures=0`, and the clean-clone log is byte-identical to
+  the working tree's. None of the 373 result rows of `21b8a3f`'s log changed or
+  was removed, including those of the corrected 51.4 and 54.5, and 10 rows are
+  added: the seven new negatives and three new variants. The 224 rows of
+  `5c60fad`'s log are unchanged. At the top level only `main()` differs from
+  `5c60fad`'s script, and only the twelve corrected functions from `21b8a3f`'s.
+  For fail-first, the `21b8a3f` harness run on the corrected fixtures exited 1
+  with `failures=10`: six new negatives were accepted, 51.8 was rejected for
+  another reason and the three new variants were rejected, while the corrected
+  51.4 and 54.5 printed `21b8a3f`'s rows. Eighteen temporary probes, not
+  committed fixtures, gave the review's `21b8a3f` results before the repair and
+  the revised results after it. For mutation, 156 distinct mutated scripts were
+  run on a clean clone, with no duplicates: 111 each disabling one reason rule,
+  28 each removing one variant's acceptance clause, 3 reverting a corrected rule
+  and 14 fold executions checked by the probes. 155 changed exactly their
+  expected results. The other, removing variant 51.1's acceptance (raw exit 1),
+  also added that reason to negative 51.4, which stays rejected with its
+  expected reason; root's recorded exception E-51V1 covers that one row, so the
+  result is 155 OK and 1 NOT OK under E-51V1. The script was restored
+  byte-identical after every mutation. The 25 earlier variant removals were
+  re-derived, and their byte identity with the C1-A1 run is unproven. On a clean
+  clone of `be26bbf`, `validate.py --baseline 314dcf1` and the documentation,
+  onboarding and layout checks passed. The continuity check first exited 1 (log
+  24), because the run's temporary directory lay inside the work tree; under the
+  owner-approved D-4 amendment, with a temporary directory outside every Git
+  work tree, it exited 0 with the four original PASS lines (log 24d4). The
+  skill-version and footprint checks and `git diff --check` from `314dcf1`,
+  `5c60fad` and `21b8a3f` passed, and every footprint line except the total of
+  working skill markdown bytes equals the C1-A1 baseline's. These are
+  fixture-level results only.
 - **Retained evidence:** the raw logs and their hashes are kept only on the
   author machine, in machine-local directories that are not portable: C1-r1 in
   `/tmp/claude-1001/osm-c1-r1-repair-evidence.0afjVF` and C1-r2 in
@@ -120,6 +159,8 @@ gains a trailing comma, the only existing fixture line that changes.
   only on the author machine.
   C1-A1's are in `/tmp/claude-1001/osm-c1-a1-addendum-evidence.fXtFyd`, also a
   machine-local location on the author machine only.
+  C1-A1-r1's are in a machine-local `osm-c1-a1-r1-20261102/evidence` directory,
+  likewise only on the author machine.
 
 **Not proved here.** Real grants, inheritance, outside denial, host isolation,
 instruction loading on any host, adapters, Home consumption and actual timed
