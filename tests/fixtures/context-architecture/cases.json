@@ -1034,7 +1034,8 @@
                            {"kind": "formatting", "date": "2026-11-04", "sets": null},
                            {"kind": "substantive", "date": "2026-11-04", "sets": "revised"}]},
    "variants": [
-     {"override": {"revised_selected": false, "events": [{"kind": "annotation", "date": "2026-11-04", "sets": null}]}}],
+     {"override": {"revised_selected": false, "events": [{"kind": "annotation", "date": "2026-11-04", "sets": null},
+                                                         {"kind": "substantive", "date": "2026-11-04", "sets": null}]}}],
    "negatives": [
      {"expect": "processing-date-as-source-date", "data": {"from_positive": true, "override": {"events": [{"kind": "import", "date": "2026-11-04", "sets": "source_date"}]}}},
      {"expect": "processing-date-as-source-date", "data": {"from_positive": true, "override": {"events": [{"kind": "annotation", "date": "2026-11-04", "sets": "source_date"}]}}},
