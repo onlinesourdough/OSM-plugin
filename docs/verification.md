@@ -241,7 +241,8 @@ and no review of the repaired text is recorded here.
 
 **Repair round after the first review** (commits `c365536` and `d9113b6`; the
 record you are reading is the commit after them). The independent review of
-`70521a1` requested changes with four blockers, and the lead reproduced all four.
+`70521a1` requested changes with four blockers, and the lead reproduced all four
+(the lead's statement; no retained log).
 This round repairs them and a few leftovers; the remaining review follow-ups stay
 open.
 
@@ -292,6 +293,12 @@ open.
 - **Fixtures are read-backs in part.** Many new fixtures state a behaviour as a
   field the predicate reads back, so they prove the predicate's wiring, not agent
   behaviour, and the mutation counts must be read that way.
+- **Case 47 and case 73.** The rows of case 47 (task-authorised edit to a human
+  document) have no accepted-input selection field: they model default or routine
+  writes to a human library against an edit by a task. Case 73 explicitly models
+  current-task, owner-decision or selected-source input under the recorded policy.
+  Neither fixture proves actual agent behaviour. The old case 47 rows and their
+  logs are unchanged and are not redefined.
 - **Repository checks:** on a clean clone of `d9113b6`, `validate.py --baseline
   314dcf1`, the documentation, onboarding, layout, skill-version and footprint
   checks, and `git diff --check` from `314dcf1` and from `70521a1` passed; the

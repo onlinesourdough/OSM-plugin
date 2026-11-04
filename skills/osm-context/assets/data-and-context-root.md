@@ -25,8 +25,10 @@ The page starts at the next heading.
 - Records here are curated: evidence, meaning and dates are kept; originals stay
   in their own systems and libraries.
 - Your own documents and libraries keep their body, structure and authorship.
-  The agent makes only targeted edits to them and never reorganises or
-  overwrites them.
+  The agent edits one only from your current task, your decision or correction,
+  or a source you selected and it processes under your recorded policy. The edit
+  stays targeted, it never reorganises or overwrites the document, and it
+  implies no new access.
 - Access comes from the connection's actual grants, not from links or labels.
 
 ## Essential rules
