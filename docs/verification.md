@@ -170,6 +170,81 @@ instruction loading on any host, adapters, Home consumption and actual timed
 success need their own live or native proof. The source-reported reviews in #70
 and #72 are design evidence, not verification.
 
+The HL-1 candidate (implementation `77f25a9` on `feat/osm-home-lifecycle-72-73`,
+from the C1 head `4ab486f`; commits `83604a1`, `ec9b05e`, `77f25a9`) replaces the
+protected-write default with the owner's recorded write policy and adds the
+record lifecycle (#72, #73). It changes contract text, templates, fixtures, the
+rehearsal and six skill versions (Context 2.2.0, Setup 2.2.0, Maintain Context
+2.1.0, Check 3.1.0, Update 3.0.2, Manage Skills 2.0.1). It is fixture-level
+proof for the predicates and review proof for the prose.
+
+- **Rehearsal at `77f25a9`:** 80 positives and 50 valid variants pass, and 387
+  negatives are rejected; the raw exit is 0 with `failures=0`. Each of the 96
+  negatives of cases 66 to 80 prints exactly its one expected reason, and the 28
+  new positives and variants pass. Of the 383 result rows in the C1 head's log,
+  the 376 of cases other than 5 and 40 are byte-identical in the new log and none
+  is removed. The 7 rows of cases 5 and 40 are the only changed rows; the other
+  new rows belong to cases 66 to 80.
+- **Cases 5 and 40, old and new.** Case 5 was "protected control record inside
+  the knowledge store" (check `protected-write`, anchor
+  `#protected-records-and-writes`): a positive for both workspaces and two
+  negatives, each rejected as `protected-write`. It is now "control record under
+  the recorded write policy" (check `write-policy`, anchor `#home-write-policy`):
+  the positive is a routine in-home control write under an explicit whole-home
+  grant; the valid variant is a write to an ordinary record under a narrower
+  policy; the negatives are rejected as `excluded-by-policy`, `outside-policy`,
+  `no-policy-recorded` and `outside-home`. Case 40 was "daily curation refuses
+  canonical Tasks and Projects" (check `daily-writes`) with three negatives. It
+  is now "routine upkeep and operational collections" (check
+  `operational-upkeep`, same new anchor). It keeps those three negatives, adds a
+  valid variant (a targeted correction to a descendant Projects record under an
+  explicit grant), and adds six negatives: `excluded-by-policy`,
+  `no-policy-recorded`, `link-as-ancestry`, `task-state-changed`,
+  `run-report-in-task` and `untargeted-upkeep`. The two workspace fixtures
+  replace their `protected` list with a recorded `write_policy` (workspace A
+  whole-home, workspace B narrower) and a `maintained` record.
+- **Fail-first:** the C1 head's harness run on the new fixtures raised
+  `KeyError: 'write-policy'` at case 5, because the check name is new. With each
+  of the 17 new or changed checks stubbed to accept everything, all 109 negatives
+  of those cases were accepted (each printed ACCEPTED and MISMATCH), every
+  positive and variant still passed, and no other case's rows changed.
+- **Mutations:** 107 mutated scripts were run on a clean clone: 88 each
+  disabling one reason appended by a new predicate, 3 each making the shared
+  policy helper return no denial for one of its reasons, and 16 each removing one
+  variant's acceptance clause or the multi-hop dependent follow. All 107 changed
+  at least their targeted rows, and the script was restored byte-identical after
+  every one. In the first clean-clone run at `ec9b05e`, 106 were killed and one
+  survived: removing case 75 variant 1's guard changed no row, because the
+  variant held no substantive event. `77f25a9` repairs that variant and the
+  full set was re-run. Planning had earlier found two reason sites (cases 69 and
+  76) that no negative reached, and `ec9b05e` added one negative for each.
+  `task-route-refused` was not mutated: it has no negative at the C1 head or now.
+- **Repository checks:** on a clean clone of `77f25a9`, `validate.py --baseline
+  314dcf1`, the documentation, onboarding, layout, skill-version and footprint
+  checks, and `git diff --check` from `314dcf1` and from `4ab486f` passed, and
+  the continuity check passed with a temporary directory outside every Git work
+  tree. The footprint journey `codex-package-and-bridge-verification` is 42,781
+  bytes against its 42,793-byte bound, so the Setup, curation and
+  setup-scenarios additions were cut to one line each. A search found no
+  `protected-records` under `skills/` or `tests/` and no `protected:` key in the
+  root template. Fragment links resolve as before: 82 are checked (62 at the C1
+  head) and the same two stale ones, in `README.md` and this file, were already
+  stale there and are unchanged.
+- **Not in CI:** the context rehearsal is in neither `AGENTS.md` nor `release.yml`,
+  so CI does not guard this contract.
+- **Retained evidence:** the raw logs and their hashes are kept only on the
+  author machine, in a machine-local `osm-c1-a1-r1-20261102/evidence-hl1`
+  directory.
+
+**NOT VERIFIED for HL-1.** Real provider containment, inheritance and
+permissions, and real connector routes; Setup, rerun, interrupted adoption and
+local extensions on a real home; a real non-Notion home and pointer loading; the
+changed manual method on a real home, and two real hosts; a real multi-hop
+refresh; a real, naturally scheduled run (a run-now, a job API success or a
+read-back configuration is not one, and no timer was created); installed and
+released states. The owner's pilot evidence and the source chat's reviews are
+context, not proof for this candidate.
+
 After lead Review on 2026-10-23, the candidate renames the new-customer Notion
 template to `notion-osm.md` (page **OSM**, no operating-system framing) and
 makes the `aios` → `osm` switch disable `aios` before fresh-session acceptance,
