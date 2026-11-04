@@ -25,7 +25,8 @@ The page starts at the next heading.
 - Records here are curated: evidence, meaning and dates are kept; originals stay
   in their own systems and libraries.
 - Your own documents and libraries keep their body, structure and authorship.
-  The agent edits one only from input you accepted, and only that targeted edit.
+  The agent makes only targeted edits to them and never reorganises or
+  overwrites them.
 - Access comes from the connection's actual grants, not from links or labels.
 
 ## Essential rules
@@ -43,7 +44,7 @@ definition:
     title: "[exact root title]"
     role: data-and-context-root
   contract: osm-context-architecture  # plugin reference; not copied here
-  destinations:  # native children by exact ID; labels are the owner's
+  destinations:  # native children, and any other store this home names, by exact ID; labels are the owner's
     knowledge: {label: "Knowledge", id: "[id]"}
     memory: {id: "[id]"}
     skills: {id: "[id]"}

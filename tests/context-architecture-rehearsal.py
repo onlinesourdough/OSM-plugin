@@ -126,13 +126,15 @@ def relocation(data, ws):
 
 POLICY_CHOICES = ("whole-home", "narrower")
 # Actions that need their own authority; a writable scope grants none of them.
-SEPARATE_AUTHORITY = ("sharing-change", "account-widening", "credential-change", "deletion", "publication",
-                      "new-notification", "plugin-delivery", "content-workflow-start", "outside-operational-write")
+SEPARATE_AUTHORITY = ("sharing-change", "source-selection", "account-widening", "credential-change", "deletion",
+                      "publication", "external-send", "new-notification", "plugin-delivery", "content-workflow-start",
+                      "outside-operational-write", "other-consequential-action")
 
 
 def home_stores(w):
+    # An external operational reference (Clients, Projects) is not home containment, so it is not listed here.
     roles = w["roles"]
-    return {w["root"]["id"], roles["knowledge"], roles["memory"], roles["methods"], roles["control"], *roles["operational"]}
+    return {w["root"]["id"], roles["knowledge"], roles["memory"], roles["methods"], roles["control"]}
 
 
 def store_of(target):
@@ -666,14 +668,17 @@ def projection(data, ws):
 
 @check("operational-upkeep")
 def operational_upkeep(data, ws):
-    reasons, allowlist = [], set(data["allowlist"])
-    # Canonical operational targets come from the workspace definitions, never from the allowlist.
+    reasons = []
+    # Canonical operational targets come from the workspace definitions, never from a destination allowlist.
     canonical = {target for w in ws.values() for target in w["roles"]["operational"]}
     for write in data["writes"]:
-        if write["mode"] == "daily" and write["allowed"] and write["target"] not in allowlist:
-            reasons.append("daily-operational-write")
-        elif write["mode"] == "daily" and write["allowed"] and write["target"] in canonical:
-            reasons.append("daily-canonical-write")
+        if write["mode"] == "daily" and write["allowed"]:
+            # Daily upkeep is bounded by the owner's recorded policy. The data's destination allowlist is superseded
+            # and neither widens nor reduces that scope; an external operational system is refused whatever it lists.
+            if store_of(write["target"]) in canonical:
+                reasons.append("daily-canonical-write")
+            else:
+                reasons.append(policy_denial(data["policy"], write["target"]))
         if write["mode"] == "projection-writeback" and write["allowed"]:
             reasons.append("implicit-writeback")
         if write["mode"] == "task" and write["route_qualified"] and not write["allowed"]:
@@ -1251,6 +1256,7 @@ def feed_transition(data, ws):
 # HL-1 (cases 66-80): owner-selected home write policy and record lifecycle.
 PROCESSING_DATES = ("import", "annotation", "skill-version")
 NO_CHANGE_EVENTS = ("read", "no-op", "formatting", "reconfirmation")
+ACCEPTED_INPUTS = ("current-task", "owner-decision", "selected-source")
 AUTHORITY_ORDER = ("live-owner", "memory", "confirmed", "extraction", "uncertain")
 PROPOSAL_FIELDS = ("field", "current", "proposed", "source", "revision", "date", "impact", "verification")
 
@@ -1378,17 +1384,28 @@ def writable_not_adoption(data, ws):
 @check("home-original")
 def home_original(data, ws):
     reasons = []
-    for edit in data["edits"]:
-        if not (edit["accepted_input"] and edit["targeted"]):
-            reasons.append("original-edit-unaccepted")
-        if edit["reorganised"]:
-            reasons.append("original-reorganised")
-        if edit["overwritten"]:
-            reasons.append("original-overwritten")
-        if edit["bulk_imported"]:
-            reasons.append("original-bulk-imported")
-        if edit["default_destination"]:
-            reasons.append("original-default-destination")
+    for target, edit in data["edits"].items():
+        if edit["record_class"] == "original":
+            # An original artifact or retained body changes only from accepted input, and only as a targeted edit.
+            if edit["input"] not in ACCEPTED_INPUTS or not edit["targeted"]:
+                reasons.append("original-edit-unaccepted")
+            if edit["reorganised"]:
+                reasons.append("original-reorganised")
+            if edit["overwritten"]:
+                reasons.append("original-overwritten")
+            if edit["bulk_imported"]:
+                reasons.append("original-bulk-imported")
+            if edit["default_destination"]:
+                reasons.append("original-default-destination")
+            continue
+        # A Source or index record and a record in a named store follow the recorded policy, even when a person wrote it.
+        if edit["refused"] and policy_denial(data["policy"], target) is None:
+            reasons.append("maintained-refused-as-original")
+        if not edit["human_writing_kept"]:
+            reasons.append("maintained-human-writing-lost")
+        pointed = edit.get("pointed_original")
+        if pointed and pointed["body_before"] != pointed["body_after"]:
+            reasons.append("original-body-changed")
     return unique(reasons)
 
 
@@ -1421,14 +1438,26 @@ def current_record(data, ws):
 @check("date-meanings")
 def date_meanings(data, ws):
     reasons = []
+    # Each event carries the record's source date and Revised as they were and as they became; the factual source date
+    # stays apart from Revised, and an unknown (null) source date stays null.
     for event in data["events"]:
-        if event["kind"] in PROCESSING_DATES and event["sets"] == "source_date":
-            reasons.append("processing-date-as-source-date")
-        if event["kind"] == "backfill" and event["sets"]:
-            reasons.append("date-backfilled")
-        if event["kind"] in NO_CHANGE_EVENTS and event["sets"] == "revised":
+        kind = event["kind"]
+        source_changed = event["source_date_after"] != event["source_date_before"]
+        revised_changed = event["revised_after"] != event["revised_before"]
+        if kind == "backfill":
+            if source_changed or revised_changed:
+                reasons.append("date-backfilled")
+            continue
+        if source_changed:
+            if kind in PROCESSING_DATES:
+                reasons.append("processing-date-as-source-date")
+            elif event["source_date_before"] is None:
+                reasons.append("unknown-date-invented")
+            else:
+                reasons.append("source-date-altered")
+        if revised_changed and kind in NO_CHANGE_EVENTS:
             reasons.append("revised-without-substantive-change")
-        if event["kind"] == "substantive" and data["revised_selected"] and event["sets"] != "revised":
+        if kind == "substantive" and data["revised_selected"] and not revised_changed:
             reasons.append("revised-not-set")
     return unique(reasons)
 

@@ -62,7 +62,7 @@ with their pending destination; unrelated repository work continues.
 
 Default to [Maintain Context](../../../osm-maintain-context/SKILL.md) during the
 current work, at a durable decision/correction or before finishing. Use the
-guide's approved sources and destinations; save the useful change, not a routine
+recorded policy's sources and destinations; save the useful change, not a routine
 run log. Compare existing identity and meaning before writing. An unchanged
 replay should make no write. If neither current task authorization nor a standing
 write policy covers a result, keep the concrete proposed change for approval
@@ -82,11 +82,14 @@ The skill is a method, not a background process or a guarantee of fresh data
 between tasks. Use the native host scheduler only for explicitly requested
 recurring work; setup/general upkeep authority alone does not authorize it.
 Record cadence/time zone, sources, destination and the actual scheduling ID.
-Limit a maintenance run to the approved guide, memory, selected changed work
-and explicitly supplied learnings. It does not have access to every conversation
-or permission to inspect hidden histories. No change should create no duplicate
-memory or routine notification. Notify on a meaningful correction, failure or
-needed decision through the host's supported notification policy.
+A maintenance run reads the approved guide, its selected inputs per the
+maintenance loop and explicitly supplied learnings. That limits what it reads,
+not what the recorded policy lets it write. It does not have access to every
+conversation or permission to inspect hidden histories. No change should create
+no duplicate memory or routine notification. Notify only through an
+already-selected notification policy, and only on a new or materially changed
+correction, failure or needed decision (the architecture's
+[drift rule](../architecture.md#maintained-controls-and-skills)).
 
 Check whether Notion's setup guide has a newer version when useful; report its
 material changes. Do not replace approved instructions, update installed skills, change

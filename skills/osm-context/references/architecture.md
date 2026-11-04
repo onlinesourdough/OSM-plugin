@@ -413,16 +413,21 @@ pipeline, and a deferred source is shown as deferred, not empty.
 
 ## Human originals and selected excerpts
 
-Human originals (a person's Business Docs, personal Docs and other workspaces)
-keep their body, structure, authorship, layout, templates and ownership, also
-when they sit inside the selected home. Installation, Setup and Maintain never
-reorganise, overwrite or bulk-import them, and they are never a default curation
-destination. An edit needs accepted input, stays targeted to what that input
-changes and is recorded; explicit, task-authorised work on a human document
-updates its canonical original, never a copy. A record is recognised as an
-original by an existing Source record, human authorship or the owner's naming;
-when that is unclear, treat it as an original. A whole-home grant does not turn
-a human original into a maintained record.
+Human originals are original source or library artifacts and retained original
+bodies: a person's Business Docs, personal Docs and other workspaces, or a
+document the owner keeps as such. They keep their body, structure, authorship,
+layout, templates, native history and identity, also when they sit inside the
+selected home. Installation, Setup and Maintain never reorganise, overwrite or
+bulk-import them, and they are never a default curation destination. A Source or
+index record that points to an original is an editable metadata record, not the
+original. Records in the named stores and control records (Knowledge, Memory,
+Skills, Content, maintenance) follow the recorded policy even when a person wrote
+them; human authorship alone never reinstates a protected-write refusal. An edit
+to an original comes from accepted input: the current task, an owner decision or
+correction, or a selected source processed under the recorded policy. Accepted
+input is not a new approval for each ordinary upkeep write. The edit stays
+targeted, is recorded, and updates the canonical original, never a copy. None of
+this grants deletion or an external action.
 
 An excerpt from an outside original needs an explicitly selected, qualified
 read-only source/collector route with its own actual scope. Each excerpt records
@@ -529,8 +534,8 @@ in the [Coverage policy](#coverage-policy).
 
 The owner chooses how much of the selected home agents and the maintenance job
 may write, and the method records that choice once. A write goes ahead only when
-four separate answers allow it. Keep them apart here, in Check's reports and in
-fixtures:
+four separate answers allow it. This contract and Check's reports keep them
+apart:
 
 1. **Owner policy**: what the owner's recorded policy grants, applied to the
    target's [containment](#containment).
@@ -675,8 +680,7 @@ The topic's marking follows [Knowledge metadata](#knowledge-metadata).
 
 A home keeps one short current record per topic and scope. Accepted input
 revises that record and its summary in place, with useful dated history kept
-separately, and only meaningful dates are written. The offline fixtures prove
-the predicates behind these rules; review establishes the prose.
+separately, and only meaningful dates are written.
 
 ### One current record per topic and scope
 
@@ -735,23 +739,28 @@ Type mapping, with no identical schema forced on all stores:
 ### Maintenance loop
 
 Inputs are useful new sources, supported route or source drift, and due or
-flagged records. For each: reread, revise the concise current record, keep
-relevant history, verify, and set only meaningful dates. A missing source or
+flagged records (flagged means marked Needs review, or carrying an owner or
+drift flag at the record itself). For each: reread, revise the concise current
+record, keep relevant history, verify, and set only meaningful dates. A missing source or
 owner choice becomes a precise pending item. Unchanged content gets no rewrite
 and no date. Context upkeep stays core without the Content companion and keeps
 one existing job with its runtime, scope and checkpoints.
 
 - **Completing a review.** A completed review with no substantive change leaves
   content and Revised alone. It clears Review due or moves it to a new justified
-  point with its reason, and that is its only write. A run with no due, flagged
-  or new input makes zero writes.
+  point with its reason, and that is its only write. A completed review with a
+  substantive change sets Revised and clears or moves Review due. A run with no
+  due, flagged or new input makes zero writes.
 - **Dependents.** When a revised record or source has recorded dependents, follow
   those links, including through another derived output. Regenerate and verify
   what the policy allows. Until then, mark each affected output Needs review and
   keep it out of unqualified current answers. A recent timestamp is not proof
-  that a derived output reflects its inputs. Later owner corrections survive.
-  Resume leaves no duplicates, and unchanged replay writes nothing. Use native
-  relations and stable references; no graph service.
+  that a derived output reflects its inputs. Later owner corrections survive, and
+  so do independently corroborated claims and accepted decisions. Check observed
+  or processed source revisions and recorded inputs. Detection happens within the
+  selected upkeep cycle and is never promised as instant. Resume leaves no
+  duplicates, and unchanged replay writes nothing. Use native relations and
+  stable references; no graph service.
 - The safeguards are unchanged: read-before-write, complete-body and
   unknown-block checks, conflict detection, stable-key deduplication, native
   child references, uncertain-write reconciliation and verified readback.
@@ -909,7 +918,7 @@ working until an explicit [migration](migration.md).
 | Earlier default | Replaced by |
 | --- | --- |
 | A separate mandatory AI Operating Model page holding the definition, plus an OSM-branded home ([OSM page](../assets/notion-osm.md)) | One neutral root with one definition ([Root and entry](#root-and-entry)) |
-| A human Business Docs or Document Hub library as the curation destination | The root's own knowledge store; human originals stay untouched ([Human originals](#human-originals-and-selected-excerpts)) |
+| A human Business Docs or Document Hub library as the curation destination | The root's own knowledge store; human originals keep their body and structure ([Human originals](#human-originals-and-selected-excerpts)) |
 | The official Notion plugin connection as the setup route | The recommended internal root-only connection; official mode is an explicit alternative ([Access roles](#access-roles)) |
 | Writes allowed by a destination-level allowlist | The owner's recorded write policy, applied by containment ([Home write policy](#home-write-policy)) |
 | Source, index and control records protected from routine writes by their role | Maintained records under the owner's recorded policy; no protected-write refusal is a default ([Maintained controls and Skills](#maintained-controls-and-skills)) |

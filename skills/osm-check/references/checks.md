@@ -20,7 +20,11 @@ and recheck, or Needs decision, plus per-claim PASS/FAIL/NOT VERIFIED.
   homes. Native product and harness checks remain independent of the provider.
 - Write policy and record lifecycle, read-only: report the owner's recorded
   policy (or one pending item when none is recorded) and keep its four answers
-  apart: owner policy, actual access, task mandate and effect. Report a policy
+  apart: owner policy, actual access, task mandate and effect. When an existing
+  recorded form (a `protected:` list, an Updates note or a CONNECTIONS entry) is
+  the policy, report one pending item that asks the owner to confirm that form or
+  replace it with a `write_policy`; an explicit narrower choice, once confirmed,
+  is not pending. Report a policy
   that differs between the definition, standing rules, connector and job prompt,
   a pointer that restates scope instead of referring to the root, duplicate
   current Keys, a Review due without a reason (read only records with Review due

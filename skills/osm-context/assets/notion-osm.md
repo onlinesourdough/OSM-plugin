@@ -62,7 +62,8 @@ own workspaces. Spaces organize information; Notion permissions control access.
 1. Ask for a useful result. Mention the Space when it is not clear from the task.
 2. The agent reads the relevant facts, methods and decisions, and flags gaps.
 3. Review the result. Keep a lasting correction in the existing document or
-   Memory when authorized. Change a method deliberately with its responsible owner in Skills.
+   Memory when authorized. Change a method deliberately with its responsible owner in Skills,
+   or by scheduled owner-method upkeep under a recorded grant.
 
 [One real starting task, its source links, output destination and reviewer.
 If still unresolved, say what remains to be chosen; do not invent an offer,
