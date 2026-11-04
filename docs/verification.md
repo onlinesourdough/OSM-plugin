@@ -120,13 +120,16 @@ seven negatives and three valid variants, corrects the inputs of negatives
   130, and the script was restored byte-identical after every one. These are
   fixture-level results only.
 - **Rehearsal at `be26bbf` (C1-A1-r1):** 65 positives and 35 valid variants
-  pass, and 283 negatives are rejected, each for its one expected reason; the
+  pass, and 283 negatives are rejected, each with its expected reason present.
+  The 114 negatives of cases 49 to 65 print exactly that one reason; 15 rows of
+  older cases print more than one entry. The
   raw exit is 0 with `failures=0`, and the clean-clone log is byte-identical to
   the working tree's. None of the 373 result rows of `21b8a3f`'s log changed or
   was removed, including those of the corrected 51.4 and 54.5, and 10 rows are
   added: the seven new negatives and three new variants. The 224 rows of
-  `5c60fad`'s log are unchanged. At the top level only `main()` differs from
-  `5c60fad`'s script, and only the twelve corrected functions from `21b8a3f`'s.
+  `5c60fad`'s log are unchanged. Among the top-level statements of `5c60fad`'s
+  script only `main()` changed, none was removed and 23 are added; against
+  `21b8a3f`'s script only the twelve corrected functions differ.
   For fail-first, the `21b8a3f` harness run on the corrected fixtures exited 1
   with `failures=10`: six new negatives were accepted, 51.8 was rejected for
   another reason and the three new variants were rejected, while the corrected
