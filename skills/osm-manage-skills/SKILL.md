@@ -2,7 +2,7 @@
 name: osm-manage-skills
 description: Manage an authorized skill creation, edit, installation, update, removal or rollback.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:manage-skills
@@ -101,4 +101,6 @@ source, version, changed scope, recovery and material limits.
 Fix authorized local defects and rerun affected checks. Failed activation holds
 further activation and preserves the prior version; uncertain effects require
 readback before retry. Report any remaining required proof or authority gap.
-Never update skills automatically.
+Never update installed capabilities automatically. Owner-method upkeep under the
+owner's recorded write grant, including a scheduled job, follows the owner skill
+lifecycle and changes nothing that is installed.

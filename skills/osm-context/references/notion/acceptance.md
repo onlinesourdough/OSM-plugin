@@ -26,7 +26,8 @@ For a Data & Context root, also report the architecture's
 | Isolation | Independent repository task follows its local instructions without reading owner context |
 | Failure | Unavailable guide or required file produces an explicit gap without fallback/mutation |
 | Activation | Native package/version and enabled selection read back; prior competing route disabled reversibly |
-| Maintenance | One authorized task-time correction reaches its existing canonical record; no write or duplicate on unchanged replay |
+| Write policy | The owner's recorded choice is read from the definition or its existing recorded form. Reads, inserts and updates are qualified across the selected stores and nested pages. The definition, standing rules, connector capabilities and job prompt carry the same scope, and the pointer refers to the root. With no recorded policy, one pending item and no guessed grant |
+| Maintenance | One authorized task-time correction reaches its existing canonical record, revising it and its Summary in place; no write, date or duplicate on unchanged replay |
 | Optional schedule | Only when explicitly requested: exact native schedule readback and one scoped run; distinguish future delivery from observed execution |
 | Rollback | Owned pointer/selection/links restored in a rehearsal; unrelated and subsequent edits preserved; Notion work retained |
 

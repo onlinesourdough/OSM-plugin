@@ -34,6 +34,12 @@ adopt that format. Git can back up a file home without becoming its agent
 runtime. [Continuity Sync](../../osm-maintain-context/references/sync.md) applies
 only to an explicitly selected managed file home and its approved Git scope.
 
+Whatever the provider, the write policy and record lifecycle keep the same
+semantics: the owner's recorded policy applied by the provider's actual
+containment, one current record per topic and scope, and Revised and Review due
+only as the [record lifecycle](architecture.md#record-lifecycle) defines them.
+Only the physical fields differ.
+
 Carry the resolved provider and operation to the owning skill; do not restart
 selection in a loop. A connected home is usable only to the extent observed.
 Notion and managed file homes have concrete procedures; other homes use a

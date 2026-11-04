@@ -24,15 +24,15 @@ The page starts at the next heading.
   sources the task needs.
 - Records here are curated: evidence, meaning and dates are kept; originals stay
   in their own systems and libraries.
-- Your own documents and libraries stay as you organised them. The agent changes
-  one only when you ask for that specific edit.
+- Your own documents and libraries keep their body, structure and authorship.
+  The agent edits one only from input you accepted, and only that targeted edit.
 - Access comes from the connection's actual grants, not from links or labels.
 
 ## Essential rules
 
-[The owner's complete essential operating rules: action authority, what may be
-written where, review points, exclusions and forget requests. Keep them short;
-link deeper procedures instead of pasting them.]
+[The owner's complete essential operating rules: action authority, what the
+recorded write policy allows where, review points, exclusions and forget
+requests. Keep them short; link deeper procedures instead of pasting them.]
 
 ## Data and Context Definition
 
@@ -48,7 +48,9 @@ definition:
     memory: {id: "[id]"}
     skills: {id: "[id]"}
     maintenance: {id: "[id]"}  # pipeline agreements and other control records
-  protected: ["[exact IDs or roles of control records]"]
+    content: {id: "[id]"}  # optional; only when the owner selects Content
+  # The owner's recorded choice. Setup proposes whole-home and never assumes it.
+  write_policy: {choice: "[whole-home | narrower | not yet chosen]", include: ["[exact identities; narrower only]"], exclude: ["[exact identities]"], recorded: "[owner decision source and date]"}
   areas:
     business-and-relationships: {coverage: "[source keys or gap]"}
     work-and-knowledge: {coverage: "[source keys or gap]"}

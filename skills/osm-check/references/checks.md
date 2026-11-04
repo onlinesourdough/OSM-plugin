@@ -18,6 +18,15 @@ and recheck, or Needs decision, plus per-claim PASS/FAIL/NOT VERIFIED.
   applicable checks for routing, memory, personal methods and reconciliation.
   The file-home routing, data and Sync bullets below apply only to managed file
   homes. Native product and harness checks remain independent of the provider.
+- Write policy and record lifecycle, read-only: report the owner's recorded
+  policy (or one pending item when none is recorded) and keep its four answers
+  apart: owner policy, actual access, task mandate and effect. Report a policy
+  that differs between the definition, standing rules, connector and job prompt,
+  a pointer that restates scope instead of referring to the root, duplicate
+  current Keys, a Review due without a reason (read only records with Review due
+  set), and a record whose containment is unknown, cyclic, archived or moved
+  outside the home. A past-due record is reported, never treated as expired or
+  false. Check writes nothing and backfills no date.
 - File owner routing: requested/established home wins, then a managed bridge, then
   ~/.AIOS only when neither exists. Native discovery needs no bridge or home.
   For a separately chosen bridge, the configured absolute home is correct; effective AGENTS/override read

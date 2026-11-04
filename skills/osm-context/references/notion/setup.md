@@ -60,7 +60,10 @@ needs only one area. Reuse actual methods and allow Memory to start empty.
 
 ## Establish the destinations
 
-Verify the connected workspace/account and available tools. Reuse the owner's
+Verify the connected workspace/account and available tools. Qualify reads,
+inserts and updates once across the selected stores and their nested pages
+(Knowledge, Memory, Skills, any Content and the control records), not per store
+or per write. Reuse the owner's
 work destinations and memory structure when suitable. A human Business home or
 Docs library keeps its structure and is no longer a curation destination; see
 [human originals](../architecture.md#human-originals-and-selected-excerpts). Inspect
@@ -162,8 +165,17 @@ The pointer is installed once at the intended scope, not rewritten whenever
 an offer, source or skill changes. Those changes belong in the context home.
 Change the pointer only for an authorized entry move or host/scope change.
 
+Record the owner's write policy once, in the definition's `write_policy`: Setup
+proposes whole-home across the selected home and its real descendants, and
+records what the owner chooses; it never assumes the grant. Carry that one
+policy through the definition, standing rules, connector capabilities and any job
+prompt so they agree, and let the host pointer refer to the root rather than
+restate it. An existing recorded form (a `protected:` list, an Updates note or a
+CONNECTIONS entry) is read and kept, and a rerun never drops a narrower choice.
+See the architecture's [home write policy](../architecture.md#home-write-policy).
+
 Make [Maintain Context](../../../osm-maintain-context/SKILL.md) usable at natural task
-checkpoints within the approved read/write policy. No timer is required.
+checkpoints within the recorded read/write policy. No timer is required.
 Setup or general upkeep authority does not authorize a recurring task. Use the
 host's scheduler only for an explicit recurring-work request with bounded
 sources, destinations and cadence; see [maintenance](operating.md#maintenance).

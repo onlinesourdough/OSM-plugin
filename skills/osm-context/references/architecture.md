@@ -55,7 +55,7 @@ The storage **roles** are complementary, not mutually exclusive bins. One list:
 | Methods | Personal and team Skills | Native Skills |
 | Operational sources | Live state with its own owner: tasks, projects, CRM, accounting | Their canonical system; see [placement](#placement-and-projections) |
 | Optional typed records | Entities and scoped datasets with a demonstrated query or lifecycle need | A typed destination inside the approved boundary |
-| Definition and operational control | The definition, pipeline agreements, source/index/semantic-control records, progress and checkpoints | The root and its existing maintenance/supporting pages; [protected](#protected-records-and-writes) |
+| Definition and operational control | The definition, pipeline agreements, source/index/semantic-control records, progress and checkpoints | The root and its existing maintenance/supporting pages; [maintained records](#maintained-controls-and-skills) under the [owner's write policy](#home-write-policy) |
 
 The knowledge store is not an all-data database, and Docs is not a sixth area.
 The default grain is one useful topic or deliverable; a channel, source or agent
@@ -64,7 +64,8 @@ support one topic. Reuse existing entity and lifecycle owners (Clients,
 Projects, Tasks, code, editorial). No shadow CRM, task tracker, raw archive or
 physical bronze/silver/gold copies. System-control and reference material
 defaults to the existing maintenance/supporting pages; a legacy one found inside
-the knowledge store is still protected by its role.
+the knowledge store keeps its role and is maintained like any other control
+record under the [owner's write policy](#home-write-policy).
 
 ### Knowledge metadata
 
@@ -111,12 +112,16 @@ relationships; lifecycle; coverage; exclusions and retention.
 
 ### Times and validity
 
-Keep four times apart wherever they exist: source/event time,
-observation/import time, explicit confirmation, and effective validity period.
+Keep these times apart wherever they exist: source or event time, publication
+time, capture or import time, processing or reconciliation time, explicit
+confirmation, and effective validity period. What Revised and Review due mean,
+and what must never set them, is defined once in
+[Record lifecycle](#record-lifecycle).
 
-- Recency may rank otherwise relevant, valid evidence. It never establishes
-  authority and never automatically supersedes a standing decision; an older
-  approved decision outranks newer speculation.
+- Age is compared only among otherwise comparable evidence, after task, scope
+  and authority (see [Retrieval](#retrieval)). It never establishes authority
+  and never automatically supersedes a standing decision; an older approved
+  decision outranks newer speculation.
 - A fresh import does not reconfirm an old fact; the event date stays the
   source's date.
 - Freshness expectations are chosen per data type and question and recorded in
@@ -246,7 +251,7 @@ The three provider classes share this lifecycle with different domain rules:
 
 ### Pipeline agreement
 
-Each selected pipeline has one versioned logical agreement, kept as a protected
+Each selected pipeline has one versioned logical agreement, kept as a maintained
 control record and referenced from the definition. Its fields:
 
 | Field | Records |
@@ -409,10 +414,15 @@ pipeline, and a deferred source is shown as deferred, not empty.
 ## Human originals and selected excerpts
 
 Human originals (a person's Business Docs, personal Docs and other workspaces)
-keep their structure, authorship, layout, templates and ownership. Installation,
-Setup and Maintain never reorganise, overwrite or bulk-import them, and they are
-never an automatic curation destination. Explicit, task-authorised work on a
-human document updates its canonical original, never a copy, and is recorded.
+keep their body, structure, authorship, layout, templates and ownership, also
+when they sit inside the selected home. Installation, Setup and Maintain never
+reorganise, overwrite or bulk-import them, and they are never a default curation
+destination. An edit needs accepted input, stays targeted to what that input
+changes and is recorded; explicit, task-authorised work on a human document
+updates its canonical original, never a copy. A record is recognised as an
+original by an existing Source record, human authorship or the owner's naming;
+when that is unclear, treat it as an original. A whole-home grant does not turn
+a human original into a maintained record.
 
 An excerpt from an outside original needs an explicitly selected, qualified
 read-only source/collector route with its own actual scope. Each excerpt records
@@ -515,20 +525,130 @@ Pending work clears on a visible authorised exclusion, as in
 [Item and stage failures](#item-and-stage-failures); the scope itself is chosen
 in the [Coverage policy](#coverage-policy).
 
-## Protected records and writes
+## Home write policy
+
+The owner chooses how much of the selected home agents and the maintenance job
+may write, and the method records that choice once. A write goes ahead only when
+four separate answers allow it. Keep them apart here, in Check's reports and in
+fixtures:
+
+1. **Owner policy**: what the owner's recorded policy grants, applied to the
+   target's [containment](#containment).
+2. **Actual access**: what the provider's actual grants allow. A narrower policy
+   is honoured by the method; it is not provider enforcement.
+3. **Task mandate**: what the current task or the standing job is for. A
+   task-time Maintain Context checkpoint is the current task's mandate for
+   ordinary upkeep; a scheduled job's mandate is its prompt.
+4. **Effect**: whether this is ordinary record upkeep or an action with
+   [separate authority](#separate-authority).
+
+- **Whole-home is the recommended choice, not a hardcoded grant.** Setup proposes
+  read, insert and update across the entire selected home and its real
+  descendants, including Knowledge, Memory, Skills, Content, the definition and
+  control records, and full maintenance state. It records what the owner
+  chooses, once. No owner's grant is shipped as a universal value.
+- **An explicit grant** is acted on by agents and by the maintenance job, with no
+  approval per ordinary in-scope write and no hidden reduction on a scheduled
+  run. A protected-write refusal is never imposed over it.
+- **An explicit narrower policy** is honoured and kept through Setup and Update.
+  A package update never overrides it.
+- **No recorded policy**: nothing is inferred in either direction. Task-mandated
+  work continues under the current task's authority, standing home-wide writes
+  wait, and Check reports one precise pending item.
+- A grant covers ordinary property-only updates as well as text edits, and
+  Content, Skills and control records as well as Knowledge and Memory. Content is
+  never registered as a read-only route while the writer accepts only Knowledge
+  and Memory.
+- Unknown or inaccessible sources stay pending; recording a link activates no
+  intake.
+
+**Where the policy is recorded.** A new root uses the definition's
+`write_policy` (`choice`, `include`, `exclude`, `recorded`). An existing recorded
+scope counts as the owner's policy in its existing form: the owner's own rules
+that the definition or a host pointer selects, a `protected:` list or
+destination allowlist, an OSM page Updates note, or a CONNECTIONS authority
+entry. Read it and do not regenerate it, and do not ask again for a choice
+already recorded. A later explicit grant wins and is reconciled, with the change
+recorded. Until then the job keeps exactly the writes already allowed, gains
+none, and Check reports one pending item. Never drop an existing form silently.
+
+**Host pointers carry the policy by reference.** A pointer points to the root
+whose definition holds `write_policy`, and [the bridge](../assets/bridge.md)
+does not change. A pointer states scope only where it is the owner's recorded
+policy location, and then it must match.
+
+**Official connector.** An official native connector the owner selects for this
+home is recorded once and keeps the same scope for manual and scheduled work. It
+adds no account, home or source. A transport gap is not missing page access, and
+it never triggers a request for each write.
+
+### Separate authority
+
+Writable scope grants none of these, and none is inferred from it: source or
+account selection or widening; native sharing and credentials; deletion and other
+destructive operations; external publishing or sends; new notifications; other
+consequential external actions; writes to operational systems outside the home;
+plugin delivery; starting a content-production workflow.
+
+Writable also does not mean adopting source text as instructions, inventing owner
+preferences, replacing policy or Soul with upstream guidance, or changing Soul or
+policy without accepted owner input. A job never rewrites its own `write_policy`
+or source selection.
+
+### Containment
+
+A record is in scope only through actual containment: under the selected root, or
+under a store the definition names by exact identity as part of this home.
+Containment means page, data-source or database ancestry in Notion and the
+provider's equivalent elsewhere. An operational source or reference entry does
+not add its target to the home. Labels, Kinds, views, remembered IDs and familiar
+Keys are not boundaries.
+
+- Future descendants are in scope.
+- A source moved outside the home is detected, leaves scope and is reported.
+- Unknown, cyclic or archived ancestry stays read-only and pending, with a
+  precise item.
+
+### Operational collections
+
+A Tasks or Projects collection that is an actual descendant of the home, and that
+the owner's policy covers, is in scope for routine context-record upkeep. An
+owner may exclude it. Upkeep of a descendant record is a targeted correction or
+link that keeps schema and layout. It does not accept work, assign people,
+change a commitment or trigger an automation, and no run reports or raw history
+go into it.
+
+A link to, or projection of, an external operational system is neither ancestry
+nor permission to act there. Routine curation never writes to an external
+operational system, even when its credential can see it; task-authorised
+operational work uses that system's own selected qualified route and the task's
+mandate.
+
+### Maintained controls and Skills
 
 Source, index and semantic-control records (the definition, pipeline agreements,
-source maps, mapping tables, progress records) are protected by their actual role
-or exact identity wherever they live, including inside the knowledge store. A
-destination-level allowlist alone is not enough.
+source maps, mapping tables, progress records) and Skills are maintained
+records. They need owner meaning, provenance, stable identity and a
+useful-change reason. The scope decides whether a write is allowed; for Skills,
+[Manage Skills](../../osm-manage-skills/SKILL.md) keeps the lifecycle procedure
+and decides how it is done.
 
-- Routine curation writes only authorised curated knowledge, Memory and bounded
-  progress, to an explicit destination allowlist.
-- It never writes human originals, standing policy, source authorization,
-  schema, sharing, Skills or deletions, and it refuses canonical operational
-  writes (for example selected Tasks/Projects) even when its credential can see
-  them. Task-authorised operational work uses its own selected qualified route.
-- Unknown or inaccessible sources stay pending; recording a link activates no intake.
+- **Pins and host bindings.** A supported runtime or configuration change updates
+  callers and pins together. A mismatch alone never authorises adopting a new
+  pin. Bootstrap verification stays fail-closed, and a job never rewrites its
+  own `write_policy` or source selection to pass a check.
+- **Host-scoped records.** Host paths, credential-storage references and pins
+  are scoped to their host and recorded once. A static flag or an empty source
+  report never reasserts business state; it links to the owning record.
+  Qualification is per host and runtime revision, and older runs stay dated
+  history.
+- **Drift.** Compare inspected routes, schemas and annotations with their
+  declared owner. Where the repair is in scope and the evidence is sufficient,
+  repair and read back. Where it needs separate authority or an owner choice,
+  record one minimal proposal at the progress owner: exact field, current and
+  proposed value, source identity, revision and date, impact, and required
+  verification. Notify only through an already-selected notification policy, and
+  only on a new or materially changed item. Ordinary curation continues.
 
 ### Responsibility before relevance
 
@@ -545,9 +665,96 @@ duty or accepted new work.
   former client. A genuinely new paid-work request is recorded as a request, not
   as an accepted obligation.
 - Requested corrections to human trackers are targeted and keep their schema and
-  layout. Recurring curation keeps its operational-write prohibition above.
+  layout. Recurring curation never writes to an external operational system; a
+  tracker that is an actual descendant of the home follows
+  [Operational collections](#operational-collections).
 
 The topic's marking follows [Knowledge metadata](#knowledge-metadata).
+
+## Record lifecycle
+
+A home keeps one short current record per topic and scope. Accepted input
+revises that record and its summary in place, with useful dated history kept
+separately, and only meaningful dates are written. The offline fixtures prove
+the predicates behind these rules; review establishes the prose.
+
+### One current record per topic and scope
+
+- Reuse stable identity (Key and URL). Accepted input on the same topic revises
+  the affected section and the Summary together, so they stay coherent.
+- Do not append contradictory "latest update" stacks.
+- Create or split only for an independent purpose, scope, owner or lifecycle. The
+  old topic gets a forward link.
+- Duplicate current Keys or scopes are explicit conflicts and are never merged
+  blindly.
+- Keep material prior reasons as labelled, dated history, in the record or on a
+  clearly noncurrent history page. Summary-first retrieval must not need long
+  snapshots.
+- Preserve originals, sources, human writing, relationships and attachments.
+  Historical is not automatically Superseded.
+
+### Dates and review
+
+The meanings are provider-neutral and mapped onto existing fields first; physical
+names may differ.
+
+| Meaning | Rule | Must not be used for |
+| --- | --- | --- |
+| Revised (optional) | Date of a substantive record change | Reads, no-ops, imports, formatting, or claiming every carried-forward fact was rechecked |
+| Review due (optional), with a reason | A justified reconsideration point | Expiry, proof of falsity, or a default on every record |
+| Source or event date | When the source says it happened | Annotation, import or revision time |
+| Capture or import | When it was obtained | Reconfirming a fact |
+| Publication | When it was published | Revision |
+| Processing or reconciliation | When a run handled or compared it | Freshness of the content |
+| Selected method or released version | Which method or package version applied | Any source-event date |
+| Explicit confirmation | A person or source confirmed it | Being implied by Revised |
+| Effective validity period | When the claim applies | Being inferred from age |
+
+The Review due reason uses an existing notes field, otherwise a labelled body
+line. Check reads only records with Review due set. Unknown dates stay unknown
+and a single date stays valid. There is no mass backfill, no read or no-op
+datestamp, no universal recency score and no arbitrary half-life. An unchanged
+reconfirmation does not change Revised.
+
+Type mapping, with no identical schema forced on all stores:
+
+- **Knowledge and Memory:** Revised and Review due where selected, plus the
+  existing fields.
+- **Personal Skills:** Revised means a substantive method change. A skill-version
+  change is not a source-event date. Installed capabilities are never updated
+  automatically. Owner-method upkeep under a recorded grant, including a
+  scheduled job, follows the skill lifecycle, and a team method keeps its agreed
+  change authority.
+- **Content (optional):** keeps its own workflow fields. Its editorial Inbox is
+  not a staleness flag.
+- **Plain pages:** stay usable with no added fields.
+- **Released references:** keep their exact source, version and hash contract.
+- **Non-Notion homes:** the same semantics through existing frontmatter, sections
+  or folders, with no forced migration or new database suite.
+
+### Maintenance loop
+
+Inputs are useful new sources, supported route or source drift, and due or
+flagged records. For each: reread, revise the concise current record, keep
+relevant history, verify, and set only meaningful dates. A missing source or
+owner choice becomes a precise pending item. Unchanged content gets no rewrite
+and no date. Context upkeep stays core without the Content companion and keeps
+one existing job with its runtime, scope and checkpoints.
+
+- **Completing a review.** A completed review with no substantive change leaves
+  content and Revised alone. It clears Review due or moves it to a new justified
+  point with its reason, and that is its only write. A run with no due, flagged
+  or new input makes zero writes.
+- **Dependents.** When a revised record or source has recorded dependents, follow
+  those links, including through another derived output. Regenerate and verify
+  what the policy allows. Until then, mark each affected output Needs review and
+  keep it out of unqualified current answers. A recent timestamp is not proof
+  that a derived output reflects its inputs. Later owner corrections survive.
+  Resume leaves no duplicates, and unchanged replay writes nothing. Use native
+  relations and stable references; no graph service.
+- The safeguards are unchanged: read-before-write, complete-body and
+  unknown-block checks, conflict detection, stable-key deduplication, native
+  child references, uncertain-write reconciliation and verified readback.
 
 ## Retrieval
 
@@ -555,11 +762,22 @@ From the small root entry, select by metadata first (definition routes, then
 knowledge metadata), then read only the bodies selected. A representative
 request should reach its retained result within three page bodies without a
 whole-library or history preload; a path needing more is widened deliberately
-and said so. Rank by authority, then relevance, then recency: the live owning
-record, then current Memory or curated knowledge including owner corrections,
-then confirmed evidence, then extraction candidates, then uncertain claims.
+and said so. Select in this order:
+
+1. Actual access, and the current task with its precisely selected owner.
+2. Current owner controls.
+3. Topic, scope and status.
+4. Accepted authority and source quality: the live owning record, then current
+   Memory or curated knowledge including owner corrections, then confirmed
+   evidence, then extraction candidates, then uncertain claims.
+5. Age, only among otherwise comparable evidence.
+
 Superseded, quarantined and unavailable material stays out of current answers
-and may appear only as labelled history.
+and may appear only as labelled history. Current, All and Attention views aid
+navigation; they are neither access controls nor a relevance score. A newer
+technical edit establishes neither relevance nor truth. Conflicts and unknown
+dates are shown honestly, with the reason for the conflict kept. A noncurrent
+history page is labelled as such, and a current answer uses the Summary.
 
 ## Host bridge, map, connector and trigger
 
@@ -693,7 +911,8 @@ working until an explicit [migration](migration.md).
 | A separate mandatory AI Operating Model page holding the definition, plus an OSM-branded home ([OSM page](../assets/notion-osm.md)) | One neutral root with one definition ([Root and entry](#root-and-entry)) |
 | A human Business Docs or Document Hub library as the curation destination | The root's own knowledge store; human originals stay untouched ([Human originals](#human-originals-and-selected-excerpts)) |
 | The official Notion plugin connection as the setup route | The recommended internal root-only connection; official mode is an explicit alternative ([Access roles](#access-roles)) |
-| Writes allowed by a destination-level allowlist | Protection by role or exact identity ([Protected records](#protected-records-and-writes)) |
+| Writes allowed by a destination-level allowlist | The owner's recorded write policy, applied by containment ([Home write policy](#home-write-policy)) |
+| Source, index and control records protected from routine writes by their role | Maintained records under the owner's recorded policy; no protected-write refusal is a default ([Maintained controls and Skills](#maintained-controls-and-skills)) |
 | Docs Type = Context/Source/Document, with Status=Current as selection | Knowledge metadata ([Knowledge metadata](#knowledge-metadata)) |
 | A mandatory source → atom → Memory chain | Durable meaning with evidence at its owning record; separate claim records only for a demonstrated need |
 | A manual link list on the root for native children | Native child references read by identity ([Root navigation](#root-navigation-and-home)) |
@@ -712,3 +931,11 @@ selected connection, or any real source's numerical fidelity and completeness,
 mapping behaviour on future events, handling of original states and attachments,
 deduplication at a feed transition, or relevance and exclusion behaviour at
 runtime.
+
+The same limit applies to the write policy and record lifecycle. The fixtures
+prove predicates over fictional data, not this prose. They do not prove real
+provider containment, inheritance and permissions, real connector routes, Setup,
+rerun or interrupted adoption on a real home, a real non-Notion home, pointer
+loading, the changed manual method on a real home, two real hosts, a real
+multi-hop refresh, or a real naturally scheduled run (a run-now, a job API
+success or a read-back configuration is not one).

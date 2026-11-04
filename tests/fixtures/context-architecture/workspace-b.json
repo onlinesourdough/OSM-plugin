@@ -25,7 +25,9 @@
     {"id": "fict-b-business-docs", "before_sha": "b1", "after_sha": "b1"},
     {"id": "fict-b-proposal-12", "before_sha": "b2", "after_sha": "b2"}
   ],
-  "protected": [{"id": "fict-b-mapping", "role": "mapping-table", "inside": "fict-b-knowledge"}],
+  "write_policy": {"choice": "narrower", "include": ["fict-b-knowledge", "fict-b-memory"], "exclude": ["fict-b-knowledge/mapping-table"],
+                   "recorded": "owner decision of the survey owner, 2026-10-14 (fictional)"},
+  "maintained": [{"id": "fict-b-knowledge/mapping-table", "role": "mapping-table"}],
   "excerpt": {
     "source_id": "fict-b-proposal-12", "target_id": "fict-b-knowledge/harbour-wall-scope",
     "authority": "signed proposal", "provenance": "collector route fict-b-route-docs",

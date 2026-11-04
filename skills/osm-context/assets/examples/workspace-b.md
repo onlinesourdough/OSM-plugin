@@ -38,9 +38,15 @@ identity, original authority (signed proposal), provenance, observed revision
 wall job"), uncertainty (appendix B unread), coverage (section 2 only) and
 refresh state (checked 2026-10-21). Business Docs is unchanged.
 
-**Protected control record inside the knowledge store.** A "Mapping table" page
-(`fict-b-mapping`) inside Survey Knowledge defines the Minutely field mapping. It
-is protected by its exact identity.
+**Write policy: a recorded narrower choice.** On 2026-10-14 the survey owner
+chose a narrower policy: Survey Knowledge and Memory are writable, and the
+"Mapping table" page (`fict-b-knowledge/mapping-table`) is excluded by its exact
+identity. Setup and Update keep that choice; the method honours it, and it is
+not provider enforcement.
+
+**Excluded control record inside the knowledge store.** The "Mapping table" page
+inside Survey Knowledge defines the Minutely field mapping. Routine curation
+does not write it, because the owner's recorded policy excludes it.
 
 **Relocation candidate.** One agent-created "Meeting digest" page
 (`fict-b-reloc-1`) was written into Business Docs by an earlier setup. On the

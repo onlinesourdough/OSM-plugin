@@ -53,7 +53,11 @@ For creation or promotion to Current, use the approved owner's mapping and the
    concurrent edits and source provenance. Keep previous snapshots recoverable.
 5. Test a bounded representative use with the actual available tools. Future
    authorized personal/team-skill creations and edits follow this same destination
-   policy. Do not turn ordinary facts into skills or update skills on a timer.
+   policy. Do not turn ordinary facts into skills. Installed capabilities are
+   never updated automatically. Owner-method upkeep under a recorded grant,
+   including a scheduled job, follows this lifecycle, and a team method keeps its
+   agreed change authority. Revised means a substantive method change; a
+   skill-version change is not a source-event date.
 
 ## Discovery and execution
 

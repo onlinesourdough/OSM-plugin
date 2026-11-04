@@ -45,6 +45,9 @@ is absent. Leave unresolved facts unknown; invent no persona or exhaustive profi
 MEMORY holds durable corrections/preferences; topic facts use routed context.
 Never retain credentials or runtime model/effort inventories.
 
+A file home's policy is its CONNECTIONS entry; none is inferred.
+Keep one current entry per topic.
+
 Preserve owner corrections with provenance and narrow override scope. Surface
 material conflicts. When a source covers a local fact, reconcile before replacing
 duplicate detail with its route; keep unique meaning. No automatic outward publish.

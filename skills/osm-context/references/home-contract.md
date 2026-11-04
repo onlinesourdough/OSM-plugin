@@ -12,7 +12,7 @@ contract; "guide" below means the root entry and its one definition.
 | Spaces | Business, brand, sub-brand or continuing-area scopes, shared context and useful parent/child relationships |
 | Memory | Durable decisions/corrections with reasons, provenance, actual source dates and uncertainty |
 | Personal methods | Where to discover the owner's reusable skills and their supporting resources |
-| Maintenance and recovery | Authorized write scope, identity/deduplication rule, readback, correction handling and recoverable prior route |
+| Maintenance and recovery | The owner's recorded write policy, identity/deduplication rule, readback, correction handling and recoverable prior route; see the architecture's [home write policy](architecture.md#home-write-policy) |
 
 One context home can cover multiple Spaces. Projects keep their native workspaces;
 they need not become new owner homes. Express Spaces with the provider's useful
@@ -40,11 +40,13 @@ Map Offers, Demand and Operations to useful sources or explicit gaps. This does
 not require a document for each topic, a personal skill or prefilled Memory.
 
 At meaningful decisions, corrections and task checkpoints, use Maintain Context
-under current-task or standing write authority. Reconcile identity and meaning
-before creating; preserve dates, reasons, exclusions and useful history. No new
-durable knowledge means no write. Missing access leaves an explicit unsaved
-change. Facts maintenance does not change shared/personal skills or approved
-policy. Those have their own authorized lifecycle.
+under the recorded write policy or the current task's authority. Reconcile
+identity and meaning before creating; keep one current record per topic and
+scope, with dated history, and preserve reasons and exclusions. No new durable
+knowledge means no write and no date. Missing access leaves an explicit unsaved
+change. Facts maintenance changes shared/personal skills only through the skill
+lifecycle, and changes approved policy only on accepted owner input. See the
+architecture's [record lifecycle](architecture.md#record-lifecycle).
 
 For setup or a material change, verify the selected scope:
 

@@ -12,7 +12,8 @@
   - finance completeness;
   - the preparation lifecycle and its versioned pipeline agreement;
   - placement and source lifecycle choices, selected excerpts and access roles;
-  - protected control records;
+  - the owner's recorded home write policy and maintained control records,
+    replacing the earlier protected-write default;
   - the host-bridge distinctions;
   - root navigation without duplicate links;
   - format-aware source recipes, item and stage failures, independently scoped
@@ -34,8 +35,28 @@
   the official plugin as the setup route, and the abstract Docs Type taxonomy.
 - Claude project-instruction guidance now records version-gated `AGENTS.md`
   loading and requires observed loading evidence.
-- Skill versions: Context 2.1.0, Setup 2.1.0, Maintain Context 2.0.1, Check
-  3.0.1, Update 3.0.1.
+- Home write policy (#73) and record lifecycle (#72). Setup proposes whole-home
+  read, insert and update across the selected home and its real descendants and
+  records what the owner chooses, once, in the definition's `write_policy`; it is
+  a recommendation, never a hardcoded grant. An explicit grant is acted on
+  without per-write approval, an explicit narrower policy is kept through Setup
+  and Update, and with none recorded nothing is inferred and Check reports one
+  pending item. Existing recorded forms (a `protected:` list, an Updates note, a
+  CONNECTIONS entry) count as the policy. Four separate questions (owner policy,
+  actual access, task mandate, effect) decide a write; sharing, accounts,
+  credentials, deletion, publishing, notifications, plugin delivery, content
+  workflows and outside operational writes keep their own authority. Scope
+  follows actual containment.
+- A home keeps one current record per topic and scope, revised in place with
+  dated history. Revised and Review due (with a reason) are optional and written
+  only for a meaningful change; there is no backfill and no datestamp for a read
+  or no-op. Retrieval selects by access, task, owner, scope and status before
+  age, and a revised record's dependents are refreshed or marked Needs review.
+- The offline rehearsal covers cases 1 to 80: cases 5 and 40 changed, and cases
+  66 to 80 are new. The fixtures prove predicates over fictional data only, not
+  a real home, real provider containment or a scheduled run.
+- Skill versions: Context 2.2.0, Setup 2.2.0, Maintain Context 2.1.0, Check
+  3.1.0, Update 3.0.2, Manage Skills 2.0.1.
 
 ## 0.30.0 — 2026-10-23
 

@@ -27,6 +27,16 @@ method route. Translate Space scope into existing metadata/folders where useful.
 If native templates are unavailable, offer a clearly labelled starter structure;
 do not call a copied file a registered database template.
 
+Map the architecture's [containment](architecture.md#containment) onto the
+provider's own ancestry: the repository path, vault folder or drive folder tree
+under the selected location. Folder names, tags and remembered paths are not
+boundaries, and a link to an outside file is not part of the home. Express the
+architecture's [record lifecycle](architecture.md#record-lifecycle) through
+existing frontmatter, sections or folders (one current record per topic, a
+labelled history section, optional Revised and Review due fields with a reason),
+with no forced migration and no new database suite. Read the owner's recorded
+write policy in its existing form, such as a CONNECTIONS entry, and keep it.
+
 For durable updates, inspect the exact current record/revision, locate the same
 fact or decision, change narrowly, preserve provenance and read back. Reuse the
 provider's revision/conflict controls when exposed. Without such controls,

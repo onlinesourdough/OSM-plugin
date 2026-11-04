@@ -19,7 +19,8 @@
   "human_originals": [
     {"id": "fict-a-handbook", "before_sha": "a1", "after_sha": "a1"}
   ],
-  "protected": [{"id": "fict-a-index", "role": "source-index", "inside": "fict-a-knowledge"}],
+  "write_policy": {"choice": "whole-home", "include": [], "exclude": [], "recorded": "owner decision of the studio owner, 2026-10-12 (fictional)"},
+  "maintained": [{"id": "fict-a-knowledge/source-index", "role": "source-index"}],
   "excerpt": {
     "source_id": "fict-a-handbook", "target_id": "fict-a-knowledge/glaze-limits",
     "authority": "owner-written handbook", "provenance": "collector route fict-a-route-handbook",

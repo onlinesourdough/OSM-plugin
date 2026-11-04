@@ -29,9 +29,16 @@ revision `r7`, source date 2026-03-02, meaning ("kiln temperature limits for
 the studio glazes"), uncertainty (none stated), coverage (section 3 only) and
 refresh state (checked 2026-10-20). The handbook itself is unchanged.
 
-**Protected control record inside Knowledge.** A legacy "Source index" page
-(`fict-a-index`) sits inside Knowledge. It is protected by its role: routine
-curation does not edit it.
+**Write policy: the owner's recorded choice.** On 2026-10-12 the studio owner
+chose whole-home: agents and the maintenance job may read, insert and update
+across the root and its real descendants. The definition records that choice
+once (`write_policy`); nothing is asked again per write. Sharing, accounts,
+credentials, deletion and publishing still need their own authority.
+
+**Maintained control record inside Knowledge.** A legacy "Source index" page
+(`fict-a-knowledge/source-index`) sits inside Knowledge. Under the recorded
+choice, curation maintains it like any control record, with a useful-change
+reason.
 
 **Relocation candidate.** One agent-created page, "Studio pricing notes"
 (`fict-a-reloc-1`), landed in the owner's personal library during an earlier

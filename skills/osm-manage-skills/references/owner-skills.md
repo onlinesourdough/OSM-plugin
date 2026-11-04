@@ -8,6 +8,9 @@ registration and discovery in the same capability-management lifecycle as
 installation, update, removal and rollback. Owner facts and configured Git
 sync remain with Maintain context. This is a task-boundary procedure, not a
 watcher or permission to audit unrelated skill libraries on every message.
+The owner's recorded write policy decides whether a skill write is allowed;
+this procedure decides how it is done, for Maintain Context and a scheduled job
+as for a person.
 
 ## Choose the owner before authoring
 

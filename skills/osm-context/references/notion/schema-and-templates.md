@@ -70,6 +70,15 @@ artificial key. Source records the exact original source/owner decision and date
 unknown dates stay unknown. An original Source document can own its provenance.
 Keep source date, import date and last check distinct.
 
+Revised and Review due are optional date properties, selected only where the
+owner wants them; the meanings are in the architecture's
+[record lifecycle](../architecture.md#record-lifecycle). Review due keeps its
+reason in an existing notes property, otherwise in a labelled body line. Offer
+Current and All views, and an optional Attention view of records with a Review
+due set or a flag; views aid navigation and are not access controls. A
+noncurrent history page is labelled as history. Plain pages need no added fields,
+and there is no backfill of dates on existing records.
+
 Use native page mentions for ordinary references. Add a native relation only
 for a useful record relationship, such as Memory's Related docs pointing to the
 Docs a decision affects. Resolve exact page IDs; matching titles or Space names

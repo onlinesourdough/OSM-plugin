@@ -2,7 +2,7 @@
 name: osm-maintain-context
 description: Curate owner facts, memory and routes, or perform explicitly requested OSM continuity Sync.
 metadata:
-  version: "2.0.1"
+  version: "2.1.0"
 ---
 
 # OSM:maintain-context
@@ -17,12 +17,17 @@ guide/mapping, [Context](../osm-context/SKILL.md) owns setup of that gap. No
 provider failure falls through to file maintenance or creates a second home.
 
 For Notion, follow its guide and [operating route](../osm-context/references/notion/operating.md).
-What curation may write follows the [Context Architecture](../osm-context/references/architecture.md).
+What curation may write follows the owner's recorded
+[home write policy](../osm-context/references/architecture.md#home-write-policy);
+with none recorded, nothing is inferred and the current task's authority applies.
 For another existing document/vault home, use the [existing-home procedure](../osm-context/references/existing-home.md).
-Curate durable decisions, reasons and corrections within current-task or standing
-write authority. Update the owning record, preserve provenance, verify writes
-and create nothing when unchanged. This is task-time curation; personal skill
-changes belong to Manage Skills. A non-file-home sync request reconciles only
+Curate durable decisions, reasons and corrections within that policy or the
+current task's authority. Revise the one current record for the topic and scope
+in place, with its Summary and dated history, verify writes, set only meaningful
+dates ([record lifecycle](../osm-context/references/architecture.md#record-lifecycle)),
+and write nothing when unchanged. A run with nothing due, flagged or new makes
+no write. This is task-time curation; a bounded skill edit goes through Manage
+Skills' lifecycle only. A non-file-home sync request reconciles only
 its named sources, not the file-home Git procedure.
 
 Apply the procedure below only to a selected managed AIOS file home.

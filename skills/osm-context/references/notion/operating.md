@@ -36,13 +36,16 @@ when adding a teammate; do not claim filtered search is a security boundary.
 
 Keep unique durable owner decisions in the approved memory destination with
 source/provenance and source date where known. Keep source date, import date and
-last check separate; checking access does not reconfirm a business fact.
+last check separate; checking access does not reconfirm a business fact. Set
+Revised only for a substantive change.
 Avoid transcripts, task logs and copies of changing records. Detailed work
 belongs in the chosen project or document destination.
 
 Before writing, fetch the target, inspect its schema/content and reconcile the
-same fact or source identity. Correct or supersede an existing entry instead
-of accumulating contradictory copies. Preserve ambiguity when evidence cannot
+same fact or source identity. Revise the one current entry for the topic and
+scope in place, keeping its section and Summary coherent and its material prior
+reasons as labelled, dated history; never accumulate contradictory copies. A
+duplicate current Key is an explicit conflict, not a blind merge. Preserve ambiguity when evidence cannot
 resolve it. Read back the result. A known successful operation is not repeated;
 an uncertain result is inspected first. With no transactional compare-and-swap,
 re-fetch before mutation and stop a conflicting write rather than claiming a
@@ -63,7 +66,17 @@ guide's approved sources and destinations; save the useful change, not a routine
 run log. Compare existing identity and meaning before writing. An unchanged
 replay should make no write. If neither current task authorization nor a standing
 write policy covers a result, keep the concrete proposed change for approval
-without blocking unrelated work.
+without blocking unrelated work. The recorded policy is read, not regenerated;
+see the architecture's [home write policy](../architecture.md#home-write-policy).
+
+A run works from useful new sources, route or source drift, and records that are
+due or flagged. It rereads, revises the concise current record, verifies, and
+sets only meaningful dates. A completed review with no substantive change
+clears Review due or moves it, with its reason, and writes nothing else; a run
+with no due, flagged or new input writes nothing. When a revised record has
+dependents, follow them and mark each affected output Needs review until it is
+regenerated and verified (the architecture's
+[maintenance loop](../architecture.md#maintenance-loop)).
 
 The skill is a method, not a background process or a guarantee of fresh data
 between tasks. Use the native host scheduler only for explicitly requested
@@ -76,7 +89,7 @@ memory or routine notification. Notify on a meaningful correction, failure or
 needed decision through the host's supported notification policy.
 
 Check whether Notion's setup guide has a newer version when useful; report its
-material changes. Do not replace approved instructions, update skills, change
+material changes. Do not replace approved instructions, update installed skills, change
 sharing or reconnect accounts automatically. A scheduled task is not a server:
 local runs depend on the host being awake and connected. Test one bounded run
 and distinguish that observation from future delivery.

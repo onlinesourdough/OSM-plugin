@@ -2,7 +2,7 @@
 name: osm-context
 description: Manage the chosen context home for setup, relevant retrieval, durable updates or a context audit. Formerly AIOS Context. Keep independent repository work local.
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
 ---
 
 # OSM:context
@@ -13,6 +13,15 @@ owner's destinations, Spaces and working policy. OSM supplies shared methods,
 not company data. A skill guides the running agent; it is not a background sync.
 The [Context Architecture](references/architecture.md) is the one root, storage,
 access and readiness contract; "guide" in these references means its root entry.
+OSM is an AI-assisted method and framework for solo founders and small teams.
+Data and context are its two foundation parts, and skills sit inside context.
+Notion is the central reference setup, and an explicitly retained compatible home
+stays supported. Core OSM establishes general business goals, audiences, offers
+and voice. Content is an optional companion, set up only when selected; upkeep
+can maintain an existing Content collection without it, and Content's own
+workflows stay as they are. The owner's recorded
+[write policy](references/architecture.md#home-write-policy) decides what
+Context upkeep may write, and one current record per topic keeps context short.
 
 Use the current selected home or verified host pointer. Consult
 [provider selection](references/providers.md) only when unresolved; carry the

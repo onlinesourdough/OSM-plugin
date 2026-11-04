@@ -124,15 +124,46 @@ def relocation(data, ws):
     return reasons
 
 
-@check("protected-write")
-def protected_write(data, ws):
+POLICY_CHOICES = ("whole-home", "narrower")
+# Actions that need their own authority; a writable scope grants none of them.
+SEPARATE_AUTHORITY = ("sharing-change", "account-widening", "credential-change", "deletion", "publication",
+                      "new-notification", "plugin-delivery", "content-workflow-start", "outside-operational-write")
+
+
+def home_stores(w):
+    roles = w["roles"]
+    return {w["root"]["id"], roles["knowledge"], roles["memory"], roles["methods"], roles["control"], *roles["operational"]}
+
+
+def store_of(target):
+    return target.split("/")[0]
+
+
+def policy_denial(policy, target):
+    """Why the owner's recorded policy does not cover a target, or None. The target and its store both count."""
+    policy = policy or {}
+    if policy.get("choice") not in POLICY_CHOICES:
+        return "no-policy-recorded"
+    identities = {target, store_of(target)}
+    if identities & set(policy.get("exclude", [])):
+        return "excluded-by-policy"
+    if policy["choice"] == "narrower" and not identities & set(policy.get("include", [])):
+        return "outside-policy"
+    return None
+
+
+@check("write-policy")
+def write_policy(data, ws):
     reasons = []
     for w in each_workspace(data, ws):
-        protected = {p["id"] for p in w["protected"]}
         for write in w.get("planned_writes", []):
-            if write["mode"] == "routine" and write["target"] in protected:
-                reasons.append("protected-write")
-    return reasons
+            if write["mode"] != "routine":
+                continue
+            if store_of(write["target"]) not in home_stores(w):
+                reasons.append("outside-home")
+            else:
+                reasons.append(policy_denial(w.get("write_policy"), write["target"]))
+    return unique(reason for reason in reasons if reason)
 
 
 @check("migration-links")
@@ -633,8 +664,8 @@ def projection(data, ws):
     return reasons
 
 
-@check("daily-writes")
-def daily_writes(data, ws):
+@check("operational-upkeep")
+def operational_upkeep(data, ws):
     reasons, allowlist = [], set(data["allowlist"])
     # Canonical operational targets come from the workspace definitions, never from the allowlist.
     canonical = {target for w in ws.values() for target in w["roles"]["operational"]}
@@ -647,7 +678,21 @@ def daily_writes(data, ws):
             reasons.append("implicit-writeback")
         if write["mode"] == "task" and write["route_qualified"] and not write["allowed"]:
             reasons.append("task-route-refused")
-    return reasons
+        if write["mode"] != "upkeep":
+            continue
+        # Upkeep reaches only an actual descendant collection; a link or projection is not ancestry.
+        if store_of(write["target"]) not in data["descendants"]:
+            reasons.append("link-as-ancestry")
+            continue
+        reasons.append(policy_denial(data["policy"], write["target"]))
+        edit = write["edit"]
+        if not edit["targeted"] or edit["schema_changed"] or edit["layout_changed"]:
+            reasons.append("untargeted-upkeep")
+        if edit["work_state_changed"]:
+            reasons.append("task-state-changed")
+        if edit["run_report"]:
+            reasons.append("run-report-in-task")
+    return unique(reason for reason in reasons if reason)
 
 
 @check("grants")
@@ -1203,6 +1248,306 @@ def feed_transition(data, ws):
     return unique(reasons)
 
 
+# HL-1 (cases 66-80): owner-selected home write policy and record lifecycle.
+PROCESSING_DATES = ("import", "annotation", "skill-version")
+NO_CHANGE_EVENTS = ("read", "no-op", "formatting", "reconfirmation")
+AUTHORITY_ORDER = ("live-owner", "memory", "confirmed", "extraction", "uncertain")
+PROPOSAL_FIELDS = ("field", "current", "proposed", "source", "revision", "date", "impact", "verification")
+
+
+@check("four-questions")
+def four_questions(data, ws):
+    reasons, write = [], data["write"]
+    if data["performed"]:
+        if policy_denial(data["policy"], write["target"]):
+            reasons.append("owner-policy-bypassed")
+        if not data["access"]["granted"]:
+            reasons.append("access-bypassed")
+        if not data["mandate"]["covers"]:
+            reasons.append("mandate-bypassed")
+        if write["effect"] in SEPARATE_AUTHORITY and not write.get("authority"):
+            reasons.append("separate-authority-bypassed")
+    if not data["report"]["separates"]:
+        reasons.append("questions-merged")
+    return unique(reasons)
+
+
+@check("grant-not-hardcoded")
+def grant_not_hardcoded(data, ws):
+    reasons, template, run = [], data["template"], data["run"]
+    text = (ROOT / template["path"]).read_text() if template.get("path") else template["text"]
+    choice = re.search(r'\bchoice:\s*"([^"]*)"', text)
+    if not choice or not choice.group(1).startswith("["):
+        reasons.append("template-choice-filled")
+    if re.search(r"^\s*protected:", text, re.M):
+        reasons.append("protected-key-present")
+    if not run["recorded"] and run["acts_on"] != "none":
+        reasons.append("grant-assumed")
+    if (run["recorded"] or {}).get("choice") == "whole-home" and run["refusal_imposed"]:
+        reasons.append("refusal-over-grant")
+    if run["recorded"] and run["asked_again"]:
+        reasons.append("choice-asked-again")
+    for w in each_workspace(data, ws):
+        policy = w.get("write_policy") or {}
+        if policy.get("choice") != "whole-home" or not policy.get("recorded"):
+            reasons.append("workspace-grant-unrecorded")
+    return unique(reasons)
+
+
+@check("containment")
+def containment(data, ws):
+    reasons, home = [], {data["root"], *data["named_stores"]}
+    if set(data["named_stores"]) & set(data["operational_sources"]):
+        reasons.append("source-as-store")
+    for record in data["records"].values():
+        if record["scope_from"] != "ancestry":
+            reasons.append("scope-from-label")
+        if record["ancestry_state"] != "known":
+            if record["written"]:
+                reasons.append("unresolved-ancestry-written")
+            elif not record.get("pending"):
+                reasons.append("ancestry-item-missing")
+        elif not home & set(record["ancestry"]):
+            if record["written"]:
+                reasons.append("out-of-scope-written")
+            elif record.get("moved") and not record.get("reported"):
+                reasons.append("move-unreported")
+    return unique(reasons)
+
+
+@check("policy-surfaces")
+def policy_surfaces(data, ws):
+    reasons, definition = [], data["definition"]
+    excluded = set(definition.get("exclude", []))
+    for surface in data["surfaces"].values():
+        own_excluded = set(surface.get("exclude", []))
+        if definition["choice"] == "whole-home":
+            if surface["choice"] != "whole-home" or own_excluded - excluded:
+                reasons.append("surface-narrower-than-grant")
+            elif excluded - own_excluded:
+                reasons.append("surface-wider-than-policy")
+        elif (surface["choice"] != "narrower" or not set(surface.get("include", [])) <= set(definition.get("include", []))
+              or excluded - own_excluded):
+            reasons.append("surface-wider-than-policy")
+    if data["pointer"]["refers_to"] != data["root"]:
+        reasons.append("pointer-not-by-reference")
+    rerun = data["rerun"]
+    if rerun["before"] != rerun["after"] and not rerun.get("explicit_change"):
+        reasons.append("rerun-changed-policy")
+    return unique(reasons)
+
+
+@check("recorded-forms")
+def recorded_forms(data, ws):
+    reasons, later = [], data["later_grant"]
+    for form in data["forms"]:
+        if not form["counts_as_policy"]:
+            reasons.append("form-not-policy")
+        if not form["kept"]:
+            reasons.append("form-dropped")
+        if form["job_gains"] and not later:
+            reasons.append("job-widened-without-grant")
+    if later and not (data["effective"] == "later-grant" and later["reconciled"] and later["change_recorded"]):
+        reasons.append("later-grant-ignored")
+    return unique(reasons)
+
+
+@check("separate-authority")
+def separate_authority(data, ws):
+    reasons = []
+    for action in data["actions"]:
+        if action["taken"] and action["kind"] in SEPARATE_AUTHORITY and not action.get("authority"):
+            reasons.append("authority-inferred-from-grant")
+    return unique(reasons)
+
+
+@check("writable-not-adoption")
+def writable_not_adoption(data, ws):
+    reasons = []
+    if data["source_text"]["kept_as"] != "evidence":
+        reasons.append("source-text-adopted")
+    if any(change["applied"] and not change["owner_input"] for change in data["changes"]):
+        reasons.append("policy-changed-without-owner")
+    if data["job"]["rewrote_write_policy"] or data["job"]["rewrote_source_list"]:
+        reasons.append("job-rewrote-own-scope")
+    if any(policy_denial(data["policy"], write["target"]) is None and not write["allowed"] for write in data["writes"]):
+        reasons.append("covered-write-refused")
+    return unique(reasons)
+
+
+@check("home-original")
+def home_original(data, ws):
+    reasons = []
+    for edit in data["edits"]:
+        if not (edit["accepted_input"] and edit["targeted"]):
+            reasons.append("original-edit-unaccepted")
+        if edit["reorganised"]:
+            reasons.append("original-reorganised")
+        if edit["overwritten"]:
+            reasons.append("original-overwritten")
+        if edit["bulk_imported"]:
+            reasons.append("original-bulk-imported")
+        if edit["default_destination"]:
+            reasons.append("original-default-destination")
+    return unique(reasons)
+
+
+@check("current-record")
+def current_record(data, ws):
+    reasons, records = [], list(data["records"].values())
+    current = [(record["key"], record["scope"]) for record in records if record["current"]]
+    duplicated = {key for key, scope in current if current.count((key, scope)) > 1}
+    flagged = {conflict["key"] for conflict in data["conflicts"] if conflict["state"] == "explicit-conflict"}
+    if data["appended_stack"]:
+        reasons.append("contradictory-append")
+    if duplicated - flagged:
+        reasons.append("duplicate-current")
+    if any(conflict["state"] != "explicit-conflict" for conflict in data["conflicts"]):
+        reasons.append("conflict-merged-blindly")
+    if any(record["current"] and record["summary"] != record["section"] for record in records):
+        reasons.append("summary-stale")
+    if data["input"]["relation"] == "same-topic":
+        if data["created"]:
+            reasons.append("page-per-input")
+        if any(record["current"] and not record["history"] for record in records):
+            reasons.append("history-lost")
+    elif not any(record["forward_to"] for record in records):
+        reasons.append("forward-link-missing")
+    if data["second_pass_writes"]:
+        reasons.append("second-pass-wrote")
+    return unique(reasons)
+
+
+@check("date-meanings")
+def date_meanings(data, ws):
+    reasons = []
+    for event in data["events"]:
+        if event["kind"] in PROCESSING_DATES and event["sets"] == "source_date":
+            reasons.append("processing-date-as-source-date")
+        if event["kind"] == "backfill" and event["sets"]:
+            reasons.append("date-backfilled")
+        if event["kind"] in NO_CHANGE_EVENTS and event["sets"] == "revised":
+            reasons.append("revised-without-substantive-change")
+        if event["kind"] == "substantive" and data["revised_selected"] and event["sets"] != "revised":
+            reasons.append("revised-not-set")
+    return unique(reasons)
+
+
+@check("review-due")
+def review_due(data, ws):
+    reasons, today = [], data["today"]
+    for record in data["records"].values():
+        if record["review_due"] and not record["reason"]:
+            reasons.append("review-due-without-reason")
+        if record["review_due"] and record["review_due"] < today and record["treated_as"] != "usable":
+            reasons.append("past-due-as-expired")
+    done = data["completion"]
+    if done["outcome"] == "no-change":
+        extra = set(done["writes"]) - {"review_due", "review_reason"}
+        if "revised" in extra:
+            reasons.append("review-set-revised")
+        elif extra:
+            reasons.append("review-extra-writes")
+        if done["due_after"] == done["due_before"]:
+            reasons.append("due-reread-forever")
+        if done["due_after"] and not done["reason_after"]:
+            reasons.append("review-due-without-reason")
+    return unique(reasons)
+
+
+@check("type-mapping")
+def type_mapping(data, ws):
+    reasons, stores = [], data["stores"]
+    if len(stores) > 1 and len({tuple(sorted(store["fields"])) for store in stores.values()}) == 1:
+        reasons.append("identical-schema-forced")
+    if "Inbox" in data["stale_flags"]:
+        reasons.append("inbox-as-stale")
+    if data["released_reference"]["hash_before"] != data["released_reference"]["hash_after"]:
+        reasons.append("released-reference-changed")
+    if data["plain_page"]["fields_added"]:
+        reasons.append("plain-page-altered")
+    if data["migration"]["forced"] or data["migration"]["new_database_suite"]:
+        reasons.append("forced-migration")
+    if not {"revised", "review-due"} <= set(data["provider"]["semantics"]):
+        reasons.append("provider-semantics-missing")
+    return unique(reasons)
+
+
+@check("retrieval-order")
+def retrieval_order(data, ws):
+    reasons, task, candidates = [], data["task"], data["candidates"]
+    chosen = candidates[data["selected"]]
+
+    def matches(candidate):
+        return candidate["owner"] == task["owner"] and candidate["scope"] == task["scope"]
+
+    comparable = [c for c in candidates.values() if matches(c) and c["status"] == "current"]
+    if comparable and not matches(chosen):
+        reasons.append("task-scope-ignored")
+    elif chosen["status"] != "current":
+        reasons.append("noncurrent-selected")
+    elif comparable and chosen is not min(comparable, key=lambda c: (AUTHORITY_ORDER.index(c["authority"]), c["age_days"])):
+        reasons.append("recency-over-authority")
+    if len(comparable) > 1 and not data["conflict_reason_kept"]:
+        reasons.append("conflict-reason-dropped")
+    if data["view_used_as_access_control"]:
+        reasons.append("view-as-access-control")
+    if data["recency_score_used"]:
+        reasons.append("recency-score")
+    if data["answer_from"] != "summary":
+        reasons.append("history-as-current")
+    return unique(reasons)
+
+
+@check("dependents")
+def dependents(data, ws):
+    reasons, affected, frontier = [], [], [data["revised"]]
+    while frontier:
+        parent = frontier.pop()
+        for name, source in data["depends_on"].items():
+            if source == parent and name not in affected:
+                affected.append(name)
+                frontier.append(name)
+    for name in affected:
+        output = data["outputs"].get(name, {"state": "current"})
+        if output["state"] == "current":
+            reasons.append("dependent-stays-current")
+        elif output["state"] == "refreshed" and not output.get("verified"):
+            reasons.append("failed-refresh-looks-current")
+        elif output["state"] == "needs-review" and output.get("in_current_answers"):
+            reasons.append("needs-review-in-current")
+    if any(not correction["survives"] for correction in data["owner_corrections"]):
+        reasons.append("owner-correction-lost")
+    if data["timestamp_as_proof"]:
+        reasons.append("timestamp-as-proof")
+    if data["replay_duplicates"]:
+        reasons.append("replay-duplicates")
+    return unique(reasons)
+
+
+@check("drift-and-binding")
+def drift_and_binding(data, ws):
+    reasons = []
+    for drift in data["drift"].values():
+        if drift["authority"] == "separate":
+            proposal = drift.get("proposal") or {}
+            if drift["proposals"] != 1 or not all(proposal.get(field) for field in PROPOSAL_FIELDS):
+                reasons.append("proposal-incomplete")
+            if drift["notified"] > 1 and not drift["changed_since_notice"]:
+                reasons.append("repeat-notification")
+        elif not (drift["repaired"] and drift["readback"]):
+            reasons.append("repair-unverified")
+    if not data["curation_continues"]:
+        reasons.append("curation-halted")
+    if data["pin"]["rewritten_to_pass"]:
+        reasons.append("pin-rewritten-to-pass")
+    if any(host["recorded_scope"] != name for name, host in data["hosts"].items()):
+        reasons.append("host-path-global")
+    if data["static_flag"]["overwrites_status"]:
+        reasons.append("static-flag-overwrote-status")
+    return unique(reasons)
+
+
 def fictional(value, path="fixture"):
     problems = []
     if isinstance(value, dict):
@@ -1241,8 +1586,8 @@ def main():
     failures += problems
 
     ids = [case["id"] for case in cases]
-    if ids != list(range(1, 66)):
-        failures.append(f"case ids are not 1..65: {ids}")
+    if ids != list(range(1, 81)):
+        failures.append(f"case ids are not 1..80: {ids}")
     for case in cases:
         label = f"case {case['id']:>2} {case['name']}"
         document, _, anchor = case["contract"].partition("#")

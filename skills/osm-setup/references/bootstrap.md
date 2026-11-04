@@ -22,8 +22,8 @@ runtime.
    unattended availability, fail closed on access loss, and define refresh,
    revocation and recovery; one platform's choice is not another's contract.
 4. **Qualify the runtime.** On the pinned selected runtime, qualify read,
-   create, update and readback; inherited access for new records; and denial of
-   an outside page. Use a useful, real, idempotent write. A connection name, a
+   create, update and readback once across the selected stores and nested pages;
+   inherited access for new records; and denial of an outside page. Use a useful, real, idempotent write. A connection name, a
    badge or a readable UI is not end-to-end readiness. Resolve failures without
    widening access.
    On each harness claimed as supported, check inherited account and
@@ -33,7 +33,10 @@ runtime.
 5. **Build.** Setup builds or adapts the one definition and only useful
    destinations inside the chosen boundary. Discover actual tools, accounts and
    canonical owners; ask what the customer uses and which outcomes matter; record
-   each source's placement and lifecycle choice. Verify one meaningful first task
+   each source's placement and lifecycle choice. Record the owner's write policy
+   once in the definition (whole-home is proposed, never assumed; an existing
+   recorded form is read and kept) and give the connector, the job prompt and
+   each pointer the same policy by reference. Verify one meaningful first task
    and its replay without duplicate objects.
    For each selected source, select its transport and format recipes once,
    including content egress and processor retention, or report the precise
