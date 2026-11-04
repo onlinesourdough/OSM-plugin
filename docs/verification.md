@@ -175,16 +175,18 @@ from the C1 head `4ab486f`; commits `83604a1`, `ec9b05e`, `77f25a9`) replaces th
 protected-write default with the owner's recorded write policy and adds the
 record lifecycle (#72, #73). It changes contract text, templates, fixtures, the
 rehearsal and six skill versions (Context 2.2.0, Setup 2.2.0, Maintain Context
-2.1.0, Check 3.1.0, Update 3.0.2, Manage Skills 2.0.1). It is fixture-level
-proof for the predicates and review proof for the prose.
+2.1.0, Check 3.1.0, Update 3.0.2, Manage Skills 2.0.1). The fixtures prove
+predicates over fictional data. The prose needs independent review: the first
+review of `70521a1` requested changes, which the repair round below addresses,
+and no review of the repaired text is recorded here.
 
-- **Rehearsal at `77f25a9`:** 80 positives and 50 valid variants pass, and 387
+- **First round, rehearsal at `77f25a9`:** 80 positives and 50 valid variants pass, and 387
   negatives are rejected; the raw exit is 0 with `failures=0`. Each of the 96
   negatives of cases 66 to 80 prints exactly its one expected reason, and the 28
   new positives and variants pass. Of the 383 result rows in the C1 head's log,
   the 376 of cases other than 5 and 40 are byte-identical in the new log and none
-  is removed. The 7 rows of cases 5 and 40 are the only changed rows; the other
-  new rows belong to cases 66 to 80.
+  is removed. The 7 rows of cases 5 and 40 are the only changed rows; of the
+  other new rows, 10 belong to cases 5 and 40 and 124 to cases 66 to 80.
 - **Cases 5 and 40, old and new.** Case 5 was "protected control record inside
   the knowledge store" (check `protected-write`, anchor
   `#protected-records-and-writes`): a positive for both workspaces and two
@@ -216,8 +218,9 @@ proof for the predicates and review proof for the prose.
   every one. In the first clean-clone run at `ec9b05e`, 106 were killed and one
   survived: removing case 75 variant 1's guard changed no row, because the
   variant held no substantive event. `77f25a9` repairs that variant and the
-  full set was re-run. Planning had earlier found two reason sites (cases 69 and
-  76) that no negative reached, and `ec9b05e` added one negative for each.
+  full set was re-run. The author states that planning had found two reason
+  sites (cases 69 and 76) that no negative reached, and `ec9b05e` added one
+  negative for each; no retained log shows that planning.
   `task-route-refused` was not mutated: it has no negative at the C1 head or now.
 - **Repository checks:** on a clean clone of `77f25a9`, `validate.py --baseline
   314dcf1`, the documentation, onboarding, layout, skill-version and footprint
@@ -225,7 +228,7 @@ proof for the predicates and review proof for the prose.
   the continuity check passed with a temporary directory outside every Git work
   tree. The footprint journey `codex-package-and-bridge-verification` is 42,781
   bytes against its 42,793-byte bound, so the Setup, curation and
-  setup-scenarios additions were cut to one line each. A search found no
+  setup-scenarios additions were cut to one or two lines each. A search found no
   `protected-records` under `skills/` or `tests/` and no `protected:` key in the
   root template. Fragment links resolve as before: 82 are checked (62 at the C1
   head) and the same two stale ones, in `README.md` and this file, were already
@@ -235,6 +238,73 @@ proof for the predicates and review proof for the prose.
 - **Retained evidence:** the raw logs and their hashes are kept only on the
   author machine, in a machine-local `osm-c1-a1-r1-20261102/evidence-hl1`
   directory.
+
+**Repair round after the first review** (commits `c365536` and `d9113b6`; the
+record you are reading is the commit after them). The independent review of
+`70521a1` requested changes with four blockers, and the lead reproduced all four.
+This round repairs them and a few leftovers; the remaining review follow-ups stay
+open.
+
+- **What was repaired.**
+  - *Human originals:* an original is now the original artifact or retained body,
+    and a Source or index record that points to it is an editable metadata
+    record; named-store and control records follow the recorded policy even when a
+    person wrote them. The earlier recognition by "human authorship" and the
+    "treat it as an original" default are gone. Case 73 now has five variants
+    (an owner-written Skill upkeep edit, a selected-source edit to an original, a
+    Source record updated while the original keeps its body, a refusal that a
+    narrower policy justifies, and a current-task edit) and nine negatives.
+  - *Notion operating route:* the maintenance limit applies to what a run reads,
+    not to what the policy lets it write, and notices follow the architecture's
+    drift rule.
+  - *Dates:* case 75 compares real before and after values of the source date and
+    Revised, so an unknown date stays null, a single date stays that date, and
+    no-op and formatting events leave both unchanged.
+  - *This record:* the "review proof for the prose" claim, the attribution of the
+    new rows, the unretained planning statement and "one line each" are corrected
+    above.
+  - *Also:* external operational stores are no longer home containment, and daily
+    upkeep reads the recorded policy instead of a superseded allowlist (case 40
+    negative 1 now expects `daily-canonical-write`); three more separate-authority
+    kinds (source selection, external send, other consequential action); Check's
+    pending item for an existing recorded form; the template comment for stores
+    the definition names outside the root; "flagged", a substantive completed
+    review and the Dependents clauses in the architecture; and three stale phrases.
+- **Rehearsal at `d9113b6`:** 80 positives and 58 valid variants pass, and 401
+  negatives are rejected; the raw exit is 0 with `failures=0`. Against the log of
+  `77f25a9`, 516 rows are byte-identical, 1 is changed (case 40 negative 1, above)
+  and 22 are added, each named in the retained row diff. Against the log of the C1
+  head, the 376 rows of cases other than 5 and 40 are byte-identical, and the
+  other differences are in cases 5, 40 and 66 to 80.
+- **Fail-first and mutations:** with each of the 17 new or changed checks stubbed
+  to accept everything, every negative of those cases is accepted, every positive
+  and variant passes and no other case's rows change. The `70521a1` harness on the
+  repaired fixtures raises `TypeError` at case 73. For the predicates and clauses
+  this round changed or added, 64 mutated scripts were run on a clean clone: 27
+  disabling a reason, 3 on the shared policy helper, 1 putting the external
+  operational stores back into `home_stores`, 22 removing a member of one of four
+  tuples (including each of the four no-change events) and 11 removing a clause.
+  A mutation counts as killed when every row it targets changes; the target list is
+  the author's. All 64 were killed, one of them by a harness crash, and the script
+  was restored byte-identical after each. The other predicates have identical
+  function text in `77f25a9` and `d9113b6`, and their cases' fixtures are
+  unchanged, so the earlier mutation results stand for them.
+- **Fixtures are read-backs in part.** Many new fixtures state a behaviour as a
+  field the predicate reads back, so they prove the predicate's wiring, not agent
+  behaviour, and the mutation counts must be read that way.
+- **Repository checks:** on a clean clone of `d9113b6`, `validate.py --baseline
+  314dcf1`, the documentation, onboarding, layout, skill-version and footprint
+  checks, and `git diff --check` from `314dcf1` and from `70521a1` passed; the
+  footprint figure is unchanged at 42,781 against 42,793 bytes. A search found no
+  `protected-records` under `skills/` or `tests/` and no `protected:` key in the
+  root template.
+- **Continuity was not rerun.** `tests/continuity-rehearsal.py` keeps blob
+  `9900f5cc4b35832b323c44ccd477edaa1f2a3840` and `skills/osm-setup/assets/owner`
+  keeps tree `3b95d53d63dc246dc6f4115ec0f6035af5f3f287`, the same as at the C1
+  head, and the script reads only itself and those assets. The continuity result
+  therefore stays bound to `77f25a9`.
+- **Retained evidence:** the repair round's logs are kept only on the author
+  machine, in a machine-local `osm-c1-a1-r1-20261102/evidence-hl1b` directory.
 
 **NOT VERIFIED for HL-1.** Real provider containment, inheritance and
 permissions, and real connector routes; Setup, rerun, interrupted adoption and
