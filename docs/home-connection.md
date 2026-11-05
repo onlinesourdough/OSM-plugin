@@ -18,6 +18,11 @@ is a workspace bot that reads only the pages and databases explicitly shared
 with it, and their children. Its
 [capabilities](https://developers.notion.com/reference/capabilities) control
 reading, inserting and updating separately. Home needs **Read content** only.
+That describes this panel alone. Home being a read-only view neither limits nor
+implies the owner's recorded write policy for agents and the maintenance job,
+which the Context Architecture's
+[home write policy](../skills/osm-context/references/architecture.md#home-write-policy)
+defines.
 
 Grants Setup asks the owner for:
 

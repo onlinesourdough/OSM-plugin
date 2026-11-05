@@ -13,6 +13,7 @@ selected documentation for people; it is a reader of this source.
 | How do the parts and their responsibilities fit together? | [Architecture](architecture.md) |
 | Which method should I use? | [Skill index](skills.md), then the relevant skill |
 | How do I install, update, switch or recover an app registration? | [Native installation](native-installation.md) |
+| How is my context home organised, what may agents write there, and how are records kept current? | [Context Architecture](../skills/osm-context/references/architecture.md): its [home write policy](../skills/osm-context/references/architecture.md#home-write-policy) and [record lifecycle](../skills/osm-context/references/architecture.md#record-lifecycle) |
 | What does the Codex panel actually do? | [Sidebar](sidebar.md) |
 | How do I contribute? | [Repository contract](../AGENTS.md) |
 

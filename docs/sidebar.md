@@ -5,7 +5,8 @@ Revision: 2026-10-26
 ## Home
 
 Home is a quiet, read-only view of the owner's recorded context and personal
-skills. It follows the approved design (#74): the context-tile mark, Context and
+skills. That describes the panel only; it is not the owner's write policy for
+agents. It follows the approved design (#74): the context-tile mark, Context and
 Skills tabs (Arrow, Home and End keys), sections from Setup's projection in its
 order and labels, and two titles per section with More/Show fewer. A title
 opens a read-only article in place. It shows the mapped Fact, Decision, Why and
