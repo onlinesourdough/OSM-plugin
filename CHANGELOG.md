@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+This section and the `0.31.0` section below are both unreleased; reconcile them
+into one dated entry before any tag.
+
 - The OSM Context Architecture (`skills/osm-context/references/architecture.md`)
   is the one shared contract for a customer's Data & Context root. It covers:
   - one neutral root with one definition;

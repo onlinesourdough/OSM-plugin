@@ -23,9 +23,12 @@ input: Context 2.2.0, Setup 2.2.0, Maintain Context 2.1.0, Check 3.1.0, Update
   historical text here, no `protected:` key in the root template, no claim that
   writes cover only Knowledge and Memory, and no conflict marker. K5's Home docs
   already say that Home reports `unsupported_host` and makes no request where
-  the host has no supported secret store; no text implies Home's internal
-  connection works there. Fragment links resolve except one stale link in this
-  file that predates the integration.
+  the host has no supported secret store; no text states that Home's internal
+  connection works there. My anchor scanner flagged one link in this file,
+  `#tracking-sop-revision--2026-09-09`, which predates the integration. The
+  flag is the scanner's limitation: its whitespace rule collapses the two
+  hyphens. The independent review's own check of 741 relative links found none
+  broken, so the GitHub slug is valid.
 - **Checks on a clean clone of `f49813b`.** The context rehearsal gives 80
   positives and 58 valid variants passing and 401 negatives rejected with
   `failures=0`, and its output is identical, once the step wrapper's own lines
@@ -36,9 +39,11 @@ input: Context 2.2.0, Setup 2.2.0, Maintain Context 2.1.0, Check 3.1.0, Update
   against its 42,793-byte bound, the same as at the HL-1 head; no trim was
   needed and no bound or script was changed.
 - **Sidebar.** `npm` is not installed in the sandbox, so `npm ci --offline` could
-  not run (command not found). The lockfile of the lead's checkout equals the
-  candidate's apart from the root package version fields, and its
-  `node_modules` was copied into the clone, not linked. The package scripts' own
+  not run (command not found). The lockfile of my own Home worktree checkout
+  equals the candidate's apart from the root package version fields, and its
+  `node_modules` was copied into the clone, not linked. The copied tree was not
+  integrity-checked against the lockfile, so this is not a fresh or hermetic
+  install. The package scripts' own
   commands were run with `node`: the build leaves `runtime/sidebar`
   byte-identical to the committed one, and the 182 unit tests and the bundled
   smoke pass. `apps/sidebar` and `runtime/sidebar` are byte-identical to K5's.
@@ -53,18 +58,26 @@ input: Context 2.2.0, Setup 2.2.0, Maintain Context 2.1.0, Check 3.1.0, Update
 - **Installability.** The README and `docs/native-installation.md` install OSM
   through the app's package manager from the public repository, optionally at a
   reviewed tag or immutable commit. This candidate is local only and has no tag,
-  so the Codex, Pi and Gemini routes, which read the repository, cannot reach it
-  until its commits are published. Claude Code can install from a local checkout
-  at a selected ref. Nothing has been installed. An owner trying it would
-  install at that ref, start a fresh session, ask OSM Setup to set up the
-  context, choose and record a write policy, and run Check read-only.
+  so those public routes cannot reach it until its commits are published. The
+  adapter references document local-path routes for an authorized local pilot
+  on Codex (`adapter-codex.md`), Pi (`adapter-pi.md`) and Gemini
+  (`adapter-other.md`), and `docs/native-installation.md` documents a local
+  checkout for Claude Code. None of those routes was run on this candidate, and
+  no installation is authorized here. Only Codex has the sidebar and Home, so an
+  owner test of the panel means a Codex local pilot with Node.js 22+ and a fresh
+  task. An owner trying the method would start a fresh session, ask OSM Setup to
+  set up the context, choose and record a write policy, and run Check
+  read-only.
 - **Home and hosts.** Per `docs/home-connection.md`, Codex is unsupported for
   Home's internal connection (`unsupported_host`, no request is made), and for
   Claude Code the secret-store mechanism is supported but not declared, with no
-  native Claude Home. Home therefore cannot read live Notion content on any host
-  in this candidate; saved links still work.
-- **Carried and not fixed.** C-04 to C-09, R-10, R-11, and the dropped parts of
-  R-13, R-14 and R-15 remain open. CI does not run the context rehearsal.
+  native Claude Home. As documented, Home therefore reads no live Notion content
+  on any host in this candidate; that was not exercised natively. Saved links
+  still work.
+- **Carried and not fixed.** C-04 to C-09, INT-05, INT-09, R-10, R-11, and the
+  dropped parts of R-13, R-14 and R-15 remain open. A neutral root with no
+  already recorded definition revision leaves only Home's projection pending.
+  CI does not run the context rehearsal.
 - **Retained evidence:** the raw logs and their hashes are kept only on the
   author machine, in a machine-local `osm-c1-a1-r1-20261102/evidence-int`
   directory.

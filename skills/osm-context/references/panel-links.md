@@ -31,7 +31,21 @@ The AI Operating Model's Data and Context Definition is the one place that holds
 source and query identities. Home stores only a projection generated from one of
 its revisions; never edit that projection or keep it as a second map.
 
-1. Read the definition and its revision. Record the owner's `selectedMode`:
+In a Data & Context root the definition is the root's YAML block (see
+[Root and entry](architecture.md#root-and-entry)), and a projection needs two
+things the block does not supply. Its `definition.id` and canonical title come
+from the selected root's already verified stable native identity (in Notion, the
+exact root page ID); never fabricate an id. It also needs a definition revision
+already recorded with known provenance under the selected existing rule. The
+block's `version: 1` is its format, not a content revision, and a revision is
+never invented from that version, the generation time or an implicit mapping.
+Without that identity or revision, leave only Home's projection unsaved and
+pending, keep the saved links and report one concise gap; Setup and other work
+continue. Existing definitions with a verified id and revision keep working.
+`generatedAt` is the actual time the projection is generated, not a source fact,
+and the YAML need not contain it.
+
+1. Read the definition and its recorded revision. Record the owner's `selectedMode`:
    `official_notion_user` or `internal_selected_pages`. Never switch it, and
    never create the internal connection only to fill Home. Home reads only
    through the internal connection; an official projection shows saved links
@@ -54,8 +68,10 @@ its revisions; never edit that projection or keep it as a second map.
    and dated `observed` access per readable section. This is a limitation of
    this phase, not proof of a grant. A linked external database needs its own
    grant; record it as `inaccessible`. Never ask for a token in chat.
-5. Call `osm_save_home_projection` with the definition's `id`, `title`,
-   `revision` and `generatedAt`, the context target, `expectedContextRevision`
+5. When the identity and recorded revision above are known, call
+   `osm_save_home_projection` with the root's verified `id`, the canonical
+   `title`, the recorded `revision` and the actual `generatedAt`, the context
+   target, `expectedContextRevision`
    and `home.revision` from `osm_sources`; read back. Content changes only with
    a new definition revision. When regenerating saved links from the same
    revision, pass `definitionRevision` to `osm_save_sources`; they stay a partial

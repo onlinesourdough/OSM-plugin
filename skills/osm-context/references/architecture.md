@@ -844,7 +844,9 @@ shortcuts are a compatibility aid, never a second source of authority.
 ### Selected connection for Preview, Home and bootstrap
 
 Preview, Home and bootstrap read the root and its sections through the
-customer's selected limited connection.
+customer's selected limited connection. Home reads a projection of the
+definition and currently reports `unsupported_host` on every host; see
+`docs/home-connection.md` in the repository.
 
 - Reading the root never requires an unselected broader Notion connector, and a
   denial is never retried through one.

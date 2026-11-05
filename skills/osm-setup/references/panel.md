@@ -34,7 +34,9 @@ the panel. Hosts without one report Home as unavailable; continue with saved
 links. A scoped connection does not limit any other Notion route the agent can
 use. Record the owner's selected mode and never switch it after a denial. Save
 Home's projection of the definition with Context's
-[dashboard-link procedure](../../osm-context/references/panel-links.md#home-projection).
+[dashboard-link procedure](../../osm-context/references/panel-links.md#home-projection),
+and only when the root's verified identity and an already recorded definition
+revision exist; otherwise leave it unsaved and pending and keep the saved links.
 
 The panel stores navigation names and links, and the Home projection's identities and labels. Company information remains
 in its source; shared methods remain in the plugin. Its saved link is not an
