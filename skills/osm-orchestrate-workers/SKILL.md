@@ -75,7 +75,7 @@ prove final bytes and write no owner memory. Local contracts still govern.
 ## Evidence and recovery
 
 If judgment exceeds the handoff/route, pause affected work and return the gap.
-The caller reopens Spec or Select Model. Retain worker state and one writer;
+The caller reopens Spec or model advice. Retain worker state and one writer;
 Review PASS or Ship does not settle new decisions.
 
 Return once: files/hashes, checks/scope, evidence gaps, goal/todo, recovery/stop,

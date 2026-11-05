@@ -62,7 +62,7 @@ needs only one area. Reuse actual methods and allow Memory to start empty.
 
 Verify the connected workspace/account and available tools. Qualify reads,
 inserts and updates once across the selected stores and their nested pages
-(Knowledge, Memory, Skills, any Content and the control records), not per store
+(Knowledge, Memory, Skills, any selected existing Content store and the control records), not per store
 or per write. Reuse the owner's
 work destinations and memory structure when suitable. A human Business home or
 Docs library keeps its structure and is no longer a curation destination; see
@@ -174,7 +174,7 @@ restate it. An existing recorded form (a `protected:` list, an Updates note or a
 CONNECTIONS entry) is read and kept, and a rerun never drops a narrower choice.
 See the architecture's [home write policy](../architecture.md#home-write-policy).
 
-Make [Maintain Context](../../../osm-manage-data-context/SKILL.md) usable at natural task
+Make [Manage Data & Context](../../../osm-manage-data-context/SKILL.md) usable at natural task
 checkpoints within the recorded read/write policy. No timer is required.
 Setup or general upkeep authority does not authorize a recurring task. Use the
 host's scheduler only for an explicit recurring-work request with bounded

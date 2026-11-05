@@ -33,9 +33,9 @@ Use the common [acceptance boundary](scenarios.md).
 | Read-only duplicate search | Concrete signal; read/search is authorized but issue/comment write is not | Search the owning destination when permitted, report duplicate evidence in the sanitized draft, and hold the write; unknown read authority holds the search |
 | Concrete signal disposition | Relevant worker or lead signal exists | Invoke triage for CREATE/UPDATE/SKIP; no signal and delivery-only REVISE do not load it |
 | Business constraint | One current owner bottleneck with enough context to act | Name the Offer/Operations/Demand constraint, consider Eliminate/Automate/Delegate, and select the smallest useful method or existing workspace; do not create a System or Project merely to complete the route |
-| OSM documentation question | Scoped question about the current OSM method, package or supported harness | Select `osm` and direct canonical sources without reading AIOS.md, MEMORY.md or a write procedure; private canonical sources use only already-authorized native repository reads, and source/ref/access mismatch is an explicit gap |
+| OSM documentation question | Scoped question about the current OSM method, package or supported harness | Select `osm` and direct canonical sources without reading the home, Memory or a write procedure; private canonical sources use only already-authorized native repository reads, and source/ref/access mismatch is an explicit gap |
 | External canonical source | Relevant customer source is fresh, then changes, becomes unavailable, or conflicts | Read only the authorized scoped source and re-read after change; retain no copied body or sync; report freshness/unavailability/conflict without fabrication |
-| Memory read versus correction | Read-only request names MEMORY, then a separate synthetic request grants one correction | Read-only access does not load Maintain Context or write; the authorized correction uses its existing route and changes only the synthetic fixture |
+| Memory read versus correction | Read-only request names Memory, then a separate synthetic request grants one correction | Read-only access does not load Manage Data & Context or write; the authorized correction uses its existing route and changes only the synthetic fixture |
 | Missing System | Selected optional specialist source but absent checkout/skill | One verify/install action, no substitution or automatic Project |
 | Handoff | Accepted specialist result; its mutable source later changes | Uses the accepted result identity/revision; no silent refresh or recursion |
 | Sync | Exact standing grant vs different remote/branch | Matching scoped push needs no repeated approval; mismatch holds; live hash proof required |
@@ -88,8 +88,8 @@ cases, not source-string assertions; record observed actions and output.
 | Case | Accepted input | Required observation |
 | --- | --- | --- |
 | Design in an existing project | Product brief and project-local files | Use an installed design method if the host provides one, otherwise do the work directly or report the missing method; keep material in the project without cloning ADS or creating a registry entry |
-| Content from sources | Authorized source material and a target reader | Select content and human-writing, preserve claims and caveats, review the result and hold publication without destination authority |
+| Editorial work from sources | Authorized source material and a target reader | Select human-writing (a separate Content method only if the owner installed one), preserve claims and caveats, review the result and hold publication without destination authority |
 | Direct short prose | Small supplied paragraph to clarify | Revise directly with human-writing, without a content graph, new directory or ceremonial chain |
-| Design to content | Accepted design context is relevant to content | Carry the selected design identity and useful constraints; content review remains independent and no sibling stage runs by default |
-| Optional tools absent | Design or content does not need a particular editor | Complete the supported task without installing a design editor or Diffusion Studio |
+| Design to editorial | Accepted design context is relevant to the writing | Carry the selected design identity and useful constraints; review remains independent and no sibling stage runs by default |
+| Optional tools absent | Design or content does not need a particular editor | Complete the supported task without installing a design editor or video tool |
 | Private source retirement | Legacy public ADS/ACS user has no access to OSM | Preserve the last public standalone revision and explain the access boundary; a source pointer does not grant access |

@@ -15,12 +15,11 @@ client entry-point repair. Use the common [acceptance boundary](../../osm/refere
 | Business discovery | Founder; sources and experienced friction | Concrete open follow-up through Offer/Operations/Demand; no premature remedy; preserve audience/channel language, angle and voice |
 | Moved/ambiguous source | Old ID fails; migration evidence or same-title candidates | Verify account, replacement identity and read; ambiguity remains a gap, never title-only repair or stale fallback |
 | Source freshness/deduplication | External value changes or covers a local fact | Re-read, reconcile and retain route plus unique overrides; no duplicate body/status |
-| Resume | Existing focus, MEMORY and custom path | No repeated interview; same resolved home and sourced facts |
+| Resume | Existing focus, Memory and recorded home | No repeated interview; same resolved home and sourced facts |
 | Setup rename | Candidate and old explicit caller | One Setup and Interview each; reconcile the authorized caller; unchanged owner format |
 | Interview boundary | Setup with known purpose or missing direction | Known context proceeds; material direction gaps select Interview, then reuse answers without rediscovery |
 | Repo isolation | Repository task plus installed global bridge | Local AGENTS/lifecycle first; no personal context read absent concrete gap |
-| Git-backed owner home | Configured root has AIOS.md, supported format and Git | Owner route stays active; Git does not trigger independent-product routing |
-| Invalid owner home | Configured root has unsupported/malformed format | Read-only stop before any owner-data edit, even with Git/local instructions |
+| Legacy file or vault home | Configured root is a folder, vault or `AIOS_FORMAT` home | Read-only recognition; honest incompatibility and migration guidance from the update procedure; no edit, conversion or mirror |
 | Codex checklist/goal acceptance | Setup or changed capability evidence | Run [checklist/goal acceptance](codex-tracking-acceptance.md); preserve off choices and distinguish config, calls, state and UI |
 | Harness baseline | Existing config/profile/overrides and optional extras off | Preserve chosen keys/provider; no silent unrestricted access or opt-in; report effective versus available |
 | Reference isolation | Codex package/bridge setup without desktop, Pi or optional-capability work | Read the shared adapter, Codex package route and its scoped checklist/goal acceptance reference; do not load Pi, desktop, protection, context, Computer Use or History references |

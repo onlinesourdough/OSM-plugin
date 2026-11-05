@@ -2,7 +2,7 @@
 
 This is the one shared contract for a customer's Data & Context home. Setup
 adapts it to the customer's actual systems, access, existing stores and business
-questions; Maintain Context executes it; Check diagnoses it read-only; Update
+questions; Manage Data & Context executes it; check diagnoses it read-only; update
 preserves owner extensions and history. Skills reference this file instead of
 restating it. It is plugin method, never customer data: do not copy it into the
 customer's workspace, generate an architecture page there, or preload it during
@@ -542,7 +542,7 @@ apart:
 2. **Actual access**: what the provider's actual grants allow. A narrower policy
    is honoured by the method; it is not provider enforcement.
 3. **Task mandate**: what the current task or the standing job is for. A
-   task-time Maintain Context checkpoint is the current task's mandate for
+   task-time Manage Data & Context checkpoint is the current task's mandate for
    ordinary upkeep; a scheduled job's mandate is its prompt.
 4. **Effect**: whether this is ordinary record upkeep or an action with
    [separate authority](#separate-authority).
@@ -604,8 +604,7 @@ or source selection.
 
 A record is in scope only through actual containment: under the selected root, or
 under a store the definition names by exact identity as part of this home.
-Containment means page, data-source or database ancestry in Notion and the
-provider's equivalent elsewhere. An operational source or reference entry does
+Containment means page, data-source or database ancestry in Notion. An operational source or reference entry does
 not add its target to the home. Labels, Kinds, views, remembered IDs and familiar
 Keys are not boundaries.
 
@@ -729,12 +728,12 @@ Type mapping, with no identical schema forced on all stores:
   automatically. Owner-method upkeep under a recorded grant, including a
   scheduled job, follows the skill lifecycle, and a team method keeps its agreed
   change authority.
-- **Content (optional):** keeps its own workflow fields. Its editorial Inbox is
-  not a staleness flag.
+- **A selected existing Content store:** keeps its own workflow fields; OSM
+  neither creates nor ships it. Its editorial Inbox is not a staleness flag.
 - **Plain pages:** stay usable with no added fields.
 - **Released references:** keep their exact source, version and hash contract.
-- **Non-Notion homes:** the same semantics through existing frontmatter, sections
-  or folders, with no forced migration or new database suite.
+- **Legacy file and vault homes:** read-only; nothing here applies these semantics
+  to them or migrates them.
 
 ### Maintenance loop
 
@@ -743,7 +742,7 @@ flagged records (flagged means marked Needs review, or carrying an owner or
 drift flag at the record itself). For each: reread, revise the concise current
 record, keep relevant history, verify, and set only meaningful dates. A missing source or
 owner choice becomes a precise pending item. Unchanged content gets no rewrite
-and no date. Context upkeep stays core without the Content companion and keeps
+and no date. Context upkeep stays core without any Content store and keeps
 one existing job with its runtime, scope and checkpoints.
 
 - **Completing a review.** A completed review with no substantive change leaves
@@ -946,7 +945,7 @@ runtime.
 The same limit applies to the write policy and record lifecycle. The fixtures
 prove predicates over fictional data, not this prose. They do not prove real
 provider containment, inheritance and permissions, real connector routes, Setup,
-rerun or interrupted adoption on a real home, a real non-Notion home, pointer
+rerun or interrupted adoption on a real home, pointer
 loading, the changed manual method on a real home, two real hosts, a real
 multi-hop refresh, or a real naturally scheduled run (a run-now, a job API
 success or a read-back configuration is not one).

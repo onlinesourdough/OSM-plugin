@@ -133,7 +133,7 @@ adapter's Claude-only check. See the official
 After method installation, the user can ask in ordinary language to set up OSM
 for their work; `/osm:osm-setup` is Claude's explicit entrypoint. Continue the
 shared [setup method](../SKILL.md), which selects Interview only when needed,
-existing-home discovery, supported format checks and first useful task. Installing
+Notion home discovery and the first useful task. Installing
 this plugin creates no owner home, personal bridge or hidden agent and grants no
 additional access. Keep owner data outside the plugin cache.
 

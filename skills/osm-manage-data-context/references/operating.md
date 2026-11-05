@@ -60,7 +60,7 @@ with their pending destination; unrelated repository work continues.
 
 ## Maintenance
 
-Default to [Maintain Context](../SKILL.md) during the
+Default to [Manage Data & Context](../SKILL.md) during the
 current work, at a durable decision/correction or before finishing. Use the
 recorded policy's sources and destinations; save the useful change, not a routine
 run log. Compare existing identity and meaning before writing. An unchanged

@@ -1,10 +1,10 @@
 # Selective durable context
 
 Own context mapping, local gaps, source repair and deduplication. Setup uses
-this for new/changed context; retrieval does not. Before owner writes verify
-AIOS_FORMAT via [data compatibility](../../../docs/legacy-file-home/data-format.md);
-unsupported/malformed stays read-only, missing needs setup. Git-backed durable
-edits use [Sync](../../../docs/legacy-file-home/sync.md) under recorded authority.
+this for new/changed context; retrieval does not. Before owner writes confirm
+the Notion home and its recorded write policy; a legacy folder or vault home stays
+read-only (see the [legacy-home guidance](../../osm/references/update.md#legacy-file-and-vault-homes)),
+and a missing home needs [Setup](../../osm-setup/SKILL.md).
 
 ## Minimum useful framework
 
@@ -29,7 +29,7 @@ Optional gaps do not prevent a useful bounded result.
 
 Keep facts in one canonical source. Retain a short route: source owner/account
 purpose, scoped link/ID, intended use and freshness boundary. Add title/parent
-or migration provenance when identity needs it. CONNECTIONS owns access path,
+or migration provenance when identity needs it. The definition owns access path,
 tested capability, exact authority and dated verification; reference it.
 
 Do not copy, sync, summarize wholesale or harvest
@@ -39,14 +39,14 @@ an offer document does not own installation instructions. Recency, title or
 successful access alone proves neither canonical ownership nor permission.
 
 If useful durable knowledge has no established external home, keep only missing
-owner-confirmed meaning with source/date, scope and use in a few local lines.
-Prefer an existing relevant file. An inaccessible source does not mean knowledge
+owner-confirmed meaning with source/date, scope and use in a few lines of the
+relevant Knowledge record. An inaccessible source does not mean knowledge
 is absent. Leave unresolved facts unknown; invent no persona or exhaustive profile.
-MEMORY holds durable corrections/preferences; topic facts use routed context.
+Memory holds durable corrections/preferences; topic facts use routed context.
 Never retain credentials or runtime model/effort inventories.
 
-A file home's policy is its CONNECTIONS entry; none is inferred.
-Keep one current entry per topic.
+The write policy is the root's recorded `write_policy`; none is inferred.
+Keep one current record per topic.
 
 Preserve owner corrections with provenance and narrow override scope. Surface
 material conflicts. When a source covers a local fact, reconcile before replacing
@@ -71,10 +71,10 @@ Preserve unique decisions, overrides and gaps. Remove superseded operational
 copies, even if labelled historical; keep change evidence in the task.
 Source indexes never mirror repository plans or source.
 
-Keep AIOS.md a short orientation/index: aim for 100 lines/6 KB and AIOS.md plus
-MEMORY below 12 KB; budgets never justify losing unique knowledge. Context names
+Keep the root entry a short orientation/index and the definition one record;
+size budgets never justify losing unique knowledge. Context names
 scope, Use when and source; load no whole directory. Repository workers propose
 corrections; one owner writer checks exact source bytes before patching. Concurrent
 changes preserve both and stop that write.
-A read of MEMORY alone neither invokes this procedure nor grants write authority;
+A read of Memory alone neither invokes this procedure nor grants write authority;
 durable maintenance uses recorded or standing authority.

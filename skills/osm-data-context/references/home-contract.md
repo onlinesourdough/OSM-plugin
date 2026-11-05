@@ -39,7 +39,7 @@ For business setup or a foundation audit, use the [business coverage check](../.
 Map Offers, Demand and Operations to useful sources or explicit gaps. This does
 not require a document for each topic, a personal skill or prefilled Memory.
 
-At meaningful decisions, corrections and task checkpoints, use Maintain Context
+At meaningful decisions, corrections and task checkpoints, use Manage Data & Context
 under the recorded write policy or the current task's authority. Reconcile
 identity and meaning before creating; keep one current record per topic and
 scope, with dated history, and preserve reasons and exclusions. No new durable

@@ -26,4 +26,4 @@ decision. Re-read the effective skill list after restart: the declared OSM names
 once, owner methods once, supported links intact. OSM adds no global discovery
 filter. Preserve ambient and trusted repository-local skills, existing explicit
 resource choices and separately selected owner-method registrations. Use the [identity migration](migration.md)
-and [owner-method migration](../../../docs/legacy-file-home/data.md) only when that collision is present.
+only when that collision is present.

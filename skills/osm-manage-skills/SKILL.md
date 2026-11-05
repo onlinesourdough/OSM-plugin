@@ -14,8 +14,8 @@ This OSM skill owns the reviewed lifecycle for capabilities and personal/team
 skills: creation/import/edit/rename/removal decisions, canonical placement,
 registration and discovery, plus adoption, update and rollback. Follow the
 [owner skill lifecycle](references/owner-skills.md) for personal/team methods. The
-native Skill Creator owns authoring mechanics; Maintain context owns durable
-owner facts and configured Git sync. Neither takes back this lifecycle.
+native Skill Creator owns authoring mechanics; Manage Data & Context owns durable
+owner facts. Neither takes back this lifecycle.
 
 Use the resolved context provider for owner placement and discovery through
 that lifecycle; a cloud page is not automatically a native installation.

@@ -83,6 +83,6 @@ Spec owns scope and proof, and does not repeat discovery. An interview-only
 request ends with the useful understanding, without manufacturing a build task.
 
 Keep project decisions with the project and external facts at their source.
-Only relevant durable owner facts use [Maintain Context](../osm-manage-data-context/SKILL.md)
+Only relevant durable owner facts use [Manage Data & Context](../osm-manage-data-context/SKILL.md)
 under existing authority. Do not save raw transcripts, temporary project plans
 or speculative answers as owner memory. A separate document is optional.

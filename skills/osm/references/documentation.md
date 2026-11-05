@@ -13,10 +13,10 @@ Reading a method to explain it does not start that workflow or load owner data.
 | How work is selected and carried through | [Routing](routing.md) and the relevant part of [the lifecycle](lifecycle.md) |
 | How interview, setup and delivery methods connect | The overview's [connected work methods](../../../docs/osm.md#connected-work-methods), then the selected skill |
 | How installation, updates or removal work in a selected app | [Native adapters](../../osm-setup/references/adapters.md) |
-| How to choose, set up or check a context home | [Context](../../osm-data-context/SKILL.md) |
+| How to set up or check a Notion context home | [Setup](../../osm-setup/SKILL.md), [Data & Context](../../osm-data-context/SKILL.md) and [check](check.md) |
 | How Notion context and personal skills work | [Notion operating route](../../osm-manage-data-context/references/operating.md) |
 | How owner context and external sources are maintained | [Context curation](../../osm-manage-data-context/references/curation.md) |
-| How owner data moves between machines | [Continuity Sync](../../../docs/legacy-file-home/sync.md) |
+| How to update OSM or move off a legacy file home | [Update](update.md) |
 
 Use already available skill descriptions to select a particular method; open its
 instructions only when the question needs them. For a current release, changed

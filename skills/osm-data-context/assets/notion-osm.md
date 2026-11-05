@@ -78,7 +78,7 @@ description. Their systems keep the live records. Omit if no extra routes matter
 <summary>For connected agents</summary>
 
 	Read this entry once per session for work using or changing this context. Use
-	OSM Context and select only the relevant Space, topic and current sources.
+	OSM Data & Context and select only the relevant Space, topic and current sources.
 	General questions and independent repositories use their own inputs.
 
 	- Workspace and home: [verified identity and home link].
