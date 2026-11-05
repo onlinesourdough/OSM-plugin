@@ -32,7 +32,8 @@ Selected-read ceilings are unchanged; byte counts are not runtime token usage.
 The domain suites pass 18 design tests, 27 Node content tests and 14 Python
 content tests. Run `python3 -B -m unittest discover -s tests/design`,
 `node --test tests/content/*.test.mjs`, and
-`python3 -B -m unittest discover -s tests/content`.
+`python3 -B -m unittest discover -s tests/content`. (Since #88 the content tests
+are at `docs/content-drafts/tests`; see [content drafts](content-drafts/README.md).)
 They run copied helpers against external synthetic working folders.
 They cover their documented operations, preservation and path boundaries.
 They do not prove installation or operation of OpenPencil, Diffusion Studio,

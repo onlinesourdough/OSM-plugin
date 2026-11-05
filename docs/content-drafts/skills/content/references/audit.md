@@ -13,7 +13,7 @@ explicit edges, optional targets, exact node approval, freshness and the four
 supervised/not-posted handoff invariants. The validator cannot verify a
 reviewer’s real decision. Missing evidence is not PASS.
 
-For requested Studio readiness, use [Diffusion](../../diffusion-studio/SKILL.md)
+For requested Studio readiness, use [Diffusion](../../diffusion-studio/method-draft.md)
 `check` and, if runtime state is in scope, `status`. Report official origin/base,
 fork branch/pin, drift or unavailable live heads, cleanliness, package manager,
 build, DAPI health and browser limitations separately. Attribute existing public

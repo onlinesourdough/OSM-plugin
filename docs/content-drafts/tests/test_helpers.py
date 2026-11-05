@@ -13,7 +13,7 @@ import unittest
 from urllib.parse import unquote
 
 sys.dont_write_bytecode = True
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / 'skills/content'
 
 

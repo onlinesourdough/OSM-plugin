@@ -6,7 +6,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { loadAndValidate, validateGraph, validateHandoff } from "../../skills/content/scripts/check-content-graph.mjs";
+import { loadAndValidate, validateGraph, validateHandoff } from "../skills/content/scripts/check-content-graph.mjs";
 
 const fixtureDirectory = fileURLToPath(new URL("./fixtures/content-graph", import.meta.url));
 const graphPath = path.join(fixtureDirectory, "content-graph.json");

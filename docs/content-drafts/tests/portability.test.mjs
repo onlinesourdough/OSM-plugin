@@ -6,10 +6,10 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { externalPath, parseArguments, resolveProductionProject, runDapi, inspectCheckout } from '../../skills/diffusion-studio/scripts/diffusion-studio.mjs';
-import { loadAndValidate, validateGraph } from '../../skills/content/scripts/check-content-graph.mjs';
+import { externalPath, parseArguments, resolveProductionProject, runDapi, inspectCheckout } from '../skills/diffusion-studio/scripts/diffusion-studio.mjs';
+import { loadAndValidate, validateGraph } from '../skills/content/scripts/check-content-graph.mjs';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
+const root = fileURLToPath(new URL('../', import.meta.url));
 const launcher = path.join(root, 'skills/diffusion-studio/scripts/diffusion-studio.mjs');
 const validator = path.join(root, 'skills/content/scripts/check-content-graph.mjs');
 const fixture = fileURLToPath(new URL('./fixtures/content-graph', import.meta.url));

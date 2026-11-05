@@ -23,13 +23,13 @@ import {
   resolveProductionProject,
   setupInvocations,
   validateCompanionStart,
-} from "../../skills/diffusion-studio/scripts/diffusion-studio.mjs";
+} from "../skills/diffusion-studio/scripts/diffusion-studio.mjs";
 
 const testsDirectory = path.dirname(fileURLToPath(import.meta.url));
 const productionRoot = mkdtempSync(path.join(os.tmpdir(), "content-productions-"));
 import { after } from "node:test";
 after(() => rmSync(productionRoot, { recursive: true, force: true }));
-const launcherPath = path.resolve(testsDirectory, "../../skills/diffusion-studio/scripts/diffusion-studio.mjs");
+const launcherPath = path.resolve(testsDirectory, "../skills/diffusion-studio/scripts/diffusion-studio.mjs");
 
 function companionFixture() {
   const projectId = "bounded-production";

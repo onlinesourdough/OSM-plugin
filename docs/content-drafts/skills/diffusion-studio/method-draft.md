@@ -30,7 +30,7 @@ matching compiled/applied identities, explicit companion cleanup and surviving
 DAPI. The browser grants no editing, export or AI authority.
 
 After human export inspection, return exact artifacts to
-[Content](../content/SKILL.md) for provenance and each node’s own final review.
+[Content](../content/method-draft.md) for provenance and each node’s own final review.
 Approval never inherits; external publishing remains separately authorized.
 Entire code-animated explainers and bounded specialist motion overlays follow
 [the specialist route](../content/references/specialist-motion.md).

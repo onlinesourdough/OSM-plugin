@@ -14,10 +14,10 @@ learning only for a current decision. Use project-local `content/` as needed,
 preserving existing files and identities. Skill files are immutable methods;
 work data, learning, media and caches belong outside the installed package.
 
-Use [human-writing](../osm-human-writing/SKILL.md) for prose. A short standalone
+Use [human-writing](../../../../skills/osm-human-writing/SKILL.md) for prose. A short standalone
 piece needs the requested draft/revision and an editorial read, without an
 obligatory graph, editor, brief or production folder. Substantive work reuses
-the accepted [shared lifecycle](../osm/references/lifecycle.md).
+the accepted [shared lifecycle](../../../../skills/osm/references/lifecycle.md).
 
 Read only the detail needed:
 
@@ -29,7 +29,7 @@ Read only the detail needed:
 | Channel/style setup or durable learning | [Setup and learning](references/setup-learning.md): resolved facts at the actual work owner |
 | Requested readiness or audit | [Read-only audit](references/audit.md): bounded evidence and gaps |
 | Reference study or local transcription | [Reference analysis](references/reference-analysis.md) or [local transcription](references/local-transcription.md) |
-| Ordinary video | [Diffusion Studio](../diffusion-studio/SKILL.md): external pinned Electron/DAPI editing and supervised export |
+| Ordinary video | [Diffusion Studio](../diffusion-studio/method-draft.md): external pinned Electron/DAPI editing and supervised export |
 | Entire code-animated explainer or bounded motion overlay | [Specialist motion](references/specialist-motion.md) |
 
 Continue through relevant validation, inspection and in-scope fixes. Preserve
