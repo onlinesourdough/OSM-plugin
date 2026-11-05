@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources, contextIdentity } from './sources.mjs';
-const bridge = await readFile(new URL('../../skills/osm-context/assets/bridge.md', import.meta.url), 'utf8');
+const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
 const target = 'https://app.notion.com/p/00000000000000000000000000000001';
 const links = { docs: { title: 'Documents', target: 'https://example.com/docs' }, personalSkills: { title: 'My skills', target: 'https://example.com/skills' }, memory: { title: 'Decisions', target: 'https://example.com/memory' } };
 async function fixture(t) {

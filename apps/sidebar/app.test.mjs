@@ -73,7 +73,6 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
     click: id => get(id).dispatch('click'),
     key: (id, key) => get(id).dispatch('keydown', { key }),
     input: value => { get('target').value = value; return get('target').dispatch('input'); },
-    provider: () => u.click('provider'),
     submit: () => get('setup').dispatch('submit'),
     options: picker => get(`${picker}-list`).descendants().filter(node => node.getAttribute('role') === 'option'),
     async choose(picker, label) {
@@ -253,13 +252,18 @@ test('failed refresh clears Connected; late snapshots cannot restore it and retr
   u.fail(false); await u.click('refresh'); assert.equal(u.text('connection-label'), '✓ Connected');
 });
 
-test('non-Notion contexts omit connection actions; ambiguous instructions cannot be saved', async () => {
+test('setup accepts only a Notion context; ambiguous instructions cannot be saved', async () => {
   const u = await ui(undefined, undefined, { initial: 'none' }); await u.click('retry-load');
   u.status.notion = { state: 'not_connected' }; await u.click('refresh');
   assert.equal(u.shown('connect'), true);
-  await u.provider(); assert.equal(u.shown('connect'), false); assert.equal(u.text('summary-0'), 'Not needed');
-  await u.click('step-1'); await u.input('/work/my vault'); await u.submit();
-  assert.equal(u.calls.at(-1).args.target, '/work/my vault');
+  assert.equal(u.get('provider'), null, 'no folder or alternative-link toggle');
+  await u.click('step-1');
+  for (const value of ['/work/my vault', 'https://example.com/context']) {
+    const calls = u.calls.length;
+    await u.input(value); await u.submit();
+    assert.equal(u.calls.length, calls, 'a folder or non-Notion link is not saved');
+    assert.match(u.text('feedback-text'), /Notion/);
+  }
   const blocked = await ui({ state: 'ambiguous', revision: 'a'.repeat(64) });
   assert.equal(blocked.get('continue-1').disabled, true); assert.equal(blocked.shown('feedback'), true);
 });
@@ -431,16 +435,6 @@ test('a disconnected or unknown connection still allows a manual Notion page', a
   }
 });
 
-test('changing provider discards its hidden unfinished editor and leaves setup usable', async () => {
-  const u = await ui(undefined, undefined, { pages: async () => ({ pages: [] }) });
-  await u.choose('setup-context-picker', 'Add link…');
-  u.get('setup-context-picker-link').value = other;
-  await u.get('setup-context-picker-link').dispatch('input');
-  await u.provider(); await u.input('https://example.com/context'); await u.submit();
-  assert.equal(u.status.context.target, 'https://example.com/context');
-  assert.equal(u.text('feedback-text'), 'Context saved.');
-});
-
 test('a successful switch with a failed name save reports the partial success visibly', async () => {
   const u = await ui(configured(), saved({}), { failSources: true,
     pages: async () => ({ pages: [{ title: 'New company', target: other }] }),
@@ -480,14 +474,6 @@ test('a manually entered page never persists its placeholder and can adopt a dis
     if (fetched.length) assert.equal(naming.args.title, 'Real company title');
     else assert.equal(naming, undefined);
   }
-});
-
-test('switching back from a folder does not list that folder as a Notion page', async () => {
-  const u = await ui(undefined, undefined, { pages: async () => ({ pages: [] }) });
-  await u.provider(); await u.input('/workspace/context'); await u.provider();
-  assert.equal(u.text('setup-context-picker'), 'Choose a page');
-  await u.click('setup-context-picker'); await settled();
-  assert.equal(u.options('setup-context-picker').some(option=>option.title==='/workspace/context'),false);
 });
 
 test('an echoed picker failure does not overwrite the connection or current setup', async () => {
@@ -688,7 +674,7 @@ function homeHost() {
   const handler = (name, args) => {
     if (name === 'osm_home') return wrap('home', s.state === 'ready'
       ? { state: 'ready', mapping: 'saved', definitionRevision: 'fictional-r1', selectedMode: 'internal_selected_pages', scope: s.scope, verifiedAt: '2026-10-26T12:00:00.000Z', checkedAt: '2026-10-26T12:00:00.000Z', root: { title: 'Fictional OSM', link: link('root') }, sections: sections(),
-        builtin: [{ name: 'osm-setup', description: 'Set up, resume or move OSM.' }, { name: 'osm-context', description: 'Manage the chosen context home.' }] }
+        builtin: [{ name: 'osm-setup', description: 'Set up or resume OSM.' }, { name: 'osm-data-context', description: 'Engineer the Notion home.' }] }
       : { state: s.state, mapping: s.mapping, builtin: [], ...(s.mapping === 'saved' && { definitionRevision: 'fictional-r1',
         selectedMode: s.state === 'official_mode' ? 'official_notion_user' : 'internal_selected_pages' }) });
     if (name === 'osm_home_list') {
@@ -777,7 +763,7 @@ test('Skills lists source descriptions, has no run control and keeps built-in me
   assert.equal(/\bRun\b|Enabled|Available/.test(u.panel()), false);
   assert.equal(u.panel().includes('osm-setup'), false); assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'false');
   await u.click('builtin-toggle');
-  assert.ok(u.panel().includes('osm-setup — Set up, resume or move OSM.')); assert.equal(u.focused(), 'builtin-toggle');
+  assert.ok(u.panel().includes('osm-setup — Set up or resume OSM.')); assert.equal(u.focused(), 'builtin-toggle');
   assert.equal(u.text('builtin-toggle'), 'Built into OSM −');
 });
 

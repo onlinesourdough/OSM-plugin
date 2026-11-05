@@ -105,7 +105,7 @@ appTool('osm_save_context', {
   _meta: { ui: { visibility: ['app'] } },
 }, async (args) => {
   try {
-    const bridge = await readFile(join(__dirname, '../../skills/osm-context/assets/bridge.md'), 'utf8');
+    const bridge = await readFile(join(__dirname, '../../skills/osm-data-context/assets/bridge.md'), 'utf8');
     await saveContextRoute(args, { bridge });
     return await result();
   } catch (error) { return { isError: true, content: [{ type: 'text', text: error.message }] }; }

@@ -900,7 +900,7 @@
      {"expect": "separate-authority-bypassed", "data": {"from_positive": true, "override": {"write": {"effect": "publication"}}}},
      {"expect": "questions-merged", "data": {"from_positive": true, "override": {"report": {"separates": false}}}}]},
   {"id": 67, "name": "the grant is a recorded choice, not a hardcoded default", "check": "grant-not-hardcoded", "contract": "architecture.md#home-write-policy",
-   "positive": {"template": {"path": "skills/osm-context/assets/data-and-context-root.md", "text": null},
+   "positive": {"template": {"path": "skills/osm-data-context/assets/data-and-context-root.md", "text": null},
                 "workspaces": [{"workspace": "a"}],
                 "run": {"recorded": {"choice": "whole-home", "recorded": "owner decision (fictional)"}, "acts_on": "recorded", "refusal_imposed": false, "asked_again": false}},
    "variants": [

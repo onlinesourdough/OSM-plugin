@@ -23,7 +23,7 @@ const dashed = id => `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-$
 const rich = text => [{ type: 'text', plain_text: text, text: { content: text } }];
 const titled = text => ({ Name: { type: 'title', title: rich(text) } });
 const outsideTitle = 'Fictional outside acquisition plan';
-const bridge = await readFile(new URL('../../skills/osm-context/assets/bridge.md', import.meta.url), 'utf8');
+const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
 const context = 'https://app.notion.com/p/00000000000000000000000000000001';
 
 function world() {
@@ -419,9 +419,9 @@ test('a changed context cannot reuse or overwrite another context mapping', asyn
 
 test('built-in methods come from the installed package skill metadata', async () => {
   const skills = await readBuiltinSkills(new URL('../../skills', import.meta.url).pathname);
-  assert.ok(skills.length >= 20);
+  assert.equal(skills.length, 17);
   const setup = skills.find(skill => skill.name === 'osm-setup');
-  assert.match(setup.description, /^Set up, resume or move OSM/);
+  assert.match(setup.description, /^Set up or resume OSM/);
 });
 
 // Contract delta 1: one definition, explicit mode, support material, schema honesty, read counts.

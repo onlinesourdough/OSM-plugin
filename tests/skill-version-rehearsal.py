@@ -118,34 +118,45 @@ class RenameBaselineTests(unittest.TestCase):
         (root / "skills" / new / "SKILL.md").write_bytes(files(version)["SKILL.md"])
 
     def test_mapped_rename_compares_previous_name(self):
-        root = self.repository({"aios-check": '"2.2.1"', "write-code": '"1.1.1"'})
-        self.rename(root, "aios-check", "osm-check", '"3.0.0"')
+        root = self.repository({"aios-spec-work": '"2.2.1"', "write-code": '"1.1.1"'})
+        self.rename(root, "aios-spec-work", "osm-spec-work", '"3.0.0"')
         self.rename(root, "write-code", "osm-write-code", '"2.0.0"')
-        validate_baseline(root, "HEAD", {"osm-check", "osm-write-code"})
+        validate_baseline(root, "HEAD", {"osm-spec-work", "osm-write-code"})
 
     def test_mapped_rename_rejects_reset_or_minor_bump(self):
         for version, message in (('"1.0.0"', "skill version regressed"),
                                  ('"2.3.0"', "renamed skill requires a major bump")):
             with self.subTest(version=version):
-                root = self.repository({"aios-check": '"2.2.1"'})
-                self.rename(root, "aios-check", "osm-check", version)
-                with self.assertRaisesRegex(AssertionError, "osm-check: " + message):
-                    validate_baseline(root, "HEAD", {"osm-check"})
+                root = self.repository({"aios-spec-work": '"2.2.1"'})
+                self.rename(root, "aios-spec-work", "osm-spec-work", version)
+                with self.assertRaisesRegex(AssertionError, "osm-spec-work: " + message):
+                    validate_baseline(root, "HEAD", {"osm-spec-work"})
 
     def test_unmapped_name_is_a_new_skill(self):
-        root = self.repository({"aios-check": '"2.2.1"'})
-        self.rename(root, "aios-check", "osm-unmapped", '"3.0.0"')
+        root = self.repository({"aios-spec-work": '"2.2.1"'})
+        self.rename(root, "aios-spec-work", "osm-unmapped", '"3.0.0"')
         with self.assertRaisesRegex(AssertionError, "initial"):
             validate_baseline(root, "HEAD", {"osm-unmapped"})
 
     def test_current_name_in_baseline_is_not_remapped(self):
-        root = self.repository({"osm-check": '"3.0.0"', "aios-check": '"9.0.0"'})
-        validate_baseline(root, "HEAD", {"osm-check"})
+        root = self.repository({"osm-spec-work": '"3.0.0"', "aios-spec-work": '"9.0.0"'})
+        validate_baseline(root, "HEAD", {"osm-spec-work"})
 
     def test_map_covers_renamed_package_skills_only(self):
-        self.assertEqual(len(RENAMED_SKILLS), 20)
+        self.assertEqual(len(RENAMED_SKILLS), 17)
         self.assertTrue(all(name == "osm" or name.startswith("osm-") for name in RENAMED_SKILLS))
         self.assertFalse({"content", "diffusion-studio"} & set(RENAMED_SKILLS.values()))
+
+    def test_context_skills_compare_their_osm_0_30_names(self):
+        self.assertEqual(RENAMED_SKILLS["osm-data-context"], "osm-context")
+        self.assertEqual(RENAMED_SKILLS["osm-manage-data-context"], "osm-maintain-context")
+        root = self.repository({"osm-context": '"2.0.0"', "osm-maintain-context": '"2.0.0"'})
+        self.rename(root, "osm-context", "osm-data-context", '"3.0.0"')
+        self.rename(root, "osm-maintain-context", "osm-manage-data-context", '"3.0.0"')
+        validate_baseline(root, "HEAD", {"osm-data-context", "osm-manage-data-context"})
+        self.rename(root, "osm-data-context", "osm-data-context", '"2.1.0"')
+        with self.assertRaisesRegex(AssertionError, "osm-data-context: renamed skill requires a major bump"):
+            validate_baseline(root, "HEAD", {"osm-data-context"})
 
 
 if __name__ == "__main__":

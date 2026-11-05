@@ -59,7 +59,7 @@ export function replaceContext(text, target, bridge) {
     if (parseContextRoute(next).target !== route.target) throw new Error('Existing context instructions need attention. They have been left unchanged.');
     return next;
   }
-  const addition = bridge.replace('<verified-context-entry-url-or-absolute-path>', () => route.target);
+  const addition = bridge.replace('<verified-notion-root-entry-url>', () => route.target);
   if (parseContextRoute(addition).target !== route.target) throw new Error('Invalid packaged context template.');
   return original + (original && !original.endsWith('\n') ? '\n\n' : original ? '\n' : '') + addition;
 }

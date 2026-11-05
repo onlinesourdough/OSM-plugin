@@ -56,7 +56,6 @@ h1:focus, .drawer-head h2:focus { outline: none; }
 .status-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; }
 .status { font-size: 13px; color: var(--osm-muted); }
 .status[data-state="connected"] { color: var(--osm-success); }
-.link-toggle { margin: 4px 0 0 -8px; padding: 0 8px; font-size: 12px; }
 
 /* Fields and the saved-source picker. */
 .field + .field, .field + div > .field, div + div > .field { margin-top: 14px; }

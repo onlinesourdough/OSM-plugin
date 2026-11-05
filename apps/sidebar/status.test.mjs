@@ -97,9 +97,9 @@ test('reads only the exact routing block and rejects ambiguous legacy instructio
 });
 
 test('the shipped context bridge round-trips web, Unix and Windows locations', async () => {
-  const bridge = await readFile(new URL('../../skills/osm-context/assets/bridge.md', import.meta.url), 'utf8');
+  const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
   for (const target of ['https://app.notion.com/p/example', 'https://example.com/context.', '/work/my vault', '/work/company.', 'C:\\Work\\Knowledge']) {
-    const saved = bridge.replace('<verified-context-entry-url-or-absolute-path>', target);
+    const saved = bridge.replace('<verified-notion-root-entry-url>', target);
     assert.deepEqual(parseContextRoute(saved), { state: 'configured', ...classifyTarget(target) });
   }
 });

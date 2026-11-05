@@ -1,6 +1,6 @@
 {
   "name": "Harborlight Surveys (fictional)",
-  "example": "skills/osm-context/assets/examples/workspace-b.md",
+  "example": "skills/osm-data-context/assets/examples/workspace-b.md",
   "layout": "migrated-separate-entry",
   "root": {"id": "fict-b-root", "title": "Survey Data & Context"},
   "roles": {

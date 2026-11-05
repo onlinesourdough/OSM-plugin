@@ -11,7 +11,7 @@ from hashlib import sha256
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OWNER_ASSETS = ROOT / "skills/osm-setup/assets/owner"
+OWNER_ASSETS = ROOT / "docs/legacy-file-home/owner"
 EXACT = {
     ".gitignore", "AIOS.md", "AIOS_FORMAT", "MEMORY.md", "CONNECTIONS.md",
     "projects/README.md", "systems/README.md",

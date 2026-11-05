@@ -16,7 +16,7 @@ const connectable = ['not_connected', 'disabled', 'unavailable'];
 // status is the latest accepted snapshot. draft holds pending source edits with
 // the revisions they were read from; only an explicit reload replaces edits.
 let status, draft, checkedAt = -Infinity, firstStatus = true, saving = false, refreshing = false, stale = false;
-let onboarding = false, openStep = 0, other = false, confirmSwitch = false, settingsOpen = false, discardPrompt = false;
+let onboarding = false, openStep = 0, confirmSwitch = false, settingsOpen = false, discardPrompt = false;
 let message = { text: '', error: false };
 let selectedContext = null;
 const canBrowse = () => Boolean(status?.features?.notionPages && status.notion.state === 'connected');
@@ -109,7 +109,6 @@ function fillDraft() {
   for (const picker of [setupContextPicker, contextPicker, ...Object.values(setupPickers), ...Object.values(settingsPickers)]) picker.reset();
   selectedContext = status.context.target && status.sources.title ? { title: status.sources.title, target: status.context.target } : null;
   $('target').value = status.context.target || '';
-  if (status.context.kind) other = status.context.kind !== 'notion';
 }
 const contextInput = () => classifyTarget($('target').value)?.target ?? $('target').value.trim();
 const contextEdited = () => onboarding && contextInput() !== draft.contextTarget;
@@ -147,7 +146,7 @@ function renderConnection(dashboard, locked) {
     $(text).textContent = label; $(text).dataset.state = refreshing ? 'unknown' : state;
     $(hint).textContent = help; $(hint).hidden = !help;
     $(refresh).disabled = locked; $(connect).disabled = locked;
-    $(connect).hidden = !connectable.includes(state) || connect === 'connect' && other;
+    $(connect).hidden = !connectable.includes(state);
   }
   const notion = status.context.kind === 'notion';
   $('badge').hidden = !dashboard || !notion || refreshing || state !== 'connected';
@@ -156,7 +155,7 @@ function renderConnection(dashboard, locked) {
   $('notice-connect').hidden = !connectable.includes(state); $('notice-connect').disabled = locked;
 }
 function summary(step) {
-  if (step === 0) return other ? 'Not needed' : refreshing ? 'Checking…' : connectionCopy[status.notion.state].replace('✓ ', '');
+  if (step === 0) return refreshing ? 'Checking…' : connectionCopy[status.notion.state].replace('✓ ', '');
   const roles = stepRoles[step];
   if (step === 1) {
     if (contextEdited() && contextInput() || isDirty(draft, roles)) return draft.contextTarget ? 'Edited' : 'Not saved';
@@ -182,11 +181,8 @@ function renderSetup(locked) {
       $(`reason-${step}`).textContent = step === 1 && status.sources.state !== 'unavailable' ? 'Continue to save the context, then add Docs.' : reason;
     }
   }
-  $('target-label').textContent = other ? 'Context link or folder' : 'Context link';
-  $('target').placeholder = other ? 'https://… or /path/to/context' : 'https://notion.so/…';
-  $('provider').textContent = other ? 'Use Notion' : 'Use a folder or other link';
-  $('target').disabled = locked; $('provider').disabled = locked;
-  const nativePicker = Boolean(status.features?.notionPages && !other);
+  $('target').disabled = locked;
+  const nativePicker = Boolean(status.features?.notionPages);
   $('setup-context').hidden = !nativePicker; $('context-link-field').hidden = nativePicker;
   const notionTarget = classifyTarget(contextInput())?.kind === 'notion' ? contextInput() : null;
   const selected = notionTarget ? selectedContext?.target === notionTarget && !home.suppressed() ? selectedContext : { title: 'Selected page', target: notionTarget, placeholder: true } : null;
@@ -195,7 +191,7 @@ function renderSetup(locked) {
   const hidden = home.suppressed();
   for (const role of sourceRoles) {
     $(`setup-${role}`).hidden = hidden;
-    setupPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse() && !other, disabled: locked || !ready || hidden });
+    setupPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse(), disabled: locked || !ready || hidden });
   }
   if (hidden && sourceRoles.some(role => $(`setup-${role}`).contains(document.activeElement))) $(`continue-${openStep}`).focus();
 }
@@ -279,8 +275,8 @@ async function refresh() {
 function current() {
   if (isCurrent(draft, status)) return true;
   if (status.context.state !== 'configured' && !isDirty(draft)) {
-    const value = $('target').value, provider = other;
-    fillDraft(); $('target').value = value; other = provider;
+    const value = $('target').value;
+    fillDraft(); $('target').value = value;
     feedback('Setup changed. Review your context link and continue again.', true);
   } else { stale = true; feedback('Setup changed elsewhere. Your edits are kept; load the latest setup to continue.', true); }
   render(); return false;
@@ -318,7 +314,7 @@ async function saveDraft() {
 }
 
 function focusStep(step, docs = false) {
-  const first = docs ? 'setup-docs-picker' : ['refresh', status.features?.notionPages && !other ? 'setup-context-picker' : 'target', 'setup-personalSkills-picker', 'setup-memory-picker'][step];
+  const first = docs ? 'setup-docs-picker' : ['refresh', status.features?.notionPages ? 'setup-context-picker' : 'target', 'setup-personalSkills-picker', 'setup-memory-picker'][step];
   ($(first).disabled ? $(`continue-${step}`) : $(first)).focus();
 }
 function goTo(step) { openStep = step; confirmSwitch = false; render(); focusStep(step); }
@@ -341,9 +337,9 @@ async function continueStep() {
   if (openStep === 1) {
     if (setupContextPicker.hasEdits()) { feedback('Apply or cancel the open link first.'); return; }
     const route = classifyTarget($('target').value);
-    if (!route || /[<>]/.test(route.target) || (!other && route.kind !== 'notion')) {
-      const picker = status.features?.notionPages && !other;
-      feedback(other ? 'Enter an HTTPS link or an absolute folder path.' : picker ? 'Choose a Notion page.' : 'Enter a Notion link, or use a folder or other link.', true);
+    if (!route || /[<>]/.test(route.target) || route.kind !== 'notion') {
+      const picker = status.features?.notionPages;
+      feedback(picker ? 'Choose a Notion page.' : 'Enter a Notion page link.', true);
       (picker ? setupContextPicker.button : $('target')).focus(); return;
     }
     if (route.target !== draft.contextTarget || status.context.state !== 'configured') return saveContext(route.target);
@@ -391,7 +387,7 @@ async function saveSettings() {
 }
 async function switchContext(value, title) {
   const route = classifyTarget(value);
-  if (!route || /[<>]/.test(route.target)) return 'Enter a Notion or HTTPS link, or an absolute folder path.';
+  if (!route || /[<>]/.test(route.target) || route.kind !== 'notion') return 'Enter a Notion page link.';
   if (route.target === draft.contextTarget) return;
   if (saving || refreshing) return 'Wait for the current request to finish.';
   if (draft.contextRevision !== status.context.revision) {
@@ -432,7 +428,6 @@ for (let step = 0; step < 4; step++) $(`step-${step}`).addEventListener('click',
   if (confirmSwitch) feedback('');
   openStep = step; confirmSwitch = false; render();
 });
-$('provider').addEventListener('click', () => { setupContextPicker.reset(); other = !other; render(); });
 $('target').addEventListener('input', () => { if (confirmSwitch) feedback(''); confirmSwitch = false; render(); });
 $('setup').addEventListener('submit', event => { event.preventDefault(); return continueStep(); });
 $('settings').addEventListener('click', () => openSettings());

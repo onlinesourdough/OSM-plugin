@@ -12,8 +12,8 @@ from skill_metadata import RENAMED_SKILLS
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ROOT / "tests/fixtures/model-selection-cases.json"
 SOURCES = [
-    "skills/osm-select-model/SKILL.md",
-    "skills/osm-select-model/references/measurement.md",
+    "skills/osm/references/model-advice.md",
+    "skills/osm/references/model-measurement.md",
     "skills/osm/references/continuation.md",
     "skills/osm/references/lifecycle.md",
     "skills/osm-spec-work/SKILL.md",
@@ -63,8 +63,8 @@ def prepare(destination, baseline):
                 result = subprocess.run(["git", "show", f"{baseline}:skills/aios-select-model/references/continuation.md"],
                                         cwd=ROOT, text=True, capture_output=True)
             if result.returncode:
-                if relative.startswith("skills/osm-select-model/") or relative.endswith("/continuation.md"):
-                    continue  # Selection did not exist in the baseline.
+                if relative.startswith("skills/osm/references/model-") or relative.endswith("/continuation.md"):
+                    continue  # Model advice did not exist at these paths in the baseline.
                 raise RuntimeError(result.stderr)
             content = result.stdout
         else:

@@ -1,6 +1,6 @@
 {
   "name": "Willowmere Pottery (fictional)",
-  "example": "skills/osm-context/assets/examples/workspace-a.md",
+  "example": "skills/osm-data-context/assets/examples/workspace-a.md",
   "layout": "new-blank-root",
   "root": {"id": "fict-a-root", "title": "Data & Context"},
   "roles": {
