@@ -17,7 +17,7 @@ Promoting a personal skill to Team requires explicit scope, review of private
 content/references and verified permissions; ordinary onboarding grants no sharing.
 
 Use the native Skill Creator for authoring mechanics and validation. Notion is
-the canonical destination for this provider; any local authoring directory is
+the canonical destination; any local authoring directory is
 temporary staging. Preserve the skill's identity, invocation policy, supporting
 files and dependencies. Updating one skill does not authorize an inventory-wide
 sync or installation of its dependencies.

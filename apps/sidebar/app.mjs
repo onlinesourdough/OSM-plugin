@@ -76,7 +76,7 @@ for (const role of sourceRoles) {
 const contextPicker = createPicker({ id: 'settings-context-picker', label: 'Context', optional: false, menuLabel: 'Current context',
   loadOptions: loadPages, exclude: savedPage, confirmSelection: true,
   editText: ['Switch context…', 'Switch context…'], applyText: 'Switch context', nameField: false,
-  placeholder: 'https://notion.so/… or /path/to/context', onSelect() {}, onEdit: () => render(), onApply: ({ target, name }) => switchContext(target, name) });
+  placeholder: 'https://notion.so/…', onSelect() {}, onEdit: () => render(), onApply: ({ target, name }) => switchContext(target, name) });
 $('settings-context').append(contextPicker.root);
 const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Page', optional: false, loadOptions: loadPages, exclude: savedPage,
   nameField: false, onSelect: link => {
@@ -149,6 +149,7 @@ function renderConnection(dashboard, locked) {
     $(connect).hidden = !connectable.includes(state);
   }
   const notion = status.context.kind === 'notion';
+  $('legacy-route').hidden = !dashboard || status.context.state !== 'configured' || notion;
   $('badge').hidden = !dashboard || !notion || refreshing || state !== 'connected';
   $('notice').hidden = !dashboard || !notion || refreshing || state === 'connected';
   $('notice-text').textContent = help || `Notion · ${label}`;

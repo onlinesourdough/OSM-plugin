@@ -1,7 +1,7 @@
 # Maintain a selected specialist
 
-Use this procedure for a separately installed specialist, not the content
-methods included in OSM. Start from the task's selected capability,
+Use this procedure for a separately installed specialist, not a method
+included in OSM. Start from the task's selected capability,
 accepted source and existing installation. Verify actual tools, supported
 platforms and source identity; a link is not proof of installation.
 
@@ -21,7 +21,7 @@ Under the task's installation authority, verify source access, selected ref,
 destination, local instructions, dependency requirements and the usable
 entrypoint. Continue the specialist's actual method with the accepted inputs
 and relevant review. Keep working data in its established location. Package
-updates and owner-data Sync remain separate operations.
+updates and owner-context upkeep remain separate operations.
 
 ## Update installed upstream Systems
 

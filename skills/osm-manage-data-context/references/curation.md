@@ -4,7 +4,7 @@ Own context mapping, local gaps, source repair and deduplication. Setup uses
 this for new/changed context; retrieval does not. Before owner writes confirm
 the Notion home and its recorded write policy; a legacy folder or vault home stays
 read-only (see the [legacy-home guidance](../../osm/references/update.md#legacy-file-and-vault-homes)),
-and a missing home needs [Setup](../../osm-setup/SKILL.md).
+and a missing home is reported as a gap for the owner to resolve with Setup.
 
 ## Minimum useful framework
 

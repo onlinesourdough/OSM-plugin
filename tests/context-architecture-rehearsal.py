@@ -1674,6 +1674,8 @@ def intake_classification(data, ws):
             if not item.get("labelled_pending"):
                 reasons.append("provisional-unlabelled")
         if kind == "source-only":
+            if not item.get("route_kept"):
+                reasons.append("source-only-no-route")
             if item["copied"]:
                 reasons.append("source-only-copied")
             if item["record_revised"]:

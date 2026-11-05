@@ -89,7 +89,9 @@ Return changed facts with provenance, the checks this run made, and one
 needs-attention list, not a score. Each item names the record or source, the
 reason and the next action, for: failed or incomplete intake; a conflict or flagged
 placement; a justified Review due; a material coverage gap; a partial or unknown
-write. Show it in the Attention view when one is selected. An empty list means
+write. Show it in the Attention view when one is selected; an item with no record
+(a failed intake, a coverage gap, an unknown write) and a run with no reader go to a
+labelled line on the maintenance or control record the definition names. An empty list means
 nothing needed attention in what this run checked, never that the home is healthy;
 there is no global truth, health or freshness score.
 

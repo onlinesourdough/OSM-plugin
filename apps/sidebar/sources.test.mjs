@@ -38,7 +38,7 @@ test('different contexts cannot inherit sources; copied Notion URLs preserve pag
   const {options,args,context}=await fixture(t); await saveSources(args,options);
   assert.equal(contextIdentity(target),contextIdentity(target+'?source=copy_link'));
   assert.deepEqual((await readSources(target+'?source=copy_link',options)).links,links);
-  const another='https://example.com/client';
+  const another='https://app.notion.com/p/00000000000000000000000000000099';
   await saveContextRoute({target:another,expectedRevision:context.revision},options);
   assert.equal((await readSources(another,options)).state,'missing');
   await assert.rejects(saveSources(args,options),/context changed/);

@@ -23,5 +23,5 @@ instructions only when the question needs them. For a current release, changed
 external fact or a gap in the local documentation, use [canonical sources](canonical-sources.md).
 Keep the installed version distinct from upstream `main` and newer releases.
 The overview and methods travel together in the local package. Native package
-updates are separate from owner-data Sync; there is no Resources-hosted copy
+updates are separate from owner context; there is no Resources-hosted copy
 to fetch. Already-read instructions are not replaced by a later package update.

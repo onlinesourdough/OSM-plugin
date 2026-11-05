@@ -17,7 +17,7 @@ registration and discovery, plus adoption, update and rollback. Follow the
 native Skill Creator owns authoring mechanics; Manage Data & Context owns durable
 owner facts. Neither takes back this lifecycle.
 
-Use the resolved context provider for owner placement and discovery through
+Use the Notion Skills store for owner placement and discovery through
 that lifecycle; a cloud page is not automatically a native installation.
 Shared OSM skills remain in the plugin; project skills remain with their project.
 

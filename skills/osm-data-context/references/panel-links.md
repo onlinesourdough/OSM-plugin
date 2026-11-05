@@ -8,7 +8,7 @@ permissions or company policy. It is not a context home or synchronization.
 After authorized personal onboarding or a requested source-route change:
 
 1. Verify the selected entry and the actual Docs, Personal Skills, optional
-   Team Skills, default/personal Memory and optional Team Memory destinations through the existing provider tools.
+   Team Skills, default/personal Memory and optional Team Memory destinations through the existing Notion tools.
    Reuse IDs and source names; do not create a database for the panel.
 2. If `osm_sources` is available, read its current context and source revisions.
    Compare the selected context identity. A client task must not overwrite the

@@ -7,7 +7,7 @@ contract; "guide" below means the root entry and its one definition.
 
 | Responsibility | Record in the owner's guide |
 | --- | --- |
-| Identity and access | Exact provider, account/workspace or repository/path; verified connection and boundaries |
+| Identity and access | Exact Notion account/workspace and root; verified connection and boundaries |
 | Knowledge and work | Where maintained facts, original references and deliverables belong; which system owns each |
 | Spaces | Business, brand, sub-brand or continuing-area scopes, shared context and useful parent/child relationships |
 | Memory | Durable decisions/corrections with reasons, provenance, actual source dates and uncertainty |
@@ -15,18 +15,17 @@ contract; "guide" below means the root entry and its one definition.
 | Maintenance and recovery | The owner's recorded write policy, identity/deduplication rule, readback, correction handling and recoverable prior route; see the architecture's [home write policy](architecture.md#home-write-policy) |
 
 One context home can cover multiple Spaces. Projects keep their native workspaces;
-they need not become new owner homes. Express Spaces with the provider's useful
-properties, relations, folders or routes. Reuse existing concepts. Add a separate
+they need not become new owner homes. Express Spaces with Notion's useful
+properties, relations or routes. Reuse existing concepts. Add a separate
 registry only when maintaining the hierarchy needs it. Scope labels are not
 access control. Load shared and parent context only when relevant.
 
 Generate or adapt a short owner guide and useful entry templates from verified
 sources and accepted choices. Do not manufacture company facts, empty departments
-or a parallel truth store. Provider-specific properties and templates belong in
-the selected adapter; actual values and IDs belong in the customer's workspace.
+or a parallel truth store. Notion properties and templates belong in
+the Notion references; actual values and IDs belong in the customer's workspace.
 Use [the thin host pointer](../assets/bridge.md) through the selected native
-[adapter](../../osm-setup/references/adapters.md). An existing managed file
-bridge can continue using its exact supported root.
+[adapter](../../osm-setup/references/adapters.md).
 
 People should be able to find and edit their work normally. The agent should
 select metadata or an index first, then read only the relevant bodies. The

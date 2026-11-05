@@ -46,6 +46,34 @@ as [non-shipped drafts](content-drafts/README.md). The assistant chains relevant
 skills using the current task and its accepted result; no workflow engine or fixed
 chain schema is required. Working material stays in the project.
 
+## Triggers and calls
+
+One owner per operation. "Calls" lists what a skill may hand work to; nothing in the
+Setup, Data & Context, Manage Data & Context and Manage Skills chain calls back into
+Setup. The check in `tests/responsibility-rehearsal.py` keeps this table's owners
+consistent with the skill text.
+
+| Trigger | Owner | Calls |
+| --- | --- | --- |
+| Explain OSM, pick a method, use a retired name | [OSM:context-and-methods](../skills/osm/SKILL.md) | Any owner below (routing only) |
+| Set up or resume the foundation | [OSM:setup](../skills/osm-setup/SKILL.md) | Interview (only if context is missing), Data & Context, Manage Data & Context, Manage Skills |
+| Engineer the Notion home | [OSM:data-context](../skills/osm-data-context/SKILL.md) | None |
+| Retrieve, take in or curate context; scheduled upkeep | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) | Data & Context (its contract), Manage Skills (method changes only) |
+| Create or change a personal or team method | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | None in the context chain |
+| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers) |
+| Resolve a work contract | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Interview, Risky Changes, Orchestrate workers, Build; model advice |
+| Implement accepted work | [OSM:build-work](../skills/osm-build-work/SKILL.md) | Write Code, Review, Orchestrate workers; model advice |
+| Inspect the result | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Risky Changes, Write Code, Ship, Triage |
+| Deliver a reviewed result | [OSM:ship-work](../skills/osm-ship-work/SKILL.md) | Review |
+| Delegate to workers | [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Triage; model advice |
+| Start a project workspace | [OSM:create-project](../skills/osm-create-project/SKILL.md) | Spec, Build, Review, Write Code, Human Writing, Manage Skills |
+| Route an improvement signal | [OSM:triage-improvement](../skills/osm-triage-improvement/SKILL.md) | Ship |
+| Assess a consequential change | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | None |
+| Write prose, code or an explanation | [Human Writing](../skills/osm-human-writing/SKILL.md), [Write Code](../skills/osm-write-code/SKILL.md), [Clarify](../skills/osm-clarify/SKILL.md) | None |
+| Inspect installation or state (read-only) | [check](../skills/osm/references/check.md) | None |
+| Update, roll back, or move off a legacy home | [update](../skills/osm/references/update.md) | None |
+| Model advice, only on request | [model advice](../skills/osm/references/model-advice.md) | None |
+
 The [systems and workflow overview](../README.md#agentic-systems-and-skill-chains) connects these entrypoints
 by purpose and result. Interview owns adaptive exploration and a shared question
 procedure; Setup owns home and harness readiness. Spec reuses interview answers

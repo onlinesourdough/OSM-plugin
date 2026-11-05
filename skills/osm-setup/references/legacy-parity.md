@@ -71,12 +71,13 @@ method remains archived. Neither is a prerequisite for unrelated work. Native ma
 routes; none grants a worker runtime or external issue authority.
 
 The public count is an outcome of responsibility boundaries, not a target.
-Creation, setup, inspection, context mutation, skill management, worker
-orchestration, lifecycle phases, improvement triage and package adoption retain
-focused discovery entries because their triggers or effects differ. The three
+Creation, setup, context engineering and curation, skill management, worker
+orchestration, lifecycle phases and improvement triage retain focused discovery
+entries because their triggers or effects differ; inspection and package adoption
+are references under `osm`. The three
 legacy evaluations are phase-owned gates, so separate auto-discovery would add
 competing owners. Business and specialist routing share one owner-coordination
-job: `osm` selects the relevant context and method. Included specialist skills
+job: `osm` selects the relevant context and method. Included skills
 own their domain process; selected external specialists retain their own
 interfaces. The old routes do not require a registry or a second project type.
 
@@ -90,7 +91,7 @@ Verify the new link/invocation and record transformed hashes separately from
 originals. Identical replay is a no-op; later edits are conflicts. Non-product
 methods and every System/Project's implementation stay with their own owner.
 
-Intentional adaptations include asset-based neutral setup, seed-owned creation
+Intentional adaptations include Notion-based setup, seed-owned creation
 interfaces, optional local-first Git, native package updates, no mandatory
 runtime helpers, and native goal/tool controls only within their actual
 invocation rules. Missing optional methods never fabricate a runtime or block

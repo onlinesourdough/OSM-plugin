@@ -83,8 +83,8 @@ does not replace their local installations. They refresh/update through their
 app, then start a fresh conversation with the installed version. A new chat
 alone does not download an update. OSM provides no background updater.
 
-Owner-data continuity is a separate, explicit Sync operation. Plugin releases
-never upload, restore or migrate an owner's home.
+Owner context lives in the owner's Notion home. Plugin releases never upload,
+restore or migrate an owner's home.
 
 ## Local documentation
 

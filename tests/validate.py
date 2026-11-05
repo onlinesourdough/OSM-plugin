@@ -290,8 +290,14 @@ def validate(root=ROOT, release_tag=None):
     require(not (skill_root / "osm-manage-data-context/references/sync.md").exists() and
             "never `git add .`" in sync and
             "user-owned personal-skill folder identified" in sync and
+            "shared\nplugin/library tree or an unrecorded folder" in sync and
+            "symlink or nested Git repository" in sync and
             "every reachable commit\nand ref" in sync and
-            "never silently rewrite, force-push" in sync,
+            "never silently rewrite, force-push" in sync and
+            "source machine's absolute owner root or standing push approval" in sync and
+            "verification candidates with `ask`" in sync and
+            "initialize a fresh local Git registration" in sync and
+            "Never copy\nthe source or temporary staging checkout's `.git`, config, hooks" in sync,
             "legacy sync record")
     maintain = (skill_root / "osm-manage-data-context/SKILL.md").read_text()
     build = (skill_root / "osm-build-work/SKILL.md").read_text()
@@ -372,7 +378,7 @@ def validate(root=ROOT, release_tag=None):
     lines = bridge.splitlines()
     require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
             "owner bridge markers")
-    require("use OSM Data & Context" in bridge and
+    require("use OSM Manage Data & Context" in bridge and
             "Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
             "legacy bridge route")
     sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()

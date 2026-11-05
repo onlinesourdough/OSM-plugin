@@ -412,8 +412,8 @@ test('the mapping rejects bodies, secrets, inferred roles, unsafe links and unbo
 test('a changed context cannot reuse or overwrite another context mapping', async t => {
   const { options, route, args } = await contextFixture(t);
   await saveHomeProjection({ ...args, projection: studioProjection() }, options);
-  await saveContextRoute({ target: 'https://example.com/client', expectedRevision: route.revision }, options);
-  assert.equal((await readHomeProjection('https://example.com/client', options)).state, 'missing');
+  await saveContextRoute({ target: 'https://app.notion.com/p/00000000000000000000000000000099', expectedRevision: route.revision }, options);
+  assert.equal((await readHomeProjection('https://app.notion.com/p/00000000000000000000000000000099', options)).state, 'missing');
   await assert.rejects(saveHomeProjection({ ...args, projection: studioProjection() }, options), /context changed/);
 });
 

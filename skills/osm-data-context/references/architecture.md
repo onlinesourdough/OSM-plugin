@@ -739,7 +739,11 @@ Type mapping, with no identical schema forced on all stores:
 
 Inputs are useful new sources, supported route or source drift, and due or
 flagged records (flagged means marked Needs review, or carrying an owner or
-drift flag at the record itself). For each: reread, revise the concise current
+drift flag at the record itself). Each new input is first classified durable,
+provisional or source-only, and ambiguous placement or an unsettled authority
+conflict is a flagged result, never a merge (see
+[Manage Data & Context](../../osm-manage-data-context/SKILL.md#classify-what-comes-in)).
+For each: reread, revise the concise current
 record, keep relevant history, verify, and set only meaningful dates. A missing source or
 owner choice becomes a precise pending item. Unchanged content gets no rewrite
 and no date. Context upkeep stays core without any Content store and keeps

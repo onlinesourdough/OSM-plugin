@@ -41,6 +41,14 @@ into one dated entry before any tag.
     advances a checkpoint only after readback and retries under the same
     identity. No new store or property. Fixture cases 85-89 and a recent-import
     variant of case 78 cover it; this is fixture proof only.
+  - Review repair: Setup acceptance scenarios, the home contract and the workflow
+    scenarios no longer describe a file home or folder-home Sync as active (a
+    legacy home is one read-only row); the responsibility rehearsal denies
+    `~/.AIOS`, `~/AIOS` and `managed file` everywhere, pins each refinement rule
+    with a deletion control and checks `docs/skills.md`. The sidebar placeholder is
+    Notion-only, a configured folder shows one read-only notice, and the pointer
+    route refuses any new non-Notion target. New pointers name Manage Data &
+    Context. `docs/skills.md` gains a triggers-and-calls table.
   - Still open: the neutral-root Home projection revision gap and the missing
     Home credential route (unsupported host) are carried unchanged. The package
     stays at the unreleased `0.31.0`; this is not an installed or released build.

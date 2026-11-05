@@ -252,6 +252,23 @@ test('failed refresh clears Connected; late snapshots cannot restore it and retr
   u.fail(false); await u.click('refresh'); assert.equal(u.text('connection-label'), '✓ Connected');
 });
 
+test('no sidebar surface suggests a folder or an alternative link', async () => {
+  for (const file of ['app.mjs', 'index.html']) {
+    const text = await read(file);
+    assert.equal(text.includes('/path/to/context'), false, file);
+    assert.equal(text.includes('Use a folder or other link'), false, file);
+  }
+});
+test('a configured folder or other link shows one read-only notice; a Notion context shows none', async () => {
+  const legacy = await ui({ state: 'configured', target: '/work/legacy', kind: 'path', revision: 'f'.repeat(64) }, saved({}));
+  assert.equal(legacy.shown('legacy-route'), true);
+  assert.match(legacy.text('legacy-route'), /Only a Notion home is supported/);
+  assert.match(legacy.text('legacy-route'), /Legacy file and vault homes/);
+  assert.equal(legacy.get('settings-context-picker') !== null, true);
+  const current = await ui(configured(), saved({}));
+  assert.equal(current.shown('legacy-route'), false);
+});
+
 test('setup accepts only a Notion context; ambiguous instructions cannot be saved', async () => {
   const u = await ui(undefined, undefined, { initial: 'none' }); await u.click('retry-load');
   u.status.notion = { state: 'not_connected' }; await u.click('refresh');
