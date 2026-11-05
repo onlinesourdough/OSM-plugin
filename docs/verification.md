@@ -1,5 +1,49 @@
 # Verification
 
+On 2026-11-05 the Notion-only core candidate (#88) was repaired after its
+integrated source review of `90d912f`, which requested changes (one Major and ten
+Minor findings). The repair head is `4bce572`, on
+`feat/osm-88-notion-core-20261105`; this record is the commit after it. It is
+local only: nothing was pushed, published, installed or tagged, and no Notion,
+schedule or credential action happened.
+
+- **What the repair changed.**
+  - *Major:* the Setup acceptance scenarios, the home contract and the workflow
+    scenarios no longer describe a file home or folder-home Sync as an active
+    route. One row keeps the retired file or vault home, read-only.
+  - *Checks:* the responsibility rehearsal denies a default-folder path and the
+    managed-file phrase in every shipped skill on whitespace-normalized text,
+    including the files it used to exempt, and pins each refinement rule with a
+    deletion control that was run. It also checks `docs/skills.md` and that curation
+    does not link back to Setup. Four validator pins for the retired Sync record
+    were restored.
+  - *Sidebar:* the Settings placeholder is Notion-only, a configured folder or other
+    link shows one read-only notice, and the pointer route refuses any new or
+    changed target that is not a Notion page while still reading old routes. The
+    bundled runtime was rebuilt from source.
+  - *Smaller items:* where a needs-attention item with no record goes; a source-only
+    input needs a route; new pointers name Manage Data & Context (existing pointers
+    are untouched); stale provider, Sync and content wording corrected;
+    `docs/skills.md` has a triggers-and-calls table; `docs/skill-versioning.md`
+    states the limit for a baseline older than 0.30.0; the native entry fixture is
+    built from the shipped Notion pointer and a fictional URL (prepared only).
+- **Checks at `4bce572` in a clean clone.** Each ran directly with its exit status
+  captured, and all 18 exited 0: `validate.py` plain and against `8b8f21a` and
+  `314dcf1`; the documentation, onboarding, layout, continuity, skill-version,
+  footprint, responsibility and context-architecture rehearsals; `git diff --check`
+  from `8b8f21a`; the draft node and Python tests; the sidebar build, the no-diff
+  check on `runtime/sidebar`, its tests and its smoke test. `npm ci` was not run
+  (npm is absent; `node_modules` was copied after the lockfiles compared equal), so
+  the sidebar steps are non-hermetic.
+- **What was not run.** CI, the Claude and Pi/Gemini native rehearsals, any model or
+  native run of the entry fixture, any install, Home or live Notion check. This is
+  fixture and static proof only, not proof of native discovery, installed behavior
+  or live Notion behavior.
+- **Carried, not fixed.** The neutral-root Home projection gap and the missing Home
+  credential route stay open.
+- **Retained evidence:** raw logs and hashes are kept on the author machine under
+  the machine-local `evidence-88r` directory of the work area.
+
 On 2026-11-05 the integrated candidate below was repaired after its independent
 review (code head `3dcac9b`, from `f544643`; this record is the commit after
 it). The review requested changes on two text blockers. Merge preservation, the
