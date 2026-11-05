@@ -13,7 +13,7 @@ whole-task/user-owned continuation uses the shared lifecycle's [handoff](../osm/
 
 ## Prepare the handoff
 
-Receive the shared task's delegation decision, Spec and Select Model's
+Receive the shared task's delegation decision, Spec and model advice's
 model/effort evidence. Define separable scope, inputs, proof and handback.
 Keep transfer/coordination/review/retry costs within the accepted rationale.
 
@@ -31,7 +31,7 @@ Skill/prompt/model is not execution proof. Resume matching session/root/goal;
 slowness, clutter or a missing handle does not justify replacement. Missing
 control requires handoff/stop, not a claimed launch.
 
-Return to [Select Model](../osm-select-model/SKILL.md) for changed runtime/suitability.
+Return to [Model advice](../osm/references/model-advice.md) for changed runtime/suitability.
 Preserve tool-required defaults and explicit choices; claim no unapplied switch.
 Unavailable routes require handoff or sufficient authorized local continuation.
 

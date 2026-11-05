@@ -1,7 +1,7 @@
 # Setup, migration and client scenarios
 
 Select only cases affected by onboarding, migration, package/bridge changes or
-client entry-point repair. Use the common [acceptance boundary](scenarios.md).
+client entry-point repair. Use the common [acceptance boundary](../../osm/references/scenarios.md).
 
 | Case | Input/state | Required observable outcome |
 | --- | --- | --- |
@@ -21,7 +21,7 @@ client entry-point repair. Use the common [acceptance boundary](scenarios.md).
 | Repo isolation | Repository task plus installed global bridge | Local AGENTS/lifecycle first; no personal context read absent concrete gap |
 | Git-backed owner home | Configured root has AIOS.md, supported format and Git | Owner route stays active; Git does not trigger independent-product routing |
 | Invalid owner home | Configured root has unsupported/malformed format | Read-only stop before any owner-data edit, even with Git/local instructions |
-| Codex checklist/goal acceptance | Setup or changed capability evidence | Run [checklist/goal acceptance](../../osm-setup/references/codex-tracking-acceptance.md); preserve off choices and distinguish config, calls, state and UI |
+| Codex checklist/goal acceptance | Setup or changed capability evidence | Run [checklist/goal acceptance](codex-tracking-acceptance.md); preserve off choices and distinguish config, calls, state and UI |
 | Harness baseline | Existing config/profile/overrides and optional extras off | Preserve chosen keys/provider; no silent unrestricted access or opt-in; report effective versus available |
 | Reference isolation | Codex package/bridge setup without desktop, Pi or optional-capability work | Read the shared adapter, Codex package route and its scoped checklist/goal acceptance reference; do not load Pi, desktop, protection, context, Computer Use or History references |
 | Account boundary | Two accounts; one authorized | Uses only relevant authorized source; no cross-account fact leakage |

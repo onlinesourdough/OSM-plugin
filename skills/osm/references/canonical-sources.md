@@ -32,7 +32,7 @@ The customer's source remains canonical. Read it only with accepted access and
 task relevance; re-read it when it changes. If it is unavailable, stale,
 inaccessible, or conflicts, report the gap without filling it from memory or
 inference. A durable scoped pointer or correction uses
-[Maintain Context](../../osm-maintain-context/SKILL.md) and its
-[curation procedure](../../osm-maintain-context/references/curation.md) under
+[Maintain Context](../../osm-manage-data-context/SKILL.md) and its
+[curation procedure](../../osm-manage-data-context/references/curation.md) under
 recorded or standing authority; a read-only question never invokes that write
 route.

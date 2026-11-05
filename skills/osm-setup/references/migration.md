@@ -44,7 +44,7 @@ Choose the physical destination once. The new-home default is `~/.AIOS`; it
 never overrides a deliberately configured existing path or authorizes a move.
 A rename migration may explicitly select that destination. No worker moves its
 own live checkout or parent repository; the lead coordinates those boundaries.
-Use the [owner-data migration procedure](data.md) for all file-level conflict
+Use the [owner-data migration procedure](../../../docs/legacy-file-home/data.md) for all file-level conflict
 and restore rules.
 
 | Source | Accepted destination / treatment |

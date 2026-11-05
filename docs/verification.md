@@ -1408,7 +1408,7 @@ longer serve the overview or metadata and that the remaining site still works.
 
 ## Context homes — 0.19.0
 
-[Notion acceptance](../skills/osm-context/references/notion/acceptance.md)
+[Notion acceptance](../skills/osm-data-context/references/notion/acceptance.md)
 separates package checks, native activation, live retrieval, first-task behavior
 and recovery. Setup is the single onboarding entry; Context owns the provider
 route. The package now exposes 26 shared skills, including Context 1.2.0 and

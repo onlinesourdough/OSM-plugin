@@ -21,7 +21,7 @@ Panel buttons never start a chat or agent.
 For requested business onboarding, this skill verifies the home, reuses Docs,
 Skills and Memory, preserves Spaces and access, and proves a useful task. Register
 verified personal destinations through Context's
-[dashboard-link procedure](../../osm-context/references/panel-links.md).
+[dashboard-link procedure](../../osm-data-context/references/panel-links.md).
 A consultant's client task never changes their personal default or its links.
 Personal/Team source labels grant no access. Keep one suitable Memory source;
 add a separate team destination only when the actual setup needs it.
@@ -34,7 +34,7 @@ the panel. Hosts without one report Home as unavailable; continue with saved
 links. A scoped connection does not limit any other Notion route the agent can
 use. Record the owner's selected mode and never switch it after a denial. Save
 Home's projection of the definition with Context's
-[dashboard-link procedure](../../osm-context/references/panel-links.md#home-projection),
+[dashboard-link procedure](../../osm-data-context/references/panel-links.md#home-projection),
 and only when the root's verified identity and an already recorded definition
 revision exist; otherwise leave it unsaved and pending and keep the saved links.
 

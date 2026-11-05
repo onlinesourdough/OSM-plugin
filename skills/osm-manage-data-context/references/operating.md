@@ -21,7 +21,7 @@ memory owns decisions and corrections. Map these roles onto suitable existing
 destinations; names and database count need not be identical across companies.
 Native skill designation and required references must remain intact even when
 an existing workspace presents them together.
-Use the approved [schema contract](schema-and-templates.md) when creating or
+Use the approved [schema contract](../../osm-data-context/references/notion/schema-and-templates.md) when creating or
 promoting managed records, checking metadata or changing Spaces/templates.
 
 Select skill metadata by Audience, accountable Owner, Space and Current status.
@@ -51,7 +51,7 @@ an uncertain result is inspected first. With no transactional compare-and-swap,
 re-fetch before mutation and stop a conflicting write rather than claiming a
 lock. Do not replace a truncated page or erase unknown blocks.
 
-Personal and team methods use [the skill lifecycle](personal-skills.md). Shared OSM
+Personal and team methods use [the skill lifecycle](../../osm-manage-skills/references/notion-skills.md). Shared OSM
 methods are updated in the plugin, not copied into the owner's workspace.
 Local exports are dated recovery artifacts or disposable execution caches;
 they do not become a second editable source of truth. Nothing silently merges
@@ -60,14 +60,14 @@ with their pending destination; unrelated repository work continues.
 
 ## Maintenance
 
-Default to [Maintain Context](../../../osm-maintain-context/SKILL.md) during the
+Default to [Maintain Context](../SKILL.md) during the
 current work, at a durable decision/correction or before finishing. Use the
 recorded policy's sources and destinations; save the useful change, not a routine
 run log. Compare existing identity and meaning before writing. An unchanged
 replay should make no write. If neither current task authorization nor a standing
 write policy covers a result, keep the concrete proposed change for approval
 without blocking unrelated work. The recorded policy is read, not regenerated;
-see the architecture's [home write policy](../architecture.md#home-write-policy).
+see the architecture's [home write policy](../../osm-data-context/references/architecture.md#home-write-policy).
 
 A run works from useful new sources, route or source drift, and records that are
 due or flagged. It rereads, revises the concise current record, verifies, and
@@ -76,7 +76,7 @@ clears Review due or moves it, with its reason, and writes nothing else; a run
 with no due, flagged or new input writes nothing. When a revised record has
 dependents, follow them and mark each affected output Needs review until it is
 regenerated and verified (the architecture's
-[maintenance loop](../architecture.md#maintenance-loop)).
+[maintenance loop](../../osm-data-context/references/architecture.md#maintenance-loop)).
 
 The skill is a method, not a background process or a guarantee of fresh data
 between tasks. Use the native host scheduler only for explicitly requested
@@ -89,7 +89,7 @@ conversation or permission to inspect hidden histories. No change should create
 no duplicate memory or routine notification. Notify only through an
 already-selected notification policy, and only on a new or materially changed
 correction, failure or needed decision (the architecture's
-[drift rule](../architecture.md#maintained-controls-and-skills)).
+[drift rule](../../osm-data-context/references/architecture.md#maintained-controls-and-skills)).
 
 Check whether Notion's setup guide has a newer version when useful; report its
 material changes. Do not replace approved instructions, update installed skills, change

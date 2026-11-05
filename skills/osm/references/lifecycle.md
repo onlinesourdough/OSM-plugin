@@ -23,7 +23,7 @@ to decide whether to answer here, prepare a usable handoff or complete productio
 Continue under existing authority unless a material choice remains unresolved.
 Task size, domain and phase alone select no destination or extra artifact.
 
-[Select Model](../../osm-select-model/SKILL.md) supplies model/reasoning suitability
+[Model advice](model-advice.md) supplies model/reasoning suitability
 for that work. Its capability/cost evidence may reopen this decision; it does not
 define the deliverable or take over responsibility for continuation. Keep source
 ownership distinct from the app, harness or session doing the work.

@@ -24,7 +24,7 @@ Shared OSM skills remain in the plugin; project skills remain with their project
 ## Distinguish audit from management
 
 An audit detects and reports the current capability state without mutation.
-Use [Check](../osm-check/SKILL.md) when the request is only to inspect or
+Use [Check](../osm/references/check.md) when the request is only to inspect or
 report; no separate audit skill is required. This skill manages a proposed
 change: create or reconcile a personal skill, review a capability gap, decide
 whether to reuse or install, and perform an authorized install, update,

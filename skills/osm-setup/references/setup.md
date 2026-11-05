@@ -4,12 +4,12 @@ Full setup covers context, capabilities, harness fit, useful work and
 continuity. Repair stays scoped; resume starts at the next gap with known answers.
 No fixed interview or account/device scan. Installation is not usable access.
 
-Business onboarding adds the [coverage check](../../osm-context/references/business-context.md),
+Business onboarding adds the [coverage check](business-context.md),
 reusing existing sources and answers.
 
 ## Context and useful work
 
-Use Maintain Context's [framework](../../osm-maintain-context/references/curation.md)
+Use Maintain Context's [framework](../../osm-manage-data-context/references/curation.md)
 for relevant answers, source/scope, confirmation and gaps. Inspect what is
 already known; keep source facts at their owner and missing values unknown.
 
@@ -36,16 +36,16 @@ useful result from accepted intent; understanding can itself be that result.
 ## Home and harness
 
 Follow Setup's home resolution and optional bridge rules; quote paths as data. Read before writing;
-use [data compatibility](data-format.md), a scoped write rehearsal and missing
-[neutral assets](../assets/owner/AIOS.md). Check unavailable volumes before creation;
+use [data compatibility](../../../docs/legacy-file-home/data-format.md), a scoped write rehearsal and missing
+[neutral assets](../../../docs/legacy-file-home/owner/AIOS.md). Check unavailable volumes before creation;
 resolve bridge conflicts. Stop symlink overwrites; preserve custom/unrelated bytes.
 
 Inspect inherited instructions; owner-context AGENTS must not preload independent
 repositories. Repair only authorized owned blocks; unresolved preload fails isolation.
 Use the current workspace for work. [Creation](../../osm/references/creation.md)
-starts a requested new repository; [specialist maintenance](../../osm-update/references/systems.md)
+starts a requested new repository; [specialist maintenance](../../osm/references/systems.md)
 handles selected optional installations. Merge needed
-[ignore exclusions](../assets/owner/.gitignore) and verify them before owner staging.
+[ignore exclusions](../../../docs/legacy-file-home/owner/.gitignore) and verify them before owner staging.
 
 Full setup/configuration changes use relevant [harness configuration](harness-configuration.md);
 [adapters](adapters.md) owns installation. Preserve settings/overrides; optional
@@ -69,7 +69,7 @@ the snapshot. Reuse accepted answers; retain unresolved confirmation and do not
 claim full setup acceptance. Return path, concise changes, gaps and next action.
 
 A new home/move ends with an explicit remote/direction/scope or local/deferred
-continuity choice through [Sync](../../osm-maintain-context/references/sync.md),
+continuity choice through [Sync](../../../docs/legacy-file-home/sync.md),
 the sole procedure for that consent and transfer. Setup neither duplicates it
 nor creates a repository. On interruption retain coverage, answers/source pointers,
 changes/readback, off states, pending input and next action in task evidence;

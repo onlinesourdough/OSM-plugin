@@ -2,7 +2,7 @@
 
 Use only the scenario set for the affected checkpoint:
 
-- [setup, migration and client entry points](setup-scenarios.md); or
+- [setup, migration and client entry points](../../osm-setup/references/setup-scenarios.md); or
 - [work lifecycle, routing and delivery](workflow-scenarios.md).
 
 A small mechanical fix needs its affected check and diff review, not either

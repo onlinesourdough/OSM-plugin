@@ -2,7 +2,7 @@
 
 Use only for a selected/requested portable brief or whole-task transfer under the
 [shared task-result decision](lifecycle.md). That lifecycle owns continuation;
-[Select Model](../../osm-select-model/SKILL.md) supplies model/reasoning evidence.
+[Model advice](model-advice.md) supplies model/reasoning evidence.
 Orchestrate Workers applies only when the caller retains coordination and acceptance.
 
 ## Choose proportionately

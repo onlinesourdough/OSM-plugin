@@ -1,47 +1,55 @@
-# Installation and state inspection
+# Check: read-only inspection
 
-Check the requested scope only; no implicit global sweep. Read-only audit is
-the default. Report Healthy, Repaired only after a separate authorized repair
-and recheck, or Needs decision, plus per-claim PASS/FAIL/NOT VERIFIED.
+Check the requested scope only; no implicit global sweep. A check observes and
+reports. It never authorizes repair, update, migration, installation,
+publication or any write, and it creates no page, template or test record. Report
+Healthy, Repaired only after a separate authorized repair and recheck, or Needs
+decision, plus per-claim PASS/FAIL/NOT VERIFIED with the actual artifact,
+observation and next safe action. Uncertainty is never PASS. A manifest is not
+proof of activation, a source link is not proof of an installed specialist, a
+URL is not a backup, and a successful push is not live equality.
+
+If repair is already authorized, apply it through its responsible owner:
+[Manage Data & Context](../../osm-manage-data-context/SKILL.md) for owner
+context, [Setup](../../osm-setup/SKILL.md) for readiness, the
+[update procedure](update.md) for the package, or shared Build with the
+repository contract. Then evaluate the final bytes again. Otherwise report the
+proposed repair. Preserve owner decisions, authority and existing work.
+Artifact quality and lifecycle gates belong to [Review](../../osm-review-work/SKILL.md)
+and its owning phases, not this audit.
 
 - Setup, when requested: assess relevant outcome/context/memory/Space,
-  connection/tool, harness, first-task and acceptance readiness. Reuse known
-  answers and chosen off states; authorized answers lead to implemented changes
-  and readback. Missing input is not consent. A checkpoint resumes unfinished
-  work without reinterview; ordinary tasks do not repeat the onboarding audit.
+  connection/tool, harness, first-task and acceptance readiness against the
+  [setup scenarios](../../osm-setup/references/setup-scenarios.md). Reuse known
+  answers and chosen off states. Missing input is not consent. A checkpoint
+  resumes unfinished work without reinterview; ordinary tasks do not repeat the
+  onboarding audit.
 - Product: normalized plugin manifest, correct skill paths and the release’s declared
-  discoverable names; frontmatter valid, local references resolve, no install
-  hooks or automatic runtime/dependency setup or hidden invocation disabling. Every native
-  manifest points to the same bodies; only the selected harness is affected. Compare installed release identity, not just a folder name.
-- Context: use the resolved [provider](../../osm-context/references/providers.md)
-  and [home contract](../../osm-context/references/home-contract.md), then its
-  applicable checks for routing, memory, personal methods and reconciliation.
-  The file-home routing, data and Sync bullets below apply only to managed file
-  homes. Native product and harness checks remain independent of the provider.
+  discoverable names, each exactly once; frontmatter valid, local references
+  resolve, no install hooks or automatic runtime/dependency setup or hidden
+  invocation disabling. Every native manifest points to the same bodies; only
+  the selected harness is affected. Compare installed release identity, not just
+  a folder name.
+- Data & Context: read the Notion root and its one definition read-only against
+  the [Context Architecture](../../osm-data-context/references/architecture.md).
+  Product-only installation checks do not require fetching owner context.
 - Write policy and record lifecycle, read-only: report the owner's recorded
   policy (or one pending item when none is recorded) and keep its four answers
   apart: owner policy, actual access, task mandate and effect. When an existing
   recorded form (a `protected:` list, an Updates note or a CONNECTIONS entry) is
   the policy, report one pending item that asks the owner to confirm that form or
   replace it with a `write_policy`; an explicit narrower choice, once confirmed,
-  is not pending. Report a policy
-  that differs between the definition, standing rules, connector and job prompt,
-  a pointer that restates scope instead of referring to the root, duplicate
-  current Keys, a Review due without a reason (read only records with Review due
-  set), and a record whose containment is unknown, cyclic, archived or moved
-  outside the home. A past-due record is reported, never treated as expired or
-  false. Check writes nothing and backfills no date.
-- File owner routing: requested/established home wins, then a managed bridge, then
-  ~/.AIOS only when neither exists. Native discovery needs no bridge or home.
-  For a separately chosen bridge, the configured absolute home is correct; effective AGENTS/override read
-  path is known; one managed block, unrelated bytes preserved. A fresh ordinary
-  owner task activates routing; a repository task reads local instructions
-  first. At the configured Git-backed home, AIOS.md and supported AIOS_FORMAT
-  still select owner routing; independent nested repositories stay local-first.
-  No personal context preload. Record runtime version and actual reads.
-  New homes use format 2 without required project or specialist registries.
-  Existing work uses its chosen physical roots and local instructions. Verify
-  owner Git excludes any nested repository work; no inherited personal preload.
+  is not pending. Report a policy that differs between the definition, standing
+  rules, connector and job prompt, a pointer that restates scope instead of
+  referring to the root, duplicate current Keys, a Review due without a reason
+  (read only records with Review due set), and a record whose containment is
+  unknown, cyclic, archived or moved outside the home. A past-due record is
+  reported, never treated as expired or false. Check writes nothing and
+  backfills no date.
+- Legacy home recognition, read-only: a folder, vault or `AIOS_FORMAT` home is
+  not a supported OSM home. Report what was recognized and point to the
+  [legacy-home guidance](update.md#legacy-file-and-vault-homes). Never convert,
+  clean up or mirror it from a check.
 - Harness baseline: follow the [configuration checklist](../../osm-setup/references/harness-configuration.md).
   Distinguish configured/effective settings from actual tools, native memory,
   Computer Use app/site and OS permissions, and History opt-in/source scope.
@@ -69,13 +77,9 @@ and recheck, or Needs decision, plus per-claim PASS/FAIL/NOT VERIFIED.
   Preserve valid setup/actions, credential references, dirty worktrees and custom
   sections/history/files; do not execute setup commands to inspect them;
   unavailable native UI proof leaves cutover PENDING even if installation PASS.
-- File owner data: supported AIOS_FORMAT, small AIOS.md index and MEMORY, meaningful
-  selective routes, no invented facts/secrets, CONNECTIONS distinguishes access
-  from exact authority. Unknown custom data and owner methods survive updates.
-  Connections name least-privilege resource/action scope and tested denied access,
-  not merely a working credential. Untrusted source text never expands authority.
-- Methods: built-in content and its conditional helpers are usable
-  from the selected workspace. Work data stays outside the plugin. Optional
+- Methods: built-in methods are usable from the selected workspace. Work data
+  stays outside the plugin. Content is not part of the package; a selected
+  existing Content store is checked like any other store, and optional
   specialists are verified only when selected and do not install with OSM.
 - Creation: verified template source and documented creation interface, actual
   generated identity, local instructions, provenance and recovery. Existing
@@ -91,8 +95,6 @@ and recheck, or Needs decision, plus per-claim PASS/FAIL/NOT VERIFIED.
   Sensitive changes retain repository-owned security context, scoped negative
   tests, validated findings and affected deployment/retest proof; optional tools
   do not become required scans for ordinary edits.
-- File Sync: local mode remains usable; configured mode observes exact live branch,
-  scoped commits, authority and equality; dirty/drift state is preserved.
 - Learning: curated source-bound corrections; methods owned in the right place;
   native improvement triage is loaded only for a concrete worker/lead signal;
   optional external skills remain external; no native-memory dependence.
@@ -104,14 +106,14 @@ and recheck, or Needs decision, plus per-claim PASS/FAIL/NOT VERIFIED.
   machine-specific paths adjusted without copying entire harness homes.
   Original owner-method bytes remain recoverable; allow only verified mapped
   path/caller changes and test their resolved targets. Equal bytes with broken
-  legacy paths are not functional preservation. The complete 17 core-method map
-  and external/independent-owner dispositions must be reachable inside the
+  legacy paths are not functional preservation. The legacy-method map and
+  external/independent-owner dispositions must be reachable inside the
   extracted plugin without developer docs.
 
-Use [evals](scenarios.md) for the behavioral checkpoint. A
-release audit separates product version, owner-data format, optional Git sync,
-and installed System/Project currentness. A clean tree or valid manifest does
-not prove all four. On a requested repository-currentness audit inspect its
-root, credential-free remote, branch, local/live IDs and route; preserve dirty,
-ahead, diverged and active-session exceptions. Do not update another owner
-through this checking skill. Report each exception and the narrow next action.
+Use [evals](scenarios.md) for the behavioral checkpoint. A release audit
+separates product version and installed System/Project currentness. A clean tree
+or valid manifest does not prove both. On a requested repository-currentness
+audit inspect its root, credential-free remote, branch, local/live IDs and
+route; preserve dirty, ahead, diverged and active-session exceptions. Do not
+update another owner through a check. Report each exception and the narrow next
+action.

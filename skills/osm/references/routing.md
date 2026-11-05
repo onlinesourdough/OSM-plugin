@@ -18,8 +18,9 @@ Record a material decision and its rationale in the source that owns the work.
 - [Clarify](../../osm-clarify/SKILL.md) explains complex topics with examples and useful visuals.
 - For visual direction and assets, use an installed design method if the host
   provides one; otherwise do the work directly or report the missing method.
-- [Content](../../content/SKILL.md) creates, revises or repurposes editorial work.
 - [Human writing](../../osm-human-writing/SKILL.md) makes prose clear and natural.
+  Editorial production beyond that belongs to a separate Content method the owner
+  has chosen; OSM ships none.
 - Shared [lifecycle](lifecycle.md) supplies specification, implementation, review
   and authorized delivery with the task's local requirements.
 
@@ -43,7 +44,7 @@ project work when useful; Git is optional. A small task needs no project setup.
 
 Power BI remains an optional specialist for Power BI model/report work. Its
 Desktop/platform requirements do not apply to OSM generally. For that or another
-selected external capability, use [specialist maintenance](../../osm-update/references/systems.md)
+selected external capability, use [specialist maintenance](systems.md)
 to verify the actual source, installation and dependencies. An explicit existing
 route is accepted input, not permission to overwrite it or install alternatives.
 

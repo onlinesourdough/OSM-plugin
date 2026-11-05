@@ -1,7 +1,7 @@
 # Bootstrap and resume before a connection exists
 
 The resumable first-run sequence for a Data & Context root under the
-[Context Architecture](../../osm-context/references/architecture.md). Show the
+[Context Architecture](../../osm-data-context/references/architecture.md). Show the
 current step, a concrete next action and truthful evidence. Resume at the first
 unfinished step; never repeat completed ones or ask an accepted question again.
 This text describes the sequence; executing it depends on the selected host and

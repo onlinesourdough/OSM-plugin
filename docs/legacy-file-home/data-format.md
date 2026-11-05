@@ -17,7 +17,7 @@ version. Resolve setup or a compatible migration before changing that home.
 A package version is not a data format or migration authority.
 
 For actual imports, machine moves or older identities, use
-[data migration](data.md) and [identity migration](migration.md) as applicable.
+[data migration](data.md) and [identity migration](../../skills/osm-setup/references/migration.md) as applicable.
 Product rollback does not restore owner data. A format 2 home needs this release
 or another compatible reader; rollback to a format-1-only reader requires the
 separately preserved owner index and marker, with later owner edits reconciled.

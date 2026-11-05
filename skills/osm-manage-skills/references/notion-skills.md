@@ -25,7 +25,7 @@ sync or installation of its dependencies.
 ## Create, import or edit
 
 For creation or promotion to Current, use the approved owner's mapping and the
-[schema contract](schema-and-templates.md) for completeness, identity and scope.
+[schema contract](../../osm-data-context/references/notion/schema-and-templates.md) for completeness, identity and scope.
 
 1. Inspect the destination and current capability map. Read Notion's Skills
    documentation. Use native upload/download tools when actually exposed;

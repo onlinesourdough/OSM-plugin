@@ -30,11 +30,11 @@ Record the pre-edit hash, reread before patching and make identical replay a
 no-op. Multiple/malformed blocks, a changed source or conflicting home require
 reconciliation. Do not change other apps or store owner data in plugin caches.
 
-Use the [context pointer](../../osm-context/assets/bridge.md) with the chosen
+Use the [context pointer](../../osm-data-context/assets/bridge.md) with the chosen
 provider and exact guide URL/path. Verify that guide before activation. Notion
 is the recommended starting point; a configured alternative remains selected.
 No local mirror or AIOS_FORMAT is required for document/vault homes.
-For file context, use the [file bridge](../assets/bridge.md) with the literal
+For file context, use the [file bridge](../../../docs/legacy-file-home/bridge.md) with the literal
 physical owner path. Resolve an established home first, defaulting to ~/.AIOS.
 AIOS.md plus supported AIOS_FORMAT identify even a Git-backed home; unsupported
 or malformed formats remain read-only.

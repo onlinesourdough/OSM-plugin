@@ -2,9 +2,9 @@
 
 Own context mapping, local gaps, source repair and deduplication. Setup uses
 this for new/changed context; retrieval does not. Before owner writes verify
-AIOS_FORMAT via [data compatibility](../../osm-setup/references/data-format.md);
+AIOS_FORMAT via [data compatibility](../../../docs/legacy-file-home/data-format.md);
 unsupported/malformed stays read-only, missing needs setup. Git-backed durable
-edits use [Sync](sync.md) under recorded authority.
+edits use [Sync](../../../docs/legacy-file-home/sync.md) under recorded authority.
 
 ## Minimum useful framework
 

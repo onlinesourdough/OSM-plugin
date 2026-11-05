@@ -111,7 +111,7 @@ the native template UI or explicitly populate the inspected fields/content;
 read back before retrying so a delayed application cannot duplicate content.
 A personal-skill template must preserve or establish
 native skill designation through supported tools; a template alone proves none.
-See [personal skills](personal-skills.md) for invocation and supporting files.
+See [personal skills](../../../osm-manage-skills/references/notion-skills.md) for invocation and supporting files.
 
 ## Integrity during writes and checks
 

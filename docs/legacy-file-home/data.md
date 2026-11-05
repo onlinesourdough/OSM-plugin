@@ -4,7 +4,7 @@ Use only for an actual legacy import, owner-file move, personal-method route
 repair or optional private backup. Read the small [format contract](data-format.md)
 first. Current format checks and ordinary writes stop there rather than loading
 this migration procedure. For package identity changes, legacy template layout or overlapping
-native/global registrations, also use the explicit [identity migration](migration.md).
+native/global registrations, also use the explicit [identity migration](../../skills/osm-setup/references/migration.md).
 
 ## Plan before migration
 
@@ -21,7 +21,7 @@ CONTEXT index to AIOS.md routes plus context detail, MEMORY to MEMORY,
 CONNECTIONS to CONNECTIONS, and useful work/specialist pointers to the
 owner’s relevant source indexes. Preserve facts, sources, access boundaries, every registry column,
 unknown values and all nonreserved owner skills externally. The 17 proved legacy methods map to the
-packaged [legacy parity map](legacy-parity.md). A name or prefix alone never
+packaged [legacy parity map](../../skills/osm-setup/references/legacy-parity.md). A name or prefix alone never
 proves ownership; inspect provenance before changing any legacy registration.
 Other owner methods stay outside Method. System and
 Project skills stay in their repositories. Do not copy private .aios context
@@ -45,7 +45,7 @@ method, deleting unknown metadata or changing its action permissions.
 
 List each old reference, proved new target and reason in the accepted map.
 Resolve paths relative to the receiving skill, including referenced assets.
-For a retired reserved caller, use the [parity map](legacy-parity.md) to select
+For a retired reserved caller, use the [parity map](../../skills/osm-setup/references/legacy-parity.md) to select
 the new entry/reference, preserving the caller's intent and lifecycle gate.
 Change only those spans, compare the complete diff, and prove all other bytes
 and unknown fields unchanged. Open the new target and rehearse the affected
@@ -98,12 +98,12 @@ Local folder operation needs no Git. If the user chooses it, initialize a
 separate private owner-data repository, not the distributable Method product.
 Inspect tracking/ignore rules before adding: credentials, work, backups and
 nested checkouts must stay outside commits. Use the
-[checkout ignore rules](../assets/owner/.gitignore) while preserving existing source-index
+[checkout ignore rules](owner/.gitignore) while preserving existing source-index
 README files trackable. Prove exclusions with git check-ignore and inspect the
 index for already tracked checkout files or gitlinks: ignore rules do not untrack
 them. Stop unsafe staging and reconcile that state under explicit scope; do not
 silently remove index entries or repository work. Verify private destination/account
 and explicit allowed paths and branch. User configuration records authority;
-product assets leave it unset. Follow [sync](../../osm-maintain-context/references/sync.md).
+product assets leave it unset. Follow [sync](sync.md).
 Private visibility is not permission to store secrets. Product update/uninstall
 never deletes or migrates this owner repository automatically.

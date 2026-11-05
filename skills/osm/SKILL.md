@@ -1,8 +1,8 @@
 ---
 name: osm
-description: Bring in owner context and OSM methods only when a task needs them.
+description: Explain OSM and route a person or agent to the relevant method, documentation or procedure, bringing in owner context only when a task needs it.
 metadata:
-  version: "3.0.0"
+  version: "4.0.0"
 ---
 
 # OSM:context-and-methods
@@ -11,41 +11,63 @@ Use the current task/workspace. Independent repositories use local
 instructions and accepted inputs without personal preload. The harness owns
 projects, sessions, tools and permissions.
 
-For needed context in an already-resolved home, follow its approved guide and
-relevant source routes; do not repeat provider selection. A managed file bridge
-already resolves its root and AIOS.md. Use [Context](../osm-context/SKILL.md) when
-the home or operation needs routing. Load only relevant sources and methods.
-Unavailable context never falls back to an old copy or another provider.
+OSM establishes and maintains a business's data and context foundation in
+Notion, plus reusable methods for working well with an AI agent. For needed
+context, follow the home's approved guide and relevant source routes.
+Unavailable context never falls back to an old copy or another home. Missing
+context does not block unrelated work.
 
-Use [Interview](../osm-interview/SKILL.md) for requested exploration or materially
-unclear goals at the start, including thinking aloud. Reuse accepted answers;
-clear work and isolated questions proceed directly.
+Choose the owner for the request:
 
-For requested context setup, [Context](../osm-context/SKILL.md) reuses the
-established home or resolves the next material choice. [Setup](../osm-setup/SKILL.md)
-owns native installation; managed file homes retain their Sync/new-home choice.
-Missing context does not block unrelated work. Explicit `osm sync` uses
-[Maintain Context](../osm-maintain-context/SKILL.md) for the selected provider.
+- Set up or resume the foundation: [Setup](../osm-setup/SKILL.md).
+- Engineer the Notion home, definition and core stores:
+  [Data & Context](../osm-data-context/SKILL.md).
+- Retrieve, take in, curate or repair owner context, including the existing
+  scheduled run: [Manage Data & Context](../osm-manage-data-context/SKILL.md).
+- Create or change a personal or team method:
+  [Manage Skills](../osm-manage-skills/SKILL.md).
+- Explore or find direction: [Interview](../osm-interview/SKILL.md). Reuse accepted
+  answers; clear work and isolated questions proceed directly.
+- Substantive work: [routing](references/routing.md) selects context, method and
+  result. [Human writing](../osm-human-writing/SKILL.md) for prose,
+  [Clarify](../osm-clarify/SKILL.md) for complex explanations and
+  [Write code](../osm-write-code/SKILL.md) for code, scripts and automation need
+  no owner home. For visual design, use an installed design method if the host
+  provides one; otherwise do the work directly or report the missing method.
+- Shared [Spec](../osm-spec-work/SKILL.md), [Build](../osm-build-work/SKILL.md),
+  [Review](../osm-review-work/SKILL.md) and authorized [Ship](../osm-ship-work/SKILL.md)
+  use local requirements and the [lifecycle](references/lifecycle.md) for task
+  results, continuation, plans and the persistent-goal request boundary. Keep
+  small work small.
+- Also: [project creation](../osm-create-project/SKILL.md),
+  [workers](../osm-orchestrate-workers/SKILL.md) and
+  [improvement triage](../osm-triage-improvement/SKILL.md).
 
-For substantive work, [routing](references/routing.md) selects context, method
-and result. Use [Content](../content/SKILL.md) through reviewed output,
-[Human writing](../osm-human-writing/SKILL.md)
-for prose, [Clarify](../osm-clarify/SKILL.md) for complex explanations, and
-[Write code](../osm-write-code/SKILL.md) for code, scripts and automation. These methods need no owner home.
-For visual design, use an installed design method if the host provides one;
-otherwise do the work directly or report the missing method.
+## Procedures kept here
 
-Shared [Spec](../osm-spec-work/SKILL.md), [Build](../osm-build-work/SKILL.md),
-[Review](../osm-review-work/SKILL.md) and authorized [Ship](../osm-ship-work/SKILL.md)
-use local requirements and the [lifecycle](references/lifecycle.md) for task
-results, continuation, plans and the persistent-goal request boundary. Keep small work small.
+Three bounded procedures live under this entry rather than as separate entries:
 
-Select focused maintenance: [context](../osm-maintain-context/SKILL.md),
-[skills](../osm-manage-skills/SKILL.md), [Check](../osm-check/SKILL.md),
-[Update](../osm-update/SKILL.md), [project creation](../osm-create-project/SKILL.md),
-[model selection](../osm-select-model/SKILL.md),
-[workers](../osm-orchestrate-workers/SKILL.md) or
-[improvement triage](../osm-triage-improvement/SKILL.md).
+- **Check**, read-only inspection: [check](references/check.md). It never
+  authorizes repair or update.
+- **Update and rollback**, with exact before and after revision and recovery,
+  separate from checks and from curating owner content:
+  [update](references/update.md).
+- **Model advice**, only on request; humans keep the model choice:
+  [model advice](references/model-advice.md).
+
+## Renamed and retired entries
+
+A request that names an old entry reaches its owner here. There is no alias
+skill and no second discovery entry.
+
+| Old name | Now |
+| --- | --- |
+| `osm-context`, `OSM Context`, `AIOS Context` | [Data & Context](../osm-data-context/SKILL.md) for the home, [Manage Data & Context](../osm-manage-data-context/SKILL.md) for retrieval and upkeep |
+| `osm-maintain-context`, `Maintain Context`, `osm sync` | [Manage Data & Context](../osm-manage-data-context/SKILL.md); folder-home Sync is retired, see the [legacy-home guidance](references/update.md#legacy-file-and-vault-homes) |
+| `osm-check` | [check](references/check.md) |
+| `osm-update` | [update](references/update.md) |
+| `osm-select-model` | [model advice](references/model-advice.md) |
+| `content`, `diffusion-studio` | Outside OSM: a separate, tailored Content method. Drafts are history only |
 
 Answer stable OSM method facts directly; otherwise select only needed
 [shipped documentation](references/documentation.md). Current product/harness

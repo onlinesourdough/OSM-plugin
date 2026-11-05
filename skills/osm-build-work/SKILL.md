@@ -12,7 +12,7 @@ contract. Return to Spec only for a material gap. Deliver the whole authorized
 result through implementation, relevant verification, Review and requested Ship.
 A small mechanical edit needs its scoped diff and affected check.
 
-Before implementation, use [Select model](../osm-select-model/SKILL.md) to
+Before implementation, use [Model advice](../osm/references/model-advice.md) to
 reconcile the Spec decision with the accepted work and current runtime. Reuse
 current task evidence; if Build starts from an accepted contract without a
 selection, make that proportionate assessment now. Continue on a sufficient

@@ -22,7 +22,7 @@ PASS plus exact existing authorization enables Ship in the same task.
 Capability alone is insufficient. Do not re-ask when standing/session authority
 already covers this exact destination, action and scope. No authorization
 comes from this file. Inspect recovery before the effect. For repository Git delivery use [Git release](references/git-release.md).
-Owner-data Git alone uses [Sync](../osm-maintain-context/references/sync.md);
+Owner-data Git alone uses [Sync](../../docs/legacy-file-home/sync.md);
 its personal-data allowlist does not govern independent product repositories.
 Before any public or customer-facing effect, including a Git publication, run
 [publish safety](references/publish-safety.md) last. Perform only the reviewed action,

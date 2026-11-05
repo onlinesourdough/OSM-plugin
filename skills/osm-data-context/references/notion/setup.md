@@ -8,7 +8,7 @@ No server, custom MCP, database service or local owner folder is required.
 Read the complete current [Notion setup guide](https://developers.notion.com/prompts/setup)
 and the relevant Skills documentation it links. Record the applied version and
 date; a newer remote guide is a review input, not authority to replace policy.
-Use [operating boundaries](operating.md) throughout the setup.
+Use [operating boundaries](../../../osm-manage-data-context/references/operating.md) throughout the setup.
 
 ## Start after installation
 
@@ -52,7 +52,7 @@ table is enough. Continue reversible in-scope setup under existing authority;
 ask only about unresolved facts, conflicts or actions outside that scope.
 Keep the customer's task and any persistent pointer scoped to that customer.
 
-Apply the [business coverage check](../business-context.md) to the selected
+Apply the [business coverage check](../../../osm-setup/references/business-context.md) to the selected
 sources. Map Offers, Demand and Operations, including relevant brand, source
 access and responsibility, before declaring the task ready. Resolve concrete
 gaps through short questions; do not require full coverage to begin a task that
@@ -107,7 +107,7 @@ keep private/team destinations separate when access differs. A solo setup needs
 no empty team database. Do not infer sharing consent from a Team label.
 
 Migrate selected personal or team methods through [Manage Skills](../../../osm-manage-skills/SKILL.md)
-and the [Notion skill lifecycle](personal-skills.md). Preserve every
+and the [Notion skill lifecycle](../../../osm-manage-skills/references/notion-skills.md). Preserve every
 supporting file and repair references before retiring an old registration.
 
 ## Starting in a messy workspace
@@ -174,11 +174,11 @@ restate it. An existing recorded form (a `protected:` list, an Updates note or a
 CONNECTIONS entry) is read and kept, and a rerun never drops a narrower choice.
 See the architecture's [home write policy](../architecture.md#home-write-policy).
 
-Make [Maintain Context](../../../osm-maintain-context/SKILL.md) usable at natural task
+Make [Maintain Context](../../../osm-manage-data-context/SKILL.md) usable at natural task
 checkpoints within the recorded read/write policy. No timer is required.
 Setup or general upkeep authority does not authorize a recurring task. Use the
 host's scheduler only for an explicit recurring-work request with bounded
-sources, destinations and cadence; see [maintenance](operating.md#maintenance).
+sources, destinations and cadence; see [maintenance](../../../osm-manage-data-context/references/operating.md#maintenance).
 Skill automatic-use settings do not create scheduled runs.
 
 ## Prove the result
