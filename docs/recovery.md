@@ -42,7 +42,7 @@ recover ignored or untracked work it never stored, so moving an owner home must
 copy and verify those checkouts independently. Removing a shortcut or
 registration never authorizes deleting its target.
 
-[System maintenance](../skills/osm-update/references/systems.md) preserves exact
+[System maintenance](../skills/osm/references/systems.md) preserves exact
 source refs and System-local storage/recovery evidence before a compatible
 fast-forward. Worktrees do not eliminate conflicts or back up data. Unknown
 artifact backup coverage, local commits, tracked user artifacts or incompatible
@@ -81,7 +81,7 @@ is not owner-data recovery.
 
 ## Notion preview
 
-Use the [Notion recovery route](../skills/osm-context/references/notion/operating.md#recovery).
+Use the [Notion recovery route](../skills/osm-manage-data-context/references/operating.md#recovery).
 Restore only the previous owned bridge, plugin selections and personal-skill
 registrations after checking current identities. Preserve Notion pages and any
 new work; reconcile post-cutover decisions before resuming old memory.

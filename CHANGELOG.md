@@ -5,7 +5,38 @@
 This section and the `0.31.0` section below are both unreleased; reconcile them
 into one dated entry before any tag.
 
-- The OSM Context Architecture (`skills/osm-context/references/architecture.md`)
+- Notion-only core with a separate Content boundary (#88). The shipped set is 17
+  skills (was 22):
+  - `osm-context` is now `osm-data-context` and `osm-maintain-context` is now
+    `osm-manage-data-context`; `osm` routes the old names and ships no alias
+    skill. Manage Data & Context is one method for manual, task-time and
+    scheduled use and maintains an existing Content store without a Content
+    module. Setup is a single conductor and never creates Content.
+  - Check, Update and Select model are internal references under
+    `skills/osm/references` (check is read-only; update and rollback record the
+    exact before and after revision and preserve user choices; model advice is
+    given only on request and humans keep the model choice).
+  - Provider selection, existing-home, vault and Obsidian setup, the managed
+    `AIOS.md` file home, the file bridge, folder-home Sync and the owner
+    file-home templates are out of the active flow. A legacy folder or vault
+    home is recognized read-only with honest incompatibility and migration
+    guidance in the update reference; originals and recovery are preserved and
+    nothing is converted, mirrored or cleaned up silently. The retired records
+    stay under `docs/legacy-file-home` (not shipped).
+  - The Codex sidebar no longer offers "Use a folder or other link"; the bundled
+    runtime was rebuilt from source.
+  - Content and Diffusion Studio left the package. Their drafts and preserved
+    tests are kept under `docs/content-drafts` (not shipped, no `SKILL.md`).
+  - The scheduled daily caller needs a new skill name before updating. The
+    operator-run migration steps are written down in the update reference; nothing
+    was run or edited.
+  - New or changed checks: validator inventory and no-alias controls, skill
+    version rename mappings, footprint, caller-graph and responsibility
+    rehearsal, and extra lifecycle cases in the context-architecture rehearsal.
+  - Still open: the neutral-root Home projection revision gap and the missing
+    Home credential route (unsupported host) are carried unchanged. The package
+    stays at the unreleased `0.31.0`; this is not an installed or released build.
+- The OSM Context Architecture (`skills/osm-data-context/references/architecture.md`)
   is the one shared contract for a customer's Data & Context root. It covers:
   - one neutral root with one definition;
   - five coverage areas versus distinct storage roles, with a configurable

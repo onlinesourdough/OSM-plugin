@@ -335,7 +335,7 @@ def validate(root=ROOT, release_tag=None):
             "Customer documentation stays in its\nsource system" in overview_text and
             "Install it separately in each app you choose" in overview_text and
             "never paste credentials into a chat" in overview_text and
-            "Native package updates are separate from owner-data Sync" in overview_text,
+            "Native package updates are separate from owner context" in overview_text,
             "local overview boundaries")
     distribution = (root / "docs/distribution.md").read_text()
     require("docs/osm.md" in distribution and

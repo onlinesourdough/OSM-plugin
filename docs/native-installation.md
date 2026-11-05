@@ -137,13 +137,12 @@ connection checks use its signed-in Codex CLI. The panel has no hosted service
 or consumer dependency-install step. Other client manifests still expose skills
 only. See [sidebar setup and recovery](sidebar.md).
 
-[Context](../skills/osm-context/SKILL.md) resolves the chosen home independently
-of installation. Use its [short host pointer](../skills/osm-context/assets/bridge.md)
-for a verified context entry URL or path. Notion is preferred for small teams;
-existing alternative homes keep their mappings. No provider failure falls back
-to `~/.AIOS`. Only a selected managed file home uses the file setup/default-root
-rules and format `2` (existing format `1` remains supported). An Obsidian vault is
-not automatically a managed file home. Package installation creates no home.
+[Data & Context](../skills/osm-data-context/SKILL.md) resolves the chosen home independently
+of installation. Use its [short host pointer](../skills/osm-data-context/assets/bridge.md)
+for a verified Notion context entry URL. Notion is the only supported home; no
+failure falls back to `~/.AIOS` or another provider. A legacy folder or vault home
+is read-only (see the [update reference](../skills/osm/references/update.md#legacy-file-and-vault-homes)).
+Package installation creates no home.
 
 ## Evidence and limits
 

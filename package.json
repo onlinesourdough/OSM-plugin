@@ -2,7 +2,7 @@
   "name": "osm",
   "version": "0.31.0",
   "private": true,
-  "description": "Portable context and skills for planning, content and reviewed delivery.",
+  "description": "Portable context and skills for planning, writing and reviewed delivery.",
   "license": "MIT",
   "keywords": [
     "pi-package"

@@ -21,7 +21,7 @@ reading, inserting and updating separately. Home needs **Read content** only.
 That describes this panel alone. Home being a read-only view neither limits nor
 implies the owner's recorded write policy for agents and the maintenance job,
 which the Context Architecture's
-[home write policy](../skills/osm-context/references/architecture.md#home-write-policy)
+[home write policy](../skills/osm-data-context/references/architecture.md#home-write-policy)
 defines.
 
 Grants Setup asks the owner for:

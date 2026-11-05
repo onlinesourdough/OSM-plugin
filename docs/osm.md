@@ -9,13 +9,13 @@ owner's relevant context and carry a task from a small request to a reviewed
 result. It is not a model, a hosted service, or a replacement for the tools and
 permissions supplied by the assistant's native harness.
 
-OSM focuses on business work, decisions, content, design and practical
+OSM focuses on business work, decisions, clear writing and practical
 automation. Projects own their implementation, engineering standards, design,
 infrastructure and delivery configuration.
 
 ## Your context home
 
-OSM is the shared method; your context home is the place you choose for your own
+OSM is the shared method; your context home is the Notion home you own for your
 context. In Codex, open **OSM** in the sidebar. Numbered setup steps save your Context,
 Docs, Personal/Team Skills and Memory destinations, then open your dashboard.
 All setup sections remain visible and revisitable. Existing context opens the
@@ -32,25 +32,31 @@ helps with the first task. Personal and Team skills retain actual permissions;
 Audience and Space are not access control. A new Notion entry is called **OSM**
 by default; existing entries and customer names remain theirs.
 
-[Context](../skills/osm-context/SKILL.md) owns the common home contract and selects
-one provider. The host keeps a short pointer to an approved entry; the agent reads
-only relevant sources and personal methods. Notion is preferred for solo founders,
-business leaders and small teams. Reuse full-page Docs, native Skills and Memory,
-with Spaces for business and brand scopes. Start with one useful workflow in an
-existing workspace; no wholesale migration is required.
+[Data & Context](../skills/osm-data-context/SKILL.md) engineers the Notion home: its
+root, one definition and the core Knowledge, Memory and Skills stores, reusing
+what exists and creating only what is missing. [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md)
+retrieves, takes in and curates context afterwards, for a manual request, a task
+checkpoint or an existing scheduled run. The host keeps a short pointer to the
+approved entry; the agent reads only relevant sources and personal methods.
+Reuse full-page Docs, native Skills and Memory, with Spaces for business and
+brand scopes. Start with one useful workflow in an existing workspace; no
+wholesale migration is required.
 
-An established alternative can use its own structure and verified tools. Managed
-file homes retain their concrete procedure; other providers need separate proof.
-Shared methods stay in the plugin and operational records at their source.
-Maintain Context saves durable changes during work. No local mirror, hosted
-server or timer is required. The Codex panel is a bundled local MCP process
-managed by Codex, using Node.js 22+ and the installed Codex CLI for connection
-status. It reads connection metadata, the short pointer and a private navigation
-map of names/links scoped to that context. No source bodies are copied. Explicit
-Setup registers verified destinations through OSM MCP after using the existing
-provider connector. Context retrieves the actual source when a task needs it.
-Installing or updating OSM leaves existing homes
-intact; use Setup when you choose to establish or move one.
+Notion is the only supported context home. External systems, local files and
+repositories stay valid sources or working artifacts, never alternate homes. A
+legacy folder, vault or `AIOS_FORMAT` home is recognized read-only: its original
+and recovery stay intact, and the [update reference](../skills/osm/references/update.md#legacy-file-and-vault-homes)
+explains the incompatibility and the owner-led migration choice. Nothing is
+converted, mirrored or cleaned up silently. Shared methods stay in the plugin and
+operational records at their source. No local mirror, hosted server or timer is
+required. The Codex panel is a bundled local MCP process managed by Codex, using
+Node.js 22+ and the installed Codex CLI for connection status. It reads
+connection metadata, the short pointer and a private navigation map of
+names/links scoped to that context. No source bodies are copied. Explicit Setup
+registers verified destinations through OSM MCP after using the Notion
+connector. Data & Context retrieves the actual source when a task needs it.
+Installing or updating OSM leaves existing homes intact; use Setup when you
+choose to establish one.
 
 ## Shared method, owner context
 
@@ -77,14 +83,14 @@ source, that is an evidence gap—not a reason to invent an answer from memory.
 
 ## Native harnesses and access
 
-Content, clear writing and code quality are included methods. Visual design
+Clear writing and code quality are included methods. Visual design
 uses an installed design method if the host provides one; otherwise the
 assistant does the work directly or reports the missing method. Write code
 applies to application code, scripts and automation, with verification suited
 to the change. The native app owns
 projects and sessions; OSM adds no second project register. Spaces hold relevant
 business context, while optional specialist Systems keep their own upkeep.
-Design and content working material stays in the project.
+Design and writing working material stays in the project.
 
 For a visible UI change, Build's [review handoff](../skills/osm-build-work/references/review-handoff.md)
 compares a real baseline and candidate capture of the same state, viewport and
@@ -117,11 +123,10 @@ resolve other choices. These steps are conditional and reuse accepted answers;
 ordinary work gains no mandatory interview, prototype or parallel agents.
 
 The shared delivery path is Spec → Build → Review → authorized Ship. Spec
-reuses interview decisions. Content uses Human Writing, production as needed and
-its own final review; ordinary video can use the optional Diffusion Studio.
-These methods connect only where the accepted result needs them. Project setup,
-context maintenance, skill management and package updates retain their focused
-owners. Reusable methods use Manage Skills; the former Create System entrypoint
+reuses interview decisions. These methods connect only where the accepted result
+needs them. Project setup, context maintenance, skill management and package
+updates retain their focused owners; check, update and model advice are
+references under `osm`. Reusable methods use Manage Skills; the former Create System entrypoint
 is retired.
 
 [Create Project](../skills/osm-create-project/SKILL.md) establishes a useful
@@ -146,25 +151,26 @@ carrying its accepted scope and sources while preserving each environment's own
 instructions, credentials and execution controls. Human involvement does not
 itself enforce a filesystem or tool boundary.
 
-The **Agentic Content System** combines these domain skill chains with the
-project's context, working files and selected tools. It is built into OSM;
-independently maintained specialist Systems can add their own dependencies and
-upkeep. Diffusion Studio is the optional video workbench. OSM supplies its
-operating method; the external application is separately installed. AIOS 0.29.0
-no longer ships design skills; existing project `DESIGN.md` and `design/` files
-are unchanged.
+Content production and video are not part of OSM. Content and Diffusion Studio
+left the package in 0.31.0; their history is kept as non-shipped drafts in the
+source repository's `docs/content-drafts/README.md` (not part of the package), a record of five
+configurable areas (setup, intake, prepare, produce and distribute, learn), not a
+plugin or required pipeline. Where an owner chooses a separate Content method,
+Notion editorial and Kit are the current selected tools and HyperFrames is an
+unqualified video candidate only. AIOS 0.29.0 no longer ships design skills;
+existing project `DESIGN.md` and `design/` files are unchanged.
 
 In Codex, the built-in browser can show local design/application previews.
-Diffusion Studio exposes a read-only companion;
-editing and export use its external desktop host. The current companion lacks
-media-element support, so final video review uses the actual export. Browser
-surfaces supplement the project files and native tools that perform the work.
+Browser surfaces supplement the project files and native tools that perform the
+work.
 
 ## Skill names
 
 Method skills use `osm` or an `osm-` prefix, such as `osm-build-work`, and show
-as `OSM:build-work`. Content and Diffusion Studio keep their own names; a
-plugin-qualified host may show `osm:content`. Each skill declares its canonical
+as `OSM:build-work`; a plugin-qualified host may show `osm:osm-build-work`. OSM
+0.31.0 renamed `osm-context` to `osm-data-context` and `osm-maintain-context` to
+`osm-manage-data-context`, and folded Check, Update and Select model into
+references under `osm`; `osm` routes the old names and ships no alias skill. Each skill declares its canonical
 name; the harness owns its native namespace. Personal methods keep their own
 names and ownership. Renames update the body, callers and native registration
 together.
@@ -173,9 +179,9 @@ together.
 
 OSM 0.30.0 is the method previously released as AIOS (`aios`, 0.29.0 and
 earlier). It is distinct from the retired OSM 0.1.x packages. Your context home
-keeps its existing names: `AIOS.md`, `AIOS_FORMAT`, `~/.AIOS`, the
-`<!-- AIOS:BEGIN -->` instruction block and saved Codex panel links. Updating
-needs no owner-data migration. At a quiet moment, install `osm@online-sourdough`
+keeps its stored names: the `<!-- AIOS:BEGIN -->` instruction block and saved
+Codex panel links, and a legacy file home keeps `AIOS.md`, `AIOS_FORMAT` and
+`~/.AIOS` read-only. Updating needs no Notion migration. At a quiet moment, install `osm@online-sourdough`
 and check its version, then disable `aios@online-sourdough` with your app's
 supported plugin control (in Claude Code, `claude plugin disable`) before
 starting a fresh chat, so only one copy of each skill is active. Remove `aios`
@@ -194,23 +200,12 @@ available to the user and task.
 
 ## Continuity between machines
 
-For Notion context, reconnect the selected workspace through the new harness,
-verify the exact guide and personal skills, then establish its thin pointer.
-Keep dated exports and the setup recovery record for recovery; this is not
-file Git Sync or automatic replication of every connected business source.
-
-For file context, choose continuity explicitly. Private GitHub is a sensible
-option for a private owner backup, but it never creates a repository or uploads
-your data without your approval. On a missing or genuinely empty chosen home,
-OSM asks whether to Sync the existing home or set up new; established, partial and
-custom homes are preserved rather than restarted.
-
-Sync transfers only approved owner context, personal skills, and owner
-format/index metadata. It excludes plugin bodies, credentials, native settings
-and history, caches, and nested Project/System repositories. Restore validates
-the remote scope and format first, writes only to an absent or empty chosen home,
-and never executes restored scripts. A later native bridge registration remains
-a separate authorized setup action.
+Notion holds the home across machines: reconnect the selected workspace through
+the new harness, verify the exact guide and personal skills, then establish its
+thin pointer. Keep dated exports and the setup recovery record for recovery;
+this is not automatic replication of every connected business source. A legacy
+file home never receives a transfer, Sync or mirror from OSM 0.31.0; its
+originals stay as they are.
 
 ## Getting started and reading more
 
@@ -221,7 +216,7 @@ procedures remain with their owning documentation so this overview stays short.
 
 This overview ships with the OSM version named above and is read only when
 needed. Its version travels with the shared methods in the installed package.
-Native package updates are separate from owner-data Sync. There is no OSM
+Native package updates are separate from owner context. There is no OSM
 documentation or skill runtime on the Resources domain. A newer upstream
 release does not replace instructions already read into an active conversation.
 Refresh/update the package through your app first, then start a fresh chat.
