@@ -1,5 +1,60 @@
 # Verification
 
+On 2026-11-05 the integrated candidate below was repaired after its independent
+review (code head `3dcac9b`, from `f544643`; this record is the commit after
+it). The review requested changes on two text blockers. Merge preservation, the
+versions and the three earlier template and record fixes were not touched, and
+no code, build, fixture, harness or runtime changed.
+
+- **What changed.**
+  - *Local pilots:* the installability text no longer says the Codex, Pi and
+    Gemini routes cannot reach the candidate. Public routes need publication;
+    documented local-path pilots exist for Codex, Pi and Gemini as well as
+    Claude Code; none was exercised on this candidate; only Codex has the sidebar
+    and Home; no installation is authorized here.
+  - *Home projection:* the Home projection procedure in `panel-links.md` now
+    takes the projection's id and canonical title from the selected root's
+    verified stable identity, says the definition's format `version: 1` is not a
+    revision, and requires an already recorded revision with known provenance.
+    Without that identity or revision, only Home's projection stays unsaved and
+    pending, the saved links stay, and Setup and other work continue. Existing
+    definitions with a verified id and revision keep working, and `generatedAt`
+    is the actual generation time. Setup's `panel.md` conditions the save the
+    same way. The template gains no revision field, and no schema, backend or UI
+    changed.
+  - *Smaller items:* the changelog marks its `Unreleased` and `0.31.0` sections
+    both unreleased, to be reconciled before any tag; the architecture's Home
+    sentence says Home reads a projection and currently reports
+    `unsupported_host`; the earlier record's claim about Home was softened; the
+    copied `node_modules` is stated as not integrity-checked and not a fresh or
+    hermetic install, and is attributed to my own Home worktree, not the lead's
+    checkout; and the scanner's flagged link is stated as the scanner's
+    limitation, with the review's own check finding no broken link.
+- **Checks on a clean clone of `3dcac9b`.** The context rehearsal gives 80
+  positives and 58 valid variants passing and 401 negatives rejected with
+  `failures=0`, and its output is identical, once the step wrapper's own lines
+  are removed, to the previous final head's. `validate.py --baseline 314dcf1`,
+  the documentation, onboarding, layout, skill-version and footprint checks
+  pass, and `git diff --check` is clean from `314dcf1` and from `f544643`. The
+  footprint journey `codex-package-and-bridge-verification` is 42,781 bytes
+  against its 42,793-byte bound, unchanged; no trim was needed. The diff from
+  `f544643` names five paths: `CHANGELOG.md`, `docs/verification.md`,
+  `skills/osm-context/references/architecture.md`,
+  `skills/osm-context/references/panel-links.md` and
+  `skills/osm-setup/references/panel.md`.
+- **Evidence reused, bound by byte identity.** `apps/sidebar`, `runtime/sidebar`,
+  the rehearsal script, its fixtures, `tests/continuity-rehearsal.py` and
+  `skills/osm-setup/assets/owner` are byte-identical to `f544643`, so the
+  sidebar, continuity and mutation evidence stays bound to its earlier logs and
+  was not rerun; `npm` was not used.
+- **Carried and not fixed.** C-04 to C-09, INT-05, INT-08, INT-09, R-10, R-11,
+  and the dropped parts of R-13, R-14 and R-15 remain open. A neutral root with
+  no already recorded definition revision leaves only Home's projection pending.
+  CI does not run the context rehearsal.
+- **Retained evidence:** the raw logs and their hashes are kept only on the
+  author machine, in a machine-local `osm-c1-a1-r1-20261102/evidence-int-r2`
+  directory.
+
 On 2026-11-05 a local integrated candidate (code head `f49813b` on
 `feat/osm-integrated-candidate-20261105`) merged three inputs, none of them
 changed: HL-1 `7d7e2a2` (which includes C1), Home K5 `492a133` and the accepted
