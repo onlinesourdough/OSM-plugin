@@ -1,5 +1,39 @@
 # Verification
 
+On 2026-11-05 the documentation reconciliation and a source-only documentation
+publisher (#85) were added on `feat/osm-85-docs-publisher-20261105`, from the #88
+repair head `9de4317`. The code head is `826711c`; this record is the commit after
+it. It is local only: nothing was pushed, published, installed or tagged, no workflow
+was enabled, and no Notion, schedule or credential action happened.
+
+- **What changed.** The README, docs index, overview and architecture separate declared,
+  fixture-tested, native-tested and released states and call the public guide a reference
+  projection of v0.30.0; twelve dated records moved unchanged to `docs/archive`; the #88
+  repair's carry-in corrections were made (ten validator pins, a record-lifecycle line for
+  the relation rule). `docs-publisher/` adds a per-artifact ownership manifest, an impact diff
+  with a visible reconciliation result, a serialized idempotent publishing stage, an
+  unexercised Notion transport and an inactive workflow template.
+- **What the fixtures prove, and what they do not.** An in-memory transport exercises
+  unchanged source, a changed reference, rename and retirement, a newer original, missing or
+  expired access, a partial update, repeat delivery, refusal to write the Content templates, an
+  unknown write read back before a retry, a released edition resolving to its approved commit,
+  rows not yet handed to CI getting no write, and a CI-owned row changed by another writer. Eight
+  deliberate breakages of the publisher were each detected. None of it is a live publication: the
+  Notion transport has never run, the publisher is not active, and no live proof exists.
+- **Checks at `826711c` in a clean clone.** Each ran directly with its exit status captured, and
+  all 22 exited 0: `validate.py` plain and against `8b8f21a` and `314dcf1`; the documentation,
+  onboarding, layout, continuity, skill-version, footprint, responsibility and context-architecture
+  rehearsals; the publisher and consumer-selection rehearsals and the credential-free
+  reconciliation check; the publisher mutation controls; `git diff --check` from `8b8f21a`; the
+  draft node and Python tests; and the sidebar build, no-diff check, tests and smoke test. `npm ci`
+  was not run (npm is absent; `node_modules` was copied after the lockfiles compared equal), so the
+  sidebar steps are non-hermetic.
+- **Not run.** CI, any native rehearsal, any install, Home or live Notion check, either consumer
+  site, and the bounded live publication proof. The preconditions that remain are listed in
+  `docs-publisher/ACTIVATION.md`.
+- **Retained evidence:** raw logs and hashes are kept on the author machine under the
+  machine-local `evidence-85` directory of the work area.
+
 On 2026-11-05 the Notion-only core candidate (#88) was repaired after its
 integrated source review of `90d912f`, which requested changes (one Major and ten
 Minor findings). The repair head is `4bce572`, on
