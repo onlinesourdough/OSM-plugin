@@ -13,6 +13,8 @@ reusing existing sources and answers.
 Use Manage Data & Context's [framework](../../osm-manage-data-context/references/curation.md)
 for relevant answers, source/scope, confirmation and gaps. Inspect what is
 already known; keep source facts at their owner and missing values unknown.
+Sort what setup learns with its [intake classes](../../osm-manage-data-context/SKILL.md#classify-what-comes-in):
+durable, provisional (the snapshot below until confirmed) or source-only.
 
 When the purpose or context for useful first work needs exploration, use
 [Interview](../../osm-interview/SKILL.md) under its activation rules, with its

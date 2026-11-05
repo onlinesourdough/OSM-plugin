@@ -716,7 +716,7 @@ names may differ.
 The Review due reason uses an existing notes field, otherwise a labelled body
 line. Check reads only records with Review due set. Unknown dates stay unknown
 and a single date stays valid. There is no mass backfill, no read or no-op
-datestamp, no universal recency score and no arbitrary half-life. An unchanged
+datestamp, no universal recency, truth or health score and no arbitrary half-life. An unchanged
 reconfirmation does not change Revised.
 
 Type mapping, with no identical schema forced on all stores:
@@ -743,7 +743,9 @@ drift flag at the record itself). For each: reread, revise the concise current
 record, keep relevant history, verify, and set only meaningful dates. A missing source or
 owner choice becomes a precise pending item. Unchanged content gets no rewrite
 and no date. Context upkeep stays core without any Content store and keeps
-one existing job with its runtime, scope and checkpoints.
+one existing job with its runtime, scope and checkpoints. A run returns the
+needs-attention list that [Manage Data & Context](../../osm-manage-data-context/SKILL.md#upkeep)
+defines, and advances a checkpoint only after readback.
 
 - **Completing a review.** A completed review with no substantive change leaves
   content and Revised alone. It clears Review due or moves it to a new justified
@@ -782,8 +784,9 @@ and said so. Select in this order:
 
 Superseded, quarantined and unavailable material stays out of current answers
 and may appear only as labelled history. Current, All and Attention views aid
-navigation; they are neither access controls nor a relevance score. A newer
-technical edit establishes neither relevance nor truth. Conflicts and unknown
+navigation; they are neither access controls nor a relevance score. A recent
+edit, revision or import establishes neither relevance nor truth, and an import
+time is never the comparable evidence time. Conflicts and unknown
 dates are shown honestly, with the reason for the conflict kept. A noncurrent
 history page is labelled as such, and a current answer uses the Summary.
 

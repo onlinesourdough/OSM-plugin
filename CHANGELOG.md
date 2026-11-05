@@ -33,6 +33,14 @@ into one dated entry before any tag.
   - New or changed checks: validator inventory and no-alias controls, skill
     version rename mappings, footprint, caller-graph and responsibility
     rehearsal, and extra lifecycle cases in the context-architecture rehearsal.
+  - Context-method refinement: Manage Data & Context classifies incoming material
+    as durable, provisional or source-only; ambiguous placement and unsettled
+    authority conflicts are flagged, never merged; a relation needs a stated
+    meaning, evidence and attribution; an import is not an evidence time; a run
+    returns one needs-attention list (no global truth, health or freshness score),
+    advances a checkpoint only after readback and retries under the same
+    identity. No new store or property. Fixture cases 85-89 and a recent-import
+    variant of case 78 cover it; this is fixture proof only.
   - Still open: the neutral-root Home projection revision gap and the missing
     Home credential route (unsupported host) are carried unchanged. The package
     stays at the unreleased `0.31.0`; this is not an installed or released build.

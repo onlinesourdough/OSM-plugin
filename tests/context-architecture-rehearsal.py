@@ -1511,12 +1511,18 @@ def retrieval_order(data, ws):
         return candidate["owner"] == task["owner"] and candidate["scope"] == task["scope"]
 
     comparable = [c for c in candidates.values() if matches(c) and c["status"] == "current"]
+
+    def rank(candidate):
+        # An import time is not an evidence time, so it never breaks a tie.
+        imported = candidate.get("time_basis") == "import"
+        return (AUTHORITY_ORDER.index(candidate["authority"]), float("inf") if imported else candidate["age_days"])
+
     if comparable and not matches(chosen):
         reasons.append("task-scope-ignored")
     elif chosen["status"] != "current":
         reasons.append("noncurrent-selected")
-    elif comparable and chosen is not min(comparable, key=lambda c: (AUTHORITY_ORDER.index(c["authority"]), c["age_days"])):
-        reasons.append("recency-over-authority")
+    elif comparable and chosen is not min(comparable, key=rank):
+        reasons.append("import-outranks" if chosen.get("time_basis") == "import" else "recency-over-authority")
     if len(comparable) > 1 and not data["conflict_reason_kept"]:
         reasons.append("conflict-reason-dropped")
     if data["view_used_as_access_control"]:
@@ -1650,6 +1656,108 @@ def concurrent_conflict(data, ws):
     return unique(reasons)
 
 
+@check("intake-classification")
+def intake_classification(data, ws):
+    reasons = []
+    for item in data["inputs"]:
+        kind = item["class"]
+        if kind not in ("durable", "provisional", "source-only"):
+            reasons.append("unclassified")
+            continue
+        if item["raw_kept"]:
+            reasons.append("raw-chat-retained")
+        if kind == "durable" and not (item["evidence_kept"] and item["attributed"]):
+            reasons.append("durable-without-evidence")
+        if kind == "provisional" and not item.get("promoted_on_confirmation"):
+            if item["current"]:
+                reasons.append("provisional-asserted-current")
+            if not item.get("labelled_pending"):
+                reasons.append("provisional-unlabelled")
+        if kind == "source-only":
+            if item["copied"]:
+                reasons.append("source-only-copied")
+            if item["record_revised"]:
+                reasons.append("source-only-made-record")
+    return unique(reasons)
+
+
+@check("flagged-results")
+def flagged_results(data, ws):
+    reasons = []
+    for item in data["items"]:
+        if item["merged"]:
+            reasons.append("forced-merge")
+        if not item["flagged"]:
+            reasons.append("unflagged")
+        if item["versions_kept"] < 2:
+            reasons.append("version-lost")
+        if not item["owner_question"]:
+            reasons.append("no-owner-question")
+        if not item["reported"]:
+            reasons.append("unreported")
+    return unique(reasons)
+
+
+@check("relation-basis")
+def relation_basis(data, ws):
+    reasons = []
+    for relation in data["relations"]:
+        if not relation["created"]:
+            continue
+        if not relation["meaning"]:
+            reasons.append("relation-without-meaning")
+        if not relation["evidence"]:
+            reasons.append("relation-without-evidence")
+        if not relation["attribution"]:
+            reasons.append("relation-without-attribution")
+        if not relation["exact_ids"]:
+            reasons.append("title-match-as-relation")
+    return unique(reasons)
+
+
+NEEDS_ATTENTION_CLASSES = ("intake", "conflict", "review-due", "coverage", "write")
+
+
+@check("needs-attention")
+def needs_attention(data, ws):
+    reasons = []
+    for item in data["items"]:
+        if item["kind"] not in NEEDS_ATTENTION_CLASSES:
+            reasons.append("unknown-class")
+        for field, reason in (("subject", "item-without-subject"), ("reason", "item-without-reason"),
+                              ("next_action", "item-without-next-action")):
+            if not item[field]:
+                reasons.append(reason)
+        if item["kind"] == "review-due" and not item.get("justified"):
+            reasons.append("unjustified-review-due")
+        if item["kind"] == "coverage" and not item.get("material"):
+            reasons.append("immaterial-coverage-gap")
+    if data["score"] is not None:
+        reasons.append("global-score")
+    if data["verdict"] is not None:
+        reasons.append("health-verdict")
+    if not data["checked_scope"]:
+        reasons.append("scope-unstated")
+    return unique(reasons)
+
+
+@check("checkpoint-identity")
+def checkpoint_identity(data, ws):
+    reasons, retry = [], data["retry"]
+    unread = [write for write in data["writes"] if not write["read_back"]]
+    if unread and data["checkpoint_advanced"]:
+        reasons.append("checkpoint-on-unread-write")
+    if any(write["listed_as"] != "unknown-write" for write in unread):
+        reasons.append("unread-write-unlisted")
+    if retry["identity"] != retry["original"]:
+        reasons.append("retry-new-identity")
+    if retry["new_records"]:
+        reasons.append("retry-duplicate-record")
+    if not retry["inspected_first"]:
+        reasons.append("blind-retry")
+    return unique(reasons)
+
+
 def fictional(value, path="fixture"):
     problems = []
     if isinstance(value, dict):
@@ -1688,8 +1796,8 @@ def main():
     failures += problems
 
     ids = [case["id"] for case in cases]
-    if ids != list(range(1, 85)):
-        failures.append(f"case ids are not 1..84: {ids}")
+    if ids != list(range(1, 90)):
+        failures.append(f"case ids are not 1..89: {ids}")
     for case in cases:
         label = f"case {case['id']:>2} {case['name']}"
         document, _, anchor = case["contract"].partition("#")

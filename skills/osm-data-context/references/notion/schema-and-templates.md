@@ -75,14 +75,19 @@ owner wants them; the meanings are in the architecture's
 [record lifecycle](../architecture.md#record-lifecycle). Review due keeps its
 reason in an existing notes property, otherwise in a labelled body line. Offer
 Current and All views, and an optional Attention view of records with a Review
-due set or a flag; views aid navigation and are not access controls. A
+due set or a flag, which can show the run's needs-attention list; views aid
+navigation and are not access controls or a score. A
 noncurrent history page is labelled as history. Plain pages need no added fields,
 and there is no backfill of dates on existing records.
 
 Use native page mentions for ordinary references. Add a native relation only
 for a useful record relationship, such as Memory's Related docs pointing to the
-Docs a decision affects. Resolve exact page IDs; matching titles or Space names
-is not a foreign-key relationship. Links do not synchronize source systems.
+Docs a decision affects, and only with a stated meaning (what it asserts), its
+evidence (the record or source that supports it) and attribution (who or which
+source asserted it, dated where known), kept in an existing notes property or a
+labelled body line. A link without those stays a plain mention, or is not made.
+Resolve exact page IDs; matching titles or Space names is not a foreign-key
+relationship. Links do not synchronize source systems.
 
 ## Native templates for humans and agents
 

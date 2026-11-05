@@ -41,8 +41,8 @@ In short:
   reasons. A source link, a Source record or an index entry is editable metadata;
   the original artifact keeps its body.
 - Authority, relevance, evidence quality and comparable source time are separate.
-  A recent edit or revision is not automatically truth or priority, and "latest
-  wins" is never a rule. Conflicts and unknown dates are shown, with the reason
+  A recent edit, revision or import is not automatically truth or priority, and
+  "latest wins" is never a rule. Conflicts and unknown dates are shown, with the reason
   kept.
 - Discover the actual metadata and types before mapping. Keep source/evidence,
   import, publication, processing and technical edit times distinct. Provenance
@@ -55,14 +55,43 @@ In short:
 - Ordinary pages and the definition follow the same rules without new databases.
   Local field mappings stay small owner configuration.
 
+## Classify what comes in
+
+Sort each input before writing; the class decides where it goes and what is kept.
+
+- **Durable:** a decision, correction, preference, route or fact the owner will act
+  on later. Revise its one current record (stable Key, concise explanation and
+  Summary) with source evidence and attribution.
+- **Provisional:** plausible but unconfirmed, partly read, or waiting on an owner
+  choice. Keep it as a labelled pending item (existing Needs review status or a
+  labelled body line), never in a current answer, until confirmed or dropped.
+- **Source-only:** useful only as evidence. Keep a route (link or ID, purpose, date)
+  at its owner; copy nothing and create no record.
+
+Keep necessary source evidence as that route plus a short excerpt where a claim
+needs one. Placement that two records or stores could own, and an authority
+conflict the evidence cannot settle, are not merged: keep both and return them as
+flagged results with the question for the owner.
+
 ## Upkeep
 
 Work from useful new evidence, supported route or definition drift and records
 that are due or flagged, not only the latest edit or a due queue. Reconcile by
-identity and meaning, verify each write, keep partial progress, and inspect an
-uncertain outcome before any retry. Unchanged content gets no write and no date.
-Return changed facts with provenance, checks, intentional gaps, and Healthy,
-Repaired or Needs decision. A check alone does not authorize cleanup.
+identity and meaning and keep partial progress. Unchanged content gets no write
+and no date. A check alone does not authorize cleanup.
+
+Complete a run or advance a checkpoint only after reading back the saved result
+(or the public result where one exists). A write not read back is partial or
+unknown. A retry reuses the same record identity and inspects an uncertain outcome
+first, so it never creates a second record.
+
+Return changed facts with provenance, the checks this run made, and one
+needs-attention list, not a score. Each item names the record or source, the
+reason and the next action, for: failed or incomplete intake; a conflict or flagged
+placement; a justified Review due; a material coverage gap; a partial or unknown
+write. Show it in the Attention view when one is selected. An empty list means
+nothing needed attention in what this run checked, never that the home is healthy;
+there is no global truth, health or freshness score.
 
 A selected existing Content store is maintained like any other store, without any
 Content module and without creating one. Skill or method changes go through

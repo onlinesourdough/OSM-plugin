@@ -121,6 +121,14 @@ def check(root=ROOT):
     for old in ("osm-context", "osm-maintain-context", "osm-check", "osm-update",
                 "osm-select-model", "content", "diffusion-studio"):
         require(f"`{old}`" in router, f"retired name not routed: {old}")
+    manage = (skills / "osm-manage-data-context/SKILL.md").read_text()
+    require("## Classify what comes in" in manage and "needs-attention list" in manage and
+            "reuses the same record identity" in manage and "no global truth, health or freshness score" in manage,
+            "intake classes, needs-attention list or checkpoint rule missing")
+    require("(../../osm-manage-data-context/SKILL.md#classify-what-comes-in)" in
+            (skills / "osm-setup/references/setup.md").read_text(), "Setup intake does not point at the classes")
+    for path in skills.rglob("*.md"):
+        require(not re.search(r"\bHealthy\b", path.read_text()), f"global health verdict wording: {path.name}")
     update = (skills / "osm/references/update.md").read_text()
     require("## Retired names and the scheduled caller" in update and
             "does not read or edit any\nschedule" in update and
@@ -165,6 +173,11 @@ def negative_controls():
         path = root / "skills/osm/SKILL.md"
         path.write_text(path.read_text().replace("`osm-select-model`", "`other`"))
 
+    def health_verdict(root):
+        path = root / "skills/osm/references/check.md"
+        path.write_text(path.read_text() + "\nReport Healthy or Needs decision.\n")
+
+    rejected(health_verdict, "global health verdict wording")
     rejected(call_back, "delegation loop")
     rejected(reverse_edge, "delegation loop")
     rejected(alias, "skill inventory")

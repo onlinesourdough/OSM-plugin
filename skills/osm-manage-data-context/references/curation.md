@@ -27,6 +27,8 @@ Optional gaps do not prevent a useful bounded result.
 
 ## Sources and local gaps
 
+Record a relation between records only with meaning, evidence and attribution (see
+the [schema contract](../../osm-data-context/references/notion/schema-and-templates.md)).
 Keep facts in one canonical source. Retain a short route: source owner/account
 purpose, scoped link/ID, intended use and freshness boundary. Add title/parent
 or migration provenance when identity needs it. The definition owns access path,

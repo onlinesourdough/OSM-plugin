@@ -3,9 +3,10 @@
 Check the requested scope only; no implicit global sweep. A check observes and
 reports. It never authorizes repair, update, migration, installation,
 publication or any write, and it creates no page, template or test record. Report
-Healthy, Repaired only after a separate authorized repair and recheck, or Needs
-decision, plus per-claim PASS/FAIL/NOT VERIFIED with the actual artifact,
-observation and next safe action. Uncertainty is never PASS. A manifest is not
+per-claim PASS/FAIL/NOT VERIFIED for what was checked, with the actual artifact,
+observation and next safe action, and name a repair only after a separate
+authorized repair and recheck. There is no overall health verdict or score.
+Uncertainty is never PASS. A manifest is not
 proof of activation, a source link is not proof of an installed specialist, a
 URL is not a backup, and a successful push is not live equality.
 
