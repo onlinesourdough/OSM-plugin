@@ -1,5 +1,81 @@
 # Verification
 
+On 2026-11-05 a local integrated candidate (code head `f49813b` on
+`feat/osm-integrated-candidate-20261105`) merged three inputs, none of them
+changed: HL-1 `7d7e2a2` (which includes C1), Home K5 `492a133` and the accepted
+PR86 correction `e22925b`. It carries K5's package version `0.31.0`, which is
+not released, tagged or installed anywhere, and the higher skill version of each
+input: Context 2.2.0, Setup 2.2.0, Maintain Context 2.1.0, Check 3.1.0, Update
+3.0.2, Manage Skills 2.0.1. It exists only in a local repository.
+
+- **Commits and conflicts.** A small commit (`2b1b958`) restored the
+  accepted-input condition in the root template and recorded two limits in this
+  file. The K5 merge (`6285dd2`) conflicted in `CHANGELOG.md`, this file and the
+  version lines of the Context and Setup `SKILL.md` files; the PR86 merge
+  (`14898ff`) conflicted in `README.md` only. No other file conflicted. Both
+  changelog bodies and every existing section here are kept, `README.md` takes
+  PR86's text with C1's Setup sentence and the owner's opening, and the sidebar
+  runtime was not edited by hand. A last commit (`f49813b`) says that Home's
+  read-only view describes the panel and is not the owner's write policy, and
+  adds a documentation-index row that reaches the write policy and record
+  lifecycle.
+- **Semantic check of the merged tree.** There is no `protected-records` outside
+  historical text here, no `protected:` key in the root template, no claim that
+  writes cover only Knowledge and Memory, and no conflict marker. K5's Home docs
+  already say that Home reports `unsupported_host` and makes no request where
+  the host has no supported secret store; no text implies Home's internal
+  connection works there. Fragment links resolve except one stale link in this
+  file that predates the integration.
+- **Checks on a clean clone of `f49813b`.** The context rehearsal gives 80
+  positives and 58 valid variants passing and 401 negatives rejected with
+  `failures=0`, and its output is identical, once the step wrapper's own lines
+  are removed, to the HL-1 head's. `validate.py --baseline 314dcf1`, the
+  documentation, onboarding, layout, skill-version and footprint checks pass, and
+  `git diff --check` is clean from `314dcf1` and from each of the three inputs.
+  The footprint journey `codex-package-and-bridge-verification` is 42,781 bytes
+  against its 42,793-byte bound, the same as at the HL-1 head; no trim was
+  needed and no bound or script was changed.
+- **Sidebar.** `npm` is not installed in the sandbox, so `npm ci --offline` could
+  not run (command not found). The lockfile of the lead's checkout equals the
+  candidate's apart from the root package version fields, and its
+  `node_modules` was copied into the clone, not linked. The package scripts' own
+  commands were run with `node`: the build leaves `runtime/sidebar`
+  byte-identical to the committed one, and the 182 unit tests and the bundled
+  smoke pass. `apps/sidebar` and `runtime/sidebar` are byte-identical to K5's.
+  These were not run through `npm run` or `npm test` themselves.
+- **Evidence reused, bound by byte identity.** `tests/continuity-rehearsal.py`
+  (blob `9900f5cc4b35832b323c44ccd477edaa1f2a3840`) and
+  `skills/osm-setup/assets/owner` (tree
+  `3b95d53d63dc246dc6f4115ec0f6035af5f3f287`) are the same at all three inputs
+  and at the candidate, so continuity was not rerun and its passing run stays
+  bound to `77f25a9`. The rehearsal script and its fixtures are byte-identical to
+  HL-1's, so the mutation runs were not repeated and the HL-1 results stand.
+- **Installability.** The README and `docs/native-installation.md` install OSM
+  through the app's package manager from the public repository, optionally at a
+  reviewed tag or immutable commit. This candidate is local only and has no tag,
+  so the Codex, Pi and Gemini routes, which read the repository, cannot reach it
+  until its commits are published. Claude Code can install from a local checkout
+  at a selected ref. Nothing has been installed. An owner trying it would
+  install at that ref, start a fresh session, ask OSM Setup to set up the
+  context, choose and record a write policy, and run Check read-only.
+- **Home and hosts.** Per `docs/home-connection.md`, Codex is unsupported for
+  Home's internal connection (`unsupported_host`, no request is made), and for
+  Claude Code the secret-store mechanism is supported but not declared, with no
+  native Claude Home. Home therefore cannot read live Notion content on any host
+  in this candidate; saved links still work.
+- **Carried and not fixed.** C-04 to C-09, R-10, R-11, and the dropped parts of
+  R-13, R-14 and R-15 remain open. CI does not run the context rehearsal.
+- **Retained evidence:** the raw logs and their hashes are kept only on the
+  author machine, in a machine-local `osm-c1-a1-r1-20261102/evidence-int`
+  directory.
+
+**NOT VERIFIED for the integrated candidate.** Live agent behaviour; real
+provider containment, inheritance and permissions; connectors; Setup on a real
+home; non-Notion homes; pointer loading; a real multi-hop refresh; a naturally
+scheduled run; CI at this head; installed and released states; Home reading live
+Notion content on any host. Fixtures prove predicates over fictional data, not
+prose.
+
 On 2026-10-28 the C1 Context Architecture candidate (`ff2cfb5` on
 `feat/osm-context-architecture-c1`, from `main` `314dcf1`) added the shared
 contract, templates, fictional examples and an offline rehearsal. Docs,
