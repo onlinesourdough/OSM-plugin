@@ -695,6 +695,9 @@ separately, and only meaningful dates are written.
   snapshots.
 - Preserve originals, sources, human writing, relationships and attachments.
   Historical is not automatically Superseded.
+- A relation between records states its meaning, evidence and attribution; one
+  without them stays a plain mention (see the
+  [schema contract](notion/schema-and-templates.md)).
 
 ### Dates and review
 

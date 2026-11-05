@@ -44,7 +44,7 @@ accepted lead direction. Baseline `779a9a496a6863fc4adbad55db53f61c8aa3780f`.
 Spec READY: accepted scope/proof/authority resolved; existing Markdown/toolchain
 retained, no runtime/schema or model configuration changes. This repository
 owns plugin and its own Project-local methods only. Lead owns other Systems,
-Projects, ongoing observation and later adoption. At initial implementation, [todo.md](todo.md) was the sole live fallback:
+Projects, ongoing observation and later adoption. At initial implementation, [todo.md](../todo.md) was the sole live fallback:
 the callable inventory had goal controls but no native plan/task-list control;
 actual worker goal readback was null. Lead's active
 goal/objective are accepted handoff evidence, not this worker's native activation.
@@ -107,7 +107,7 @@ reasoning effort is established as the cause of missing exposure.
 On continuation, this worker's inventory exposed `update_plan`; its actual
 invocation succeeded with `{}`. That proves call execution, not independent
 stored-state readback or visible UI. The accepted requirements and new revisions
-were submitted to the native plan tool; [todo.md](todo.md) is retired as a live list.
+were submitted to the native plan tool; [todo.md](../todo.md) is retired as a live list.
 Both canonical SOPs now require native updates at meaningful step start and
 completion, with done status gated on evidence. Onboarding/repair explains the
 supported setting under authority; routine work cannot silently enable it.

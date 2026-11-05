@@ -58,6 +58,8 @@ PINS = (
      "are not merged: keep both and return them as flagged results"),
     ("items without a record", "osm-manage-data-context/SKILL.md",
      "go to a labelled line on the maintenance or control record the definition names"),
+    ("relation rule in the contract", "osm-data-context/references/architecture.md",
+     "states its meaning, evidence and attribution"),
     ("classification in the contract", "osm-data-context/references/architecture.md",
      "classified durable, provisional or source-only"),
     ("no call back into Setup", "osm-setup/SKILL.md", "nothing calls back"),

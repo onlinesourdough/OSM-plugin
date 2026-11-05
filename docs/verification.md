@@ -15,8 +15,8 @@ schedule or credential action happened.
     managed-file phrase in every shipped skill on whitespace-normalized text,
     including the files it used to exempt, and pins each refinement rule with a
     deletion control that was run. It also checks `docs/skills.md` and that curation
-    does not link back to Setup. Four validator pins for the retired Sync record
-    were restored.
+    does not link back to Setup. Six validator pins for the retired Sync record
+    were restored, ten in total.
   - *Sidebar:* the Settings placeholder is Notion-only, a configured folder or other
     link shows one read-only notice, and the pointer route refuses any new or
     changed target that is not a Notion page while still reading old routes. The
@@ -1127,7 +1127,7 @@ Build and test the pinned author dependencies, check generated runtime equality,
 then run the existing source and native onboarding checks. A protocol fixture
 does not establish rendered sidebar placement or a new-account OAuth grant.
 
-For AIOS 0.20.0, see [native onboarding](issue-38-onboarding.md) for the
+For AIOS 0.20.0, see [native onboarding](archive/issue-38-onboarding.md) for the
 optional Notion connection, native Setup entry, six synthetic decision cases,
 Codex parser and Claude lifecycle observations. Run
 `python3 tests/onboarding-rehearsal.py`; add `--native` for the separate
@@ -1153,7 +1153,7 @@ and retirement/recovery boundary. Native package adoption and public archive
 state are read back separately after release.
 
 For the 0.15.0 Interview/local-trial change, see
-[intent and local trials](intent-and-trials.md) for the accepted boundaries,
+[intent and local trials](archive/intent-and-trials.md) for the accepted boundaries,
 baseline/candidate decision probes, ordinary native observations and limitations.
 These cover overactivation and selected source reads; the behavioral probes
 do not establish installation or a rendered UI comparison. Release and native
@@ -1170,10 +1170,10 @@ For 0.14.0, see [Project Foundation](project-foundation.md) for shared template
 content, selected application obligations, CI cadence, runtime boundaries and
 the required distinction between source checks and behavioral evidence.
 
-For 0.13.0, see [productivity skill refinements](productivity-refinements.md)
+For 0.13.0, see [productivity skill refinements](archive/productivity-refinements.md)
 for the accepted five-skill scope, factory boundary and bounded verification.
 
-For the 0.12.0 source candidate, see [Interview and Setup](interview-setup.md)
+For the 0.12.0 source candidate, see [Interview and Setup](archive/interview-setup.md)
 for the accepted invocation boundaries, rename, README workflow coverage and
 bounded proof. The existing source checks now cover 24 canonical skills.
 The matched new-home footprint routes have an accepted focus and include the
@@ -1195,7 +1195,7 @@ For 0.8.0, see [native installation](native-installation.md) for packaging,
 isolated lifecycle commands, actual observations and per-client limits.
 
 
-For 0.7.0, see [Astra alignment](astra-alignment.md) for the final 17-skill
+For 0.7.0, see [Astra alignment](archive/astra-alignment.md) for the final 17-skill
 inventory, individual version checks and bounded native Build/writing probes.
 Run `python3 tests/skill-version-rehearsal.py` for the additional metadata and
 version-transition tests, and `python3 tests/validate.py --baseline <commit>`
@@ -1206,7 +1206,7 @@ ceilings pass. Bounded French cold-start baseline/candidate and Danish resumed
 conversation probes verify optional source invitations and a sourced concrete
 follow-up. They are read-only next-response observations, not complete setup or
 live connection/authentication proof. Pi model behavior remains unverified after
-the earlier authentication failure. See the [contract and observations](lifecycle-onboarding-foundation.md).
+the earlier authentication failure. See the [contract and observations](archive/lifecycle-onboarding-foundation.md).
 
 Run the maintained source checks from the repository root:
 
@@ -1231,7 +1231,7 @@ Cases distinguish retained orchestration, whole-task transfer, user-owned
 continuation, explicit production here and judgment still required after Spec/Review.
 Fixtures supply runtime evidence, so this measures
 instruction decisions, not live discovery, switching, installs or task savings.
-See the [model-selection record](lifecycle-model-selection.md) for actual results.
+See the [model-selection record](archive/lifecycle-model-selection.md) for actual results.
 Performance claims and authorized comparisons also select the skill's measurement
 reference. `context-footprint.py` reports that conditional extra read separately;
 the older legacy journeys have no matched measurement route. Portable/whole-task
@@ -1323,7 +1323,7 @@ run; layout/continuity rehearsals and native execution were not run. Required
 routing reads are included in the affected footprint paths. Package/link
 validation permits the accepted ADS route label while continuing to exclude
 specialist tools/formats and bundled ownership. See the
-[lifecycle record](lifecycle-routing-system-maintenance.md) for scope and pending
+[lifecycle record](archive/lifecycle-routing-system-maintenance.md) for scope and pending
 independent lead acceptance. Daily-use feedback belongs to the user; these
 checks do not prove workflow selection, sidebar behavior or live System updates.
 
@@ -1333,13 +1333,13 @@ broad suites are excluded. The initial unavailable-tool fallback [todo.md](todo.
 is now retired: this resumed worker exposes `update_plan` and its call succeeded
 with an empty response. This proves call execution, not independent stored-state
 readback or observed UI.
-The [lifecycle checkpoint](lifecycle-agents-adoption.md#tracking-sop-revision--2026-09-09)
+The [lifecycle checkpoint](archive/lifecycle-agents-adoption.md#tracking-sop-revision--2026-09-09)
 records incident/source evidence, scope, local 0.3.5 snapshot authority and lead
 adoption responsibility. Reduced instruction bytes do not prove better behavior.
 
 ## Shared lifecycle (0.4.0)
 
-The [accepted contract](lifecycle-shared-method.md) changes shared execution and
+The [accepted contract](archive/lifecycle-shared-method.md) changes shared execution and
 repository ownership. `validate.py` additionally rejects both a copied local
 phase and a thin local wrapper in the product repository. Project Template's
 creation fixtures verify zero generated generic skills, four native shared
@@ -1405,7 +1405,7 @@ for new-home routes; conditional continuation remains separately counted.
 The old 24-case preloaded decision batch was not rerun for this revision and
 cannot substitute for these ordinary-entry observations. Exact source identity,
 independent Review and native adoption are recorded separately. See the
-[lifecycle record](lifecycle-context-routing.md). Synthetic adapter access does
+[lifecycle record](archive/lifecycle-context-routing.md). Synthetic adapter access does
 not prove live Notion, provider authentication, desktop cutover or future savings.
 
 ## 0.7.0 source candidate
@@ -1414,7 +1414,7 @@ For the accepted instruction cleanup and issue #8, also run
 `python3 tests/skill-version-rehearsal.py` and
 `python3 tests/validate.py --baseline LAST_REVIEWED_COMMIT_OR_TAG`.
 See [version maintenance](skill-versioning.md) for schema scope, compatibility
-judgment and Git comparison semantics, and [the scoped evidence](astra-alignment.md)
+judgment and Git comparison semantics, and [the scoped evidence](archive/astra-alignment.md)
 for actual results and limits. The package remains dependency-free; the new
 parser and transition tests are author tooling only.
 

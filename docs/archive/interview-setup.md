@@ -74,7 +74,7 @@ Observed on 2026-09-21:
   comparison; no full-interview context-saving claim is made. These are static
   source counts, not runtime token measurements.
 
-The [retained probe](evidence/interview-setup-probe.json) contains exact synthetic
+The [retained probe](../evidence/interview-setup-probe.json) contains exact synthetic
 inputs, responses and inspected source hashes. Codex CLI 0.155.1 evaluated ten
 independent cases in one read-only run, with expected decisions withheld:
 

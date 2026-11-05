@@ -1,10 +1,10 @@
 # Native AIOS onboarding — issue 38
 
 Historical 0.20.0 evidence. The app binding and initial panel are superseded by
-the [0.26.0 sidebar contract](sidebar.md); Notion is now a separate plugin.
+the [0.26.0 sidebar contract](../sidebar.md); Notion is now a separate plugin.
 
 Historical 0.20.0 delivery record. The subsequently requested sidebar is
-implemented in 0.21.0; see [the current sidebar contract](sidebar.md).
+implemented in 0.21.0; see [the current sidebar contract](../sidebar.md).
 
 Accepted outcome: one short onboarding route in Codex, verified Notion access,
 the AIOS name across the customer entry and shared template, and a consistent

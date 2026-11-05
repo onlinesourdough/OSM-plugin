@@ -79,14 +79,14 @@ model and available native controls requires no settings or model change.
   as evidence of performance/usability, and declined to invent a new slide's
   baseline. The two code cases were rerun after final wording compression;
   the other cases' source was unchanged. Both native runs completed read-only.
-- The [sanitized prompts, outputs and final source hashes](evidence/productivity-refinements-probe.json)
+- The [sanitized prompts, outputs and final source hashes](../evidence/productivity-refinements-probe.json)
   make those observations inspectable. Prompts explicitly selected candidate
   instructions, so they do not establish automatic discovery. Proposed checks
   and captures were not executed. Installation and release are verified later
   against this reviewed source; no such observation is claimed here.
 - OpenPencil's six existing helper fixtures passed using their synthetic daemon,
   including status/logs, no OS opener, source isolation and cleanup. The helper
-  script is unchanged. An additional [five-case native decision probe](evidence/openpencil-readiness-probe.json)
+  script is unchanged. An additional [five-case native decision probe](../evidence/openpencil-readiness-probe.json)
   rejected stopped-but-exit-zero readiness, treated a blank canvas as unverified,
   preserved unsaved work before recovery, reused the built-in browser without
   launching Chrome, and required the current session URL at handback. The probe

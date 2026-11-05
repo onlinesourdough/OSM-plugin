@@ -129,7 +129,7 @@ portable root manifest takes precedence. The package therefore omits that root
 manifest. Claude/Copilot, Cursor, Gemini and Pi retain their native metadata.
 The optional Notion app is a connection declaration, not an installed runtime
 dependency. There are no executable extensions, hooks, settings payloads or
-duplicated instruction bodies. See [onboarding evidence](issue-38-onboarding.md).
+duplicated instruction bodies. See [onboarding evidence](archive/issue-38-onboarding.md).
 
 From 0.21.0, Codex also loads the explicitly declared local sidebar MCP from
 `.codex-plugin/mcp.json`. Node.js 22+ must be on the execution host's PATH;

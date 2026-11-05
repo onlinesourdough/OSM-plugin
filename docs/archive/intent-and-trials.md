@@ -35,7 +35,7 @@ The exact model ID is unavailable in retained events. Synthetic fixtures use
 task-local skill registrations, with owner context, external writes,
 installation and further model launches excluded.
 
-The [sanitized evidence](evidence/intent-trials-probe.json) retains source hashes,
+The [sanitized evidence](../evidence/intent-trials-probe.json) retains source hashes,
 case responses, observations and emitted usage. It separates two kinds of proof:
 
 - **Decision comparison:** supplied baseline/candidate instructions, twelve
