@@ -15,6 +15,7 @@ selected documentation for people; it is a reader of this source.
 | How do I install, update, switch or recover an app registration? | [Native installation](native-installation.md) |
 | How is my context home organised, what may agents write there, and how are records kept current? | [Context Architecture](../skills/osm-data-context/references/architecture.md): its [home write policy](../skills/osm-data-context/references/architecture.md#home-write-policy) and [record lifecycle](../skills/osm-data-context/references/architecture.md#record-lifecycle) |
 | What does the Codex panel actually do? | [Sidebar](sidebar.md) |
+| How is the public Notion guide kept aligned, and who writes what? | [Publication](publication.md) |
 | How do I contribute? | [Repository contract](../AGENTS.md) |
 
 An agent can use the installed [documentation route](../skills/osm/references/documentation.md)
@@ -44,9 +45,31 @@ flowchart LR
 | Company facts, decisions and personal methods | The owner's chosen context home and authoritative sources, outside this repository |
 | Project deliverables and live work | Their own project and operational systems |
 
-OSM needs no separate Notion edition of its shared method. A customer's Notion
+Git owns the executable method instructions: the skills and their references. The
+public Notion guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
+is a versioned explanatory and reference projection of them. Its released edition
+reflects v0.30.0 (`314dcf1`); this working branch is newer and unreleased, so the
+guide is never the installed method and never proof of what a given install does.
+The guide's Content templates are a separate Notion-authored draft edition; that
+edition, not the preserved Git drafts under [content-drafts](content-drafts/README.md),
+is the current template source. How the projection is kept aligned, and what is
+and is not yet automated, is in [publication](publication.md). A customer's Notion
 context home is a different, customer-owned destination. Factory is a separate
 method and package; its documentation is not copied into OSM.
+
+### What a statement can mean
+
+Documentation here separates four states, and no text should blur them:
+
+| State | Meaning | Where to look |
+| --- | --- | --- |
+| Declared | Stated in a manifest, skill or document | The file itself |
+| Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
+| Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.30.0 is the latest |
+
+The skill set on this branch (17 skills, Notion-only core) is declared and
+fixture-tested, unreleased and not installed or native-tested anywhere.
 
 ### Documentation consumers
 
@@ -59,6 +82,10 @@ Keep the existing entrypoints stable when editing the README:
   edit its source here when the story changes, rather than patching generated copies.
 - An installed agent reads its packaged methods and versioned overview. It does
   not fetch instructions from Resources to perform a task.
+
+`tests/consumer-selection-rehearsal.py` rehearses both selections locally against this
+repository (headings present once and non-empty, links resolvable, no private data); it
+deploys nothing and does not run the consumers.
 
 A new guide or renamed heading needs an explicit consumer update. Resources
 refreshes and reviews its pinned content through its own workflow; a repo edit
@@ -87,14 +114,18 @@ markers, stored keys and managed instruction blocks can be compatibility
 contracts. Classify them before changing them; a branding cleanup is not a
 user-data migration.
 
-Files such as `lifecycle-*.md`, `issue-38-onboarding.md`, preservation maps and
-`evidence/` retain dated decisions and implementation proof. Use them to answer
+The [archive](archive/README.md) holds dated lifecycle and candidate records;
+preservation maps, [verification](verification.md) and `evidence/` retain dated
+decisions and implementation proof. Use them to answer
 a historical or verification question, then check current skills and source.
 They are not an additional onboarding path or an instruction to restore retired
 features. `todo.md` explicitly records a retired tracking fallback, not a live
 backlog.
 
-When consolidating those records, retain needed provenance and recovery proof,
-check inbound links and test references, and coordinate with the current
-implementation writer before moving files. Git history can preserve obsolete
-material; active compatibility and accepted evidence need a deliberate owner.
+Consolidating records keeps needed provenance and recovery proof, accounts for
+inbound links and test references, and coordinates with the implementation writer
+before files move. Git history preserves the earlier paths; active compatibility and
+accepted evidence need a deliberate owner. Nothing was deleted: the twelve archived
+records moved unchanged, and the remaining dated documents (preservation maps,
+integration proof, home connection and the retired-skill notes) stay because live
+documents or skills still link them.

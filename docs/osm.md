@@ -216,6 +216,8 @@ procedures remain with their owning documentation so this overview stays short.
 
 This overview ships with the OSM version named above and is read only when
 needed. Its version travels with the shared methods in the installed package.
+The public guide is a reference projection of released editions; the installed
+package and its skills are the instructions.
 Native package updates are separate from owner context. There is no OSM
 documentation or skill runtime on the Resources domain. A newer upstream
 release does not replace instructions already read into an active conversation.

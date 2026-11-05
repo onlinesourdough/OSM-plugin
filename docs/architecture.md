@@ -120,7 +120,9 @@ The installed version stays distinct from upstream `main` and newer releases.
 Private source reads use already-authorized access. Local documentation and
 methods remain usable without that access or website availability.
 
-There is no separate public OSM documentation export or Resources runtime.
+There is no OSM documentation runtime on the Resources domain. A public Notion guide is
+a versioned reference projection of released editions; keeping it aligned is the job of the
+source-only [publication pipeline](publication.md), which is not active.
 The [release procedure](distribution.md#release-and-adoption) checks package,
 overview and tag versions together before publishing a GitHub Release. Customer
 documentation remains in its source system; OSM retains only useful pointers,

@@ -96,6 +96,7 @@ Content review establishes accuracy; matching numbers alone do not prove prose.
 
 OSM no longer exports documentation for the Resources domain. The package
 contains its own references and needs no documentation server, installer hook,
-custom CLI or background updater. Customer sources and owner data stay with
+custom CLI or background updater. The source-only [publication](publication.md)
+pipeline for the public Notion guide is not active. Customer sources and owner data stay with
 their existing owners. The Resources rollback is delivered through that
 repository's normal review, merge and production deployment.

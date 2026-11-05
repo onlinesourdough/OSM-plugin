@@ -20,6 +20,7 @@ Revision: 2026-11-05
 | Owner continuity | Notion holds the home; Manage Data & Context owns named-source reconciliation. Folder-home Sync is retired and a legacy file home is read-only |
 | Customer or externally owned documentation | Its source system; OSM may retain only a scoped pointer and freshness boundary |
 | Native installation, connections, and cutover | Authorized client or lead using native controls and readback |
+| Public documentation projection (Notion guide) and its publisher | Per artifact: Git-owned released packets, Notion-authored Content templates and guide originals, and CI-owned working rows; see [publication](publication.md). The publisher is source and fixtures only |
 | Codex sidebar source and bundled runtime | `apps/sidebar` and reproducible `runtime/sidebar` in this repository; Codex owns launch, account access and UI placement |
 | Home reader and OSM's internal Notion connection | The AI Operating Model definition owns source identities; Setup generates the Home projection from one revision and records the selected mode; the sidebar reads; Notion grants define what is readable; the host's documented secret store owns the token (none supported yet, see [Home connection](home-connection.md)); native grant and revocation proof stays with approved native holders |
 | Projects and optional specialists | Their own working files, deliverables, dependencies, proof and recovery; Git and native project controls are selected when useful, without mandatory OSM registration |

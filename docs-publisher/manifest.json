@@ -1,0 +1,542 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Per-artifact source and ownership manifest for the public OSM documentation projection. Not shipped in the package.",
+  "activation": {
+    "active": false,
+    "live_proof": "not-run",
+    "note": "Source and fixtures only. Set active only in a reviewed activation commit after every item in ACTIVATION.md is done."
+  },
+  "editions": {
+    "released": {
+      "label": "v0.30.0",
+      "tag": "v0.30.0",
+      "commit": "314dcf17a06014df472a32cdb10f847672cba0be",
+      "approved": true
+    },
+    "main-working": {
+      "label": "Main working revision (unreleased)",
+      "ref": "main",
+      "commit": "resolved-at-run"
+    },
+    "guide": {
+      "label": "2026-11-05.2",
+      "state": "verified public handoff; recorded before-source",
+      "owner": "notion"
+    },
+    "content-templates": {
+      "label": "2026-11-05.1",
+      "packet": "0.10.0",
+      "state": "Draft",
+      "owner": "notion"
+    }
+  },
+  "classes": {
+    "A": "Released OSM instruction and reference packets. Git-owned, unchanged at the released commit; changes only at a new tagged approved commit.",
+    "B": "Content templates and their setup, configuration and diagram explanations. Notion-authored Draft edition; frozen ZIP exports; never written by the publisher.",
+    "G": "Public guide pages. Notion-authored; the 2026-11-05.2 original is the before-source; a newer original is a conflict.",
+    "W": "Main-working documentation projection. Labelled unreleased; the one class the publisher may write once handed to CI.",
+    "C": "The owner's private documentation control and daily state. Not a CI source or credential scope; deliberately absent from this manifest."
+  },
+  "writers": {
+    "existing-upkeep": "The existing private maintenance route; relinquishes these exact rows to CI at activation.",
+    "ci": "The publisher in CI, using the dedicated connection limited to the public subtree.",
+    "notion-authored": "Edited by hand in Notion; the publisher never writes it."
+  },
+  "ci_inputs": [
+    {
+      "kind": "git-commit",
+      "note": "Frozen source commit of this repository"
+    },
+    {
+      "kind": "public-edition-block",
+      "note": "The public Releases edition block"
+    },
+    {
+      "kind": "ci-receipt",
+      "note": "Per-row receipt stored on the CI-owned public row"
+    }
+  ],
+  "bindings": {
+    "public_entry": "https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a",
+    "releases": "https://gustavanderson.notion.site/40d6d2e17f5681f6accff01259bc2ab4#6d01017b2fe949e0ad4548da7e77f404",
+    "public_content": "40d6d2e17f5681219a81e13317a19339",
+    "content_schema": "40f6d2e17f56819ea683f45a30072086",
+    "content_config": "40f6d2e17f5681d68525d83503a457d5",
+    "template_catalogue_data_source": "6ff724a0-558c-4845-a0e1-a2e7fab86642",
+    "working_subtree": null,
+    "working_subtree_note": "Not provisioned. The owner creates a labelled public subtree and a dedicated connection at activation."
+  },
+  "artifacts": [
+    {
+      "key": "osm.released.skill.content",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/content/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.diffusion-studio",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/diffusion-studio/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-build-work",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-build-work/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-check",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-check/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-clarify",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-clarify/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-context",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-context/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-create-project",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-create-project/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-human-writing",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-human-writing/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-interview",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-interview/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-maintain-context",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-maintain-context/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-manage-skills",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-manage-skills/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-orchestrate-workers",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-orchestrate-workers/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-review-work",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-review-work/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-risky-changes",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-risky-changes/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-select-model",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-select-model/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-setup",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-setup/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-ship-work",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-ship-work/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-spec-work",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-spec-work/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-triage-improvement",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-triage-improvement/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-update",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-update/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-write-code",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-write-code/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.working.readme",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "README.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
+      "key": "osm.working.docs-index",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "docs/README.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
+      "key": "osm.working.overview",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "docs/osm.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
+      "key": "osm.working.architecture",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "docs/architecture.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
+      "key": "osm.working.skill-index",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "docs/skills.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
+      "key": "notion.guide.entry",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-original",
+      "before_source": {
+        "edition": "2026-11-05.2",
+        "original_hash": null,
+        "note": "Hash not recorded offline; the first live read records it. A different original is a conflict."
+      }
+    },
+    {
+      "key": "notion.guide.releases",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-original"
+    },
+    {
+      "key": "notion.content.template-01",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export",
+      "title": null,
+      "title_note": "Resolved from the template catalogue; not recorded offline."
+    },
+    {
+      "key": "notion.content.template-02",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export",
+      "title": null,
+      "title_note": "Resolved from the template catalogue; not recorded offline."
+    },
+    {
+      "key": "notion.content.template-03",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export",
+      "title": null,
+      "title_note": "Resolved from the template catalogue; not recorded offline."
+    },
+    {
+      "key": "notion.content.template-04",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export",
+      "title": null,
+      "title_note": "Resolved from the template catalogue; not recorded offline."
+    },
+    {
+      "key": "notion.content.template-05",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export",
+      "title": null,
+      "title_note": "Resolved from the template catalogue; not recorded offline."
+    },
+    {
+      "key": "notion.content.entry",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export"
+    },
+    {
+      "key": "notion.content.setup",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export",
+      "frozen_zip": {
+        "bytes": 9031,
+        "sha256": "75412e2695fa23ca1abdcd1670881dcddc258cec5bfed3f2b3397382d1720515"
+      }
+    },
+    {
+      "key": "notion.content.configuration",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export"
+    },
+    {
+      "key": "notion.content.diagram",
+      "class": "B",
+      "edition": "content-templates",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "content-templates",
+      "public_writer": "notion-authored",
+      "adoption_state": "frozen-export"
+    }
+  ],
+  "generators": [
+    {
+      "key": "osm.working.skill.{name}",
+      "class": "W",
+      "edition": "main-working",
+      "match": "skills/*/SKILL.md",
+      "source_paths": [
+        "skills/{name}/"
+      ],
+      "target_subtree": "main-working/skills",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    }
+  ],
+  "renames": {
+    "osm.working.skill.osm-context": "osm.working.skill.osm-data-context",
+    "osm.working.skill.osm-maintain-context": "osm.working.skill.osm-manage-data-context"
+  }
+}

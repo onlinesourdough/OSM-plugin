@@ -49,6 +49,16 @@ into one dated entry before any tag.
     Notion-only, a configured folder shows one read-only notice, and the pointer
     route refuses any new non-Notion target. New pointers name Manage Data &
     Context. `docs/skills.md` gains a triggers-and-calls table.
+  - Documentation reconciliation and a source-only publisher (#85): the README, docs
+    index, overview and architecture state what is declared, fixture-tested,
+    native-tested and released, and point at the public guide as a reference projection
+    of v0.30.0; twelve dated lifecycle and candidate records moved unchanged to
+    `docs/archive`. `docs-publisher/` holds a per-artifact ownership manifest, an impact
+    diff with a visible reconciliation result, a serialized idempotent publishing stage
+    and an inactive workflow template with one trigger and no schedule. It writes only
+    artifacts whose public writer is CI; the released packets are pending handoff, the
+    Content templates and guide originals are Notion-authored. Fixture proof only: not
+    active, no Notion write, no credential, no live proof.
   - Still open: the neutral-root Home projection revision gap and the missing
     Home credential route (unsupported host) are carried unchanged. The package
     stays at the unreleased `0.31.0`; this is not an installed or released build.
