@@ -1,4 +1,4 @@
 interface:
-  display_name: "OSM:context"
+  display_name: "OSM:data-context"
   short_description: "Set up your Notion Data & Context home."
   default_prompt: "Use $osm-data-context to set up my Notion Data & Context home."

@@ -39,7 +39,9 @@ into Setup:
 4. **Reuse or create.** [Data & Context](../osm-data-context/SKILL.md) engineers
    the home, its definition and the core Knowledge, Memory and Skills roles:
    existing stores are reused by actual ID, only missing ones are created, and
-   replay creates no duplicate. Setup never creates Content.
+   replay creates no duplicate. Setup never creates Content. It discovers the actual
+   types and metadata of existing stores before mapping and follows the architecture's
+   [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
    assumed. Add the thin host pointer only at the intended scope.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/SKILL.md)
