@@ -1577,6 +1577,79 @@ def drift_and_binding(data, ws):
     return unique(reasons)
 
 
+@check("partial-retry")
+def partial_retry(data, ws):
+    reasons, retry = [], data["retry"]
+    if not retry["inspected_first"]:
+        reasons.append("blind-retry")
+    written = {step["id"] for step in data["steps"] if step["written"]}
+    if written & set(retry["rewrote"]):
+        reasons.append("rewrote-written-step")
+    if retry["created_duplicates"]:
+        reasons.append("duplicate-created")
+    if not data["progress_kept"]:
+        reasons.append("progress-lost")
+    if any(step["reported_done"] and not step["verified"] for step in data["steps"]):
+        reasons.append("unverified-reported-done")
+    return unique(reasons)
+
+
+@check("correction-supersession")
+def correction_supersession(data, ws):
+    reasons, correction = [], data["correction"]
+    if correction["mode"] != "in-place":
+        reasons.append("correction-as-new-page")
+    if not correction["reason_kept"]:
+        reasons.append("correction-reason-lost")
+    if not correction["original_kept"]:
+        reasons.append("original-lost")
+    for source in data["sources"]:
+        if source["superseded"] and source["cited_as"] == "current":
+            reasons.append("superseded-cited-current")
+        if source["superseded"] and source["cited_as"] == "dropped":
+            reasons.append("superseded-dropped")
+    if data["current_pick"] != data["authority_winner"]:
+        reasons.append("recency-over-authority")
+    return unique(reasons)
+
+
+@check("ordinary-page-update")
+def ordinary_page_update(data, ws):
+    reasons = []
+    if data["fields_after"] != data["fields_before"]:
+        reasons.append("fields-added-to-plain-page")
+    if data["new_databases"]:
+        reasons.append("new-database")
+    if data["revised_set"] and not data["substantive"]:
+        reasons.append("revised-without-substance")
+    if data["revised_selected"] and data["substantive"] and not data["revised_set"]:
+        reasons.append("revised-missing")
+    if data["unknown_dates_backfilled"]:
+        reasons.append("date-backfilled")
+    if data["unchanged_rewritten"]:
+        reasons.append("unchanged-rewritten")
+    return unique(reasons)
+
+
+@check("concurrent-conflict")
+def concurrent_conflict(data, ws):
+    reasons = []
+    if not data["checked_before_write"]:
+        reasons.append("unchecked-before-write")
+    if data["source_changed"]:
+        if data["outcome"] == "merged":
+            reasons.append("merged-blindly")
+        if data["outcome"] == "overwrote":
+            reasons.append("overwrote-concurrent")
+        if data["outcome"] == "stopped" and len(set(data["versions_preserved"])) < 2:
+            reasons.append("version-lost")
+        if not data["reported"]:
+            reasons.append("conflict-unreported")
+    elif data["outcome"] == "stopped":
+        reasons.append("spurious-stop")
+    return unique(reasons)
+
+
 def fictional(value, path="fixture"):
     problems = []
     if isinstance(value, dict):
@@ -1615,8 +1688,8 @@ def main():
     failures += problems
 
     ids = [case["id"] for case in cases]
-    if ids != list(range(1, 81)):
-        failures.append(f"case ids are not 1..80: {ids}")
+    if ids != list(range(1, 85)):
+        failures.append(f"case ids are not 1..84: {ids}")
     for case in cases:
         label = f"case {case['id']:>2} {case['name']}"
         document, _, anchor = case["contract"].partition("#")
