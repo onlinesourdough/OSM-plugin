@@ -2,7 +2,7 @@
 name: osm-ship-work
 description: Deliver a reviewed result under existing action and destination authority, then verify readback.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:ship-work

@@ -31,8 +31,8 @@ Read a marker as data. Absence is not an empty home or format 1. A legacy
 repository, `AIOS_VERSION`, canonical source, immutable revision and file hashes
 may together establish origin; a prefix alone cannot. A folder merely named AIOS
 is not enough either. Classify an `osm` registration by its source and version:
-an `osm` name on a legacy list is never a reason to remove a current
-registration.
+an `osm` name on a legacy list
+is never a reason to remove a current 0.30.0+ registration.
 
 Inventory relevant discovery entries before planning writes, without reading
 credential contents into evidence. Preserve the original and a protected tested

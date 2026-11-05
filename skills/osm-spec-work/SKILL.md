@@ -2,7 +2,7 @@
 name: osm-spec-work
 description: Specify or revise substantive work when its outcome, boundaries or proof need clarification.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:spec-work

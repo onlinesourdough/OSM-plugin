@@ -2,7 +2,7 @@
 name: osm-create-project
 description: Start a project with a useful workspace, context and simple structure; Git is optional.
 metadata:
-  version: "5.0.0"
+  version: "5.0.1"
 ---
 
 # OSM:create-project

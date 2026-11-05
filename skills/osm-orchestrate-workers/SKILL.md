@@ -2,7 +2,7 @@
 name: osm-orchestrate-workers
 description: Prepare, launch, coordinate and recover delegated workers while the caller retains acceptance.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:orchestrate-workers

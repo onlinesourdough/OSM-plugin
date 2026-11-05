@@ -54,8 +54,8 @@ details, and [bootstrap](references/bootstrap.md) for the first-run sequence of 
 new root. For personal skills during setup, call Manage Skills'
 [personal skill lifecycle](../osm-manage-skills/references/owner-skills.md). When
 an owner asks in ordinary language for local guardrails during autonomous use,
-route that request to [Manage Skills](../osm-manage-skills/SKILL.md); normal
-setup does not depend on an optional guard implementation.
+route that request to [Manage Skills](../osm-manage-skills/SKILL.md); normal setup does not
+depend on an optional guard implementation.
 
 ## Boundaries
 

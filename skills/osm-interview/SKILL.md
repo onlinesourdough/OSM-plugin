@@ -2,7 +2,7 @@
 name: osm-interview
 description: Interview to explore context, restate goals and the underlying problem, or find direction when requested or materially unclear at the start; clear work and isolated questions continue directly.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:interview

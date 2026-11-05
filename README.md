@@ -6,11 +6,11 @@ The Onlinesourdough Method (OSM) is an AI-assisted method and framework for solo
 founders and small teams. Data and context are its two foundation parts, and
 skills sit inside context. It helps an AI assistant use relevant context,
 carry work from a request to a reviewed result, and retain useful decisions.
-Use it for business work, research, content, practical automation and software.
+Use it for business work, research, writing, practical automation and software.
 Small requests stay small; substantial work gets a clear outcome and review.
 
 This repository owns the method, its documentation and the native plugin that
-puts its 22 skills in your agent app. Your app provides models, tools and
+puts its 17 skills in your agent app. Your app provides models, tools and
 permissions. Your company data stays in the context home and source systems
 you choose.
 
@@ -24,9 +24,9 @@ skills for planning, building, reviewing and writing. It builds on open formats
 such as Agent Skills and on what those apps already provide, so I mostly write
 methods and small adaptations, with little code to maintain.
 
-Your context stays in a home you choose, such as Notion or a repository. The app
-provides the models, tools and permissions; the method helps the assistant find and
-maintain the context it needs.
+Your context stays in a Notion home you own. The app provides the models, tools
+and permissions; the method helps the assistant find and maintain the context it
+needs.
 
 ## Agentic systems and skill chains
 
@@ -36,9 +36,9 @@ Select the steps the task needs; these are useful routes, not a fixed ritual.
 | --- | --- |
 | Understand an idea or difficult decision | Interview and Clarify |
 | Complete substantial work | Spec → Build → Review → authorized Ship |
-| Create useful content | Content with Human Writing; optional production tools |
+| Write clearly | Human Writing |
 | Establish a useful workspace | Create Project; Git is optional |
-| Connect and maintain owner context | Setup → Context, Maintain Context and Check |
+| Connect and maintain owner context | Setup → Data & Context, then Manage Data & Context |
 | Add a reusable capability | Manage Skills; optional specialists keep their own ownership |
 
 Read the [skill index](docs/skills.md) for the actual entrypoints and the
@@ -48,8 +48,8 @@ The agent loads only the relevant skill and references.
 [Factory](https://github.com/arcitai/factory) supplies separate Foundation,
 AgentOps and engineering methods. OSM and Factory can be used independently;
 neither installs the other. Visual design uses an available design method.
-[Diffusion Studio](skills/diffusion-studio/SKILL.md) is an optional external
-video workbench, not an installation requirement.
+Content and video production are not part of OSM; the
+[Content drafts](docs/content-drafts/README.md) record where that work stands.
 
 ## Install in your app
 
@@ -96,8 +96,7 @@ gemini extensions install https://github.com/onlinesourdough/OSM-plugin
 ```
 
 Review Gemini's installation prompt, then start a fresh session. The extension
-contains the same skills and no executable extension code. Selected content
-tasks can use the helpers supplied with their skills.
+contains the same skills and no executable extension code.
 
 ### Copilot CLI
 
@@ -129,10 +128,11 @@ paths. A short instruction in your app points to your chosen context entry.
 That entry directs the assistant to relevant facts, sources, memory and
 personal methods, without loading the whole workspace.
 
-Notion is the central reference setup, and an explicitly retained compatible
-home stays supported. Setup reuses suitable existing pages and databases and tests a useful first
-task. Existing alternative homes keep their own structure and require verified
-access. Installation alone creates no context home and grants no source access.
+Notion is the only supported context home. Setup reuses suitable existing pages
+and databases and tests a useful first task. External systems, local files and
+repositories stay valid sources. A legacy folder or vault home is read-only; see
+[Update](skills/osm/references/update.md) for the migration guidance.
+Installation alone creates no context home and grants no source access.
 
 In Codex, open **OSM** in the sidebar to inspect the saved destinations or
 revisit setup. Saved links are navigation, not proof of a working connection.
@@ -141,9 +141,9 @@ For a new or messy workspace, ask:
 > Use OSM Setup to set up my context. Start here: [page link]. Help me choose
 > the first useful task and reuse what I already have.
 
-Setup adapts the neutral [Data & Context root](skills/osm-context/assets/data-and-context-root.md)
-(see the [Context Architecture](skills/osm-context/references/architecture.md); an existing
-[OSM page](skills/osm-context/assets/notion-osm.md) keeps working) with your Spaces and
+Setup adapts the neutral [Data & Context root](skills/osm-data-context/assets/data-and-context-root.md)
+(see the [Context Architecture](skills/osm-data-context/references/architecture.md); an existing
+[OSM page](skills/osm-data-context/assets/notion-osm.md) keeps working) with your Spaces and
 working agreements.
 
 Operational records remain in their owning systems. Retain useful context and
@@ -158,7 +158,7 @@ After installation, try:
 
 - “Help me turn this idea into a clear plan.”
 - “Build the agreed change and review the result.”
-- “Turn these sources into a finished article.”
+- “Turn these sources into a clear article draft.”
 - “Make this draft easier to understand without losing its meaning.”
 - “Set up OSM for my work. My current focus is …”
 
