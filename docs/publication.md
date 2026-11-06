@@ -41,6 +41,17 @@ unchanged. An unknown write is read back before any retry and a partial update r
 Anything not owned by CI gets a visible refusal and no write. A missing credential makes it fail closed.
 The job exits non-zero unless every row was written, unchanged, resumed, retired or is a recorded refusal.
 
+## Current release alignment
+
+As of 2026-11-06, v0.30.1 is a published prerelease. The public guide and this
+publisher manifest still describe the approved v0.30.0 projection. With the
+real newer tag present, the unchanged release guard rejects that frozen
+binding; the corrected latest-package sentence also differs from its expected
+v0.30.0 sentence. This is a publication HOLD, not a product installation
+failure. No manifest, released row or public page was advanced. A separate
+reviewed binding decision is required before current publication checks can
+pass or the publisher can be activated.
+
 ## What it cannot observe yet
 
 - **Public access and catalogue membership.** Both read as `unsupported` until a reader is qualified: an

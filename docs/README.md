@@ -66,7 +66,12 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.30.0 is the latest |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.30.1 is the latest published package (prerelease) |
+
+The public guide and publisher manifest remain frozen at v0.30.0. That projection
+is distinct from the latest published package. The newer v0.30.1 tag and current
+release sentence intentionally hold the unchanged publisher reconciliation; a
+future reviewed publication binding must resolve it before activation.
 
 The skill set on this branch (17 skills, Notion-only core) is declared and
 fixture-tested, unreleased and not installed or native-tested anywhere.

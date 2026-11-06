@@ -1683,3 +1683,40 @@ limits in `docs-publisher/ACTIVATION.md`. No merge, tag, install, consumer updat
 schedule, CI publisher activation or owner-home migration was performed.
 Independent Sol High review of the final integrated candidate is recorded in its
 PR/handoff; the earlier Opus reviews apply only to the returned source.
+
+
+### Focused integration corrections — 2026-11-06
+
+Both independent Sol 6.1 High/Standard reviewers requested documentation and
+packet corrections at `8e47fcf` / tree `1dacf694`; neither found a new publisher
+or runtime defect. The original rejected candidate and findings remain retained.
+The corrections restore the unrelated Factory-AI vendor citations, route
+recovery to available design/writing/separate Content methods and correct the
+latest-package claim. The handoff integrity manifest is refreshed after edits.
+
+Canonical GitHub evidence confirms that v0.30.1 was published as a prerelease
+at 2026-11-06T11:46:23Z. Its annotated tag object
+`a29969b270a2c64e4394b61118fc310d3864403a` resolves to
+`ff1b50e3e052651f4d85bb72c3374e4d45fd6709`. The separately published
+`osm-setup-preview-0.30.1-4` is not this 17-skill candidate. The guide and
+publisher manifest remain frozen at v0.30.0; no source binding was advanced.
+
+This supersedes the earlier integration's green reconciliation claim as a
+present-state readiness claim: that checkout lacked v0.30.1. A tag-incomplete
+pass cannot qualify current publication. With the actual newer tag present,
+`reconcile --check` rejects the frozen manifest. The changed latest-package
+sentence also deliberately fails its old v0.30.0 sentence requirement. The
+repository-level publisher rehearsal consequently remains red at its current
+reconciliation scenario. Those failures are retained as publication HOLDs;
+no assertion, manifest, publisher implementation or inactive workflow was
+changed to conceal them. Green local fixture results remain evidence for the
+behaviour they actually exercised, not a live or current publication pass.
+
+The raw npm-ci process log was not saved in the original packet. The native
+command result recorded exit 0, 100 packages and the locked offline command;
+this is retained command evidence, not a new installation or independent rerun.
+The 183 sidebar tests and runtime are unchanged; no repeat is needed for these
+documentation-only corrections. Local preview packaging and focused correction
+checks are recorded against the exact corrected tree in its private handoff.
+No native Home/public-reader, live Notion, installation or consumer acceptance
+is inferred from preparing that preview.

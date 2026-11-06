@@ -1,5 +1,7 @@
 # Recovery
 
+Guidance revision: 2026-11-06
+
 ## Codex sidebar
 
 If the sidebar process fails, use the plugin's native **Set up** entry or ask
@@ -68,7 +70,10 @@ candidate; do not switch editors or regenerate over it silently. Reconcile
 `DESIGN.md` with the project's implementation sources, then refresh affected
 rendered proof. Package rollback does not roll back project design files.
 
-New work uses the bundled domain skills. Before retiring a legacy ADS or ACS
+For new design work, use an available design method or report the missing
+capability. Human Writing handles prose; a separately selected Content method
+owns content production when needed. Neither design nor Content production
+methods are bundled in this candidate. Before retiring a legacy ADS or ACS
 checkout, inventory its tracked, ignored and untracked files. Preserve actual
 work and accepted artifacts; Git history only preserves committed source.
 Removal of old discovery entries does not authorize deleting a workspace.

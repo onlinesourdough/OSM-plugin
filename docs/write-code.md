@@ -194,9 +194,9 @@ the final acceptance reconciles that evidence separately from product hashes.
 These sources informed the criteria; their text, vendor-specific ticketing and
 orchestration workflows are not bundled into the skill:
 
-- [Agentic Systems code-review](https://github.com/Agentic Systems-AI/skills/blob/21a74dec467a1424e3e067712d004cd987d6a0ce/skills/code-review/SKILL.md):
+- [Factory code-review](https://github.com/Factory-AI/skills/blob/21a74dec467a1424e3e067712d004cd987d6a0ce/skills/code-review/SKILL.md):
   correctness, maintainability, API compatibility and useful tests.
-- [Agentic Systems Automated QA](https://docs.factory.ai/software-factory/automated-qa):
+- [Factory Automated QA](https://docs.factory.ai/software-factory/automated-qa):
   observable checks of changed browser, CLI and API behavior.
 - [Warp review-pr](https://github.com/warpdotdev/common-skills/blob/b811c24365ae505bfc9646458957b886e29110b5/.agents/skills/review-pr/SKILL.md):
   comment/test quality and distinct behavioral coverage.
