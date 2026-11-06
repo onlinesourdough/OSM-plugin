@@ -1635,3 +1635,51 @@ account-specific IDs and traces stay outside this public repository. Release CI,
 installed package identity, fresh-session discovery and live production delivery
 are verified separately for the final release. No cross-harness behavior, future
 scheduled run or general token/latency saving is inferred from these checks.
+
+
+## Current-main integration — 2026-11-06 (source only)
+
+The reviewed publisher/context source `5d8bcc805a116277c5f96be3d1c7b3770827860a`
+(tree `1b329e0820a2bfd300dcbf510a8e5bf99014cdc5`) was integrated with current
+main `5afb77fd7b24dca4c486acdc78e0ed161b9f200c` in a separate worktree. Both
+histories remain reachable, including the `00d29e2` regression baseline. The
+original source, previous failed runs and two final Opus High source ACCEPTs
+remain historical evidence; they do not accept this new integration.
+
+The integration retains the latest data/context explanation and Agentic Systems
+routes, the 17-skill Notion-only contract, the released 0.30.1 changelog entry
+and the unreleased 0.31.0 candidate designation. Combined owned changes advance
+OSM to 4.0.2, Build to 2.0.2 and Create Project to 5.0.2. Publisher implementation,
+fixtures, manifest, inactive template, sidebar sources and generated runtime are
+byte-identical to `5d8bcc8`; only the already identified G3 explanation in
+`publication.md` is clarified. No publisher repair was rewritten.
+
+Actual integration checks on Node 22.23.3 and Python 3.14:
+
+- Locked `npm ci --ignore-scripts --no-fund --offline`: exit 0 (100 packages).
+- Sidebar build and generated-runtime no-diff: exit 0; 183 tests and bundled
+  stdio/fullscreen/Home-projection/isolated-first-run smoke: exit 0.
+- Package validation, including baselines at both integration parents; the nine
+  release rehearsals; context footprint; credential-free reconciliation against
+  main; and diff whitespace checks: exit 0. Publisher rehearsal: 69 scenarios
+  and 75 mutation controls using in-memory stand-ins, not live Notion.
+- Preserved non-shipped drafts: 27 Node tests and 14 Python tests passed.
+- Local consumer-section rehearsal passed. Neither consumer ran or adopted it.
+
+Earlier results are retained: the first run caught a root/native description
+mismatch introduced during integration; it was corrected before the passing
+validation. Sandboxed execution could not open the publisher fixture's local
+socket, the stdio smoke closed its connection and two draft test files failed.
+The same unchanged checks passed in individually scoped execution; no persistent
+permission or profile change was made. These failures are not live-service proof.
+
+This is not a release decision. PR #84 Home remains fixture-qualified with no
+supported host credential route, and no native Home acceptance is claimed.
+PR #86 documentation ancestry is included; consumer adoption remains separate.
+Publication stays inactive, with no secret, Notion write or live public reader.
+G1 (public content/catalogue reader), G2 (live transport) and G3 (edits during a
+partial/unknown write or an incomplete pending write) retain their recorded
+limits in `docs-publisher/ACTIVATION.md`. No merge, tag, install, consumer update,
+schedule, CI publisher activation or owner-home migration was performed.
+Independent Sol High review of the final integrated candidate is recorded in its
+PR/handoff; the earlier Opus reviews apply only to the returned source.
