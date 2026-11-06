@@ -85,7 +85,7 @@ is historical for the design skills retired in 0.29.0.
 
 `aios-project-foundation` is no longer shipped. For engineering preparation of
 a new or existing software project, use the separately usable
-[Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation)
+[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 skill directly in Codex or Claude; T3 Code is not required. OSM has no runtime
 dependency on it, does not install it and contains none of its content. Small
 coding work stays with Write Code; without a selected foundation method, OSM

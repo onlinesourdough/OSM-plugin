@@ -2,7 +2,7 @@
 name: osm-write-code
 description: Write or change code of any size, including scripts, shell snippets, SQL, tests and automation; apply proportionate quality and verification, also when reviewing code.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:write-code
@@ -50,7 +50,7 @@ execution or external-write authority.
 For extraction, inspect affected callers, move a bounded part, verify one caller
 then the others before removing old code. Preserve caller-specific permissions,
 transactions and retry policies. A substantial setup/delivery foundation gap
-uses a separately selected method such as Factory Foundation, or is reported;
+uses a separately selected method such as Agentic Foundation, or is reported;
 changed sensitive or protected boundaries use the existing
 [security contract](../osm/references/security.md).
 

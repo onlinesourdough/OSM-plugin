@@ -4,7 +4,7 @@ Baseline: `v0.12.0` / `73c44fa94e4e698d10be51ff52ba3b2d5a107284`.
 
 ## Accepted result
 
-Keep AIOS business-first with productivity built in. Software & Defense Factory
+Keep AIOS business-first with productivity built in. Software & Defense Agentic Systems
 is an independent product with its own software/security skills and operation;
 it requires no AIOS runtime or installed method package. General AIOS work still
 uses its existing proportional quality, verification and safety criteria.
@@ -24,7 +24,7 @@ Owner data and other harness registrations are outside the installation scope.
 
 Before/after capture uses available tools and project/task evidence. No recorder,
 upload endpoint, PR automation, testing platform or external review service is
-introduced. Factory-specific workflows remain with the factory.
+introduced. Agentic Systems-specific workflows remain with the factory.
 
 The owner added OpenPencil readiness and duplicate-browser handling before
 release. The inspected task used a separate Playwright browser and then opened

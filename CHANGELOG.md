@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.30.1-setup-preview.4
+
+Update the separately selected Agentic Systems framework and Agentic Foundation
+routes following the owner-selected Factory rebrand. OSM remains an independent
+package. Compatible wording and reference corrections bump only the four affected
+skills; setup, access and execution behavior stay unchanged.
+
 ## 0.30.1-setup-preview.3 — unreleased preview
 
 Not a release; #58 and #60 holds remain. A second correctness fix for the

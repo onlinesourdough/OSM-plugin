@@ -21,7 +21,7 @@ preserves meaning, facts, uncertainty, quotes and the user’s language/voice;
 it adds no new approval gate and no writing pass for unrelated code. Contextual
 Review links to the same shipped method, without a second payload.
 
-The requested inspiration was Factory-AI’s [human-writing at 8aea382](https://github.com/Factory-AI/factory-plugins/blob/8aea3821b5a6ccd0db24299232e7d5a7281ccf50/plugins/droid-evolved/skills/human-writing/SKILL.md).
+The requested inspiration was Agentic Systems-AI’s [human-writing at 8aea382](https://github.com/Agentic Systems-AI/factory-plugins/blob/8aea3821b5a6ccd0db24299232e7d5a7281ccf50/plugins/droid-evolved/skills/human-writing/SKILL.md).
 The upstream root license was unavailable from the license endpoint at that
 revision. The AIOS skill is original prose; no upstream text, examples or
 payload were copied, and it makes no authorship-detection promise.
