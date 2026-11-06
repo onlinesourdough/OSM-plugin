@@ -476,6 +476,23 @@ def the_affected_set_is_held_until_every_member_passes(w):
 
 
 @scenario
+def a_plan_time_failure_holds_the_written_rows(w):
+    run(w, MANIFEST, working_files(), "run-1")                       # all five rows complete
+    w.hand_edit(ARCH, "hand edit")                                   # the page body only
+    result = run(w, MANIFEST, working_files("v2"), "run-2")          # one source change touches every row
+    got = outcomes(result)
+    require(got[ARCH] == pub.CONFLICT and ARCH not in result["affected_set"], f"the edited page is a plan-time conflict: { {k: got[k] for k in W_KEYS} }")
+    others = [k for k in W_KEYS if k != ARCH]
+    require({got[k] for k in others} == {pub.HELD}, f"a conflict outside the write set holds the rest: { {k: got[k] for k in W_KEYS} }")
+    require(all(w.snapshot(k)["status"] != "complete" for k in others), "no written row is stored complete in that run")
+    require(w.snapshot(ARCH)["body"] == "hand edit" and pub.failing(result), "the edit is not overwritten and the run is red")
+    arch = next(a for a in pub.expand(MANIFEST) if a["key"] == ARCH)
+    w.hand_edit(ARCH, pub.render(arch, pub.DictSource(working_files(), "c-run-1")))      # the conflict is resolved
+    result = run(w, MANIFEST, working_files("v2"), "run-3")
+    require(all(w.snapshot(k)["status"] == "complete" for k in W_KEYS) and not pub.failing(result), "the hold lifts once nothing fails")
+
+
+@scenario
 def an_interrupted_update_never_reports_complete_with_a_wrong_page(w):
     run(w, MANIFEST, working_files(), "run-1")
     files = working_files("v2")
@@ -746,6 +763,16 @@ def the_released_edition_resolves_to_the_exact_approved_commit():
         pass
     else:
         raise AssertionError("an unapproved edition cannot be released")
+
+
+@test
+def an_absent_tag_is_noted_by_the_credential_free_check_and_never_silent():
+    note = pub.tag_note(MANIFEST, lambda tag: None)
+    require(note and "v0.30.0 is not present" in note and "not checked (unsupported)" in note, f"the note names the tag and says not checked: {note}")
+    require(pub.tag_note(MANIFEST, lambda tag: APPROVED) is None, "a tag that resolves needs no note")
+    result = pub.plan(MANIFEST, pub.DictSource(working_files(), "c"), None, released_source=released_source())
+    result["notes"] = [note]
+    require(f"Note: {note}" in pub.reconciliation_text(result), "the note appears in the visible result")
 
 
 @test
@@ -1070,8 +1097,9 @@ MUTATIONS = [
     ("publish does not resolve the tag", P, [('    resolve_released(manifest, tag_resolver)\n    transport.claim_run', '    transport.claim_run')]),
     ("a newer guide original is not a conflict", P, [('if remote["actual_hash"] != orig:', 'if False:')]),
     ("a failed read-back keeps the written outcome", P, [('row["outcome"], row["detail"] = PARTIAL, f"read-back did not match: {detail}; left pending and retryable"', 'row["detail"] = detail')]),
-    ("unsupported members are completed", P, [('if len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if all(state != FAILED for state, _d in verdict.values()):')]),
-    ("the set does not wait for a member that was not written", P, [('if len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if wrote and all(state == VERIFIED for state, _d in verdict.values()):')]),
+    ("unsupported members are completed", P, [('if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if all(state != FAILED for state, _d in verdict.values()):')]),
+    ("the set does not wait for a member that was not written", P, [('if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if not stopped and wrote and all(state == VERIFIED for state, _d in verdict.values()):')]),
+    ("a plan-time failure does not hold the written rows", P, [('if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):')]),
     ("a landed resume is marked complete without read-back", P, [('row["detail"] = "the earlier write is on the page; read back below, not retried"', 'row["detail"] = "x"; transport.set_status(a["key"], "complete", receipt_after=digest, commit=use.commit)')]),
     ("BodyHash written first", P, [('{"properties": self._props(key=key, writer=writer, commit=commit)}', '{"properties": self._props(key=key, writer=writer, commit=commit, body_hash=digest)}')]),
     ("long lines truncated", P, [('{"content": line[i:i + CHUNK]}} for i in range(0, len(line), CHUNK)]', '{"content": line[:CHUNK]}} for i in range(0, 1)]')]),
@@ -1109,6 +1137,7 @@ MUTATIONS = [
     ("a frozen ZIP mismatch is not reported", P, [('elif got != frozen["sha256"]:', "elif False:")]),
     ("the guide check does not say it was not run", P, [('f"Notion-authored original | newer-original check: {NOT_CHECKED}: "', '"Notion-authored original | "')]),
     ("the class B hash check does not say it was not run", P, [('detail += f" | frozen ZIP hash: {NOT_CHECKED}: no reader hashes the live export"', "pass")]),
+    ("the absent-tag note is dropped", P, [('    if tag_resolver(ed["tag"]) is None:\n        return f"released tag', '    if False:\n        return f"released tag')]),
     ("a newer release tag is not noticed", P, [("        if newer:\n            out.append", "        if False:\n            out.append")]),
     ("the latest sentence is not checked", P, [("""if f"{ed['label']} is the latest" not in text:""", "if False:")]),
     ("a fixture row is created by set_status", F, [('        if key not in self.rows:\n            raise PublisherError(f"no row with the Key {key} to mark {status}")', "        self.rows.setdefault(key, {'writer': 'ci', 'status': status, 'receipt_after': None, 'receipt_before': None, 'body_hash': None, 'body': None, 'commit': None})")]),

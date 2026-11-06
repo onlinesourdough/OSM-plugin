@@ -223,6 +223,14 @@ def resolve_released(manifest, tag_resolver, require_tag=True):
     return ed["commit"]
 
 
+def tag_note(manifest, tag_resolver):
+    """The visible note of the credential-free check when the released tag is absent, else None."""
+    ed = manifest["editions"]["released"]
+    if tag_resolver(ed["tag"]) is None:
+        return f"released tag {ed['tag']} is not present in this checkout; the tag check is {NOT_CHECKED}; only the approved commit is read"
+    return None
+
+
 def git_tag_resolver(repo):
     def resolve(tag):
         r = subprocess.run(["git", "-C", str(repo), "rev-parse", "--verify", "--end-of-options", tag + "^{commit}"],
@@ -656,7 +664,11 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
         declared = result["affected_set"]
         wrote = [k for k in declared if _write_row(transport, arts[k], rows[k], use(arts[k]), run_id)]
         verdict = {k: _read_back(transport, k, rows[k], render(arts[k], use(arts[k]), commit=rows[k]["page_commit"])) for k in wrote}
-        if len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):
+        # A CI-owned row that failed at plan time (conflict, unreadable, blocked, unrepresentable) is outside the
+        # write set but inside the coherent set: it holds the rest.
+        stopped = [k for k, r in rows.items() if k in arts and arts[k]["public_writer"] == "ci" and k not in declared
+                   and r["outcome"] not in OK_OUTCOMES]
+        if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):
             for key in declared:
                 try:
                     transport.set_status(key, "complete", receipt_after=rows[key]["hash"], commit=rows[key]["page_commit"], run_id=run_id)
@@ -671,7 +683,8 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
                 elif state == UNSUPPORTED:
                     row["outcome"], row["detail"] = UNSUPPORTED, f"HOLD: {detail}; left pending"
                 else:
-                    row["outcome"], row["detail"] = HELD, "held pending: another member of the affected set did not pass"
+                    row["outcome"], row["detail"] = HELD, ("held pending: " + (f"{stopped[0]} failed before the write" if stopped
+                                                                else "another member of the affected set did not pass"))
         result["frozen"] = check_frozen(manifest, transport)
         for finding in result["frozen"]:
             row = rows.get(finding["key"])
@@ -919,8 +932,7 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
             resolve_released(manifest, resolve, require_tag=False)
         except PublisherError as error:
             problems.append(str(error))
-        if resolve(released["tag"]) is None:
-            notes.append(f"released tag {released['tag']} is not present in this checkout; the tag check is {NOT_CHECKED}; only the approved commit is read")
+        notes += [n for n in [tag_note(manifest, resolve)] if n]
         problems += release_problems(manifest, source)
         frozen = GitSource(args.repo, released["commit"])
         for a in manifest["artifacts"]:

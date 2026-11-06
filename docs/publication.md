@@ -33,7 +33,8 @@ A single stage then handles the rows CI owns, by stable Key. It declares the aff
 row pending with its before and after source (a new row is created pending), replaces the body in
 batches and records the body hash last. It then reads every member back: the page body (all children,
 hashed in a defined normalised form), the public page and the catalogue entry. No member is complete
-until the whole set passes. A body it cannot write exactly is refused, never truncated. A row whose
+until the whole set passes, and a CI-owned row that fails before the write (a conflict, an
+unreadable body, a block, a refusal) holds the set too. A body it cannot write exactly is refused, never truncated. A row whose
 body was changed elsewhere is a conflict and is not overwritten; an unreadable body is never called
 unchanged. An unknown write is read back before any retry and a partial update resumes on the same Key.
 Anything not owned by CI gets a visible refusal and no write. A missing credential makes it fail closed.

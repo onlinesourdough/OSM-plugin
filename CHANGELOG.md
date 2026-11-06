@@ -56,7 +56,7 @@ into one dated entry before any tag.
     `docs/archive`. `docs-publisher/` holds a per-artifact ownership manifest (five
     CI-owned documentation rows, no skill rows), an impact diff that maps changed paths to
     the Keys they affect with a visible result (a no-op is valid), a publishing stage that
-    reads every affected row back before any is complete, and an inactive workflow template
+    reads every affected row back, and completes none until the whole set passes and no CI-owned row has failed, and an inactive workflow template
     with one trigger and no schedule. It writes only artifacts whose public writer is CI; the
     released packets are pending handoff, the Content templates and guide originals are
     Notion-authored. Review repair (r1): a three-state public check (verified, failed,

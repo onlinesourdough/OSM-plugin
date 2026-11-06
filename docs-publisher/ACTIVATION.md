@@ -31,7 +31,7 @@ exits non-zero. That is an unmet live gate (G1 below), not a defect to work arou
 | `would-write`, `no-source-change`, `unknown-no-receipts` (credential-free) | Git paths changed since `--base`, mapped to Keys | Anything about Notion: receipts are not read, so nothing says written or unchanged |
 | `unchanged`, `conflict` for a CI row | The page body read back (all children, paginated, normalised to one line per paragraph) hashed and compared with CI's receipt | A hand edit made while a row is pending, partial or unknown-write cannot be told from the interrupted write and is overwritten on resume |
 | `conflict` for another writer | The row's `Writer` property | An edit by another writer that leaves `Writer` alone shows only as a body mismatch |
-| `written`, `resumed` | Body read back equal to the source, public page and catalogue verified for the whole affected set | Nothing live: see G1. Today the public and catalogue observations are `unsupported`, so neither result can occur live |
+| `written`, `resumed` | Body read back equal to the source, public page and catalogue verified for the whole affected set, with no CI-owned row failing at plan time (a conflict, unreadable, blocked or refused row holds the set) | Nothing live: see G1. Today the public and catalogue observations are `unsupported`, so neither result can occur live |
 | `unsupported` (HOLD) | No qualified reader, so the observation was not made | Whether the page is public, or in the catalogue |
 | `partial`, `unknown-write`, `rejected`, `blocked`, `unreadable` | The API refused, dropped, rate-limited or returned something unreadable; or the body read back differs | Why Notion refused (a 404 cannot say which cause) |
 | `refused-unrepresentable` | A body with a control character or beyond the block limits; refused, never truncated | |
@@ -94,9 +94,12 @@ Unmet live gates. If any stays open, the publisher must not be activated or call
 - **G2. The Notion transport has run only against `FakeNotion`.** Unknown until a live run: what the API
   returns for the body, query consistency right after a create, rate limits against a page of a few hundred
   blocks (each existing child is deleted by one request), block and property limits beyond what the code
-  assumes, API 2022-06-28 behaviour against this database, and how long deleted children are recoverable.
+  assumes (the 500 KB request-payload limit and the counting of the 2000-character limit in UTF-16 are not modelled; a batch over a limit
+  would be answered 400 and shown as `rejected` or `partial`, never silently), API 2022-06-28 behaviour against this database, and how long deleted children are recoverable.
+- **Keyless rows.** Any row in the database with no Key (Notion adds blank rows to a new database) makes every full `publish` `blocked` and red; delete or fill it first.
+- **CI base.** `--base` on a force-push whose `before` commit is not in the clone exits 2 with a clean error, so that CI run goes red.
 - **G3. Hand edits in flight.** A hand edit made while a row is pending, partial or unknown-write is not told
-  apart from the interrupted write and is overwritten on resume.
+  apart from the interrupted write and is overwritten on resume. A hand edit to only the provenance header line is not detected, because the hash covers the content after it.
 
 Not yet built, so the matching claims are not made:
 
