@@ -129,7 +129,7 @@ portable root manifest takes precedence. The package therefore omits that root
 manifest. Claude/Copilot, Cursor, Gemini and Pi retain their native metadata.
 The optional Notion app is a connection declaration, not an installed runtime
 dependency. There are no executable extensions, hooks, settings payloads or
-duplicated instruction bodies. See [onboarding evidence](issue-38-onboarding.md).
+duplicated instruction bodies. See [onboarding evidence](archive/issue-38-onboarding.md).
 
 From 0.21.0, Codex also loads the explicitly declared local sidebar MCP from
 `.codex-plugin/mcp.json`. Node.js 22+ must be on the execution host's PATH;
@@ -137,13 +137,12 @@ connection checks use its signed-in Codex CLI. The panel has no hosted service
 or consumer dependency-install step. Other client manifests still expose skills
 only. See [sidebar setup and recovery](sidebar.md).
 
-[Context](../skills/osm-context/SKILL.md) resolves the chosen home independently
-of installation. Use its [short host pointer](../skills/osm-context/assets/bridge.md)
-for a verified context entry URL or path. Notion is preferred for small teams;
-existing alternative homes keep their mappings. No provider failure falls back
-to `~/.AIOS`. Only a selected managed file home uses the file setup/default-root
-rules and format `2` (existing format `1` remains supported). An Obsidian vault is
-not automatically a managed file home. Package installation creates no home.
+[Data & Context](../skills/osm-data-context/SKILL.md) resolves the chosen home independently
+of installation. Use its [short host pointer](../skills/osm-data-context/assets/bridge.md)
+for a verified Notion context entry URL. Notion is the only supported home; no
+failure falls back to `~/.AIOS` or another provider. A legacy folder or vault home
+is read-only (see the [update reference](../skills/osm/references/update.md#legacy-file-and-vault-homes)).
+Package installation creates no home.
 
 ## Evidence and limits
 

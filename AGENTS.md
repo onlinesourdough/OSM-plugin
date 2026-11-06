@@ -58,6 +58,11 @@ python3 tests/layout-rehearsal.py
 python3 tests/continuity-rehearsal.py
 python3 tests/skill-version-rehearsal.py
 python3 tests/context-footprint.py
+python3 tests/responsibility-rehearsal.py
+python3 tests/context-architecture-rehearsal.py
+python3 tests/publisher-rehearsal.py
+python3 tests/consumer-selection-rehearsal.py
+python3 docs-publisher/publisher.py reconcile --check
 ```
 
 These match [Package and release CI](.github/workflows/release.yml). Run

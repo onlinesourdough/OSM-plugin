@@ -133,7 +133,7 @@ adapter's Claude-only check. See the official
 After method installation, the user can ask in ordinary language to set up OSM
 for their work; `/osm:osm-setup` is Claude's explicit entrypoint. Continue the
 shared [setup method](../SKILL.md), which selects Interview only when needed,
-existing-home discovery, supported format checks and first useful task. Installing
+Notion home discovery and the first useful task. Installing
 this plugin creates no owner home, personal bridge or hidden agent and grants no
 additional access. Keep owner data outside the plugin cache.
 
@@ -147,9 +147,38 @@ another harness's skill exclusions or configuration changes during this setup.
 See [Claude's configuration directory](https://code.claude.com/docs/en/claude-directory)
 and [settings](https://code.claude.com/docs/en/settings).
 
+Project instruction loading is version-gated; this was checked on 2026-10-27
+against [Claude Code memory](https://code.claude.com/docs/en/memory). From
+v2.1.277 the default, `claude-md-or-agents-md`, reads a project `AGENTS.md` only
+when no `CLAUDE.md`, `.claude/CLAUDE.md` or `CLAUDE.local.md` exists in the
+working directory or above; `~/.claude/CLAUDE.md`, a managed `CLAUDE.md` and
+`.claude/rules` do not count and load alongside it. With both formats present,
+only the `CLAUDE.md` files load unless one imports `@AGENTS.md` (a kept import is
+never read twice) or Project instructions is `claude-md-and-agents-md`, honoured
+only in user settings, a `--settings` file or managed settings (plugin ID
+`cc-plugin-agents-md@builtin` from v2.1.285, `agents-md@builtin` before). Before
+v2.1.277, with the built-in plugin disabled, in some first sessions after an
+upgrade and, before v2.1.281, in some sessions such as Bedrock or telemetry
+disabled, only `CLAUDE.md` loads; use an `@AGENTS.md` import there.
+`AGENTS.local.md`, `AGENTS.override.md` and `.agents/` are never read.
+
+Keep one shared `AGENTS.md`. Add an `@AGENTS.md` import only where a `CLAUDE.md`
+must also exist or direct support is unavailable; never copy its content, print
+it from a SessionStart hook or tell Claude in words to read it. Call a bridge
+loaded only with the client and version, the instruction files present, the
+Project instructions value and where it was set, and an observed load in a fresh
+session (the `AGENTS.md loaded` session line, or `/memory` from v2.1.280);
+otherwise report it unverified. `InstructionsLoaded` hooks do not fire for an
+`AGENTS.md` read through Project instructions, but do for one a `CLAUDE.md`
+imports or symlinks to, so a missing hook event is not evidence of non-loading
+and a hook log is not loading evidence for a direct read. Instruction loading
+proves no credential, access, permission, ingestion or timed run.
+
 ## Author verification and evidence limits
 
-Official sources above were checked on 2026-09-13. Installed Claude Code 2.1.139
+Official package and lifecycle sources above, and the Claude Code 2.1.139
+observations that follow, were checked on 2026-09-13; the instruction-loading
+paragraphs above carry their own 2026-10-27 date. Installed Claude Code 2.1.139
 exposes `plugin validate`, `list --json`, `details`, marketplace controls and
 scoped install/update/uninstall. Check local help when versions differ; current
 documentation includes features newer than this CLI.

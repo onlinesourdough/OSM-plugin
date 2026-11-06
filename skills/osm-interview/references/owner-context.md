@@ -21,5 +21,5 @@ When the location of needed knowledge is unclear, ask where that particular
 work happens. Use existing authorized access. New connections and registration
 belong to [Setup](../../osm-setup/SKILL.md) only when needed and authorized;
 otherwise continue from available context. Source routes and unique local facts
-use Maintain Context's [curation](../../osm-maintain-context/references/curation.md).
+use Manage Data & Context's [curation](../../osm-manage-data-context/references/curation.md).
 Understanding can itself be the small useful result.

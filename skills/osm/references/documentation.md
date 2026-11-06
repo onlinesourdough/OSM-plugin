@@ -13,15 +13,16 @@ Reading a method to explain it does not start that workflow or load owner data.
 | How work is selected and carried through | [Routing](routing.md) and the relevant part of [the lifecycle](lifecycle.md) |
 | How interview, setup and delivery methods connect | The overview's [connected work methods](../../../docs/osm.md#connected-work-methods), then the selected skill |
 | How installation, updates or removal work in a selected app | [Native adapters](../../osm-setup/references/adapters.md) |
-| How to choose, set up or check a context home | [Context](../../osm-context/SKILL.md) |
-| How Notion context and personal skills work | [Notion operating route](../../osm-context/references/notion/operating.md) |
-| How owner context and external sources are maintained | [Context curation](../../osm-maintain-context/references/curation.md) |
-| How owner data moves between machines | [Continuity Sync](../../osm-maintain-context/references/sync.md) |
+| How to set up or check a Notion context home | [Setup](../../osm-setup/SKILL.md), [Data & Context](../../osm-data-context/SKILL.md) and [check](check.md) |
+| How Notion context and personal skills work | [Notion operating route](../../osm-manage-data-context/references/operating.md) |
+| How owner context and external sources are maintained | [Context curation](../../osm-manage-data-context/references/curation.md) |
+| How to update OSM or move off a legacy file home | [Update](update.md) |
+| Where the public guide is | The OSM repository's `README.md` links it (that file is not part of the installed package). The guide is a reference projection of a released version, not the installed method; the installed skills stay the instructions |
 
 Use already available skill descriptions to select a particular method; open its
 instructions only when the question needs them. For a current release, changed
 external fact or a gap in the local documentation, use [canonical sources](canonical-sources.md).
 Keep the installed version distinct from upstream `main` and newer releases.
 The overview and methods travel together in the local package. Native package
-updates are separate from owner-data Sync; there is no Resources-hosted copy
+updates are separate from owner context; there is no Resources-hosted copy
 to fetch. Already-read instructions are not replaced by a later package update.

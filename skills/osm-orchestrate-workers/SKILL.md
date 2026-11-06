@@ -2,7 +2,7 @@
 name: osm-orchestrate-workers
 description: Prepare, launch, coordinate and recover delegated workers while the caller retains acceptance.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:orchestrate-workers
@@ -13,7 +13,7 @@ whole-task/user-owned continuation uses the shared lifecycle's [handoff](../osm/
 
 ## Prepare the handoff
 
-Receive the shared task's delegation decision, Spec and Select Model's
+Receive the shared task's delegation decision, Spec and model advice's
 model/effort evidence. Define separable scope, inputs, proof and handback.
 Keep transfer/coordination/review/retry costs within the accepted rationale.
 
@@ -31,7 +31,7 @@ Skill/prompt/model is not execution proof. Resume matching session/root/goal;
 slowness, clutter or a missing handle does not justify replacement. Missing
 control requires handoff/stop, not a claimed launch.
 
-Return to [Select Model](../osm-select-model/SKILL.md) for changed runtime/suitability.
+Return to [Model advice](../osm/references/model-advice.md) for changed runtime/suitability.
 Preserve tool-required defaults and explicit choices; claim no unapplied switch.
 Unavailable routes require handoff or sufficient authorized local continuation.
 
@@ -75,7 +75,7 @@ prove final bytes and write no owner memory. Local contracts still govern.
 ## Evidence and recovery
 
 If judgment exceeds the handoff/route, pause affected work and return the gap.
-The caller reopens Spec or Select Model. Retain worker state and one writer;
+The caller reopens Spec or model advice. Retain worker state and one writer;
 Review PASS or Ship does not settle new decisions.
 
 Return once: files/hashes, checks/scope, evidence gaps, goal/todo, recovery/stop,

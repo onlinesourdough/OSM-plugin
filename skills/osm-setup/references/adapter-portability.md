@@ -7,7 +7,7 @@ OSM portability means that the same shared `skills/` source can be used through
 each harness's native entrypoint. File context can reuse its physical owner
 home; Notion context reuses the approved guide URL and verifies access separately
 in each client, without copying a local owner mirror. Personal Notion skills
-use the [Notion lifecycle](../../osm-context/references/notion/personal-skills.md).
+use the [Notion lifecycle](../../osm-manage-skills/references/notion-skills.md).
 Thin Codex, Claude/Copilot, Cursor, Gemini and Pi metadata all use
 the same skills. Install separately in each chosen harness; no cross-install
 hook or shared configuration writer runs. Native discovery and model behavior
@@ -21,9 +21,8 @@ receiving harness resolves its own entrypoint, permissions, trust and runtime
 capabilities before acting. No universal loader, duplicated method body,
 background bridge or hidden permission grant is part of OSM.
 
-For update, inspect the selected source and its declared owner-data compatibility.
-Read [data compatibility](data-format.md) only if file-home data will be used or
-changed; native package installation/removal does not read or migrate a home. Pin the active task's method version; defer updates until a
+For update, inspect the selected source and its declared owner-data compatibility;
+native package installation/removal does not read or migrate a home. Pin the active task's method version; defer updates until a
 task boundary. Use native package update/reinstall targeting the reviewed ref,
 then a new task and checks. Product rollback selects the previous reviewed
 package; it does not roll back owner data. Native uninstall removes the selected package registration; it leaves owner

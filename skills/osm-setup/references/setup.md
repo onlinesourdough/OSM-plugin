@@ -1,17 +1,20 @@
-# Setup a useful owner home
+# Set up a useful Notion home
 
 Full setup covers context, capabilities, harness fit, useful work and
-continuity. Repair stays scoped; resume starts at the next gap with known answers.
-No fixed interview or account/device scan. Installation is not usable access.
+continuity of what was learned. Repair stays scoped; resume starts at the next
+gap with known answers. No fixed interview or account/device scan. Installation
+is not usable access.
 
-Business onboarding adds the [coverage check](../../osm-context/references/business-context.md),
+Business onboarding adds the [coverage check](business-context.md),
 reusing existing sources and answers.
 
 ## Context and useful work
 
-Use Maintain Context's [framework](../../osm-maintain-context/references/curation.md)
+Use Manage Data & Context's [framework](../../osm-manage-data-context/references/curation.md)
 for relevant answers, source/scope, confirmation and gaps. Inspect what is
 already known; keep source facts at their owner and missing values unknown.
+Sort what setup learns with its [intake classes](../../osm-manage-data-context/SKILL.md#classify-what-comes-in):
+durable, provisional (the snapshot below until confirmed) or source-only.
 
 When the purpose or context for useful first work needs exploration, use
 [Interview](../../osm-interview/SKILL.md) under its activation rules, with its
@@ -35,17 +38,20 @@ useful result from accepted intent; understanding can itself be that result.
 
 ## Home and harness
 
-Follow Setup's home resolution and optional bridge rules; quote paths as data. Read before writing;
-use [data compatibility](data-format.md), a scoped write rehearsal and missing
-[neutral assets](../assets/owner/AIOS.md). Check unavailable volumes before creation;
-resolve bridge conflicts. Stop symlink overwrites; preserve custom/unrelated bytes.
+The home is the Notion Data & Context home that
+[Data & Context](../../osm-data-context/SKILL.md) engineers: [bootstrap](bootstrap.md)
+the root and connection, then [Notion setup](../../osm-data-context/references/notion/setup.md)
+for stores, routes and acceptance. Read before writing and reuse by actual ID.
+External systems, local files and repositories are selected sources, not homes.
+A legacy folder, vault or `AIOS_FORMAT` home is recognized read-only; offer the
+[update reference](../../osm/references/update.md#legacy-file-and-vault-homes)
+guidance and never edit, convert, mirror or clean it up.
 
 Inspect inherited instructions; owner-context AGENTS must not preload independent
 repositories. Repair only authorized owned blocks; unresolved preload fails isolation.
 Use the current workspace for work. [Creation](../../osm/references/creation.md)
-starts a requested new repository; [specialist maintenance](../../osm-update/references/systems.md)
-handles selected optional installations. Merge needed
-[ignore exclusions](../assets/owner/.gitignore) and verify them before owner staging.
+starts a requested new repository; [specialist maintenance](../../osm/references/systems.md)
+handles selected optional installations.
 
 Full setup/configuration changes use relevant [harness configuration](harness-configuration.md);
 [adapters](adapters.md) owns installation. Preserve settings/overrides; optional
@@ -53,10 +59,11 @@ extras need a request/task need. Resume needs no machine audit.
 
 ## Acceptance and continuity
 
-Complete the agreed useful result. Check home and any chosen bridge readback, format, selected
-routes and gaps. A source read must supply needed content, not merely a reachable
-page, title or migration placeholder. Verify a needed unique local fact is
-retrievable; external facts stay at source. Unavailable sources remain dated gaps.
+Complete the agreed useful result. Check the home and any chosen pointer by
+readback, plus selected routes and gaps. A source read must supply needed content,
+not merely a reachable page, title or migration placeholder. Verify a needed
+unique local fact is retrievable; external facts stay at source. Unavailable
+sources remain dated gaps.
 
 Codex setup uses [checklist/goal acceptance](codex-tracking-acceptance.md).
 New/changed setup needs a fresh ordinary request without naming OSM; desktop
@@ -66,11 +73,10 @@ reuse dated proof without repeating cold/optional checks.
 
 Generated context/routes remain provisional until the owner confirms/corrects
 the snapshot. Reuse accepted answers; retain unresolved confirmation and do not
-claim full setup acceptance. Return path, concise changes, gaps and next action.
+claim full setup acceptance. Return the home link, concise changes, gaps and next
+action.
 
-A new home/move ends with an explicit remote/direction/scope or local/deferred
-continuity choice through [Sync](../../osm-maintain-context/references/sync.md),
-the sole procedure for that consent and transfer. Setup neither duplicates it
-nor creates a repository. On interruption retain coverage, answers/source pointers,
+Notion keeps the home across machines; setup creates no repository and no
+transfer step. On interruption retain coverage, answers/source pointers,
 changes/readback, off states, pending input and next action in task evidence;
 resume without reinterview and recheck only affected/stale facts.

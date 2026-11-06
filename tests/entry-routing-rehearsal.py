@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Prepare native-entry fixtures; does not launch a model or change a real setup."""
+"""Prepare native-entry fixtures from the shipped Notion pointer and a fictional URL.
+
+Preparation only: it launches no model and changes no real setup. The local owner-home
+folder is a synthetic stand-in for the fictional Notion home; nothing here proves native
+routing, a live Notion read or a real home."""
 import argparse
 import hashlib
 import json
@@ -9,6 +13,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 PRODUCT_PREFIXES = ("skills/", ".codex-plugin/", "assets/")
 PRODUCT_FILES = {"package.json", "LICENSE", "README.md", "docs/osm.md"}
+FICTIONAL_HOME_URL = "https://notion.example/fict-data-and-context"
 
 
 def write(root, relative, text):
@@ -125,13 +130,14 @@ Keep the function interface and verify the supplied cases with python3 check.py.
         for folder in sorted((package / "skills").iterdir()):
             if (folder / "SKILL.md").is_file():
                 (skill_dir / folder.name).symlink_to(folder, target_is_directory=True)
-        bridge = (package / "skills/osm-setup/assets/bridge.md").read_text().replace(
-            "AIOS_ABSOLUTE_PATH", str(root / "owner-home"))
+        bridge = (package / "skills/osm-data-context/assets/bridge.md").read_text().replace(
+            "<verified-notion-root-entry-url>", FICTIONAL_HOME_URL)
         boundary = f"""This is an isolated local task. Use only files under {root}
 and the read-only installed skill package at {package}. No real owner files,
 other accounts, network browsing, native configuration changes, skill installs,
 new goals, sidebar tasks or external writes. The external/ folder represents
 the named external source account for this task and is read-only to you.
+The folder owner-home stands in for the fictional Notion home at {FICTIONAL_HOME_URL}.
 You may edit owner-home and outputs for owner tasks, or app.py for the repository
 task. Treat this resource boundary as setup, not as the task's intended answer.
 """

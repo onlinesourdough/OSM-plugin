@@ -18,12 +18,12 @@ const examplePages = [
 const scratch = await mkdtemp(join(tmpdir(), 'osm-ui-test-'));
 const roots = Object.fromEntries(['home','setup','test'].map(key=>[key,join(scratch,key)]));
 await Promise.all(Object.values(roots).map(path=>mkdir(path)));
-const bridge = await readFile(new URL('../../skills/osm-context/assets/bridge.md', import.meta.url), 'utf8');
+const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
 const version = JSON.parse(await readFile(new URL('./package.json', import.meta.url))).version;
 async function reset(codexHome, scenario) {
   await rm(join(codexHome, 'AGENTS.md'), { force: true });
   await rm(join(codexHome, 'aios'), { recursive: true, force: true });
-  if (['existing', 'dashboard', 'team'].includes(scenario)) await writeFile(join(codexHome, 'AGENTS.md'), bridge.replace('<verified-context-entry-url-or-absolute-path>', 'https://app.notion.com/p/00000000000000000000000000000001'));
+  if (['existing', 'dashboard', 'team'].includes(scenario)) await writeFile(join(codexHome, 'AGENTS.md'), bridge.replace('<verified-notion-root-entry-url>', 'https://app.notion.com/p/00000000000000000000000000000001'));
   if (['dashboard','team'].includes(scenario)) {
     const context = await readContextRoute({ codexHome });
     const current = await readSources(context.target, { codexHome });

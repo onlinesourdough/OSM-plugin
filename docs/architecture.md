@@ -1,6 +1,6 @@
 # Architecture
 
-OSM combines portable owner context with Agent Skills for planning, content
+OSM combines portable owner context with Agent Skills for planning, writing
 and reviewed delivery. Native manifests load one root `skills/`
 directory. Focused helpers belong to their skills and run only for a selected
 task; OSM has no model runner, background service or permission system.
@@ -13,31 +13,27 @@ task; OSM has no model runner, background service or permission system.
 | Skills | Reusable methods, standards and judgment, with references and small helpers as needed |
 | Project workspace | Local requirements, working files, outputs, proof and recovery; Git is selected when useful |
 | Optional System | A separately maintained specialist with its own dependencies or operational needs |
-| Native manifests | Package identity and discovery over the same 22 skills |
+| Native manifests | Package identity and discovery over the same 17 skills |
 | Codex sidebar | A host-managed local MCP App for numbered source setup and a dashboard; stores private navigation names/links, with no company-content copy or chat handoff |
 
 ## Work and methods
 
 Continue in the current task and workspace. The shared lifecycle resolves the
 outcome, then applies Spec, Build, Review and authorized Ship proportionately.
-Content chains its own specialist steps into this lifecycle; visual design uses
-an installed design method if the host provides one, otherwise direct work or a
-reported missing method. There is no chain configuration language, mandatory
-department model or fixed sequence between design and content. Short writing uses human-writing directly.
+Visual design uses an installed design method if the host provides one,
+otherwise direct work or a reported missing method. There is no chain
+configuration language, mandatory department model or fixed sequence between
+design and writing. Short writing uses human-writing directly.
 
-The README presents the connected content workflow as the **Agentic Content
-System**. It combines context, skills, project artifacts and selected tools,
-using this plugin's methods without a separate installation of the former ACS
-repository. The design skills were retired in 0.29.0. Diffusion Studio is an
-optional external workbench. Its native interface owns production, with browser
-surfaces where supported: local design/application previews and Diffusion's
-limited read-only companion. The current Diffusion companion does not support media elements.
+Content production and Diffusion Studio are not part of the package since 0.31.0.
+Their history stays as non-shipped [Content drafts](content-drafts/README.md); the
+design skills were retired in 0.29.0.
 
 Use project-local `design/` and `content/` for working material and create them
 when needed. Product files belong where the project consumes them. Skill
 packages contain reusable methods and neutral assets, never customer work.
 Domain skills own briefs, evidence, review and handoff details; the core router
-only selects a method. See the [skill index](skills.md),
+only selects a method. See the [skill index](skills.md), the historical
 [content preservation map](content-preservation.md) and the historical
 [design preservation map](design-preservation.md) for the skills retired in 0.29.0.
 
@@ -67,35 +63,35 @@ nested beneath an owner home. No parent instruction file preloads personal data.
 Native project discovery does not depend on an OSM registry. Existing useful
 source indexes can remain ordinary context.
 
-New file owner homes use `AIOS_FORMAT` 2, without mandatory project or system indexes.
-The package also reads format 1. Package versions and owner-data formats are
-separate; installation never migrates data. An authorized cleanup preserves
-existing data and rollback evidence before changing the format marker. See
-[data compatibility](../skills/osm-setup/references/data-format.md).
+Package versions and owner-data formats are separate; installation never
+migrates data. Notion is the only supported context home. A legacy folder, vault
+or `AIOS_FORMAT` home is recognized read-only and preserved; the
+[update reference](../skills/osm/references/update.md#legacy-file-and-vault-homes) gives
+the migration guidance and [legacy-file-home](legacy-file-home/README.md) keeps the
+retired format and Sync records for history.
 
-[Context](../skills/osm-context/SKILL.md) selects the provider and owns the common
-home contract. A small host pointer supplies fresh-session discovery; the entry
-identifies authoritative sources, Spaces, personal methods and maintenance scope.
-Notion is the preferred concrete setup for solo founders and small teams. Other
-selected homes retain native structures and require verified tools and acceptance.
-Source systems retain their operational records and access control.
+[Data & Context](../skills/osm-data-context/SKILL.md) engineers the Notion home and
+owns the common home contract. A small host pointer supplies fresh-session
+discovery; the entry identifies authoritative sources, Spaces, personal methods
+and maintenance scope. Source systems retain their operational records and access
+control. External systems, local files and repositories are sources, not homes.
 
 Docs, Skills and Memory establish a context foundation. An operating model also
 needs workflows, responsibility, review points and evidence of useful outcomes.
 Start from one real workflow and add context where it improves that work. This
 package does not provision an ERP, data integration service or runtime memory engine.
 
-Maintain Context owns facts and explicit continuity Sync. Manage Skills owns
-personal-skill placement and native adoption. File-home Sync transfers consented context,
-personal skills and identity metadata; it excludes product trees, native
-settings, credentials and nested repositories. It is an explicit workflow,
-not an installation side effect.
+One owner per operation: Setup conducts onboarding and calls Data & Context for the
+home; Manage Data & Context retrieves and curates under the owner's recorded write
+policy, and delegates skill or method changes to Manage Skills, which owns
+personal-skill placement and native adoption. The `osm` entry hosts the read-only
+check, the update/rollback procedure and on-request model advice.
 
 ## Selective loading
 
 The harness discovers skill names and descriptions. Load the selected skill,
 then only the references needed for its operation. Explaining a method does not
-execute its lifecycle. Model selection assesses the remaining work under the
+execute its lifecycle. Model advice, only on request, assesses the remaining work under the
 user's configured default; worker orchestration is conditional on a concrete
 gain or a request. Shared continuation retains existing action authority.
 Risky Changes applies to consequential changes, without creating routine gates.
@@ -121,7 +117,9 @@ The installed version stays distinct from upstream `main` and newer releases.
 Private source reads use already-authorized access. Local documentation and
 methods remain usable without that access or website availability.
 
-There is no separate public OSM documentation export or Resources runtime.
+There is no OSM documentation runtime on the Resources domain. A public Notion guide is
+a versioned reference projection of released editions; keeping it aligned is the job of the
+source-only [publication pipeline](publication.md), which is not active.
 The [release procedure](distribution.md#release-and-adoption) checks package,
 overview and tag versions together before publishing a GitHub Release. Customer
 documentation remains in its source system; OSM retains only useful pointers,
@@ -130,9 +128,9 @@ unique facts or explicit gaps. Private owner continuity remains a separate flow.
 The technical plugin identity is `osm` from 0.30.0; earlier releases used `aios`.
 The rename covers package, skill, MCP and display names only. Persisted owner
 state keeps its names so earlier builds and existing homes stay readable:
-`AIOS.md`, `AIOS_FORMAT`, `~/.AIOS`, the `<!-- AIOS:BEGIN -->` bridge block, its
-`.aios-lock` and `backups/aios-context`, and Codex panel links under
-`CODEX_HOME/aios/panel`. Retired OSM 0.1.x packages are a different source;
+the `<!-- AIOS:BEGIN -->` bridge block, its `.aios-lock` and
+`backups/aios-context`, and Codex panel links under `CODEX_HOME/aios/panel`; a
+legacy file home also keeps `AIOS.md`, `AIOS_FORMAT` and `~/.AIOS` read-only. Retired OSM 0.1.x packages are a different source;
 installations are classified by source and version, never by name. The README
 distinguishes the shared OSM plugin from the owner's personal context home.
 

@@ -2,7 +2,7 @@
 name: osm-manage-skills
 description: Manage an authorized skill creation, edit, installation, update, removal or rollback.
 metadata:
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # OSM:manage-skills
@@ -14,17 +14,17 @@ This OSM skill owns the reviewed lifecycle for capabilities and personal/team
 skills: creation/import/edit/rename/removal decisions, canonical placement,
 registration and discovery, plus adoption, update and rollback. Follow the
 [owner skill lifecycle](references/owner-skills.md) for personal/team methods. The
-native Skill Creator owns authoring mechanics; Maintain context owns durable
-owner facts and configured Git sync. Neither takes back this lifecycle.
+native Skill Creator owns authoring mechanics; Manage Data & Context owns durable
+owner facts. Neither takes back this lifecycle.
 
-Use the resolved context provider for owner placement and discovery through
+Use the Notion Skills store for owner placement and discovery through
 that lifecycle; a cloud page is not automatically a native installation.
 Shared OSM skills remain in the plugin; project skills remain with their project.
 
 ## Distinguish audit from management
 
 An audit detects and reports the current capability state without mutation.
-Use [Check](../osm-check/SKILL.md) when the request is only to inspect or
+Use [Check](../osm/references/check.md) when the request is only to inspect or
 report; no separate audit skill is required. This skill manages a proposed
 change: create or reconcile a personal skill, review a capability gap, decide
 whether to reuse or install, and perform an authorized install, update,
@@ -101,4 +101,6 @@ source, version, changed scope, recovery and material limits.
 Fix authorized local defects and rerun affected checks. Failed activation holds
 further activation and preserves the prior version; uncertain effects require
 readback before retry. Report any remaining required proof or authority gap.
-Never update skills automatically.
+Never update installed capabilities automatically. Owner-method upkeep under the
+owner's recorded write grant, including a scheduled job, follows the owner skill
+lifecycle and changes nothing that is installed.

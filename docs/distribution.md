@@ -48,7 +48,10 @@ python3 tests/validate.py --release-tag vVERSION --baseline PREVIOUS_REVIEWED_RE
 python3 tests/documentation-rehearsal.py
 ```
 
-Replace both placeholders with the actual reviewed versions. Under the accepted
+Replace both placeholders with the actual reviewed versions. After the tag exists, a later
+reviewed commit updates the released edition in `docs-publisher/manifest.json` (tag, commit,
+label) and the "is the latest" sentence in `docs/README.md`. `docs-publisher/publisher.py
+reconcile --check` fails on a commit after a newer release tag until both agree. Under the accepted
 release authority, create and push only that version tag:
 
 ```sh
@@ -83,8 +86,8 @@ does not replace their local installations. They refresh/update through their
 app, then start a fresh conversation with the installed version. A new chat
 alone does not download an update. OSM provides no background updater.
 
-Owner-data continuity is a separate, explicit Sync operation. Plugin releases
-never upload, restore or migrate an owner's home.
+Owner context lives in the owner's Notion home. Plugin releases never upload,
+restore or migrate an owner's home.
 
 ## Local documentation
 
@@ -96,6 +99,7 @@ Content review establishes accuracy; matching numbers alone do not prove prose.
 
 OSM no longer exports documentation for the Resources domain. The package
 contains its own references and needs no documentation server, installer hook,
-custom CLI or background updater. Customer sources and owner data stay with
+custom CLI or background updater. The source-only [publication](publication.md)
+pipeline for the public Notion guide is not active. Customer sources and owner data stay with
 their existing owners. The Resources rollback is delivered through that
 repository's normal review, merge and production deployment.

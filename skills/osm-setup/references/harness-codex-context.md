@@ -23,8 +23,8 @@ notes/history; report that capability NOT VERIFIED until observed. Do not force
 compaction or inspect private history merely to manufacture proof.
 
 These task-context facilities are separate from cross-chat Memories and
-Computer History. They neither enable those options nor replace portable AIOS.md,
-MEMORY.md and routed owner context. OSM works without them. This is Codex-only
+Computer History. They neither enable those options nor replace the Notion
+home and its routed owner context. OSM works without them. This is Codex-only
 guidance: do not translate the key into Pi settings or introduce a runtime shim.
 
 For native Memories, inspect the effective `features.memories` flag and supported
@@ -38,4 +38,4 @@ Preserve an off choice; enabling requires user intent. A chosen off state does
 not require deleting generated memory or session files. Do not copy those stores
 into OSM or rely on editing them to control the feature.
 [Native memory controls](https://learn.chatgpt.com/docs/customization/memories)
-are separate from OSM's sourced MEMORY.md and context files.
+are separate from OSM's Memory and Notion context.

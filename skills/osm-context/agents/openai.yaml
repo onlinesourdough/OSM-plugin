@@ -1,4 +1,0 @@
-interface:
-  display_name: "OSM:context"
-  short_description: "Set up and maintain your chosen context home."
-  default_prompt: "Use $osm-context to set up or check my chosen context home."

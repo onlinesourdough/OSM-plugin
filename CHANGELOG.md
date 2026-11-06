@@ -1,5 +1,212 @@
 # Changelog
 
+## Unreleased
+
+This section and the `0.31.0` section below are both unreleased; reconcile them
+into one dated entry before any tag.
+
+Integration note (2026-11-06): this candidate includes released 0.30.1 and the
+current data/context introduction and Agentic Systems routes. The designation
+0.31.0 remains unreleased; no tag, activation, installation or consumer update
+is authorized by this integration. Combined owned changes advance OSM to 4.0.2,
+Build to 2.0.2 and Create Project to 5.0.2; Write Code retains main's 2.0.1.
+
+- Notion-only core with a separate Content boundary (#88). The shipped set is 17
+  skills (was 22):
+  - `osm-context` is now `osm-data-context` and `osm-maintain-context` is now
+    `osm-manage-data-context`; `osm` routes the old names and ships no alias
+    skill. Manage Data & Context is one method for manual, task-time and
+    scheduled use and maintains an existing Content store without a Content
+    module. Setup is a single conductor and never creates Content.
+  - Check, Update and Select model are internal references under
+    `skills/osm/references` (check is read-only; update and rollback record the
+    exact before and after revision and preserve user choices; model advice is
+    given only on request and humans keep the model choice).
+  - Provider selection, existing-home, vault and Obsidian setup, the managed
+    `AIOS.md` file home, the file bridge, folder-home Sync and the owner
+    file-home templates are out of the active flow. A legacy folder or vault
+    home is recognized read-only with honest incompatibility and migration
+    guidance in the update reference; originals and recovery are preserved and
+    nothing is converted, mirrored or cleaned up silently. The retired records
+    stay under `docs/legacy-file-home` (not shipped).
+  - The Codex sidebar no longer offers "Use a folder or other link"; the bundled
+    runtime was rebuilt from source.
+  - Content and Diffusion Studio left the package. Their drafts and preserved
+    tests are kept under `docs/content-drafts` (not shipped, no `SKILL.md`).
+  - The scheduled daily caller needs a new skill name before updating. The
+    operator-run migration steps are written down in the update reference; nothing
+    was run or edited.
+  - New or changed checks: validator inventory and no-alias controls, skill
+    version rename mappings, footprint, caller-graph and responsibility
+    rehearsal, and extra lifecycle cases in the context-architecture rehearsal.
+  - Context-method refinement: Manage Data & Context classifies incoming material
+    as durable, provisional or source-only; ambiguous placement and unsettled
+    authority conflicts are flagged, never merged; a relation needs a stated
+    meaning, evidence and attribution; an import is not an evidence time; a run
+    returns one needs-attention list (no global truth, health or freshness score),
+    advances a checkpoint only after readback and retries under the same
+    identity. No new store or property. Fixture cases 85-89 and a recent-import
+    variant of case 78 cover it; this is fixture proof only.
+  - Review repair: Setup acceptance scenarios, the home contract and the workflow
+    scenarios no longer describe a file home or folder-home Sync as active (a
+    legacy home is one read-only row); the responsibility rehearsal denies
+    `~/.AIOS`, `~/AIOS` and `managed file` everywhere, pins each refinement rule
+    with a deletion control and checks `docs/skills.md`. The sidebar placeholder is
+    Notion-only, a configured folder shows one read-only notice, and the pointer
+    route refuses any new non-Notion target. New pointers name Manage Data &
+    Context. `docs/skills.md` gains a triggers-and-calls table.
+  - Documentation reconciliation and a source-only publisher (#85): the README, docs
+    index, overview and architecture state what is declared, fixture-tested,
+    native-tested and released, and point at the public guide as a reference projection
+    of v0.30.0; twelve dated lifecycle and candidate records moved unchanged to
+    `docs/archive`. `docs-publisher/` holds a per-artifact ownership manifest (five
+    CI-owned documentation rows, no skill rows), an impact diff that maps changed paths to
+    the Keys they affect with a visible result (a no-op is valid), a publishing stage that
+    reads every affected row back, and completes none until the whole set passes and no CI-owned row has failed, and an inactive workflow template
+    with one trigger and no schedule. It writes only artifacts whose public writer is CI; the
+    released packets are pending handoff, the Content templates and guide originals are
+    Notion-authored. Review repair (r1): a three-state public check (verified, failed,
+    unsupported) replaces the two booleans, and with no qualified public content reader no live
+    run can reach complete; the page body is read back and hashed for unchanged, conflict and
+    complete; bodies are written whole or refused; the job exits non-zero unless every row is
+    written, unchanged, resumed or a recorded refusal. Fixture proof only (the Notion transport
+    has run only against an in-memory stand-in): not active, no Notion write, no credential, no
+    live proof. This supersedes the earlier "serialized idempotent publishing stage" wording:
+    serialization rests on the workflow's concurrency group alone.
+  - Still open: the neutral-root Home projection revision gap and the missing
+    Home credential route (unsupported host) are carried unchanged. The package
+    stays at the unreleased `0.31.0`; this is not an installed or released build.
+- The OSM Context Architecture (`skills/osm-data-context/references/architecture.md`)
+  is the one shared contract for a customer's Data & Context root. It covers:
+  - one neutral root with one definition;
+  - five coverage areas versus distinct storage roles, with a configurable
+    Knowledge store and its metadata;
+  - meaning, times and validity, including the rule that a date-only value is
+    one calendar date;
+  - finance completeness;
+  - the preparation lifecycle and its versioned pipeline agreement;
+  - placement and source lifecycle choices, selected excerpts and access roles;
+  - the owner's recorded home write policy and maintained control records,
+    replacing the earlier protected-write default;
+  - the host-bridge distinctions;
+  - root navigation without duplicate links;
+  - format-aware source recipes, item and stage failures, independently scoped
+    source credentials, an explicit coverage policy and owner intake exclusions,
+    credentials and host surfaces, configured/empty and deferred sources, and
+    Preview, Home and bootstrap through the selected connection;
+  - numerical fidelity versus completeness, mappings and their future defaults,
+    exact tabular references, original states and attachments, the transition to
+    a recurring feed, and responsibility before relevance;
+  - separate readiness states, two diagrams and a table of superseded defaults.
+- New supporting files:
+  - a migration and relocation procedure;
+  - Setup's bootstrap sequence;
+  - a neutral root template;
+  - two fictional example workspaces;
+  - an offline fixture rehearsal (`tests/context-architecture-rehearsal.py`).
+- Superseded for new setups and still supported in existing layouts: the
+  separate model page and OSM page entry, human Docs as the curation destination,
+  the official plugin as the setup route, and the abstract Docs Type taxonomy.
+- Claude project-instruction guidance now records version-gated `AGENTS.md`
+  loading and requires observed loading evidence.
+- Home write policy (#73) and record lifecycle (#72). Setup proposes whole-home
+  read, insert and update across the selected home and its real descendants and
+  records what the owner chooses, once, in the definition's `write_policy`; it is
+  a recommendation, never a hardcoded grant. An explicit grant is acted on
+  without per-write approval, an explicit narrower policy is kept through Setup
+  and Update, and with none recorded nothing is inferred and Check reports one
+  pending item. Existing recorded forms (a `protected:` list, an Updates note, a
+  CONNECTIONS entry) count as the policy. Four separate questions (owner policy,
+  actual access, task mandate, effect) decide a write; sharing, accounts,
+  credentials, deletion, publishing, notifications, plugin delivery, content
+  workflows and outside operational writes keep their own authority. Scope
+  follows actual containment.
+- A home keeps one current record per topic and scope, revised in place with
+  dated history. Revised and Review due (with a reason) are optional and written
+  only for a meaningful change; there is no backfill and no datestamp for a read
+  or no-op. Retrieval selects by access, task, owner, scope and status before
+  age, and a revised record's dependents are refreshed or marked Needs review.
+- The offline rehearsal covers cases 1 to 80: cases 5 and 40 changed, and cases
+  66 to 80 are new. The fixtures prove predicates over fictional data only, not
+  a real home, real provider containment or a scheduled run.
+- Skill versions: Context 2.2.0, Setup 2.2.0, Maintain Context 2.1.0, Check
+  3.1.0, Update 3.0.2, Manage Skills 2.0.1.
+
+## 0.31.0 — 2026-10-29
+
+- Home in the Codex sidebar: a read-only Context/Skills view of the owner's
+  mapped Notion records and personal skills, ported from the approved design
+  (#74). Titles open an article in place; Back returns to the list. Shared OSM
+  methods are listed, collapsed, from the installed package. Reading a skill
+  doesn't run it.
+- Home reads only through OSM's own internal Notion connection (#82), never
+  through the official plugin. The connection is a read-only REST adapter
+  pinned to Notion API `2026-03-11`, with bounded lists and bodies and explicit
+  inaccessible, unsupported, revoked and rate-limited states. No host provides a
+  supported secret store for it yet, so Home reports itself unavailable and
+  saved links work as before. See `docs/home-connection.md`.
+- Home's sources come from the AI Operating Model definition. Setup generates a
+  projection of one definition revision (`osm-home-projection/1`) and saves it
+  as its own per-context file through `osm_save_home_projection`; it changes
+  only with a new revision. It records the owner's connection mode. An
+  `official_notion_user` projection shows saved links with a note that Home
+  can't read through that connection yet; the mode is never switched. Support
+  material the definition names, such as core rules and recovery snapshots, is
+  kept out of context by one check for every list and read:
+  - It follows up to three ancestor pages per item, and a data source's
+    database through its schema. It never reads a database or a parent data
+    source.
+  - It refuses what it can't resolve. An external database whose ancestry can't
+    be read, and a page-list page that is a database row, are refused; both are
+    pending an owner decision.
+  - A support source can't also be mapped as context.
+  Existing saved links load unchanged and are labelled a partial view.
+- Page-icon reads, which use the official connection, need the resolved current
+  Home status to show an official mode, no projection, or saved links the user
+  chose; none run while a check is pending or after a failed or error status.
+  They never run while Home shows the internal connection's view.
+- Any list or read that reports another mode, a connection change or no current
+  scope clears Home and rechecks status once. So does a denial for something
+  already listed, also after Back. A trashed root is not reported connected, an
+  article says when a long property was shortened, and saves that would exceed
+  the reader's byte limit are refused before anything is replaced.
+- After Home observes that its projection was set up for a different Notion
+  connection, it keeps the saved links out of view until Setup maps it again
+  for the current connection and Home is ready: no Show saved links action,
+  no links view (also one chosen earlier), no saved-link opens, no page-icon
+  reads, and no saved source titles in Settings or setup, where the five
+  source fields are hidden and the context shows without its saved name.
+  Saving source links waits for that mapping. No other status ends this: not
+  an official-mode projection, a missing projection or connection, a failed,
+  pending or transient check, a list or read that reports the change, or a
+  status read for another context; a failed or transient check still offers
+  Try again. While it holds, the context pickers leave saved pages out of
+  their live results, also those already listed, without closing an open
+  list or clearing its search, and a context switch that names a saved page
+  keeps the choice but hides its question. The saved links, edits in
+  progress, an unfinished link and a page chosen in setup are kept and return
+  unchanged. For a configured context, each Home status names the context it
+  was read for, and Home does not apply one that names another context: after
+  the context changes outside this panel, such a status counts as a failed
+  check until Refresh reads the current one. The server's error fallback and
+  a status read without a configured context name no context and apply as
+  before; neither can end a held change. Three limits apply: as on every
+  Refresh, an open list of saved choices closes and a page search typed into
+  it is cleared on its next open; hidden fields keep their content in the
+  page; and nothing changes before Home has observed the change. Home in
+  official mode makes no connection check, so a newly opened panel does not
+  observe the change.
+- An article shows only the answer to its own read, so an older read of a
+  reopened record never replaces it, and it says when a block's text was cut at
+  20,000 characters or 200 text parts.
+- Context's Home projection procedure no longer treats `osm_home` as a
+  verification step: it is app-only, gives no bot or workspace IDs and can't
+  verify the mapped root before the first projection exists, so saving an
+  internal projection needs separately established identity and access
+  evidence in this phase.
+- Context 2.1.0 adds the Home projection procedure. Setup 2.1.0 explains the
+  internal connection option.
+
 ## 0.30.1
 
 Update the separately selected Agentic Systems framework and Agentic Foundation

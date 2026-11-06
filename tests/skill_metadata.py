@@ -13,14 +13,17 @@ import subprocess
 
 FIELDS = {"name", "description", "license", "compatibility", "allowed-tools", "metadata"}
 # OSM 0.30.0 renamed these skills; each keeps its version lineage under the new
-# name. A name change alters invocation, so it requires a major bump.
+# name. A name change alters invocation, so it requires a major bump. OSM 0.31.0
+# renamed the two context skills again; they map to their OSM 0.30.x names (a
+# baseline older than 0.30.0 does not map them).
 RENAMED_SKILLS = {
     "osm": "aios",
     **{f"osm-{name}": f"aios-{name}" for name in (
-        "build-work", "check", "context", "create-project", "interview",
-        "maintain-context", "manage-skills", "orchestrate-workers", "review-work",
-        "risky-changes", "select-model", "setup", "ship-work", "spec-work",
-        "triage-improvement", "update")},
+        "build-work", "create-project", "interview", "manage-skills",
+        "orchestrate-workers", "review-work", "risky-changes", "setup",
+        "ship-work", "spec-work", "triage-improvement")},
+    "osm-data-context": "osm-context",
+    "osm-manage-data-context": "osm-maintain-context",
     **{f"osm-{name}": name for name in ("clarify", "human-writing", "write-code")},
 }
 SEMVER = re.compile(

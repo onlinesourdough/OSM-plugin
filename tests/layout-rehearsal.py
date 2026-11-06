@@ -1,4 +1,4 @@
-"""Exercise independent nested Git roots and owner-repository exclusions."""
+"""Exercise independent nested Git roots and owner-repository exclusions in the legacy file-home record (non-shipped, read-only guidance)."""
 
 from pathlib import Path
 import os
@@ -8,7 +8,7 @@ import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OWNER_ASSETS = ROOT / "skills/osm-setup/assets/owner"
+OWNER_ASSETS = ROOT / "docs/legacy-file-home/owner"
 
 
 def git(root, *args):

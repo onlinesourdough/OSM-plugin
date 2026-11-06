@@ -40,6 +40,14 @@ maps each current name to its previous one (OSM 0.30.0: `aios*`, `clarify`,
 from the baseline, the check compares the mapped previous folder and requires a
 major bump, because invocation changed. An unmapped new name is a new skill.
 
+OSM 0.31.0 renamed `osm-context` to `osm-data-context` and `osm-maintain-context` to
+`osm-manage-data-context`; the map points them at their 0.30.x names. A baseline older
+than 0.30.0 (for example `v0.29.0`) has neither folder, so those two names are treated as
+new skills and the check stops with "initial skill version must be 1.0.0". That is the
+known limit of a single-name map, not a version error. Use a reviewed baseline at or after
+0.30.0 (the last reviewed commit or tag). Routine delivery and CI do not pass an older
+baseline.
+
 The dependency-free author validator supports the package's deliberately small
 YAML shape: root string fields (`name`, `description`, optional `license`,
 `compatibility`, `allowed-tools`) and a `metadata` mapping of quoted strings.

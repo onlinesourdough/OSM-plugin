@@ -4,8 +4,9 @@ import { mkdtemp, readFile, writeFile, readdir, rm, symlink } from 'node:fs/prom
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { readContextRoute, saveContextRoute, replaceContext } from './context-route.mjs';
-const bridge = await readFile(new URL('../../skills/osm-context/assets/bridge.md', import.meta.url), 'utf8');
+const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
 const target = 'https://app.notion.com/p/00000000000000000000000000000001';
+const moved = 'https://app.notion.com/p/00000000000000000000000000000002';
 async function fixture(t) {
   const codexHome = await mkdtemp(join(tmpdir(), 'osm-context-'));
   t.after(() => rm(codexHome, { recursive: true, force: true }));
@@ -16,14 +17,14 @@ test('first-run save persists only the context bridge and can be read after rest
   const after = await saveContextRoute({ target, expectedRevision: before.revision }, options);
   assert.equal(after.target, target); assert.equal(after.state, 'configured');
   assert.deepEqual(await readContextRoute(options), after);
-  assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), bridge.replace('<verified-context-entry-url-or-absolute-path>', target));
+  assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), bridge.replace('<verified-notion-root-entry-url>', target));
   assert.deepEqual(await readdir(options.codexHome), ['AGENTS.md']);
 });
 test('changes retain custom policy and unrelated bytes, back up the original and replay without writes', async (t) => {
   const options = await fixture(t);
-  const original = 'Unrelated rule\n' + bridge.replace('<verified-context-entry-url-or-absolute-path>', target).replace('Report gaps;', 'Extra approved rule.\nReport gaps;') + '\nAnother rule\n';
+  const original = 'Unrelated rule\n' + bridge.replace('<verified-notion-root-entry-url>', target).replace('Report gaps;', 'Extra approved rule.\nReport gaps;') + '\nAnother rule\n';
   await writeFile(join(options.codexHome, 'AGENTS.md'), original);
-  const before = await readContextRoute(options), nextTarget = '/work/my company.';
+  const before = await readContextRoute(options), nextTarget = moved;
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), original.replace(target, nextTarget));
   const backupDir = join(options.codexHome, 'backups/aios-context');
@@ -35,18 +36,18 @@ test('a 0.29.0 AIOS block stays readable and only its Context line changes', asy
   // Persisted owner state keeps the AIOS markers and wording written by earlier builds.
   const options = await fixture(t);
   const legacy = `<!-- AIOS:BEGIN -->\nContext: ${target}.\nFor work using or changing this context, use AIOS Context and read its\nguidance once per session. Load only what the task needs.\nReport gaps; do not invent context or silently switch sources.\n<!-- AIOS:END -->\n`;
-  assert.match(bridge, /^<!-- AIOS:BEGIN -->\n[\s\S]*use OSM Context[\s\S]*<!-- AIOS:END -->\n$/);
+  assert.match(bridge, /^<!-- AIOS:BEGIN -->\n[\s\S]*use OSM Manage Data & Context[\s\S]*<!-- AIOS:END -->\n$/);
   await writeFile(join(options.codexHome, 'AGENTS.md'), legacy);
   const before = await readContextRoute(options);
   assert.equal(before.state, 'configured'); assert.equal(before.target, target);
-  const nextTarget = '/work/company';
+  const nextTarget = moved;
   await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), legacy.replace(target, nextTarget));
   assert.equal(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md'), 'utf8'), legacy);
 });
 test('concurrent panels and external edits cannot overwrite a newer observed revision', async (t) => {
   const options = await fixture(t), before = await readContextRoute(options);
-  const results = await Promise.allSettled([target, 'https://example.com/context'].map(target => saveContextRoute({ target, expectedRevision: before.revision }, options)));
+  const results = await Promise.allSettled([target, moved].map(target => saveContextRoute({ target, expectedRevision: before.revision }, options)));
   assert.equal(results.filter(r => r.status === 'fulfilled').length, 1);
   assert.equal(results.filter(r => r.status === 'rejected').length, 1);
   const current = await readContextRoute(options);
@@ -71,6 +72,21 @@ test('input cannot inject instructions; an existing link is not asserted as veri
   assert.equal(replaceContext('Existing instructions', target, bridge).startsWith('Existing instructions\n\n'), true);
 });
 
+test('only a Notion page can be set or changed; old routes stay readable and read-only', async (t) => {
+  const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
+  const legacy = bridge.replace('<verified-notion-root-entry-url>', '/work/legacy');
+  await writeFile(path, legacy);
+  const before = await readContextRoute(options);
+  assert.equal(before.state, 'configured'); assert.equal(before.target, '/work/legacy'); assert.equal(before.kind, 'path');
+  for (const value of ['/work/other', 'C:\\Work\\Knowledge', 'https://example.com/context']) {
+    await assert.rejects(saveContextRoute({ target: value, expectedRevision: before.revision }, options), /Only a Notion page/);
+    assert.equal(await readFile(path, 'utf8'), legacy);
+  }
+  assert.throws(() => replaceContext('', '/work/new', bridge), /Only a Notion page/);
+  assert.equal(replaceContext(legacy, '/work/legacy', bridge), legacy);
+  const after = await saveContextRoute({ target: moved, expectedRevision: before.revision }, options);
+  assert.equal(after.target, moved); assert.equal(after.kind, 'notion');
+});
 test('malformed same-line markers and empty duplicate routes never change instructions', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
   for (const original of [
@@ -85,21 +101,21 @@ test('malformed same-line markers and empty duplicate routes never change instru
 });
 test('BOM and CRLF bytes survive both backup and context replacement', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
-  const original = Buffer.from('\uFEFFPrivate rule\r\n' + bridge.replace('<verified-context-entry-url-or-absolute-path>', target).replaceAll('\n', '\r\n'));
+  const original = Buffer.from('\uFEFFPrivate rule\r\n' + bridge.replace('<verified-notion-root-entry-url>', target).replaceAll('\n', '\r\n'));
   await writeFile(path, original); const before = await readContextRoute(options);
-  const nextTarget = 'https://example.com/context';
+  const nextTarget = moved;
   await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));
   assert.deepEqual(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md')), original);
 });
 test('a BOM immediately before the context block is read and preserved on save', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
-  const original = Buffer.from('\uFEFF' + bridge.replace('<verified-context-entry-url-or-absolute-path>', target));
+  const original = Buffer.from('\uFEFF' + bridge.replace('<verified-notion-root-entry-url>', target));
   await writeFile(path, original);
   const before = await readContextRoute(options);
   assert.equal(before.state, 'configured');
   assert.equal(before.target, target);
-  const nextTarget = 'https://example.com/context';
+  const nextTarget = moved;
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(after.target, nextTarget);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));

@@ -47,10 +47,12 @@ export async function readContextRoute({ codexHome = defaultHome() } = {}) {
 }
 export function replaceContext(text, target, bridge) {
   const route = classifyTarget(target);
-  if (!route || /[<>]/.test(route.target)) throw new Error('Enter an HTTPS context link or an absolute folder path.');
+  if (!route || /[<>]/.test(route.target)) throw new Error('Enter a Notion page link.');
   const current = parseContextRoute(text || '');
   if (current.state === 'ambiguous') throw new Error('Existing context instructions need attention. They have been left unchanged.');
   if (current.target === route.target) return text;
+  // Old routes stay readable (parseContextRoute); only a Notion home can be set or changed.
+  if (route.kind !== 'notion') throw new Error('Only a Notion page can be the context home. A folder or other link is read-only; see the OSM update guidance.');
   const original = text || '';
   if (current.state === 'configured') {
     // Preserve every rule; replace only the owned location inside the single routing block.
@@ -59,7 +61,7 @@ export function replaceContext(text, target, bridge) {
     if (parseContextRoute(next).target !== route.target) throw new Error('Existing context instructions need attention. They have been left unchanged.');
     return next;
   }
-  const addition = bridge.replace('<verified-context-entry-url-or-absolute-path>', () => route.target);
+  const addition = bridge.replace('<verified-notion-root-entry-url>', () => route.target);
   if (parseContextRoute(addition).target !== route.target) throw new Error('Invalid packaged context template.');
   return original + (original && !original.endsWith('\n') ? '\n\n' : original ? '\n' : '') + addition;
 }

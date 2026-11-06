@@ -2,7 +2,7 @@
 name: osm-spec-work
 description: Specify or revise substantive work when its outcome, boundaries or proof need clarification.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:spec-work
@@ -58,7 +58,7 @@ interview or compulsory phase.
 
 During substantive Spec, reconcile the shared task-result decision once
 requirements are clear. For model-executed work use
-[Select model](../osm-select-model/SKILL.md) for model/effort suitability; carry
+[Model advice](../osm/references/model-advice.md) for model/effort suitability; carry
 its evidence and material gaps into READY. It does not own the deliverable or
 continuation decision. A requested brief needs only the relevant preparation,
 sources and specialist guidance, followed by the lifecycle's usable handoff.

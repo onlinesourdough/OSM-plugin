@@ -1,0 +1,38 @@
+{
+  "name": "Willowmere Pottery (fictional)",
+  "example": "skills/osm-data-context/assets/examples/workspace-a.md",
+  "layout": "new-blank-root",
+  "root": {"id": "fict-a-root", "title": "Data & Context"},
+  "roles": {
+    "profile": "fict-a-root",
+    "knowledge": "fict-a-knowledge",
+    "memory": "fict-a-memory",
+    "methods": "fict-a-skills",
+    "operational": ["fict-a-clients", "fict-a-projects"],
+    "control": "fict-a-maintenance"
+  },
+  "definitions": [{"id": "fict-a-root#definition", "active": true}],
+  "reused_stores": ["fict-a-clients", "fict-a-projects"],
+  "connection_grants": [
+    {"parent": "fict-a-root", "descendants": ["fict-a-knowledge", "fict-a-memory", "fict-a-skills", "fict-a-maintenance"]}
+  ],
+  "human_originals": [
+    {"id": "fict-a-handbook", "before_sha": "a1", "after_sha": "a1"}
+  ],
+  "write_policy": {"choice": "whole-home", "include": [], "exclude": [], "recorded": "owner decision of the studio owner, 2026-10-12 (fictional)"},
+  "maintained": [{"id": "fict-a-knowledge/source-index", "role": "source-index"}],
+  "excerpt": {
+    "source_id": "fict-a-handbook", "target_id": "fict-a-knowledge/glaze-limits",
+    "authority": "owner-written handbook", "provenance": "collector route fict-a-route-handbook",
+    "revision": "r7", "source_date": "2026-03-02",
+    "meaning": "kiln temperature limits for the studio glazes", "uncertainty": "none stated",
+    "coverage": "section 3 only", "refresh_state": "checked 2026-10-20",
+    "route": {"kind": "collector", "read_only": true, "qualified": true}
+  },
+  "relocation_candidate": "fict-a-reloc-1",
+  "finance": {"source": "Ledgerline (fictional)", "coverage": "2026-01..2026-06", "rows": 41},
+  "readiness": {
+    "ledgerline": "manual-verified", "chatterbox": "unknown",
+    "payments": "blocked", "newsletter": "deferred"
+  }
+}

@@ -14,6 +14,13 @@ rollback to the reviewed 0.20.0 tag removes this Codex runtime and keeps the
 existing home and pointer. Preserve any later customer edits. See
 [sidebar boundaries](sidebar.md).
 
+Home's projection is a separate per-context file beside the links, with the
+same backups, and older runtimes ignore it. If Home shows the wrong sources,
+correct the AI Operating Model definition and let Setup regenerate the
+projection from its new revision; never hand-edit it. To stop Home
+reading, revoke OSM's internal connection in Notion. Never copy a token to
+repair it. See [Home connection](home-connection.md).
+
 Git history and reviewed tags/commits preserve earlier package versions and
 removed documentation. Do not keep duplicate historical reports in the active
 tree solely as backups.
@@ -35,7 +42,7 @@ recover ignored or untracked work it never stored, so moving an owner home must
 copy and verify those checkouts independently. Removing a shortcut or
 registration never authorizes deleting its target.
 
-[System maintenance](../skills/osm-update/references/systems.md) preserves exact
+[System maintenance](../skills/osm/references/systems.md) preserves exact
 source refs and System-local storage/recovery evidence before a compatible
 fast-forward. Worktrees do not eliminate conflicts or back up data. Unknown
 artifact backup coverage, local commits, tracked user artifacts or incompatible
@@ -74,7 +81,7 @@ is not owner-data recovery.
 
 ## Notion preview
 
-Use the [Notion recovery route](../skills/osm-context/references/notion/operating.md#recovery).
+Use the [Notion recovery route](../skills/osm-manage-data-context/references/operating.md#recovery).
 Restore only the previous owned bridge, plugin selections and personal-skill
 registrations after checking current identities. Preserve Notion pages and any
 new work; reconcile post-cutover decisions before resuming old memory.

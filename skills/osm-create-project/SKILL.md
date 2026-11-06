@@ -2,7 +2,7 @@
 name: osm-create-project
 description: Start a project with a useful workspace, context and simple structure; Git is optional.
 metadata:
-  version: "5.0.1"
+  version: "5.0.2"
 ---
 
 # OSM:create-project
@@ -35,8 +35,8 @@ are never reseeded or given fresh Git history.
 
 ## Continue the project
 
-Use the relevant methods for the real work: [Content](../content/SKILL.md),
-[Human Writing](../osm-human-writing/SKILL.md) or other available specialist skills.
+Use the relevant methods for the real work: [Human Writing](../osm-human-writing/SKILL.md) or other available specialist skills,
+including any separate Content method the owner has installed.
 For visual design, use an installed design method if the host provides one;
 otherwise do the work directly or report the missing method. Use [Manage Skills](../osm-manage-skills/SKILL.md)
 when the intended result is a reusable method rather than this project's work.

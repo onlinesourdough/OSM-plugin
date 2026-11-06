@@ -2,7 +2,7 @@
 
 Use this read-only route only when a current, version, release, source, harness,
 or external fact is missing from the accepted input and loaded package. Read the
-one relevant source; do not copy or sync it into OSM, MEMORY, skills,
+one relevant source; do not copy or sync it into OSM, Memory, skills,
 registries, or a durable owner corpus.
 
 ## OSM product facts
@@ -32,7 +32,7 @@ The customer's source remains canonical. Read it only with accepted access and
 task relevance; re-read it when it changes. If it is unavailable, stale,
 inaccessible, or conflicts, report the gap without filling it from memory or
 inference. A durable scoped pointer or correction uses
-[Maintain Context](../../osm-maintain-context/SKILL.md) and its
-[curation procedure](../../osm-maintain-context/references/curation.md) under
+[Manage Data & Context](../../osm-manage-data-context/SKILL.md) and its
+[curation procedure](../../osm-manage-data-context/references/curation.md) under
 recorded or standing authority; a read-only question never invokes that write
 route.
