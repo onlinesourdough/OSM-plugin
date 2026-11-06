@@ -2,7 +2,7 @@
 name: osm
 description: Explain OSM and route a person or agent to the relevant method, documentation or procedure, bringing in owner context only when a task needs it.
 metadata:
-  version: "4.0.0"
+  version: "4.0.1"
 ---
 
 # OSM:context-and-methods

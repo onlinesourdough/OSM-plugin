@@ -31,6 +31,8 @@ jobs:
           git diff --exit-code -- runtime/sidebar
           npm test --prefix apps/sidebar
       - name: Validate package and local documentation
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           python3 tests/validate.py
           python3 tests/documentation-rehearsal.py
@@ -43,7 +45,7 @@ jobs:
           python3 tests/context-architecture-rehearsal.py
           python3 tests/publisher-rehearsal.py
           python3 tests/consumer-selection-rehearsal.py
-          python3 docs-publisher/publisher.py reconcile --check
+          python3 docs-publisher/publisher.py reconcile --check ${BASE:+--base "$BASE"}
       - name: Validate release version and main ancestry
         if: startsWith(github.ref, 'refs/tags/v')
         env:

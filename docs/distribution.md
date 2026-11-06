@@ -48,7 +48,10 @@ python3 tests/validate.py --release-tag vVERSION --baseline PREVIOUS_REVIEWED_RE
 python3 tests/documentation-rehearsal.py
 ```
 
-Replace both placeholders with the actual reviewed versions. Under the accepted
+Replace both placeholders with the actual reviewed versions. After the tag exists, a later
+reviewed commit updates the released edition in `docs-publisher/manifest.json` (tag, commit,
+label) and the "is the latest" sentence in `docs/README.md`. `docs-publisher/publisher.py
+reconcile --check` fails on a commit after a newer release tag until both agree. Under the accepted
 release authority, create and push only that version tag:
 
 ```sh

@@ -1,7 +1,8 @@
 # INACTIVE TEMPLATE. Do not copy into .github/workflows until every item in ACTIVATION.md is done.
 # It is outside .github/workflows on purpose: nothing here runs, and nothing was enabled by merging it.
 # One trigger, no schedule. The publishing stage is serialized by the concurrency group below and by
-# the publisher's own run claim; one public writer per artifact is what actually prevents a collision.
+# nothing else: the publisher takes no run lock of its own. One public writer per artifact is what
+# actually prevents a collision.
 name: Publish documentation projection
 
 on:
@@ -30,12 +31,20 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Credential-free reconciliation (always runs, writes nothing)
-        run: python3 docs-publisher/publisher.py reconcile --ref "$GITHUB_SHA" --base "${{ github.event.before }}" --out reconciliation.md --check
+        env:
+          BASE: ${{ github.event.before }}
+        run: python3 docs-publisher/publisher.py reconcile --ref "$GITHUB_SHA" ${BASE:+--base "$BASE"} --out reconciliation.md --check
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: documentation-reconciliation
           path: reconciliation.md
-      - name: Publish CI-owned rows (fails closed without the dedicated credential)
+      - name: Publish CI-owned rows (fails closed without the dedicated credential; red unless every row is complete or a recorded refusal)
         env:
           OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
-        run: python3 docs-publisher/publisher.py publish --ref "$GITHUB_SHA" --database "${{ vars.OSM_PUBLIC_DOCS_DATABASE }}" --public-base "${{ vars.OSM_PUBLIC_DOCS_BASE }}"
+        run: python3 docs-publisher/publisher.py publish --ref "$GITHUB_SHA" --database "${{ vars.OSM_PUBLIC_DOCS_DATABASE }}" --public-base "${{ vars.OSM_PUBLIC_DOCS_BASE }}" --public-catalogue "${{ vars.OSM_PUBLIC_DOCS_CATALOGUE }}" --out publication.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: documentation-publication
+          path: publication.md

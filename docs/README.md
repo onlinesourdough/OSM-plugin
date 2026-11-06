@@ -83,6 +83,10 @@ Keep the existing entrypoints stable when editing the README:
 - An installed agent reads its packaged methods and versioned overview. It does
   not fetch instructions from Resources to perform a task.
 
+The README introduction Resources selects says "its 17 skills", and the disclosure that this tree is
+unreleased sits under `## More`, which that selection omits. A consumer that adopts an untagged
+revision shows the 17 with no state; it should pin a tagged release or carry the state itself.
+
 `tests/consumer-selection-rehearsal.py` rehearses both selections locally against this
 repository (headings present once and non-empty, links resolvable, no private data); it
 deploys nothing and does not run the consumers.

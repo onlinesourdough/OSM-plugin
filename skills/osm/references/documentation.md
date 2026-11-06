@@ -17,6 +17,7 @@ Reading a method to explain it does not start that workflow or load owner data.
 | How Notion context and personal skills work | [Notion operating route](../../osm-manage-data-context/references/operating.md) |
 | How owner context and external sources are maintained | [Context curation](../../osm-manage-data-context/references/curation.md) |
 | How to update OSM or move off a legacy file home | [Update](update.md) |
+| Where the public guide is | The OSM repository's `README.md` links it (that file is not part of the installed package). The guide is a reference projection of a released version, not the installed method; the installed skills stay the instructions |
 
 Use already available skill descriptions to select a particular method; open its
 instructions only when the question needs them. For a current release, changed

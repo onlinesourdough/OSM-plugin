@@ -53,12 +53,20 @@ into one dated entry before any tag.
     index, overview and architecture state what is declared, fixture-tested,
     native-tested and released, and point at the public guide as a reference projection
     of v0.30.0; twelve dated lifecycle and candidate records moved unchanged to
-    `docs/archive`. `docs-publisher/` holds a per-artifact ownership manifest, an impact
-    diff with a visible reconciliation result, a serialized idempotent publishing stage
-    and an inactive workflow template with one trigger and no schedule. It writes only
-    artifacts whose public writer is CI; the released packets are pending handoff, the
-    Content templates and guide originals are Notion-authored. Fixture proof only: not
-    active, no Notion write, no credential, no live proof.
+    `docs/archive`. `docs-publisher/` holds a per-artifact ownership manifest (five
+    CI-owned documentation rows, no skill rows), an impact diff that maps changed paths to
+    the Keys they affect with a visible result (a no-op is valid), a publishing stage that
+    reads every affected row back before any is complete, and an inactive workflow template
+    with one trigger and no schedule. It writes only artifacts whose public writer is CI; the
+    released packets are pending handoff, the Content templates and guide originals are
+    Notion-authored. Review repair (r1): a three-state public check (verified, failed,
+    unsupported) replaces the two booleans, and with no qualified public content reader no live
+    run can reach complete; the page body is read back and hashed for unchanged, conflict and
+    complete; bodies are written whole or refused; the job exits non-zero unless every row is
+    written, unchanged, resumed or a recorded refusal. Fixture proof only (the Notion transport
+    has run only against an in-memory stand-in): not active, no Notion write, no credential, no
+    live proof. This supersedes the earlier "serialized idempotent publishing stage" wording:
+    serialization rests on the workflow's concurrency group alone.
   - Still open: the neutral-root Home projection revision gap and the missing
     Home credential route (unsupported host) are carried unchanged. The package
     stays at the unreleased `0.31.0`; this is not an installed or released build.

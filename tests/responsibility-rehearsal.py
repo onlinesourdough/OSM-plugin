@@ -64,6 +64,24 @@ PINS = (
      "classified durable, provisional or source-only"),
     ("no call back into Setup", "osm-setup/SKILL.md", "nothing calls back"),
 )
+# The triggers-and-calls table in docs/skills.md: each row's trigger starts with the key and its Owner
+# column must link the value. Every owner is then pinned, so a deleted or re-assigned row fails.
+TRIGGER_ROWS = {
+    "Explain OSM": "osm/SKILL.md", "Set up or resume": "osm-setup/SKILL.md", "Engineer the Notion home": "osm-data-context/SKILL.md",
+    "Retrieve, take in": "osm-manage-data-context/SKILL.md", "Create or change a personal": "osm-manage-skills/SKILL.md",
+    "Explore direction": "osm-interview/SKILL.md", "Resolve a work contract": "osm-spec-work/SKILL.md",
+    "Implement accepted work": "osm-build-work/SKILL.md", "Inspect the result": "osm-review-work/SKILL.md",
+    "Deliver a reviewed": "osm-ship-work/SKILL.md", "Delegate to workers": "osm-orchestrate-workers/SKILL.md",
+    "Start a project": "osm-create-project/SKILL.md", "Route an improvement": "osm-triage-improvement/SKILL.md",
+    "Assess a consequential": "osm-risky-changes/SKILL.md", "Write prose, code": "osm-human-writing/SKILL.md",
+    "Inspect installation": "osm/references/check.md", "Update, roll back": "osm/references/update.md",
+    "Model advice": "osm/references/model-advice.md",
+}
+# Calls are checked against the skill's own links for the context chain and Interview.
+CALLS_CHECKED = {"osm-setup": None, "osm-data-context": None, "osm-manage-data-context": None, "osm-manage-skills": None,
+                 "osm-interview": None}
+DISPLAY = {"osm-interview": r"Interview", "osm-data-context": r"(?<!Manage )Data & Context",
+           "osm-manage-data-context": r"Manage Data & Context", "osm-manage-skills": r"Manage Skills", "osm-spec-work": r"Spec"}
 ACTIVE_DENY = ("AIOS_ROOT", "provider selection", "existing-home", "Use a folder or other link",
                "file bridge", "legacy-file-home")
 
@@ -155,6 +173,31 @@ def check(root=ROOT):
                 else owner.split("/")[0] + "/SKILL.md"
             require(f"skills/{shown}" in listed, f"docs/skills.md omits the owner of {operation}")
 
+    if skills_doc.exists():
+        rows = {}
+        section = skills_doc.read_text().split("## Triggers and calls", 1)[1].split("\n## ", 1)[0]
+        for line in section.splitlines():
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if line.startswith("|") and len(cells) == 3 and not set(cells[0]) <= set("- "):
+                rows[cells[0]] = cells
+        owner_links = {}
+        for trigger, owner_cell, calls in (r for k, r in rows.items() if k != "Trigger"):
+            owner_links[trigger] = set(re.findall(r"\]\(\.\./skills/([^)#]+)\)", owner_cell))
+        for key, owner in TRIGGER_ROWS.items():
+            row = [t for t in owner_links if t.startswith(key)]
+            require(len(row) == 1, f"triggers table has no row for {key!r}")
+            require(owner in owner_links[row[0]], f"triggers table row {key!r} does not name {owner} as owner")
+        require(len(owner_links) == len(TRIGGER_ROWS), "triggers table has a row this check does not know")
+        for name in CALLS_CHECKED:
+            row = next(t for t in owner_links if f"{name}/SKILL.md" in owner_links[t])
+            calls = rows[row][2]
+            linked = {t.relative_to(skills.resolve()).parts[0] for t in links(skills / name / "SKILL.md")
+                      if t.name == "SKILL.md" and t.parent.name != name and t.is_relative_to(skills.resolve())}
+            for other in linked & set(DISPLAY):
+                require(re.search(DISPLAY[other], calls), f"triggers table Calls for {name} omits {other}")
+            if not linked & set(DISPLAY):
+                require(calls.startswith("None"), f"triggers table Calls for {name} should say None")
+
     setup = (skills / "osm-setup/SKILL.md").read_text()
     data = (skills / "osm-data-context/SKILL.md").read_text()
     require("Setup never creates Content" in setup and "Never create Content" in data,
@@ -240,6 +283,14 @@ def negative_controls():
         path = root / "docs/skills.md"
         path.write_text(path.read_text().replace("skills/osm/references/model-advice.md", "skills/osm/references/gone.md"))
 
+    def table_edit(old, new):
+        def mutate(root):
+            path = root / "docs/skills.md"
+            text = path.read_text()
+            require(old in text, f"control cannot find {old[:40]!r}")
+            path.write_text(text.replace(old, new))
+        return mutate
+
     def delete_rule(name, relative, phrase):
         def mutate(root):
             path = root / "skills" / relative
@@ -255,6 +306,16 @@ def negative_controls():
     rejected(history_exempt_file, "shipped text names")
     rejected(link_back, "curation links back to Setup")
     rejected(dropped_owner_row, "docs/skills.md omits the owner")
+    interview_row = "| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers), Manage Data & Context (durable owner facts only) |"
+    rejected(table_edit(interview_row + "\n", ""), "triggers table has no row for 'Explore direction'")
+    rejected(table_edit("| Engineer the Notion home | [OSM:data-context](../skills/osm-data-context/SKILL.md) |",
+                        "| Engineer the Notion home | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) |"),
+             "does not name osm-data-context/SKILL.md as owner")
+    rejected(table_edit(", Manage Data & Context (durable owner facts only)", ""), "Calls for osm-interview omits osm-manage-data-context")
+    rejected(table_edit("| Interview (only if context is missing), Data & Context, Manage Data & Context, Manage Skills |",
+                        "| Interview (only if context is missing), Manage Data & Context, Manage Skills |"), "Calls for osm-setup omits osm-data-context")
+    rejected(table_edit("| Ship |\n", "| Ship |\n| Surprise row | [OSM:review-work](../skills/osm-review-work/SKILL.md) | None |\n"),
+             "has a row this check does not know")
     for name, relative, phrase in PINS:
         rejected(delete_rule(name, relative, phrase), f"rule text missing: {name}")
     rejected(call_back, "delegation loop")

@@ -4,7 +4,8 @@
   "activation": {
     "active": false,
     "live_proof": "not-run",
-    "note": "Source and fixtures only. Set active only in a reviewed activation commit after every item in ACTIVATION.md is done."
+    "note": "Source and fixtures only. Set active only in a reviewed activation commit after every item in ACTIVATION.md is done. public_reader stays null until a reader is qualified by the bounded proof; with it null, no live run can reach complete.",
+    "public_reader": null
   },
   "editions": {
     "released": {
@@ -48,10 +49,6 @@
       "note": "Frozen source commit of this repository"
     },
     {
-      "kind": "public-edition-block",
-      "note": "The public Releases edition block"
-    },
-    {
       "kind": "ci-receipt",
       "note": "Per-row receipt stored on the CI-owned public row"
     }
@@ -64,7 +61,7 @@
     "content_config": "40f6d2e17f5681d68525d83503a457d5",
     "template_catalogue_data_source": "6ff724a0-558c-4845-a0e1-a2e7fab86642",
     "working_subtree": null,
-    "working_subtree_note": "Not provisioned. The owner creates a labelled public subtree and a dedicated connection at activation."
+    "working_subtree_note": "Not provisioned. The owner creates a labelled public subtree (a database whose title property may have any name) and a dedicated connection at activation; with active true, publish refuses any other --database."
   },
   "artifacts": [
     {
@@ -403,7 +400,7 @@
       "before_source": {
         "edition": "2026-11-05.2",
         "original_hash": null,
-        "note": "Hash not recorded offline; the first live read records it. A different original is a conflict."
+        "note": "No hash is recorded, and no reader records one. A later guide edition is not detected (not checked: unsupported) until a reader and a recorded hash exist."
       }
     },
     {
@@ -521,22 +518,5 @@
       "adoption_state": "frozen-export"
     }
   ],
-  "generators": [
-    {
-      "key": "osm.working.skill.{name}",
-      "class": "W",
-      "edition": "main-working",
-      "match": "skills/*/SKILL.md",
-      "source_paths": [
-        "skills/{name}/"
-      ],
-      "target_subtree": "main-working/skills",
-      "public_writer": "ci",
-      "adoption_state": "unpublished"
-    }
-  ],
-  "renames": {
-    "osm.working.skill.osm-context": "osm.working.skill.osm-data-context",
-    "osm.working.skill.osm-maintain-context": "osm.working.skill.osm-manage-data-context"
-  }
+  "renames": {}
 }

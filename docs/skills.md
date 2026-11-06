@@ -16,6 +16,10 @@ there is no alias skill. Each carries an independent quoted `metadata.version`;
 see [version maintenance](skill-versioning.md). Repository development methods in
 `.agents/skills/` are separate and are not product skills.
 
+State: this describes the working tree, the unreleased `0.31.0`. It is declared and
+fixture-tested, and not installed or native-tested. The released v0.30.0 ships 22
+skills; see [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
+
 | Skill | Responsibility |
 | --- | --- |
 | [OSM:clarify](../skills/osm-clarify/SKILL.md) | Explain complex topics and decisions with concrete examples and visuals when they help understanding |
@@ -60,7 +64,7 @@ consistent with the skill text.
 | Engineer the Notion home | [OSM:data-context](../skills/osm-data-context/SKILL.md) | None |
 | Retrieve, take in or curate context; scheduled upkeep | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) | Data & Context (its contract), Manage Skills (method changes only) |
 | Create or change a personal or team method | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | None in the context chain |
-| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers) |
+| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers), Manage Data & Context (durable owner facts only) |
 | Resolve a work contract | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Interview, Risky Changes, Orchestrate workers, Build; model advice |
 | Implement accepted work | [OSM:build-work](../skills/osm-build-work/SKILL.md) | Write Code, Review, Orchestrate workers; model advice |
 | Inspect the result | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Risky Changes, Write Code, Ship, Triage |

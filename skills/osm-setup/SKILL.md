@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task.
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # OSM:setup
@@ -19,8 +19,10 @@ needs no global instruction edit. Register verified personal sources with the
 
 ## One path
 
-Setup is the single conductor. Each step has one owner, and nothing calls back
-into Setup:
+Setup is the single conductor. Each step has one owner. In the chain of Setup,
+Data & Context, Manage Data & Context and Manage Skills nothing calls back into
+Setup (Interview links Setup only for a new connection, which is conditional and
+outside that chain):
 
 1. **Connection and access.** Inspect exposed connections before proposing one,
    explain the useful read, and guide one supported native connection step under
