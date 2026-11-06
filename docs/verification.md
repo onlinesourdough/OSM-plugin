@@ -1,5 +1,54 @@
 # Verification
 
+On 2026-11-06 the #85 publisher was repaired after its integrated review of `00d29e2`, which
+requested changes (findings R-1 to R-14). The repair head is `0a14885`, on
+`feat/osm-85-docs-publisher-20261105`; this record is the commit after it. It is local only: nothing was
+pushed, published, installed or tagged, no workflow was enabled, and no Notion, schedule or credential
+action happened. This entry supersedes the earlier #85 claims below where they differ (a "serialized
+idempotent publishing stage", a row complete after "page, catalogue entry and anonymous access" read back,
+and "nothing deletes history"); the earlier entry stays as written.
+
+- **What changed, and what each result can now observe.**
+  - *R-1:* public access and catalogue membership are one three-state result (verified, failed,
+    unsupported). No reader is qualified, so `NotionTransport` returns unsupported for both and makes no
+    public request. **With no qualified reader no live run can reach `complete`**; the run reports HOLD and
+    exits non-zero. This is an unmet live gate, listed in `ACTIVATION.md`, `docs/publication.md` and this record.
+    The content comparison is a pure function, and a reader can be enabled only by `activation.public_reader`
+    in a reviewed commit (null today).
+  - *R-2 to R-5, R-8:* the page body is read back (paginated, one normalised line per paragraph) and hashed for
+    unchanged, conflict and complete; an unreadable body is never unchanged; a row is created pending, its
+    before-source survives a resume, no resume shortcut marks complete, `BodyHash` is written last; bodies are
+    written in batches whole or refused (never truncated); the affected set is declared and held pending until
+    every member passes.
+  - *R-6, R-7:* the job exits non-zero unless every row is written, unchanged, resumed, retired or a recorded
+    refusal, and the result file uploads with `if: always()`. The credential-free result says `would-write`,
+    `no-source-change` or `unknown-no-receipts`, never written; changed paths map to Keys; CI passes `--base`.
+  - *R-9:* the skill-row generator is gone; five documentation rows remain; changed skills are reported as
+    pending release propagation; `--only KEY` is the one-row route for a bounded proof. If the owner wants
+    working skill rows, that is the owner's explicit decision to record; they were not added back.
+  - *R-10 to R-12, R-14:* documents state only what each result observes; the class B ZIP hash and guide
+    original checks say `not checked (unsupported)`; the smaller gaps (absent tag, retirement, duplicate and empty
+    Keys, class A without a Key, timeouts, error mapping, no redirect following, "unreleased" in the header) are
+    closed in source; the R-14 documentation follow-ups are made, with a release-tag check in `reconcile --check`.
+  - *R-13:* every publish scenario now runs against both the in-memory fixture and `NotionTransport` through an
+    in-memory opener, and 66 mutation controls are part of `tests/publisher-rehearsal.py`; each must be caught.
+    The two weak assertions are exact. The responsibility rehearsal gained per-row checks of the triggers table.
+- **What this proves, and what it does not.** Fixture and static proof only. The Notion transport has run only
+  against `FakeNotion`, an in-memory stand-in, never against Notion. Unknown until a live run: what public pages
+  return, whether public HTML contains the body, query consistency after a create, rate limits for pages with
+  hundreds of blocks, block limits, API behaviour against the real database, and how long deleted children are
+  recoverable. Replacing a body deletes the row's child blocks; no row is deleted.
+- **Checks at `0a14885` in a clean clone (`clone-85r`).** Each ran directly with its exit status captured, and
+  all exited 0, including the sidebar build, the no-diff check on `runtime/sidebar`, `npm test` and the smoke
+  test. `npm ci` was NOT RUN (no network): the copied `node_modules` closure (tar sha256 `a7675ee1…`) was
+  used, so the sidebar steps are non-hermetic. The release tags were imported from a Root-supplied bundle by a
+  local fetch (v0.29.0 `f7fb831`, v0.30.0 `314dcf1`); the authoritative table is the final-head run recorded
+  in the hand-back.
+- **Not run.** CI, any native rehearsal, any install, Home or live Notion check, either consumer site, the
+  bounded live proof. The preconditions and unmet gates are in `docs-publisher/ACTIVATION.md`.
+- **Retained evidence:** raw logs, the runner script and hashes are kept under the machine-local
+  `evidence-85r` directory of the work area.
+
 On 2026-11-05 the documentation reconciliation and a source-only documentation
 publisher (#85) were added on `feat/osm-85-docs-publisher-20261105`, from the #88
 repair head `9de4317`. The code head is `826711c`; this record is the commit after
