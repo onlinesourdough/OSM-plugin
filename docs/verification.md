@@ -1,5 +1,39 @@
 # Verification
 
+On 2026-11-06 the #85 publisher repair (r1, `74fdd03`) was repaired once more after its independent
+review, which requested changes on one blocking item (B-1, R-8). The repair head is `64f9951`, on
+`feat/osm-85-docs-publisher-20261105`; this record is the commit after it. It is local only: nothing was
+pushed, published, installed or tagged, no workflow was enabled, and no Notion, schedule or credential
+action happened. This entry supersedes the r1 entry below where they differ; that entry stays as written.
+
+- **B-1 (R-8).** The r1 entry says the affected set is held pending until every member passes. That held
+  only for rows that failed during the write. A CI-owned row that failed at plan time (a conflict, an
+  unreadable body, a block or a refusal) was outside the set, so the other rows could be written and stored
+  `complete` in the same run (a hand-edited page plus one source change touching every row). Now such a row
+  holds the rest: no written row is complete in that run, and the hold lifts once nothing fails. The causal
+  scenario `a_plan_time_failure_holds_the_written_rows` (both transports) failed on `74fdd03` (rc 1; the
+  conflict row and four `written` rows) and passes at `64f9951`. A new control reverts the fix and is caught
+  by that scenario; the two controls anchored on the changed line were re-anchored, not weakened.
+- **Corrections to the r1 report.** The r1 hand-back said 18 files changed from `00d29e2`; numstat shows 17
+  (at `74fdd03`, and 17 at `64f9951`). It also said every control was caught by an assertion, not an accidental
+  crash. Four of the 66 were caught by an exception, each the defect's own symptom: result file not written
+  (`FileNotFoundError`), `RemoteDisconnected` not mapped (`RemoteDisconnected`), non-JSON not mapped
+  (`JSONDecodeError`), `get` returns no commit (`KeyError`). The rehearsal accepts any exception as a
+  detection. At `64f9951` there are 68 controls, the same four by exception and 64 by assertion.
+- **Also done.** A test and a control pin the "tag not present: not checked (unsupported)" note of
+  `reconcile --check`; absent-tag `publish` still fails. `ACTIVATION.md` now lists keyless database rows (every
+  full run blocked), the 500 KB payload and UTF-16 2000-character limits (not modelled) under G2, a force-push
+  base (CI red with a clean error) and that a hand edit of only the provenance header line is not detected. G3
+  (a hand edit in a pending, partial or unknown-write row is overwritten on resume) is unchanged.
+- **Checks at `64f9951` in a clean clone (`clone-85r2`).** Each ran directly with its exit status captured,
+  and all exited 0, including the sidebar build, the no-diff check on `runtime/sidebar`, `npm test` and the
+  smoke test; the publisher rehearsal reports 62 rehearsals and 68 controls. `npm ci` was NOT RUN (no network):
+  the copied `node_modules` closure was used, so the sidebar steps are non-hermetic. The authoritative table is
+  the final-head run in the hand-back. Fixture and static results only; not CI, native, install, Home or live
+  Notion proof.
+- **Retained evidence:** raw logs, the runner and hashes are kept under the machine-local `evidence-85r2`
+  directory of the work area.
+
 On 2026-11-06 the #85 publisher was repaired after its integrated review of `00d29e2`, which
 requested changes (findings R-1 to R-14). The repair head is `0a14885`, on
 `feat/osm-85-docs-publisher-20261105`; this record is the commit after it. It is local only: nothing was
