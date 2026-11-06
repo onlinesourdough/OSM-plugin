@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.30.0
+OSM version: 0.30.1
 
 **Business first. Productivity built in.**
 
@@ -134,14 +134,14 @@ Small coding work stays direct with Write Code and the shared lifecycle.
 Workspace or template creation alone does not prove an application ready.
 AIOS 0.28.0 retired the former Project Foundation skill: engineering preparation
 of a new or existing software project uses the separately usable
-[Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation)
+[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 skill directly in Codex or Claude; T3 Code is not required. When no such method is selected, OSM reports the
 gap rather than improvising an engineering contract.
 
-[Factory](https://github.com/arcitai/factory) is an independent package of
+[Agentic Systems](https://github.com/arcitai/agentic-systems) is an independent package of
 Foundation, AgentOps and ADLC methods, such as implement and review, for T3 Code
-and native coding agents. OSM and Factory are independent packages: neither
-depends on nor installs the other. An operator may select Factory for a project,
+and native coding agents. OSM and Agentic Systems are independent packages: neither
+depends on nor installs the other. An operator may select Agentic Systems for a project,
 carrying its accepted scope and sources while preserving each environment's own
 instructions, credentials and execution controls. Human involvement does not
 itself enforce a filesystem or tool boundary.

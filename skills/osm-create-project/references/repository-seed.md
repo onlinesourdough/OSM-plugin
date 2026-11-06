@@ -28,6 +28,6 @@ from the product's licensing decision. Each project type needs only its
 applicable authoring, validation and delivery responsibilities.
 
 When the accepted result also needs a substantial engineering foundation, use a
-separately selected method such as Factory Foundation, or report the gap.
+separately selected method such as Agentic Foundation, or report the gap.
 The new project owns its files and future maintenance; template provenance is
 history, not a runtime dependency or an instruction to refresh existing projects.

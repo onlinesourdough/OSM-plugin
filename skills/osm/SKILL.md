@@ -2,7 +2,7 @@
 name: osm
 description: Bring in owner context and OSM methods only when a task needs them.
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # OSM:context-and-methods
