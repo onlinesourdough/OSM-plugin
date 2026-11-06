@@ -2,22 +2,34 @@
 
 **Business first. Productivity built in.**
 
-The Onlinesourdough Method (OSM) helps your AI assistant plan work, build it, review the result and remember
-useful decisions. Install it in the app you use. The same 22 skills work from
-one shared source, with native packaging for Codex, Pi, Claude Code, Gemini CLI,
-Copilot CLI and Cursor.
+The Onlinesourdough Method (OSM) helps you give your AI assistant a useful
+foundation: relevant data, business context and reusable ways of working.
+It helps the assistant plan work, build it, review the result and retain useful
+decisions. Install it in the app you use. The same 22 skills work from one shared
+source, with native packaging for Codex, Pi, Claude Code, Gemini CLI, Copilot CLI
+and Cursor.
 
 Small requests stay small. Larger tasks get a clear outcome, the relevant
 specialist method and a review before delivery. Your app still provides the
 models, tools and permissions.
 
-The method was previously released as AIOS. OSM 0.30.0 renames the plugin to
-`osm` and its method skills to `osm-*` ([migration](https://github.com/onlinesourdough/OSM-plugin/issues/76)).
-If you have `aios@online-sourdough`, install `osm@online-sourdough`, disable
-`aios` before your fresh chat, and remove it once OSM works; see
-[Earlier names](docs/osm.md#earlier-names).
-Your context stays in its existing home with its existing names. Earlier
-OSM 0.1.x releases are a retired, different package; do not install them.
+## Your data and context
+
+**Data is the material you work with:** documents, notes, customer records and
+other information in your existing tools. **Context explains what it means:**
+how your business works, your goals, decisions, standards and what a useful
+result should achieve. **Skills describe how the assistant should work**, such
+as planning a task, writing clearly or reviewing a result.
+
+You choose a home for the context you want to keep. Operational data stays in
+its source systems; the agent uses the relevant sources through access you have
+authorized. OSM helps it find that context, apply useful methods and retain
+reviewed learning. It does not upload all your data, connect every account or
+grant access merely because you installed a plugin.
+
+That foundation can support different tasks and AI apps. You can reuse what
+already works, add context when a real task needs it and improve the methods as
+you learn. Start with one useful task rather than organizing everything first.
 
 The method supports business work, decisions, content, design and practical automation.
 Its code guidance and verification stay proportional to the task. Projects own
@@ -37,8 +49,7 @@ independent; neither depends on nor installs the other. The project carries its
 accepted scope and relevant sources between them, while the selected environment
 owns tools, access and execution protection.
 
-AIOS 0.28.0 retires its Project Foundation skill. To prepare a new or existing
-software project for reliable engineering, use
+For engineering preparation of a new or existing software project, use
 [Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 directly in Codex or Claude; T3 Code is not required for that. OSM does not
 install it or copy its content. Without a selected foundation method, OSM
@@ -46,8 +57,9 @@ reports the gap instead of improvising one.
 
 ## Why I built this
 
-I built The Onlinesourdough Method to carry useful context, decisions and working
-methods between AI apps, so each conversation can build on the work that came before.
+I built The Onlinesourdough Method to give AI assistants a useful foundation:
+relevant data, business context and reusable ways of working, kept in sources
+I control.
 
 The method installs as a native plugin in Codex and Claude Code and adds reusable
 skills for planning, building, reviewing and writing. It builds on open formats
@@ -100,8 +112,8 @@ when authorized and needed. Final export inspection remains part of content revi
 
 ### Visual design
 
-AIOS 0.29.0 no longer bundles design skills. For visual direction and assets,
-use an installed design method if your app provides one; otherwise the assistant
+For visual direction and assets, use an installed design method if your app
+provides one; otherwise the assistant
 does the work directly or reports the missing method. Existing projects keep
 their `DESIGN.md` and `design/` folder unchanged. For a visible UI change, Build's
 [review handoff](skills/osm-build-work/references/review-handoff.md) still
@@ -143,7 +155,7 @@ step, not a requirement to repeat work or use every skill.
 | Complete substantive work | Spec → [Build](skills/osm-build-work/SKILL.md) → [Review](skills/osm-review-work/SKILL.md) → Ship for authorized delivery | A defined outcome, implemented result, current verification and delivery readback |
 | Start a project for content, learning, business or software | [Create Project](skills/osm-create-project/SKILL.md) → the relevant work methods | A useful workspace, context and simple structure; Git and templates are optional |
 | Set up or move your context home | [Setup](skills/osm-setup/SKILL.md) leads onboarding through the chosen [Context](skills/osm-context/SKILL.md) procedure, using Maintain Context and Check where needed | A usable home, relevant context, verified chosen connections and a first useful result |
-| Keep useful context current | Maintain Context → the selected provider; [Git Sync](skills/osm-maintain-context/references/sync.md) only for an explicitly selected managed AIOS file home | Relevant facts and source pointers; optional scoped backup or restore |
+| Keep useful context current | Maintain Context → the selected provider; [Git Sync](skills/osm-maintain-context/references/sync.md) only for an explicitly selected managed file context home | Relevant facts and source pointers; optional scoped backup or restore |
 | Create or change a skill | [Manage Skills](skills/osm-manage-skills/SKILL.md) → native authoring or installation → verification, using Check for discovery when relevant | One maintained capability with a known source, placement and recovery path |
 | Update or recover a package or specialist | [Update](skills/osm-update/SKILL.md) → native adoption or specialist maintenance → Check where applicable | A selected revision with observed installation state and a recovery route |
 
@@ -159,9 +171,9 @@ choice, Spec can select a [small local trial](skills/osm-spec-work/references/lo
 visual variations on an available canvas/preview, a runnable UI interaction, or a
 sample workflow. Clear work proceeds directly; neither step is a fixed ritual.
 
-Setup is `osm-setup`; it replaced `aios-onboard` and, in 0.30.0, `aios-setup`.
-Update explicit shortcuts and callers when adopting this version. Existing homes resume from
-known facts without another foundation interview; owner formats are unchanged.
+Setup is `osm-setup`. Existing homes resume from known facts without another
+foundation interview; owner formats are unchanged. For older plugin names and
+shortcuts, use [Earlier names](docs/osm.md#earlier-names).
 Final content review and continuity Sync are procedures within their owning
 skills, not additional public skills.
 
@@ -184,6 +196,10 @@ registry or background agent. The [skill index](docs/skills.md) lists all 22
 public entrypoints.
 
 ## Install in your app
+
+Upgrading an older installation? Read [Earlier names](docs/osm.md#earlier-names)
+for the supported migration; existing context homes keep their own names.
+
 
 OSM is open source under the MIT license. Install directly from this public
 GitHub repository; no invitation is required. Your app uses its normal Git
@@ -318,7 +334,7 @@ home without replacing their own personal default.
 
 The method also accommodates a selected Obsidian vault, repository or another
 home through verified access and local mappings. Those alternatives require their
-own acceptance; they are not all tested integrations. Managed AIOS file homes
+own acceptance; they are not all tested integrations. Managed file context homes
 keep their existing concrete procedure. See [context verification](docs/verification.md#context-homes--0190)
 for tested boundaries and limits. An update preserves existing homes; use Setup
 when you choose to establish or move one.
@@ -348,26 +364,25 @@ detail. It adds no separate approval step.
 
 ## What is shared
 
-**The Onlinesourdough Method** supplies shared skills. **Your context home**,
-selected through Context, contains your context and personal skills. They have separate
-owners, locations and update paths.
+**The Onlinesourdough Method** supplies shared skills. **Your context home**
+contains your business context and personal methods. **Your data sources** keep
+the underlying documents and operational records. The agent brings the relevant
+parts together for a task; their owners, permissions and update paths stay separate.
 
 ```mermaid
-flowchart TB
-    upstream["onlinesourdough / OSM-plugin<br/>Reviewed GitHub releases"]
-    installed["Each app's local plugin installation<br/>Shared skills + references + overview"]
-    agent["Your agent in Codex, Pi or another app<br/>Reads relevant sources when needed"]
-    personal["Your selected context home<br/>Personal skills + source pointers"]
-    backup["Optional private GitHub owner repository<br/>Approved owner files only"]
-    project["Independent projects and Systems<br/>Own code, instructions and Git history"]
-    projectremote["Each project's or System's own remote"]
-    upstream -->|"Native install or update in each app"| installed
-    installed -->|"Selected method and references"| agent
-    personal -->|"Relevant owner context and personal methods"| agent
-    personal <-->|"File homes only: approved Git Sync"| backup
-    personal -.->|"Optional source pointers"| project
-    project -->|"Local instructions and accepted inputs"| agent
-    project <-->|"That repository's own Git workflow"| projectremote
+flowchart LR
+    data["Your data<br/>Documents, records and existing tools"]
+    context["Your context home<br/>Business context, decisions and personal skills"]
+    osm["OSM in your AI app<br/>Shared working methods"]
+    task["Your task or project<br/>Goal, instructions and acceptance"]
+    agent["Your AI assistant<br/>Relevant sources, methods and native tools"]
+    result["Reviewed result"]
+    data -->|"Authorized access for this task"| agent
+    context -->|"Relevant context and personal methods"| agent
+    osm -->|"Selected skills"| agent
+    task -->|"Agreed outcome and boundaries"| agent
+    agent --> result
+    result -.->|"Useful decisions, saved within scope"| context
 ```
 
 | What | Where it belongs | How it moves or updates |
