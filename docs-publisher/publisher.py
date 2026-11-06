@@ -84,6 +84,10 @@ class DuplicateKey(PublisherError):
     pass
 
 
+class Interrupted(PublisherError):
+    """An error stopped the run after it may have begun writing; nothing was marked complete after that point."""
+
+
 class RunInProgress(PublisherError):
     pass
 
@@ -439,6 +443,10 @@ def decide(artifact, source, remote, offline=None):
     if remote["writer"] != "ci":
         return CONFLICT, f"row is owned by {remote['writer']}", new
     status, actual = remote["status"], remote.get("actual_hash")
+    if status == "pending" and remote.get("body_hash") == remote["receipt_after"] and actual not in (None, remote["receipt_after"]):
+        # The write completed (BodyHash is written last and equals the receipt) and the row was only held, so a body
+        # that differs now was changed afterwards. A partial or unknown write has BodyHash != receipt and still resumes.
+        return CONFLICT, "the page body changed after CI's write completed; not overwritten", new
     if status in PENDING_LIKE:
         return RESUMED, f"resuming a {status} row", new
     if status not in ("complete", "retired"):
@@ -509,7 +517,7 @@ def plan(manifest, source, transport=None, changed_paths=None, released_source=N
                                      "detail": f"renamed to {new_key}" if new_key else "no longer in the source"})
     paths = changed_paths or []
     unmapped = [p for p in paths if not any(_hit(a, [p]) for a in expand(manifest))]
-    skills = sorted({"/".join(p.split("/")[:2]) for p in unmapped if p.startswith("skills/")})
+    skills = sorted({"/".join(p.split("/")[:2]) for p in paths if p.startswith("skills/")})
     return {"commit": source.commit, "rows": sorted(rows, key=lambda r: r["key"]), "base": base,
             "unmapped_changes": [p for p in unmapped if not p.startswith("skills/")], "changed_skills": skills,
             "receipts_consulted": transport is not None, "notes": [],
@@ -658,16 +666,19 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
                 try:
                     transport.set_status(row["key"], "retired", run_id=run_id)
                 except AccessError as error:
-                    row["outcome"], row["detail"] = BLOCKED, str(error)
+                    row["outcome"], row["detail"], row["stops"] = BLOCKED, str(error), True
                 except PublisherError as error:
-                    row["outcome"], row["detail"] = UNKNOWN_WRITE, f"{error}; read back before any retry"
+                    row["outcome"], row["detail"], row["stops"] = UNKNOWN_WRITE, f"{error}; read back before any retry", True
         declared = result["affected_set"]
-        wrote = [k for k in declared if _write_row(transport, arts[k], rows[k], use(arts[k]), run_id)]
-        verdict = {k: _read_back(transport, k, rows[k], render(arts[k], use(arts[k]), commit=rows[k]["page_commit"])) for k in wrote}
+        try:
+            wrote = [k for k in declared if _write_row(transport, arts[k], rows[k], use(arts[k]), run_id)]
+            verdict = {k: _read_back(transport, k, rows[k], render(arts[k], use(arts[k]), commit=rows[k]["page_commit"])) for k in wrote}
+        except PublisherError as error:
+            raise Interrupted(f"{error}; the run stopped, rows may have been written (they stay pending) and none was marked complete") from None
         # A CI-owned row that failed at plan time (conflict, unreadable, blocked, unrepresentable) is outside the
         # write set but inside the coherent set: it holds the rest.
-        stopped = [k for k, r in rows.items() if k in arts and arts[k]["public_writer"] == "ci" and k not in declared
-                   and r["outcome"] not in OK_OUTCOMES]
+        stopped = [k for k, r in rows.items() if k not in declared and r["outcome"] not in OK_OUTCOMES
+                   and (r.get("stops") or (k in arts and arts[k]["public_writer"] == "ci"))]
         if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):
             for key in declared:
                 try:
@@ -963,7 +974,8 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
         result = publish(manifest, source, transport, args.run_id, tag_resolver or git_tag_resolver(args.repo),
                          released_source=GitSource(args.repo, released["commit"]), only=args.only)
     except PublisherError as error:
-        _emit(f"# {title}\n\nFAIL-CLOSED: {error}\n\nNothing was written.\n", args.out)
+        _emit(f"# {title}\n\nFAIL-CLOSED: {error}\n\n" + ("Rows may have been written before it stopped; read the job log.\n" if isinstance(error, Interrupted)
+                                                         else "Nothing was written.\n"), args.out)
         return 3
     except Exception as error:
         _emit(f"# {title}\n\nUNEXPECTED ERROR: {type(error).__name__}. The run did not finish; read the job log.\n", args.out)

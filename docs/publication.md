@@ -34,8 +34,9 @@ row pending with its before and after source (a new row is created pending), rep
 batches and records the body hash last. It then reads every member back: the page body (all children,
 hashed in a defined normalised form), the public page and the catalogue entry. No member is complete
 until the whole set passes, and a CI-owned row that fails before the write (a conflict, an
-unreadable body, a block, a refusal) holds the set too. A body it cannot write exactly is refused, never truncated. A row whose
-body was changed elsewhere is a conflict and is not overwritten; an unreadable body is never called
+unreadable body, an access block, a body refused as unrepresentable, a refused retirement) holds the set too. A body it cannot write exactly is refused, never truncated. A row whose
+body was changed elsewhere after its write completed is a conflict and is not overwritten (an edit made during an interrupted write cannot be told apart and is the declared limit G3 in
+[ACTIVATION](../docs-publisher/ACTIVATION.md)); an unreadable body is never called
 unchanged. An unknown write is read back before any retry and a partial update resumes on the same Key.
 Anything not owned by CI gets a visible refusal and no write. A missing credential makes it fail closed.
 The job exits non-zero unless every row was written, unchanged, resumed, retired or is a recorded refusal.

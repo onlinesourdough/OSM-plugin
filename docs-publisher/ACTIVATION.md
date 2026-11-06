@@ -11,7 +11,7 @@ exits non-zero. That is an unmet live gate (G1 below), not a defect to work arou
 
 - `manifest.json`: per-artifact source and ownership, with each artifact's current public writer. Five
   documentation rows are CI-owned working rows. There is no skill row: skills stay Git-owned, and a
-  changed skill is reported as pending release propagation.
+  changed skill is reported as pending release propagation, whether or not a class A row maps its folder.
 - `publisher.py`: the impact diff, the reconciliation result, the serialized idempotent publishing
   stage, a Notion transport and a pure content comparison. Standard library only; no poller, timer or new dependency.
 - `fixture_transport.py` and `tests/publisher-rehearsal.py`: the fixture proof. It runs every publish
@@ -29,9 +29,9 @@ exits non-zero. That is an unmet live gate (G1 below), not a defect to work arou
 | Result | Evidence it rests on | What it does not show |
 | --- | --- | --- |
 | `would-write`, `no-source-change`, `unknown-no-receipts` (credential-free) | Git paths changed since `--base`, mapped to Keys | Anything about Notion: receipts are not read, so nothing says written or unchanged |
-| `unchanged`, `conflict` for a CI row | The page body read back (all children, paginated, normalised to one line per paragraph) hashed and compared with CI's receipt | A hand edit made while a row is pending, partial or unknown-write cannot be told from the interrupted write and is overwritten on resume |
+| `unchanged`, `conflict` for a CI row | The page body read back (all children, paginated, normalised to one line per paragraph) hashed and compared with CI's receipt | A hand edit made after a write completed (BodyHash equals the receipt) is a conflict even while the row is held at `pending`. One made while a row is `partial` or `unknown-write`, or `pending` after a write was refused or cut off (BodyHash differs from the receipt), cannot be told from the interrupted write and is overwritten on resume |
 | `conflict` for another writer | The row's `Writer` property | An edit by another writer that leaves `Writer` alone shows only as a body mismatch |
-| `written`, `resumed` | Body read back equal to the source, public page and catalogue verified for the whole affected set, with no CI-owned row failing at plan time (a conflict, unreadable, blocked or refused row holds the set) | Nothing live: see G1. Today the public and catalogue observations are `unsupported`, so neither result can occur live |
+| `written`, `resumed` | Body read back equal to the source, public page and catalogue verified for the whole affected set, with no CI-owned row failing at plan time (a conflict, unreadable, blocked or refused row, or a refused retirement, holds the set) | Nothing live: see G1. Today the public and catalogue observations are `unsupported`, so neither result can occur live |
 | `unsupported` (HOLD) | No qualified reader, so the observation was not made | Whether the page is public, or in the catalogue |
 | `partial`, `unknown-write`, `rejected`, `blocked`, `unreadable` | The API refused, dropped, rate-limited or returned something unreadable; or the body read back differs | Why Notion refused (a 404 cannot say which cause) |
 | `refused-unrepresentable` | A body with a control character or beyond the block limits; refused, never truncated | |
@@ -84,7 +84,8 @@ publisher takes no run lock of its own: serialization rests on the workflow's co
 
 ## Unmet live gates and missing setup
 
-Unmet live gates. If any stays open, the publisher must not be activated or called operational.
+Unmet live gates. If any stays open, the publisher must not be called operational. Activating it for the bounded proof depends on
+Root's decision on G1 (accept HOLD, or a separate anonymous-readback receipt); G2 can close only through a live run.
 
 - **G1. No qualified public content reader.** `activation.public_reader` is null. The comparison itself is a
   pure function that is tested, and a reader (an anonymous read of the page and of the catalogue view) is
@@ -96,10 +97,11 @@ Unmet live gates. If any stays open, the publisher must not be activated or call
   blocks (each existing child is deleted by one request), block and property limits beyond what the code
   assumes (the 500 KB request-payload limit and the counting of the 2000-character limit in UTF-16 are not modelled; a batch over a limit
   would be answered 400 and shown as `rejected` or `partial`, never silently), API 2022-06-28 behaviour against this database, and how long deleted children are recoverable.
-- **Keyless rows.** Any row in the database with no Key (Notion adds blank rows to a new database) makes every full `publish` `blocked` and red; delete or fill it first.
+- **Keyless rows.** Any row in the database with no Key (Notion adds blank rows to a new database) turns every full `publish` red with one `blocked` `(empty Key)` line; the other rows are still written and completed (a keyless row does not hold the set). Delete or fill it first.
 - **CI base.** `--base` on a force-push whose `before` commit is not in the clone exits 2 with a clean error, so that CI run goes red.
-- **G3. Hand edits in flight.** A hand edit made while a row is pending, partial or unknown-write is not told
-  apart from the interrupted write and is overwritten on resume. A hand edit to only the provenance header line is not detected, because the hash covers the content after it.
+- **G3. Hand edits in flight.** A hand edit made while a row is `partial` or `unknown-write`, or `pending` after a write was
+  refused or cut off (BodyHash differs from the receipt), is not told apart from the interrupted write and is overwritten on resume.
+  A completed write that is only held (BodyHash equals the receipt) is protected: a later edit is a conflict. A hand edit to only the provenance header line is not detected, because the hash covers the content after it.
 
 Not yet built, so the matching claims are not made:
 
@@ -112,5 +114,5 @@ Not yet built, so the matching claims are not made:
 
 `publish --only osm.working.readme` writes one authorized working row, then a read-only rerun that makes no
 write, then anonymous access to the changed page and its catalogue entry. With G1 open it can show the write, the
-body read back and a rerun that is a no-op; it cannot show `complete`. Until G1 closes and the result is reviewed,
+body read back and a rerun that makes no write; that rerun ends at HOLD, exit 4, with the rows still pending, and it cannot show `complete`. Until G1 closes and the result is reviewed,
 nothing may describe the publisher as operational.

@@ -100,6 +100,9 @@ class FixtureWorld:
     def corrupt(self, key):
         self.t.corrupt = key
 
+    def fail_retirement(self, key):
+        self.t.status_errors[key] = "retired"
+
     def upserted(self):
         return [e[1] for e in self.log if e[0] == "upsert"]
 
@@ -161,6 +164,15 @@ class NotionWorld:
 
     def corrupt(self, key):
         self.n.corrupt = key
+
+    def fail_retirement(self, key):
+        pid = self.n.page_for(key)
+
+        def respond(method, path, payload):
+            status = ((payload or {}).get("properties", {}).get("Status", {}).get("rich_text") or [{}])[0].get("text", {}).get("content")
+            if method == "PATCH" and path == f"pages/{pid}" and status == "retired":
+                raise urllib.error.HTTPError("x", 403, "no", {}, io.BytesIO(b""))
+        self.n.respond = respond
 
     def upserted(self):
         return [e[1] for e in self.log if e[0] == "upsert"]
@@ -493,6 +505,102 @@ def a_plan_time_failure_holds_the_written_rows(w):
 
 
 @scenario
+def a_hand_edit_after_a_completed_write_is_a_conflict_while_the_row_is_held(w):
+    # No reader: the write completes (BodyHash equals the receipt) but the row stays pending at HOLD.
+    w.no_reader()
+    run(w, MANIFEST, working_files(), "run-1")
+    require(w.snapshot(ARCH)["status"] == "pending" and w.snapshot(ARCH)["body_hash"] == w.snapshot(ARCH)["receipt_after"], "a completed write held at pending")
+    w.hand_edit(ARCH, "hand edit")
+    result = run(w, MANIFEST, working_files(), "run-2")
+    require(outcomes(result)[ARCH] == pub.CONFLICT and w.snapshot(ARCH)["body"] == "hand edit", "the later edit is a conflict and is kept")
+    require(pub.failing(result), "and the run is red")
+    # With a reader, a row held because another member failed is protected the same way.
+    w = type(w)()
+    run(w, MANIFEST, working_files(), "run-1")
+    w.public_shows(README, "not the page")
+    result = run(w, MANIFEST, working_files("v2"), "run-2")
+    require(outcomes(result)[README] == pub.PARTIAL and outcomes(result)[ARCH] == pub.HELD, "one member fails, the others are held pending")
+    w.hand_edit(ARCH, "hand edit")
+    result = run(w, MANIFEST, working_files("v2"), "run-3")
+    require(outcomes(result)[ARCH] == pub.CONFLICT and w.snapshot(ARCH)["body"] == "hand edit", "a held row's later edit is a conflict and is kept")
+    # A write that was interrupted is a different case: BodyHash differs from the receipt, so it still resumes.
+    w = type(w)()
+    run(w, MANIFEST, working_files(), "run-1")
+    w.fail_next("partial", ARCH)
+    run(w, MANIFEST, working_files("v2"), "run-2")
+    require(outcomes(run(w, MANIFEST, working_files("v2"), "run-3"))[ARCH] == pub.RESUMED, "an interrupted write still resumes")
+    # So does a row marked pending whose write was refused before anything landed (BodyHash is still the old one).
+    w = type(w)()
+    run(w, MANIFEST, working_files(), "run-1")
+    w.fail_next("access", ARCH)
+    require(outcomes(run(w, MANIFEST, working_files("v2"), "run-2"))[ARCH] == pub.BLOCKED and w.snapshot(ARCH)["status"] == "pending", "refused mid-write, left pending")
+    result = run(w, MANIFEST, working_files("v2"), "run-3")
+    require(outcomes(result)[ARCH] == pub.RESUMED and w.snapshot(ARCH)["status"] == "complete", "a refused write resumes and completes")
+
+
+@scenario
+def a_failed_retirement_holds_the_set(w):
+    old = {"key": "osm.working.old", "class": "W", "edition": "main-working", "owner": "git", "source_paths": ["docs/old.md"],
+           "target_subtree": "main-working/docs", "public_writer": "ci", "adoption_state": "unpublished"}
+    first = copy.deepcopy(MANIFEST)
+    first["artifacts"].append(old)
+    run(w, first, {**working_files(), "docs/old.md": "old page\nline\nline"}, "run-1")
+    w.fail_retirement("osm.working.old")
+    result = run(w, MANIFEST, working_files("v2"), "run-2")      # the old row left the manifest; its retirement is refused
+    got = outcomes(result)
+    require(got["osm.working.old"] == pub.BLOCKED, f"the failed retirement is visible: {got['osm.working.old']}")
+    require({got[k] for k in W_KEYS} == {pub.HELD} and all(w.snapshot(k)["status"] != "complete" for k in W_KEYS),
+            "and the written rows are held, not complete")
+
+
+@test
+def a_changed_skill_is_pending_release_propagation_whether_or_not_a_row_maps_it():
+    source = pub.DictSource({**working_files(), "skills/osm/SKILL.md": "x"}, "c-1")
+    changed = ["skills/osm/SKILL.md", "skills/alpha/SKILL.md", "docs/architecture.md"]
+    result = pub.plan(MANIFEST, source, None, changed, released_source=released_source(), base="b")
+    require(result["changed_skills"] == ["skills/alpha", "skills/osm"], f"a mapped and an unmapped skill are both reported: {result['changed_skills']}")
+    require(result["unmapped_changes"] == [], "a skill path is not also listed as an unmapped change")
+    text = pub.reconciliation_text(result)
+    require("pending release propagation" in text and "`skills/osm`" in text and "`skills/alpha`" in text, text)
+    require(outcomes(result)["osm.released.skill.osm"] == pub.PENDING_HANDOFF, "and the released row still gets no write")
+    quiet = pub.plan(MANIFEST, source, None, ["docs/architecture.md"], released_source=released_source(), base="b")
+    require(quiet["changed_skills"] == [] and "pending release propagation" not in pub.reconciliation_text(quiet), "no skill changed, none reported")
+
+
+@test
+def an_error_in_the_middle_of_a_run_does_not_claim_that_nothing_was_written():
+    w = FixtureWorld()
+    run(w, MANIFEST, working_files(), "run-1")
+    original = w.t.upsert
+
+    def vanishing(key, *args, **kwargs):
+        if key == INDEX:
+            raise pub.DuplicateKey("a row was duplicated during the run")
+        return original(key, *args, **kwargs)
+    w.t.upsert = vanishing
+    try:
+        run(w, MANIFEST, working_files("v2"), "run-2")
+    except pub.PublisherError as error:
+        require(isinstance(error, pub.Interrupted) and "may have been written" in str(error) and "a row was duplicated" in str(error), str(error))
+    else:
+        raise AssertionError("an error mid-run must say that rows may have been written")
+    with tempfile.TemporaryDirectory() as tmp:
+        result = Path(tmp) / "publication.md"
+        n, creates = FakeNotion(), []
+
+        def respond(method, path, payload):
+            if method == "POST" and path == "pages":
+                creates.append(path)
+                if len(creates) == 3:
+                    raise pub.DuplicateKey("a row was duplicated during the run")
+        n.respond = respond
+        code, text, _ = run_main(["publish", "--repo", str(ROOT), "--ref", "HEAD", "--database", "db-fixture", "--out", str(result)],
+                                 active_manifest(), n=n)
+        require(code == 3 and "may have been written" in text and "Nothing was written" not in text and result.read_text() == text, text)
+        require(len(n.pages) == 2 and all(p["props"]["Status"] != "complete" for p in n.pages.values()), "two rows exist, none complete")
+
+
+@scenario
 def an_interrupted_update_never_reports_complete_with_a_wrong_page(w):
     run(w, MANIFEST, working_files(), "run-1")
     files = working_files("v2")
@@ -773,6 +881,33 @@ def an_absent_tag_is_noted_by_the_credential_free_check_and_never_silent():
     result = pub.plan(MANIFEST, pub.DictSource(working_files(), "c"), None, released_source=released_source())
     result["notes"] = [note]
     require(f"Note: {note}" in pub.reconciliation_text(result), "the note appears in the visible result")
+
+
+@test
+def reconcile_prints_the_absent_tag_note_through_main_and_none_when_the_tag_resolves():
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args):
+            return subprocess.run(["git", "-C", tmp, "-c", "user.name=t", "-c", "user.email=t@t", *args], check=True, capture_output=True, text=True).stdout.strip()
+        git("init", "-q")
+        for name, text in (("README.md", "readme"), ("docs/README.md", "v0.30.0 is the latest"), ("docs/osm.md", "o"), ("docs/architecture.md", "a"), ("docs/skills.md", "s")):
+            (Path(tmp) / name).parent.mkdir(exist_ok=True)
+            (Path(tmp) / name).write_text(text)
+        git("add", "."); git("commit", "-q", "-m", "one")
+        mini = copy.deepcopy(MANIFEST)
+        mini["artifacts"] = [a for a in mini["artifacts"] if a["class"] == "W"]
+        mini["editions"]["released"]["commit"] = git("rev-parse", "HEAD")
+
+        def reconcile():
+            out = io.StringIO()
+            with redirect_stdout(out):
+                code = pub.main(["reconcile", "--repo", tmp, "--ref", "HEAD", "--check"], manifest=mini)
+            return code, out.getvalue()
+        code, text = reconcile()
+        require(code == 0 and "Note: released tag v0.30.0 is not present in this checkout" in text and "not checked (unsupported)" in text,
+                f"a tagless checkout prints the note and still passes: {code}\n{text}")
+        git("tag", "v0.30.0")
+        code, text = reconcile()
+        require(code == 0 and "is not present" not in text, f"a tag that resolves prints no note: {text}")
 
 
 @test
@@ -1060,6 +1195,11 @@ def the_credential_free_reconciliation_check_passes_on_this_repository():
     require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
     require("| pending-handoff | 22 |" in text and "22 artifact(s) are pending handoff" in text, "the 22 released packets are pending handoff")
     require("| unknown-no-receipts | 5 |" in text and "| written" not in text, "no row claims to be written")
+    since = io.StringIO()
+    with redirect_stdout(since):
+        pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "00d29e2"])
+    require("pending release propagation" in since.getvalue() and "`skills/osm`" in since.getvalue() and "`skills/osm-setup`" in since.getvalue(),
+            "the real repair's own skill changes are reported as pending release propagation")
     with tempfile.TemporaryDirectory() as tmp:
         out_file = Path(tmp) / "reconciliation.md"
         with redirect_stdout(io.StringIO()):
@@ -1129,7 +1269,13 @@ MUTATIONS = [
     ("--only is ignored", P, [("    if only:\n        artifacts = [a for a in artifacts", "    if False:\n        artifacts = [a for a in artifacts")]),
     ("every path maps to every row", P, [("    return any(p == pre or (pre.endswith(\"/\") and p.startswith(pre)) for pre in a[\"source_paths\"] for p in changed_paths)", "    return True")]),
     ("the credential-free result says written", P, [("return WOULD_WRITE, ", "return WRITTEN, ")]),
-    ("changed skills are not reported", P, [('skills = sorted({"/".join(p.split("/")[:2]) for p in unmapped if p.startswith("skills/")})', "skills = []")]),
+    ("changed skills are not reported", P, [('skills = sorted({"/".join(p.split("/")[:2]) for p in paths if p.startswith("skills/")})', "skills = []")]),
+    ("only unmapped changed skills are reported", P, [('for p in paths if p.startswith("skills/")})', 'for p in unmapped if p.startswith("skills/")})')]),
+    ("a later edit of a completed, held write is overwritten", P, [('if status == "pending" and remote.get("body_hash") == remote["receipt_after"] and actual not in', 'if False and actual not in')]),
+    ("any pending row with another body is a conflict", P, [('remote.get("body_hash") == remote["receipt_after"] and actual not in (None, remote["receipt_after"]):', 'actual not in (None, remote["receipt_after"]):')]),
+    ("a failed retirement does not hold the set", P, [('and (r.get("stops") or (k in arts and arts[k]["public_writer"] == "ci"))]', 'and (k in arts and arts[k]["public_writer"] == "ci")]')]),
+    ("an interrupted run is reported as a plain error", P, [('raise Interrupted(f"{error}; the run stopped', 'raise PublisherError(f"{error}; the run stopped')]),
+    ("an interrupted run says nothing was written", P, [("if isinstance(error, Interrupted)", "if False")]),
     ("a skill generator is accepted", P, [('    if manifest.get("generators"):', "    if False:")]),
     ("activation without a subtree is accepted", P, [('if activation["active"] and not manifest["bindings"].get("working_subtree"):', "if False:")]),
     ("any database is accepted", P, [('args.database != manifest["bindings"]["working_subtree"]', "False")]),
@@ -1137,6 +1283,7 @@ MUTATIONS = [
     ("a frozen ZIP mismatch is not reported", P, [('elif got != frozen["sha256"]:', "elif False:")]),
     ("the guide check does not say it was not run", P, [('f"Notion-authored original | newer-original check: {NOT_CHECKED}: "', '"Notion-authored original | "')]),
     ("the class B hash check does not say it was not run", P, [('detail += f" | frozen ZIP hash: {NOT_CHECKED}: no reader hashes the live export"', "pass")]),
+    ("the absent-tag note is not printed by reconcile", P, [("        notes += [n for n in [tag_note(manifest, resolve)] if n]\n", "")]),
     ("the absent-tag note is dropped", P, [('    if tag_resolver(ed["tag"]) is None:\n        return f"released tag', '    if False:\n        return f"released tag')]),
     ("a newer release tag is not noticed", P, [("        if newer:\n            out.append", "        if False:\n            out.append")]),
     ("the latest sentence is not checked", P, [("""if f"{ed['label']} is the latest" not in text:""", "if False:")]),

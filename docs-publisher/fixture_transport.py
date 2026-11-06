@@ -32,6 +32,7 @@ class FixtureTransport:
         self.duplicates = set()
         self.unreadable = set()
         self.corrupt = None          # key whose next successful write silently stores a damaged body
+        self.status_errors = {}      # key -> status whose marking is refused (access denied)
 
     # -- reads ---------------------------------------------------------------------------------
     def _check(self):
@@ -88,6 +89,8 @@ class FixtureTransport:
         self._check()
         if key not in self.rows:
             raise PublisherError(f"no row with the Key {key} to mark {status}")
+        if self.status_errors.get(key) == status:
+            raise AccessError(f"fixture refuses to mark {key} {status}")
         self.log.append(("status", key, status))
         self.rows[key]["status"] = status
         for name in ("receipt_before", "receipt_after", "commit"):
@@ -102,6 +105,8 @@ class FixtureTransport:
             self.fail_next = None
             if failure[0] == "unknown":
                 raise UnknownWrite("no answer; the write did not land")
+            if failure[0] == "access":
+                raise AccessError("fixture access refused the write")
         row = self.rows.get(key)
         if row is None:    # a new row is created already pending
             row = self.rows[key] = {"writer": writer, "status": "pending", "receipt_before": receipt_before or "",
@@ -272,6 +277,9 @@ class FakeNotion:
         """Called before each content mutation (create, block delete, append) of a page's body."""
         if self.fail and self.fail[1] == key:
             self._mutations = getattr(self, "_mutations", 0) + 1
+            if (self.fail[0] == "access" and self._mutations == 1):
+                self.fail, self._mutations = None, 0
+                raise self._error(request, 403)
             if (self.fail[0] == "unknown" and self._mutations == 1) or (self.fail[0] == "partial" and self._mutations == 2):
                 self.fail, self._mutations = None, 0
                 raise urllib.error.URLError("fake connection dropped")
