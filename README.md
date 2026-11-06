@@ -29,16 +29,17 @@ optional. Small coding work stays direct with Write Code and the shared Spec,
 Build and Review. None of this requires a particular sidebar or execution
 environment.
 
-[Factory](https://github.com/arcitai/factory) is a separate package of
-engineering methods for T3 Code and native coding agents: Foundation, AgentOps
-and the ADLC methods such as implement and review. The method and Factory are
+[Agentic Systems](https://github.com/arcitai/agentic-systems) is an open-source framework for
+building and operating agentic systems. It brings Foundation, AgentOps and domain
+methods together across software, BI, defence and research, using T3 Code and
+native coding agents where appropriate. The method and Agentic Systems are
 independent; neither depends on nor installs the other. The project carries its
 accepted scope and relevant sources between them, while the selected environment
 owns tools, access and execution protection.
 
 AIOS 0.28.0 retires its Project Foundation skill. To prepare a new or existing
 software project for reliable engineering, use
-[Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation)
+[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 directly in Codex or Claude; T3 Code is not required for that. OSM does not
 install it or copy its content. Without a selected foundation method, OSM
 reports the gap instead of improvising one.

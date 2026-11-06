@@ -36,7 +36,7 @@ the prose. These are choices, not mandatory screenshots, tables or diagrams.
 Identify the source revision/artifact and relevant comparison conditions. State
 an unavailable baseline or check rather than manufacture evidence. Preserve
 private data and other work while capturing; use existing tools and authorized
-destinations. No new capture dependency, public upload service or Factory
+destinations. No new capture dependency, public upload service or Agentic Systems
 installation is implied. Evidence complements the existing domain checks and
 acceptance procedure; it adds no new review or owner-approval gate.
 

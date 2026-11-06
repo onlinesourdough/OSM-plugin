@@ -2,7 +2,7 @@
 name: osm-build-work
 description: Implement and verify accepted work through in-scope fixes and Review.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:build-work

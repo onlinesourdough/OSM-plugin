@@ -49,10 +49,10 @@ and context. A selected repository template is an optional seed; it does not add
 a second project identity or copy OSM phases. Create System is retired;
 reusable methods use Manage Skills. Project Foundation was retired in 0.28.0;
 substantial software engineering foundations use a separately selected method,
-such as [Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation),
+such as [Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation),
 or the gap is reported. OSM ships no replacement engineering contract.
 
-[Factory](https://github.com/arcitai/factory) is a separate package of
+[Agentic Systems](https://github.com/arcitai/agentic-systems) is a separate package of
 Foundation, AgentOps and ADLC methods for T3 Code and native coding agents.
 The operator may use it with an OSM-assisted project under the project's
 accepted scope. Neither package depends on or installs the other; there is no

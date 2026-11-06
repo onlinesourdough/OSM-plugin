@@ -12,7 +12,7 @@ A small self-contained task needs no project setup.
 
 Use [Manage Skills](../../osm-manage-skills/SKILL.md) for reusable methods.
 Keep small coding work direct. A substantial software engineering foundation or
-repair uses a separately selected method such as Factory Foundation; if none is
+repair uses a separately selected method such as Agentic Foundation; if none is
 available, report the gap. Continue through the [shared lifecycle](lifecycle.md) proportionately; project
 setup, tested application readiness and authorized delivery are separate results.
 

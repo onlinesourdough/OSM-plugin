@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.30.1
+
+Update the separately selected Agentic Systems framework and Agentic Foundation
+routes following the owner-selected Factory rebrand. OSM remains an independent
+package. Compatible wording and reference corrections bump only the four affected
+skills; setup, access and execution behavior stay unchanged.
+
 ## 0.30.0 — 2026-10-23
 
 - Rename AIOS to The Onlinesourdough Method (OSM). The plugin identity is now
