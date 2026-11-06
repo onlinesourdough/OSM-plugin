@@ -4,10 +4,12 @@ OSM version: 0.30.1
 
 **Business first. Productivity built in.**
 
-The Onlinesourdough Method (OSM) supplies portable context and skills to help an AI assistant work from an
-owner's relevant context and carry a task from a small request to a reviewed
-result. It is not a model, a hosted service, or a replacement for the tools and
-permissions supplied by the assistant's native harness.
+The Onlinesourdough Method (OSM) supplies portable context and skills to help an
+AI assistant work from relevant data and business context, carrying a task from a small request to
+a reviewed result. Data stays in its source systems. The chosen context home
+explains how the business works and retains useful decisions and personal
+methods. Shared skills guide the work; the native app supplies the model, tools
+and permissions.
 
 OSM focuses on business work, decisions, content, design and practical
 automation. Projects own their implementation, engineering standards, design,
