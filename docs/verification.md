@@ -1,5 +1,47 @@
 # Verification
 
+On 2026-11-06 the #85 publisher repair (r2, `8c17e94`) was repaired a third time after a second independent
+review, which confirmed B-1 and requested changes on two blocking items. The repair head is `e5aa91f`, on
+`feat/osm-85-docs-publisher-20261105`; this record is the commit after it. It is local only: nothing was
+pushed, published, installed or tagged, no workflow was enabled, and no Notion, schedule or credential
+action happened. This entry supersedes the r1 and r2 entries below where they differ; those entries stay as written.
+
+- **G3 was wider than declared.** With no reader enabled, every row stays `pending` after every run, and any
+  `pending` row was resumed, so a later hand edit to a row whose write had completed was overwritten. Now a row
+  that is `pending` with BodyHash equal to its receipt (the write completed and the row was only held) and a body
+  that differs is a conflict, and the edit is kept; this holds with or without a reader. An interrupted or
+  refused write (BodyHash differs from the receipt) and a `partial` or `unknown-write` row still resume, which
+  remains the declared limit G3. The r1 and r2 statements that a changed page body is a conflict and is not
+  overwritten hold only on that basis.
+- **Changed skills (R-9).** The r1 entry says changed skills are reported as pending release propagation. They
+  were reported only when no row mapped them, which left 15 of 17 skills (every folder that also existed at
+  v0.30.0) on a quiet pending-handoff line. The list is now built from all changed `skills/` paths; the
+  repair's own `skills/osm` and `skills/osm-setup` changes show in `reconcile --check --base 00d29e2`.
+- **Smaller corrections.** The r2 and `ACTIVATION.md` wording that a keyless row makes "every full publish
+  blocked" was wrong: the other rows are still written and completed, and the run is red with one blocked
+  `(empty Key)` line. A refused retirement now holds the set. An error that stops a run after it may have
+  begun writing no longer prints "Nothing was written". `ACTIVATION.md` says that activating the bounded proof
+  depends on Root's G1 decision and that its read-only rerun ends at HOLD, exit 4. `docs/publication.md` names
+  the holding failures exactly.
+- **Evidence for the two blocking items.** Fail-before is the committed `e5aa91f` test files run against the
+  `8c17e94` publisher: rc 1, with the held-edit scenario failing on both transports and the changed-skill test
+  failing; pass-after is the same files at `e5aa91f`, rc 0. Seven new controls (75 in all, from 68) include
+  the reverts of both fixes; each is caught, again four by an exception rather than an assertion (result file
+  not written, `RemoteDisconnected` not mapped, non-JSON not mapped, `get` returns no commit). A control the
+  new work first let survive (a `pending` row with any other body treated as a conflict) is caught by a refused-write
+  scenario. The absent-tag note is now pinned through `reconcile` in a tagless temporary repository.
+  The changed-file count from `00d29e2` is still 17.
+- **Owner decisions, unchanged:** the skill version bumps (`osm` 4.0.1, `osm-setup` 3.0.1) and whether `release.yml`
+  should require the release tag in CI.
+- **Checks at `e5aa91f` in a clean clone (`clone-85r3`).** Each ran directly with its exit status captured,
+  and all exited 0, including the sidebar build, the no-diff check on `runtime/sidebar`, `npm test` and the
+  smoke test; the publisher rehearsal reports 69 rehearsals and 75 controls. `npm ci` was NOT RUN (no network):
+  the copied `node_modules` closure was used, so the sidebar steps are non-hermetic. The authoritative table is
+  the final-head run in the hand-back. Fixture and static results only; not CI, native, install, Home or live
+  Notion proof.
+- **Retained evidence:** raw logs, the runner and hashes are kept under the machine-local `evidence-85r3`
+  directory of the work area.
+
 On 2026-11-06 the #85 publisher repair (r1, `74fdd03`) was repaired once more after its independent
 review, which requested changes on one blocking item (B-1, R-8). The repair head is `64f9951`, on
 `feat/osm-85-docs-publisher-20261105`; this record is the commit after it. It is local only: nothing was
