@@ -6,11 +6,20 @@ setup, moves and structural audits. Ordinary tasks read only relevant routes.
 | Responsibility | Record in the owner's guide |
 | --- | --- |
 | Identity and access | Exact provider, account/workspace or repository/path; verified connection and boundaries |
-| Knowledge and work | Where maintained facts, original references and deliverables belong; which system owns each |
-| Spaces | Business, brand, sub-brand or continuing-area scopes, shared context and useful parent/child relationships |
-| Memory | Durable decisions/corrections with reasons, provenance, actual source dates and uncertainty |
+| Read/write policy | When to read the guide, what to retrieve, what may be written where, and known capability limits |
+| Collaboration and profile | Optional owner-selected Soul (about 150 words) and a short source-linked About |
+| Knowledge and work | Where maintained facts, original references and deliverables belong; which system owns each, including live task status |
+| Spaces | Optional: business, brand, sub-brand, team, life or continuing-area scopes already in use, what is common and what is scope-specific, and useful parent/child relationships |
+| Setup baseline | The provider setup recipe and version adopted, and local deviations; kept apart from the guide's own revision |
+| Memory | One canonical store of durable facts, decisions, corrections and lessons, with reasons, provenance, actual source dates and uncertainty |
 | Personal methods | Where to discover the owner's reusable skills and their supporting resources |
 | Maintenance and recovery | Authorized write scope, identity/deduplication rule, readback, correction handling and recoverable prior route |
+
+The guide (in Notion, the AI Operating Model) is the complete, user-owned
+contract: another connected agent can read and maintain the home from it
+without installing OSM. The host keeps only a short pointer to it. A home page
+that gathers links is navigation, not a second guide or route map, and needs no
+reorganization of where sources live.
 
 One context home can cover multiple Spaces. Projects keep their native workspaces;
 they need not become new owner homes. Express Spaces with the provider's useful

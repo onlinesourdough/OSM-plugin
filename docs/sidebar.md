@@ -1,6 +1,112 @@
 # Codex sidebar — 0.29.0
 
-Revision: 2026-10-17
+Revision: 2026-10-20
+
+## Operating-model overview (#58 source candidate)
+
+This section describes an unreleased source candidate for issue #58. An earlier
+version was installed once and showed a real saved model; this layout has not
+been installed or checked in the app.
+
+The dashboard leads with navigation. The section at the top uses the selected
+model's own title as its heading, once, with Open in Notion beside it; a small
+"Operating model" label appears above only when that title does not already say
+so. The model's cards follow directly. The main view shows only what needs
+action: a hidden, failed or held overview, a section choice, or Save pointer
+before the pointer is saved. When the links may be incomplete or completeness
+is unknown, one short line above the cards says "Some links may be missing",
+with a Details button. Healthy connection is shown only by the header's
+Connected badge.
+
+Routine facts sit in one closed **About this overview** disclosure below the cards:
+Notion connection, host pointer, the source revision the connector reported (or
+Not reported), when this snapshot was saved, coverage (Complete as reported,
+Partial or Completeness unknown, with the number of rows left out), why rows
+were left out and changes since the previous snapshot. The save time is not a
+read time: a snapshot saved today from an older export says so. Details opens it
+and moves focus to its summary. None of these claims that an agent has loaded
+the model, that native Skills are enabled or that Memory exists.
+
+Each of the model's own sections is a card with its heading and links. Cards
+share the width in columns of at least 220px and stack into one column in a
+narrow panel; long names wrap. When a role-labelled row's page has the same
+name as its role, such as `**Notes:**` linking a page called Notes, Setup records
+that page name as a short label and the card shows it once. Only letter case,
+spacing and emoji shown as pictures are ignored; names that differ in any other
+character, such as "C++ · C#", "x² · x2" or "ACME® · ACME", keep both. A link
+that was not a labelled row is never shortened, even if its own title contains a
+middle dot. The stored title and every target stay unchanged, and a snapshot
+with a malformed label is refused whole. Snapshots saved before this change have
+no labels, so they show their stored names exactly; to shorten them, ask Setup
+to save the overview again from the same model text; when that text is still
+available, no new Notion read is needed. Nothing is rewritten automatically.
+Earlier versions ignore the label. The full model stays in Notion.
+
+The panel has no qualified app-authorized way to read a page body; the page
+fetch it uses for icons is not that proof. The overview is therefore a
+revision-labelled, derived snapshot. During a Setup or Settings refresh the
+person asked for, the agent reads the model through its existing official
+Notion connection and passes the text to the model-only
+`osm_save_model_overview` tool. The server derives the groups
+deterministically, keeps only labels, groups and links, and discards the text.
+There is no polling, live refresh, recursive destination fetch, embedded page,
+new credential or chat in the panel. Destinations are not fetched for icons.
+
+Only explicit structure counts: a heading followed by a list of page,
+database or Markdown links. Each item either starts with the reference and has
+at most a short annotation, or starts with a bold role label ending in one
+colon (`**Role:**` or `**Role**:`, or the current Notion fetch's `<b>Role:</b>`
+or `<b>Role</b>:`) followed directly by the reference, then any explanation.
+References are Markdown links, typed mentions such as `<mention-page>`, or the
+generic `<mention url>`, paired or self-closed. A standalone child page may also
+be the current fetch's three lines at one depth: `<page url="…">`, its plain
+title, `</page>`; any other multi-line shape is counted once as left out. Its
+body is not read, up to its close, the next heading outside a code fence, or the
+end. An unclosed tag hides the rest of its own section; later sections remain.
+User mentions and unknown tags
+are never documents; a label in another HTML element, such as `<strong>`, is
+counted as left out. A labelled link is named by its role, plus the reference's own
+text when it has any. A role label of any length is recognized; only its shown
+name is cut to 100 characters. Other references later in that row, such as a Related
+mention, are not routes. Prose, policy, evidence, code and quoted links
+never become navigation. A row that looks like a source but does not fit this
+grammar (a plain `Role:` label, a reference followed by running prose, a bold
+label without its colon, or a reference without a link) is never guessed into
+a route. It is counted as left out and marks the overview partial, so a valid
+section elsewhere cannot make the overview look complete. No heading name is required and nothing is
+translated. Ordinary notes beside references that all carry a role label do not
+need a choice, so those routes appear directly. A section that mixes unlabelled
+references with other items, or a repeated heading, makes the result
+`ambiguous`; the person chooses sections once, and that choice is kept apart
+from the derived groups and carried to later refreshes of the same model. Removed chosen sections are reported as
+`changed`; no explicit list is `unsupported`. Non-HTTPS, credentialed,
+relative or overlong links are dropped and counted. Output is capped at 12
+groups, 20 links per group and 60 links; a truncated read or capped output is
+shown as partial. Additions and removals since the previous snapshot of the
+same model are shown.
+
+A failed refresh (`no_access`, `not_found` or `disconnected`) replaces the
+earlier links. When Codex reports Notion as not installed, disabled, not
+connected or needing attention, the panel hides the links. A check that could
+not verify the connection does not hide them on its own, but it never re-shows
+links hidden by such a report; only a later Connected status does. The panel cannot observe an account change; the next
+refresh shows its result.
+
+Reviewing an overview never writes Codex instructions. **Save pointer** shows
+what will change, then uses the existing revision-checked, backed-up
+`osm_save_context` write and leaves unrelated instructions intact. The
+setup Context step now names its write Save pointer. Beside the saved model,
+existing Docs, Skills and Memory links appear below the cards as a compact
+**More links** row of chips, each named by its role, showing only filled roles
+and still edited in Settings. A saved link that opens the same destination as a
+link shown in the model's cards is not repeated. Destinations match only when
+their links are identical apart from Notion's copied-link marker (a lone
+`?source=copy_link`); a different database view, block or any other query or
+fragment keeps the saved link visible, and links are never matched by name. The
+stored link and the link it opens are unchanged. With nothing distinct to show
+there is no More links block. While Notion is disconnected and the model's
+links are hidden, every saved link shows. Without an overview, and for folder
+contexts, the earlier layout below is unchanged.
 
 The Meetings-inspired layout uses a compact header and three matching sections
 of simple rows: Context with Primary and Docs, then Personal/Team for Skills and
@@ -93,8 +199,9 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
 - osm_notion_pages: app-only bounded read-only navigation listing/search; UI metadata only.
 - osm_settings: app-only native settings entry, opening the same drawer.
 - osm_save_context: app-only owned AGENTS pointer save.
-- osm_sources: explicit model read of the context and navigation with revisions.
+- osm_sources: explicit model read of the context, navigation with revisions and the overview snapshot.
 - osm_save_sources: app/model navigation replacement, scoped to current context.
+- osm_save_model_overview: model-only save of a derived operating-model overview; no Notion read or pointer change.
 
 The context-hub mark identifies OSM. `assets/branding/aios-icon.svg` is the
 source of `assets/icon.png` (the Codex `composerIcon` and `logo`):
@@ -110,7 +217,7 @@ icon.
 
 The short pointer lives in CODEX_HOME/AGENTS.md. Installing OSM alone does not
 choose a context. Saving the primary Context during setup, or confirming a
-Context switch in Settings, automatically writes its managed context block (AIOS markers) there,
+Context switch in Settings, automatically writes its managed context block (OSM markers) there,
 keeping unrelated instructions; normal setup needs no manual copy. A fresh chat
 verifies that Codex discovers the instructions; Notion connection and page
 access still need their own check. Pointer saves keep unrelated
@@ -127,6 +234,12 @@ Notion identity normalizes copied URL variants; other providers use their exact
 location. A changed context loads its own map, never the previous one's sources.
 No source bodies, credentials, policy or access claims are stored. The map is
 not preloaded as agent context or used as a second source of business truth.
+
+The overview snapshot is one file, CODEX_HOME/aios/overview/model.json, replaced
+by each refresh. It holds the model link and title, the reported revision, read
+time, any section choice, and bounded groups, labels and links. It uses the same
+bounded read, locking, atomic rename and fail-closed checks; an invalid or
+symlinked state is shown as needing attention and is never overwritten.
 
 Writes use bounded reads, file identity checks, per-map locking, context/source
 revisions, backups and atomic rename. Invalid or symlinked state fails closed.
@@ -172,4 +285,7 @@ Notion and its sources. Clear a selected teamMemory navigation slot before a
 a reviewed earlier map, preserving any later edits. Pointer backups are under
 CODEX_HOME/backups/aios-context; map backups sit alongside the JSON file as
 <file>.<revision>.bak. Prove a crashed writer stopped before removing its lock.
+The overview snapshot is derived and has no backup: remove
+CODEX_HOME/aios/overview/ to clear it or recover from an invalid file, then
+refresh through Setup. Older builds ignore that folder.
 An already-open Codex panel may require an app reopen to load the new runtime.

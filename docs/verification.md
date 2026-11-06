@@ -1,5 +1,75 @@
 # Verification
 
+On 2026-10-23 the lead installed `0.30.1-setup-preview.2` (`791f033`, tag
+`osm-setup-preview-0.30.1-2`, CI run 39987263047) through Codex's native plugin
+manager and refreshed the overview from the current model through the official
+Notion fetch. It returned `ready` with 10 of the 11 earlier links, including the
+OSM root label; six protected instruction and shortcut files were unchanged.
+The eleventh source is a standalone child page that the fetch writes on three
+lines (`<page url="…">`, its title, `</page>`), which the line reader counted as
+left out, dropping its group. A sanitized fixture of that shape, with invented
+identities, reproduced it before the fix: `ready`, five links, one skipped,
+partial, no Recovery group. `0.30.1-setup-preview.3` accepts only that exact
+three-line shape at one tab depth. New tests cover it with tabs and entities,
+and as negatives: blank lines, no title, markup in the title, a nested body
+(not read), a close at another depth, an extra attribute, no URL, a database
+tag, a list bullet, an unclosed tag (later section kept), an unsafe URL, a code
+fence, a quotation and prose. With Node 22.22.3 and Python 3.14.5, 160 sidebar
+unit tests and the smoke passed; the rebuilt bundled server returned `ready`
+with six links for the fixture; `validate.py` passed with `--baseline`
+`791f033`, `c6432c5` and `169b129`, as did the maintained rehearsals and
+fixture preparation. The owner's native refresh and readback of all 11 links
+remain the lead's checks. Independent review also found that an unclosed page
+could expose a nested Markdown link as navigation. A failing regression now
+covers recovery at a later heading and at end of content. The reader skips that
+malformed body to the boundary, counting it once, without rescanning its lines.
+Independent Opus review found a fenced-example regression in that recovery:
+the scan could mistake an example heading for the boundary. A failing test
+reproduced it; the scan now shares the main reader's fence predicates and ignores
+example headings and close tags. All 161 corrected sidebar tests and the stdio
+smoke passed, alongside package validation and the six maintained rehearsals.
+
+On 2026-10-23 an end-to-end naming check on the owner's Codex, which runs
+`0.30.1-setup-preview.1` (`2d34543`), found the cached overview still naming the
+old AIOS root. A native refresh from the current model, through the official
+Notion fetch and `osm_save_model_overview`, returned `unsupported` and replaced
+the earlier overview's 11 links. The model, Notion, the pointer and saved
+shortcuts were unchanged. The lead reported the cause: the current fetch writes
+labelled rows as `<b>Role:</b> <mention url="…">Name</mention>` or with a
+self-closed `<mention url="…" />`, and the reader, unchanged from `c6432c5`,
+knew only Markdown bold labels and typed mentions. A sanitized fixture of that
+shape, with invented page identities, failed before the fix: an all-native Home
+gave `unsupported`, and with one Markdown row beside it the native rows were
+silently dropped from a `ready`, complete overview. `0.30.1-setup-preview.2`
+extends the existing grammar to `<b>` labels and generic mentions. New tests
+cover the native Home, colon and leading-reference negatives, user and unknown
+mention tags, another HTML wrapper, a mention without a link and an unsafe link.
+With Node 22.22.3 and Python 3.14.5, the fixture shows the five Home links
+after the fix, and the rebuilt bundled server returned `ready` with those five
+links for it over stdio. 157 sidebar unit tests and the smoke passed, as did
+`validate.py` with `--baseline` `2d34543`, `169b129` and `c6432c5`, the
+maintained rehearsals and fixture preparation. Restoring the owner's overview
+through a native refresh, the same 11 targets with OSM labels, and the Codex UI
+remain the lead's native checks.
+
+On 2026-10-23, `feat/osm-setup-preview-58` merged the PR #64 Setup preview
+(`c6432c5`, base `e9f4d2d`) into OSM production candidate `169b129`, as version
+`0.30.1-setup-preview.1`. This is naming-only adoption of an unreleased #58
+preview, not a release or repair; #58 and #60 holds remain. With Node 22.22.3
+and Python 3.14.5 it passed: locked `npm ci --ignore-scripts`, build, 154 sidebar
+unit tests and the stdio smoke including the overview snapshot; `validate.py`
+with `--baseline` `169b129`, `b3bb4d4` and `c6432c5` (no skill version
+regresses for an owner on the preview); and the documentation, onboarding,
+layout, continuity, skill-version and footprint rehearsals with entry-routing,
+model-selection and intent-trial fixture preparation. Normalizing `c6432c5`'s
+sidebar sources with the OSM naming map leaves only renamed tool prefixes, the
+"managed context block" wording, the package name/version and PR80's added
+compatibility tests; the model-overview modules are byte-identical. Normalized
+skills differ only by PR80 naming, switch and compatibility text. Stored state
+keeps `CODEX_HOME/aios/overview/model.json`, `aios/panel`, the `AIOS:BEGIN`
+block and its backups. Native installation, owner upgrade from the installed
+preview and Codex UI are not verified here.
+
 After lead Review on 2026-10-23, the candidate renames the new-customer Notion
 template to `notion-osm.md` (page **OSM**, no operating-system framing) and
 makes the `aios` → `osm` switch disable `aios` before fresh-session acceptance,
@@ -25,6 +95,240 @@ commit left no `runtime/sidebar` diff. New unit tests read a 0.29.0
 because nothing was installed there. Native install, upgrade from `aios`, Codex
 UI, fresh-session model behavior and owner adoption are not verified by these
 source checks.
+On 2026-10-19 an unreleased source candidate for the #58 model overview (coordinated
+with #62) added a sidebar overview of the selected AI Operating Model. It is derived
+from an explicit, revision-labelled snapshot that Setup saves from the model's headings
+and source lists. The panel shows connection, model read and pointer saved as separate
+facts, and does not claim to update live. Only an explicit Save pointer writes the
+pointer. The final sidebar UI suite passed 48 of 48. Its new stale-connection test failed
+on the previous candidate at the first check that links stay hidden after a failed
+refresh, so later checks did not run there. The 57 other sidebar unit tests were not
+rerun for the final candidate because their files had not changed. Of those, 37 passed in
+the first run. The other 20 storage tests first failed with disk-quota error -122 in
+`/tmp`, then passed with task-local scratch space; the first run's 98-test failure is
+kept on record. The package,
+documentation, onboarding, layout, continuity, skill-version and context-footprint checks
+passed. The first continuity run was in the wrong location, and a disposable non-Git
+fixture then passed. The native onboarding option was not run. The rebuilt runtime's
+server bundle is byte-identical to the one that passed the stdio check, which ran without
+the Codex executable on the PATH and did not access Notion. In a browser with the
+synthetic localhost fixture, the built sidebar showed the preview before saving, saved
+once on request and listed 2 groups with 7 model-derived links. A click emitted the
+expected synthetic link without navigating. The light theme at full width and the dark
+theme at 320px had no horizontal overflow. Pressing Tab moved focus to a source link,
+which then matched `:focus-visible`; the drawn focus style was not measured. Reopening kept
+the pointer and overview without a new save. Ambiguous and no-access snapshots showed no
+links and saved nothing. The fixture rejected the `localhost` origin and worked at its
+documented `127.0.0.1` address, and one timed-out click was not counted. This is
+synthetic rendering, not native Codex or Notion acceptance. Native Memory, Skills and
+provenance, a real model's structure and connector access, fresh-session agent loading,
+independent review, release and adoption remain open. #58 is not complete. Review then
+found that a fenced code example could become navigation and that an over-bound stored
+snapshot was trimmed rather than refused; the fix for both was made after the checks above.
+After the fix, the 66 affected tests passed: 48 UI, 10 parser and 8 storage tests. The
+42 other tests were not rerun because their files had not changed. With only the new tests
+added to the previous candidate, its three new cases failed at their first intended checks:
+a link inside a four-backtick example, the total link limit, and an over-bound stored
+snapshot. The built stdio check passed again without the Codex executable on the PATH and
+without any account or model call. Two locked builds produced identical runtime files, and
+the documentation and whitespace checks passed. The browser check above was not repeated
+on the fixed candidate, and no real model or account was used. A second review then
+found that an indented fence line inside a code block could still close it, and that a
+stored link target wrapped in an array was accepted as a link. After those fixes, the 69
+affected tests passed: 48 UI, 12 parser and 9 storage tests. The 42 other tests were
+again not rerun because their files had not changed. With only the new tests added to the
+previous candidate, its three new cases failed at their first checks: the indented
+example link, an array link target in the parser and the same target in storage. The
+built stdio check passed again without the Codex executable on the PATH, with a private
+synthetic store and no account or model call. A separate locked build reproduced the
+runtime files, and the documentation and whitespace checks passed. The parser treats
+leading tabs as Notion's nesting of child blocks; this is an assumption tested only with
+synthetic input, not checked against Notion's actual fetch format. The browser check was
+not repeated on the current runtime.
+
+The real-format check then failed. The owner's coordinator read one selected model once
+through Notion and ran the published parser on its exact text. The overview came back
+ready and complete, with one link from an incidental child page. None of the model's ten
+role-labelled source rows, spread over two sections, was recognized. Whether that read was
+complete was not exposed. No link was invented. The repair recognizes a bold role label
+followed directly by a reference, keeps related mentions in the rest of the row out, and
+counts source-like rows it cannot use, marking the overview partial instead of complete.
+With only the new parser tests added to the previous published candidate, its 4 new cases
+failed at their first checks: the supplied shape's groups, the ten-role shape's groups,
+the partial flag for unusable source rows and the mixed-section ambiguity. Review then
+found that a role label with a second colon could become a route, or be dropped without
+being reported. With only the parser tests for that fix added to the version before it,
+its 2 new cases failed at their first checks: an extra colon inside the bold was accepted
+as a route, and an extra colon after it left a lone child section looking complete. A
+later check found that a role label over 100 characters was silently lost. After that
+fix, with Node 22.23.3, the 77 affected tests passed: 48 UI, 20 parser and 9 storage
+tests. The 42 other tests were not rerun because their files had not changed. With only
+the final parser tests added to the version before this fix, its 2 new cases failed at
+their first checks: a 101-character label lost its route, and a 101-character malformed
+label left a lone child section looking complete. In each before-check, later checks in a
+failing case did not run. The locked build, the bundled stdio check without the optional
+Codex CLI, and the package and whitespace checks passed, and a separate rebuild matched
+all three runtime files; only the server bundle changed. That version was then published
+as `61f5cc0`, where a fresh independent source review accepted it and CI passed. These
+tests use synthetic shapes only. No native app, account or model was used,
+and no complete read of the model is claimed. The draft pull request is not installed
+anywhere.
+
+The owner's coordinator then ran the `61f5cc0` parser once on the same retained model
+text, with no new Notion read and no section choice. All ten role-labelled source rows
+were now recognized, six in one section and four in another, but that second section was
+reported as mixed because it also held other list items. The result was ambiguous, so the
+overview showed no links at all; it was partial, with two unusable rows counted as left
+out. No related or prose link was emitted. Whether the read was complete is still
+unknown. The next change treats other items beside references that all carry a role
+label as needing no section choice, while an unlabelled reference among other items or a
+repeated heading still does. With Node 22.23.3, the 79 affected tests passed: 48 UI, 22
+parser and 9 storage tests. The 42 other tests were not rerun because their files had not
+changed. With only the final parser tests added to `61f5cc0`, one case failed at its
+first check: a synthetic model with six and four labelled sources beside notes came back
+ambiguous with no groups. The new guard for genuine ambiguity, repeated headings and a
+chosen section passes on both versions. The locked build, the bundled stdio check without
+the optional Codex CLI, and the package, documentation and whitespace checks passed, and a
+separate rebuild matched all three runtime files; only the server bundle changed. That
+version was published as `3c3bfa8` on the draft pull request, where a fresh independent
+source review accepted it and [CI](https://github.com/onlinesourdough/AIOS-plugin/actions/runs/39301119400)
+passed 121 tests with the release job skipped. It is not installed anywhere.
+
+On 2026-10-19 at 18:28:54Z the same coordinator ran the `3c3bfa8` parser once on the same
+retained model text, unchanged at 14,649 bytes, with no section choice, no normalization and
+no new Notion read or model call. The result was ready and partial, with 3 rows left out
+and 11 links in 3 groups. All ten role-labelled sources matched their roles, targets and
+original two sections, and the eleventh link is a valid standalone child page. No related,
+incidental or prose link appeared. A first comparison that expected role-only names was
+corrected by checking the same stored output against the documented role plus visible
+name; the parser was not run again. The public source files and the coordinator's input
+and configuration were unchanged before and after. This passes correspondence with this
+one retained revision, with limits: whether the original read was complete is unknown, the
+output bounds were observed but not exercised, and real fences and tabs were not tested.
+The earlier child-only and empty ambiguous results above remain the before-evidence. This
+is not live freshness, native app behavior or acceptance of all of #58.
+
+A later, uncommitted candidate then changed 18 method and documentation files for the
+rest of #58: the AI Operating Model under a private AIOS parent, optional Soul and About,
+one canonical Memory resolved by identity with native creator and editor fields, native
+Skills reported separately from the exact-page fallback, a thin portable host pointer,
+Check and Update descriptions and a shorter README. Locally, the package validator against
+`3c3bfa8`, the documentation, onboarding, layout, skill-version, continuity and
+context-footprint checks, the whitespace check, all 121 sidebar tests and the bundled
+synthetic stdio check passed; no native Codex CLI or provider login was available. The first
+continuity run stopped at its own guard because its synthetic source sat inside an unrelated
+Git checkout; the same unchanged test passed with its fixtures outside any Git repository.
+Runtime and parser code are unchanged, so no new build was needed. The CI result above
+covers `3c3bfa8`, not this candidate. A fresh model given eight withheld-answer setup and
+maintenance cases chose acceptable decisions in all eight, including keeping a custom
+Memory beside an empty native alias, reporting the exact-page skill fallback as a fallback,
+reading back each schema step and leaving independent repositories without personal
+context. No tools ran in those cases and the previous instructions were not compared, so
+this shows instruction decisions only, not real Memory saves, skill activation, recall or a
+second agent. During that source qualification the `notion://docs/memory` and
+`notion://docs/skills` resources and the active tool catalog were not read, and the public
+Notion setup guide was not accessible; the public Notion Skills help was read.
+
+Later on 2026-10-19, around 21:00 CEST, the owner's coordinator read both resources once
+and inspected the 40-tool catalog of their Notion connection. Neither resource gave a
+version, date or connector revision, and the installed plugin's version is not evidence
+of the backend. Nothing else was fetched or changed: no model, Memory entry, alias or skill
+body, and no write, enablement, account or lifecycle action. The memory guidance confirms
+the Type values, Source as the creating client kept on edits and Last updated by as the
+editing client. It describes the `memory` alias resolving the native Memories database and
+About page, created on the first save, with later operations using the returned identities;
+no alias fetch was made, so this is documented behavior only. It also says About links its
+supporting memories and a specific or newer memory overrides the summary, that search can
+lag behind a save, and that fetch results report truncation and unknown blocks. The guidance
+still describes creating a memory with a text `memory` parent, but that catalog's page
+creation tool takes a parent object with a page, database or data source ID. This mismatch
+is unresolved; no native save, update or alternative shape was tried, and the method now
+holds that mismatched native create and reports it. The catalog included fetch, search, data-source queries, page
+creation and update, with a skill-designation flag on creation and update. It had no
+enabled-skills, skill-enablement, memory-search or skill-download tool, so in that
+connection ordinary search and page fetches are only an explicit-destination fallback. The
+skills guidance separates per-user enablement from designation, describes enabled surfaces
+only through the enablement tool, and says automatic use loads skills by relevance while
+existing sessions keep their registry. This is documentation and catalog evidence for one
+connection at one time, not proof that any operation succeeds. Native save compatibility,
+account changes and revocation, freshness, save provenance, rendered Setup and overview,
+Memory, Skills and recovery, a useful task, fresh-session and second-agent use, independent
+review of this candidate, CI, merge, installation and release all remain open. Whether the
+retained model read was complete is still unknown. #58 is not complete.
+
+A later independent review of this candidate returned REVISE on two instructions that had
+not changed. The overview refresh told Setup to mark a read incomplete only when it was
+truncated, so a read with unknown blocks or without completeness signals could be saved as
+complete. The shortcut procedure still sent fresh onboarding through fixed Docs, Skills and
+Memory links, adding a second role map beside the model. Both instructions were corrected
+in source: Setup now marks a refresh complete only when the fetch reports nothing missing,
+and shortcut steps apply only to existing or explicitly requested shortcuts. No native
+operation, rerun on the retained text or CI followed this correction.
+
+That corrected version, published as `75aebda` on the draft pull request, was then
+accepted by a further independent source review with its native gates still open, and CI
+passed 121 of 121. The owner's coordinator installed it once in Codex; every source file
+matched, and the earlier install and unrelated configuration were kept. After an ordinary
+Codex restart, the AIOS panel ran the installed server, and Setup saved one overview from
+the same retained export, marked not complete, with no section choice and no new Notion
+read. The app showed 3 groups, 11 links, 3 rows left out, the partial warning and the
+original source revision, matching the export; the pointer and saved shortcuts were
+unchanged. Whether an overview existed before that save was not inventoried. This
+qualifies that Setup and overview path only, not methods, Memory, Skills, account changes,
+recall, a second agent or release. The owner found it hard to use: one long list, the
+model's title shown twice, and a role and page with the same name, such as AIOS, shown
+twice. A following source candidate shows the model's title once, its sections as cards,
+the source revision apart from the snapshot's save time, and keeps saved shortcuts
+collapsed. Its affected tests, build, package and stdio checks and a synthetic browser
+fixture at wide and narrow widths, with clicks, keyboard focus and states, passed. Two
+independent findings then showed its rule for showing a role and page name once was too
+broad: it treated "C++" and "C#", "x²" and "x2", and "ACME®" and "ACME" as the same name,
+and shortened a page whose own title happened to contain a middle dot. The repair records a
+short label only where Setup parses a role-labelled row whose page has the same name, and
+otherwise shows titles exactly as stored, so snapshots saved earlier keep their names until
+Setup saves the overview again. Results for the current source are in its CI run and the
+lead's check record, not here. The synthetic browser fixture is not native proof, and this
+layout has not been installed or checked in the app.
+
+That repaired version, `b47dbcf`, was accepted by independent review and passed CI, but
+was not installed. On 2026-10-20 the owner reviewed its browser renders: the cards were
+useful, but connection, pointer, revision, save time, coverage and the shortcut
+disclosure crowded the navigation. A following source candidate leads with the cards,
+keeps only actionable problems and one "Some links may be missing" notice in the main
+view, moves the routine facts into one closed Model details disclosure, and turns
+populated shortcuts into a compact row that does not repeat a model link to the same
+page. The label rule above is unchanged. This candidate's checks, renders and review are
+recorded with its CI run and the lead's check record; it has not been installed.
+
+An independent review of that candidate returned REVISE: its rule for a repeated
+shortcut compared only Notion page identity, so a saved link to a block or a different
+database view on a page shown in the cards was hidden. The repair treats links as the
+same destination only when they are identical apart from Notion's copied-link marker,
+and adds a regression for each reviewer witness. The owner also renamed the two labels:
+the shortcut row is now More links and the closed disclosure is About this overview.
+This repair's checks and review are recorded with its CI run and the lead's check record;
+it has not been installed.
+
+The dashboard at `2488495` was later installed on the owner's Mac. From one save of the
+same retained export, with no new Notion read, its native panel showed the model's three
+groups and eleven links, the partial notice and About this overview; More links was
+correctly absent because every saved link was already in the model's cards. That was one
+dark native panel at 1200 by 1221 pixels with a synthetic pointer; other native widths,
+trusted keyboard and assistive-technology use, a full useful task and release were not
+checked. On 2026-10-20 the owner's official Codex Notion
+connection read pages but did not offer the enabled-skills tools in that chat, although
+its app metadata listed them; a separately signed-in direct connection to Notion's hosted
+MCP offered them and returned the selected MCP skills, and the owner's direct connection
+on another host later completed skill discovery too. The cause is not known, so this is
+evidence about particular connections, not a rule about the plugin. A following source
+change brings Setup, Context, Manage Skills and Update guidance in line with the accepted
+#58 architecture and #65 native-database requirements: the AIOS home as navigation, the
+model's placement and setup-guide version, optional Soul and Spaces, native database types
+and My Tasks, Meetings and plan limits, Library and skill enablement, and the connection
+check on the execution host. Its qualification is tracked in #58 and the draft pull
+request; no check result for it is recorded here. These are method sources; no Notion
+database, Library setting, sign-in, Memory save, meeting setting or fresh-session use has
+been exercised for them.
 
 On 2026-10-17 the owner checked `1d719a2` in the installed Codex sidebar: the centred
 geometry is accepted, but its own greys looked lighter than the neighbouring icons in the

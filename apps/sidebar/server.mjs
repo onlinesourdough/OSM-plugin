@@ -8,6 +8,8 @@ import { join } from 'node:path';
 import { readNotionSetup } from './codex-status.mjs';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources } from './sources.mjs';
+import { readModelOverview, saveModelOverview } from './model-snapshot.mjs';
+import { LIMITS, outcomes } from './model-overview.mjs';
 import { z } from 'zod';
 import { NotionPages } from './notion-pages.mjs';
 
@@ -38,16 +40,16 @@ let lastCheck = 0;
 async function status() {
   lastCheck = Math.max(lastCheck + 1, Date.now());
   const checkedAt = new Date(lastCheck).toISOString();
-  const [notion, context] = await Promise.all([readNotionSetup(), readContextRoute()]);
+  const [notion, context, model] = await Promise.all([readNotionSetup(), readContextRoute(), readModelOverview()]);
   const sources = context.state === 'configured' ? await readSources(context.target) : { state: 'missing', title: '', links: {} };
-  return { version: __OSM_VERSION__, features: { notionPages: true, notionIcons: true }, notion, context, sources, checkedAt };
+  return { version: __OSM_VERSION__, features: { notionPages: true, notionIcons: true, modelOverview: true }, notion, context, sources, model, checkedAt };
 }
 async function result() {
-  return { content: [{ type: 'text', text: 'OSM dashboard. Connection status and saved links to Context, Docs, Skills and Memory; no business records are copied.' }],
+  return { content: [{ type: 'text', text: 'OSM dashboard. Connection status, the saved context pointer, any operating-model overview snapshot and saved shortcuts; no business records are copied.' }],
     _meta: { 'osm/status': await status() } };
 }
 appTool('osm_open', {
-  title: 'OSM', description: 'Open the OSM panel with connection status and the saved context location. No page search, conversation request or Notion write.',
+  title: 'OSM', description: 'Open the OSM panel with connection status, the saved context location and any operating-model overview snapshot. No page search, conversation request or Notion write.',
   inputSchema: {},
   annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
   _meta: { ui: { resourceUri: uri }, 'openai/ui': { entrypoints: [{ type: 'global' }] } },
@@ -87,7 +89,7 @@ appTool('osm_settings', {
   return snapshot;
 });
 appTool('osm_save_context', {
-  title: 'Save your context', description: 'Save the user-entered personal default context location in the managed context block of Codex instructions. Preserve other rules and back up changed instructions. This does not verify access or create business sources.',
+  title: 'Save your context', description: 'Save the personal default context location the user explicitly confirmed in the managed context block of Codex instructions. Preserve other rules and back up changed instructions. This does not verify access, create business sources or show that an agent has loaded it.',
   inputSchema: { target: z.string().min(1).max(2048), expectedRevision: z.string().regex(/^[a-f0-9]{64}$/) },
   annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   _meta: { ui: { visibility: ['app'] } },
@@ -101,13 +103,13 @@ appTool('osm_save_context', {
 
 modelTool('osm_sources', {
   title: 'Read OSM source links',
-  description: 'Read the current personal context location and its saved navigation links with revision tokens. Use only for requested setup or source-link maintenance. These are saved links, not live Notion records or proof of access.',
+  description: 'Read the current personal context location, its saved navigation links with revision tokens and the operating-model overview snapshot. Use only for requested setup or source-link maintenance. These are saved links and a dated snapshot, not live Notion records or proof of access.',
   inputSchema: {},
   annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
 }, async () => {
-  const context = await readContextRoute();
+  const [context, overview] = await Promise.all([readContextRoute(), readModelOverview()]);
   const sources = context.state === 'configured' ? await readSources(context.target) : { state: 'missing', title: '', links: {} };
-  return { content: [{ type: 'text', text: JSON.stringify({ context, sources }) }] };
+  return { content: [{ type: 'text', text: JSON.stringify({ context, sources, overview }) }] };
 });
 const sourceLink = z.object({ title: z.string().min(1).max(100), target: z.string().min(1).max(2048) }).strict();
 appTool('osm_save_sources', {
@@ -120,6 +122,22 @@ appTool('osm_save_sources', {
   try {
     await saveSources(args);
     return await result();
+  } catch (error) { return { isError: true, content: [{ type: 'text', text: error.message }] }; }
+});
+modelTool('osm_save_model_overview', {
+  title: 'Save the AI Operating Model overview',
+  description: 'During a Setup or Settings refresh the user asked for, save a dated overview of the selected AI Operating Model for the OSM panel. Pass the model text exactly as the official Notion fetch returned it, or a failed outcome instead. OSM keeps only groups, labels and links from headings followed by lists of page or database references, and discards the text. It does not read Notion, follow links, change the context pointer, enable skills or create memory. Use sections only after the user chose among listed sections.',
+  inputSchema: {
+    target: z.string().min(1).max(2048), title: z.string().min(1).max(LIMITS.label), revision: z.string().max(LIMITS.label).default(''),
+    outcome: z.enum(outcomes).default('read'), content: z.string().max(LIMITS.content).default(''), complete: z.boolean().default(true),
+    sections: z.array(z.string().min(1).max(LIMITS.section)).max(LIMITS.sections).optional(),
+  },
+  annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+}, async args => {
+  try {
+    const { model, state, revision, readAt, partial, skipped, missing, selection, sections, changes, groups } = await saveModelOverview(args);
+    const summary = { model, state, revision, readAt, partial, skipped, missing, selection, sections, changes, groups: groups.map(group => ({ title: group.title, links: group.links.length })) };
+    return { content: [{ type: 'text', text: JSON.stringify(summary) }] };
   } catch (error) { return { isError: true, content: [{ type: 'text', text: error.message }] }; }
 });
 

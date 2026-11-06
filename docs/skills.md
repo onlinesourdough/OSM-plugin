@@ -24,11 +24,11 @@ carries an independent quoted `metadata.version`; see
 | [OSM:context-and-methods](../skills/osm/SKILL.md) | Select relevant context and methods for the current task |
 | [OSM:interview](../skills/osm-interview/SKILL.md) | Explore context, challenge assumptions and find direction when requested or materially needed at the start; no routine interruption of execution |
 | [OSM:build-work](../skills/osm-build-work/SKILL.md) | Implement and verify accepted work through in-scope fixes and Review |
-| [OSM:check](../skills/osm-check/SKILL.md) | Inspect installation, owner format, and discovery |
+| [OSM:check](../skills/osm-check/SKILL.md) | Inspect installation, discovery, owner format and context-home health without changes |
 | [OSM:create-project](../skills/osm-create-project/SKILL.md) | Establish a useful project workspace, context and simple structure; Git is optional |
 | [OSM:maintain-context](../skills/osm-maintain-context/SKILL.md) | Maintain owner facts, routes, connections, and explicit continuity Sync |
 | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | Manage personal and installed skill lifecycles |
-| [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or move an owner home and native bridge |
+| [OSM:setup](../skills/osm-setup/SKILL.md) | Set up, resume or move a context home and its host pointer, then prove a useful first task |
 | [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Prepare and recover delegated workers when the caller retains coordination and acceptance |
 | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | Assess consequential changes proportionately |
 | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Inspect the final result against its contract; caller acceptance remains separate for delegated work |
@@ -36,7 +36,7 @@ carries an independent quoted `metadata.version`; see
 | [OSM:ship-work](../skills/osm-ship-work/SKILL.md) | Deliver an exactly reviewed result under authority |
 | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Resolve a substantive OSM work contract |
 | [OSM:triage-improvement](../skills/osm-triage-improvement/SKILL.md) | Route a concrete underlying improvement signal |
-| [OSM:update](../skills/osm-update/SKILL.md) | Update selected optional specialists or adopt/roll back OSM |
+| [OSM:update](../skills/osm-update/SKILL.md) | Adopt or roll back a reviewed OSM package or a selected System; acquiring new skills belongs to Manage Skills |
 
 Content preserves its domain standards through focused references
 and helpers. The assistant chains relevant skills using the current task and
@@ -44,8 +44,8 @@ its accepted result; no workflow engine or fixed chain schema is required.
 Working material stays in the project. Optional tool setup is loaded only for
 work that uses that tool.
 
-The [systems and workflow overview](../README.md#agentic-systems-and-skill-chains) connects these entrypoints
-by purpose and result. Interview owns adaptive exploration and a shared question
+The [README skill table](../README.md#skills) summarizes these entrypoints by
+purpose. Interview owns adaptive exploration and a shared question
 procedure; Setup owns home and harness readiness. Spec reuses interview answers
 and owns the execution contract. Neither installation nor a new project alone
 requires an interview.
@@ -74,7 +74,7 @@ Create Project establishes a workspace for the actual work; Git and a repository
 template are optional. Manage Skills owns reusable specialist
 methods. Independently maintained solutions keep their local ownership and
 ordinary project lifecycle. No mandatory OSM registration is created.
-Update owns native package recovery and selected specialist maintenance;
+Update owns native package adoption, recovery and selected System maintenance;
 Maintain Context owns facts, and Check observes state. The
 [legacy behavior map](../skills/osm-setup/references/legacy-parity.md) records
 older method routes. Domain preservation is documented in the
@@ -85,7 +85,7 @@ is historical for the design skills retired in 0.29.0.
 
 `aios-project-foundation` is no longer shipped. For engineering preparation of
 a new or existing software project, use the separately usable
-[Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation)
+[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 skill directly in Codex or Claude; T3 Code is not required. OSM has no runtime
 dependency on it, does not install it and contains none of its content. Small
 coding work stays with Write Code; without a selected foundation method, OSM

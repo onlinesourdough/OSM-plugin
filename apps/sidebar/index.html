@@ -13,9 +13,28 @@
   </header>
   <p id="loading" role="status">Checking your setup…</p>
   <button id="retry-load" class="btn btn-secondary cursor-interaction" type="button" hidden>Retry</button>
+  <div id="notice" class="notice" hidden><span id="notice-text"></span><button id="notice-connect" class="btn btn-ghost cursor-interaction" type="button" hidden>Connect</button></div>
+
+  <section id="overview" class="overview" aria-labelledby="overview-title" hidden>
+    <div class="overview-head">
+      <div class="overview-name">
+        <p id="overview-kind" class="overview-kind" hidden>Operating model</p>
+        <h2 id="overview-title"><span id="model-meta"></span></h2>
+      </div>
+      <button id="open-model" class="btn btn-secondary cursor-interaction" type="button">Open in Notion</button>
+    </div>
+    <div id="overview-notes"></div>
+    <div id="pointer-change" class="pointer-change" hidden>
+      <p id="pointer-text"></p>
+      <div class="step-actions"><button id="save-pointer" class="btn btn-primary cursor-interaction" type="button">Save pointer</button></div>
+    </div>
+    <p id="overview-partial" class="overview-partial" hidden><span>Some links may be missing.</span> <button id="overview-why" class="link-button cursor-interaction" type="button" aria-controls="overview-more">Details</button></p>
+    <div id="overview-groups" class="overview-groups"></div>
+    <details id="overview-more" class="overview-more" hidden><summary id="overview-more-summary" class="cursor-interaction">About this overview</summary><ul id="overview-facts" class="facts"></ul><div id="overview-details"></div></details>
+  </section>
 
   <form id="setup" hidden novalidate>
-    <p class="intro">Connect Notion, then choose your Context, Skills and Memory.</p>
+    <p id="setup-intro" class="intro">Connect Notion, then ask Setup in chat to read your AI Operating Model. Review its overview here before you save the pointer. The steps below can save a pointer and optional shortcuts directly.</p>
     <div class="osm-card steps">
       <section class="step">
         <h2><button id="step-0" class="step-head cursor-interaction" type="button" aria-expanded="true" aria-controls="panel-0"><span class="step-number" aria-hidden="true">1</span><span class="step-label">Notion</span><span id="summary-0" class="summary"></span></button></h2>
@@ -59,7 +78,8 @@
   </form>
 
   <div id="dashboard" hidden>
-    <div id="notice" class="notice" hidden><span id="notice-text"></span><button id="notice-connect" class="btn btn-ghost cursor-interaction" type="button" hidden>Connect</button></div>
+    <h2 id="shortcuts-title" class="shortcuts-title" hidden>More links</h2>
+    <div id="shortcuts-list">
     <section aria-labelledby="context-title"><h2 id="context-title">Context</h2>
       <button id="open-context" class="row cursor-interaction" type="button"><span class="row-title">Primary</span><span id="context-meta" class="row-meta"></span></button>
       <button id="open-docs" class="row cursor-interaction" type="button"><span class="row-title">Docs</span><span id="docs-meta" class="row-meta"></span></button>
@@ -72,6 +92,7 @@
       <button id="open-memory" class="row cursor-interaction" type="button"><span class="row-title">Personal</span><span id="memory-meta" class="row-meta"></span></button>
       <button id="open-teamMemory" class="row cursor-interaction" type="button"><span class="row-title">Team</span><span id="teamMemory-meta" class="row-meta"></span></button>
     </section>
+    </div>
   </div>
 
   <div id="feedback" class="feedback" hidden><span id="feedback-text" role="status" aria-live="polite"></span><button id="reload-draft" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>
@@ -87,7 +108,8 @@
       <p id="drawer-help" class="hint" hidden></p>
       <button id="drawer-connect" class="btn btn-secondary cursor-interaction" type="button" hidden>Connect Notion</button>
     </section>
-    <section><h3>Context</h3><p class="hint">Switching Context applies right away. Docs, Skills and Memory changes apply with Save.</p><div id="settings-context"></div><div id="settings-docs"></div></section>
+    <section><h3>Operating model</h3><p id="settings-model" class="hint"></p></section>
+    <section><h3>Context</h3><p class="hint">Switching Context saves the pointer right away. Docs, Skills and Memory are saved shortcuts; their changes apply with Save.</p><div id="settings-context"></div><div id="settings-docs"></div></section>
     <section><h3>Skills</h3><div id="settings-personalSkills"></div><div id="settings-teamSkills"></div></section>
     <section><h3>Memory</h3><div id="settings-memory"></div><div id="settings-teamMemory"></div></section>
     <div id="drawer-feedback" class="feedback" hidden><span id="drawer-feedback-text" role="status" aria-live="polite"></span><button id="drawer-reload" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>

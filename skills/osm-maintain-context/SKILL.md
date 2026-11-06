@@ -2,7 +2,7 @@
 name: osm-maintain-context
 description: Curate owner facts, memory and routes, or perform explicitly requested OSM continuity Sync.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:maintain-context
@@ -20,7 +20,9 @@ For Notion, follow its guide and [operating route](../osm-context/references/not
 For another existing document/vault home, use the [existing-home procedure](../osm-context/references/existing-home.md).
 Curate durable decisions, reasons and corrections within current-task or standing
 write authority. Update the owning record, preserve provenance, verify writes
-and create nothing when unchanged. This is task-time curation; personal skill
+and create nothing when unchanged. Lessons belong in the canonical Memory;
+change About only when a fact it states changes, and Soul or the operating
+model only under the owner's approval. This is task-time curation; personal skill
 changes belong to Manage Skills. A non-file-home sync request reconciles only
 its named sources, not the file-home Git procedure.
 

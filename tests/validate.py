@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import argparse
-from skill_metadata import RENAMED_SKILLS, parse_frontmatter, skill_version, validate_baseline
+from skill_metadata import RENAMED_SKILLS, SEMVER, parse_frontmatter, skill_version, validate_baseline
 from native_manifests import validate_native
 import json
 import re
@@ -129,7 +129,8 @@ def validate(root=ROOT, release_tag=None):
 
     require(manifest["name"] == package["name"] == "osm", "package identity")
     require(manifest["version"] == package["version"], "version mismatch")
-    require(re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"]), "invalid version")
+    # Releases are MAJOR.MINOR.PATCH; an unreleased preview may add a SemVer prerelease.
+    require(SEMVER.fullmatch(manifest["version"]) and "+" not in manifest["version"], "invalid version")
     require(not (FORBIDDEN_KEYS & package.keys()), "consumer script or dependency")
     require(set(package["files"]) == set(PRODUCT_PATHS) | {"README.md"},
             "package inventory")
@@ -382,7 +383,8 @@ def validate(root=ROOT, release_tag=None):
         lines = (skill_root / relative).read_text().splitlines()
         require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
                 "owner bridge markers")
-    require("use OSM Context" in (skill_root / "osm-context/assets/bridge.md").read_text() and
+    # New pointers name no skill; 0.29.0 pointers that say "AIOS Context" still route.
+    require("AIOS Context" not in (skill_root / "osm-context/assets/bridge.md").read_text() and
             "Formerly AIOS Context." in skill_fields["osm-context"]["description"],
             "legacy bridge route")
     sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()
@@ -405,8 +407,10 @@ def validate(root=ROOT, release_tag=None):
     require(notion_page.is_file() and not (skill_root / "osm-context/assets/notion-aios.md").exists(),
             "new Notion page template")
     page = notion_page.read_text()
-    require(page.startswith("# Adapting the OSM page\n") and "\n# OSM\n" in page and
-            "The Onlinesourdough Method" in page and "\n# AIOS\n" not in page and
+    # The setup preview's template is the AI Operating Model; its optional home page is OSM.
+    require(page.startswith("# Adapting the AI Operating Model\n") and "\n# AI Operating Model\n" in page and
+            "The Onlinesourdough Method (OSM)" in page and "A small **OSM** home page" in page and
+            "\n# AIOS\n" not in page and "installing AIOS" not in page and
             not re.search(r"operating\s+system", page, re.I),
             "new Notion page template")
     # One effective source during acceptance: disable aios before the fresh session.
@@ -649,7 +653,8 @@ def negative_controls():
 
     def retired_brand_template(root):
         path = root / "skills/osm-context/assets/notion-osm.md"
-        path.write_text(path.read_text().replace("\n# OSM\n", "\n# OSM\n\nYour AI operating system.\n"))
+        path.write_text(path.read_text().replace("\n# AI Operating Model\n",
+                                                 "\n# AI Operating Model\n\nYour AI operating system.\n"))
 
     def overlapping_acceptance(root):
         path = root / "docs/osm.md"

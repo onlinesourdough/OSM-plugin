@@ -2,7 +2,7 @@
 name: osm-context
 description: Manage the chosen context home for setup, relevant retrieval, durable updates or a context audit. Formerly AIOS Context. Keep independent repository work local.
 metadata:
-  version: "2.0.0"
+  version: "2.1.1"
 ---
 
 # OSM:context
@@ -35,7 +35,7 @@ templates and source responsibilities in the owner's guide, outside this plugin.
 
 | Requested work | Procedure owner |
 | --- | --- |
-| Read relevant context | Fetch the selected guide once per session. Use [Notion operating](references/notion/operating.md), managed-file AIOS.md and its relevant routes, or the [existing-home procedure](references/existing-home.md) for another home |
+| Read relevant context | Fetch the selected guide once per session and follow its routes. For writes or gaps use [Notion operating](references/notion/operating.md), managed-file AIOS.md, or the [existing-home procedure](references/existing-home.md) |
 | Set up or move the home | [Notion setup](references/notion/setup.md), [managed-file Setup](../osm-setup/SKILL.md) or [existing-home adaptation](references/existing-home.md); Setup also owns native installation |
 | Save a durable fact, decision or correction | [Maintain Context](../osm-maintain-context/SKILL.md) using the resolved provider; unchanged information produces no write |
 | Inspect context health | [Check](../osm-check/SKILL.md) using the home contract and selected provider checks; read-only unless repair is separately authorized |

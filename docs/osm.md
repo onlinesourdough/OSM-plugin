@@ -1,43 +1,48 @@
 # The Onlinesourdough Method
 
-OSM version: 0.30.0
-
-**Business first. Productivity built in.**
+OSM version: 0.30.1-setup-preview.4
 
 The Onlinesourdough Method (OSM) supplies portable context and skills to help an AI assistant work from an
 owner's relevant context and carry a task from a small request to a reviewed
 result. It is not a model, a hosted service, or a replacement for the tools and
 permissions supplied by the assistant's native harness.
 
-OSM focuses on business work, decisions, content, design and practical
-automation. Projects own their implementation, engineering standards, design,
+OSM focuses on business work, decisions, content and practical automation.
+Projects own their implementation, engineering standards, design,
 infrastructure and delivery configuration.
 
 ## Your context home
 
 OSM is the shared method; your context home is the place you choose for your own
-context. In Codex, open **OSM** in the sidebar. Numbered setup steps save your Context,
-Docs, Personal/Team Skills and Memory destinations, then open your dashboard.
-All setup sections remain visible and revisitable. Existing context opens the
-dashboard immediately; Settings opens a separate drawer. Connected Notion
-selectors list accessible pages by name and support search. Saved sources and
-manual links remain available; page listings fetch no page bodies. Selected destinations can read icon
-metadata via the official fetch tool; the remaining response is discarded.
-Clicks open destinations or save links directly; they never send a chat message.
-A saved link does not prove remote access or complete business onboarding.
+context. The home's **AI Operating Model** is the complete, user-owned contract for where
+context lives and how agents read and maintain it. Setup follows Notion's
+official setup guide, recording the version it adopted apart from the model's
+own revision. For a new Notion setup the model is a page in a private document
+database; a small OSM home page can link to it as navigation. Soul, Spaces and
+imports are optional. Existing workspaces keep their own structure and names;
+an existing guide is reused by identity where it is, not by title. Another
+connected agent can follow the model without installing OSM.
+
+In Codex, open **OSM** in the sidebar. It shows a dated overview of the
+selected model's own source groups, saved from Setup, and saves the host
+pointer only when you choose Save pointer. Earlier Docs, Skills and Memory links
+remain as optional More links. Clicks open destinations or save links
+directly; they never send a chat message. A saved pointer or link does not
+prove remote access, native Skills or Memory, or that an agent loaded the model.
 
 For help organizing a new or messy workspace, explicitly invoke **Set up** or
 ask for OSM Setup. That skill checks access, reuses useful destinations and
 helps with the first task. Personal and Team skills retain actual permissions;
-Audience and Space are not access control. A new Notion entry is called **OSM**
-by default; existing entries and customer names remain theirs.
+Audience and Space are not access control.
 
 [Context](../skills/osm-context/SKILL.md) owns the common home contract and selects
-one provider. The host keeps a short pointer to an approved entry; the agent reads
-only relevant sources and personal methods. Notion is preferred for solo founders,
-business leaders and small teams. Reuse full-page Docs, native Skills and Memory,
-with Spaces for business and brand scopes. Start with one useful workflow in an
-existing workspace; no wholesale migration is required.
+one provider. The host keeps a short pointer to the model; the agent reads it
+once per session for context-dependent work, plus a Soul only if the model
+lists it as standing context, then only relevant sources and personal methods. Notion is preferred for solo founders,
+business leaders and small teams. Memory stays one canonical store; native
+Memory and Skills are used only as the current connection actually supports.
+Start with one useful workflow in an existing workspace; no wholesale migration
+is required.
 
 An established alternative can use its own structure and verified tools. Managed
 file homes retain their concrete procedure; other providers need separate proof.
@@ -45,10 +50,10 @@ Shared methods stay in the plugin and operational records at their source.
 Maintain Context saves durable changes during work. No local mirror, hosted
 server or timer is required. The Codex panel is a bundled local MCP process
 managed by Codex, using Node.js 22+ and the installed Codex CLI for connection
-status. It reads connection metadata, the short pointer and a private navigation
-map of names/links scoped to that context. No source bodies are copied. Explicit
-Setup registers verified destinations through OSM MCP after using the existing
-provider connector. Context retrieves the actual source when a task needs it.
+status. It reads connection metadata, the short pointer, a private navigation
+map and the derived overview snapshot. No source bodies are copied. Explicit
+Setup reads the model through the existing provider connector and saves that
+snapshot. Context retrieves the actual source when a task needs it.
 Installing or updating OSM leaves existing homes
 intact; use Setup when you choose to establish or move one.
 
@@ -134,14 +139,14 @@ Small coding work stays direct with Write Code and the shared lifecycle.
 Workspace or template creation alone does not prove an application ready.
 AIOS 0.28.0 retired the former Project Foundation skill: engineering preparation
 of a new or existing software project uses the separately usable
-[Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation)
+[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 skill directly in Codex or Claude; T3 Code is not required. When no such method is selected, OSM reports the
 gap rather than improvising an engineering contract.
 
-[Factory](https://github.com/arcitai/factory) is an independent package of
+[Agentic Systems](https://github.com/arcitai/agentic-systems) is an independent package of
 Foundation, AgentOps and ADLC methods, such as implement and review, for T3 Code
-and native coding agents. OSM and Factory are independent packages: neither
-depends on nor installs the other. An operator may select Factory for a project,
+and native coding agents. OSM and Agentic Systems are independent packages: neither
+depends on nor installs the other. An operator may select Agentic Systems for a project,
 carrying its accepted scope and sources while preserving each environment's own
 instructions, credentials and execution controls. Human involvement does not
 itself enforce a filesystem or tool boundary.

@@ -1,5 +1,6 @@
-// A minimal DOM for app.test.mjs: element tree, ids, bubbling events, focus and
-// dialogs. It parses tags, attributes and trimmed non-blank text from index.html.
+// A minimal DOM for app.test.mjs: element tree, ids, bubbling events, focus,
+// dialogs, text nodes and simple tag/class queries. It parses tags, attributes
+// and trimmed non-blank text from index.html.
 const voidTags = new Set(['meta', 'input', 'br', 'img', 'hr', 'link']);
 
 export function createDocument(html) {
@@ -29,6 +30,14 @@ export function createDocument(html) {
     focus() { active = this; }
     contains(node) { for (; node; node = node.parentNode) if (node === this) return true; return false; }
     descendants() { return this.children.flatMap(child => [child, ...child.descendants()]); }
+    // Only the simple selectors the app uses: one tag name or one class. Classes
+    // come from parsed class attributes or a script-assigned className.
+    querySelectorAll(selector) {
+      const match = selector.startsWith('.')
+        ? node => String(node.className ?? node.attributes.class ?? '').split(/\s+/).includes(selector.slice(1))
+        : node => node.tagName === selector.toUpperCase();
+      return this.descendants().filter(match);
+    }
     showModal() { this.open = true; }
     close() { this.open = false; this.dispatch('close'); }
     async dispatch(type, init = {}) {
@@ -46,6 +55,7 @@ export function createDocument(html) {
     get activeElement() { return active; },
     getElementById: id => ids.get(id) ?? null,
     createElement: tag => new Element(tag),
+    createTextNode: text => Object.assign(new Element('#text'), { text: String(text) }),
     addEventListener(type, handler) { (listeners[type] ||= new Set()).add(handler); },
     removeEventListener(type, handler) { listeners[type]?.delete(handler); },
   };

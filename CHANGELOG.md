@@ -1,5 +1,95 @@
 # Changelog
 
+## 0.30.1-setup-preview.4
+
+Update the separately selected Agentic Systems framework and Agentic Foundation
+routes following the owner-selected Factory rebrand. OSM remains an independent
+package. Compatible wording and reference corrections bump only the four affected
+skills; setup, access and execution behavior stay unchanged.
+
+## 0.30.1-setup-preview.3 — unreleased preview
+
+Not a release; #58 and #60 holds remain. A second correctness fix for the
+preview's overview reader, found by a native refresh of the current model.
+
+- A standalone child page that the current official Notion fetch writes as
+  three lines (`<page url="…">`, its title, `</page>`) is now a source, like the
+  one-line form. Before, it was counted as left out and its section dropped.
+  Only that exact shape counts: blank lines, markup in the title, a nested
+  body, an extra attribute or a close at another depth are counted as left out,
+  their lines up to the close are not read. An unclosed tag hides its own
+  section's remainder, counted once, up to the next heading outside a code
+  fence or the end. Later sections remain; code, quotations and prose stay
+  excluded, including fenced headings and close tags during recovery.
+
+## 0.30.1-setup-preview.2 — unreleased preview
+
+Not a release; #58 and #60 holds remain. A correctness fix for the preview's
+overview reader, found by an end-to-end naming check.
+
+- The overview now reads the current official Notion fetch form of a labelled
+  source row: `<b>Role:</b>` or `<b>Role</b>:` labels and generic
+  `<mention url>` references, paired or self-closed. Before, such rows were not
+  recognized: a model written only this way gave `unsupported`, and a refresh
+  replaced the earlier overview's links. Markdown labels and typed mentions work
+  as before. The exactly-one-colon and leading-reference rules, link checks and
+  bounds are unchanged. User mentions and unknown tags are never documents; a
+  label in another HTML element is counted as left out, so the overview is
+  marked partial instead of looking complete.
+- Context 2.1.1: pass the fetched text exactly as returned, without rewriting
+  it to fit the overview, and do not retry with edited text after `unsupported`.
+
+## 0.30.1-setup-preview.1 — unreleased preview
+
+Not a release and not production. This is the Setup and model-first preview
+from PR #64 (`c6432c5`, part of issue #58, which is not complete), adopted onto
+OSM 0.30.0 with naming changes only. Its #58 holds remain; production stays at
+0.30.0 (PR #80). The preview behavior below is unchanged from `c6432c5`.
+
+- The Codex sidebar can preview a dated overview of the selected AI Operating
+  Model, saved by Setup from the model's own headings and labelled source rows.
+  Reviewing it never writes instructions; only Save pointer changes the host
+  pointer. Unusable source rows are counted and mark the overview partial, and a
+  section that needs a choice is reported instead of guessed. Setup marks a
+  refresh complete only when the fetch reports nothing missing. The overview
+  uses the model's own title once and shows each of its sections as a card. A
+  role-labelled row whose page has the same name is shown once; names that differ
+  in any meaningful character keep both, and snapshots saved before this change
+  keep their stored names until Setup saves the overview again. The main view
+  shows the cards, problems that need action and, when links may be incomplete,
+  one short notice; connection, pointer, source revision, save time and coverage
+  are in a closed About this overview disclosure. Earlier Docs, Skills and Memory
+  links appear as a compact More links row beside the model, without repeating a
+  model link to exactly the same destination (a different view or block stays);
+  a fresh model setup adds none. The overview is navigation, not a live view.
+  The snapshot stays at `CODEX_HOME/aios/overview/model.json`; the new tool is
+  `osm_save_model_overview`.
+- Setup and Context guidance treats OSM as the product and the AI Operating
+  Model as the one approved guide. Setup follows Notion's official setup guide,
+  records its adopted version apart from the model's revision, and for a new
+  setup stores the model in a private document database, with an optional OSM
+  home page for navigation; existing guides and sources are reused by identity
+  where they are. Soul, Spaces and imports are optional. Context adds guidance
+  for one canonical Memory resolved by identity, native creator and editor
+  fields, step-by-step schema readback, native Tasks, Projects and Skills
+  database types (reused before created), My Tasks source selection, the
+  Meetings destination and plan limits, Library and per-surface skill
+  enablement, and a connection check on the actual execution host that reuses a
+  working Notion connection and offers Notion's hosted MCP only when skill
+  discovery is missing. Whether a connection supports native Memory or Skills is
+  checked, not assumed.
+- The host pointer template is shorter and portable: another connected agent can
+  follow the model without OSM. Existing pointers keep their wording, including
+  0.29.0 pointers that name AIOS Context.
+- Skill versions continue the OSM 0.30.0 lineage: Check 3.1.0 covers
+  context-home health without changes; Context 2.1.0; Setup 2.1.0 describes the
+  current dashboard; Update 3.0.1 reconciles a newer upstream setup guide
+  without resetting customized rules; Maintain Context 2.0.1 keeps lessons in
+  Memory and changes About, Soul or the model only within their authority;
+  Manage Skills 2.0.1 routes Notion skills through Library and discovery states.
+  In `c6432c5` these were AIOS 2.3.0, 1.9.0, 1.9.1, 2.0.5, 1.4.1 and 1.3.2.
+- The README is shorter, with the current install routes and all 22 skills.
+
 ## 0.30.0 — 2026-10-23
 
 - Rename AIOS to The Onlinesourdough Method (OSM). The plugin identity is now

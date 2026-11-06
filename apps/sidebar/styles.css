@@ -91,8 +91,56 @@ h1:focus, .drawer-head h2:focus { outline: none; }
 .row-meta { min-width: 0; max-width: 60%; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--osm-muted); }
 .row:disabled { opacity: .5; cursor: default; }
 #dashboard section h2 { margin: 36px 0 8px; font-size: 15px; font-weight: 600; }
-#dashboard > section:first-of-type h2 { margin-top: 0; }
+#shortcuts-list > section:first-of-type h2 { margin-top: 0; }
 #dashboard section .row { width: calc(100% + 24px); margin: 0 -12px; }
+
+/* Operating-model overview: the model's own title once, a quiet line of facts,
+   then each of its sections as a card. Cards share the width in columns of at
+   least 220px and stack into one column in a narrow panel; long names wrap
+   instead of clipping. */
+#overview { margin-bottom: 36px; }
+.overview-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px 16px; }
+.overview-name { min-width: 0; flex: 1 1 200px; }
+.overview-kind { margin: 0 0 2px; font-size: 12px; color: var(--osm-muted); }
+#overview h2 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+#overview h2 .source-title { white-space: normal; }
+.facts { margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--osm-muted); }
+.facts li { display: flex; flex-wrap: wrap; column-gap: 8px; overflow-wrap: anywhere; }
+.fact-label { min-width: 112px; color: var(--osm-text); }
+#overview-notes .hint:first-child { margin-top: 10px; }
+/* One short notice beside the links when they may be incomplete; the specifics
+   are in About this overview. */
+.overview-partial { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 16px 0 -8px; font-size: 13px; color: var(--osm-muted); }
+.link-button { min-height: 24px; padding: 0 4px; border: 0; border-radius: 6px; background: transparent; color: var(--osm-text); font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.link-button:focus-visible { outline: none; box-shadow: 0 0 0 1.5px var(--osm-line-strong); }
+/* About this overview: the single secondary place for connection, pointer,
+   revision, save time, coverage and explanations. Closed by default, below the cards. */
+.overview-more { margin-top: 16px; font-size: 12px; color: var(--osm-muted); }
+.overview-more summary { width: fit-content; padding: 2px 4px; margin-left: -4px; border-radius: 6px; cursor: pointer; }
+.overview-more summary:hover { color: var(--osm-text); }
+.overview-more summary:focus-visible { outline: none; box-shadow: 0 0 0 1.5px var(--osm-line-strong); }
+.overview-more .hint { margin: 6px 0 0; }
+#overview-facts { margin-top: 8px; }
+#overview-facts li { padding: 1px 0; }
+.overview-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 12px; margin-top: 20px; }
+.overview-card { min-width: 0; padding: 10px 8px 8px; border: 1px solid var(--osm-line); border-radius: 12px; }
+.overview-card h3 { margin: 0 8px 4px; font-size: 12px; font-weight: 600; color: var(--osm-muted); overflow-wrap: anywhere; }
+#overview .overview-link { min-height: 32px; padding: 6px 8px; }
+#overview .overview-link .row-title { flex: 1; white-space: normal; overflow-wrap: anywhere; font-weight: 500; }
+#overview .overview-link .source-title { white-space: normal; }
+.section-choices { grid-column: 1 / -1; margin: 0; }
+.pointer-change { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: var(--osm-hover); font-size: 13px; }
+.pointer-change p { margin: 0; }
+.pointer-change .step-actions { margin-top: 12px; }
+#dashboard .shortcuts-title { margin: 0 0 10px; font-size: 12px; font-weight: 600; color: var(--osm-muted); }
+/* Beside the saved model, More links is one compact wrapping row of chips, each
+   named by its role. Their section headings give way to that role label. */
+#dashboard[data-secondary="true"] #shortcuts-list { display: flex; flex-wrap: wrap; gap: 8px; }
+#dashboard[data-secondary="true"] #shortcuts-list > section { display: contents; }
+#dashboard[data-secondary="true"] #shortcuts-list section h2 { display: none; }
+#dashboard[data-secondary="true"] section .row { width: auto; max-width: 100%; min-height: 32px; margin: 0; padding: 4px 12px; gap: 8px; border: 1px solid var(--osm-line); border-radius: 999px; }
+#dashboard[data-secondary="true"] .row .row-title { font-size: 12px; font-weight: 400; color: var(--osm-muted); }
+#dashboard[data-secondary="true"] .row .row-meta { max-width: none; margin-left: 0; font-size: 13px; color: var(--osm-text); }
 
 .feedback { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-top: 24px; padding: 4px 4px 4px 14px; border-radius: 10px; background: var(--osm-hover); font-size: 13px; overflow-wrap: anywhere; }
 .feedback[data-error="true"] { color: var(--osm-danger); }

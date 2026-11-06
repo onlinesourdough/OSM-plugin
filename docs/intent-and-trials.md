@@ -24,7 +24,7 @@ This adapts Lauren's [restatement prompt](https://x.com/poteto/status/2104744961
 and the inspected [pstack prototype playbook](https://github.com/cursor/plugins/blob/fae2c6ed95821bd85f614a73e4842e13229fa5e5/pstack/skills/poteto-mode/playbooks/prototype.md).
 [AIOS #23](https://github.com/onlinesourdough/AIOS-Plugin/issues/23) holds the
 research and mapping. Architecture remains an independent
-[Factory follow-up](https://github.com/arcitai/factory-software-defence/issues/128).
+[Agentic Systems follow-up](https://github.com/arcitai/agentic-systems-software-defence/issues/128).
 [Arena #25](https://github.com/onlinesourdough/AIOS-Plugin/issues/25) is deferred
 until measured benefit can justify full comparison cost.
 

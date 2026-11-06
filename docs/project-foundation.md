@@ -1,14 +1,14 @@
 # Project Foundation
 
-## 0.28.0: retired in favor of Factory Foundation
+## 0.28.0: retired in favor of Agentic Foundation
 
 AIOS 0.28.0 removes the `aios-project-foundation` skill, its references and its
 native entrypoint. Engineering preparation of a new or existing software
 project now uses the separately usable
-[Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation)
-skill from [Factory](https://github.com/arcitai/factory). It can be used
+[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
+skill from [Agentic Systems](https://github.com/arcitai/agentic-systems). It can be used
 directly in Codex or Claude; T3 Code is not required for that preparation.
-AIOS has no runtime dependency on Factory, does not install it and does not
+AIOS has no runtime dependency on Agentic Systems, does not install it and does not
 copy its content.
 
 Create Project still starts content, research, business and software workspaces,
@@ -29,7 +29,7 @@ seed shares the established engineering/document criteria; general folder
 setup does not load them or imply an application is ready.
 
 Create System is retired. Reusable methods use Manage Skills, while separately
-maintained solutions retain their ordinary project ownership. Factory remains
+maintained solutions retain their ordinary project ownership. Agentic Systems remains
 an independent environment and method selected separately by the operator.
 See [project creation](project-creation.md) for the scoped change and evidence.
 
@@ -38,7 +38,7 @@ See [project creation](project-creation.md) for the scoped change and evidence.
 AIOS prepares self-contained projects. Create Project and Project Foundation
 share engineering and document criteria: real setup/checks, code standards,
 design, application infrastructure, security, CI/delivery and recovery.
-There is no external Factory route or runtime-specific skill dependency.
+There is no external Agentic Systems route or runtime-specific skill dependency.
 Choosing another execution system is a separate, explicit operator action.
 
 Standards use an existing canonical CONTRIBUTING or coding-standards source.

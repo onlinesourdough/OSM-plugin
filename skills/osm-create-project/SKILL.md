@@ -2,7 +2,7 @@
 name: osm-create-project
 description: Start a project with a useful workspace, context and simple structure; Git is optional.
 metadata:
-  version: "5.0.0"
+  version: "5.0.1"
 ---
 
 # OSM:create-project
@@ -44,7 +44,7 @@ when the intended result is a reusable method rather than this project's work.
 Keep small software work direct with [Write code](../osm-write-code/SKILL.md). OSM
 no longer ships an engineering-foundation method. When accepted work needs a
 substantial engineering foundation or repair, use a separately selected method
-such as Factory Foundation if it is available; otherwise report that gap rather
+such as Agentic Foundation if it is available; otherwise report that gap rather
 than inventing a readiness contract. Folder creation or a template receipt proves
 workspace setup; it does not prove an application, deployment or execution
 environment ready.

@@ -2,7 +2,7 @@
 name: osm-manage-skills
 description: Manage an authorized skill creation, edit, installation, update, removal or rollback.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:manage-skills
@@ -18,7 +18,11 @@ native Skill Creator owns authoring mechanics; Maintain context owns durable
 owner facts and configured Git sync. Neither takes back this lifecycle.
 
 Use the resolved context provider for owner placement and discovery through
-that lifecycle; a cloud page is not automatically a native installation.
+that lifecycle; a cloud page is not automatically a native installation. In
+Notion, follow the [skill lifecycle](../osm-context/references/notion/personal-skills.md):
+designation, a person's per-surface enablement in Library, discovery on the
+actual connection, and relevant use are separate states, and enabling grants no
+page access or authority.
 Shared OSM skills remain in the plugin; project skills remain with their project.
 
 ## Distinguish audit from management

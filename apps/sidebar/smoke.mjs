@@ -15,7 +15,7 @@ const transport = new StdioClientTransport({
 try {
   await client.connect(transport);
   const { tools } = await client.listTools();
-  assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources']);
+  assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources', 'osm_save_model_overview']);
   assert.deepEqual(tools[0]._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
   for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status']) {
     assert.deepEqual(tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
@@ -72,5 +72,22 @@ try {
   assert.deepEqual(sources._meta['osm/status'].sources.links, links);
   const metadata = await client.callTool({ name: 'osm_sources', arguments: {} });
   assert.deepEqual(JSON.parse(metadata.content[0].text).sources.links, links);
-  console.log('PASS: bundled stdio server, global entrypoint, fullscreen resource and isolated first run.');
+  // The overview tool is model-visible, writes no instructions and returns only the derived view.
+  const overviewTool = tools.find(tool => tool.name === 'osm_save_model_overview');
+  assert.equal(overviewTool.annotations.readOnlyHint, false);
+  assert.equal(overviewTool._meta?.ui?.visibility, undefined);
+  const model = 'https://app.notion.com/p/00000000000000000000000000000010';
+  const content = `<content>\n## Sources\n- [Memory](https://app.notion.com/p/00000000000000000000000000000013)\nPolicy text with [a link](https://example.com/policy).\n</content>`;
+  const overview = await client.callTool({ name: 'osm_save_model_overview', arguments: { target: model, title: 'AI Operating Model', revision: 'r1', content } });
+  assert.equal(overview.isError, undefined);
+  const summary = JSON.parse(overview.content[0].text);
+  assert.equal(summary.state, 'ready'); assert.deepEqual(summary.groups, [{ title: 'Sources', links: 1 }]);
+  assert.equal(JSON.stringify(summary).includes('Policy text'), false);
+  const after = await client.callTool({ name: 'osm_status', arguments: {} });
+  assert.equal(after._meta['osm/status'].context.target, target, 'saving an overview does not change the pointer');
+  assert.equal(after._meta['osm/status'].model.groups[0].links[0].title, 'Memory');
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_sources', arguments: {} })).content[0].text).overview.revision, 'r1');
+  const refused = await client.callTool({ name: 'osm_save_model_overview', arguments: { target: 'https://example.com/model', title: 'M', content } });
+  assert.equal(refused.isError, true);
+  console.log('PASS: bundled stdio server, global entrypoint, fullscreen resource, isolated first run and overview snapshot.');
 } finally { await client.close(); await rm(scratch, { recursive: true, force: true }); }

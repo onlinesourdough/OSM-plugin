@@ -1,8 +1,8 @@
 ---
 name: osm-check
-description: Verify OSM installation, owner format and native skill discovery without changes.
+description: Verify OSM installation, skill discovery and context-home health without changes.
 metadata:
-  version: "3.0.0"
+  version: "3.1.0"
 ---
 
 # OSM:check

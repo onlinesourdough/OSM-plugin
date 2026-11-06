@@ -35,7 +35,7 @@ JOB_PREFIXES = {
     "osm-ship-work": "Deliver ",
     "osm-spec-work": "Specify or revise ",
     "osm-triage-improvement": "Triage ",
-    "osm-update": "Update selected optional ",
+    "osm-update": "Update or roll back ",
 }
 CURRENT_NEUTRAL_SCAFFOLD = (
     "skills/osm-setup/assets/bridge.md",
@@ -213,6 +213,56 @@ def validate_routes():
     require("Reference isolation" in setup_scenarios and
             "do not load Pi, desktop, protection" in setup_scenarios,
             "onboarding reference isolation")
+
+    # Notion method contracts (#58). Static wording guards only; live provider,
+    # native Memory/Skills and second-agent behavior need their own evidence.
+    def flat(relative):
+        return " ".join((ROOT / relative).read_text().split())
+    notion = "skills/osm-context/references/notion/"
+    acceptance = (ROOT / notion / "acceptance.md").read_text()
+    require(all(f"| {row} |" in acceptance for row in (
+        "New home and same-title guide", "Memory identity", "Memory provenance",
+        "Schema transition", "Missing capability", "Native skills", "Selective context",
+        "Second agent", "Read-only Check", "Isolation",
+        "Setup recipe and model revision", "Native databases and templates",
+        "Native Tasks and empty My Tasks", "Populated conversion", "Meetings and plans",
+        "Connection and discovery", "Skills and access", "Dashboard")),
+        "Notion acceptance scenario coverage")
+    # #58/#65 native-database, Library and connection contracts.
+    require("never pass both" in flat(notion + "schema-and-templates.md") and
+            "There is no `meetings` database type" in flat(notion + "schema-and-templates.md") and
+            "An empty My Tasks is not evidence that the task database lacks native type" in flat(notion + "schema-and-templates.md") and
+            "Typed creation is not conversion" in flat(notion + "schema-and-templates.md"),
+            "native database type, My Tasks and Meetings contract")
+    setup = flat(notion + "setup.md")
+    require("### Connection for native Skills discovery" in (ROOT / notion / "setup.md").read_text() and
+            "codex mcp add <unused-name> --url https://mcp.notion.com/mcp" in setup and
+            "Reuse a working connection" in setup and "An empty result shows discovery works" in setup and
+            "ordinary private parent page" not in setup,
+            "execution-host connection check and non-compulsory home placement")
+    require("Enabling a skill grants neither page access nor any extra authority" in flat(notion + "personal-skills.md"),
+            "Library enablement grants no access")
+    schema = flat(notion + "schema-and-templates.md")
+    require("An empty native alias does not mean there are no memories" in schema and
+            "Source names the creating client and is preserved on edits" in schema and
+            "never rename a property and reuse its old name in one unchecked batch" in schema,
+            "Memory identity, provenance and schema-transition contract")
+    skills = flat(notion + "personal-skills.md")
+    require("it is a page fallback, not native enabled discovery" in skills and
+            "neither “Enable for me”" not in skills,
+            "native skill discovery and page fallback are distinct")
+    require("need not be reread each time" in flat(notion + "operating.md"),
+            "ordinary retrieval avoids a second full policy read")
+    model = (ROOT / "skills/osm-context/assets/notion-osm.md").read_text()
+    require("\n# AI Operating Model\n" in model and "\n# AIOS\n" not in model and
+            "ordinary child page" not in model and "Set up with:" in model,
+            "operating-model template title, placement and setup-guide version")
+    pointer = (ROOT / "skills/osm-context/assets/bridge.md").read_text()
+    require(len(pointer.splitlines()) <= 10 and
+            pointer.count("<!-- AIOS:BEGIN -->") == pointer.count("<!-- AIOS:END -->") == 1 and
+            len([line for line in pointer.splitlines() if line.startswith("Context:")]) == 1 and
+            "AIOS Context" not in pointer and "once per session" in pointer and "Report gaps;" in pointer,
+            "thin portable host pointer")
 
     owner_root = ROOT / "skills/osm-setup/assets/owner"
     actual_owner_assets = {

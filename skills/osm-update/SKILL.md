@@ -1,8 +1,8 @@
 ---
 name: osm-update
-description: Update selected optional specialists or adopt or roll back a reviewed OSM package.
+description: Update or roll back a reviewed OSM package or a selected System.
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # OSM:update
@@ -57,7 +57,11 @@ for this boundary. A package-only update neither scans nor rewrites repositories
 Under existing exact installation authority, use supported native actions for
 only the accepted package/registration changes. Leave owner data and custom
 skills untouched unless a separately reviewed migration explicitly includes
-those paths. Do not edit caches, native databases or the entire settings file.
+those paths. A customized operating model, Soul or personal skill is never
+regenerated because a newer template or upstream setup guide exists; reconcile
+a new upstream guide version deliberately, keeping the model's own revision and
+local rules. Acquiring a new skill or
+specialist is a [Manage Skills](../osm-manage-skills/SKILL.md) change. Do not edit caches, native databases or the entire settings file.
 Respect app-control denials and current native permissions.
 
 Read back package source/version and start a fresh session. Verify the release’s declared public

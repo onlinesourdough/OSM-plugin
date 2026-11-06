@@ -1,6 +1,6 @@
 # Ownership
 
-Revision: 2026-10-11
+Revision: 2026-10-19
 
 | Responsibility | Owner and canonical truth |
 | --- | --- |
@@ -11,6 +11,7 @@ Revision: 2026-10-11
 | Task deliverable, continuation and whole-task handoff | Shared OSM lifecycle; Spec clarifies the contract and Select Model supplies model/reasoning evidence |
 | Exploratory interview and shared question procedure | Interview owns activation, adaptive questioning, waiting and resumption; Setup and Spec reuse accepted answers |
 | Context home contract and provider selection | Context owns the common contract; concrete provider procedures adapt it to the selected home |
+| AI Operating Model, Soul, About, Memory and personal Skills content | The owner in their chosen home; the model is their complete, portable read/write contract. Context owns the shared template and provider procedures; package updates never regenerate a customized instance |
 | Facts, source routes and durable corrections | Maintain Context applies the chosen provider's curation procedure |
 | Consequential-change assessment | `osm-risky-changes`; conditionally routed by Spec and Review |
 | Acceptance and delivery instruction | Reviewer bound to an exact artifact; independent caller acceptance for delegated work |
@@ -22,8 +23,8 @@ Revision: 2026-10-11
 | Native installation, connections, and cutover | Authorized client or lead using native controls and readback |
 | Codex sidebar source and bundled runtime | `apps/sidebar` and reproducible `runtime/sidebar` in this repository; Codex owns launch, account access and UI placement |
 | Projects and optional specialists | Their own working files, deliverables, dependencies, proof and recovery; Git and native project controls are selected when useful, without mandatory OSM registration |
-| Software engineering foundation (setup, checks, CI/delivery, engineering documents) | A separately selected method such as [Factory Foundation](https://github.com/arcitai/factory/tree/main/foundation/factory-foundation); the project owns the resulting files. OSM neither ships, installs nor depends on it |
-| Design and content methods and helpers | Built-in domain skills; project files remain owned by the project. Design owns semantic direction and the selected companion; existing tokens/components/code own implementation truth. Review Design checks actual selected proof; Human Writing and Write Code retain prose and implementation responsibilities |
+| Software engineering foundation (setup, checks, CI/delivery, engineering documents) | A separately selected method such as [Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation); the project owns the resulting files. OSM neither ships, installs nor depends on it |
+| Content methods and helpers | Built-in Content and Diffusion Studio skills; project files remain owned by the project. Visual design uses an installed design method if the host provides one; AIOS 0.29.0 ships no design skill. Human Writing and Write Code retain prose and implementation responsibilities |
 | Selected upstream System installation/code updates | OSM Update [System maintenance](../skills/osm-update/references/systems.md) routes authorized work; each System owns compatibility and recovery |
 | Complex explanations | Included `clarify`; native visualization tools own their presentation contracts |
 | Historical Global Skills and Skills Atlas | Their public archived repositories; only Clarify is adopted in this package |
