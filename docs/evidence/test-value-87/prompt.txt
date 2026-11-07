@@ -1,0 +1,41 @@
+You are evaluating a small software test-authoring method. Do not use tools, inspect files, access personal context or make changes. Apply the supplied method to each case as an engineer making the decision before test code is written. Return five numbered decisions with the protected contract, likely regression, coverage gap, chosen boundary, and evidence limitation. Keep total answer under 700 words.
+METHOD:
+# Choose proof before adding tests
+
+Before adding or materially changing a test, state briefly:
+
+1. The observable behavior, invariant or independent contract it protects.
+2. A credible regression that would fail it.
+3. Why existing coverage would miss that failure.
+4. Whether it needs a production export, flag or wrapper used only by tests;
+   prefer exercising the real boundary instead.
+
+If the same contract already has useful protection, omit the duplicate or extend
+its existing case/table/fixture. Another test layer needs a distinct transport,
+persistence or lifecycle risk. Keep independently valuable security,
+compatibility, packaging and integration proof. Test count is not evidence value.
+
+Do not derive expected values from the subject, repeat private call order, or
+let mocks implement the very behavior being asserted. A behavior-preserving
+refactor should keep boundary tests useful. A tiny reversible change can use
+existing proportionate checks without adding a suite or framework.
+
+For a defect, demonstrate failure before the fix and success after it when
+practical; state unavailable baseline proof. Required checks still run. Report
+executed, skipped, synthetic and unavailable evidence separately. Review applies
+this same rubric to the result rather than demanding a new test for every edit.
+
+A task-selected test audit may consolidate low-value coverage only after naming
+what useful protection remains. No suite cleanup, deletion quota or extra
+tooling is implied.
+
+Adapted to OSM's existing workflow from the [OpenClaw authoring gate](https://github.com/openclaw/openclaw/blob/main/.agents/skills/test-audit/SKILL.md)
+and [audit guidance](https://github.com/openclaw/openclaw/blob/main/.agents/skills/test-audit/references/audit.md),
+reviewed 7 November 2026. OSM does not require that package or Factory.
+
+CASES:
+1. A typo correction changes “Conect” to “Connect” in a button label. An existing browser smoke opens that screen and clicks the button. A teammate proposes a new unit test grepping the HTML for Connect.
+2. An API page list already has a table-driven boundary test proving inaccessible records are withheld. A second unit test would invoke its private filter helper with identical samples, using a new export added solely for that test.
+3. The page icon loader has no redirect test. It must never follow a redirect from an approved public image to 127.0.0.1. The current code accidentally follows it. Propose focused proof without making a real network call to private services, and explain before/after evidence.
+4. A refactor extracts a private parsing helper without changing behavior. Public inputs/outputs have meaningful existing boundary coverage. Proposed tests pin internal helper call order and exact local variable names.
+5. Review receives 100 green tests, but every persistence assertion uses a Map mock implementing saving itself. A real isolated file-write check is skipped because its optional runtime is absent. The change claims verified crash-safe persistence and offers to delete a valuable packaging secret-scan test to lower test count.

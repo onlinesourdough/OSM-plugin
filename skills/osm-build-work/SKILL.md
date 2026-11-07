@@ -2,7 +2,7 @@
 name: osm-build-work
 description: Implement and verify accepted work through in-scope fixes and Review.
 metadata:
-  version: "2.0.2"
+  version: "2.0.3"
 ---
 
 # OSM:build-work
@@ -40,7 +40,9 @@ including scripts, shell snippets, SQL, tests and automation. It owns code-quali
 criteria and verification by changed surface; apply them proportionately even
 to small one-off code. Reuse the result in this Build and its existing Review.
 
-Choose evidence for the changed behavior and risk. Reproduce a behavioral defect
+Choose evidence for the changed behavior and risk using Write Code’s
+[test-value rubric](../osm-write-code/references/test-value.md) before adding
+or materially changing tests. Reproduce a behavioral defect
 at the nearest safe representative boundary when practical; otherwise state the
 reproduction limit and verify the strongest meaningful regression. Do not weaken
 checks to obtain green. A changed accepted contract needs rationale and replacement

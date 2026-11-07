@@ -1720,3 +1720,21 @@ documentation-only corrections. Local preview packaging and focused correction
 checks are recorded against the exact corrected tree in its private handoff.
 No native Home/public-reader, live Notion, installation or consumer acceptance
 is inferred from preparing that preview.
+
+## 7 November 2026 — explicit test-value decision (#87)
+
+Write Code owns one compact pre-authoring rubric in
+`skills/osm-write-code/references/test-value.md`; Build and Review link to it.
+Write Code is 2.1.0, Build 2.0.3 and Review 2.0.1. No blanket suite cleanup,
+production test-only seam or new testing dependency was introduced.
+
+An actual Codex CLI 0.167.0 run used gpt-6.1-sol with medium reasoning, existing
+authentication, ephemeral/read-only execution and no tools. Five fictional cases
+elicited concrete decisions: omit/fold duplicates, retain a missing security
+boundary, preserve behavior-focused refactor coverage, use existing proof for a
+tiny edit and reject mock-only persistence claims while retaining packaging
+protection. Prompt and exact output are in `docs/evidence/test-value-87/`.
+The run reported 10,846 tokens. This is one observed method rehearsal, not a
+cross-model benchmark or execution of the hypothetical tests. No model turn was
+used to change owner context. Package validation against e1cd725, 14 skill-version
+checks and the responsibility rehearsal passed after the source change.

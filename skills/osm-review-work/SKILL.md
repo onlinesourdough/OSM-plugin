@@ -2,7 +2,7 @@
 name: osm-review-work
 description: Review a result against its accepted outcome, or audit requested repository drift, without editing.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:review-work
@@ -50,6 +50,10 @@ candidate and evidence. Check that the format answers the reader's question abou
 the change; flag decorative or redundant visuals. Check rendering and useful links; keep
 decision-relevant failures visible and distinguish illustration from observation.
 This is part of the current review, not another approval step.
+
+For test changes, apply Write Code’s canonical
+[test-value rubric](../osm-write-code/references/test-value.md), checking the
+protected contract and remaining useful coverage rather than test count.
 
 For code review, including scripts, shell snippets, SQL, tests and automation,
 use [Write code](../osm-write-code/SKILL.md) in read-only review mode. Apply its shared
