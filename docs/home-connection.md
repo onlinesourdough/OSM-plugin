@@ -92,19 +92,35 @@ Every Home call reads the identity again. A different bot or workspace from the
 mapping returns `account_changed`, and the panel then clears its lists, bodies
 and sections.
 
-## Host secret mechanisms
+## Host credential route in the local candidate
 
-The token may come only from a documented, supported host secret store that
-injects it into the OSM server process. OSM writes no token file, asks for none
-in chat or the panel, and never returns, logs or saves one.
+The local candidate adds an explicit macOS Keychain opt-in. It does not change
+any installed profile. With `OSM_NOTION_KEYCHAIN=1` in the OSM server's existing
+configuration, `apps/sidebar/credential.mjs` reads only the generic-password item
+with service `com.onlinesourdough.osm.notion` and account `osm`, using the absolute
+system `security` executable with a five-second bound. The secret remains in the
+server closure and is never sent to Home, tools, errors or saved projections.
+Without opt-in, or on another OS, the route remains `unsupported_host`.
 
-| Host | Documented mechanism | Status in this release |
-| --- | --- | --- |
-| Codex | Stdio MCP servers take `env` from `config.toml`, or forward `env_vars` from Codex's own environment ([Codex MCP](https://developers.openai.com/codex/mcp)). No secure store is documented for stdio servers. `bearer_token_env_var` applies only to HTTP servers. | **Unsupported.** Home reports `unsupported_host` and makes no request. |
-| Claude Code | A plugin `userConfig` option with `sensitive: true` masks input and keeps the value in the platform's secure credential store. `${user_config.KEY}` substitutes it into the plugin's MCP server `env` ([plugins reference](https://code.claude.com/docs/en/plugins-reference)). | **Supported mechanism, not declared.** The plugin declares no Claude MCP server. Adding one changes host registration and needs native proof, so it is open under #61/#82. There is no native Claude Home. |
+Provisioning is manual for this pilot. In macOS Keychain Access the human creates
+or selects the dedicated OSM item and enters the credential privately. Do not
+reuse another integration's credential or paste a key in chat/terminal history.
+A missing item means not connected; a locked/denied/timed-out store means the
+connection could not be checked. OS prompts belong to the human. No credential
+was provisioned or accessed as part of this candidate's synthetic tests.
 
-`hostCredential()` in `apps/sidebar/home-service.mjs` is the one place a future
-host entry would be added, together with that host's declaration and native proof.
+Home and the agent's `osm_connection`, `osm_context_home`, `osm_context_list` and
+`osm_context_read` share the same service and identity checks. These are read
+operations only. The source mapping is an application boundary, not a complete
+inventory of Notion grants or a restriction on other installed connectors.
+
+The preferred human onboarding is browser OAuth with OSM's own registered
+integration and Notion's native page picker. The current Connect dialog honestly
+states that browser sign-in is not configured. The precise registration,
+confidential-client callback/backend and token-custody dependency, plus why
+hosted MCP PKCE is not an equivalent scope, are in
+[browser connection architecture](notion-browser-connection.md). No shared client
+secret, new app, account or backend is included or activated here.
 
 ## Proven and unproven
 

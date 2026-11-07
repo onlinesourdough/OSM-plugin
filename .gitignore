@@ -12,3 +12,9 @@ coverage/
 !.env.example
 # Python author checks
 __pycache__/
+
+# Native design session state stays local; editable artwork and notes are versioned.
+/Paper/*/.history/
+/Paper/*/feedback.json
+/Paper/*/.session*
+/work/

@@ -136,9 +136,9 @@ footer { display: flex; align-items: baseline; justify-content: space-between; g
 
 /* Home: the approved Context/Skills reader. Generous whitespace, comfortable
    wrapping and no row, section or footer dividers; only the selected tab has a
-   line. Light colours follow the approved design; dark mode keeps the host theme. */
-body[data-view="home"] { --home-text: light-dark(#382b23, var(--osm-text)); --home-muted: light-dark(#796d62, var(--osm-muted)); --home-green: light-dark(#416448, var(--osm-success));
-  --home-hover: light-dark(#f2ece4, var(--osm-hover)); --home-chevron: light-dark(#aa9c8d, var(--osm-muted)); background: light-dark(#fbf8f3, var(--osm-surface)); color: var(--home-text); }
+   line. Both colour schemes follow the native host theme. */
+body[data-view="home"] { --home-text: var(--osm-text); --home-muted: var(--osm-muted); --home-green: var(--osm-success);
+  --home-hover: var(--osm-hover); --home-chevron: var(--osm-muted); background: var(--osm-surface); color: var(--home-text); }
 body[data-view="home"] main { max-width: 640px; padding: 26px 40px 64px; }
 body[data-view="home"] h1 { font-size: 16px; font-weight: 650; letter-spacing: 0; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -198,8 +198,27 @@ body[data-view="home"] h1 { font-size: 16px; font-weight: 650; letter-spacing: 0
 .gate { max-width: 420px; margin-top: 42px; }
 .gate h2 { margin: 0 0 14px; font-size: 26px; font-weight: 600; line-height: 1.3; letter-spacing: -.6px; }
 .gate p { margin: 0 0 23px; font-size: 14px; line-height: 1.8; color: var(--home-muted); }
-.primary { min-height: 44px; padding: 10px 17px; border: 0; border-radius: 6px; background: var(--home-text); color: light-dark(#fbf8f3, var(--osm-surface)) !important; font-size: 13px; }
+.primary { min-height: 44px; padding: 10px 17px; border: 0; border-radius: 6px; background: var(--home-text); color: var(--osm-surface) !important; font-size: 13px; }
 @media (max-width: 520px) { body[data-view="home"] main { padding: 25px 24px 48px; } .home-title, .gate h2 { font-size: 25px; } .context-section { margin-bottom: 22px; } .reader h2 { font-size: 24px; } }
 @media (max-width: 380px) { body[data-view="home"] main { padding: 25px 20px 40px; } .home-title, .gate h2 { font-size: 24px; } .tabs { margin-bottom: 24px; } .reader-body { font-size: 14px; } .reader h2 { font-size: 23px; } .home-footer { gap: 12px; flex-wrap: wrap; } }
 .links-note { margin: 0 0 16px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+
+/* The selected Notion page is the primary surface; navigation is disclosed. */
+#home-page .reader > h2 { font-size: 30px; line-height: 1.25; letter-spacing: -.5px; margin: 0 0 24px; }
+#home-page .source-icon { width: 32px; height: 32px; font-size: 28px; }
+#home-navigation { margin: 24px 0; }
+#home-navigation > summary { cursor: pointer; color: var(--osm-muted); padding: 8px 0; }
+#home-navigation[open] > summary { margin-bottom: 16px; }
+#home-page .reader-body { overflow-wrap: anywhere; }
+#gate-setup { margin: 16px 12px 0 0; }
+
+body[data-view="home"] .brand-mark, body[data-view="home"] #help { display: none; }
+body[data-view="home"] #heading { font-size: 14px; font-weight: 500; color: var(--osm-muted); }
+body[data-view="home"] #home-status { display: none; }
+.reader h2 { display: flex; align-items: center; gap: 10px; }
+.reader h2 .source-title { min-width: 0; overflow-wrap: anywhere; }
+#home-page .reader > h2 { display: block; }
+#home-page .reader > h2 .source-icon { display: flex; margin-bottom: 12px; }
+
+#home .btn-primary { background: var(--osm-text); color: var(--osm-surface); }

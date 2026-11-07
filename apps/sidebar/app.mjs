@@ -15,6 +15,7 @@ const stepRoles = [[], ['docs'], ['personalSkills', 'teamSkills'], ['memory', 't
 const connectable = ['not_connected', 'disabled', 'unavailable'];
 // status is the latest accepted snapshot. draft holds pending source edits with
 // the revisions they were read from; only an explicit reload replaces edits.
+let setupRequested = false;
 let status, draft, checkedAt = -Infinity, firstStatus = true, saving = false, refreshing = false, stale = false;
 let onboarding = false, openStep = 0, confirmSwitch = false, settingsOpen = false, discardPrompt = false;
 let message = { text: '', error: false };
@@ -122,6 +123,7 @@ const sourcesReady = () => status.context.state === 'configured' && draft.contex
 function render() {
   $('retry-load').hidden = Boolean(status) || refreshing;
   $('help').disabled = saving || refreshing;
+  for (const id of ['agent-setup', 'gate-setup', 'access-setup', 'settings-agent-setup']) $(id).disabled = setupRequested || saving || refreshing;
   if (!status) { $('loading').hidden = !refreshing; return; }
   const dashboard = status.context.state === 'configured' && !onboarding;
   const locked = saving || refreshing;
@@ -257,6 +259,47 @@ async function open(target) {
   try { const result = await app.openLink({ url: route.target }); if (result?.isError) throw new Error(); }
   catch { feedback('Could not open the link. ' + route.target, true); }
 }
+let checkingConnection = false, connectionOpener;
+function openConnection() {
+  if (saving || refreshing) return;
+  connectionOpener = document.activeElement;
+  $('connection-dialog').showModal(); $('connection-title').focus();
+}
+async function checkConnection() {
+  if (checkingConnection) return;
+  checkingConnection = true; $('connection-check').disabled = true;
+  $('connection-state').textContent = 'Checking OSM’s connection…';
+  try {
+    const result = await app.callServerTool({ name: 'osm_connection', arguments: {} });
+    const connection = JSON.parse(result?.content?.find(item => item.type === 'text')?.text || '{}');
+    const states = { unsupported_host: 'The OSM credential route is not enabled on this host.', not_connected: 'OSM’s connection is not connected or was revoked.',
+      unmapped: 'OSM’s connection is available. Choose your Data & Context home next.', ready: 'OSM’s connection and mapping are available. Refresh Home to check page access.',
+      account_changed: 'The connection changed. Check setup before opening saved sources.', official_mode: 'The saved mapping selected the separate official connection.',
+      unavailable: 'OSM’s connection could not be checked. Try again.' };
+    $('connection-state').textContent = states[connection.state] || states.unavailable;
+  } catch { $('connection-state').textContent = 'OSM’s connection could not be checked. Try again.'; }
+  finally { checkingConnection = false; $('connection-check').disabled = false; }
+}
+for (const id of ['connect-osm', 'gate-connect', 'settings-connection']) $(id).addEventListener('click', openConnection);
+$('connection-close').addEventListener('click', () => { $('connection-dialog').close(); connectionOpener?.focus(); });
+$('connection-check').addEventListener('click', checkConnection);
+$('osm-connection-guide').addEventListener('click', () => open('https://www.notion.com/help/add-and-manage-connections-with-the-api'));
+
+// A deliberate user click sends one fixed setup request. Source text, page
+// bodies and credentials are never interpolated into the user instruction.
+async function requestAgentSetup() {
+  if (setupRequested || saving || refreshing) return;
+  setupRequested = true; feedback(''); render();
+  try {
+    const result = await app.sendMessage({ role: 'user', content: [{ type: 'text', text:
+      'Use OSM Setup to help me set up or check OSM’s own Notion connection and my Data & Context home. First inspect the saved OSM setup and osm_connection. Reuse existing pages and original writing. Help me choose which pages to share with OSM; the official Notion plugin is a separate connection. Do not ask me to paste credentials into chat. Ask before new access grants or writes outside my existing authority. Continue to a useful first task when setup is ready.' }] }, { timeout: 12000 });
+    if (result?.isError) throw new Error();
+    feedback('Setup request sent to your agent. Continue in chat, then refresh OSM.');
+  } catch {
+    feedback('This host could not start the chat. Ask “Use OSM Setup to check my OSM connection and Data & Context home” in chat, then refresh OSM.', true);
+  } finally { setupRequested = false; render(); }
+}
+
 async function refresh() {
   if (refreshing || saving) return;
   ++iconGeneration; icons.clear(); requestedIcons.clear();
@@ -403,7 +446,7 @@ async function switchContext(value, title) {
 function reload() { fillDraft(); feedback(''); render(); }
 
 app.ontoolresult = result => {
-  if (result?._meta?.['osm/pages'] || ['pages', 'icons', 'home', 'home-list', 'home-record'].includes(result?._meta?.['osm/kind'])) return;
+  if (result?._meta?.['osm/pages'] || ['pages', 'icons', 'home', 'home-list', 'home-record', 'home-page'].includes(result?._meta?.['osm/kind'])) return;
   try { apply(result); if (result?._meta?.['osm/view'] === 'settings') openSettings(); }
   catch (error) {
     checkedAt = Math.max(checkedAt + 1, Date.now());
@@ -413,6 +456,7 @@ app.ontoolresult = result => {
   }
 };
 app.onhostcontextchanged = theme;
+for (const id of ['agent-setup', 'gate-setup', 'access-setup', 'settings-agent-setup']) $(id).addEventListener('click', requestAgentSetup);
 for (const id of ['refresh', 'drawer-refresh', 'retry-load']) $(id).addEventListener('click', refresh);
 for (const id of ['connect', 'drawer-connect', 'notice-connect']) $(id).addEventListener('click', () => open(connectUrl));
 for (const id of ['reload-draft', 'drawer-reload']) $(id).addEventListener('click', reload);

@@ -202,6 +202,12 @@ test('the root, a child page and a granted database are readable through the map
   const status = await home.status();
   assert.equal(status.state, 'ready'); assert.ok(status.scope && status.verifiedAt);
   assert.deepEqual(status.sections.map(item => [item.label, item.role]), [['About your business', 'profile'], ['Memory', 'memory'], ['Business Docs', 'documents'], ['Skills', 'skills'], ['Tasks', 'related']]);
+  const root = await home.page();
+  assert.equal(root.state, 'read');
+  assert.equal(root.scope, status.scope);
+  assert.equal(root.record.title, 'Fictional Studio OSM');
+  assert.ok(fake.requests.some(request => request.path === `/v1/blocks/${dashed(ids.root)}/children`));
+  assert.equal((await home.connection()).connection.botId, ids.bot);
   const about = await home.list({ key: 'about' });
   assert.deepEqual(about.items.map(item => item.title), ['About Fictional Studio', 'How we work together']);
   const skills = await home.list({ key: 'skills' });
@@ -264,9 +270,9 @@ test('revocation, a changed account and a changed mapping are reported, with no 
   assert.equal((await service(fake, studioProjection(), 'r2', () => ({ state: 'available', token: 'placeholder-credential-rotated' })).status()).state, 'root_inaccessible');
 });
 
-test('this release declares no host secret mechanism, so no request is made', async () => {
+test('without credential opt-in no Notion request is made', async () => {
   const fake = fakeNotion();
-  assert.deepEqual(hostCredential(), { state: 'unsupported_host' });
+  assert.deepEqual(await hostCredential({ env: {} }), { state: 'unsupported_host' });
   const home = createHomeService({ transport: fake.transport, readProjection: async () => ({ state: 'saved', revision: 'r', projection: normalizeProjection(studioProjection()) }) });
   assert.equal((await home.status()).state, 'unsupported_host');
   assert.equal((await home.list({ key: 'memory' })).state, 'unsupported_host');

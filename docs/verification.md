@@ -1738,3 +1738,48 @@ The run reported 10,846 tokens. This is one observed method rehearsal, not a
 cross-model benchmark or execution of the hypothetical tests. No model turn was
 used to change owner context. Package validation against e1cd725, 14 skill-version
 checks and the responsibility rehearsal passed after the source change.
+
+## 7 November 2026 — page-centered Home and own-connection candidate (#74/#82)
+
+The selected Data & Context page is now Home's primary surface, with real title,
+icon and bounded page blocks. Browse is collapsed and does not fetch hidden
+source lists. One gear owns connection/setup/access. App and model reads share
+one service and identity/mapping checks. The Mac Keychain route requires explicit
+opt-in and reads only its dedicated item; no owner credential was provisioned or
+read. Current installed owner Home mapping was observed missing, so a separate
+maintenance credential was not adopted. The preferred browser OAuth route is
+precisely documented but unconfigured; no hosted-MCP scope substitution occurs.
+
+Executed: 190 sidebar cases plus bundled stdio smoke; package validator against
+e1cd725; docs/onboarding/layout/continuity/skill-version/responsibility/footprint/
+context-architecture and consumer rehearsals. A second build produced identical
+runtime artifacts before the final bounded icon/error/contrast corrections;
+final affected sidebar checks were rerun after those corrections. A disposable
+native Codex install discovered 17 enabled skills, zero errors. This proves
+installation/discovery, not native Desktop Home or live Notion access.
+
+An actual public PNG fetch returned 16,946 bytes through the image transport;
+synthetic boundary tests reject private destinations, redirects, oversized and
+unsupported responses. The IPv4 request family is explicit so Node's connection
+selection cannot reinterpret the pinned lookup result. No bearer credential is
+sent to image hosts; signed URLs and bytes stay ephemeral. External SVGs retain
+a text/title fallback. UI snapshots with fictional data exercised page/list/
+reader/Back, settings/access, human check/cancel, rejected agent handoff, changed
+account and error retry, light/dark and 320px. Dark primary-button contrast was
+repaired and rechecked. The 320px error viewport had no horizontal overflow.
+
+Paper 3438e04fc0d64ffe was saved/reopened through native MCP: 47 editable boards,
+9 pages, index and retained references. Artwork revision is
+4c0b8145ee80044b1babadbc006ccfa0cdaeaa7f8ce2dcb1bb7aa819fd02ddea.
+Canonical design.md maps implemented, external and planned states. Primary,
+setup/access and recovery content were inspected through native rendering/DOM;
+this does not assert exhaustive pixel acceptance of all boards or live OAuth.
+
+Inherited publisher hold remains visible: reconciliation exits 1 for the frozen
+v0.30.0 public binding after v0.30.1. Exhaustive scenario invocation produced 67
+passes, two binding failures and 75 caught mutation controls. The publisher code,
+manifest, relevant docs binding and rehearsal are byte-unchanged from e1cd725.
+No release edition, public row or activation was changed to hide this failure.
+See TEST-TOMORROW.md for exact entrypoints, issue disposition and remaining proof.
+
+Final readback: all three runtime files matched an independent rebuild after the final copy/transport changes. A fresh disposable native install discovered 17 enabled skills with zero errors, and all 115 installed product files matched the final staged payload byte for byte. The final sidebar run passed 190 tests plus stdio smoke. The network-gate body was shortened after visual review; no behavior or authorization changed.

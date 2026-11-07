@@ -1,25 +1,31 @@
-# Codex sidebar — 0.29.0
+# Codex sidebar — local 0.31.0 candidate
 
-Revision: 2026-10-26
+Revision: 2026-11-07
 
 ## Home
 
-Home is a quiet, read-only view of the owner's recorded context and personal
-skills. That describes the panel only; it is not the owner's write policy for
-agents. It follows the approved design (#74): the context-tile mark, Context and
-Skills tabs (Arrow, Home and End keys), sections from Setup's projection in its
-order and labels, and two titles per section with More/Show fewer. A title
-opens a read-only article in place. It shows the mapped Fact, Decision, Why and
-Evidence fields first, then the page's bounded blocks, so a property-only
-memory reads fully. Back clears the article and returns focus to its title.
+Home opens the actual selected Data & Context page, with its current title,
+icon and bounded readable content. One discreet gear holds settings and OSM's
+connection/access disclosure. Browse is collapsed by default and reveals mapped
+Context and Skills lists; a record opens in place, with Back restoring focus.
+Page originals remain in Notion. This reader does not define the owner's write
+policy for agents.
 
-The Skills tab lists personal skills from the mapped source with that source's
-descriptions. A collapsed **Built into OSM** list shows the installed package's
-skill names and descriptions. Reading a skill does not enable or run it, so
-there is no Run button or availability badge. Related routes such as Tasks are
-plain outward links. The footer has Open in Notion and How this is organised.
-There are no dividers, cards, graph or metrics, and at 500 and 320 px the page
-narrows and the footer wraps.
+Source/record emoji, native Notion icons and bounded custom/file/external raster
+icons come from metadata obtained through OSM's own connection. Expired or
+unsupported images retain a readable title. Raw signed icon URLs and retrieved
+bytes are not stored. The current reader is bounded text, headings, lists and
+code; it does not claim to embed arbitrary native Notion views or edit pages.
+
+Personal skills show their source descriptions. Built-in method descriptions
+stay collapsed and do not imply enablement or execution. See the canonical
+[design guide](../design.md) for the editable Paper and flow/state map.
+
+First use offers human **Connect Notion** guidance; browser OAuth is visibly
+unconfigured in this candidate. The person can check an existing OSM connection
+without starting a model. Optional **Set up with agent** sends one fixed setup
+request after a deliberate click using MCP Apps `sendMessage`. A host rejection
+shows a manual prompt fallback and never claims setup succeeded.
 
 Home's sources come from one place: the AI Operating Model's Data and Context
 Definition. Setup generates Home's projection from one revision of it; Home never
@@ -239,6 +245,11 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
   context it was read for.
 - osm_home_list / osm_home_read: app-only bounded title lists and one selected
   record of a mapped section.
+- osm_home_page: app-only read of the actual selected root page.
+- osm_connection: app/model identity and mapping check using OSM's credential;
+  no token or complete grant inventory is returned.
+- osm_context_home / osm_context_list / osm_context_read: model-visible reads
+  through the same service and access checks as Home, with no connector fallback.
 - osm_save_home_projection: model, revision-checked whole replacement of Home's
   generated projection; content changes only with a new definition revision.
   osm_sources returns it with its revision. osm_save_sources accepts the

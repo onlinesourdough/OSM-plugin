@@ -1,3 +1,4 @@
+import { sourceLabel } from './source-label.mjs';
 // Home: a read-only Context/Skills view over Setup's generated projection, read through OSM's own
 // internal Notion connection. Lists and bodies live only in this closure for the
 // current scope: Back clears the body, and any account, scope, access or context
@@ -20,12 +21,11 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     root_inaccessible: ['Continue OSM Setup', 'Your OSM page can’t be read with the current connection. Share it with OSM’s connection, or ask OSM Setup in chat.'],
     mapping_unavailable: ['Continue OSM Setup', 'The Home projection needs attention. It has been left unchanged.'],
     rate_limited: ['Notion asked OSM to wait', copy.rate_limited],
-    unavailable: ['Notion could not be read', copy.unavailable],
+    unavailable: ['Notion could not be read', 'Check your connection, then try again.'],
   };
   const labels = { ready: 'Notion · Connected', unmapped: 'Notion · Home not set up', root_inaccessible: 'Notion · Home can’t be read',
     account_changed: 'Notion · Different connection', not_connected: 'Notion · Not connected', unsupported_host: 'Notion · Not available here',
     mapping_unavailable: 'Notion · Needs attention' };
-  const roleText = { profile: 'profile', memory: 'retained facts and decisions', documents: 'documents', skills: 'personal skills', related: 'outward links' };
   // I2: every service state a list or read can return, classified once. Section states
   // keep the view when they carry the current scope; every other state, including
   // not_connected, account_changed, unsupported_host, unmapped, mapping_unavailable,
@@ -37,12 +37,13 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   let data = null, context = null, showLinks = false, loading = false, generation = 0, recoveries = 0, recovering = false;
   // lists and reads hold this view's requests: lists by section, reads by request (pending
   // or failed reads only). clear() drops both, so older generations never count.
+  let rootPage = null;
   let tab = 'context', reader = null, builtinOpen = false, lists = new Map(), reads = new Map(), openers = new Map();
 
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text) node.textContent = text; if (cls) node.setAttribute('class', cls); return node; };
   const button = (text, cls, onClick) => { const node = el('button', text, cls); node.setAttribute('type', 'button'); node.addEventListener('click', onClick); return node; };
   const sections = () => data?.state === 'ready' ? data.sections : [];
-  function clear() { lists = new Map(); reads = new Map(); reader = null; openers = new Map(); builtinOpen = false; }
+  function clear() { rootPage = null; lists = new Map(); reads = new Map(); reader = null; openers = new Map(); builtinOpen = false; }
   // Without a projection, Home appears only for a supported host's connect or Continue Setup
   // step; otherwise, including a failed check, the saved links view stays as it was. An
   // official_notion_user projection keeps the links view with its own note: this view
@@ -81,7 +82,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       : { state: 'unavailable', ...(data?.mapping && { mapping: data.mapping }), builtin: [], failed: true, ...(data?.selectedMode && { selectedMode: data.selectedMode }) };
     if (next.state !== 'ready' || next.scope !== data?.scope) clear();
     if (next.state === 'account_changed') accountChanged = true; else if (next.state === 'ready' && next.mapping === 'saved') accountChanged = false;
-    data = next; changed();
+    data = next;
+    if (data.state === 'ready') void loadRoot();
+    changed();
   }
   // The app reports its current context; a different one, or none, drops everything.
   function sync(target) {
@@ -129,6 +132,16 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     return true;
   }
 
+  async function loadRoot() {
+    const mine = generation;
+    rootPage = { state: 'loading' }; changed();
+    let result;
+    try { result = (await call('osm_home_page', {}))?._meta?.['osm/home-page']; }
+    catch { result = { state: 'unavailable', scope: data?.scope }; }
+    if (!current(result, mine)) return changed();
+    rootPage = result; changed();
+  }
+
   async function list(key, more = false) {
     const entry = lists.get(key) || {};
     if (entry.loading) return;
@@ -139,7 +152,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (!current(result, mine, entry.state === 'listed')) return changed();
     const items = more ? [...(entry.items || []), ...(result.items || [])].slice(0, 50) : result.items || [];
     lists.set(key, { state: result.state, items, cursor: result.cursor, hasMore: Boolean(result.hasMore) && items.length < 50, partial: result.partial,
-      withheld: result.withheld, expanded: more || entry.expanded, retryAfter: result.retryAfter });
+      withheld: result.withheld, source: result.source, expanded: more || entry.expanded, retryAfter: result.retryAfter });
     rearm();
     changed();
   }
@@ -171,7 +184,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   function recordButton(section, item, describe) {
     const node = button('', 'record-button', () => read(section.key, item.id));
     const words = el('span');
-    words.append(el('span', item.title, 'record-title'));
+    const title = el('span', null, 'record-title'); sourceLabel(title, item); words.append(title);
     if (describe && item.description) words.append(el('span', item.description, 'record-description'));
     const chevron = el('span', '›', 'chevron'); chevron.setAttribute('aria-hidden', 'true');
     node.append(words, chevron); node.dataset.open = item.id;
@@ -209,16 +222,20 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (entry.withheld) nodes.push(el('p', 'Some pages can’t be read with the current connection.', 'reader-meta'));
     return nodes;
   }
-  function renderReader(panel) {
+  function renderReader(panel, value = reader, root = false) {
     const article = el('article', null, 'reader');
-    article.append(button('← ' + (tab === 'skills' ? 'Skills' : 'Context'), 'text-button back', back));
-    const record = reader.record, heading = el('h2', record?.title || (reader.state === 'loading' ? 'Loading…' : 'Unavailable'));
-    heading.setAttribute('id', 'reader-title'); heading.setAttribute('tabindex', '-1');
-    article.setAttribute('aria-labelledby', 'reader-title');
-    if (record) article.append(el('p', record.meta, 'reader-meta'));
+    if (!root) article.append(button('← ' + (tab === 'skills' ? 'Skills' : 'Context'), 'text-button back', back));
+    const record = value.record, heading = el('h2', record?.title || (value.state === 'loading' ? 'Loading…' : 'Unavailable'));
+    heading.setAttribute('id', root ? 'home-page-title' : 'reader-title'); heading.setAttribute('tabindex', '-1');
+    article.setAttribute('aria-labelledby', root ? 'home-page-title' : 'reader-title');
+    if (record && !root) article.append(el('p', record.meta, 'reader-meta'));
+    if (record) sourceLabel(heading, record);
     article.append(heading);
     const body = el('div', null, 'reader-body');
-    if (!record && reader.state !== 'loading') body.append(el('p', copy[reader.state] || copy.unavailable, 'unavailable'));
+    if (!record && value.state !== 'loading') {
+      body.append(el('p', copy[value.state] || copy.unavailable, 'unavailable'));
+      if (root) body.append(button('Try again', 'text-button', reload));
+    }
     if (record) {
       for (const field of record.fields) { if (field.heading) body.append(el('h3', field.heading)); body.append(el('p', field.text)); }
       let previous;
@@ -235,13 +252,15 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       if (record.truncated) body.append(el('p', 'The rest of this page is in Notion.', 'muted'));
     }
     article.append(body);
-    if (record?.link) article.append(button('Open in Notion ↗', 'text-button open', () => open(record.link)));
+    if (!root && record?.link) article.append(button('Open in Notion ↗', 'text-button open', () => open(record.link)));
     panel.append(article);
   }
   function renderContext(panel) {
     for (const section of sections().filter(item => !['skills', 'related'].includes(item.role))) {
       const root = el('section', null, 'context-section');
-      root.append(el('h3', section.label, 'section-title'), ...records(section, false));
+      const heading = el('h3', null, 'section-title');
+      sourceLabel(heading, lists.get(section.key)?.source || { title: section.label });
+      root.append(heading, ...records(section, false));
       panel.append(root);
     }
     const related = sections().filter(item => item.role === 'related');
@@ -255,7 +274,12 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   function renderSkills(panel) {
     const source = sections().find(item => item.role === 'skills');
     panel.append(el('h3', 'Your skills', 'section-title'));
-    if (source) panel.append(el('p', `From ${source.label} in Notion`, 'reader-meta'), ...records(source, true));
+    if (source) {
+      const label = el('p', null, 'reader-meta');
+      const metadata = lists.get(source.key)?.source || { title: source.label };
+      sourceLabel(label, { ...metadata, title: `From ${metadata.title} in Notion` });
+      panel.append(label, ...records(source, true));
+    }
     else panel.append(el('p', 'No personal skills source is mapped yet.', 'unavailable'));
     const root = el('section', null, 'builtin');
     const toggle = button('Built into OSM ' + (builtinOpen ? '−' : '+'), 'text-button', () => { builtinOpen = !builtinOpen; changed(); $('builtin-toggle').focus(); });
@@ -289,11 +313,17 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     status.dataset.state = verified ? 'connected' : 'neutral';
     $('home-status-label').textContent = loading && !data ? 'Notion · Checking…' : labels[gateState()] || 'Notion · Could not check';
     status.setAttribute('title', verified ? 'Checked ' + new Date(data.verifiedAt).toLocaleTimeString() : '');
-    if (!visible) { $('home-panel').replaceChildren(); return; }
+    const ready = data?.state === 'ready' && !suppressed();
+    $('osm-workspace').textContent = ready && data.workspaceName ? 'Workspace · ' + data.workspaceName : labels[gateState()] || 'OSM connection not checked';
+    $('organisation-copy').textContent = ready
+      ? 'Mapped sources: ' + sections().map(item => item.label).join(', ') + '. Definition revision ' + data.definitionRevision + '. This list does not enumerate all Notion grants.'
+      : 'Check OSM’s connection with your agent. Saved source details are hidden until the current identity and mapping are verified.';
+    $('manage-access').disabled = !ready || locked;
+    if (!visible) { $('home-panel').replaceChildren(); $('home-page').replaceChildren(); return; }
     const gate = data.state === 'ready' && !suppressed() ? null : gates[gateState()] || gates.unavailable;
     $('home-workspace').hidden = Boolean(gate); $('home-gate').hidden = !gate;
     if (gate) {
-      $('home-panel').replaceChildren(); $('organisation').hidden = true;
+      $('home-panel').replaceChildren(); $('home-page').replaceChildren(); $('organisation').hidden = true;
       $('gate-title').textContent = gate[0]; $('gate-copy').textContent = gate[1];
       $('gate-action').textContent = retry() ? 'Try again' : 'Show saved links';
       $('gate-action').disabled = locked || loading; $('gate-action').hidden = suppressed() && !retry();
@@ -303,16 +333,19 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       const chosen = tab === name;
       $(name + '-tab').setAttribute('aria-selected', String(chosen)); $(name + '-tab').setAttribute('tabindex', chosen ? '0' : '-1');
     }
+    const rootPanel = $('home-page'); rootPanel.replaceChildren();
+    rootPanel.hidden = Boolean(reader);
+    if (!reader) renderReader(rootPanel, rootPage || { state: 'loading' }, true);
     const panel = $('home-panel');
     panel.setAttribute('aria-labelledby', tab + '-tab');
     panel.replaceChildren(); openers = new Map();
     $('home-footer').hidden = Boolean(reader); $('organisation').hidden ||= Boolean(reader);
-    if (reader) renderReader(panel); else if (tab === 'context') renderContext(panel); else renderSkills(panel);
-    $('organisation-copy').textContent = 'This Home maps ' + sections().map(item => `${item.label} to ${roleText[item.role]}`).join(', ')
-      + `. Setup generated this from your AI Operating Model, revision ${data.definitionRevision}; Home does not infer sources or names.`
-      + (data.supportHidden ? ' Rules, procedures, evidence and recovery snapshots stay in Notion and are not shown as context.' : '');
+    if (reader) renderReader(panel);
+    else if ($('home-navigation').open) { if (tab === 'context') renderContext(panel); else renderSkills(panel); }
+
   }
 
+  $('home-navigation').addEventListener('toggle', changed);
   $('context-tab').addEventListener('click', () => choose('context'));
   $('skills-tab').addEventListener('click', () => choose('skills'));
   $('home-tabs').addEventListener('keydown', event => {
@@ -323,8 +356,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   $('organisation-toggle').addEventListener('click', () => {
     const region = $('organisation'); region.hidden = !region.hidden;
     $('organisation-toggle').setAttribute('aria-expanded', String(!region.hidden));
-    $('organisation-toggle').textContent = 'How this is organised ' + (region.hidden ? '+' : '−');
+    $('organisation-toggle').textContent = 'OSM connection and access ' + (region.hidden ? '+' : '−');
   });
+  $('manage-access').addEventListener('click', () => data?.state === 'ready' && open(data.root.link));
   $('home-open').addEventListener('click', () => data?.root && open(data.root.link));
   $('gate-action').addEventListener('click', () => {
     if (retry()) return reload();

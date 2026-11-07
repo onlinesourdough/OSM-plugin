@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources } from './sources.mjs';
 import { readNotionSetup } from './codex-status.mjs';
+import { previewHome } from './preview-home.mjs';
 import { NotionPages } from './notion-pages.mjs';
 const port = Number(process.env.PORT || 43195);
 const liveNotion = process.env.OSM_PREVIEW_LIVE_NOTION === '1';
@@ -23,8 +24,8 @@ const version = JSON.parse(await readFile(new URL('./package.json', import.meta.
 async function reset(codexHome, scenario) {
   await rm(join(codexHome, 'AGENTS.md'), { force: true });
   await rm(join(codexHome, 'aios'), { recursive: true, force: true });
-  if (['existing', 'dashboard', 'team'].includes(scenario)) await writeFile(join(codexHome, 'AGENTS.md'), bridge.replace('<verified-notion-root-entry-url>', 'https://app.notion.com/p/00000000000000000000000000000001'));
-  if (['dashboard','team'].includes(scenario)) {
+  if ((['existing', 'dashboard', 'team'].includes(scenario) || scenario.startsWith('home-'))) await writeFile(join(codexHome, 'AGENTS.md'), bridge.replace('<verified-notion-root-entry-url>', 'https://app.notion.com/p/00000000000000000000000000000001'));
+  if ((['dashboard','team'].includes(scenario) || scenario.startsWith('home-'))) {
     const context = await readContextRoute({ codexHome });
     const current = await readSources(context.target, { codexHome });
     const links = {docs:{title:'Company docs',target:examplePages[1].target},personalSkills:{title:'Writing & delivery',target:examplePages[2].target},memory:{title:'Decisions',target:examplePages[3].target}};
@@ -33,9 +34,9 @@ async function reset(codexHome, scenario) {
   }
   if (scenario === 'ambiguous') await writeFile(join(codexHome, 'AGENTS.md'), '<!-- AIOS:BEGIN -->old instructions');
 }
-await reset(roots.home,'dashboard');
+await reset(roots.home,'home-ready');
 let lastCheck = 0;
-const pages = {'/':['preview','home','dashboard'], '/setup':['preview','setup','new'], '/settings':['preview','home','dashboard'], '/test':['debug','test','new']};
+const pages = {'/':['preview','home','home-ready'], '/setup':['preview','setup','new'], '/settings':['preview','home','home-ready'], '/test':['debug','test','new']};
 const server = createServer(async (req, res) => {
   try {
     if (req.method === 'GET') {
@@ -50,6 +51,10 @@ const server = createServer(async (req, res) => {
     const { action, args, scenario, workspace } = JSON.parse(body);
     if (!Object.hasOwn(roots,workspace)) throw new Error('Unknown preview');
     const codexHome=roots[workspace];
+    if (action === 'home') {
+      res.setHeader('Content-Type','application/json');
+      return res.end(JSON.stringify(previewHome(args.name, args.arguments || {}, scenario)));
+    }
     if (action === 'icons') {
       const data = liveNotion ? await notionPages.icons(args.targets) : { icons: args.targets.map(target => ({ target, icon: examplePages.find(page => page.target === target)?.icon || null })), partial: false };
       res.setHeader('Content-Type','application/json'); return res.end(JSON.stringify({ content: [], _meta: { 'osm/kind': 'icons', 'osm/icons': data } }));

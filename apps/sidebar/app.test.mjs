@@ -17,7 +17,9 @@ const plain = value => JSON.parse(JSON.stringify(value));
 
 async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sources = { state: 'missing', revision: 'c'.repeat(64), title: '', links: {} }, options = {}) {
   let time = 100000, host, fail = Boolean(options.initialFailure), delay, release, revision = 0, linkFailure = false;
-  const calls = [], homeCalls = [], links = [], document = createDocument(template);
+  const messages = [], calls = [], homeCalls = [], links = [], document = createDocument(template);
+  // Most legacy interaction cases begin with Browse already opened.
+  document.getElementById('home-navigation').open = options.navigation !== false;
   const status = { features: { notionPages: Boolean(options.pages), notionIcons: Boolean(options.icons) }, notion: { state: options.notion || 'connected' }, context, sources, checkedAt: new Date(time).toISOString() };
   const snapshot = () => ({ _meta: { 'osm/status': structuredClone({ ...status, checkedAt: new Date(time).toISOString() }) } });
   const rejected = text => ({ isError: true, content: [{ type: 'text', text }] });
@@ -30,6 +32,11 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
       if (options.view) result._meta['osm/view'] = options.view;
       this.ontoolresult(result);
     }
+    async sendMessage(args) {
+      messages.push(args);
+      if (options.sendMessage) return options.sendMessage(args);
+      return {};
+    }
     async openLink(args) {
       links.push(args.url);
       if (linkFailure === 'throw') throw new Error('Link blocked');
@@ -39,6 +46,10 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
     async callServerTool({ name, arguments: args }) {
       // Home tools are recorded apart; by default the host has no supported connection.
       if (name.startsWith('osm_home')) {
+        if (name === 'osm_home_page') {
+          const state = options.home ? (await options.home('osm_home', {}))?._meta?.['osm/home'] : null;
+          return { _meta: { 'osm/home-page': { state: 'read', scope: state?.scope, record: { title: 'Fictional Data & Context', meta: '', fields: [], blocks: [], link: target } } } };
+        }
         homeCalls.push({ name, args: plain(args) });
         return options.home ? options.home(name, args) : { content: [], _meta: { 'osm/kind': 'home', 'osm/home': { state: 'unsupported_host', mapping: 'missing', builtin: [] } } };
       }
@@ -66,7 +77,7 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
   await vm.runInNewContext(`(async () => {${source}})()`, sandbox);
   const get = id => document.getElementById(id);
   const u = {
-    get, calls, homeCalls, links, status, document, names: () => calls.map(call => call.name), focused: () => document.activeElement?.id,
+    get, calls, homeCalls, links, messages, status, document, names: () => calls.map(call => call.name), focused: () => document.activeElement?.id,
     text: id => get(id).textContent, shown: id => !get(id).hidden,
     notify: value => host.ontoolresult(value), fail: value => { fail = value; }, failLinks: value => { linkFailure = value; },
     delay() { delay = new Promise(resolve => { release = resolve; }); }, release() { release(); delay = undefined; },
@@ -601,7 +612,7 @@ test('the GitHub button is in setup and on the dashboard and opens only the OSM 
   await d.click('help'); assert.deepEqual(d.links, [repository]);
   const page = d.get('drawer').parentNode.descendants();
   assert.equal(d.get('help-drawer'), null);
-  assert.deepEqual(page.filter(node => node.tagName === 'DIALOG').map(node => node.id), ['drawer']);
+  assert.deepEqual(page.filter(node => node.tagName === 'DIALOG').map(node => node.id), ['connection-dialog', 'drawer']);
   assert.equal(page.some(node => node.tagName === 'TEXTAREA'), false);
 });
 
@@ -1798,4 +1809,51 @@ test('a recovery status read for another context is not applied, so its sections
   await u.click('context-tab'); await settle();
   assert.equal(u.shown('home-gate'), false); assert.ok(u.panel().includes('About your business'), 'this context again');
   assert.equal(u.get('home').textContent.includes('Company handbook'), false, 'still no other-context section');
+});
+
+
+test('agent setup sends one fixed instruction and reports rejection without saving setup', async () => {
+  for (const outcome of ['success', 'rejected', 'unsupported']) {
+    const u = await ui(undefined, undefined, { sendMessage: async () => {
+      if (outcome === 'unsupported') throw new Error('untrusted error');
+      return outcome === 'rejected' ? { isError: true } : {};
+    } });
+    assert.equal(u.messages.length, 0, 'no model turn on open');
+    await u.click('agent-setup');
+    assert.equal(u.messages.length, 1);
+    assert.equal(u.messages[0].role, 'user');
+    assert.match(u.messages[0].content[0].text, /osm_connection/);
+    assert.equal(u.calls.length, 0, 'handoff cannot save navigation or grant access');
+    assert.match(u.text('feedback-text'), outcome === 'success' ? /Continue in chat/ : /could not start the chat/);
+    assert.equal(u.text('feedback-text').includes('untrusted error'), false);
+  }
+});
+
+
+test('human connection guide checks OSM explicitly and cancels without changing setup', async () => {
+  const u = await ui();
+  await u.click('connect-osm');
+  assert.equal(u.get('connection-dialog').open, true);
+  assert.equal(u.calls.length, 0, 'opening guide does not read credentials or start a model');
+  await u.click('connection-check');
+  assert.deepEqual(u.names(), ['osm_connection']);
+  assert.match(u.text('connection-state'), /could not be checked/);
+  await u.click('connection-close');
+  assert.equal(u.get('connection-dialog').open, false);
+  assert.equal(u.messages.length, 0);
+  assert.equal(u.status.context.state, 'missing');
+});
+
+
+test('collapsed Browse reads the selected page without fetching hidden source lists', async () => {
+  const u = await ui(configured(), saved({}), { navigation: false, home: async name => ({ _meta: {
+    'osm/home': { state: 'ready', mapping: 'saved', scope: 'quiet-home', context: target,
+      root: { title: 'Fictional home', link: target }, sections: [{ key: 'knowledge', label: 'Knowledge', role: 'documents' }], builtin: [] },
+    'osm/home-list': { state: 'empty', scope: 'quiet-home' }
+  } }) });
+  await settle();
+  assert.ok(u.homeCalls.some(call => call.name === 'osm_home'));
+  assert.equal(u.homeCalls.some(call => call.name === 'osm_home_list'), false);
+  u.get('home-navigation').open = true; await u.get('home-navigation').dispatch('toggle'); await settle();
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_list').length, 1);
 });

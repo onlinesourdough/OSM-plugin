@@ -12,7 +12,9 @@ export function pageIcon(value) {
   else if (value?.type === 'icon' && typeof value.icon?.name === 'string' && typeof value.icon?.color === 'string'
       && /^[a-z0-9_-]+$/.test(value.icon.name) && /^[a-z]+$/.test(value.icon.color)) value = `/icons/${value.icon.name}_${value.icon.color}.svg`;
   else if (value?.type === 'external') value = value.external?.url;
-  if (typeof value !== 'string' || value.length > 512) return null;
+  if (typeof value !== 'string') return null;
+  if (value.length <= 90000 && /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/.test(value)) return value;
+  if (value.length > 512) return null;
   if (/^(?:\p{Extended_Pictographic}|\p{Regional_Indicator}|\p{Emoji_Modifier}|[\u200d\ufe0f\u20e3]|[0-9#*])+$/u.test(value) && /\p{Extended_Pictographic}|\p{Regional_Indicator}|\u20e3/u.test(value)
       && [...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(value)].length === 1) return value;
   try {

@@ -16,7 +16,7 @@ try {
   await client.connect(transport);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources',
-    'osm_home', 'osm_home_list', 'osm_home_read', 'osm_save_home_projection']);
+    'osm_home', 'osm_home_list', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection']);
   assert.deepEqual(tools[0]._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
   for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_home', 'osm_home_list', 'osm_home_read']) {
     assert.deepEqual(tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
@@ -74,7 +74,7 @@ try {
   const metadata = await client.callTool({ name: 'osm_sources', arguments: {} });
   assert.deepEqual(JSON.parse(metadata.content[0].text).sources.links, links);
   assert.equal(JSON.parse(metadata.content[0].text).home.state, 'missing');
-  // No host declares a secret mechanism yet: Home reports that and reads nothing.
+  // Without explicit credential opt-in, Home and agent tools report unsupported and read nothing.
   const home = await client.callTool({ name: 'osm_home', arguments: {} });
   assert.equal(home._meta['osm/home'].state, 'unsupported_host');
   // L-2: the bundled server's status names the context it was read for.
@@ -82,6 +82,15 @@ try {
   assert.deepEqual(home.content, []);
   assert.ok(home._meta['osm/home'].builtin.some(skill => skill.name === 'osm-setup'));
   assert.equal((await client.callTool({ name: 'osm_home_list', arguments: { section: 'memory' } }))._meta['osm/home-list'].state, 'unsupported_host');
+  const connection = JSON.parse((await client.callTool({ name: 'osm_connection', arguments: {} })).content[0].text);
+  assert.equal(connection.state, 'unsupported_host');
+  assert.equal(connection.accessInventory, 'mapped-sources-only');
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_list', arguments: { section: 'memory' } })).content[0].text).state, 'unsupported_host');
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_read', arguments: { section: 'memory', id: '00000000000000000000000000000001' } })).content[0].text).state, 'unsupported_host');
+  for (const name of ['osm_context_list', 'osm_context_read']) {
+    assert.equal(tools.find(tool => tool.name === name)._meta?.ui?.visibility?.includes('app'), undefined);
+    assert.equal(tools.find(tool => tool.name === name).annotations.readOnlyHint, true);
+  }
   const at = '2026-10-26T12:00:00.000Z', fictional = n => n.toString(16).padStart(32, '0');
   const projection = { definition: { id: fictional(0xd01), title: 'Fictional AI Operating Model', revision: 'fictional-r1', generatedAt: at },
     selectedMode: 'official_notion_user',

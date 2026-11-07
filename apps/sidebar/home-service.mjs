@@ -2,18 +2,11 @@ import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { classifyTarget } from './target.mjs';
-import { createNotionClient, NotionReadError, notionId, pageTitle, propertyText, readBlocks, textProperties, readLimits } from './notion-internal.mjs';
+import { createNotionClient, NotionReadError, notionId, pageTitle, plainText, propertyText, readBlocks, textProperties, readLimits } from './notion-internal.mjs';
 
-// The host secret mechanisms OSM may read its internal Notion token from. Each entry
-// needs a documented, supported secure store that injects the value into this
-// process. None is declared in this release, so every host reports unsupported:
-// - Codex: stdio MCP servers receive `env`/`env_vars` from config.toml or Codex's
-//   own environment; no secure store is documented for stdio servers.
-// - Claude Code: a plugin's `userConfig` option with `sensitive: true` is kept in the
-//   platform credential store and substituted into its MCP server `env`, but OSM
-//   declares no Claude MCP server yet (#61/#82).
-// OSM never writes, prompts for or accepts a token itself.
-export function hostCredential() { return { state: 'unsupported_host' }; }
+import { readPageIcon } from './notion-icons.mjs';
+import { hostCredential } from './credential.mjs';
+export { hostCredential } from './credential.mjs';
 
 const roleNouns = { profile: 'Profile', memory: 'Memory', documents: 'Document', skills: 'Personal skill' };
 const fieldHeadings = { fact: 'Fact', decision: 'Decision', why: 'Why', evidence: 'Evidence' };
@@ -46,6 +39,7 @@ export function createHomeService({ credential = hostCredential, transport, read
     if (mapping.state === 'saved' && mapping.projection.selectedMode !== 'internal_selected_pages') return { mapping, state: 'official_mode' };
     const secret = await credential();
     if (secret?.state === 'unsupported_host') return { mapping, state: 'unsupported_host' };
+    if (secret?.state === 'unavailable') return { mapping, state: 'unavailable' };
     if (secret?.state !== 'available') return { mapping, state: 'not_connected' };
     let client, identity;
     try { client = createNotionClient({ token: secret.token, transport }); identity = await client.identity(); }
@@ -117,6 +111,14 @@ export function createHomeService({ credential = hostCredential, transport, read
     }
   }
 
+  // Agent and Home share this service, credential and verified identity. No
+  // raw token or external connector identity crosses the tool boundary.
+  async function connection() {
+    const session = await open();
+    return { state: session.state, ...(session.identity && { connection: session.identity }),
+      credentialRoute: 'macos-keychain-opt-in', accessInventory: 'mapped-sources-only' };
+  }
+
   async function status() {
     const checkedAt = new Date().toISOString();
     const session = await open();
@@ -129,13 +131,14 @@ export function createHomeService({ credential = hostCredential, transport, read
     const { root, sections } = saved;
     // Connected requires this identity and a successful read of the mapped root now.
     // A trashed root is not a readable Home.
-    try { if ((await session.client.page(root.id)).in_trash) return { ...base, state: 'root_inaccessible' }; }
+    let rootPage;
+    try { rootPage = await session.client.page(root.id); if (rootPage.in_trash) return { ...base, state: 'root_inaccessible' }; }
     catch (error) {
       const problem = failed(error);
       return { ...base, state: problem.state === 'inaccessible' ? 'root_inaccessible' : problem.state, ...(problem.retryAfter && { retryAfter: problem.retryAfter }) };
     }
     const support = sections.filter(item => item.role === 'support').length;
-    return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: root.title, link: root.link },
+    return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: pageTitle(rootPage) || root.title, link: root.link },
       sections: sections.filter(item => item.role !== 'support').map(item => ({ key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
         ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) })), ...(support && { supportHidden: support }) };
   }
@@ -154,7 +157,7 @@ export function createHomeService({ credential = hostCredential, transport, read
           try {
             const value = await session.client.page(page.id);
             const where = value.in_trash ? 'trash' : await containment(session, page.id, value.parent, walk);
-            if (where === 'support') excluded++; else if (where !== 'clear') denied++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled' });
+            if (where === 'support') excluded++; else if (where !== 'clear') denied++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled', icon: await readPageIcon(value.icon) });
           } catch (error) { if (failed(error).state !== 'inaccessible') throw error; denied++; }
         }
         const notes = excluded ? { supportExcluded: excluded } : {};
@@ -170,6 +173,7 @@ export function createHomeService({ credential = hostCredential, transport, read
       if (where !== 'clear') return { state: 'unsupported', scope: session.scope, contained: where };
       const types = Object.fromEntries(Object.entries(schema.properties || {}).map(([name, value]) => [name, value?.type]));
       if (types[item.fields.title] !== 'title') return { state: 'unsupported', scope: session.scope };
+      const source = { title: plainText(schema.title).trim().slice(0, 200) || item.label, icon: await readPageIcon(schema.icon) };
       const description = item.fields.description && textProperties.has(types[item.fields.description]) ? item.fields.description : undefined;
       const result = await session.client.query(target.id, { filter: item.view?.filter, sorts: item.view?.sorts, cursor,
         size: readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
@@ -179,15 +183,15 @@ export function createHomeService({ credential = hostCredential, transport, read
       const places = [];
       for (const page of rows) places.push(await containment(session, notionId(page.id), page.parent, walk));
       const excluded = places.filter(place => place === 'support').length, withheld = places.filter(place => place === 'unresolved').length;
-      const items = rows.filter((page, index) => places[index] === 'clear')
-        .slice(0, readLimits.pageSize).map(page => {
+      const items = await Promise.all(rows.filter((page, index) => places[index] === 'clear')
+        .slice(0, readLimits.pageSize).map(async page => {
           const text = description ? propertyText(page.properties?.[description]).trim().slice(0, 300) : '';
-          return { id: notionId(page.id), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
-        });
+          return { id: notionId(page.id), icon: await readPageIcon(page.icon), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
+        }));
       const next = result.has_more && typeof result.next_cursor === 'string' && result.next_cursor.length <= 200 ? result.next_cursor : undefined;
       const notes = { ...(result.request_status?.type === 'incomplete' && { partial: true }), ...(excluded && { supportExcluded: excluded }), ...(withheld && { withheld }) };
-      if (!items.length && !cursor && !next) return { state: 'empty', scope: session.scope, ...notes };
-      return { state: 'listed', scope: session.scope, items, hasMore: Boolean(next), ...(next && { cursor: next }), ...notes };
+      if (!items.length && !cursor && !next) return { state: 'empty', scope: session.scope, source, ...notes };
+      return { state: 'listed', scope: session.scope, source, items, hasMore: Boolean(next), ...(next && { cursor: next }), ...notes };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
   }
 
@@ -233,9 +237,24 @@ export function createHomeService({ credential = hostCredential, transport, read
       }
       const { blocks, truncated } = await readBlocks(session.client, recordId);
       const noun = roleNouns[item.role];
-      return { state: 'read', scope: session.scope, record: { title, meta: noun.toLowerCase() === item.label.toLowerCase() ? item.label : `${item.label} · ${noun}`,
+      return { state: 'read', scope: session.scope, record: { title, icon: await readPageIcon(page.icon), meta: noun.toLowerCase() === item.label.toLowerCase() ? item.label : `${item.label} · ${noun}`,
         fields, blocks, truncated, ...(cut && { fieldsTruncated: true }), link: safeLink(page.url, target.link) } };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
   }
-  return { status, list, read };
+  async function page() {
+    const session = await open();
+    if (session.state !== 'ready') return { state: session.state };
+    try {
+      const root = session.mapping.projection.root;
+      const value = await session.client.page(root.id);
+      if (value.in_trash) return { state: 'root_inaccessible', scope: session.scope };
+      const content = await readBlocks(session.client, root.id);
+      return { state: 'read', scope: session.scope, record: { title: pageTitle(value) || root.title,
+        icon: await readPageIcon(value.icon), meta: 'Data & Context', fields: [], ...content, link: root.link } };
+    } catch (error) {
+      const result = failed(error);
+      return { ...result, state: result.state === 'inaccessible' ? 'root_inaccessible' : result.state, scope: session.scope };
+    }
+  }
+  return { connection, status, list, read, page };
 }
