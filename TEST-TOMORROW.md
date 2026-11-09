@@ -32,11 +32,13 @@ port (the fixture prints its URL):
 Canonical guide: [design.md](design.md). Native Paper **3438e04fc0d64ffe**,
 project library repo: start at **R0 · Revision 9 Nov · start here**.
 Five new pages add 18 artboards; all nine earlier pages are preserved.
-There are 14 pages and 65 boards in total. All new design and UX decisions were
-authored and rendered browser corrections reviewed by actual Claude Opus 5.5,
-High, Fast off. Implementation ran on GPT-6.1 Sol Medium.
+There are 15 pages and 68 boards in total. R5 carries Setup’s approved style
+to Home and Settings. Opus 5.5 High/Fast off authored that design. Its new
+post-implementation render review hit the SDK session limit and is pending.
+The earlier GPT implementation checkpoint was preserved; actual Sonnet 5.5
+High completed this correction. GPT-6.1 Sol Medium performs final independent review.
 
-The latest implementation check passed 224 sidebar tests and bundled stdio
+The latest implementation check passed 228 sidebar tests and bundled stdio
 smoke. Generated runtime matched an independent rebuild. Package/documentation,
 onboarding, layout, continuity, skill-version, footprint, responsibility,
 context architecture and consumer-selection checks passed. Exact private

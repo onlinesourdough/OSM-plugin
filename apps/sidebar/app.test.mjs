@@ -746,10 +746,10 @@ async function nextSourcePage(u, key) {
 test('Home previews three titles in stable definition order and opens a named source list', async () => {
   const u = await homeUi();
   assert.equal(u.shown('home-status'), false); assert.equal(u.shown('dashboard'), false);
-  const titles = u.nodes().filter(node => node.getAttribute('class') === 'section-title').map(node => node.textContent);
+  const titles = u.nodes().filter(node => node.getAttribute('class') === 'source-head').map(node => node.textContent);
   assert.deepEqual(titles, ['About your business', 'Memory', 'Business Docs', 'Skills']);
   assert.ok(u.panel().includes('Keep meeting decisions')); assert.equal(u.panel().includes('Review the offer'), false);
-  await u.press('Open Memory ›'); assert.ok(u.panel().includes('Review the offer'));
+  await u.press('Open Memory'); assert.ok(u.panel().includes('Review the offer'));
   assert.ok(u.panel().includes('Load more from Memory')); await u.press('‹');
   assert.equal(u.focused(), 'source-memory');
   assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
@@ -759,7 +759,7 @@ test('Home previews three titles in stable definition order and opens a named so
 
 test('overview has no root body; activating the actual root title opens its reader', async () => {
   const u = await homeUi();
-  assert.equal(u.get('home-page').textContent, 'Fictional OSM');
+  assert.equal(u.get('heading').textContent, 'Fictional OSM');
   assert.equal(u.homeCalls.some(call => call.name === 'osm_home_page'), false);
   await u.click('home-root-title'); await settle();
   assert.equal(u.text('reader-title'), 'Fictional Data & Context');
@@ -797,7 +797,7 @@ test('Skills descriptions remain text and built-in methods live in Settings', as
   assert.equal(u.nodes().some(node => node.tagName === 'IMG'), false);
   assert.equal(/\bRun\b|Enabled|Available/.test(u.panel()), false);
   assert.equal(u.panel().includes('osm-setup'), false);
-  await u.click('settings'); assert.ok(u.text('builtin-content').includes('osm-setup — Set up or resume OSM.'));
+  await u.click('settings'); assert.ok(u.text('builtin-content').includes('osm-setup')); assert.ok(u.text('builtin-content').includes('Set up or resume OSM.'));
 });
 
 test('gates: unsupported host with a mapping, not connected and unmapped; saved links stay reachable', async () => {
@@ -833,7 +833,7 @@ test('an account or scope change drops earlier lists and reads the new mapping',
   const u = await homeUi();
   assert.ok(u.panel().includes('About Fictional Studio'));
   Object.assign(u.host.s, { listState: 'inaccessible', listScope: 'scope-2', scope: 'scope-2', generation: 2 });
-  await u.press('Open Memory ›');
+  await u.press('Open Memory');
   await u.click('refresh'); await settle();
   Object.assign(u.host.s, { listState: null, listScope: null });
   await u.click('refresh'); await settle();
@@ -859,16 +859,22 @@ test('a context switch clears Home before the new context loads', async () => {
   assert.equal(u.panel().includes('About Fictional Studio'), false); assert.equal(u.text('gate-title'), 'Continue OSM Setup');
 });
 
-test('Home styles keep the approved quiet layout at 500 and 320 pixels', async () => {
-  const css = await read('styles.css');
-  const query = width => css.split('\n').find(line => line.startsWith(`@media (max-width: ${width}px)`)) || '';
-  assert.match(query(520), /\.home-title/); assert.match(query(380), /\.home-footer \{[^}]*flex-wrap: wrap/);
-  const home = css.slice(css.indexOf('/* Home'));
-  assert.ok(home.length > 200);
-  // Only the selected tab draws a line; rows, sections and the footer have no dividers or cards.
-  const borders = [...home.matchAll(/([^{}]+)\{([^}]*border(?:-(?:top|bottom))?:(?!\s*(?:0|none)\b)[^;}]+)/g)].map(match => match[1].trim());
-  assert.deepEqual(borders, ['.tab[aria-selected="true"]']);
-  assert.doesNotMatch(home, /box-shadow|\.osm-card/);
+test('Home groups sources into one card with noninteractive heads and usable record controls', async () => {
+  const u = await homeUi();
+  const cards = u.nodes().filter(node => node.getAttribute('class') === 'osm-card');
+  assert.equal(cards.length, 1);
+  assert.equal(cards[0].children.length, 4);
+  for (const section of cards[0].children) {
+    assert.equal(section.children[0].tagName, 'H3');
+    assert.equal(section.children[0].descendants().some(node => node.tagName === 'BUTTON'), false);
+  }
+  const record = u.buttonNamed('Fixed scope before retainers');
+  assert.ok(record); record.focus(); await record.dispatch('keydown', { key: 'ArrowDown' });
+  assert.equal(u.document.activeElement.dataset.open, 'm1');
+  await u.document.activeElement.dispatch('keydown', { key: 'ArrowUp' });
+  assert.equal(u.document.activeElement.dataset.open, 'm0');
+  await u.document.activeElement.dispatch('click'); await settle();
+  assert.equal(u.text('reader-title'), 'Fixed scope before retainers');
 });
 
 test('a failed Home check without a mapping keeps the saved links; a supported host without a connection offers the connect gate', async () => {
@@ -1853,7 +1859,7 @@ test('human connection guide checks OSM explicitly and cancels without changing 
 test('overview requests mapped title lists without fetching root blocks', async () => {
   const u = await homeUi();
   assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_list').length, 4);
-  assert.equal(u.get('home-page').textContent, 'Fictional OSM');
+  assert.equal(u.get('heading').textContent, 'Fictional OSM');
   assert.equal(u.messages.length, 0);
 });
 
@@ -1905,12 +1911,22 @@ test('visibility refresh is event-driven, throttled to 30 seconds, and keeps old
   u.advance(30000); await visibility('hidden'); await visibility('visible'); assert.equal(count(), 3);
   await settle(); assert.equal(count(), 3);
 });
-test('wide overview shows four preview rows with source action only when more exist', async () => {
-  const base = homeHost(), u = await ui(configured(), homeSources, { home: base.handler, wide: true }); await settle();
-  assert.ok(u.text('home-panel').includes('Review the offer'));
-  const noMore = homeHost(); const handler = (name, args) => { const result = noMore.handler(name, args); if (name === 'osm_home_list') result._meta['osm/home-list'].hasMore = false; return result; };
-  const v = await homeUi({ s: noMore.s, handler });
-  assert.equal(v.buttonNamed('Open About your business'), undefined); assert.ok(v.buttonNamed('Open Memory'));
+test('compact and wide preview three rows and Open Memory reveals all four even without a cursor', async () => {
+  for (const wide of [false, true]) {
+    const base = homeHost();
+    const handler = (name, args) => { const result = base.handler(name, args); if (name === 'osm_home_list') result._meta['osm/home-list'].hasMore = false; return result; };
+    const u = await ui(configured(), homeSources, { home: handler, wide }); await settle();
+    const panel = () => u.get('home-panel').textContent;
+    assert.ok(panel().includes('Keep meeting decisions')); assert.equal(panel().includes('Review the offer'), false);
+    const before = u.homeCalls.length;
+    assert.ok(u.get('source-about'), 'listed two-row source still has Open');
+    assert.equal(u.get('source-docs'), null, 'denied source has no Open');
+    await u.click('source-memory'); await settle();
+    assert.ok(panel().includes('Review the offer')); assert.equal(panel().includes('Load more from Memory'), false);
+    assert.equal(u.homeCalls.length, before, 'opening a source uses its existing verified list');
+    const back = u.get('home-panel').descendants().find(node => node.tagName === 'BUTTON' && node.textContent === '‹');
+    await back.dispatch('click'); await settle(); assert.equal(u.focused(), 'source-memory');
+  }
 });
 
 test('in-flight title searches coalesce to the newest query and stale text never replaces it', async () => {
@@ -1970,7 +1986,7 @@ test('connected Settings shows verified home value, minute check time and only t
   for (const id of ['settings-connection', 'connection-provisioning', 'organisation-copy', 'saved-links', 'settings-footer']) assert.equal(u.shown(id), false, id);
   for (const id of ['manage-access', 'home-recheck', 'settings-main']) assert.equal(u.shown(id), true, id);
   assert.equal(u.get('settings-context-picker').children[0].children[1].textContent, 'Verified sample home');
-  assert.ok(u.text('settings-context-picker').endsWith('Change ›'));
+  assert.equal(u.text('settings-context-picker'), '📚Verified sample home');
   assert.match(u.text('home-definition'), /^Definition revision fictional-r1 routes Home to 4 sources\. It routes; access comes from OSM’s connection\.$/);
 });
 
@@ -2083,8 +2099,12 @@ test('source list reuses the reader bar with a named Home back action and inline
   const bar = u.nodes().find(node => node.getAttribute('class') === 'reader-bar');
   assert.equal(bar.children[0].getAttribute('class'), 'reader-leading');
   assert.equal(bar.children[0].children[0].getAttribute('aria-label'), 'Back to Home');
-  assert.equal(u.shown('page-header'), false); await u.press('‹'); assert.equal(u.shown('page-header'), true);
-  assert.match(await read('styles.css'), /#home-panel > h2 \{[^}]*display: flex;[^}]*align-items: center;[^}]*gap: 8px/);
+  assert.equal(u.shown('page-header'), false);
+  const title = u.get('home-panel').children.find(node => node.tagName === 'H2');
+  assert.equal(title.getAttribute('class'), 'source-title-h');
+  assert.equal(title.children[0].className, 'source-icon');
+  assert.equal(title.children[1].textContent, 'Verified source');
+  await u.press('‹'); assert.equal(u.shown('page-header'), true);
 });
 
 test('pending located read settles after Back without reopening; failures expose only approved recovery', async () => {
@@ -2199,11 +2219,11 @@ test('missing search answers show Searching only while pending and never assert 
   assert.ok(u.panel().includes('Searched About your business, Memory, Business Docs, Skills.'));
 });
 
-test('recheck clears the query and its debounce, and media changes rerender the 3/4 previews without reads', async () => {
+test('recheck clears the query and its debounce, and media changes retain three previews without reads', async () => {
   const u = await homeUi(); await enterHomeSearch(u, 'scope'); await u.click('home-recheck');
   assert.equal(u.get('home-search').value, ''); assert.ok(u.panel().includes('Weekly client update'));
   const before = u.homeCalls.length;
-  u.resize(true); assert.ok(u.panel().includes('Review the offer')); u.resize(false); assert.equal(u.panel().includes('Review the offer'), false);
+  u.resize(true); assert.equal(u.panel().includes('Review the offer'), false); u.resize(false); assert.equal(u.panel().includes('Review the offer'), false);
   assert.equal(u.homeCalls.length, before);
   u.get('home-search').value = 'cancelled'; await u.get('home-search').dispatch('input'); await u.click('home-recheck');
   const searches = u.homeCalls.filter(call => call.name === 'osm_home_search').length;
@@ -2220,7 +2240,7 @@ test('connection-ended gate is human-first with one primary; organisation copy i
       assert.equal(u.text('gate-copy'), 'OSM isn’t connected to Notion, or its connection was removed, so nothing from your home is shown.');
       assert.equal(u.text('gate-connect'), 'Open connection settings');
       assert.equal(u.get('gate-connect').getAttribute('class'), 'btn btn-primary');
-      for (const id of ['gate-action', 'gate-setup']) assert.equal(u.get(id).getAttribute('class'), 'text-button');
+      for (const id of ['gate-action', 'gate-setup']) assert.equal(u.get(id).getAttribute('class'), 'btn btn-ghost');
       assert.equal(u.text('gate-action'), 'Show saved links'); assert.equal(u.text('gate-setup'), 'Get help from your agent');
       assert.equal(u.get('settings-connection').getAttribute('class'), 'btn btn-primary');
       assert.equal(u.messages.length, 0);
@@ -2261,4 +2281,78 @@ test('failed searched-source answers never provide a title or icon for a heading
   await enterHomeSearch(u, 'unmatched');
   assert.ok(u.panel().includes('Business Docs couldn’t be searched right now'));
   assert.doesNotMatch(u.panel(), /Denied metadata title|🚫|No titles|Searching/);
+});
+
+
+test('Built into OSM expands and collapses locally with metadata and no execution claims', async () => {
+  const u = await homeUi(); await u.click('settings');
+  const calls = plain(u.homeCalls), names = u.names(), messages = u.messages.length;
+  assert.equal(u.text('builtin-summary'), '2 methods');
+  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'false');
+  assert.equal(u.get('builtin-toggle').getAttribute('aria-controls'), 'builtin-panel');
+  assert.equal(u.shown('builtin-panel'), false);
+  u.get('builtin-toggle').focus(); await u.click('builtin-toggle');
+  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'true');
+  assert.equal(u.shown('builtin-panel'), true);
+  assert.equal(u.focused(), 'builtin-toggle');
+  assert.ok(u.text('builtin-content').includes('osm-setup'));
+  assert.ok(u.text('builtin-content').includes('Set up or resume OSM.'));
+  assert.ok(u.text('builtin-panel').includes('Reading a method here doesn’t run it.'));
+  assert.doesNotMatch(u.text('builtin-content'), /Enabled|Available|Run/);
+  assert.equal(u.get('settings-main').descendants().some(node => node.tagName === 'DETAILS'), false);
+  assert.equal(u.text('saved-links-summary'), 'Docs');
+  await u.click('builtin-toggle');
+  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'false');
+  assert.equal(u.shown('builtin-panel'), false);
+  assert.deepEqual(plain(u.homeCalls), calls); assert.deepEqual(u.names(), names); assert.equal(u.messages.length, messages);
+});
+
+test('Built into OSM summary counts methods with the correct singular and still expands one entry', async () => {
+  for (const [builtin, label] of [[[{ name: 'osm-write-code', description: 'Write and verify code.' }], '1 method'], [[], '0 methods']]) {
+    const base = homeHost();
+    const u = await homeUi({ ...base, handler: (name, args) => {
+      const result = base.handler(name, args);
+      if (name === 'osm_home') result._meta['osm/home'].builtin = builtin;
+      return result;
+    } });
+    await u.click('settings');
+    assert.equal(u.text('builtin-summary'), label);
+    await u.click('builtin-toggle');
+    assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'true');
+    assert.equal(u.text('builtin-content').includes('osm-write-code'), builtin.length === 1);
+  }
+});
+
+test('header uses verified root icon and title and removes both after account change or root denial', async () => {
+  for (const state of ['account_changed', 'root_inaccessible']) {
+    const base = homeHost();
+    const u = await homeUi({ ...base, handler: (name, args) => {
+      const result = base.handler(name, args);
+      // Even a bad failure answer must not supply header metadata.
+      if (name === 'osm_home') result._meta['osm/home'].root = { title: 'Verified sample home', icon: '📚', link: target };
+      return result;
+    } });
+    assert.equal(u.text('heading'), 'Verified sample home'); assert.equal(u.text('brand-mark'), '📚');
+    assert.equal(u.get('heading').children[0].id, 'home-root-title');
+    assert.equal(u.text('home-page'), '');
+    base.s.state = state; await u.click('home-recheck'); await settle();
+    assert.equal(u.text('heading'), u.text('gate-title'));
+    assert.equal(u.text('heading').includes('Verified sample home'), false);
+    assert.equal(u.text('brand-mark'), ''); assert.equal(u.shown('brand-mark'), false);
+    assert.equal(u.get('heading').descendants().some(node => node.id === 'home-root-title'), false);
+    const ids = u.get('home').parentNode.descendants().map(node => node.id).filter(Boolean);
+    assert.equal(new Set(ids).size, ids.length, 'all mounted IDs remain unique');
+  }
+});
+
+test('empty and denied sources retain their truthful state and have no source Open action', async () => {
+  const base = homeHost();
+  const u = await homeUi({ ...base, handler: (name, args) => name === 'osm_home_list' && args.section === 'memory'
+    ? { _meta: { 'osm/home-list': { state: 'empty', scope: base.s.scope, source: { title: 'Actual decisions', icon: '📒' }, items: [] } } }
+    : base.handler(name, args) });
+  assert.ok(u.panel().includes('Actual decisions')); assert.ok(u.panel().includes('Nothing here yet.'));
+  assert.equal(u.buttonNamed('Open Actual decisions'), undefined);
+  assert.equal(u.buttonNamed('Open Business Docs'), undefined);
+  assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
+  assert.ok(u.buttonNamed('How to share it ›'));
 });

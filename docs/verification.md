@@ -1957,3 +1957,84 @@ Keychain-backed lookup and used the supplied bounded brief without an alternate
 credential or source. No new grant, account, credential, normal-profile
 activation, Notion write, public push or release occurred. The inherited
 publisher hold remains unchanged; #74/#82 remain open for native/live adoption.
+
+## 9 November 2026 — Setup-foundation cohesion on Home and Settings (#74/#82)
+
+Implemented the owner's cohesion feedback from the finished Opus design (R5 and
+the guide's Shared foundation): Setup is the visual source, and Home, the source
+list, reader, gates and Settings now use its type, `.btn`/`.form-control`
+controls, `.osm-card` rows and state grammar. The earlier GPT checkpoint
+(root icon/title in the page header, one source card with non-interactive heads,
+reader/gate/Settings controls, removal of Home's own type and button overrides,
+the Built into OSM card row, and adapted tests) was continued, not restarted.
+Completed in this pass by the Sonnet 5.5 implementer: the one failing adapted
+test (it opened a record the fixture does not define) now exercises keyboard
+movement and opens a real record; the Built into OSM summary uses the correct
+singular (`1 method`, `N methods`); the expanded row keeps a pointer cursor and
+hover because, unlike a Setup step, it collapses again; and `docs/sidebar.md`
+describes the new Home and Settings.
+
+Every listed, non-empty source ends with `Open ‹Source›` at every width, so
+Memory keeps its link when it has exactly the preview count (three rows at all
+widths) and opens the full verified list without another read. Empty sources
+show "Nothing here yet." and denied, unsupported, rate-limited or unavailable
+sources keep their state line, each without an Open action. Built into OSM
+expands and collapses locally (`aria-expanded`, no tool call, message or
+network) over the installed package's existing method metadata, with no run,
+enable or ownership claim. Identity/scope/account suppression, missing-scope
+invalidation, the recovery budget, support exclusion, link Back safe-row,
+incomplete-search and query-lifetime rules were not changed; a test confirms
+the header's root title and icon disappear on account change and root denial.
+
+On Node.js 22, `npm test --prefix apps/sidebar` passed **228 tests, zero
+failures** (the previous 224 plus the new behavior tests, with two superseded
+CSS/layout-mirror tests replaced by behavior tests), then the bundled stdio
+smoke. `npm run build --prefix apps/sidebar` regenerated only
+`runtime/sidebar/index.html`; two further builds produced identical SHA-256
+hashes for all three runtime files. `python3 tests/validate.py` passed its
+package/isolation/security checks, `python3 tests/documentation-rehearsal.py`
+passed all seven tests, and `git diff --check` passed. Existing dependencies were
+used; npm ci was not run, and unrelated rehearsals were not repeated. The
+inherited publisher hold, versions,
+manifests and public bindings were not edited; `design.md` and the Paper were
+preserved exactly.
+
+This is local implementation and test evidence in a synthetic browser fixture.
+It does not include a fresh designer render review, which the coordinator
+requests separately, and the earlier synthetic acceptance does not cover the new
+expression. Native Codex UI, clipboard and visibility events, live Notion, OAuth,
+Paper pixel rendering, installation and release remain unqualified. No
+credentials, account, grants, profile, external records, commit, push or release
+were changed.
+
+## 9 November 2026 — coordinator browser check of Setup cohesion
+
+The latest owner feedback selected Setup as the visual source for Home and
+Settings and requested a persistent Open Memory action. Opus 5.5 High/Fast off
+authored the canonical correction and R5 Paper page before implementation.
+The first GPT Medium implementation was stopped when the owner selected
+Sonnet 5.5 High for implementation and GPT-6.1 Sol Medium for final review.
+Its source checkpoint and raw transcript were preserved. Actual Sonnet 5.5
+High resumed the existing Claude design history, completed the checkpoint and
+passed 228 tests plus stdio and an identical rebuild. Prior GPT edits are not
+relabeled as Sonnet-authored.
+
+The coordinator verified the new browser fixture: Open Memory appears with four
+records, opens all four without another list request, reader Back restores its
+opener and source Back focuses Open Memory. The custom Built into OSM row
+expands/collapses its panel and aria-expanded, with no native triangle or extra
+chevron. Setup's approved numbered and filled step circles are preserved.
+Light/dark and compact/wide screenshots are retained privately.
+
+Computed browser styles match: Setup, Home, source and reader titles use the
+same host sans family at 24px/600, with Setup/Home/gate titles 22px/600 at compact.
+Continue and Open Memory both use that family, 13px/500, 32px height and 8px
+radius. This is measured browser evidence, not a CSS-string assertion.
+
+The post-implementation Opus screenshot review was actually rejected by the
+SDK session limit, with reset reported for 18:20 Europe/Copenhagen. No further
+Claude probe, quota reset, payment or substitute designer was used. Fresh
+visual acceptance of R5 therefore remains pending. The Saved links row's
+short summary can repeat “Personal”; that small copy issue awaits the designer.
+Native Paper pixels, native Codex behavior, live Home, OAuth and release remain
+unqualified. Publisher, credentials, grants and normal profiles are unchanged.

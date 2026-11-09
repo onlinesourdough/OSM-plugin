@@ -6,10 +6,14 @@ Revision: 2026-11-09
 
 Home is an overview of the selected Data & Context home's definition-routed
 sources, in deterministic projection order. The verified root title and icon
-open the root reader; its body is never loaded on the overview. Sections use
-verified source titles/icons, with three compact or four wide preview rows from
-the first list response. Named “Open ‹source› ›” actions open the full source
-list, with explicit cursor pagination and the existing 50-row display cap.
+open the root reader; its body is never loaded on the overview. Home uses
+Setup's type, controls and card vocabulary: one 600px column and one card whose
+sections show verified source titles/icons and up to three preview rows from the
+first list response at every width. Every successfully listed, non-empty source
+ends with a named “Open ‹source›” action, even when the preview already shows
+all rows, and it opens the full source list with explicit cursor pagination and
+the existing 50-row display cap. Empty sources say so and denied, unsupported or
+unavailable ones keep their state line; neither gets an Open action.
 Related routes only open Notion; support material is excluded from Home and
 search. Routing and its revision-bound projection cache confer no access.
 
@@ -29,8 +33,11 @@ otherwise a selected URL input supports manual copy. Native clipboard and panel
 visibility events still require host qualification.
 
 The gear opens Settings with Notion connection status and actual checked time,
-Data & Context home and its existing Change picker, Saved links, the optional
-separate plugin, built-in methods, and explicit agent help. Saved links editing
+Data & Context home in its bordered context picker, a card with Saved links and
+a Built into OSM row (an `aria-expanded` row that lists the installed package's
+existing method names and descriptions locally, with a “1 method”/“N methods”
+summary and no run, enable or ownership controls), the optional separate plugin,
+and explicit agent help. Saved links editing
 is confined to Settings and manual Setup; it neither grants nor revokes access.
 Healthy Home has no connection pill or link editor. Access refresh runs on open,
 context change, explicit retry, return from a hidden panel (at most once per

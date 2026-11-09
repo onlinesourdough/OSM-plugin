@@ -8,18 +8,23 @@ second editable Notion and not a Notion clone.
 
 Revision 9 November 2026 follows accepted owner feedback: Home resembles the
 official Notion plugin's simple content experience, but scoped to the selected
-home instead of global recents, favorites or greetings. The setup foundation and
-Settings structure are preserved. Public examples are fictional. Preserve
-original page names, hierarchy, text, icons and stores; never infer a role from a
-title.
+home instead of global recents, favorites or greetings. Setup is the approved
+visual source. Home, the source list, the reader, gates and Settings use its
+palette, type, weights, radius, rhythm and state grammar (see
+[Shared foundation](#shared-foundation-setup)), so the product keeps one
+expression from first use to daily reading. Public examples are fictional.
+Preserve original page names, hierarchy, text, icons and stores; never infer a
+role from a title.
 
 ## Editable source and scope
 
 OpenPaperDesign Paper **3438e04fc0d64ffe**, project library `repo`, is saved in
 [Paper/3438e04fc0d64ffe/paper.json](Paper/3438e04fc0d64ffe/paper.json). Open it
 through the native Paper Home project library and start at page
-`R0 · Revision 9 Nov · start here`. Pages R1–R4 hold this revision; pages
-00–05 and the three Reference pages are preserved earlier versions.
+`R0 · Revision 9 Nov · start here`. Pages R1–R4 hold this revision's flows and
+states. Page R5 shows the Setup foundation carried to Home and Settings and
+governs the visual expression wherever it differs from R1–R4. Pages 00–05 and
+the three Reference pages are preserved earlier versions.
 
 This file is the canonical product design guide. The Paper's DESIGN.md points
 here and documents only illustration scope. A drawing is not runtime evidence.
@@ -60,28 +65,42 @@ results live in [verification](docs/verification.md).
    field, Home does not guess from a title. Such a source is not shown on Home;
    Setup reports it. The definition is neither a complete page tree nor a grant
    inventory.
-6. **Preview size** uses the first existing list response, with no extra
-   request: 3 rows compact, 4 wide (breakpoint 700px), and it follows the current
-   width when the panel is resized. “Open ‹source title› ›” appears only when a
-   source has more rows or another page, and always names its destination.
+6. **Preview and Open.** Every source preview uses its first existing list
+   response, with no extra request, and shows up to 3 rows at every width.
+   - **Listed source:** always ends with “Open ‹Source›”, which opens its in-Home
+     source list. It appears whether or not more rows exist.
+   - **Empty readable source:** shows “Nothing here yet.” and no Open action,
+     because its list would be empty.
+   - **Denied, unsupported, rate-limited or unavailable source:** keeps its state
+     line and existing recovery, with no Open action, no count and no metadata
+     beyond the projection label.
 
 ## Surfaces
 
-**Home overview (H01 compact, H02 wide).** Top bar: muted OSM mark left, gear
-right; no connection pill. Below: root icon and title (from the root page,
-read through OSM's connection; activating the title opens the root page in the
-reader), then the search field, then sections. No root body is shown on the
-overview, so a long operating policy or definition block never floods Home.
-Compact stacks sections; wide places them in two columns in the same order
-inside a 720px measure. Rows are plain text rows with icons, no cards or
-borders.
+**Home overview (H01, H02, R5).** Setup's page header carries the home: root
+icon in the brand slot and the root title as the screen title, with the gear as
+the header's icon button. There is no separate “OSM” label and no connection
+pill. Activating the title opens the root page in the reader. Below it come the
+search field, then one card with a section per source in definition order:
 
-**Source list (H03).** The named destination of “Open … ›”. It uses the reader
-bar (the OSM bar is hidden): a labeled Back (“Back to Home” or “Back to search
+- **Section head:** source icon in the 20px leading slot and the source title as
+  the row label. It is not interactive.
+- **Panel:** up to 3 record rows, then the right-aligned “Open ‹Source›”.
+
+Related links follow the card under “Elsewhere in Notion”. No root body is shown
+on the overview. Compact and wide are the same single 600px column; wide only
+adds side margin. Home never shows step numbers.
+
+**Source list (H03).** The destination of “Open ‹Source›”. It uses the reader
+bar (the header is hidden): a labeled Back (“Back to Home” or “Back to search
 results”) and the breadcrumb `root / source`, with the root dropped at compact.
-Below the bar come the source icon and title, Open in Notion, all verified
-rows (existing 50 row cap), an explicit “Load more from ‹source›” while a cursor
-remains, and the existing withheld/partial notes.
+Below the bar come:
+
+- the source icon and title, in the screen-title style;
+- “Open in Notion ↗”;
+- one card holding all verified rows (existing 50 row cap);
+- a right-aligned “Load more from ‹Source›” while a cursor remains;
+- the existing withheld/partial notes.
 
 **Search (Q01–Q02).** “Search titles or paste a Notion link.” Typing (300 ms
 debounce, in-flight coalescing) queries page titles in each overview source
@@ -100,13 +119,14 @@ Each searched source shows:
 | --- | --- |
 | Complete, no hits | Nothing; the source is omitted |
 | Hits, complete | Rows only |
-| `hasMore` | Rows if any · “‹Source› couldn’t be searched completely” · “Open ‹Source› ›” (no Try again; a retry returns the same bounded page) |
+| `hasMore` | Rows if any · “‹Source› couldn’t be searched completely” · “Open ‹Source›” (no Try again; a retry returns the same bounded page) |
 | `partial` | Rows if any · “‹Source› couldn’t be searched completely” · Try again |
 | `withheld > 0` | Rows if any · “N pages here can’t be read with OSM’s connection.” |
 | Failure state | “‹Source› couldn’t be searched right now” · Try again |
 
 When these combine, the incomplete note comes before the withheld note, followed by one
-action; “Open ‹Source› ›” wins over Try again. “No titles in this home match
+action; “Open ‹Source›” wins over Try again. Results use the overview's card,
+heads and rows. “No titles in this home match
 “…”.” appears only when every readable overview source has answered the
 current query, every answer is complete and empty, and none has `hasMore`,
 `partial`, `withheld` or a failure. Otherwise there is no global sentence:
@@ -145,10 +165,10 @@ history. The root crumb clears history and search. The source crumb opens the
 source list and keeps the previous entry, so Back still returns to the view that
 opened the reader. Back never opens a page by itself.
 
-Body: actual icon above the title (40px wide, 32px compact), the title (wraps,
-never truncated), a muted type line (existing `meta`), mapped properties
-(Decision, Why, Fact, Evidence), then text, headings, lists and code in a 600px
-measure. Unsupported blocks, sub-pages and truncation stay visibly partial.
+Body: actual icon (32px) above the title, the title in the screen-title style
+(wraps, never truncated), a muted type line (existing `meta`), mapped properties
+(Decision, Why, Fact, Evidence), then text, headings, lists and code in the
+same 600px column. Unsupported blocks, sub-pages and truncation stay visibly partial.
 Back restores the previous Home view and focuses the opener. Copy link copies
 the page's Notion URL and announces “Link copied” in a status region that clears
 after about 2 s. If the clipboard is refused, the URL is shown selected for
@@ -161,11 +181,22 @@ Order:
    - **Connected:** “Connected · ‹workspace›” with “Checked at HH:MM when Home opened”, Choose pages in Notion ↗, one line of native ••• → Connections guidance, and Check again.
    - **Not connected:** Connect Notion as the primary button, opening the existing honest guide (O02), the plain statement that browser sign-in needs OSM’s own registration and backend, and Check again.
    - **No verbose copy:** no mapping inventory or agent-first copy in either state.
-2. **Data & Context home:** the current home’s icon and title with “Change ›” (the existing context picker and its confirmations), plus one muted line: “Definition revision ‹rev› routes Home to N sources. It routes; access comes from OSM’s connection.”
-3. **Saved links ›**
-4. **Separate Notion plugin:** the optional picker only.
-5. **Built into OSM**
-6. **Get help from your agent**
+2. **Data & Context home:** the existing context picker in its standard Setup
+   form: a bordered 32px field showing the current home's icon and title, with
+   the chevron. It opens the existing picker and its confirmations. Below it, one
+   hint: “Definition revision ‹rev› routes Home to N sources. It routes; access
+   comes from OSM’s connection.”
+3. **One card with two rows**, using Setup's row heads without numbers:
+   - **Saved links:** summary is the saved slot labels joined with “ · ”, or
+     “None”. It opens the Saved links sub-view.
+   - **Built into OSM:** summary “N methods”. It expands in place like a Setup
+     step (`aria-expanded`). The panel lists each method from the installed
+     package's existing metadata, name then description, followed by “From the
+     installed OSM package. Reading a method here doesn’t run it.” There is no
+     native disclosure triangle and no enable, run or ownership control.
+4. **Separate Notion plugin:** the optional picker only, with Setup's existing
+   status row.
+5. **Get help from your agent**
 
 **Saved links (T03).** The former “Edit link…” is the saved-navigation link
 editor in [picker.mjs](apps/sidebar/picker.mjs). It saves Docs, Skills and
@@ -203,11 +234,17 @@ existing one-automatic-recovery budget and invalidation rules in
 | Withheld rows | “N pages here can’t be read with OSM’s connection.” | H03, X03 |
 | Source denied | “OSM’s connection can’t read ‹source›.” · one line of ••• → Connections guidance · How to share it › (opens the source in Notion) | X03 |
 | Rate limited / unavailable | Source line with Try again; full gate if status fails | X03, E06–E07 |
-| Not connected / removed | “Reconnect Notion”: “OSM isn’t connected to Notion, or its connection was removed, so nothing from your home is shown.” One primary Open connection settings; text actions Show saved links and Get help from your agent | X04 |
+| Not connected / removed | “Reconnect Notion”: “OSM isn’t connected to Notion, or its connection was removed, so nothing from your home is shown.” One primary Open connection settings; ghost Show saved links and Get help from your agent | X04 |
 | Different connection | Existing suppression; nothing from the home or saved links shown | X04, E05 |
-| Home page unreadable | “Your home page can’t be read”, naming “your home” because a failed root check exposes no verified title · one primary Open page in Notion ↗ · text actions Check again and Get help from your agent | X05 |
+| Home page unreadable | “Your home page can’t be read”, naming “your home” because a failed root check exposes no verified title · one primary Open page in Notion ↗ · ghost Check again and Get help from your agent | X05 |
 | Returning from Notion | Recheck on visibility; previous state dimmed until answered | X06 |
 | No projection yet | Existing Continue Setup gate with Connect first | E10, S01 |
+
+Every gate uses Setup's opening composition:
+
+- **Title:** the gate title in the page header.
+- **Copy:** in the intro style.
+- **Actions:** one row, with one primary button first and ghost buttons after it, as in “Connect Notion · Set up with agent”.
 
 ## Fixture versus product
 
@@ -226,6 +263,15 @@ This revision fixed these product problems:
 - Previews showed only two rows.
 - Home had no search.
 
+The 9 November cohesion correction fixes these:
+
+- Home drifted from Setup in title size and weight: a Home button reset inherited
+  the weight.
+- Home used its own text-button, search and section styles, and a wider two-column
+  layout.
+- Memory lost its Open link when it had exactly the preview count.
+- Built into OSM used a native triangle plus a chevron.
+
 An installed Home projection was missing at the latest owner check. That is a
 real Setup state, not a design gap, and no credential or grant was changed.
 
@@ -237,6 +283,7 @@ picker, #83 skills. No new issue.
 | Boards | Flow / state | Source / issue | Status |
 | --- | --- | --- | --- |
 | R0 | Revision index and contract | design.md | Design |
+| R5 | Setup foundation carried to Home and Settings | design.md Shared foundation; `styles.css`, `index.html`, `home.mjs`, `app.mjs` | Implemented locally; fresh Opus render review pending |
 | H01–H02 | Overview compact / wide, light / dark | `home.mjs`, `index.html`, `styles.css`; #74 | Synthetic-accepted |
 | H03 | Source list, Load more, withheld | `home.mjs`, `home-service.mjs`; #74 | Synthetic-accepted |
 | Q01–Q02 | Title search, no match, pasted link, link Back, incomplete sources | `home.mjs`, `home-service.mjs` search/locate; #74 | Q01/Q02 synthetic-accepted; link Back and incomplete-source rules implemented, not image-reviewed |
@@ -262,6 +309,13 @@ B1–B8, then F1–F3 (the source-list bar, the not-connected gate, and Settings
 when not connected), checked against actual screenshots with fictional data.
 No design blockers remain for that candidate.
 
+That acceptance covered layout and behavior before the Setup-foundation cohesion
+correction (R5). The new visual expression, the always-present “Open ‹Source›”
+and the Built into OSM row are implemented locally. Their fresh Opus render
+review remains pending: the post-implementation call was rejected by the SDK
+session limit (reset reported for 18:20 Europe/Copenhagen on 9 November). No
+quota reset or replacement designer was used.
+
 It is not acceptance of:
 
 - The native Codex panel, or clipboard and visibility events in the host.
@@ -270,29 +324,62 @@ It is not acceptance of:
 - Paper pixels.
 - Installation or release.
 
-## Composition and tokens
+## Shared foundation (Setup)
 
-Use the native Codex theme variables already in `apps/sidebar/styles.css`.
-Background `--osm-surface` (#fff / #181818 fallback); primary text `--osm-text`
-(#202020 / #ececec); secondary `--osm-muted` (#666 / #aaa); edges `--osm-line`;
-hover `--osm-hover`; success and error use existing semantic roles. Search
-field uses `--osm-hover` fill without a border. No KPI cards, graphs, recents
-carousels, decorative dashboard modules or new brand palette.
+Setup ([index.html](apps/sidebar/index.html) `#setup` and its rules in
+[styles.css](apps/sidebar/styles.css)) is the approved design source. Every OSM
+surface uses these values. Where an older Home rule differs, the Setup value
+wins.
 
-Runtime font is the host's sans-serif with system-ui fallback. Paper uses its
-bundled Inter 400/700 as a visual approximation. Home title 28px, reader title
-26px compact / 32px wide, reader heading 18px, body 15px with 1.45 line height,
-section labels and controls 13–14px, metadata 12px. Use a 4px rhythm, 24px
-compact gutters, a 720px wide overview measure and a 600px reading measure.
-Compact and wide keep the same content order; only the overview's section grid
-changes. No desktop sidebar.
+| Role | Value |
+| --- | --- |
+| Colour | `--osm-surface`, `--osm-text`, `--osm-muted`, `--osm-line`, `--osm-line-strong`, `--osm-hover`, `--osm-success`, `--osm-danger` with their light/dark fallbacks; host theme first. No other palette, KPI cards, graphs, carousels or decorative modules. |
+| Font | Host `--font-sans`, `system-ui` fallback; base 14px/1.5. One family everywhere. |
+| Screen title | 24px/600/1.2, letter-spacing −0.4px; 22px at ≤440px. Used for Setup “Get started”, the Home root title, gate titles, the source list title and the reader title. |
+| Row label | 15px/500, as on Setup steps. Used for source heads and Settings card rows. |
+| Body | 14px/400, for record titles, intro and gate copy (muted) and reader text (line-height 1.6). |
+| Reader heading | 15px/600 |
+| Small label | 13px/500, for field labels, all buttons and the current breadcrumb. Settings section titles are 13px/600. |
+| Hint | 12px muted, for hints, row summaries, descriptions and meta. Breadcrumb links are 13px muted. |
+| Status | 13px; connected uses `--osm-success`. |
+| Container | `main` max-width 600px, padding 48/36/40; 28/20/32 at ≤440px. The same for Setup, Home, source list, reader and gates. |
+| Header | `.page-header`: title left, 32px ghost icon buttons right, 28px below. |
+| Controls | `.btn` 32px, padding 0 12px, radius 8px, 13px/500: `btn-primary` (filled dark), `btn-secondary`, `btn-ghost`. Icon buttons are 32×32. `.form-control` and `.picker` are 32px with radius 8px and a 1px `--osm-line` border. Menu radius 10px, option radius 6px. |
+| Card | `.osm-card`: 1px `--osm-line`, radius 14px, rows divided by 1px `--osm-line`. Row head min-height 52px, padding 0 16px, gap 12px, 20px leading slot, label then right summary. Panel padding 4/16/16/48px, so content aligns under the label (16px left when the row has no leading slot). Actions in `.step-actions`: right-aligned, gap 8px, 16px above. |
+| Record row | `.row`: min-height 40px, padding 0 12px, radius 8px, margin 0 −12px; 18px icon, gap 8px; description on a second line in the hint style. |
 
-Reuse existing button, picker, drawer, list and reader primitives. Rows are
-buttons with visible keyboard focus; hover differs from focus. Search is a
-combobox over a results list (Arrow keys, Enter opens, Esc clears). Breadcrumb
-is a `nav` with the current page `aria-current`. Locked saves and handoff
-requests disable repeated submissions. Escape/Back preserve useful focus.
-Editing, relations and arbitrary embedded Notion views are not claimed.
+**States.**
+
+- **Hover:** `--osm-hover` background.
+- **Keyboard focus:** `box-shadow: 0 0 0 1.5px var(--osm-line-strong)`, plus the hover fill on ghost buttons and rows. Hover and focus stay distinct from selection.
+- **Disabled:** opacity .5.
+- **Filled dark** (`--osm-text` fill, `--osm-surface` text) has exactly two uses: the open Setup step number, and the single primary button on a screen.
+- **Expanded:** shown by its panel, as on Setup steps. No triangles.
+
+**Element mapping.**
+
+| Element | Setup primitive |
+| --- | --- |
+| Home header | `.page-header` + `.brand`: root icon (24px) in the brand slot, root title as the `h1`, gear as `btn-ghost icon` |
+| Search | `.form-control`, full width, 16px below |
+| Sources and search results | One `.osm-card`. Each source is a section with a non-interactive head (icon slot + label), a panel of `.row` records, and `.step-actions` with `btn-ghost` “Open ‹Source›”. State lines are hints; Try again is `btn-ghost`. |
+| Source list | Reader bar; title in the screen-title style with the 24px icon inline, gap 10px; `btn-ghost` “Open in Notion ↗”; one `.osm-card` of `.row`s; `btn-ghost` “Load more from ‹Source›” in `.step-actions` |
+| Reader bar | Back `btn-ghost icon`; breadcrumb `nav`; `btn-ghost` Copy link and “Open in Notion ↗” |
+| Gates | Header title, `.intro` copy, actions row as on Setup's opening |
+| Settings | Existing drawer head and section titles. Connection actions in one row: `btn-secondary` “Choose pages in Notion ↗” or, when not connected, `btn-primary` “Connect Notion”, then `btn-ghost` “Check again”. Then the standard context picker, the two-row card, and `btn-ghost` “Get help from your agent”. |
+
+Home keeps no type or button rules of its own:
+
+- **Button resets:** `font: inherit` resets apply only to non-`.btn` buttons.
+- **Removed Home styles:** title-size overrides, text-button and `.more` link styling, the borderless search and `.primary` buttons.
+- **Width:** Home keeps the 600px Setup column. No wider Home container and no two-column grid.
+
+Search is a combobox over a results list (Arrow keys, Enter opens, Esc clears);
+the breadcrumb is a `nav` with the current page `aria-current`. Locked saves and
+handoff requests disable repeated submissions; Escape and Back preserve useful
+focus. Editing, relations and arbitrary embedded Notion views are not claimed.
+Paper approximates with its bundled Inter 400/700 (600 drawn as 700, 500 as
+400); runtime uses the host font.
 
 ## Connection and permission contract
 

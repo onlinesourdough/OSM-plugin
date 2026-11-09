@@ -231,39 +231,40 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     }
   }
   function recordButton(section, item, describe, searched = false) {
-    const node = button('', 'record-button', () => read(section.key, item.id));
+    const node = button('', 'row', () => read(section.key, item.id));
     if (searched) { node.setAttribute('role', 'option'); node.setAttribute('aria-selected', 'false'); }
     const words = el('span');
-    const title = el('span', null, 'record-title'); sourceLabel(title, item); words.append(title);
+    const title = el('span', null, 'row-title'); sourceLabel(title, item); words.append(title);
     if (item.icon) words.setAttribute('class', 'record-words has-icon');
-    if (describe && item.description) words.append(el('span', item.description, 'record-description'));
+    if (describe && item.description) words.append(el('span', item.description, 'hint record-description'));
     node.append(words); node.dataset.open = item.id;
     openers.set(section.key + ':' + item.id, node);
     return node;
   }
   function sourceState(section, entry) {
-    const box = el('div', null, 'unavailable');
+    const box = el('div', null, 'hint unavailable');
     if (!entry || entry.loading && !entry.items) { box.append(el('p', 'Loading…')); return box; }
     if (entry.state === 'empty') { box.append(el('p', 'Nothing here yet.')); return box; }
     box.append(el('p', entry.state === 'inaccessible' ? 'OSM’s connection can’t read ' + section.label + '.' : copy[entry.state] || copy.unavailable));
     // A section's Try again is explicit too, so it resets the budget.
-    if (['rate_limited', 'unavailable'].includes(entry.state)) box.append(button('Try again', 'text-button', () => { rearm(true); return list(section.key); }));
-    else { if (entry.state === 'inaccessible') box.append(el('p', 'In Notion, use ••• → Connections to share this source with OSM.')); box.append(button(entry.state === 'inaccessible' ? 'How to share it ›' : 'Open in Notion ↗', 'text-button', () => open(section.link))); }
+    if (['rate_limited', 'unavailable'].includes(entry.state)) box.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return list(section.key); }));
+    else { if (entry.state === 'inaccessible') box.append(el('p', 'In Notion, use ••• → Connections to share this source with OSM.')); box.append(button(entry.state === 'inaccessible' ? 'How to share it ›' : 'Open in Notion ↗', 'btn btn-ghost', () => open(section.link))); }
     return box;
   }
   function records(section, describe, full = false, searched = false) {
     const entry = searched ? searchResults.get(section.key) : lists.get(section.key);
     if (!searched && !entry && data?.state === 'ready') Promise.resolve().then(() => { if (!lists.has(section.key)) void list(section.key); });
     if (entry?.state !== 'listed') return [sourceState(section, entry)];
-    const limit = globalThis.matchMedia?.('(min-width: 700px)').matches ? 4 : 3;
+    const limit = 3;
     const all = full || searched ? entry.items : entry.items.slice(0, limit);
     const ul = el('ul', null, 'record-list'); ul.setAttribute('role', searched ? 'group' : 'list');
     for (const item of all) { const li = el('li'); li.append(recordButton(section, item, describe, searched)); ul.append(li); }
     const nodes = [ul], title = entry.source?.title || section.label;
-    if (!full && !searched && (entry.items.length > limit || entry.hasMore)) {
-      const action = button('Open ' + title + ' ›', 'more', () => sourceView(section)); action.id = 'source-' + section.key; nodes.push(action);
+    if (!full && !searched && entry.state === 'listed' && entry.items.length) {
+      const actions = el('div', null, 'step-actions');
+      const action = button('Open ' + title, 'btn btn-ghost', () => sourceView(section)); action.id = 'source-' + section.key; actions.append(action); nodes.push(actions);
     }
-    if (full && entry.hasMore) nodes.push(button(entry.loading ? 'Loading…' : 'Load more from ' + title, 'more', () => list(section.key, true)));
+    if (full && entry.hasMore) { const actions = el('div', null, 'step-actions'); actions.append(button(entry.loading ? 'Loading…' : 'Load more from ' + title, 'btn btn-ghost', () => list(section.key, true))); nodes.push(actions); }
     if (full && entry.capped) nodes.push(el('p', 'Home shows up to 50 pages. Open this source in Notion for the rest.', 'reader-meta'));
     if (entry.partial) nodes.push(el('p', 'Notion stopped this list early. Open it in Notion for the rest.', 'reader-meta'));
     if (entry.withheld) nodes.push(el('p', entry.withheld + ' pages here can’t be read with OSM’s connection.', 'reader-meta'));
@@ -271,12 +272,12 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   }
   function breadcrumbs(panel, section, record) {
     const nav = el('nav', null, 'breadcrumbs'); nav.setAttribute('aria-label', 'Breadcrumb');
-    const root = button(data.root.title, 'text-button breadcrumb-root', () => {
+    const root = button(data.root.title, 'breadcrumb-link breadcrumb-root', () => {
       reader = null; view = { kind: 'overview' }; history = []; resetSearch(); changed();
     });
     if (!section && record) { const current = el('span', record.title, 'breadcrumb-segment'); current.setAttribute('aria-current', 'page'); nav.append(current); panel.append(nav); return; }
     nav.append(root);
-    if (section) nav.append(button(lists.get(section.key)?.source?.title || section.label, 'text-button breadcrumb-segment', () => { reader = null; view = { kind: 'source', key: section.key }; changed(); }));
+    if (section) nav.append(button(lists.get(section.key)?.source?.title || section.label, 'breadcrumb-link breadcrumb-segment', () => { reader = null; view = { kind: 'source', key: section.key }; changed(); }));
     if (record) { const current = el('span', record.title, 'breadcrumb-segment'); current.setAttribute('aria-current', 'page'); nav.append(current); }
     panel.append(nav);
   }
@@ -285,15 +286,15 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const article = el('article', null, 'reader');
     const section = sections().find(item => item.key === value.key);
     const bar = el('div', null, 'reader-bar'), leading = el('div', null, 'reader-leading');
-    const backButton = button('‹', 'text-button back', back);
+    const backButton = button('‹', 'btn btn-ghost icon back', back);
     backButton.setAttribute('aria-label', 'Back to ' + (history.at(-1)?.view.kind === 'search' ? 'search results' : history.at(-1)?.view.kind === 'source' ? (lists.get(section?.key)?.source?.title || section?.label || 'source') : 'Home'));
     leading.append(backButton); breadcrumbs(leading, section, value.record); bar.append(leading);
     if (value.record?.link) {
       const tools = el('div', null, 'reader-tools'), status = el('span'); status.setAttribute('role', 'status');
-      tools.append(button('Copy link', 'text-button', async () => {
+      tools.append(button('Copy link', 'btn btn-ghost', async () => {
         try { await navigator.clipboard.writeText(value.record.link); status.textContent = 'Link copied'; setTimeout(() => { status.textContent = ''; }, 2000); }
         catch { tools.setAttribute('data-manual-copy', 'true'); const input = el('input'); input.value = value.record.link; input.readOnly = true; input.setAttribute('aria-label', 'Copy this Notion URL'); tools.append(input); input.focus(); input.select?.(); }
-      }), button('Open in Notion ↗', 'text-button', () => open(value.record.link)), status); bar.append(tools);
+      }), button('Open in Notion ↗', 'btn btn-ghost', () => open(value.record.link)), status); bar.append(tools);
     }
     panel.append(bar);
     const record = value.record, heading = el('h2', record?.title || (value.state === 'loading' ? 'Loading…' : 'Unavailable'));
@@ -305,7 +306,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const body = el('div', null, 'reader-body');
     if (!record && value.state !== 'loading') {
       body.append(el('p', copy[value.state] || copy.unavailable, 'unavailable'));
-      if (['unavailable', 'rate_limited'].includes(value.state)) body.append(button('Try again', 'text-button', () => { rearm(true); return read(value.key, value.id, undefined, true); }));
+      if (['unavailable', 'rate_limited'].includes(value.state)) body.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return read(value.key, value.id, undefined, true); }));
     }
     if (record) {
       for (const field of record.fields) { if (field.heading) body.append(el('h3', field.heading)); body.append(el('p', field.text)); }
@@ -326,16 +327,28 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
 
     panel.append(article);
   }
+  function sourceSection(source) {
+    const root = el('section', null, 'step'), heading = el('h3', null, 'source-head');
+    const label = el('span'); sourceLabel(label, source);
+    const slot = el('span', null, 'step-number source-slot');
+    const icon = [...label.children].find(node => node.className === 'source-icon');
+    if (icon) slot.append(icon);
+    const title = [...label.children].find(node => node.className === 'source-title');
+    title.className = 'step-label'; heading.append(slot, title);
+    const content = el('div', null, 'source-panel'); root.append(heading, content);
+    return { root, content };
+  }
   function renderOverview(panel) {
-    const grid = el('div', null, 'home-grid');
+    const card = el('div', null, 'osm-card');
     for (const section of sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role))) {
-      const root = el('section', null, 'context-section'), heading = el('h3', null, 'section-title');
-      sourceLabel(heading, lists.get(section.key)?.source || { title: section.label });
-      root.append(heading, ...records(section, section.role === 'skills')); grid.append(root);
+      const entry = lists.get(section.key);
+      const source = ['listed', 'empty'].includes(entry?.state) ? entry.source : null;
+      const { root, content } = sourceSection(source || { title: section.label });
+      content.append(...records(section, section.role === 'skills')); card.append(root);
     }
-    panel.append(grid);
+    panel.append(card);
     const related = sections().filter(item => item.role === 'related');
-    if (related.length) { const aside = el('aside', 'Elsewhere in Notion', 'also'); for (const item of related) aside.append(button(item.label + ' ↗', 'text-button', () => open(item.link))); panel.append(aside); }
+    if (related.length) { const aside = el('aside', 'Elsewhere in Notion', 'also'); for (const item of related) aside.append(button(item.label + ' ↗', 'btn btn-ghost', () => open(item.link))); panel.append(aside); }
   }
   function renderSearch(panel) {
     const locatedState = locatedSearch?.state;
@@ -343,35 +356,37 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (unavailableLink) {
       const section = sections().find(item => item.key === locatedSearch?.key);
       const title = lists.get(section?.key)?.source?.title || section?.label || 'This page';
-      panel.append(el('p', title + ' couldn’t be searched right now'), button('Try again', 'text-button', () => {
+      panel.append(el('p', title + ' couldn’t be searched right now'), button('Try again', 'btn btn-ghost', () => {
         rearm(true); locatedSearch = null; linkState = null; searchResults.clear(); return search(view.query);
       })); return;
     }
     if (linkState || ['inaccessible', 'unsupported'].includes(locatedState)) {
       panel.append(el('p', linkState === 'outside' ? 'This page isn’t part of your Data & Context home. Home opens only pages in the sources your home routes to.' : 'OSM can’t open this page here'));
-      if (/^https:\/\/(?:www\.)?(?:notion\.so|notion\.com|app\.notion\.com)\//i.test(view.query.trim())) panel.append(button('Open in Notion ↗', 'text-button', () => open(view.query.trim())));
+      if (/^https:\/\/(?:www\.)?(?:notion\.so|notion\.com|app\.notion\.com)\//i.test(view.query.trim())) panel.append(button('Open in Notion ↗', 'btn btn-ghost', () => open(view.query.trim())));
       return;
     }
     const searched = sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role));
     let count = 0;
+    const card = el('div', null, 'osm-card');
     for (const section of searched) {
       const result = searchResults.get(section.key); if (!result) continue;
       const failed = !['listed', 'empty'].includes(result.state);
       const items = result.state === 'listed' ? (result.items || []).slice(0, 5) : [];
       if (!items.length && !failed && !result.hasMore && !result.partial && !result.withheld) continue;
       const source = !failed && result.source?.title ? result.source : { title: section.label };
-      const heading = el('h3', null, 'section-title'); sourceLabel(heading, source); panel.append(heading);
+      const { root, content } = sourceSection(source); card.append(root);
       if (items.length) {
         const ul = el('ul', null, 'record-list'); ul.setAttribute('role', 'group');
         for (const item of items) { const li = el('li'); li.append(recordButton(section, item, section.role === 'skills', true)); ul.append(li); }
-        panel.append(ul); count += items.length;
+        content.append(ul); count += items.length;
       }
-      if (failed) panel.append(el('p', source.title + ' couldn’t be searched right now', 'reader-meta'));
-      else if (result.hasMore || result.partial) panel.append(el('p', source.title + ' couldn’t be searched completely', 'reader-meta'));
-      if (result.withheld) panel.append(el('p', result.withheld + ' pages here can’t be read with OSM’s connection.', 'reader-meta'));
-      if (result.hasMore && !failed) panel.append(button('Open ' + source.title + ' ›', 'text-button', () => sourceView(section)));
-      else if (failed || result.partial) panel.append(button('Try again', 'text-button', () => { rearm(true); return search(view.query); }));
+      if (failed) content.append(el('p', source.title + ' couldn’t be searched right now', 'reader-meta'));
+      else if (result.hasMore || result.partial) content.append(el('p', source.title + ' couldn’t be searched completely', 'reader-meta'));
+      if (result.withheld) content.append(el('p', result.withheld + ' pages here can’t be read with OSM’s connection.', 'reader-meta'));
+      if (result.hasMore && !failed) { const actions = el('div', null, 'step-actions'), action = button('Open ' + source.title, 'btn btn-ghost', () => sourceView(section)); action.id = 'source-' + section.key; actions.append(action); content.append(actions); }
+      else if (failed || result.partial) content.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return search(view.query); }));
     }
+    if (card.children.length) panel.append(card);
     if (searching || searchTimer || locatedState === 'loading') panel.append(el('p', 'Searching…', 'reader-meta'));
     else if (!locatedSearch && !count && searched.every(section => {
       const result = searchResults.get(section.key);
@@ -391,7 +406,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     if (revision) $('links-note').textContent = linksRevision() === revision
       ? `Saved links: a partial view of your AI Operating Model, revision ${revision}.`
       : `Saved links: a partial view saved separately; it may not match your AI Operating Model revision ${revision}.`;
-    $('brand-mark').hidden = !visible; $('home').hidden = !visible;
+    $('brand-mark').replaceChildren(); $('brand-mark').hidden = true; $('home').hidden = !visible;
+    if (visible) $('heading').textContent = 'OSM';
     $('show-home').hidden = !available() || !showLinks;
     const status = $('home-status');
     status.hidden = true;
@@ -406,13 +422,16 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     $('osm-checked').hidden = !ready || !data.verifiedAt;
     $('osm-checked').textContent = ready && data.verifiedAt ? 'Checked at ' + new Date(data.verifiedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) + ' when Home opened' : '';
     $('settings-connection').hidden = ready;
-    $('settings-connection').setAttribute('class', data?.state === 'not_connected' && !suppressed() ? 'btn btn-primary' : 'text-button');
+    $('settings-connection').setAttribute('class', 'btn btn-primary');
     $('settings-connection').textContent = data?.state === 'not_connected' ? 'Connect Notion' : 'Manage OSM connection';
     $('connection-provisioning').hidden = data?.state !== 'not_connected' || suppressed();
     $('connection-guidance').hidden = !ready;
     $('manage-access').hidden = !ready;
     $('home-definition').textContent = ready ? 'Definition revision ' + data.definitionRevision + ' routes Home to ' + sections().filter(item => item.role !== 'related').length + ' sources. It routes; access comes from OSM’s connection.' : 'Home not verified';
-    const builtin = $('builtin-content'); builtin.replaceChildren(); for (const skill of data?.builtin || []) builtin.append(el('p', skill.name + ' — ' + skill.description));
+    const methods = data?.builtin?.length || 0;
+    $('builtin-summary').textContent = methods + (methods === 1 ? ' method' : ' methods');
+    const builtin = $('builtin-content'); builtin.replaceChildren();
+    for (const skill of data?.builtin || []) { const method = el('div', null, 'builtin-method'); method.append(el('p', skill.name, 'builtin-name'), el('p', skill.description, 'hint')); builtin.append(method); }
     $('organisation-copy').hidden = true;
     $('organisation-copy').textContent = '';
     $('manage-access').disabled = !ready || locked;
@@ -425,6 +444,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     }
     if (gate) {
       $('home-panel').replaceChildren(); $('home-page').replaceChildren(); $('organisation').hidden = false;
+      $('heading').textContent = gate[0];
       $('gate-title').textContent = gate[0]; $('gate-copy').textContent = gate[1];
       $('gate-action').textContent = retry() ? 'Try again' : data?.state === 'root_inaccessible' ? 'Check again' : 'Show saved links';
       const rootDenied = data?.state === 'root_inaccessible' && !suppressed();
@@ -433,13 +453,23 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       $('gate-connect').hidden = rootDenied;
       $('gate-connect').textContent = data?.state === 'not_connected' ? 'Open connection settings' : 'Manage OSM connection';
       $('gate-setup').textContent = humanGate ? 'Get help from your agent' : 'Continue with agent';
-      $('gate-setup').setAttribute('class', humanGate ? 'text-button' : 'btn btn-ghost');
-      $('gate-action').setAttribute('class', humanGate ? 'text-button' : 'primary cursor-interaction');
+      $('gate-setup').setAttribute('class', 'btn btn-ghost');
+      $('gate-action').setAttribute('class', humanGate ? 'btn btn-ghost' : 'btn btn-primary');
+      $('gate-connect').setAttribute('class', humanGate ? 'btn btn-primary' : 'btn btn-ghost');
+      const actions = $('gate-action').parentNode;
+      const ordered = humanGate ? ['gate-notion', 'gate-connect', 'gate-action', 'gate-setup'] : ['gate-action', 'gate-connect', 'gate-notion', 'gate-setup'];
+      actions.replaceChildren(...ordered.map($));
       $('gate-action').disabled = locked || loading; $('gate-action').hidden = suppressed() && !retry();
       return;
     }
     const rootPanel = $('home-page'); rootPanel.replaceChildren(); rootPanel.hidden = Boolean(reader) || view.kind !== 'overview';
-    if (!rootPanel.hidden) { const title = button('', 'home-title', () => read('$root', '$root', 'home-root-title')); title.id = 'home-root-title'; sourceLabel(title, data.root); rootPanel.append(title); }
+    if (!reader && view.kind !== 'source') {
+      const label = el('span'); sourceLabel(label, data.root);
+      const icon = [...label.children].find(node => node.className === 'source-icon');
+      if (icon) { $('brand-mark').append(icon); $('brand-mark').hidden = false; }
+      const title = button('', 'title-link', () => read('$root', '$root', 'home-root-title')); title.id = 'home-root-title';
+      title.append(...label.children); $('heading').replaceChildren(title);
+    }
     $('home-search').hidden = Boolean(reader) || view.kind === 'source';
     $('home-search').disabled = loading;
     $('home-checking').hidden = !loading; $('home-workspace').setAttribute('aria-busy', String(loading));
@@ -449,11 +479,15 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       const section = sections().find(item => item.key === view.key);
       if (section) {
         const bar = el('div', null, 'reader-bar'), leading = el('div', null, 'reader-leading');
-        const backButton = button('‹', 'text-button back', back);
+        const backButton = button('‹', 'btn btn-ghost icon back', back);
         backButton.setAttribute('aria-label', history.at(-1)?.view.kind === 'search' ? 'Back to search results' : 'Back to Home');
         leading.append(backButton); breadcrumbs(leading, section); bar.append(leading); panel.append(bar);
-        const heading = el('h2'); sourceLabel(heading, lists.get(section.key)?.source || { title: section.label });
-        panel.append(heading, button('Open in Notion ↗', 'text-button', () => open(section.link)), ...records(section, section.role === 'skills', true));
+        const heading = el('h2', null, 'source-title-h'); sourceLabel(heading, lists.get(section.key)?.source || { title: section.label });
+        const rows = records(section, section.role === 'skills', true), card = el('div', null, 'osm-card source-records');
+        if (rows[0]?.tagName === 'UL') card.append(rows.shift());
+        panel.append(heading, button('Open in Notion ↗', 'btn btn-ghost', () => open(section.link)));
+        if (card.children.length) panel.append(card);
+        panel.append(...rows);
       }
     }
     else if (view.kind === 'search') renderSearch(panel);
@@ -472,7 +506,10 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const rows = [...openers.values()], index = rows.indexOf(document.activeElement);
     if (['ArrowDown', 'ArrowUp'].includes(event.key) && index >= 0) { event.preventDefault(); rows[(index + (event.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length]?.focus(); }
   });
-  globalThis.matchMedia?.('(min-width: 700px)').addEventListener?.('change', changed);
+  $('builtin-toggle').addEventListener('click', () => {
+    const expanded = $('builtin-toggle').getAttribute('aria-expanded') !== 'true';
+    $('builtin-toggle').setAttribute('aria-expanded', String(expanded)); $('builtin-panel').hidden = !expanded;
+  });
   let wasHidden = false;
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') { wasHidden = true; return; }

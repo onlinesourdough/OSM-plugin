@@ -221,8 +221,9 @@ function renderSettings(locked) {
   const ready = status.context.state === 'configured' && draft.contextTarget === status.context.target && status.sources.state !== 'unavailable';
   const hidden = home.suppressed(); // R8-1, as in renderSetup
   const current = { ...(home.currentRoot() || {}), title: (hidden ? '' : home.currentRoot()?.title || draft.title) || 'Context', target: draft.contextTarget };
-  contextPicker.render({ actionText: 'Change ›', value: displayed(current), choices: [displayed(current)], browse: canBrowse(), disabled: locked,
+  contextPicker.render({ value: displayed(current), choices: [displayed(current)], browse: canBrowse(), disabled: locked,
     applyText: sourceChanges() ? 'Discard and switch' : 'Switch context', note: sourceChanges() ? 'Unsaved source changes will be discarded.' : '' });
+  $('settings-context-picker').setAttribute('aria-label', 'Change ' + current.title);
   for (const role of sourceRoles) {
     $(`settings-${role}`).hidden = hidden;
     settingsPickers[role].render({ value: displayed(draft.links[role]), choices: [displayed(draft.saved[role])], browse: canBrowse(), disabled: locked || !ready || hidden });
@@ -233,6 +234,7 @@ function renderSettings(locked) {
   $('drawer-cancel').disabled = saving; $('drawer-close').disabled = saving;
   $('settings-main').hidden = settingsView !== 'main';
   $('saved-links').hidden = settingsView !== 'links';
+  $('saved-links-summary').textContent = home.suppressed() ? 'None' : sourceRoles.filter(role => status.sources.links[role]).map(role => slotLabels[role]).join(' · ') || 'None';
   $('settings-back').hidden = settingsView !== 'links';
   $('drawer-title').textContent = settingsView === 'links' ? 'Saved links' : 'Settings';
   $('settings-footer').hidden = settingsView !== 'links' && !discardPrompt;
