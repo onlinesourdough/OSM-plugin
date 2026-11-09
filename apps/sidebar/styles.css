@@ -222,3 +222,77 @@ body[data-view="home"] #home-status { display: none; }
 #home-page .reader > h2 .source-icon { display: flex; margin-bottom: 12px; }
 
 #home .btn-primary { background: var(--osm-text); color: var(--osm-surface); }
+
+/* Accepted 9 November overview and reader composition. */
+body[data-view="home"] main { max-width: 768px; }
+body[data-view="home"] #help { display: none; }
+#home-workspace { max-width: 720px; margin: auto; }
+#home-workspace[aria-busy="true"] > :not(#home-checking) { opacity: .55; }
+.home-search { width: 100%; border: 0; border-radius: 6px; background: var(--osm-hover); color: var(--osm-text); padding: 12px; font: inherit; margin: 0 0 24px; }
+#home button.home-title { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; font-size: 28px; color: var(--osm-text); text-align: left; }
+.home-grid { display: grid; grid-template-columns: 1fr; gap: 0 32px; }
+.reader { max-width: 600px; margin: auto; }
+.reader h2 { font-size: 26px; margin-bottom: 12px; }
+.reader-body { line-height: 1.45; }
+.reader-body h3 { font-size: 18px; }
+.reader-tools, .breadcrumbs { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.reader-tools { margin-bottom: 24px; }
+.breadcrumbs .text-button { font-size: 13px; }
+@media (min-width: 700px) { .home-grid { grid-template-columns: 1fr 1fr; } .reader h2 { font-size: 32px; } }
+@media (max-width: 699px) { .reader-bar .breadcrumb-root { display: none; } }
+
+/* Render-review B1–B8: preserve the approved composition at both widths. */
+h1, h2, .home-title, #home h2 .source-title, #home .home-title .source-title {
+  white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere;
+}
+#home button.home-title { display: block; width: 100%; }
+#home .home-title .source-icon { display: block; width: 40px; height: 40px; font-size: 36px; line-height: 40px; margin-bottom: 8px; }
+.record-title, .section-title { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.record-title .source-title { white-space: normal; overflow-wrap: anywhere; }
+.section-title .source-icon { width: 16px; height: 16px; font-size: 14px; line-height: 16px; }
+.record-button { min-height: 32px; padding: 4px 0; gap: 8px; line-height: 24px; align-items: center; }
+.skills-list .record-button { padding: 4px 0; }
+.skills-list li + li { margin-top: 0; }
+.has-icon .record-description { margin-left: 26px; }
+.reader-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; }
+.reader-leading { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+#home .reader-bar .back { flex: none; min-width: 24px; font-size: 24px; margin: 0; }
+.reader-bar .text-button, .breadcrumbs .text-button { min-height: 32px; padding: 4px 0; }
+.breadcrumbs { flex-wrap: nowrap; gap: 8px; min-width: 0; }
+.breadcrumbs > * { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.breadcrumb-segment::before { content: '/'; padding-right: 8px; color: var(--osm-muted); }
+.breadcrumbs > :first-child::before { content: none; }
+.reader-tools { flex: none; position: relative; flex-wrap: nowrap; gap: 16px; margin: 0 0 0 auto; }
+.reader-tools [role="status"] { position: absolute; top: 100%; right: 0; white-space: nowrap; font-size: 12px; color: var(--osm-muted); }
+.reader-tools[data-manual-copy="true"] { flex-wrap: wrap; flex-basis: 100%; }
+.reader-tools input { min-width: 0; width: 100%; flex-basis: 100%; }
+.reader h2 { display: block; }
+.reader h2 .source-icon { display: block; width: 40px; height: 40px; font-size: 36px; line-height: 40px; margin-bottom: 8px; }
+.reader-body .item { margin: 6px 0; }
+#home-panel > h2 { display: flex; align-items: center; gap: 8px; font-size: 26px; }
+#home-panel > .record-list .record-button { min-height: 34px; }
+#organisation .text-button { display: block; min-height: 32px; padding: 4px 0; font-size: 14px; color: var(--osm-text); }
+#osm-workspace { margin: 0; font-size: 14px; }
+#osm-workspace[data-state="connected"] { color: var(--osm-success); }
+#osm-checked { margin: 4px 0 12px; }
+#connection-guidance { margin: 4px 0 8px; line-height: 1.5; }
+#settings-context .picker { border: 0; height: auto; min-height: 32px; padding: 0; }
+#settings-context .picker::after { display: none; }
+#settings-context .picker-value { width: 100%; overflow: visible; white-space: normal; }
+#settings-context .source-title { white-space: normal; overflow-wrap: anywhere; }
+.picker-action { flex: none; margin-left: auto; padding-left: 8px; font-size: 13px; }
+.saved-links-purpose { margin-top: 0; }
+#settings-back { min-height: 32px; padding: 0; font-size: 13px; }
+#saved-links { margin-top: 12px; }
+#home-gate .btn, #home-gate .primary { height: 32px; min-height: 32px; padding: 0 12px; }
+#home-gate .text-button { display: block; min-height: 32px; padding: 4px 0; font-size: 14px; }
+#gate-notion { display: block; margin: 0 0 4px; }
+#gate-setup { margin: 0; }
+@media (max-width: 699px) {
+  .reader-bar .breadcrumbs > .breadcrumb-root + .breadcrumb-segment::before { content: none; }
+  .reader-bar { flex-wrap: wrap; gap: 4px 12px; }
+  .reader-leading { flex-basis: 180px; min-width: min(100%, 180px); }
+  .reader-tools { justify-content: flex-end; }
+  .reader h2 .source-icon, #home .home-title .source-icon { width: 32px; height: 32px; font-size: 28px; line-height: 32px; }
+  body[data-view="home"] main { padding-left: 24px; padding-right: 24px; }
+}

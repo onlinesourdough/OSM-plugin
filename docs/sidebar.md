@@ -1,13 +1,42 @@
 # Codex sidebar — local 0.31.0 candidate
 
-Revision: 2026-11-07
+Revision: 2026-11-09
 
 ## Home
 
-Home opens the actual selected Data & Context page, with its current title,
-icon and bounded readable content. One discreet gear holds settings and OSM's
-connection/access disclosure. Browse is collapsed by default and reveals mapped
-Context and Skills lists; a record opens in place, with Back restoring focus.
+Home is an overview of the selected Data & Context home's definition-routed
+sources, in deterministic projection order. The verified root title and icon
+open the root reader; its body is never loaded on the overview. Sections use
+verified source titles/icons, with three compact or four wide preview rows from
+the first list response. Named “Open ‹source› ›” actions open the full source
+list, with explicit cursor pagination and the existing 50-row display cap.
+Related routes only open Notion; support material is excluded from Home and
+search. Routing and its revision-bound projection cache confer no access.
+
+Search contains page titles within each mapped readable source. Data-source
+queries intersect the mapped title property's `contains` filter with the saved
+view filter, at most five results per source; page lists filter verified titles.
+There is no workspace search or other-connector fallback. Pasted Notion links
+must pass mapped membership and the same containment predicate before a reader
+can open. An outside page discloses no metadata; a 404 stays neutral about
+whether it exists or is shared. Failures name the affected source without
+hiding other matches. Typing debounces 300 ms and coalesces in-flight work.
+
+The simple reader shows mapped properties and bounded text. Back restores the
+source/search view, query and opener focus. Breadcrumbs follow Home's routes.
+Copy link announces success only after the clipboard accepts the Notion URL;
+otherwise a selected URL input supports manual copy. Native clipboard and panel
+visibility events still require host qualification.
+
+The gear opens Settings with Notion connection status and actual checked time,
+Data & Context home and its existing Change picker, Saved links, the optional
+separate plugin, built-in methods, and explicit agent help. Saved links editing
+is confined to Settings and manual Setup; it neither grants nor revokes access.
+Healthy Home has no connection pill or link editor. Access refresh runs on open,
+context change, explicit retry, return from a hidden panel (at most once per
+30 seconds), and Settings close after a connection action. There is no polling.
+A recheck retains dimmed content until status answers; an invalid identity or
+scope clears it under the existing recovery budget and stale-generation guards.
 Page originals remain in Notion. This reader does not define the owner's write
 policy for agents.
 
@@ -17,7 +46,7 @@ unsupported images retain a readable title. Raw signed icon URLs and retrieved
 bytes are not stored. The current reader is bounded text, headings, lists and
 code; it does not claim to embed arbitrary native Notion views or edit pages.
 
-Personal skills show their source descriptions. Built-in method descriptions
+Personal skills show their source descriptions. Built-in method descriptions in Settings
 stay collapsed and do not imply enablement or execution. See the canonical
 [design guide](../design.md) for the editable Paper and flow/state map.
 
@@ -245,6 +274,8 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
   context it was read for.
 - osm_home_list / osm_home_read: app-only bounded title lists and one selected
   record of a mapped section.
+- osm_home_search / osm_home_locate: app-only scoped title query and link
+  membership checks, using the same credential, mapping and containment checks.
 - osm_home_page: app-only read of the actual selected root page.
 - osm_connection: app/model identity and mapping check using OSM's credential;
   no token or complete grant inventory is returned.

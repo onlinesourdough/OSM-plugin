@@ -16,9 +16,9 @@ try {
   await client.connect(transport);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources',
-    'osm_home', 'osm_home_list', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection']);
+    'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection']);
   assert.deepEqual(tools[0]._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
-  for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_home', 'osm_home_list', 'osm_home_read']) {
+  for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read']) {
     assert.deepEqual(tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
     assert.equal(tools.find(tool => tool.name === name).annotations.openWorldHint, true);
   }
@@ -82,6 +82,8 @@ try {
   assert.deepEqual(home.content, []);
   assert.ok(home._meta['osm/home'].builtin.some(skill => skill.name === 'osm-setup'));
   assert.equal((await client.callTool({ name: 'osm_home_list', arguments: { section: 'memory' } }))._meta['osm/home-list'].state, 'unsupported_host');
+  assert.equal((await client.callTool({ name: 'osm_home_search', arguments: { section: 'memory', query: 'sample' } }))._meta['osm/home-list'].state, 'unsupported_host');
+  assert.equal((await client.callTool({ name: 'osm_home_locate', arguments: { link: target } }))._meta['osm/home-location'].state, 'unsupported_host');
   const connection = JSON.parse((await client.callTool({ name: 'osm_connection', arguments: {} })).content[0].text);
   assert.equal(connection.state, 'unsupported_host');
   assert.equal(connection.accessInventory, 'mapped-sources-only');

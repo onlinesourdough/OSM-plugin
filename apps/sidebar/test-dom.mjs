@@ -27,6 +27,7 @@ export function createDocument(html) {
     removeAttribute(name) { delete this.attributes[name]; }
     addEventListener(type, handler) { (this.listeners[type] ||= []).push(handler); }
     focus() { active = this; }
+    select() { this.selectionStart = 0; this.selectionEnd = this.value.length; }
     contains(node) { for (; node; node = node.parentNode) if (node === this) return true; return false; }
     descendants() { return this.children.flatMap(child => [child, ...child.descendants()]); }
     showModal() { this.open = true; }

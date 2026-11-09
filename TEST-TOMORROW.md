@@ -1,103 +1,63 @@
-# OSM — private test candidate
+# OSM — private Home candidate, 9 November 2026
 
-Start with the running [Home preview](http://127.0.0.1:43217/). It uses fictional
-Notion content, no credential and no live Notion write. Setup is at `/setup`;
-`/test` adds scenario, width and theme controls. The actual product reader uses
-the selected mapped Notion page; the fixture is explicitly a stand-in.
+Open the [current fictional preview](http://127.0.0.1:43219/).
+[Setup](http://127.0.0.1:43219/setup), [Settings](http://127.0.0.1:43219/settings)
+and [scenarios](http://127.0.0.1:43219/test) use disposable sample data.
+This revision supersedes the older page-first/Browse preview on port 43217;
+that prior candidate and its review artifacts remain retained separately.
 
-If the preview is stopped, from this checkout run:
+## Five-minute owner check
 
-```sh
-PORT=43217 OSM_PREVIEW_LIVE_NOTION=0 node apps/sidebar/fixture.mjs
-```
+1. Home shows the selected home's title/icon and its mapped sources. Search
+   **scope**, open the result, then go Back: the query and focus should return.
+2. Open a page. Check its title, icon, breadcrumb, Copy link and Open in Notion.
+   A refused clipboard write should offer a selected URL for manual copy.
+3. Open the gear. Check the connection and chosen home, then Saved links.
+   These five fallback links change navigation; they do not grant access.
+   Test an edit followed by Back/Close and Keep editing or Discard.
+4. In Scenarios, select H03, open Knowledge and use Load more. Try empty,
+   one denied source, ended connection and denied root. A denied link must
+   not reveal a page title/body or borrow another connection.
+5. Repeat at 320px and in dark theme. Search **unmatched**, then paste
+   https://www.notion.so/99999999999999999999999999999999.
+   No-match and outside-home refusal must remain distinct.
 
-## Useful five-minute check
+If stopped, start a fresh fictional preview from this checkout on an unused
+port (the fixture prints its URL):
 
-1. Open Home. The page title, icon and body are primary; Browse starts collapsed.
-2. Expand Browse, open a record, then go Back. The source list and useful focus
-   return. Open Skills; built-in descriptions stay collapsed.
-3. Open the gear → OSM connection and access. Check the workspace/mapped-source
-   wording. Page access opens the real selected page in Notion, where the native
-   Connections menu controls sharing. No OSM grant checkbox is fabricated.
-4. Open Setup → Connect Notion → Check existing OSM connection → Close. In this
-   credential-free preview, the route is honestly unsupported. Browser sign-in
-   is explicitly unconfigured. Optional agent setup demonstrates the host-reject
-   fallback without running a model or saving source data.
-5. On `/test`, select different account, denied root, network error, rate limited,
-   empty and partial. Use 320px and dark theme. Ready content must disappear after
-   an account/access change; recovery must remain legible and explicit.
+    PORT=43219 OSM_PREVIEW_LIVE_NOTION=0 node apps/sidebar/fixture.mjs
 
-## Design
+## Source and evidence
 
-Native OpenPaperDesign, project library `repo`, Paper **3438e04fc0d64ffe**.
-Read `00 Flow index`. There are 47 editable artboards on nine pages, including
-three retained references. Human OAuth boards distinguish implemented guide/UI
-from planned browser authorization, cancellation and recovery. `design.md` is
-canonical and maps states to source/issue IDs. Selected-page/setup/access screens
-were inspected in the native app; this is not a claim of live OAuth or exhaustive
-pixel acceptance of every illustration. The Paper is also exported as a portable
-`.paper.zip` with this candidate's review artifacts.
+Canonical guide: [design.md](design.md). Native Paper **3438e04fc0d64ffe**,
+project library repo: start at **R0 · Revision 9 Nov · start here**.
+Five new pages add 18 artboards; all nine earlier pages are preserved.
+There are 14 pages and 65 boards in total. All new design and UX decisions were
+authored and rendered browser corrections reviewed by actual Claude Opus 5.5,
+High, Fast off. Implementation ran on GPT-6.1 Sol Medium.
 
-## Executed proof
+The latest implementation check passed 224 sidebar tests and bundled stdio
+smoke. Generated runtime matched an independent rebuild. Package/documentation,
+onboarding, layout, continuity, skill-version, footprint, responsibility,
+context architecture and consumer-selection checks passed. Exact private
+artifact hashes, screenshots and review dispositions are in the task's
+outputs/revision-20261109 folder. See [verification](docs/verification.md).
 
-- 190 sidebar tests and bundled stdio smoke passed.
-- Package validation against the retained e1cd725 baseline; documentation,
-  onboarding, layout, continuity, 14 skill-version, responsibility, context
-  footprint, context architecture and consumer-selection checks passed.
-- Context architecture: 89 positives, 74 variants, 456 negatives, zero failures.
-- A disposable native Codex profile installed the product locally and discovered
-  all 17 enabled OSM skills with zero discovery errors; all 115 installed payload files matched the final staged product byte for byte. No auth/settings/history
-  were copied and no model was invoked by that installation check.
-- One actual GPT-6.1 Sol Medium method rehearsal exercised five test-value
-  decisions for #87; exact prompt/output are retained in the repository.
-- A public 16,946-byte PNG was read through the bounded image transport. Synthetic
-  tests cover private destinations, redirect refusal, MIME/size bounds and icon
-  variants. No owner's Notion images or credential were read for this proof.
-- Browser UI: page → Browse → list → reader → Back, gear/access, human connection
-  check/cancel, rejected agent handoff, different-account clearing and explicit
-  error retry; light/dark and 320px inspected. The error state measured 320px
-  content width and 320px scroll width. A dark-button contrast defect was fixed
-  and rechecked.
+## Remaining qualification
 
-Known failing inherited checks: publisher reconciliation exits 1 because the
-approved public projection remains v0.30.0 while v0.30.1 exists. Full publisher
-rehearsal has 67 passing scenarios, two repository-binding failures caused by
-that same hold, and 75 caught mutation controls. Publisher source/manifest and
-these tests remain unchanged. This is a release/publication hold, not a green
-publisher claim.
+This is a browser fixture and local source candidate. Live Notion, native
+Codex clipboard/visibility behavior and native Paper pixel acceptance remain
+unproven. Paper's native controls/screenshots timed out; saved source was
+verified. Returning from a hidden panel is tested synthetically with a
+30-second throttle; Settings → Check again remains available.
 
-## Remaining real dependencies
+OSM's own browser OAuth still needs its registered client, callback and
+confidential backend. No new credential, account, grant, normal-profile
+activation, Notion write, public push or release was made. The existing owner
+Home projection was missing at the last authorized read; no maintenance token
+was adopted. Home never falls back to the separate official Notion plugin.
 
-Preferred Connect → browser authorization → page selection → return requires
-OSM's own registered OAuth integration, an owned registered callback, confidential
-secret custody and auth-service implementation/deployment. The public REST
-exchange requires client authentication; hosted MCP PKCE/DCR has a different
-permission model. See `docs/notion-browser-connection.md` for exact sources and
-architecture. No app, backend, new account or access grant was created.
-
-The local pilot can instead use the opt-in dedicated macOS Keychain route after
-explicit selection/provisioning and Home mapping. The owner's existing context
-was readable, but its installed Home projection was missing; its credential was
-not silently adopted or copied. Real connection identity, grants, revocation and
-native Desktop Home still need that selected pilot or the provisioned OAuth
-route. External SVG icons and arbitrary Notion embeds/editing are unsupported;
-readable originals remain available in Notion.
-
-## Issues and delivery boundary
-
-- #87: source implemented, versioned and exercised with actual model decisions;
-  ready for focused review/adoption. It is not closed merely because a local
-  commit exists.
-- #74/#82: selected-page Home, same-connection agent reads, icon handling,
-  human connection guide, access disclosure and optional agent handoff are
-  implemented. Live connection/OAuth/native acceptance remains open.
-- #58: existing manual navigation/save/recovery is preserved and tested.
-- #83: verified skill ownership/sharing remains open; the current skill reader
-  makes no ownership or enablement claim.
-- #85/#88: retained accepted documentation/context work stays preserved; publisher
-  activation, public propagation and consumer rollout remain held.
-
-No merge, tag, release, public push, normal-profile activation or Notion write was
-performed. The review bundle includes immutable source revision, diff manifest,
-consumer payload, design source and actual evidence. Normal installed OSM and the
-separate official Notion plugin remain untouched.
+#74/#82 remain open for live/native adoption; #58 manual navigation is preserved.
+The inherited publisher binding hold is unchanged: public v0.30.0 versus the
+newer v0.30.1 tag. Publisher checks remain red; publication is not authorized by
+this candidate.

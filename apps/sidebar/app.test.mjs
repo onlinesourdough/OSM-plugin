@@ -19,7 +19,7 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
   let time = 100000, host, fail = Boolean(options.initialFailure), delay, release, revision = 0, linkFailure = false;
   const messages = [], calls = [], homeCalls = [], links = [], document = createDocument(template);
   // Most legacy interaction cases begin with Browse already opened.
-  document.getElementById('home-navigation').open = options.navigation !== false;
+
   const status = { features: { notionPages: Boolean(options.pages), notionIcons: Boolean(options.icons) }, notion: { state: options.notion || 'connected' }, context, sources, checkedAt: new Date(time).toISOString() };
   const snapshot = () => ({ _meta: { 'osm/status': structuredClone({ ...status, checkedAt: new Date(time).toISOString() }) } });
   const rejected = text => ({ isError: true, content: [{ type: 'text', text }] });
@@ -47,6 +47,7 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
       // Home tools are recorded apart; by default the host has no supported connection.
       if (name.startsWith('osm_home')) {
         if (name === 'osm_home_page') {
+          homeCalls.push({ name, args: plain(args) });
           const state = options.home ? (await options.home('osm_home', {}))?._meta?.['osm/home'] : null;
           return { _meta: { 'osm/home-page': { state: 'read', scope: state?.scope, record: { title: 'Fictional Data & Context', meta: '', fields: [], blocks: [], link: target } } } };
         }
@@ -72,12 +73,15 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
       return snapshot();
     }
   }
+  const mediaListeners = new Set(), media = { matches: Boolean(options.wide), addEventListener: (type, listener) => { if (type === 'change') mediaListeners.add(listener); } };
   const sandbox = { App, classifyTarget, connectionCopy, __OSM_VERSION__: 'test', applyDocumentTheme() {}, applyHostStyleVariables() {},
-    document, URL, structuredClone, setTimeout, clearTimeout, Date: class extends Date { static now() { return time; } } };
+    navigator: { clipboard: { writeText: options.writeText || (async () => { throw new Error('Clipboard unavailable'); }) } },
+    matchMedia: () => media, document, URL, structuredClone, setTimeout, clearTimeout, Date: class extends Date { static now() { return time; } } };
   await vm.runInNewContext(`(async () => {${source}})()`, sandbox);
   const get = id => document.getElementById(id);
   const u = {
-    get, calls, homeCalls, links, messages, status, document, names: () => calls.map(call => call.name), focused: () => document.activeElement?.id,
+    resize: wide => { media.matches = wide; for (const listener of mediaListeners) listener(); },
+    advance: ms => { time += ms; }, get, calls, homeCalls, links, messages, status, document, names: () => calls.map(call => call.name), focused: () => document.activeElement?.id,
     text: id => get(id).textContent, shown: id => !get(id).hidden,
     notify: value => host.ontoolresult(value), fail: value => { fail = value; }, failLinks: value => { linkFailure = value; },
     delay() { delay = new Promise(resolve => { release = resolve; }); }, release() { release(); delay = undefined; },
@@ -87,12 +91,13 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
     submit: () => get('setup').dispatch('submit'),
     options: picker => get(`${picker}-list`).descendants().filter(node => node.getAttribute('role') === 'option'),
     async choose(picker, label) {
+      if (picker.startsWith('settings-') && picker !== 'settings-context-picker' && get('saved-links').hidden) await u.click('saved-links-toggle');
       await u.click(picker);
       const option = u.options(picker).find(node => node.textContent.startsWith(label));
       assert.ok(option, `${label} in ${picker}`); return option.dispatch('click');
     },
     async addLink(picker, link, name = '') {
-      await u.choose(picker, get(picker).dataset.empty === 'true' ? 'Add link…' : 'Edit link…');
+      await u.choose(picker, get(picker).dataset.empty === 'true' ? 'Paste a link…' : 'Change link…');
       get(`${picker}-link`).value = link; if (get(`${picker}-name`)) get(`${picker}-name`).value = name;
       return u.click(`${picker}-apply`);
     },
@@ -173,7 +178,7 @@ test('closing Settings with unsaved edits asks first; Keep editing and Escape ke
   const u = await ui(configured(), saved({}));
   await u.click('settings'); await u.key('drawer', 'Escape');
   assert.equal(u.get('drawer').open, false);
-  await u.click('settings'); await u.addLink('settings-memory-picker', 'https://example.com/memory');
+  await u.click('settings'); await u.click('saved-links-toggle'); await u.addLink('settings-memory-picker', 'https://example.com/memory');
   await u.click('drawer-close');
   assert.equal(u.get('drawer').open, true); assert.equal(u.shown('foot-discard'), true); assert.equal(u.focused(), 'keep-editing');
   await u.key('drawer', 'Escape'); assert.equal(u.shown('foot-edit'), true);
@@ -190,7 +195,7 @@ test('the source picker is a keyboard listbox of saved choices, None and a link 
   const picker = u.get('settings-memory-picker');
   await u.key('settings-memory-picker', 'ArrowDown');
   assert.equal(picker.getAttribute('aria-expanded'), 'true');
-  assert.deepEqual(u.options('settings-memory-picker').map(node => node.textContent), ['Decisionsexample.com/memory', 'None', 'Edit link…']);
+  assert.deepEqual(u.options('settings-memory-picker').map(node => node.textContent), ['Decisionsexample.com/memory', 'None', 'Change link…']);
   assert.equal(u.text('settings-memory-picker-list').startsWith('Saved sources'), true);
   assert.equal(picker.getAttribute('aria-activedescendant'), 'settings-memory-picker-opt-0');
   await u.key('settings-memory-picker', 'End'); await u.key('settings-memory-picker', 'Home'); await u.key('settings-memory-picker', 'ArrowDown');
@@ -210,7 +215,7 @@ test('the source picker is a keyboard listbox of saved choices, None and a link 
 
 test('an unapplied link keeps its original context and asks before closing Settings', async () => {
   const u = await ui(configured(), saved({}));
-  await u.click('settings'); await u.choose('settings-memory-picker', 'Add link…');
+  await u.click('settings'); await u.choose('settings-memory-picker', 'Paste a link…');
   u.get('settings-memory-picker-link').value = 'https://example.com/unapplied';
   await u.get('settings-memory-picker-link').dispatch('input');
   await u.click('drawer-close');
@@ -228,7 +233,7 @@ test('an unapplied link keeps its original context and asks before closing Setti
 
 test('switching context explicitly discards unapplied editors as well as applied drafts', async () => {
   const u = await ui(configured(), saved({}));
-  await u.click('settings'); await u.choose('settings-memory-picker', 'Add link…');
+  await u.click('settings'); await u.choose('settings-memory-picker', 'Paste a link…');
   u.get('settings-memory-picker-link').value = 'https://example.com/old-context';
   await u.get('settings-memory-picker-link').dispatch('input');
   await u.choose('settings-context-picker', 'Switch context…');
@@ -315,7 +320,7 @@ test('refresh in progress blocks a new save until the current snapshot arrives',
 
 test('switching context in Settings warns about pending edits and never carries sources over', async () => {
   const u = await ui(configured(), saved({ docs: { title: 'Private docs', target: 'https://example.com/a' } }, 'Client A'));
-  await u.click('settings'); await u.addLink('settings-memory-picker', 'https://example.com/a-memory');
+  await u.click('settings'); await u.click('saved-links-toggle'); await u.addLink('settings-memory-picker', 'https://example.com/a-memory');
   await u.choose('settings-context-picker', 'Switch context…');
   assert.equal(u.get('settings-context-picker-apply').textContent, 'Discard and switch');
   assert.equal(u.get('settings-context-picker').parentNode.parentNode.textContent.includes('Unsaved source changes will be discarded.'), true);
@@ -521,7 +526,7 @@ test('choosing another page in Settings asks before switching and does not carry
   assert.equal(u.get('settings-context-picker-link').parentNode.hidden,true);
   assert.equal(u.focused(),'settings-context-picker-apply');
   await u.click('settings-context-picker-apply');
-  assert.equal(u.text('settings-context-picker'),'Client B');
+  assert.equal(u.get('settings-context-picker').getAttribute('aria-label'),'Change Client B');
   assert.equal(u.text('settings-docs-picker'),'Choose a page');
   assert.deepEqual(u.calls.at(-1).args.links,{});
 });
@@ -710,7 +715,7 @@ function homeHost() {
       // expresses a result without one.
       if (s.listState) return wrap('home-list', { state: s.listState, ...(s.listScope !== null && { scope: s.listScope || s.scope }) });
       if (args.section === 'docs') return wrap('home-list', { state: 'inaccessible', scope: s.scope });
-      return wrap('home-list', { state: 'listed', scope: s.scope, items: items()[args.section], hasMore: false });
+      return wrap('home-list', { state: 'listed', scope: s.scope, items: items()[args.section], hasMore: true, cursor: 'next' });
     }
     if (s.readState) return wrap('home-record', { state: s.readState, ...(s.readScope !== null && { scope: s.readScope || s.scope }) });
     return wrap('home-record', records[args.id] ? { state: 'read', scope: s.scope, record: records[args.id] } : { state: 'inaccessible', scope: s.scope });
@@ -728,34 +733,37 @@ async function homeUi(host = homeHost()) {
     press: async text => { const node = buttonNamed(text); assert.ok(node, text); await node.dispatch('click'); await settle(); } });
 }
 
-test('Home shows mapped sections with bounded title lists and expands with More', async () => {
+async function nextSourcePage(u, key) {
+  const panel = u.get('home-panel');
+  const named = text => panel.descendants().find(node => node.tagName === 'BUTTON' && node.textContent.startsWith(text));
+  if (u.get('home-page').hidden && named('‹')) { await named('‹').dispatch('click'); await settle(); }
+  await u.click('source-' + key); await settle();
+  const more = named('Load more from '); assert.ok(more, 'paginated source action');
+  await more.dispatch('click'); await settle();
+  if (!u.get('home-gate').hidden) return;
+  const back = named('‹'); if (back) { await back.dispatch('click'); await settle(); }
+}
+test('Home previews three titles in stable definition order and opens a named source list', async () => {
   const u = await homeUi();
-  assert.equal(u.shown('home'), true); assert.equal(u.shown('dashboard'), false); assert.equal(u.shown('brand-mark'), true);
-  assert.equal(u.text('home-status-label'), 'Notion · Connected'); assert.equal(u.get('home-status').dataset.state, 'connected');
-  assert.equal(u.shown('badge'), false);
-  const titles = () => u.nodes().filter(node => node.getAttribute('class') === 'section-title').map(node => node.textContent);
-  assert.deepEqual(titles(), ['About your business', 'Memory', 'Business Docs']);
-  assert.ok(u.panel().includes('Start emails with the outcome')); assert.equal(u.panel().includes('Keep meeting decisions'), false);
-  await u.press('More memories');
-  assert.ok(u.panel().includes('Review the offer')); assert.equal(u.focused(), 'more-memory');
-  assert.equal(u.get('more-memory').getAttribute('aria-expanded'), 'true'); assert.equal(u.text('more-memory'), 'Show fewer');
-  await u.press('Show fewer'); assert.equal(u.panel().includes('Review the offer'), false);
-  // A denied source is not an empty list.
-  assert.ok(u.panel().includes('This source can’t be read with the current connection.')); assert.equal(u.panel().includes('Nothing here yet.'), false);
-  await u.press('Tasks ↗'); await u.click('home-open');
-  assert.deepEqual(u.links, ['https://www.notion.so/fictional-tasks', 'https://www.notion.so/fictional-root']);
-  assert.deepEqual(u.names(), []);
+  assert.equal(u.shown('home-status'), false); assert.equal(u.shown('dashboard'), false);
+  const titles = u.nodes().filter(node => node.getAttribute('class') === 'section-title').map(node => node.textContent);
+  assert.deepEqual(titles, ['About your business', 'Memory', 'Business Docs', 'Skills']);
+  assert.ok(u.panel().includes('Keep meeting decisions')); assert.equal(u.panel().includes('Review the offer'), false);
+  await u.press('Open Memory ›'); assert.ok(u.panel().includes('Review the offer'));
+  assert.ok(u.panel().includes('Load more from Memory')); await u.press('‹');
+  assert.equal(u.focused(), 'source-memory');
+  assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
+  await u.press('Tasks ↗'); assert.deepEqual(u.links, ['https://www.notion.so/fictional-tasks']);
+  assert.deepEqual(u.names(), []); assert.equal(u.messages.length, 0);
 });
 
-test('tabs follow Arrow, Home and End keys and move focus', async () => {
+test('overview has no root body; activating the actual root title opens its reader', async () => {
   const u = await homeUi();
-  await u.key('context-tab', 'ArrowRight'); await settle();
-  assert.equal(u.get('skills-tab').getAttribute('aria-selected'), 'true'); assert.equal(u.focused(), 'skills-tab');
-  assert.equal(u.get('context-tab').getAttribute('tabindex'), '-1');
-  await u.key('skills-tab', 'Home'); assert.equal(u.focused(), 'context-tab'); assert.equal(u.get('context-tab').getAttribute('aria-selected'), 'true');
-  await u.key('context-tab', 'End'); assert.equal(u.focused(), 'skills-tab');
-  await u.key('skills-tab', 'ArrowLeft'); assert.equal(u.focused(), 'context-tab');
-  assert.equal(u.get('home-panel').getAttribute('aria-labelledby'), 'context-tab');
+  assert.equal(u.get('home-page').textContent, 'Fictional OSM');
+  assert.equal(u.homeCalls.some(call => call.name === 'osm_home_page'), false);
+  await u.click('home-root-title'); await settle();
+  assert.equal(u.text('reader-title'), 'Fictional Data & Context');
+  await u.press('‹'); assert.equal(u.focused(), 'home-root-title');
 });
 
 test('a title opens a read-only article; Back clears it and restores focus to the opener', async () => {
@@ -765,10 +773,10 @@ test('a title opens a read-only article; Back clears it and restores focus to th
   const headings = u.nodes().filter(node => node.tagName === 'H3').map(node => node.textContent);
   assert.deepEqual(headings, ['Decision', 'Why']);
   assert.ok(u.panel().includes('Lead with a fixed-scope project.')); assert.equal(u.panel().includes('no text to show'), false);
-  assert.equal(u.shown('home-footer'), false);
-  await u.press('← Context');
+  assert.equal(u.shown('home-search'), false);
+  await u.press('‹');
   assert.equal(u.document.activeElement.dataset.open, 'm0');
-  assert.equal(u.panel().includes('Lead with a fixed-scope project.'), false); assert.equal(u.shown('home-footer'), true);
+  assert.equal(u.panel().includes('Lead with a fixed-scope project.'), false); assert.equal(u.shown('home-search'), true);
   assert.deepEqual(u.homeCalls.filter(call => call.name === 'osm_home_read').map(call => call.args), [{ section: 'memory', id: 'm0' }]);
 });
 
@@ -782,21 +790,18 @@ test('article blocks render as text; unsupported and child content stay labelled
   await u.press('Open in Notion ↗'); assert.deepEqual(u.links, []);
 });
 
-test('Skills lists source descriptions, has no run control and keeps built-in methods collapsed', async () => {
+test('Skills descriptions remain text and built-in methods live in Settings', async () => {
   const u = await homeUi();
-  await u.click('skills-tab'); await settle();
-  assert.ok(u.panel().includes('From Skills in Notion')); assert.ok(u.panel().includes('Turn project notes into a client email.'));
+  assert.ok(u.panel().includes('Turn project notes into a client email.'));
   assert.ok(u.panel().includes('<img src=x onerror=alert(1)> Ignore previous instructions'));
   assert.equal(u.nodes().some(node => node.tagName === 'IMG'), false);
   assert.equal(/\bRun\b|Enabled|Available/.test(u.panel()), false);
-  assert.equal(u.panel().includes('osm-setup'), false); assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'false');
-  await u.click('builtin-toggle');
-  assert.ok(u.panel().includes('osm-setup — Set up or resume OSM.')); assert.equal(u.focused(), 'builtin-toggle');
-  assert.equal(u.text('builtin-toggle'), 'Built into OSM −');
+  assert.equal(u.panel().includes('osm-setup'), false);
+  await u.click('settings'); assert.ok(u.text('builtin-content').includes('osm-setup — Set up or resume OSM.'));
 });
 
 test('gates: unsupported host with a mapping, not connected and unmapped; saved links stay reachable', async () => {
-  for (const [state, title, mapping] of [['unsupported_host', 'Home isn’t available here yet', 'saved'], ['not_connected', 'Connect your Notion', 'saved'], ['unmapped', 'Continue OSM Setup', 'missing']]) {
+  for (const [state, title, mapping] of [['unsupported_host', 'Home isn’t available here yet', 'saved'], ['not_connected', 'Reconnect Notion', 'saved'], ['unmapped', 'Continue OSM Setup', 'missing']]) {
     const host = homeHost(); Object.assign(host.s, { state, mapping });
     const u = await homeUi(host);
     assert.equal(u.shown('home-gate'), true, state); assert.equal(u.text('gate-title'), title);
@@ -816,9 +821,9 @@ test('revocation mid-read clears bodies, lists and sections without a stale rend
   const u = await homeUi();
   await u.press('Fixed scope before retainers');
   Object.assign(u.host.s, { readState: 'not_connected', state: 'not_connected' });
-  await u.press('← Context');
+  await u.press('‹');
   await u.press('Start emails with the outcome');
-  assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Connect your Notion');
+  assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Reconnect Notion');
   assert.equal(u.panel().includes('Fixed scope'), false); assert.equal(u.panel().includes('Memory'), false);
   assert.equal(u.get('home-status').dataset.state, 'neutral');
   assert.deepEqual(u.names(), []); assert.deepEqual(u.links, []);
@@ -828,7 +833,7 @@ test('an account or scope change drops earlier lists and reads the new mapping',
   const u = await homeUi();
   assert.ok(u.panel().includes('About Fictional Studio'));
   Object.assign(u.host.s, { listState: 'inaccessible', listScope: 'scope-2', scope: 'scope-2', generation: 2 });
-  await u.press('More memories');
+  await u.press('Open Memory ›');
   await u.click('refresh'); await settle();
   Object.assign(u.host.s, { listState: null, listScope: null });
   await u.click('refresh'); await settle();
@@ -840,7 +845,7 @@ test('a list result for another scope invalidates the view and reloads status', 
   const u = await homeUi();
   const before = u.homeCalls.filter(call => call.name === 'osm_home').length;
   Object.assign(u.host.s, { listState: 'listed', listScope: 'stale-scope' });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.ok(u.homeCalls.filter(call => call.name === 'osm_home').length > before);
   assert.equal(u.panel().includes('Weekly client update'), false);
 });
@@ -872,7 +877,7 @@ test('a failed Home check without a mapping keeps the saved links; a supported h
   assert.equal(failed.shown('dashboard'), true); assert.equal(failed.shown('home'), false); assert.equal(failed.shown('home-status'), false);
   const host = homeHost(); Object.assign(host.s, { state: 'not_connected', mapping: 'missing' });
   const u = await homeUi(host);
-  assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Connect your Notion');
+  assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Reconnect Notion');
   assert.equal(u.text('home-status-label'), 'Notion · Not connected');
 });
 
@@ -883,7 +888,7 @@ test('an official-mode projection keeps the saved links with its own note, never
   assert.equal(u.text('home-note'), 'Home can’t read through your official Notion connection in this view yet. Your saved links below open each source in Notion.');
   assert.equal(u.shown('home-note'), true);
   const page = u.get('dashboard').textContent + u.get('home').textContent;
-  assert.equal(/Connect your Notion|not supported on this host|isn’t available here/.test(u.get('dashboard').textContent), false);
+  assert.equal(/Reconnect Notion|not supported on this host|isn’t available here/.test(u.get('dashboard').textContent), false);
   assert.equal(u.shown('home-gate'), false); assert.ok(page.includes('Primary'));
   assert.deepEqual(u.homeCalls.map(call => call.name), ['osm_home']);
   await u.click('open-context'); assert.deepEqual(u.links, [target]);
@@ -911,7 +916,7 @@ test('internal Home makes no official icon reads, even before its mode is known;
   assert.equal(iconCalls(u), 0, 'before osm_home resolves');
   release(); await settle();
   assert.equal(u.shown('home'), true); assert.equal(iconCalls(u), 0, 'internal Home shown');
-  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
   assert.equal(u.shown('dashboard'), true); assert.equal(iconCalls(u), 1, 'links view chosen');
 });
 
@@ -928,7 +933,7 @@ test('a listed record that becomes inaccessible clears its titles with one statu
   const u = await homeUi();
   const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
   assert.equal(statusCalls(), 1); // The initially inaccessible Docs source keeps its placeholder without rechecks.
-  assert.ok(u.panel().includes('This source can’t be read with the current connection.'));
+  assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
   Object.assign(u.host.s, { readState: 'inaccessible', listState: 'inaccessible' });
   await u.press('Start emails with the outcome'); await settle();
   assert.equal(statusCalls(), 2);
@@ -990,7 +995,7 @@ test('a denial that arrives after Back still clears the title with one status re
   assert.equal(statusCalls(), 1);
   const opening = u.buttonNamed('Start emails with the outcome').dispatch('click');
   await settle();
-  await u.press('← Context');
+  await u.press('‹');
   assert.ok(u.panel().includes('Start emails with the outcome'));
   Object.assign(host.s, { readState: 'inaccessible', listState: 'inaccessible' });
   release(); await opening; await settle();
@@ -1007,7 +1012,7 @@ test('a list or read answering official_mode invalidates the view and rechecks s
     const u = await homeUi();
     const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
     Object.assign(u.host.s, { state: 'official_mode', ...(via === 'list' ? { listState: 'official_mode' } : { readState: 'official_mode' }) });
-    if (via === 'list') { await u.click('skills-tab'); await settle(); } else await u.press('Fixed scope before retainers');
+    if (via === 'list') { await nextSourcePage(u, 'skills'); await settle(); } else await u.press('Fixed scope before retainers');
     await settle();
     assert.equal(statusCalls(), 2, via); assert.equal(u.shown('home'), false, via); assert.equal(u.shown('dashboard'), true, via);
     assert.equal(u.shown('home-status'), false, via); assert.equal(u.get('home-panel').textContent, '', via);
@@ -1033,7 +1038,7 @@ test('icon reads follow positive resolved evidence only (I3)', async () => {
   const pending = pendingHomeHost();
   const u = await ui(configured(), homeSources, { ...iconOptions, home: pending.handler }); await settle();
   assert.equal(iconCalls(u), 0, 'internal Home visible');
-  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
   assert.equal(iconCalls(u), 1, 'links chosen, internal resolved');
   // Links chosen while the status is pending: none until it resolves.
   pending.hold(); await u.click('drawer-refresh'); await settle();
@@ -1044,7 +1049,7 @@ test('icon reads follow positive resolved evidence only (I3)', async () => {
   let broken = false;
   const handler = (name, args) => broken && name === 'osm_home' ? fallback : pending.handler(name, args);
   const v = await ui(configured(), homeSources, { ...iconOptions, home: handler }); await settle();
-  await v.click('organisation-toggle'); await v.click('show-links'); await settle();
+  await v.click('saved-links-toggle'); await v.click('show-links'); await settle();
   assert.equal(iconCalls(v), 1);
   broken = true; await v.click('drawer-refresh'); await settle();
   assert.equal(v.shown('dashboard'), true); assert.equal(iconCalls(v), 1, 'links chosen, server fallback');
@@ -1072,7 +1077,7 @@ test('a list result without a scope invalidates the view (I2)', async () => {
   const u = await homeUi();
   const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
   Object.assign(u.host.s, { listState: 'listed', listScope: null });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(statusCalls(), 2); assert.equal(u.panel().includes('Weekly client update'), false);
 });
 
@@ -1080,7 +1085,7 @@ test('links chosen: only a resolved ready status allows icon reads after Refresh
   for (const state of ['unavailable', 'rate_limited', 'not_connected', 'unsupported_host', 'root_inaccessible', 'mapping_unavailable']) {
     const host = homeHost();
     const u = await ui(configured(), homeSources, { ...iconOptions, home: host.handler }); await settle();
-    await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+    await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
     assert.equal(iconCalls(u), 1, `${state}: links chosen, ready`);
     host.s.state = state; // a resolved non-ready status keeps mapping 'saved' and the internal mode
     await u.click('drawer-refresh'); await settle();
@@ -1090,7 +1095,7 @@ test('links chosen: only a resolved ready status allows icon reads after Refresh
   const placeholder = { content: [], _meta: { 'osm/kind': 'home', 'osm/home': { state: 'unavailable', mapping: 'saved', selectedMode: 'internal_selected_pages', builtin: [] } } };
   const host = homeHost(); let placed = false;
   const u = await ui(configured(), homeSources, { ...iconOptions, home: (name, args) => placed && name === 'osm_home' ? placeholder : host.handler(name, args) }); await settle();
-  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
   placed = true; await u.click('drawer-refresh'); await settle();
   assert.equal(iconCalls(u), 1, 'placeholder: no icon read');
 });
@@ -1161,10 +1166,10 @@ test('after a recovery fully settles, a distinct read invalidation reloads once 
 test('after a recovery fully settles, a distinct list invalidation reloads once more (R5-1, I2)', async () => {
   const host = recoveryHost(), u = await homeUi(host), { status } = counts(u);
   host.s.scope = 'scope-2';
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(status(), 2); assert.ok(u.panel().includes('Weekly client update'));
   host.s.scope = 'scope-3';
-  await u.click('context-tab'); await settle();
+  await nextSourcePage(u, 'about'); await settle();
   assert.equal(status(), 3);
   await settle(); assert.equal(status(), 3);
 });
@@ -1176,7 +1181,7 @@ test('a ready status alone does not re-arm while every sibling is still pending 
   await u.press('Fixed scope before retainers'); await settle();
   assert.equal(status(), 2);
   host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(status(), 2, 'no second automatic reload'); assert.equal(u.shown('home-gate'), true);
   for (const release of releases) release();
   await settle();
@@ -1192,7 +1197,7 @@ test('one healthy sibling does not re-arm while another is pending (R5-1, I2)', 
   await u.press('Fixed scope before retainers'); await settle();
   assert.equal(status(), 2); assert.ok(u.panel().includes('About Fictional Studio'), 'healthy sibling listed');
   host.overrides.set('skills', value => { delete value.scope; });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(status(), 2); assert.equal(u.shown('home-gate'), true);
   release(); await settle(); assert.equal(status(), 2);
 });
@@ -1216,7 +1221,7 @@ test('a failed sibling does not re-arm; a section Try again or the gate Try agai
   await u.press('Fixed scope before retainers'); await settle();
   const spent = status();
   host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(status(), spent, 'failed sibling: not re-armed'); assert.equal(u.shown('home-gate'), true);
   host.overrides.clear(); await u.click('gate-action'); await settle();
   assert.equal(status(), spent + 1); assert.equal(u.shown('home-gate'), false);
@@ -1278,7 +1283,7 @@ for (const leave of [false, true]) {
     const { host, u, status, releaseDocs } = await recoveringWithDocsHeld();
     host.reads.hold = true;
     const opening = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
-    if (leave) { await u.press('← Context'); assert.equal(u.shown('home-footer'), true); }
+    if (leave) { await u.press('‹'); assert.equal(u.shown('home-search'), true); }
     releaseDocs(); await settle();
     host.reads.change = value => { value.scope = 'stale-scope'; };
     host.releaseReads(); await opening; await settle();
@@ -1293,7 +1298,7 @@ for (const failure of ['unavailable', 'rate_limited']) {
     host.reads.change = null;
     releaseDocs(); await settle();
     host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
-    await u.click('skills-tab'); await settle();
+    await nextSourcePage(u, 'skills'); await settle();
     assert.equal(status(), 2, 'the failed read keeps the budget spent'); assert.equal(u.shown('home-gate'), true);
   });
 }
@@ -1304,9 +1309,9 @@ test('a recovery whose last outstanding request is a successful read settles; a 
   releaseDocs(); await settle();
   host.releaseReads(); await opening; await settle();
   assert.equal(u.text('reader-title'), 'Fixed scope before retainers');
-  await u.press('← Context');
+  await u.press('‹');
   host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(status(), 3, 'exactly one more reload'); await settle(); assert.equal(status(), 3);
 });
 test('old-generation answers arriving during an active recovery do not re-arm it (R6-1, I2)', async () => {
@@ -1321,7 +1326,7 @@ test('old-generation answers arriving during an active recovery do not re-arm it
   assert.equal(status(), 2); assert.equal(calls, 2, 'memory pending in both generations');
   gates[0].release(); await settle(); // the first generation's Memory answer, now stale
   host.overrides.set('skills', value => { value.scope = 'stale-scope'; });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(status(), 2, 'not re-armed by the stale answer'); assert.equal(u.shown('home-gate'), true);
   gates[1].release(); await settle(); assert.equal(status(), 2);
 });
@@ -1370,7 +1375,7 @@ test('a changed account offers no saved links and opens no saved target; the sav
   host.s.state = 'ready';
   await u.click('refresh'); await settle();
   assert.equal(u.shown('home'), true); assert.equal(u.shown('home-gate'), false);
-  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
   assert.equal(u.shown('dashboard'), true);
   for (const title of titles) assert.ok(u.get('dashboard').textContent.includes(title), title);
   await u.click('open-docs'); assert.deepEqual(u.links, ['https://example.com/prior-docs']);
@@ -1388,7 +1393,7 @@ test('the reader shows only its own request: an older read of the same record ne
   };
   const u = await homeUi({ s: host.s, handler });
   const first = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
-  await u.press('← Context');
+  await u.press('‹');
   const second = u.buttonNamed('Fixed scope before retainers').dispatch('click'); await settle();
   held[1].release(); await second; await settle();
   assert.equal(u.text('reader-title'), 'Fictional newer answer');
@@ -1419,7 +1424,7 @@ test('links chosen, then a Refresh into account_changed hides them and reads no 
   const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
   const host = homeHost(), title = 'Fictional prior handbook';
   const u = await ui(configured(), saved({ docs: { title, target: 'https://example.com/prior-docs' } }), { ...iconOptions, home: host.handler }); await settle();
-  await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+  await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
   assert.equal(u.shown('dashboard'), true); assert.equal(iconCalls(u), 1, 'links chosen, ready');
   const sourcesBefore = hash(u.status.sources), from = u.homeCalls.length;
   host.s.state = 'account_changed'; // a resolved status that keeps mapping 'saved' and the internal mode
@@ -1456,16 +1461,16 @@ test('an open Settings drawer keeps the draft and an unfinished link but shows a
   assert.ok(u.options('settings-memory-picker').some(node => node.textContent.startsWith('Fictional prior decisions')));
   const stale = u.options('settings-memory-picker').find(node => node.textContent === 'None');
   await u.click('settings-memory-picker');
-  await u.choose('settings-teamSkills-picker', 'Add link…');
+  await u.choose('settings-teamSkills-picker', 'Paste a link…');
   u.get('settings-teamSkills-picker-link').value = 'https://example.com/fictional-unfinished';
   u.get('settings-teamSkills-picker-name').value = 'Fictional unfinished name';
-  assert.ok(u.text('settings-context-picker').includes('Fictional prior studio')); assert.equal(u.focused(), 'settings-teamSkills-picker-link');
+  assert.ok(u.get('settings-context-picker').getAttribute('aria-label').includes('Fictional OSM')); assert.equal(u.focused(), 'settings-teamSkills-picker-link');
   const before = await p2Hash(u.status.sources);
   host.s.state = 'account_changed';
   await u.click('drawer-refresh'); await settle();
   assert.equal(u.get('drawer').open, true); assert.equal(u.shown('settings'), true); assert.equal(u.get('drawer-refresh').disabled, false);
   for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `${role} hidden`);
-  assert.equal(u.text('settings-context-picker').includes('Fictional prior studio'), false); assert.ok(u.text('settings-context-picker').includes('Context'));
+  assert.equal(u.get('settings-context-picker').getAttribute('aria-label').includes('Fictional prior studio'), false); assert.ok(u.get('settings-context-picker').getAttribute('aria-label').includes('Context'));
   assert.equal(u.get('drawer-save').disabled, true); assert.equal(u.focused(), 'drawer-title');
   // Stale handlers change and save nothing.
   await stale.dispatch('click'); await u.click('settings-teamSkills-picker-apply'); await u.click('drawer-save'); await settle();
@@ -1475,7 +1480,7 @@ test('an open Settings drawer keeps the draft and an unfinished link but shows a
   host.s.state = 'ready';
   await u.click('drawer-refresh'); await settle();
   for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), true, `${role} shown`);
-  assert.ok(u.text('settings-context-picker').includes('Fictional prior studio'));
+  assert.ok(u.get('settings-context-picker').getAttribute('aria-label').includes('Fictional OSM'));
   assert.ok(u.text('settings-docs-picker').includes('Fictional prior handbook')); assert.ok(u.text('settings-memory-picker').includes('Fictional prior decisions'));
   assert.ok(u.text('settings-teamMemory-picker').includes('Fictional pending team memory'));
   assert.equal(u.get('settings-teamSkills-picker-link').value, 'https://example.com/fictional-unfinished'); assert.equal(u.get('settings-teamSkills-picker-link').disabled, false);
@@ -1496,14 +1501,14 @@ test('Settings opened after an account change shows no saved source and opens no
     assert.equal(u.get('drawer').open, true, opener); assert.equal(u.focused(), 'drawer-title', opener);
     for (const role of p2Roles) assert.equal(u.shown(`settings-${role}`), false, `${opener}: ${role} hidden`);
     assert.equal(u.get('settings-teamMemory-picker').getAttribute('aria-expanded'), 'false', opener);
-    assert.equal(u.text('settings-context-picker').includes('Fictional prior studio'), false, opener);
+    assert.equal(u.get('settings-context-picker').getAttribute('aria-label').includes('Fictional prior studio'), false, opener);
     await u.click('drawer-close'); assert.equal(u.get('drawer').open, false, opener);
   }
   const second = homeHost(); Object.assign(second.s, { state: 'account_changed', mapping: 'saved' });
   const w = await ui(configured(), p2Sources(), { home: second.handler, view: 'settings' }); await settle();
   assert.equal(w.get('drawer').open, true, 'host view');
   for (const role of p2Roles) assert.equal(w.shown(`settings-${role}`), false, `host view: ${role} hidden`);
-  assert.equal(w.text('settings-context-picker').includes('Fictional prior studio'), false, 'host view');
+  assert.equal(w.get('settings-context-picker').getAttribute('aria-label').includes('Fictional prior studio'), false, 'host view');
   for (const view of [u, w]) assert.equal(view.names().some(name => name.startsWith('osm_save')), false);
 });
 test('onboarding after an account change keeps the draft but shows and saves no saved source until reconciled (R8-1, P2)', async () => {
@@ -1548,7 +1553,7 @@ test('onboarding with the Notion page picker after an account change shows the c
   const u = await ui(undefined, undefined, { home: host.handler, pages, recoveredSources: p2Sources() });
   await u.input(target); await u.submit(); await settle();
   assert.equal(u.text('setup-context-picker'), 'Fictional prior studio', 'shown while ready');
-  await u.choose('setup-context-picker', 'Edit link…');
+  await u.choose('setup-context-picker', 'Change link…');
   u.get('setup-context-picker-link').value = other;
   host.s.state = 'account_changed';
   await u.click('refresh'); await settle();
@@ -1582,7 +1587,7 @@ test('an observed account change stays suppressed through failed, pending, mappi
       return host.handler(name, args);
     };
     const u = await ui(configured(), p2Sources(), { ...iconOptions, home: handler }); await settle();
-    await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+    await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
     assert.equal(u.shown('dashboard'), true, `${mode}: links chosen`); assert.equal(iconCalls(u), 1, `${mode}: icons while ready`);
     host.s.state = 'account_changed';
     await u.click('drawer-refresh'); await settle();
@@ -1611,7 +1616,7 @@ test('a list or read that reports an account change suppresses saved links at on
     const u = await homeUi({ s: host.s, handler });
     const statusCalls = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
     fail = true;
-    if (kind === 'list') { Object.assign(host.s, { listState: 'account_changed', listScope: null }); await u.click('skills-tab'); await settle(); }
+    if (kind === 'list') { Object.assign(host.s, { listState: 'account_changed', listScope: null }); await nextSourcePage(u, 'skills'); await settle(); }
     else { Object.assign(host.s, { readState: 'account_changed', readScope: null }); await u.press('Fixed scope before retainers'); }
     await u.click('settings'); await settle();
     assert.equal(u.shown('settings-docs'), false, `${kind}: docs field hidden`);
@@ -1634,7 +1639,7 @@ test('an official-mode, missing-projection or disconnected status keeps a held a
   for (const [state, mapping] of [['official_mode', 'saved'], ['unsupported_host', 'missing'], ['not_connected', 'saved']]) {
     const host = homeHost();
     const u = await ui(configured(), p2Sources(), { ...iconOptions, home: host.handler }); await settle();
-    await u.click('organisation-toggle'); await u.click('show-links'); await settle();
+    await u.click('saved-links-toggle'); await u.click('show-links'); await settle();
     assert.equal(iconCalls(u), 1, `${state}: icons while ready`);
     host.s.state = 'account_changed';
     await u.click('drawer-refresh'); await settle();
@@ -1700,14 +1705,14 @@ test('a context list open when the change arrives keeps its search and leaves sa
   const host = homeHost();
   const u = await ui(configured(), r9Sources(), { home: host.handler, pages: r9Pages }); await settle();
   await u.click('settings'); await u.click('settings-context-picker'); await settle();
-  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional prior studio')), 'ready: the context is named');
+  assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional OSM')), 'ready: the verified context is named');
   const search = u.get('settings-context-picker-search'); search.value = 'Fictional'; await search.dispatch('input');
   await new Promise(resolve => setTimeout(resolve, 320)); await settle();
   assert.ok(r9Titles(u, 'settings-context-picker').some(text => text.startsWith('Fictional prior handbook')), 'ready: saved pages are listed');
   const requests = r9Requests(u);
   // A list reports the change while the context list is open.
   Object.assign(host.s, { state: 'account_changed', listState: 'account_changed', listScope: null });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(u.get('settings-context-picker').getAttribute('aria-expanded'), 'true', 'the open list stays open');
   assert.equal(search.value, 'Fictional', 'the typed search is kept');
   assert.equal(r9Titles(u, 'settings-context-picker').some(text => text.includes('Fictional prior')), false, 'no saved page listed at once');
@@ -1729,7 +1734,7 @@ test('a context switch confirmation that names a saved page keeps the choice but
   const question = () => u.get('settings-context').descendants().find(node => node.tagName === 'P' && node.textContent === 'Switch to Fictional prior handbook?');
   assert.equal(question()?.hidden, false, 'ready: the question names the page');
   Object.assign(host.s, { state: 'account_changed', listState: 'account_changed', listScope: null });
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(question()?.hidden, true, 'the question is hidden while the change holds');
   // Setup saves a reconciled mapping for the current connection; the question returns and the kept choice applies.
   Object.assign(host.s, { state: 'ready', listState: null, listScope: undefined });
@@ -1799,14 +1804,14 @@ test('a recovery status read for another context is not applied, so its sections
   assert.ok(u.panel().includes('About your business'), 'this context is shown');
   // The route changes outside this panel; a section answer without a scope starts the recovery.
   Object.assign(host.s, { generation: 2, listState: 'unavailable', listScope: null }); host.route.target = other;
-  await u.click('skills-tab'); await settle();
+  await nextSourcePage(u, 'skills'); await settle();
   assert.equal(u.get('home').textContent.includes('Company handbook'), false, 'no other-context section');
   assert.equal(u.shown('home-gate'), true); assert.equal(u.text('gate-title'), 'Notion could not be read');
   assert.equal(u.text('gate-action'), 'Try again');
   // Refresh reads this panel's context again.
   Object.assign(host.s, { generation: 1, listState: null, listScope: undefined }); host.route.target = target;
   await u.click('drawer-refresh'); await settle();
-  await u.click('context-tab'); await settle();
+  await nextSourcePage(u, 'about'); await settle();
   assert.equal(u.shown('home-gate'), false); assert.ok(u.panel().includes('About your business'), 'this context again');
   assert.equal(u.get('home').textContent.includes('Company handbook'), false, 'still no other-context section');
 });
@@ -1845,15 +1850,415 @@ test('human connection guide checks OSM explicitly and cancels without changing 
 });
 
 
-test('collapsed Browse reads the selected page without fetching hidden source lists', async () => {
-  const u = await ui(configured(), saved({}), { navigation: false, home: async name => ({ _meta: {
-    'osm/home': { state: 'ready', mapping: 'saved', scope: 'quiet-home', context: target,
-      root: { title: 'Fictional home', link: target }, sections: [{ key: 'knowledge', label: 'Knowledge', role: 'documents' }], builtin: [] },
-    'osm/home-list': { state: 'empty', scope: 'quiet-home' }
-  } }) });
-  await settle();
-  assert.ok(u.homeCalls.some(call => call.name === 'osm_home'));
-  assert.equal(u.homeCalls.some(call => call.name === 'osm_home_list'), false);
-  u.get('home-navigation').open = true; await u.get('home-navigation').dispatch('toggle'); await settle();
-  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_list').length, 1);
+test('overview requests mapped title lists without fetching root blocks', async () => {
+  const u = await homeUi();
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_list').length, 4);
+  assert.equal(u.get('home-page').textContent, 'Fictional OSM');
+  assert.equal(u.messages.length, 0);
+});
+
+const enterHomeSearch = async (u, query) => { const input = u.get('home-search'); input.value = query; await input.dispatch('input'); await new Promise(resolve => setTimeout(resolve, 320)); await settle(); };
+function searchableHost() {
+  const base = homeHost();
+  return { ...base, handler: (name, args) => {
+    if (name === 'osm_home_search') {
+      const value = base.handler('osm_home_list', args)._meta['osm/home-list'];
+      return { _meta: { 'osm/home-list': { ...value, items: value.items?.filter(item => item.title.toLowerCase().includes(args.query.trim().toLowerCase())).slice(0, 5) } } };
+    }
+    if (name === 'osm_home_locate') return { _meta: { 'osm/home-location': { state: 'outside', scope: base.s.scope } } };
+    return base.handler(name, args);
+  } };
+}
+test('search restores its query and opener on Back, names failures and clears on Esc', async () => {
+  const u = await homeUi(searchableHost());
+  await enterHomeSearch(u, 'scope');
+  assert.ok(u.panel().includes('Fixed scope before retainers')); assert.ok(u.panel().includes('Business Docs couldn’t be searched right now'));
+  await u.press('Fixed scope before retainers'); await u.press('‹');
+  assert.equal(u.get('home-search').value, 'scope'); assert.equal(u.document.activeElement.dataset.open, 'm0');
+  await enterHomeSearch(u, 'unmatched'); assert.equal(u.panel().includes('No titles in this home match'), false, 'a denied source prevents a global no-match claim');
+  await u.key('home-search', 'Escape'); assert.equal(u.get('home-search').value, ''); assert.ok(u.panel().includes('Weekly client update'));
+  assert.equal(u.names().some(name => name === 'osm_notion_pages'), false); assert.equal(u.messages.length, 0);
+});
+test('pasted outside link never opens a reader or discloses metadata', async () => {
+  const u = await homeUi(searchableHost()); await enterHomeSearch(u, other);
+  assert.ok(u.panel().includes('This page isn’t part of your Data & Context home'));
+  assert.equal(u.homeCalls.some(call => call.name === 'osm_home_read'), false); assert.equal(u.names().length, 0);
+});
+test('Copy link announces success or selects an honest manual URL fallback', async () => {
+  for (const refused of [false, true]) {
+    const copied = [], base = homeHost();
+    const u = await ui(configured(), homeSources, { home: base.handler, writeText: async value => { if (refused) throw new Error('Denied'); copied.push(value); } }); await settle();
+    const buttons = () => u.get('home-panel').descendants().filter(node => node.tagName === 'BUTTON');
+    await buttons().find(node => node.textContent.startsWith('Fixed scope before retainers')).dispatch('click'); await settle();
+    await buttons().find(node => node.textContent === 'Copy link').dispatch('click');
+    if (refused) { const input = u.document.activeElement; assert.equal(input.value, 'https://www.notion.so/fictional-m0'); assert.equal(input.selectionEnd, input.value.length); assert.equal(u.text('home-panel').includes('Link copied'), false); }
+    else { assert.deepEqual(copied, ['https://www.notion.so/fictional-m0']); assert.ok(u.text('home-panel').includes('Link copied')); }
+  }
+});
+test('visibility refresh is event-driven, throttled to 30 seconds, and keeps old content while checking', async () => {
+  const host = pendingHomeHost(), u = await homeUi(host), count = () => u.homeCalls.filter(call => call.name === 'osm_home').length;
+  const visibility = async state => { u.document.visibilityState = state; await u.get('home').dispatch('visibilitychange'); await settle(); };
+  assert.equal(count(), 1); await visibility('visible'); assert.equal(count(), 1);
+  host.hold(); await visibility('hidden'); await visibility('visible'); assert.equal(count(), 2);
+  assert.ok(u.panel().includes('Fixed scope before retainers')); assert.equal(u.shown('home-checking'), true);
+  host.release(); await settle(); await visibility('hidden'); await visibility('visible'); assert.equal(count(), 2);
+  u.advance(30000); await visibility('hidden'); await visibility('visible'); assert.equal(count(), 3);
+  await settle(); assert.equal(count(), 3);
+});
+test('wide overview shows four preview rows with source action only when more exist', async () => {
+  const base = homeHost(), u = await ui(configured(), homeSources, { home: base.handler, wide: true }); await settle();
+  assert.ok(u.text('home-panel').includes('Review the offer'));
+  const noMore = homeHost(); const handler = (name, args) => { const result = noMore.handler(name, args); if (name === 'osm_home_list') result._meta['osm/home-list'].hasMore = false; return result; };
+  const v = await homeUi({ s: noMore.s, handler });
+  assert.equal(v.buttonNamed('Open About your business'), undefined); assert.ok(v.buttonNamed('Open Memory'));
+});
+
+test('in-flight title searches coalesce to the newest query and stale text never replaces it', async () => {
+  const base = searchableHost(), held = deferred(); let waiting = true;
+  const handler = async (name, args) => { if (name === 'osm_home_search' && waiting) await held.promise; return base.handler(name, args); };
+  const u = await homeUi({ s: base.s, handler });
+  await enterHomeSearch(u, 'scope'); await enterHomeSearch(u, 'Weekly');
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_search').length, 4, 'one batch in flight');
+  waiting = false; held.release(); await settle();
+  const calls = u.homeCalls.filter(call => call.name === 'osm_home_search');
+  assert.deepEqual(calls.map(call => call.args.query), ['scope', 'scope', 'scope', 'scope', 'Weekly', 'Weekly', 'Weekly', 'Weekly']);
+  assert.equal(u.panel().includes('Fixed scope before retainers'), false); assert.ok(u.panel().includes('Weekly client update'));
+  assert.equal(u.names().length, 0);
+});
+
+test('a denied search-only record invalidates its title without another connector', async () => {
+  const base = homeHost();
+  const handler = (name, args) => name === 'osm_home_search'
+    ? { _meta: { 'osm/home-list': { state: 'listed', scope: base.s.scope, items: [{ id: 'search-only', title: 'Previously readable sample title' }] } } }
+    : base.handler(name, args);
+  const u = await homeUi({ s: base.s, handler }); await enterHomeSearch(u, 'Previously');
+  Object.assign(base.s, { readState: 'inaccessible', listState: 'inaccessible' });
+  await u.press('Previously readable sample title');
+  assert.equal(u.panel().includes('Previously readable sample title'), false);
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home').length, 2);
+  assert.equal(u.names().length, 0); assert.equal(u.messages.length, 0);
+});
+
+test('reader replaces overview chrome and root breadcrumb clears a search-origin query', async () => {
+  const u = await homeUi(searchableHost());
+  const query = '  scope  ';
+  await enterHomeSearch(u, query); await u.press('Fixed scope before retainers');
+  assert.equal(u.shown('page-header'), false);
+  assert.equal(u.buttonNamed('‹').getAttribute('aria-label'), 'Back to search results');
+  assert.ok(u.buttonNamed('Open in Notion ↗'));
+  const bar = u.nodes().find(node => node.getAttribute('class') === 'reader-bar');
+  assert.ok(bar); assert.equal(bar.children[0].children[0].textContent, '‹');
+  await u.press('‹'); assert.equal(u.get('home-search').value, query);
+  assert.equal(u.document.activeElement.dataset.open, 'm0'); assert.equal(u.shown('page-header'), true);
+  await u.press('Fixed scope before retainers'); await u.press('Fictional OSM');
+  assert.equal(u.get('home-search').value, ''); assert.equal(u.shown('home-search'), true);
+  assert.equal(u.shown('home-page'), true); assert.ok(u.panel().includes('Weekly client update'));
+  assert.equal(u.panel().includes('Copy link'), false);
+});
+
+test('connected Settings shows verified home value, minute check time and only the navigation row for Saved links', async () => {
+  const base = homeHost();
+  const u = await homeUi({ ...base, handler: (name, args) => {
+    const result = base.handler(name, args);
+    if (name === 'osm_home') Object.assign(result._meta['osm/home'], { workspaceName: 'Sample workspace', root: { title: 'Verified sample home', icon: '📚', link: target } });
+    return result;
+  } });
+  await u.click('settings');
+  assert.equal(u.text('osm-workspace'), 'Connected · Sample workspace');
+  assert.equal(u.get('osm-workspace').dataset.state, 'connected');
+  assert.match(u.text('osm-checked'), /^Checked at \d{2}:\d{2} when Home opened$/);
+  for (const id of ['settings-connection', 'connection-provisioning', 'organisation-copy', 'saved-links', 'settings-footer']) assert.equal(u.shown(id), false, id);
+  for (const id of ['manage-access', 'home-recheck', 'settings-main']) assert.equal(u.shown(id), true, id);
+  assert.equal(u.get('settings-context-picker').children[0].children[1].textContent, 'Verified sample home');
+  assert.ok(u.text('settings-context-picker').endsWith('Change ›'));
+  assert.match(u.text('home-definition'), /^Definition revision fictional-r1 routes Home to 4 sources\. It routes; access comes from OSM’s connection\.$/);
+});
+
+test('Saved links is a separate view with five clear labels; Back, Escape, Cancel and Save preserve draft rules', async () => {
+  const u = await ui(configured(), saved({}));
+  await u.click('settings'); await u.click('saved-links-toggle');
+  assert.equal(u.shown('settings-main'), false); assert.equal(u.text('drawer-title'), 'Saved links');
+  assert.equal(u.shown('settings-back'), true); assert.equal(u.shown('settings-footer'), true);
+  const labels = ['docs', 'personalSkills', 'teamSkills', 'memory', 'teamMemory'].map(role => u.get(`settings-${role}`).children[0].children[0].textContent);
+  assert.deepEqual(labels, ['DocsOptional', 'Personal skillsOptional', 'Team skillsOptional', 'MemoryOptional', 'Team memoryOptional']);
+  await u.click('settings-back'); assert.equal(u.shown('settings-footer'), false); assert.equal(u.focused(), 'saved-links-toggle');
+  await u.click('saved-links-toggle'); await u.addLink('settings-memory-picker', 'https://example.com/sample-memory');
+  await u.click('settings-back'); assert.equal(u.shown('foot-discard'), true); assert.equal(u.get('drawer').open, true);
+  await u.click('keep-editing'); assert.equal(u.shown('saved-links'), true);
+  await u.key('drawer', 'Escape'); assert.equal(u.shown('foot-discard'), true);
+  await u.key('drawer', 'Escape'); assert.equal(u.shown('foot-edit'), true);
+  await u.click('drawer-cancel'); assert.equal(u.shown('foot-discard'), true);
+  await u.click('keep-editing'); await u.click('settings-back'); await u.click('discard');
+  assert.equal(u.shown('settings-main'), true); assert.equal(u.get('drawer').open, true); assert.equal(u.calls.length, 0);
+  await u.click('saved-links-toggle'); assert.equal(u.text('settings-memory-picker'), 'None');
+  await u.addLink('settings-memory-picker', 'https://example.com/sample-memory'); await u.click('drawer-save');
+  assert.equal(u.get('drawer').open, false); assert.deepEqual(u.names(), ['osm_save_sources']);
+});
+
+test('root-denied gate uses neutral copy and selected URL, never unverified returned root metadata', async () => {
+  const base = homeHost(); base.s.state = 'root_inaccessible';
+  const u = await homeUi({ ...base, handler: (name, args) => {
+    const result = base.handler(name, args);
+    if (name === 'osm_home') result._meta['osm/home'].root = { title: 'Unverified hidden title', link: other };
+    return result;
+  } });
+  assert.equal(u.text('gate-title'), 'Your home page can’t be read');
+  assert.equal(u.text('gate-copy'), 'OSM’s connection can’t read your home. In Notion, open the page’s ••• menu → Connections and add OSM.');
+  assert.equal(u.shown('gate-connect'), false); assert.equal(u.shown('gate-notion'), true);
+  assert.equal(u.text('gate-action'), 'Check again'); assert.equal(u.text('gate-setup'), 'Get help from your agent');
+  assert.equal(u.text('home-definition').includes('Unverified'), false); assert.equal(u.panel(), '');
+  await u.click('gate-notion'); assert.deepEqual(u.links, [target]);
+  assert.equal(u.homeCalls.some(call => call.name !== 'osm_home'), false);
+});
+
+test('not-connected Settings keeps honest provisioning and Connect Notion outside the connected state', async () => {
+  const base = homeHost(); base.s.state = 'not_connected';
+  const u = await homeUi(base); await u.click('settings');
+  assert.equal(u.text('settings-connection'), 'Connect Notion');
+  assert.equal(u.shown('settings-connection'), true); assert.equal(u.shown('connection-provisioning'), true);
+  assert.equal(u.shown('osm-checked'), false); assert.equal(u.shown('manage-access'), false);
+  await u.click('settings-connection'); assert.equal(u.get('connection-dialog').open, true); assert.equal(u.messages.length, 0);
+});
+
+test('global no-match requires every searchable source to finish completely and successfully', async () => {
+  for (const failure of [null, 'unavailable', 'inaccessible', 'partial']) {
+    const base = homeHost();
+    const u = await homeUi({ ...base, handler: (name, args) => name === 'osm_home_search'
+      ? { _meta: { 'osm/home-list': { state: args.section === 'memory' && failure && failure !== 'partial' ? failure : 'empty', scope: base.s.scope, items: [], partial: args.section === 'memory' && failure === 'partial' } } }
+      : base.handler(name, args) });
+    await enterHomeSearch(u, 'unmatched');
+    assert.equal(u.panel().includes('No titles in this home match “unmatched”.'), failure === null, String(failure));
+    if (failure === 'unavailable') assert.ok(u.panel().includes('Memory couldn’t be searched right now'));
+    if (failure === 'partial') assert.ok(u.panel().includes('Memory couldn’t be searched completely'));
+    if (failure === 'inaccessible') assert.equal(u.homeCalls.filter(call => call.name === 'osm_home').length, 2, 'denial of a previously listed source invalidates Home and rechecks once');
+  }
+});
+
+// Bounded final repairs: accepted F1–F3, LINK-BACK and INCOMPLETE-SEARCH.
+function locatedHost({ state = 'read', held, id = 'located-only', resultScope, locateKey = 'memory' } = {}) {
+  const base = homeHost(); let attempts = 0;
+  return { ...base, get attempts() { return attempts; }, handler: async (name, args) => {
+    if (name === 'osm_home_locate') return { _meta: { 'osm/home-location': { state: 'located', scope: base.s.scope, key: locateKey, id, title: 'Unverified locate title', icon: '🚫' } } };
+    if (name === 'osm_home_read') {
+      ++attempts;
+      if (held) await held.promise;
+      return { _meta: { 'osm/home-record': { state: base.s.readState || state, scope: resultScope === undefined ? base.s.scope : resultScope,
+        record: { title: 'Verified located sample', icon: '📗', fields: [{ heading: 'Private field', text: 'Ephemeral field content' }], blocks: [{ kind: 'text', text: 'Ephemeral body content' }], meta: 'Ephemeral meta content', link: other } } } };
+    }
+    const result = base.handler(name, args);
+    if (name === 'osm_home_list' && args.section === 'memory') result._meta['osm/home-list'].source = { title: 'Verified source', icon: '📚' };
+    return result;
+  } };
+}
+const linkQuery = '  https://www.notion.so/00000000000000000000000000000003  ';
+const searchRows = u => u.nodes().filter(node => node.getAttribute('role') === 'option');
+
+test('located-link Back restores one verified Q01 row, original URL and focus; crumbs preserve search history', async () => {
+  const host = locatedHost(), u = await homeUi(host);
+  await enterHomeSearch(u, linkQuery);
+  assert.ok(u.panel().includes('Ephemeral body content'));
+  assert.ok(u.panel().includes('Fictional OSMVerified sourceVerified located sample'));
+  assert.equal(u.panel().includes('Unverified locate title'), false);
+  await u.press('‹');
+  assert.equal(u.get('home-search').value, linkQuery);
+  assert.equal(searchRows(u).length, 1); assert.equal(searchRows(u)[0].textContent, '📗Verified located sample');
+  assert.equal(u.document.activeElement, searchRows(u)[0]);
+  assert.ok(u.panel().includes('📚Verified source'));
+  assert.doesNotMatch(u.panel(), /Searching|Ephemeral|Private field|Copy link|Open in Notion/);
+  assert.equal(host.attempts, 1); assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_locate').length, 1);
+  await u.press('📗Verified located sample'); assert.equal(host.attempts, 2);
+  await u.press('Verified source');
+  assert.equal(u.shown('page-header'), false);
+  assert.equal(u.buttonNamed('‹').getAttribute('aria-label'), 'Back to search results');
+  assert.ok(u.nodes().some(node => node.getAttribute('class') === 'reader-leading'));
+  await u.press('‹'); assert.equal(u.get('home-search').value, linkQuery); assert.equal(u.document.activeElement, searchRows(u)[0]);
+  assert.equal(host.attempts, 2);
+  await u.press('📗Verified located sample'); await u.press('Fictional OSM');
+  assert.equal(u.get('home-search').value, ''); assert.equal(searchRows(u).length, 0);
+  assert.equal(u.shown('page-header'), true);
+});
+
+test('source list reuses the reader bar with a named Home back action and inline title icon gap', async () => {
+  const u = await homeUi(locatedHost()); await u.press('Open Verified source');
+  const bar = u.nodes().find(node => node.getAttribute('class') === 'reader-bar');
+  assert.equal(bar.children[0].getAttribute('class'), 'reader-leading');
+  assert.equal(bar.children[0].children[0].getAttribute('aria-label'), 'Back to Home');
+  assert.equal(u.shown('page-header'), false); await u.press('‹'); assert.equal(u.shown('page-header'), true);
+  assert.match(await read('styles.css'), /#home-panel > h2 \{[^}]*display: flex;[^}]*align-items: center;[^}]*gap: 8px/);
+});
+
+test('pending located read settles after Back without reopening; failures expose only approved recovery', async () => {
+  for (const state of ['read', 'inaccessible', 'unsupported', 'unavailable', 'rate_limited']) {
+    const held = deferred(), host = locatedHost({ state, held }), u = await homeUi(host);
+    await enterHomeSearch(u, linkQuery); await u.press('‹');
+    assert.ok(u.panel().includes('Searching…'), state); assert.equal(u.focused(), 'home-search');
+    held.release(); await settle();
+    assert.equal(u.panel().includes('Searching…'), false, state);
+    assert.equal(u.panel().includes('Unverified locate title'), false);
+    assert.doesNotMatch(u.panel(), /Ephemeral|Private field/);
+    if (state === 'read') {
+      assert.equal(searchRows(u).length, 1); assert.equal(u.document.activeElement, searchRows(u)[0]);
+    } else {
+      assert.equal(searchRows(u).length, 0); assert.equal(u.focused(), 'home-search');
+      assert.equal(u.panel().includes('Verified located sample'), false);
+      if (['inaccessible', 'unsupported'].includes(state)) {
+        assert.ok(u.panel().includes('OSM can’t open this page here')); await u.press('Open in Notion'); assert.deepEqual(u.links, [linkQuery.trim()]);
+      } else {
+        assert.ok(u.panel().includes('Verified source couldn’t be searched right now'));
+        await u.press('Try again');
+        assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_locate').length, 2, 'retry explicitly locates again');
+      }
+    }
+    assert.equal(host.attempts, ['unavailable', 'rate_limited'].includes(state) ? 2 : 1);
+  }
+});
+
+test('located-link failures after reader Back do not remain Searching or leak response metadata', async () => {
+  for (const state of ['unsupported', 'unavailable', 'rate_limited', 'inaccessible']) {
+    const u = await homeUi(locatedHost({ state })); await enterHomeSearch(u, linkQuery); await u.press('‹');
+    assert.doesNotMatch(u.panel(), /Searching|Ephemeral|Verified located sample|Unverified locate/);
+    assert.equal(searchRows(u).length, 0);
+    assert.ok(u.panel().includes(['unsupported', 'inaccessible'].includes(state) ? 'OSM can’t open this page here' : 'couldn’t be searched right now'));
+  }
+});
+
+test('located rows clear on edit, Esc and explicit recheck; pending old answers cannot restore them', async () => {
+  for (const event of ['edit', 'escape', 'recheck', 'context']) {
+    const held = deferred(), u = await homeUi(locatedHost({ held }));
+    await enterHomeSearch(u, linkQuery); await u.press('‹');
+    if (event === 'edit') { u.get('home-search').value = 'new query'; await u.get('home-search').dispatch('input'); }
+    if (event === 'escape') await u.key('home-search', 'Escape');
+    if (event === 'recheck') await u.click('home-recheck');
+    if (event === 'context') u.notify({ _meta: { 'osm/status': { ...plain(u.status), context: { state: 'configured', target: other, kind: 'notion', revision: 'e'.repeat(64) }, checkedAt: new Date(999999).toISOString() } } });
+    await settle(); held.release(); await settle();
+    assert.doesNotMatch(u.panel(), /Verified located sample|Ephemeral|Unverified locate/);
+    assert.equal(u.get('home-search').value, event === 'edit' ? 'new query' : '', event);
+    if (event === 'edit') { await u.key('home-search', 'Escape'); }
+    assert.equal(searchRows(u).length, 0);
+  }
+  const u = await homeUi(locatedHost()); await enterHomeSearch(u, linkQuery); await u.press('‹');
+  await u.click('home-recheck'); assert.equal(u.get('home-search').value, ''); assert.equal(searchRows(u).length, 0);
+  assert.equal(u.panel().includes('Verified located sample'), false);
+});
+
+test('located read invalidation after Back precedes metadata use for scope, account, revocation and known-page denial', async () => {
+  for (const failure of ['stale-scope', 'missing-scope', 'account_changed', 'not_connected', 'inaccessible']) {
+    const held = deferred(), host = locatedHost({ held, ...(failure === 'inaccessible' && { id: 'm0' }),
+      ...(failure === 'stale-scope' && { resultScope: 'old' }), ...(failure === 'missing-scope' && { resultScope: null }) });
+    const u = await homeUi(host); await enterHomeSearch(u, linkQuery); await u.press('‹');
+    if (failure === 'account_changed' || failure === 'not_connected') host.s.state = failure;
+    if (!failure.endsWith('scope')) host.s.readState = failure;
+    held.release(); await settle();
+    assert.equal(u.homeCalls.filter(call => call.name === 'osm_home').length, 2, failure);
+    assert.doesNotMatch(u.panel(), /Verified located sample|Ephemeral|Unverified locate|Searching/);
+    assert.equal(u.get('home-search').value, '');
+  }
+  // A restored, search-only Q01 row is also previously listed evidence on the next read.
+  const host = locatedHost(), u = await homeUi(host); await enterHomeSearch(u, linkQuery); await u.press('‹');
+  host.s.readState = 'inaccessible'; await u.press('📗Verified located sample');
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home').length, 2);
+  assert.equal(u.panel().includes('Verified located sample'), false);
+});
+
+test('locate never requests an unmapped or related source and never displays its metadata', async () => {
+  for (const locateKey of ['outside', 'tasks']) {
+    const u = await homeUi(locatedHost({ locateKey })); await enterHomeSearch(u, linkQuery);
+    assert.equal(u.homeCalls.some(call => call.name === 'osm_home_read'), false);
+    assert.doesNotMatch(u.panel(), /Unverified locate|Verified located sample/); assert.ok(u.panel().includes('This page isn’t part'));
+  }
+});
+
+test('zero-hit incomplete searches retain headings and ordered notes, with source-open winning over retry', async () => {
+  for (const flags of [{ hasMore: true }, { partial: true }, { withheld: 2 }, { hasMore: true, partial: true, withheld: 2 }]) {
+    const base = homeHost(), u = await homeUi({ ...base, handler: (name, args) => name === 'osm_home_search'
+      ? { _meta: { 'osm/home-list': { state: 'listed', scope: base.s.scope, items: [], ...(args.section === 'memory' && { source: { title: 'Verified memory', icon: '📚' }, ...flags }) } } }
+      : base.handler(name, args) });
+    await enterHomeSearch(u, 'scope');
+    assert.doesNotMatch(u.panel(), /No titles|Searching/); assert.ok(u.panel().startsWith('📚Verified memory'));
+    if (flags.hasMore || flags.partial) assert.ok(u.panel().includes('Verified memory couldn’t be searched completely'));
+    if (flags.withheld) assert.ok(u.panel().includes('2 pages here can’t be read with OSM’s connection.'));
+    if (flags.hasMore) {
+      assert.equal(Boolean(u.buttonNamed('Try again')), false); const before = u.homeCalls.length;
+      await u.press('Open Verified memory'); assert.equal(u.shown('home-search'), false); assert.equal(u.homeCalls.length, before, 'H03 uses the existing read-only list');
+      assert.equal(u.buttonNamed('‹').getAttribute('aria-label'), 'Back to search results');
+      await u.press('‹'); assert.equal(u.get('home-search').value, 'scope');
+    } else assert.equal(Boolean(u.buttonNamed('Try again')), Boolean(flags.partial));
+    if (flags.partial && flags.withheld) assert.ok(u.panel().indexOf('searched completely') < u.panel().indexOf('2 pages'));
+  }
+});
+
+test('missing search answers show Searching only while pending and never assert global no-match', async () => {
+  const base = homeHost(), held = deferred();
+  const u = await homeUi({ ...base, handler: async (name, args) => {
+    if (name !== 'osm_home_search') return base.handler(name, args);
+    if (args.section === 'memory') await held.promise;
+    return { _meta: { 'osm/home-list': { state: 'empty', scope: base.s.scope } } };
+  } });
+  await enterHomeSearch(u, 'missing'); assert.ok(u.panel().includes('Searching…')); assert.equal(u.panel().includes('No titles'), false);
+  held.release(); await settle(); assert.equal(u.panel().includes('Searching…'), false); assert.ok(u.panel().includes('No titles'));
+  assert.ok(u.panel().includes('Searched About your business, Memory, Business Docs, Skills.'));
+});
+
+test('recheck clears the query and its debounce, and media changes rerender the 3/4 previews without reads', async () => {
+  const u = await homeUi(); await enterHomeSearch(u, 'scope'); await u.click('home-recheck');
+  assert.equal(u.get('home-search').value, ''); assert.ok(u.panel().includes('Weekly client update'));
+  const before = u.homeCalls.length;
+  u.resize(true); assert.ok(u.panel().includes('Review the offer')); u.resize(false); assert.equal(u.panel().includes('Review the offer'), false);
+  assert.equal(u.homeCalls.length, before);
+  u.get('home-search').value = 'cancelled'; await u.get('home-search').dispatch('input'); await u.click('home-recheck');
+  const searches = u.homeCalls.filter(call => call.name === 'osm_home_search').length;
+  await new Promise(resolve => setTimeout(resolve, 320)); await settle();
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_search').length, searches); assert.equal(u.get('home-search').value, '');
+});
+
+test('connection-ended gate is human-first with one primary; organisation copy is hidden for every status', async () => {
+  for (const state of ['not_connected', 'ready', 'unsupported_host', 'unmapped', 'account_changed', 'root_inaccessible', 'mapping_unavailable', 'rate_limited', 'unavailable', 'official_mode']) {
+    const base = homeHost(); base.s.state = state; const u = await homeUi(base);
+    assert.equal(u.shown('organisation-copy'), false, state);
+    assert.equal(u.shown('connection-provisioning'), state === 'not_connected', state);
+    if (state === 'not_connected') {
+      assert.equal(u.text('gate-copy'), 'OSM isn’t connected to Notion, or its connection was removed, so nothing from your home is shown.');
+      assert.equal(u.text('gate-connect'), 'Open connection settings');
+      assert.equal(u.get('gate-connect').getAttribute('class'), 'btn btn-primary');
+      for (const id of ['gate-action', 'gate-setup']) assert.equal(u.get(id).getAttribute('class'), 'text-button');
+      assert.equal(u.text('gate-action'), 'Show saved links'); assert.equal(u.text('gate-setup'), 'Get help from your agent');
+      assert.equal(u.get('settings-connection').getAttribute('class'), 'btn btn-primary');
+      assert.equal(u.messages.length, 0);
+    }
+  }
+});
+
+test('thrown located reads settle Back into explicit locate retry instead of stuck Searching', async () => {
+  const host = locatedHost(), u = await homeUi({ ...host, handler: (name, args) => {
+    if (name === 'osm_home_read') throw new Error('Synthetic transport failure');
+    return host.handler(name, args);
+  } });
+  await enterHomeSearch(u, linkQuery); await u.press('‹');
+  assert.doesNotMatch(u.panel(), /Searching|Verified located sample/);
+  assert.ok(u.panel().includes('couldn’t be searched right now'));
+  await u.press('Try again'); assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_locate').length, 2);
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home').length, 1, 'transport failure does not fabricate an access revocation');
+});
+
+test('an older located read cannot replace the current query version row', async () => {
+  const base = locatedHost(), first = deferred(); let reads = 0;
+  const u = await homeUi({ ...base, handler: async (name, args) => {
+    if (name !== 'osm_home_read') return base.handler(name, args);
+    const n = ++reads; if (n === 1) await first.promise;
+    const result = await base.handler(name, args); result._meta['osm/home-record'].record.title = n === 1 ? 'Older verified answer' : 'Newest verified answer'; return result;
+  } });
+  await enterHomeSearch(u, linkQuery); await u.press('‹');
+  await enterHomeSearch(u, linkQuery.trim()); await u.press('‹');
+  first.release(); await settle();
+  assert.ok(u.panel().includes('Newest verified answer')); assert.equal(u.panel().includes('Older verified answer'), false);
+  assert.equal(u.homeCalls.filter(call => call.name === 'osm_home_locate').length, 2); assert.equal(reads, 2);
+});
+
+test('failed searched-source answers never provide a title or icon for a heading', async () => {
+  const base = homeHost(), u = await homeUi({ ...base, handler: (name, args) => name === 'osm_home_search'
+    ? { _meta: { 'osm/home-list': { state: args.section === 'docs' ? 'inaccessible' : 'empty', scope: base.s.scope, source: { title: 'Denied metadata title', icon: '🚫' } } } }
+    : base.handler(name, args) });
+  await enterHomeSearch(u, 'unmatched');
+  assert.ok(u.panel().includes('Business Docs couldn’t be searched right now'));
+  assert.doesNotMatch(u.panel(), /Denied metadata title|🚫|No titles|Searching/);
 });

@@ -1,6 +1,6 @@
 # Recovery
 
-Guidance revision: 2026-11-06
+Guidance revision: 2026-11-09
 
 ## Codex sidebar
 
@@ -22,6 +22,17 @@ correct the AI Operating Model definition and let Setup regenerate the
 projection from its new revision; never hand-edit it. To stop Home
 reading, revoke OSM's internal connection in Notion. Never copy a token to
 repair it. See [Home connection](home-connection.md).
+
+For the 9 November Home revision, use Settings → Check again after changing
+OSM's page access in Notion. Returning from a hidden panel also rechecks at most
+once per 30 seconds, when the host emits visibility events; there is no polling.
+If that event is unavailable, the explicit check remains the recovery action.
+Settings → Saved links changes navigation only and cannot repair a grant.
+Search is confined to mapped titles and never falls back to another connector.
+A refused clipboard write leaves a selected URL for manual copy. A local fixture
+that cannot listen in a restricted host is not evidence of a Notion failure;
+restart it on an unused port in a host that permits local listening, preserving
+any existing preview process.
 
 Git history and reviewed tags/commits preserve earlier package versions and
 removed documentation. Do not keep duplicate historical reports in the active

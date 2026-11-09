@@ -138,12 +138,12 @@ export function createHomeService({ credential = hostCredential, transport, read
       return { ...base, state: problem.state === 'inaccessible' ? 'root_inaccessible' : problem.state, ...(problem.retryAfter && { retryAfter: problem.retryAfter }) };
     }
     const support = sections.filter(item => item.role === 'support').length;
-    return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: pageTitle(rootPage) || root.title, link: root.link },
+    return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: pageTitle(rootPage) || root.title, icon: await readPageIcon(rootPage.icon), link: root.link },
       sections: sections.filter(item => item.role !== 'support').map(item => ({ key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
         ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) })), ...(support && { supportHidden: support }) };
   }
 
-  async function list({ key, cursor }) {
+  async function list({ key, cursor, query = '' }) {
     const session = await open();
     if (session.state !== 'ready') return { state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
     const item = section(session, key);
@@ -162,7 +162,7 @@ export function createHomeService({ credential = hostCredential, transport, read
         }
         const notes = excluded ? { supportExcluded: excluded } : {};
         if (!items.length) return { state: denied ? 'inaccessible' : 'empty', scope: session.scope, ...notes };
-        return { state: 'listed', scope: session.scope, items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
+        return { state: 'listed', scope: session.scope, items: query ? items.filter(item => item.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, 5) : items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
       }
       // The data source's schema must still hold the verified fields before any query.
       const schema = await session.client.dataSource(target.id);
@@ -175,8 +175,10 @@ export function createHomeService({ credential = hostCredential, transport, read
       if (types[item.fields.title] !== 'title') return { state: 'unsupported', scope: session.scope };
       const source = { title: plainText(schema.title).trim().slice(0, 200) || item.label, icon: await readPageIcon(schema.icon) };
       const description = item.fields.description && textProperties.has(types[item.fields.description]) ? item.fields.description : undefined;
-      const result = await session.client.query(target.id, { filter: item.view?.filter, sorts: item.view?.sorts, cursor,
-        size: readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
+      const titleFilter = { property: item.fields.title, title: { contains: query } };
+      const filter = query ? item.view?.filter ? { and: [item.view.filter, titleFilter] } : titleFilter : item.view?.filter;
+      const result = await session.client.query(target.id, { filter, sorts: item.view?.sorts, cursor,
+        size: query ? 5 : readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
       const rows = (Array.isArray(result.results) ? result.results : [])
         .filter(page => page?.object === 'page' && !page.in_trash && notionId(page.parent?.data_source_id) === target.id && notionId(page.id));
       // The same predicate per row; rows share the source's chain, so this reads nothing more.
@@ -184,7 +186,7 @@ export function createHomeService({ credential = hostCredential, transport, read
       for (const page of rows) places.push(await containment(session, notionId(page.id), page.parent, walk));
       const excluded = places.filter(place => place === 'support').length, withheld = places.filter(place => place === 'unresolved').length;
       const items = await Promise.all(rows.filter((page, index) => places[index] === 'clear')
-        .slice(0, readLimits.pageSize).map(async page => {
+        .slice(0, query ? 5 : readLimits.pageSize).map(async page => {
           const text = description ? propertyText(page.properties?.[description]).trim().slice(0, 300) : '';
           return { id: notionId(page.id), icon: await readPageIcon(page.icon), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
         }));
@@ -238,7 +240,30 @@ export function createHomeService({ credential = hostCredential, transport, read
       const { blocks, truncated } = await readBlocks(session.client, recordId);
       const noun = roleNouns[item.role];
       return { state: 'read', scope: session.scope, record: { title, icon: await readPageIcon(page.icon), meta: noun.toLowerCase() === item.label.toLowerCase() ? item.label : `${item.label} · ${noun}`,
-        fields, blocks, truncated, ...(cut && { fieldsTruncated: true }), link: safeLink(page.url, target.link) } };
+        fields, blocks, truncated, ...(cut && { fieldsTruncated: true }), link: safeLink(page.url, `https://www.notion.so/${recordId}`) } };
+    } catch (error) { return { ...failed(error), scope: session.scope }; }
+  }
+  // Resolve links without exposing any metadata until membership and containment pass.
+  async function locate({ link }) {
+    const session = await open();
+    if (session.state !== 'ready') return { state: session.state };
+    const target = classifyTarget(link), id = target?.kind === 'notion' ? notionId(new URL(target.target).pathname.replaceAll('-', '').match(/([a-f0-9]{32})\/?$/i)?.[1]) : null;
+    if (!id || supportIds(session).has(id)) return { state: 'outside', scope: session.scope };
+    try {
+      const value = await session.client.page(id);
+      if (value.in_trash) return { state: 'inaccessible', scope: session.scope };
+      for (const item of session.mapping.projection.sections.filter(readable)) {
+        const dest = item.destination;
+        if (!(dest.type === 'pages' ? dest.pages.some(page => page.id === id) : notionId(value.parent?.data_source_id) === dest.id)) continue;
+        let walk = walkFor();
+        if (dest.type === 'data_source') {
+          const schema = await session.client.dataSource(dest.id);
+          if (dest.databaseId && notionId(schema.parent?.database_id) !== dest.databaseId) continue;
+          walk = walkFor([[dest.id, schema]]);
+        }
+        if (await containment(session, id, value.parent, walk) === 'clear') return { state: 'located', scope: session.scope, key: item.key, id };
+      }
+      return { state: 'outside', scope: session.scope };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
   }
   async function page() {
@@ -256,5 +281,5 @@ export function createHomeService({ credential = hostCredential, transport, read
       return { ...result, state: result.state === 'inaccessible' ? 'root_inaccessible' : result.state, scope: session.scope };
     }
   }
-  return { connection, status, list, read, page };
+  return { connection, status, list, read, page, locate };
 }

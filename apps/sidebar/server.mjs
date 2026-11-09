@@ -156,6 +156,21 @@ appTool('osm_home_list', {
   try { return homeResult('home-list', await home.list({ key: section, cursor })); }
   catch { return homeResult('home-list', { state: 'unavailable' }); }
 });
+appTool('osm_home_search', {
+  title: 'Search titles in a mapped Home source', description: 'Read-only title contains query intersected with the saved source view. Never workspace search.',
+  inputSchema: { section: z.string().regex(/^[a-z0-9-]{1,40}$/), query: z.string().min(1).max(200) },
+  annotations: homeAnnotations, _meta: { ui: { visibility: ['app'] } },
+}, async ({ section, query }) => {
+  try { return homeResult('home-list', await home.list({ key: section, query })); }
+  catch { return homeResult('home-list', { state: 'unavailable' }); }
+});
+appTool('osm_home_locate', {
+  title: 'Check a pasted Home link', description: 'Verify mapped source membership and containment without returning outside page metadata.',
+  inputSchema: { link: z.string().max(2048) }, annotations: homeAnnotations, _meta: { ui: { visibility: ['app'] } },
+}, async args => {
+  try { return homeResult('home-location', await home.locate(args)); }
+  catch { return homeResult('home-location', { state: 'unavailable' }); }
+});
 appTool('osm_home_read', {
   title: 'Read a Home record', description: 'Read one record of a mapped Home section, its mapped fields and bounded page blocks, for display in the panel only.',
   inputSchema: { section: z.string().regex(/^[a-z0-9-]{1,40}$/), id: z.string().max(36) },

@@ -18,6 +18,7 @@ const connectable = ['not_connected', 'disabled', 'unavailable'];
 let setupRequested = false;
 let status, draft, checkedAt = -Infinity, firstStatus = true, saving = false, refreshing = false, stale = false;
 let onboarding = false, openStep = 0, confirmSwitch = false, settingsOpen = false, discardPrompt = false;
+let settingsView = 'main', discardDestination = 'close';
 let message = { text: '', error: false };
 let selectedContext = null;
 const canBrowse = () => Boolean(status?.features?.notionPages && status.notion.state === 'connected');
@@ -61,7 +62,8 @@ const savedPage = page => home.suppressed() && [status.context.target, ...Object
   .map(notionPageId).filter(Boolean).includes(notionPageId(page.target));
 
 function sourcePicker(id, role) {
-  return createPicker({ id, label: slotLabels[role], loadOptions: loadPages,
+  const savedLabels = { docs: 'Docs', personalSkills: 'Personal skills', teamSkills: 'Team skills', memory: 'Memory', teamMemory: 'Team memory' };
+  return createPicker({ id, label: id.startsWith('settings-') ? savedLabels[role] : slotLabels[role], loadOptions: loadPages,
     onEdit: () => { feedback(''); render(); },
     onSelect: link => { if (home.suppressed()) return; setLink(draft, role, link); feedback(''); render(); },
     onApply: ({ target, name }) => {
@@ -218,8 +220,8 @@ function renderSettings(locked) {
   const dirty = isDirty(draft);
   const ready = status.context.state === 'configured' && draft.contextTarget === status.context.target && status.sources.state !== 'unavailable';
   const hidden = home.suppressed(); // R8-1, as in renderSetup
-  const current = { title: (hidden ? '' : draft.title) || 'Context', target: draft.contextTarget };
-  contextPicker.render({ value: displayed(current), choices: [displayed(current)], browse: canBrowse(), disabled: locked,
+  const current = { ...(home.currentRoot() || {}), title: (hidden ? '' : home.currentRoot()?.title || draft.title) || 'Context', target: draft.contextTarget };
+  contextPicker.render({ actionText: 'Change ›', value: displayed(current), choices: [displayed(current)], browse: canBrowse(), disabled: locked,
     applyText: sourceChanges() ? 'Discard and switch' : 'Switch context', note: sourceChanges() ? 'Unsaved source changes will be discarded.' : '' });
   for (const role of sourceRoles) {
     $(`settings-${role}`).hidden = hidden;
@@ -229,7 +231,12 @@ function renderSettings(locked) {
   $('drawer-save').disabled = locked || !dirty || !ready || hidden;
   $('drawer-save').textContent = saving ? 'Saving…' : 'Save';
   $('drawer-cancel').disabled = saving; $('drawer-close').disabled = saving;
-  $('foot-edit').hidden = discardPrompt; $('foot-discard').hidden = !discardPrompt;
+  $('settings-main').hidden = settingsView !== 'main';
+  $('saved-links').hidden = settingsView !== 'links';
+  $('settings-back').hidden = settingsView !== 'links';
+  $('drawer-title').textContent = settingsView === 'links' ? 'Saved links' : 'Settings';
+  $('settings-footer').hidden = settingsView !== 'links' && !discardPrompt;
+  $('foot-edit').hidden = discardPrompt || settingsView !== 'links'; $('foot-discard').hidden = !discardPrompt;
 }
 
 function apply(result) {
@@ -398,9 +405,17 @@ async function continueStep() {
   onboarding = false; openStep = 0; feedback(''); render(); $('heading').focus();
 }
 
+let connectionAction = false;
+$('saved-links-toggle').addEventListener('click', () => { settingsView = 'links'; render(); $('drawer-title').focus(); });
+$('settings-back').addEventListener('click', () => {
+  if (saving) return;
+  if (pending()) { discardDestination = 'main'; discardPrompt = true; render(); $('keep-editing').focus(); }
+  else { settingsView = 'main'; render(); $('saved-links-toggle').focus(); }
+});
+for (const id of ['settings-connection', 'manage-access', 'home-recheck', 'connection-check']) $(id).addEventListener('click', () => { connectionAction = true; });
 function openSettings(role) {
   if (!status || saving || refreshing || settingsOpen || onboarding || status.context.state !== 'configured') return;
-  fillDraft(); settingsOpen = true; discardPrompt = false;
+  fillDraft(); settingsOpen = true; discardPrompt = false; settingsView = role ? 'links' : 'main'; discardDestination = 'close';
   feedback(status.sources.state === 'unavailable' ? 'Saved source links need attention. They have been left unchanged.' : '', status.sources.state === 'unavailable');
   $('drawer').showModal(); render();
   if (role && status.sources.state !== 'unavailable' && !home.suppressed()) {
@@ -410,7 +425,7 @@ function openSettings(role) {
 function requestClose() {
   if (saving) return;
   if (!pending()) return closeSettings();
-  discardPrompt = true; render(); $('keep-editing').focus();
+  discardDestination = 'close'; discardPrompt = true; render(); $('keep-editing').focus();
 }
 function keepEditing() {
   discardPrompt = false; render();
@@ -424,6 +439,7 @@ function closeSettings() {
   for (const picker of [contextPicker, ...Object.values(settingsPickers)]) picker.reset();
   if ($('drawer').open) $('drawer').close();
   fillDraft(); feedback(''); render(); $('settings').focus();
+  if (connectionAction) { connectionAction = false; void home.reload(); }
 }
 async function saveSettings() {
   if (saving || refreshing || !isDirty(draft)) return;
@@ -446,7 +462,7 @@ async function switchContext(value, title) {
 function reload() { fillDraft(); feedback(''); render(); }
 
 app.ontoolresult = result => {
-  if (result?._meta?.['osm/pages'] || ['pages', 'icons', 'home', 'home-list', 'home-record', 'home-page'].includes(result?._meta?.['osm/kind'])) return;
+  if (result?._meta?.['osm/pages'] || ['pages', 'icons', 'home', 'home-list', 'home-record', 'home-page', 'home-location'].includes(result?._meta?.['osm/kind'])) return;
   try { apply(result); if (result?._meta?.['osm/view'] === 'settings') openSettings(); }
   catch (error) {
     checkedAt = Math.max(checkedAt + 1, Date.now());
@@ -479,7 +495,10 @@ $('settings').addEventListener('click', () => openSettings());
 $('drawer-close').addEventListener('click', requestClose);
 $('drawer-cancel').addEventListener('click', requestClose);
 $('keep-editing').addEventListener('click', keepEditing);
-$('discard').addEventListener('click', closeSettings);
+$('discard').addEventListener('click', () => {
+  if (discardDestination !== 'main') return closeSettings();
+  fillDraft(); discardPrompt = false; settingsView = 'main'; feedback(''); render(); $('saved-links-toggle').focus();
+});
 $('drawer-save').addEventListener('click', saveSettings);
 // Escape closes an open menu first (the picker stops it), then asks before discarding.
 $('drawer').addEventListener('keydown', event => {

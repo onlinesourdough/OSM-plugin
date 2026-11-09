@@ -23,7 +23,7 @@ function linkKey(link) {
 }
 const sameLink = (a, b) => linkKey(a) === linkKey(b);
 
-export function createPicker({ id, label, optional = true, menuLabel = 'Saved sources', editText = ['Add link…', 'Edit link…'],
+export function createPicker({ id, label, optional = true, menuLabel = 'Saved sources', editText = ['Paste a link…', 'Change link…'],
   applyText = 'Apply', nameField = true, placeholder = 'https://… or /path/to/folder', loadOptions, exclude = () => false, confirmSelection = false,
   onSelect, onApply, onEdit = () => {} }) {
   const value = node('span', { className: 'picker-value' });
@@ -212,6 +212,11 @@ export function createPicker({ id, label, optional = true, menuLabel = 'Saved so
   function render(next) {
     state = next;
     sourceLabel(value, next.value || { title: browsing() ? 'Choose a page' : optional ? 'None' : 'Not set' });
+    if (next.actionText) {
+      const action = node('span', { className: 'picker-action', 'aria-hidden': 'true' }, next.actionText); value.append(action);
+      button.setAttribute('aria-label', 'Change ' + (next.value?.title || 'Data & Context home'));
+      button.dataset.action = 'true';
+    }
     button.dataset.empty = String(!next.value);
     button.disabled = next.disabled;
     for (const control of [link, name, cancel, apply]) control.disabled = next.disabled;

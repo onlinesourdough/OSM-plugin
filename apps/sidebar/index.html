@@ -3,7 +3,7 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>OSM</title><style>/*APP_CSS*/</style></head>
 <body>
 <main>
-  <header class="page-header">
+  <header id="page-header" class="page-header">
     <div class="brand"><span id="brand-mark" class="brand-mark" aria-hidden="true" hidden><svg width="29" height="29" viewBox="0 0 512 512"><rect width="512" height="512" rx="104" fill="#2B1B12"/><rect x="100" y="100" width="94" height="94" rx="10" fill="#B86F36"/><rect x="207" y="100" width="94" height="94" rx="10" fill="#D8B995"/><rect x="314" y="100" width="94" height="94" rx="10" fill="#B86F36"/><rect x="100" y="207" width="94" height="94" rx="10" fill="#D8B995"/><rect x="207" y="207" width="94" height="94" rx="10" fill="#FFF2DF"/><rect x="314" y="207" width="94" height="94" rx="10" fill="#AC7750"/><rect x="100" y="314" width="94" height="94" rx="10" fill="#8A5A36"/><rect x="207" y="314" width="94" height="94" rx="10" fill="#D8B995"/><rect x="314" y="314" width="94" height="94" rx="10" fill="#B86F36"/></svg></span><h1 id="heading" tabindex="-1">Get started</h1></div>
     <div class="header-actions">
       <span id="home-status" class="home-status" data-state="neutral" hidden><span class="dot" aria-hidden="true"></span><span id="home-status-label"></span></span>
@@ -84,14 +84,12 @@
   <div id="home" hidden>
     <div id="home-workspace">
       <section id="home-page" aria-label="Selected Data and Context page"></section>
-      <details id="home-navigation"><summary>Browse context and skills</summary>
-      <div id="home-tabs" class="tabs" role="tablist" aria-label="Home sections"><button id="context-tab" class="tab" type="button" role="tab" aria-selected="true" aria-controls="home-panel">Context</button><button id="skills-tab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="home-panel" tabindex="-1">Skills</button></div>
-      <section id="home-panel" role="tabpanel" aria-labelledby="context-tab" tabindex="0"></section>
-      </details>
-      <div id="home-footer" class="home-footer"><button id="home-open" class="text-button open" type="button">Open in Notion ↗</button></div>
+      <input id="home-search" class="home-search" role="combobox" aria-label="Search titles or paste a Notion link" aria-controls="home-panel" aria-expanded="true" autocomplete="off" maxlength="2048" placeholder="Search titles or paste a Notion link">
+      <p id="home-checking" role="status" hidden>Checking access…</p>
+      <section id="home-panel" aria-label="Home content"></section>
 
     </div>
-    <section id="home-gate" class="gate" hidden><h2 id="gate-title"></h2><p id="gate-copy"></p><button id="gate-connect" class="btn btn-primary" type="button">Manage OSM connection</button><button id="gate-setup" class="btn btn-ghost" type="button">Continue with agent</button><button id="gate-action" class="primary cursor-interaction" type="button"></button></section>
+    <section id="home-gate" class="gate" hidden><h2 id="gate-title"></h2><p id="gate-copy"></p><button id="gate-notion" class="btn btn-primary" type="button" hidden>Open page in Notion ↗</button><button id="gate-connect" class="btn btn-primary" type="button">Manage OSM connection</button><button id="gate-action" class="primary cursor-interaction" type="button"></button><button id="gate-setup" class="btn btn-ghost" type="button">Continue with agent</button></section>
   </div>
 
   <div id="feedback" class="feedback" hidden><span id="feedback-text" role="status" aria-live="polite"></span><button id="reload-draft" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>
@@ -114,29 +112,36 @@
 </dialog>
 
 <dialog id="drawer" class="drawer" aria-labelledby="drawer-title">
-  <div class="drawer-head"><h2 id="drawer-title" tabindex="-1">Settings</h2><button id="drawer-close" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Close settings" title="Close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 3 8 8M11 3l-8 8"/></svg></button></div>
+  <div class="drawer-head"><div><button id="settings-back" class="text-button" type="button" hidden>‹ Settings</button><h2 id="drawer-title" tabindex="-1">Settings</h2></div><button id="drawer-close" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Close settings" title="Close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 3 8 8M11 3l-8 8"/></svg></button></div>
   <div class="drawer-body">
-    <button id="organisation-toggle" class="text-button" type="button" aria-expanded="false" aria-controls="organisation">OSM connection and access +</button>
-      <section id="organisation" class="organisation" aria-label="How this is organised" hidden>
-        <h3>OSM connection and access</h3><p id="osm-workspace"></p>
-        <p id="organisation-copy"></p>
-        <p>OSM checks these mapped sources when opened. This is not a complete inventory of Notion grants. Other plugins have separate connections.</p>
-        <p>In Notion, open the page’s ••• → Connections to add or disconnect OSM. Return here and refresh to check access.</p>
-        <button id="manage-access" class="text-button" type="button">Open page access in Notion ↗</button>
-        <button id="access-setup" class="text-button" type="button">Ask agent to check setup</button>
-        <button id="show-links" class="text-button" type="button">Show saved links</button>
-      </section>
-    <section><h3>Separate Notion plugin</h3><p class="hint">This connection is used only for the optional page picker. OSM Home uses its own connection.</p><button id="settings-connection" class="text-button" type="button">Manage OSM connection</button><button id="settings-agent-setup" class="text-button" type="button">Manage OSM setup with agent</button>
+    <div id="settings-main">
+    <section id="organisation" class="organisation" aria-label="Notion connection">
+      <h3>Notion connection</h3><p id="osm-workspace"></p><p id="osm-checked" class="hint" hidden></p>
+      <button id="settings-connection" class="text-button" type="button">Connect Notion</button>
+      <p id="connection-provisioning" class="hint">Browser sign-in needs OSM’s own registration and backend and is not available in this preview.</p>
+      <p id="organisation-copy" hidden></p>
+      <button id="manage-access" class="text-button" type="button">Choose pages in Notion ↗</button>
+      <p id="connection-guidance" class="hint">In Notion, open a page’s ••• menu → Connections and add OSM. Home checks again when you come back.</p>
+      <button id="home-recheck" class="text-button" type="button">Check again</button>
+    </section>
+    <section><h3>Data & Context home</h3><div id="settings-context"></div><p id="home-definition" class="hint"></p></section>
+    <button id="saved-links-toggle" class="text-button" type="button" aria-controls="saved-links">Saved links ›</button>
+    <p class="hint saved-links-purpose">Manual fallback links. They don’t grant or change access.</p>
+    <section><h3>Separate Notion plugin</h3><p class="hint">This connection is used only for the optional page picker. OSM Home uses its own connection.</p>
       <div class="status-row"><span id="drawer-connection" class="status"></span><button id="drawer-refresh" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Refresh Notion connection" title="Refresh connection"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 7a6.5 6.5 0 1 0 .3 5M16 3v4h-4"/></svg></button></div>
       <p id="drawer-help" class="hint" hidden></p>
       <button id="drawer-connect" class="btn btn-secondary cursor-interaction" type="button" hidden>Connect separate Notion plugin</button>
     </section>
-    <section><h3>Context</h3><p class="hint">Switching Context applies right away. Docs, Skills and Memory changes apply with Save.</p><div id="settings-context"></div><div id="settings-docs"></div></section>
-    <section><h3>Skills</h3><div id="settings-personalSkills"></div><div id="settings-teamSkills"></div></section>
-    <section><h3>Memory</h3><div id="settings-memory"></div><div id="settings-teamMemory"></div></section>
+    <details><summary>Built into OSM ›</summary><div id="builtin-content"></div><p class="hint">From the installed OSM package. Reading a method here doesn’t run it.</p></details>
+    <button id="settings-agent-setup" class="text-button" type="button">Get help from your agent</button><button id="access-setup" class="text-button" type="button" hidden>Ask agent to check setup</button>
+    </div>
+    <section id="saved-links" hidden><p>Quick links for opening your sources when Home can’t read Notion. Saving a link doesn’t share a page with OSM or change access.</p>
+      <div id="settings-docs"></div><div id="settings-personalSkills"></div><div id="settings-teamSkills"></div><div id="settings-memory"></div><div id="settings-teamMemory"></div>
+      <button id="show-links" class="text-button" type="button">Show saved links</button>
+    </section>
     <div id="drawer-feedback" class="feedback" hidden><span id="drawer-feedback-text" role="status" aria-live="polite"></span><button id="drawer-reload" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>
   </div>
-  <div class="drawer-foot">
+  <div id="settings-footer" class="drawer-foot" hidden>
     <div id="foot-edit" class="foot-row"><button id="drawer-cancel" class="btn btn-ghost cursor-interaction" type="button">Cancel</button><button id="drawer-save" class="btn btn-primary cursor-interaction" type="button">Save</button></div>
     <div id="foot-discard" class="foot-row" hidden><span class="foot-question">Discard unsaved changes?</span><button id="keep-editing" class="btn btn-ghost cursor-interaction" type="button">Keep editing</button><button id="discard" class="btn btn-primary cursor-interaction" type="button">Discard</button></div>
   </div>

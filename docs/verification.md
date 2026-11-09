@@ -1783,3 +1783,177 @@ No release edition, public row or activation was changed to hide this failure.
 See TEST-TOMORROW.md for exact entrypoints, issue disposition and remaining proof.
 
 Final readback: all three runtime files matched an independent rebuild after the final copy/transport changes. A fresh disposable native install discovered 17 enabled skills with zero errors, and all 115 installed product files matched the final staged payload byte for byte. The final sidebar run passed 190 tests plus stdio smoke. The network-gate body was shortened after visual review; no behavior or authorization changed.
+
+
+## 9 November 2026 — accepted Home overview implementation (#74/#82)
+
+Implemented the accepted `design.md`/Opus handoff in the existing sidebar
+components: definition-ordered overview, verified root/source titles and icons,
+three/four-row previews, named paginated source lists, scoped title search and
+pasted-link membership checks, reader breadcrumbs/Back/Copy link, Settings Saved
+links placement, and bounded event-driven access refresh. Root blocks load only
+on activation. Sample fixture content is visibly fictional Northwind material.
+The design and Paper files were preserved as supplied by the design writer.
+
+Local tests cover title-filter/view-filter intersection, five-result bounds,
+stable definition order with no model call, denied/outside/support/unresolved
+metadata suppression, search coalescing, query/opener restoration, manual copy
+fallback, compact/wide previews, and visibility recheck throttling. Existing
+identity/scope invalidation, stale-generation, single-recovery-budget, mapping
+revision and SSRF/icon defenses remain tested. Former tab-triggered security
+cases now trigger actual paginated source requests; they were retained.
+
+Executed on Node.js 22.22.3: `npm run build --prefix apps/sidebar`,
+`npm test --prefix apps/sidebar` (200 tests, zero failures, plus bundled stdio
+smoke including the two new app-only tools), and `git diff --check`. An
+independent rebuild produced identical runtime files; runtime was generated
+only by the sidebar build. Package validator, documentation, onboarding,
+layout, continuity, skill-version, context footprint, responsibility, context
+architecture and consumer-selection rehearsals passed.
+
+The existing publisher hold is unchanged. `python3 tests/publisher-rehearsal.py`
+exits 1 at `reconcile_check_says_what_it_could_observe_and_names_a_noop` with
+“the null commit means no base”; `python3 docs-publisher/publisher.py reconcile
+--check` exits 1 for the v0.30.0 manifest/public binding versus newer v0.30.1 tag
+and the corresponding latest-release sentence. Publisher source, manifest,
+release binding, versions and rehearsal were not changed to hide this failure.
+
+No live Notion, native Desktop clipboard/visibility or Paper visual acceptance
+is claimed. The coordinator retains that inspection and packaging. A sample
+fixture start on unused port 43209 was refused by this sandbox with `listen
+EPERM`; no preview was started or existing process replaced. No account, grant,
+credential, profile, external record or release was changed, and no commit or
+push was made. Native unsupported clipboard falls back to a selected URL;
+missing visibility events leave explicit Settings → Check again available.
+
+## 9 November 2026 — Opus render-review corrections B1–B8
+
+Implemented the eight bounded corrections in the designated designer’s
+`RENDER-REVIEW.md`: separators follow visible reader crumbs, home/reader titles
+wrap, the reader replaces the brand header with its own responsive bar, icons
+have the specified spacing and title placement, connected Settings uses the
+accepted status/actions/copy, the home picker shows its verified value plus a
+Change action, Saved links has a separate drawer view and five distinct labels,
+and the root-unreadable gate uses X05 with neutral copy and three aligned
+actions. Cheap refinements tighten rows/lists, remove row chevrons, indent skill
+descriptions and clear the Copy link status after two seconds. Canonical design
+and Paper were not edited by this correction pass.
+
+The root breadcrumb now clears the search field when returning to the overview;
+normal Back retains the exact query (including surrounding spaces) and opener.
+Global no-match requires complete successful results from every searchable
+source. Failed/denied/partial sources cannot produce that claim; partial search
+has a named retry line. Existing grant, support-exclusion, identity, scope,
+stale-generation and recovery-budget defenses remain in the passing suite.
+No service/grant invariant was relaxed. Unverified denied-root metadata is never
+used in gate copy or its destination; the gate opens the selected context URL.
+
+Fictional fixture coverage now includes Q01 matches, Q02 no-match and pasted
+outside link, H03 a distinct next page plus withheld rows, X02 empty, X03 one
+source denied, X04 connection ended/different connection, and T02 OSM’s own
+connection not connected while the separate picker remains independent. Emoji,
+synthetic raster, native and absent icons appear in list/reader metadata. All
+states use the existing test-host scenario/theme/width selectors; production
+state is not seeded from fixtures.
+
+Executed on Node.js 22.22.3: sidebar build; all **210 tests, zero failures**, plus
+bundled stdio smoke; a repeated build with all three runtime files byte-identical;
+package validator; documentation, onboarding, layout, continuity, skill-version,
+context footprint, responsibility, context architecture and consumer-selection
+rehearsals; and `git diff --check`. The two publisher checks were rerun and retain
+the same inherited failures documented above (null-base rehearsal assertion and
+v0.30.0/v0.30.1 public binding). Publisher, releases, manifests and versions were
+not changed.
+
+This is implementation and local behavior evidence. Fresh compact/wide/dark
+screenshots and designated Opus visual acceptance remain with the coordinator.
+No browser automation, preview process start/stop, native Paper acceptance,
+live Notion access, credentials/grants/profile changes, external writes,
+commit, push or deployment was performed in this pass. The required owner-root
+read failed with `selected_keychain_credential_unavailable_no_fallback`; work
+used the explicit local brief and accepted review without switching sources.
+
+## 9 November 2026 — bounded final Home fixes F1–F3 and search correctness
+
+Applied only the remaining accepted render blockers and the designated Opus
+LINK-BACK / INCOMPLETE-SEARCH clarifications. H03 now uses the reader bar with a
+named history-aware Back control and hides the page header; its title icon has
+an inline 8px gap. The connection-ended gate uses the exact human-first copy,
+one primary connection action and two text actions. Not-connected Settings
+makes Connect Notion primary, always hides organisation copy and limits the
+honest provisioning sentence to the not-connected state. Preview counts now
+rerender on the existing compact/wide media-query change without new reads.
+
+The three independently reproduced correctness defects are covered: located
+links return to one verified Q01 row with the original URL and row focus;
+incomplete/withheld/bounded search answers never assert global no-match; and
+Home invalidation clears the query and debounce along with the overview reset.
+Only the verified read's id/title/icon survive for the located row, under its
+source key; no article fields, blocks, body, link or meta are retained for Back.
+Pending reads settle the current search without reopening; failures use the
+approved refusal or explicit locate retry. Breadcrumb source navigation leaves
+search history intact, while the root crumb clears it. Generation, scope,
+query-version and own-request guards precede metadata use; known-page denial
+still invalidates Home, including when a restored search-only row is reopened.
+Nothing is persisted and no search bounds or connection authority changed.
+
+Added 14 focused app tests, retaining all prior tests. On Node.js 22.22.3,
+`npm test --prefix apps/sidebar` passed **224 tests, zero failures**, plus the
+bundled stdio smoke. `npm run build --prefix apps/sidebar` passed; a second
+build produced byte-identical SHA-256 hashes for all three runtime files.
+`python3 tests/validate.py` passed its package/isolation/security checks;
+`python3 tests/documentation-rehearsal.py` passed all seven tests.
+`git diff --check` passed. Existing dependencies were used; npm ci was not run.
+The previously passing unrelated nonpublisher rehearsals were not repeated.
+The inherited publisher hold and its existing evidence remain unchanged;
+publisher code, manifests, versions and public bindings were not edited.
+
+This is local implementation/test evidence. The coordinator owns the existing
+43219 preview, screenshots and final designated Opus confirmation. No preview
+process or browser automation was used, and design.md, Paper and
+TEST-TOMORROW.md were not edited in this pass. Native host, live Notion,
+clipboard/visibility and OAuth qualification remain outside this proof. No
+credentials, account, grants, profile, external records, commit, push or release
+were changed. The prescribed owner-root read again returned
+`selected_keychain_credential_unavailable_no_fallback`; this bounded work used
+the supplied local contract and accepted Opus files without a source fallback.
+
+## 9 November 2026 — coordinator acceptance of the private browser candidate
+
+The designated designer, actual Claude Opus 5.5 with High effort and Fast off,
+accepted browser rendering corrections B1–B8 and F1–F3 with no remaining design
+blocker for this private synthetic candidate. Opus synchronized canonical
+design.md and the revision-checked Paper notes. Artwork revision
+17d09459e92ccd412ee2939d831fdf364813b8210973a29f2067d4def9378f13
+has 14 pages and 65 boards; the nine earlier pages and assets remain unchanged.
+
+The coordinator exercised the browser fixture on port 43219: overview and
+reader at compact/wide widths, title search, no-match and outside-link refusal,
+reader Back with query and focus restored, Copy link success, Settings and its
+Saved links sub-view, pagination with withheld rows, empty/source-denied/
+connection-ended/root-denied states, and light/dark themes. Nineteen current
+screenshots are retained in the private revision artifacts; earlier screenshots
+are kept separately. These are fictional data and a synthetic host.
+
+An independent correctness review reproduced three search/navigation defects,
+which were fixed at Medium with focused tests. A separate read-only verification
+then found no remaining blocking correctness finding in the inspected paths;
+16 targeted executions covering 15 distinct tests passed. Missing-scope
+protocol responses still invalidate, and failure handling cannot retain denied
+metadata. Product file hashes stayed unchanged throughout that final review.
+This is a focused review, not an exhaustive scan of every repository path.
+
+The final writer run passed 224 tests plus stdio smoke and an identical rebuild.
+After Opus updated the guide/notes, the coordinator reran package validation,
+all seven documentation tests and diff whitespace checks successfully. No
+product code changed after the 224-test run.
+
+Native Codex UI/clipboard/visibility, live Home reads, OAuth, Paper pixel
+rendering, installation and release remain unqualified. Native Paper screenshot
+and control requests timed out; saved artwork and notes were read back through
+MCP. The coordinator read the authorized owner root, selected policy and Soul
+before context-dependent work. Isolated workers could not repeat the
+Keychain-backed lookup and used the supplied bounded brief without an alternate
+credential or source. No new grant, account, credential, normal-profile
+activation, Notion write, public push or release occurred. The inherited
+publisher hold remains unchanged; #74/#82 remain open for native/live adoption.

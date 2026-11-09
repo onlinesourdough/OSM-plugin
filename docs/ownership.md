@@ -1,11 +1,13 @@
 # Ownership
 
-Revision: 2026-11-06
+Revision: 2026-11-09
 
 | Responsibility | Owner and canonical truth |
 | --- | --- |
 | Product instructions, declarations, and neutral assets | OSM maintainer in this repository |
-| Implementation and local verification | Current repository task or deliberately selected worker |
+| Implementation and local verification | Current repository task or deliberately selected worker; the 9 November Home revision has one implementation writer |
+| Accepted Home design (#74/#82) | Completed Claude Opus 5.5 design in canonical `design.md` and its Paper; implementation does not redesign it |
+| Home native visual and host qualification | Coordinating owner task; local implementation tests do not qualify native clipboard, visibility events, live grants or Paper rendering |
 | Human review presentation | Build's [review handoff](../skills/osm-build-work/references/review-handoff.md); Review checks claims and Ship verifies the destination. Domain proof remains with its existing owner |
 | Requirement tracking SOP offered to users | `skills/osm/references/lifecycle.md` for all phases of the shipped OSM lifecycle; developing this repository follows the root `AGENTS.md` contract with any harness method |
 | Task deliverable, continuation and whole-task handoff | Shared OSM lifecycle; Spec clarifies the contract and `osm` model advice supplies model/reasoning evidence on request |

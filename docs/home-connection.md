@@ -1,6 +1,6 @@
 # OSM's internal Notion connection
 
-Revision: 2026-10-26
+Revision: 2026-11-09
 
 Home reads the owner's mapped Notion records through the connection mode the
 projection records (#82, #74). This release implements one mode,
@@ -56,6 +56,11 @@ and uses only these read endpoints:
 
 Bounds:
 
+- Title search queries use the mapped title property and saved view filter in
+  an AND intersection, with at most five results per mapped source. Page-list
+  search filters verified titles. Related and support routes are never searched;
+  pasted links reveal no metadata before membership/containment pass. No global
+  search or separate connector is used.
 - Lists read ten results per request and follow `next_cursor` only when asked.
   `request_status.type: "incomplete"` is shown as a partial list, and no total
   is ever computed.
