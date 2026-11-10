@@ -2273,3 +2273,54 @@ Rechecked after this edit: the release validator (`--release-tag v0.31.0 --basel
 documentation rehearsal and the consumer-selection rehearsal passed, and `git diff --check` was
 clean. The paragraph is under `## More`, which no consumer selection reads; compared section by
 section with `HEAD`, no other README section changed, so the selected README sections are unchanged. The parent's full CI-equivalent set had passed on the preceding preparation.
+
+## 10 November 2026 — post-tag publisher release binding for v0.31.0 (source only)
+
+Source: tag `v0.31.0` (annotated object `e4bd68cca780c7f33d0f2910dcec20ae672d392c`) resolves to
+commit `3429755e2099bd8668d7b93c3b8006df0cf2b616`. This follow-up is uncommitted; no product
+payload file changed (the shipped files are identical to that commit). Nothing was staged, committed,
+pushed, tagged, released or installed, and no Notion, grant, credential, job or reader was touched.
+
+- **Binding.** The inactive publisher manifest's released edition moved from v0.30.1
+  (`ff1b50e3e052651f4d85bb72c3374e4d45fd6709`) to v0.31.0 at the exact tag commit. Activation stays
+  false, `public_reader` stays null, and the bindings, classes, writers, CI inputs, other editions and
+  all class B, G and W rows are unchanged.
+- **Class A inventory: 22 rows to 18, one per skill in the tag's tree.** Fifteen rows are byte-identical
+  to before. Three are added in the same shape (existing upkeep, pending handoff, released edition):
+  `osm-data-context`, `osm-manage-data-context` and `osm-dreaming`. Seven are removed because their
+  source is absent from 0.31.0: `osm-context`, `osm-maintain-context`, `osm-check`, `osm-update`,
+  `osm-select-model`, `content` and `diffusion-studio`.
+- **History kept in the manifest's existing `renames` map, not restated by hand.** `osm-context` maps to
+  `osm-data-context` and `osm-maintain-context` to `osm-manage-data-context` (the repository's own
+  rename map in `tests/skill_metadata.py`); `osm-check`, `osm-update` and `osm-select-model` map to `osm`,
+  where those methods were folded into references. `content` and `diffusion-studio` left the package and
+  have no destination key. One informational `renames_note` says so and points to the v0.30.1 tag and
+  `docs/content-drafts`. The map only labels a retired row that CI owns; the public pages for retired keys
+  are untouched.
+- **Tests.** The five count-pinned expectations in `tests/publisher-rehearsal.py` (22 and 38) now use one
+  named constant, `CLASS_A_ROWS = 18`. A new test, `the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_history`,
+  ties the rows to the bound commit's actual tree, requires existing upkeep and pending handoff, an
+  inactive publisher with no reader, every rename to map a retired key to a current row, and the two skill
+  renames to match the repository's rename map. Mutating the loaded manifest in the disposable copy, the test
+  rejected a missing skill row, a retained retired row, a dropped rename, a rename to a missing row, a row handed
+  to CI, activation, a public reader and lost provenance. No test, guard or mutation control was removed or
+  weakened.
+- **Docs.** The docs index, publication, activation, skills index and test notes state the v0.31.0 binding,
+  the 18-row inventory and that the public Notion guide's last verified projection is still v0.30.0. The
+  shipped `README.md` is release-neutral and unchanged.
+
+Checks ran in a disposable copy without Finder files, with this working tree committed on top of
+`3429755` inside the copy only (the reconcile check reads `docs/README.md` from committed source).
+
+| Check | Result |
+| --- | --- |
+| `publisher.py reconcile --check` | exit 0, no problems, 18 artifacts pending handoff, no write |
+| Same commit with the previous v0.30.1 manifest | refused: `release tag v0.31.0 is newer than the manifest's v0.30.1` and the stale latest sentence |
+| Independent identity check | tag object, tag commit, 18 rows equal the tag's skills tree, every path resolves, 15 rows unchanged, other rows and fields unchanged, renames resolve, activation inactive, no product file changed: passed |
+| `tests/publisher-rehearsal.py` | passed: 71 rehearsals (70 and the new test) and 76 mutation controls |
+| `validate.py --release-tag v0.31.0 --baseline v0.30.1`, documentation, consumer-selection and responsibility rehearsals | passed |
+
+On the live tree the reconcile check refuses until this is committed, because it reads `docs/README.md` from
+the committed source, which still names v0.30.1. The full CI set, the sidebar suite, build and native checks
+were not repeated; none of their inputs changed. Qualification is unchanged: the publisher is source and
+fixtures only, and nothing here is native, live or public-page evidence.

@@ -9,9 +9,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.30.1",
-      "tag": "v0.30.1",
-      "commit": "ff1b50e3e052651f4d85bb72c3374e4d45fd6709",
+      "label": "v0.31.0",
+      "tag": "v0.31.0",
+      "commit": "3429755e2099bd8668d7b93c3b8006df0cf2b616",
       "approved": true
     },
     "main-working": {
@@ -65,30 +65,6 @@
   },
   "artifacts": [
     {
-      "key": "osm.released.skill.content",
-      "class": "A",
-      "edition": "released",
-      "owner": "git",
-      "source_paths": [
-        "skills/content/"
-      ],
-      "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
-    },
-    {
-      "key": "osm.released.skill.diffusion-studio",
-      "class": "A",
-      "edition": "released",
-      "owner": "git",
-      "source_paths": [
-        "skills/diffusion-studio/"
-      ],
-      "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
-    },
-    {
       "key": "osm.released.skill.osm",
       "class": "A",
       "edition": "released",
@@ -113,18 +89,6 @@
       "adoption_state": "pending-handoff"
     },
     {
-      "key": "osm.released.skill.osm-check",
-      "class": "A",
-      "edition": "released",
-      "owner": "git",
-      "source_paths": [
-        "skills/osm-check/"
-      ],
-      "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
-    },
-    {
       "key": "osm.released.skill.osm-clarify",
       "class": "A",
       "edition": "released",
@@ -137,24 +101,36 @@
       "adoption_state": "pending-handoff"
     },
     {
-      "key": "osm.released.skill.osm-context",
-      "class": "A",
-      "edition": "released",
-      "owner": "git",
-      "source_paths": [
-        "skills/osm-context/"
-      ],
-      "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
-    },
-    {
       "key": "osm.released.skill.osm-create-project",
       "class": "A",
       "edition": "released",
       "owner": "git",
       "source_paths": [
         "skills/osm-create-project/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-data-context",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-data-context/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-dreaming",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-dreaming/"
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
@@ -185,12 +161,12 @@
       "adoption_state": "pending-handoff"
     },
     {
-      "key": "osm.released.skill.osm-maintain-context",
+      "key": "osm.released.skill.osm-manage-data-context",
       "class": "A",
       "edition": "released",
       "owner": "git",
       "source_paths": [
-        "skills/osm-maintain-context/"
+        "skills/osm-manage-data-context/"
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
@@ -245,18 +221,6 @@
       "adoption_state": "pending-handoff"
     },
     {
-      "key": "osm.released.skill.osm-select-model",
-      "class": "A",
-      "edition": "released",
-      "owner": "git",
-      "source_paths": [
-        "skills/osm-select-model/"
-      ],
-      "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
-    },
-    {
       "key": "osm.released.skill.osm-setup",
       "class": "A",
       "edition": "released",
@@ -299,18 +263,6 @@
       "owner": "git",
       "source_paths": [
         "skills/osm-triage-improvement/"
-      ],
-      "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
-    },
-    {
-      "key": "osm.released.skill.osm-update",
-      "class": "A",
-      "edition": "released",
-      "owner": "git",
-      "source_paths": [
-        "skills/osm-update/"
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
@@ -518,5 +470,12 @@
       "adoption_state": "frozen-export"
     }
   ],
-  "renames": {}
+  "renames": {
+    "osm.released.skill.osm-context": "osm.released.skill.osm-data-context",
+    "osm.released.skill.osm-maintain-context": "osm.released.skill.osm-manage-data-context",
+    "osm.released.skill.osm-check": "osm.released.skill.osm",
+    "osm.released.skill.osm-update": "osm.released.skill.osm",
+    "osm.released.skill.osm-select-model": "osm.released.skill.osm"
+  },
+  "renames_note": "Class A keys retired from the 0.30.x set. osm-context and osm-maintain-context were renamed to osm-data-context and osm-manage-data-context. osm-check, osm-update and osm-select-model were folded into references under osm; the mapped key is where the method now lives. content and diffusion-studio left the package and have no destination key; their history is the v0.30.1 tag and docs/content-drafts. Informational only: it changes no writer, row or public page."
 }

@@ -48,9 +48,9 @@ flowchart LR
 Git owns the executable method instructions: the skills and their references. The
 public Notion guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
 is a versioned explanatory and reference projection of them. Its last verified
-projection reflects v0.30.0 (`314dcf1`); the latest published package is v0.30.1,
-and this working branch is newer and unreleased, so the guide is never the
-installed method and never proof of what a given install does.
+projection reflects v0.30.0 (`314dcf1`); the latest tagged release is v0.31.0 and
+the guide has not been advanced to it, so the guide is never the installed method
+and never proof of what a given install does.
 The guide's Content templates are a separate Notion-authored draft edition; that
 edition, not the preserved Git drafts under [content-drafts](content-drafts/README.md),
 is the current template source. How the projection is kept aligned, and what is
@@ -67,19 +67,20 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.30.1 is the latest published package (prerelease) |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.31.0 is the latest tagged release; confirm its published prerelease on GitHub Releases |
 
-The inactive publisher manifest binds its released edition to the latest published
-package, v0.30.1 (`ff1b50e`), so its release guard and this sentence agree with the
-tags. That is repository release consistency only: the public Notion guide was not
-read or advanced, its last verified projection is still v0.30.0, and the publisher
-stays inactive. Recording a later release is a separate reviewed binding that
+The inactive publisher manifest binds its released edition to the latest tagged
+release, v0.31.0 (`3429755`), with one class A row per skill of that release and the
+retired 0.30.x keys kept in its `renames`, so its release guard and this sentence
+agree with the tags. That is repository release consistency only: the public Notion
+guide was not read or advanced, its last verified projection is still v0.30.0, and the
+publisher stays inactive. Recording a later release is a separate reviewed binding that
 follows its tag; see [publication](publication.md#current-release-alignment).
 
-The skill set on this branch (18 skills, Notion-only core) is declared and
-fixture-tested and was exercised only in disposable native installs. It is unreleased, not
-installed in any normal profile, and its native panel rendering and live Notion behavior are
-unqualified; see [verification](verification.md).
+The skill set at v0.31.0 (18 skills, Notion-only core) is declared and fixture-tested and
+was exercised in disposable native installs. Its published prerelease and any normal-profile
+installation are recorded in GitHub Releases and [verification](verification.md), not here;
+its native panel rendering and live Notion behavior are unqualified.
 
 ### Documentation consumers
 
@@ -93,8 +94,8 @@ Keep the existing entrypoints stable when editing the README:
 - An installed agent reads its packaged methods and versioned overview. It does
   not fetch instructions from Resources to perform a task.
 
-The README introduction Resources selects says "The same 18 skills", and the disclosure that this tree is
-unreleased sits under `## More`, which that selection omits. A consumer that adopts an untagged
+The README introduction Resources selects says "The same 18 skills". The shipped README is
+release-neutral and carries no release-state disclosure, so a consumer that adopts an untagged
 revision shows the 18 with no state; it should pin a tagged release or carry the state itself.
 
 `tests/consumer-selection-rehearsal.py` rehearses both selections locally against this

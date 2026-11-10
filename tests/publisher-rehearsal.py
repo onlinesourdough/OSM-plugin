@@ -38,6 +38,9 @@ HEX32 = re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")
 RECORDED_IDS = {i for v in RECORDED_PUBLIC for i in HEX32.findall(v.replace("-", ""))}
 RELEASED = MANIFEST["editions"]["released"]
 APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
+# One class A row per skill of the bound release. It changes only with a new binding, and the
+# identity test below ties it to that commit's actual tree rather than to this number alone.
+CLASS_A_ROWS = 18
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
@@ -243,7 +246,7 @@ def unchanged_source_is_a_valid_no_op(w):
     result = run(w, MANIFEST, working_files(), "run-2")
     require(len(w.upserted()) == before, "an unchanged source writes nothing")
     text = pub.reconciliation_text(result, True)
-    require("Result: no documentation impact (a valid no-op)." in text and "| unchanged | 5 |" in text and "| pending-handoff | 22 |" in text,
+    require("Result: no documentation impact (a valid no-op)." in text and "| unchanged | 5 |" in text and f"| pending-handoff | {CLASS_A_ROWS} |" in text,
             "the no-op is stated visibly, with the exact counts")
     require(not pub.failing(result), "a no-op leaves the run green")
 
@@ -400,9 +403,9 @@ def unknown_write_is_read_back_before_any_retry(w):
 def artifacts_not_handed_to_ci_get_no_write_and_no_duplicate_row(w):
     result = run(w, MANIFEST, working_files(), "run-1")
     a = [r for r in result["rows"] if r["class"] == "A"]
-    require(len(a) == 22 and all(r["outcome"] == pub.PENDING_HANDOFF for r in a), "the 22 released packets are pending handoff")
+    require(len(a) == CLASS_A_ROWS and all(r["outcome"] == pub.PENDING_HANDOFF for r in a), f"the {CLASS_A_ROWS} released packets are pending handoff")
     require(not any(k.startswith("osm.released.") for k in w.upserted()), "no write to a row CI does not own")
-    require("22 artifact(s) are pending handoff" in pub.reconciliation_text(result), "the pending handoff is visible")
+    require(f"{CLASS_A_ROWS} artifact(s) are pending handoff" in pub.reconciliation_text(result), "the pending handoff is visible")
     handed = copy.deepcopy(MANIFEST)
     one = next(x for x in handed["artifacts"] if x["key"] == "osm.released.skill.osm")
     one["public_writer"], one["adoption_state"] = "ci", "adopted"
@@ -815,7 +818,7 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
 @test
 def the_manifest_has_no_skill_generator_and_one_row_route_exists():
     require("generators" not in MANIFEST and not pub.validate_manifest(MANIFEST), "no skill rows are generated")
-    require(len(pub.expand(MANIFEST)) == 38 and sum(a["class"] == "W" for a in MANIFEST["artifacts"]) == 5, "22 A, 5 W, 2 G and 9 B rows")
+    require(len(pub.expand(MANIFEST)) == CLASS_A_ROWS + 16 and sum(a["class"] == "W" for a in MANIFEST["artifacts"]) == 5, f"{CLASS_A_ROWS} A, 5 W, 2 G and 9 B rows")
     bad = copy.deepcopy(MANIFEST)
     bad["generators"] = [{"key": "osm.working.skill.{name}"}]
     require(any("generator" in p for p in pub.validate_manifest(bad)), "a generator is refused")
@@ -994,6 +997,31 @@ def the_release_binding_follows_the_manifest_through_a_pre_tag_build_and_its_fol
         write_docs(bound); git("add", "."); git("commit", "-q", "-m", "stale sentence")
         code, text = reconcile(edition(upcoming, candidate))
         require(code == 1 and f"does not say '{upcoming} is the latest'" in text, f"a stale latest sentence is refused: {text}")
+
+
+@test
+def the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_history():
+    """The released rows are exactly the skills in the bound commit's tree, each still with the existing
+    upkeep and pending handoff, and every retired key maps to where its method now lives. The two
+    skill renames come from the repository's own rename map, so history is not restated by hand."""
+    sys.path.insert(0, str(ROOT / "tests"))
+    from skill_metadata import RENAMED_SKILLS
+    rows = [a for a in MANIFEST["artifacts"] if a["class"] == "A"]
+    tree = subprocess.run(["git", "-C", str(ROOT), "ls-tree", "-d", "--name-only", APPROVED, "skills/"], check=True, capture_output=True, text=True).stdout.split()
+    names = sorted(line.split("/", 1)[1] for line in tree)
+    require(len(rows) == CLASS_A_ROWS == len(names), f"one row per skill of {LABEL}: {len(rows)} rows, {len(names)} skills")
+    require(sorted(a["key"] for a in rows) == sorted(f"osm.released.skill.{n}" for n in names)
+            and sorted(a["source_paths"][0] for a in rows) == sorted(f"skills/{n}/" for n in names)
+            and all(len(a["source_paths"]) == 1 for a in rows), "each row's key and path name one skill of the bound release")
+    require(all(a["owner"] == "git" and a["public_writer"] == "existing-upkeep" and a["adoption_state"] == "pending-handoff" for a in rows),
+            "released rows stay with the existing upkeep until a recorded handoff")
+    require(not MANIFEST["activation"]["active"] and MANIFEST["activation"]["public_reader"] is None, "the publisher stays inactive with no public reader")
+    keys = {a["key"] for a in MANIFEST["artifacts"]}
+    for old, new in MANIFEST["renames"].items():
+        require(old not in keys and new in keys, f"a retired key maps to a current row: {old} -> {new}")
+    expected = {f"osm.released.skill.{old}": f"osm.released.skill.{new}" for new, old in RENAMED_SKILLS.items() if old.startswith("osm-") and new in names}
+    require(len(expected) == 2 and expected.items() <= MANIFEST["renames"].items(), f"the accepted skill renames are recorded: {expected}")
+    require(all(name in MANIFEST.get("renames_note", "") for name in ("content", "diffusion-studio")), "the departed methods' provenance is recorded")
 
 
 @test
@@ -1257,7 +1285,7 @@ def the_credential_free_reconciliation_check_passes_on_this_repository():
     text = out.getvalue()
     require(code == 0, text)
     require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
-    require("| pending-handoff | 22 |" in text and "22 artifact(s) are pending handoff" in text, "the 22 released packets are pending handoff")
+    require(f"| pending-handoff | {CLASS_A_ROWS} |" in text and f"{CLASS_A_ROWS} artifact(s) are pending handoff" in text, f"the {CLASS_A_ROWS} released packets are pending handoff")
     require("| unknown-no-receipts | 5 |" in text and "| written" not in text, "no row claims to be written")
     since = io.StringIO()
     with redirect_stdout(since):
