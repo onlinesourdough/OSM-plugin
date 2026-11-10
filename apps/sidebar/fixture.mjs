@@ -1,11 +1,13 @@
 import { createServer } from 'node:http';
 import { readFile, mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources } from './sources.mjs';
 import { readNotionSetup } from './codex-status.mjs';
 import { previewHome } from './preview-home.mjs';
+import { readBuiltinSkill, readBuiltinSkills } from './home-service.mjs';
 import { NotionPages } from './notion-pages.mjs';
 const port = Number(process.env.PORT || 43195);
 const liveNotion = process.env.OSM_PREVIEW_LIVE_NOTION === '1';
@@ -16,6 +18,8 @@ const examplePages = [
   { icon: '🤹', title: 'Writing & delivery', target: 'https://app.notion.com/p/00000000000000000000000000000003' },
   { icon: '🧠', title: 'Decisions', target: 'https://app.notion.com/p/00000000000000000000000000000004' },
 ];
+// The preview answers method reads from the real bundled skills; only Notion's data is fictional.
+const skillsRoot = fileURLToPath(new URL('../../skills', import.meta.url));
 const scratch = await mkdtemp(join(tmpdir(), 'osm-ui-test-'));
 const roots = Object.fromEntries(['home','setup','test'].map(key=>[key,join(scratch,key)]));
 await Promise.all(Object.values(roots).map(path=>mkdir(path)));
@@ -53,7 +57,10 @@ const server = createServer(async (req, res) => {
     const codexHome=roots[workspace];
     if (action === 'home') {
       res.setHeader('Content-Type','application/json');
-      return res.end(JSON.stringify(previewHome(args.name, args.arguments || {}, scenario)));
+      if (args.name === 'osm_builtin_read') return res.end(JSON.stringify({ content: [], _meta: { 'osm/kind': 'builtin-record', 'osm/builtin-record': await readBuiltinSkill(skillsRoot, args.arguments?.name) } }));
+      const value = previewHome(args.name, args.arguments || {}, scenario);
+      if (args.name === 'osm_home' && value._meta['osm/home'].builtin) value._meta['osm/home'].builtin = await readBuiltinSkills(skillsRoot);
+      return res.end(JSON.stringify(value));
     }
     if (action === 'icons') {
       const data = liveNotion ? await notionPages.icons(args.targets) : { icons: args.targets.map(target => ({ target, icon: examplePages.find(page => page.target === target)?.icon || null })), partial: false };

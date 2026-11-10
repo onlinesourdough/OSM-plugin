@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readdir, readFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { lstat, open, readdir, realpath } from 'node:fs/promises';
 import { join } from 'node:path';
 import { classifyTarget } from './target.mjs';
 import { contextIdentity } from './sources.mjs';
@@ -9,7 +10,7 @@ import { readPageIcon } from './notion-icons.mjs';
 import { hostCredential } from './credential.mjs';
 export { hostCredential } from './credential.mjs';
 
-const roleNouns = { profile: 'Profile', memory: 'Memory', documents: 'Document', skills: 'Personal skill' };
+const roleNouns = { profile: 'Profile', memory: 'Memory', documents: 'Document', content: 'Content item', skills: 'Personal skill' };
 const fieldHeadings = { fact: 'Fact', decision: 'Decision', why: 'Why', evidence: 'Evidence' };
 const failed = error => ({ state: error instanceof NotionReadError ? error.state : 'unavailable',
   ...(error?.retryAfter && { retryAfter: error.retryAfter }) });
@@ -23,17 +24,74 @@ const linkId = value => {
 // Every state the host credential can report that stops a read before any request.
 const credentialStops = new Set(['unsupported_host', 'not_enabled', 'unavailable', 'keychain_blocked', 'keychain_timeout']);
 
+// The method list and a method's text both come through this one loader, so the package boundary is the
+// same for both. Under the package's skills folder it needs a real folder (a symlinked folder is not one,
+// and the folder must resolve to its own place), then a real, unlinked SKILL.md within the size bound, and
+// all of that is checked before a byte is read. The file is then opened without following a link and read
+// through the handle for at most the bound, so a file that changes after the check still cannot be read
+// past it. Anything else returns null: it is neither listed nor readable.
+const skillTextLimit = 128 * 1024, skillBlockLimit = 400, skillBlockText = 4000;
+async function bundledSkillText(root, name) {
+  if (typeof name !== 'string' || !/^[a-z0-9][a-z0-9-]{0,59}$/.test(name)) return null;
+  const folder = join(root, name), file = join(folder, 'SKILL.md');
+  let handle;
+  try {
+    if (!(await lstat(folder)).isDirectory()) return null;
+    if (await realpath(folder) !== join(await realpath(root), name)) return null;
+    const info = await lstat(file);
+    if (!info.isFile() || info.size > skillTextLimit) return null;
+    handle = await open(file, constants.O_RDONLY | (constants.O_NOFOLLOW || 0));
+    const opened = await handle.stat();
+    if (!opened.isFile() || opened.dev !== info.dev || opened.ino !== info.ino || opened.size > skillTextLimit) return null;
+    const buffer = Buffer.alloc(skillTextLimit + 1);
+    const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
+    return bytesRead > skillTextLimit ? null : new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, bytesRead));
+  } catch { return null; } finally { await handle?.close(); }
+}
+
 // Shared OSM methods, from the installed package's own skill metadata.
 export async function readBuiltinSkills(root) {
   const skills = [];
   for (const name of (await readdir(root).catch(() => [])).sort().slice(0, 60)) {
-    const text = await readFile(join(root, name, 'SKILL.md'), 'utf8').catch(() => '');
+    const text = await bundledSkillText(root, name) ?? '';
     const front = text.startsWith('---\n') ? text.slice(4, text.indexOf('\n---', 4)) : '';
     const field = key => front.match(new RegExp(`^${key}: (.+)$`, 'm'))?.[1].trim().replace(/^(["'])(.*)\1$/, '$2');
     const id = field('name'), description = field('description');
     if (id === name && description) skills.push({ name: id.slice(0, 60), description: description.slice(0, 300) });
   }
   return skills;
+}
+
+// One bundled skill's SKILL.md as plain blocks, for the Settings reader. The name must be one the package's
+// own skills folder lists (never a path); a folder or file that is a link or over the bound is not listed, so
+// it is inaccessible here, and nothing outside the package is read. The text is bounded package content, not
+// owner data, and is shown as text only.
+export async function readBuiltinSkill(root, name) {
+  const listed = typeof name === 'string' ? (await readBuiltinSkills(root)).find(skill => skill.name === name) : undefined;
+  if (!listed) return { state: 'inaccessible' };
+  const text = await bundledSkillText(root, name);
+  if (text === null) return { state: 'unavailable' };
+  const front = text.startsWith('---\n') ? text.indexOf('\n---', 4) : -1;
+  const body = front > 0 ? text.slice(front + 4).replace(/^\r?\n/, '') : text;
+  const blocks = []; let paragraph = [], fence = null, truncated = false;
+  const push = (kind, value) => {
+    if (blocks.length >= skillBlockLimit) { truncated = true; return; }
+    const clipped = value.length > skillBlockText; if (clipped) truncated = true;
+    blocks.push({ kind, depth: 0, text: value.slice(0, skillBlockText) });
+  };
+  const flush = () => { if (paragraph.length) push('text', paragraph.join(' ')); paragraph = []; };
+  for (const line of body.split(/\r?\n/)) {
+    if (/^```/.test(line)) { if (fence) { push('code', fence.join('\n')); fence = null; } else { flush(); fence = []; } continue; }
+    if (fence) { fence.push(line); continue; }
+    const heading = line.match(/^#{1,6}\s+(.*\S)\s*$/), item = line.match(/^\s*(?:[-*]|\d+\.)\s+(.*\S)\s*$/);
+    if (heading) { flush(); push('heading', heading[1]); }
+    else if (item) { flush(); push('item', item[1]); }
+    else if (!line.trim()) flush();
+    else paragraph.push(line.trim());
+  }
+  if (fence) push('code', fence.join('\n'));
+  flush();
+  return { state: 'read', record: { title: name, meta: 'Built into OSM', description: listed.description, fields: [], blocks, truncated } };
 }
 
 // Home reads only through the projection's selected connection mode and never moves to
@@ -53,11 +111,13 @@ export function createHomeService({ credential = hostCredential, route = async (
     try { client = createNotionClient({ token: secret.token, transport }); identity = await client.identity(); }
     catch (error) { return { mapping, ...failed(error) }; }
     const source = optIn?.source || 'none';
-    if (mapping.state === 'missing') return { mapping, identity, client, optIn: source, state: 'unmapped' };
-    if (mapping.state !== 'saved') return { mapping, identity, optIn: source, state: 'mapping_unavailable' };
+    // The saved access link counts only for the bot and workspace the live connection actually is.
+    const manage = optIn?.manage && optIn.manage.botId === identity.botId && optIn.manage.workspaceId === identity.workspaceId ? optIn.manage.link : undefined;
+    if (mapping.state === 'missing') return { mapping, identity, client, optIn: source, manage, state: 'unmapped' };
+    if (mapping.state !== 'saved') return { mapping, identity, optIn: source, manage, state: 'mapping_unavailable' };
     const expected = mapping.projection.connection;
     if (expected.botId !== identity.botId || expected.workspaceId !== identity.workspaceId) return { mapping, identity, optIn: source, state: 'account_changed' };
-    return { mapping, identity, client, optIn: source, state: 'ready', scope: scopeOf(identity, mapping.revision) };
+    return { mapping, identity, client, optIn: source, manage, state: 'ready', scope: scopeOf(identity, mapping.revision) };
   }
   // Related links are never read and support material is never Context.
   const readable = item => !['related', 'support'].includes(item.role);
@@ -135,7 +195,8 @@ export function createHomeService({ credential = hostCredential, route = async (
     // L-2: every status names the context its projection was read for; all returns below spread base.
     const base = { mapping: session.mapping.state, checkedAt, ...(session.mapping.target && { context: session.mapping.target }),
       ...(session.identity && { workspaceName: session.identity.workspaceName }),
-      ...(saved && { definitionRevision: saved.definition.revision, selectedMode: saved.selectedMode }) };
+      ...(saved && { definitionRevision: saved.definition.revision, selectedMode: saved.selectedMode }),
+      ...(session.manage && { manageLink: session.manage }) };
     if (session.state !== 'ready') return { ...base, state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
     const { root, sections } = saved;
     // Connected requires this identity and a successful read of the mapped root now.
@@ -148,8 +209,12 @@ export function createHomeService({ credential = hostCredential, route = async (
     }
     const support = sections.filter(item => item.role === 'support').length;
     return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: pageTitle(rootPage) || root.title, icon: await readPageIcon(rootPage.icon), link: root.link },
-      sections: sections.filter(item => item.role !== 'support').map(item => ({ key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
-        ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) })), ...(support && { supportHidden: support }) };
+      // Status verifies only the root. A Content route is optional and its saved title, link and label are
+      // the owner's, so status names it only as a neutral routing entry (its key and role): Home asks for its
+      // list, and the title and link come back only inside that list's own result, which proves access to it.
+      sections: sections.filter(item => item.role !== 'support').map(item => item.role === 'content' ? { key: item.key, label: 'Content', role: 'content' }
+        : { key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
+          ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) }), ...(support && { supportHidden: support }) };
   }
 
   async function list({ key, cursor, query = '' }) {
@@ -170,8 +235,10 @@ export function createHomeService({ credential = hostCredential, route = async (
           } catch (error) { if (failed(error).state !== 'inaccessible') throw error; denied++; }
         }
         const notes = excluded ? { supportExcluded: excluded } : {};
-        if (!items.length) return { state: denied ? 'inaccessible' : 'empty', scope: session.scope, ...notes };
-        return { state: 'listed', scope: session.scope, items: query ? items.filter(item => item.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, 5) : items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
+        // For a Content route, a result that proves access also carries the saved title and link for display.
+        const named = item.role === 'content' ? { source: { title: item.label, link: target.link } } : {};
+        if (!items.length) return { state: denied ? 'inaccessible' : 'empty', scope: session.scope, ...(!denied && named), ...notes };
+        return { state: 'listed', scope: session.scope, ...named, items: query ? items.filter(item => item.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, 5) : items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
       }
       // The data source's schema must still hold the verified fields before any query.
       const schema = await session.client.dataSource(target.id);
@@ -182,7 +249,8 @@ export function createHomeService({ credential = hostCredential, route = async (
       if (where !== 'clear') return { state: 'unsupported', scope: session.scope, contained: where };
       const types = Object.fromEntries(Object.entries(schema.properties || {}).map(([name, value]) => [name, value?.type]));
       if (types[item.fields.title] !== 'title') return { state: 'unsupported', scope: session.scope };
-      const source = { title: plainText(schema.title).trim().slice(0, 200) || item.label, icon: await readPageIcon(schema.icon) };
+      const source = { title: plainText(schema.title).trim().slice(0, 200) || item.label, icon: await readPageIcon(schema.icon),
+        ...(item.role === 'content' && { link: item.destination.link }) };
       const description = item.fields.description && textProperties.has(types[item.fields.description]) ? item.fields.description : undefined;
       const titleFilter = { property: item.fields.title, title: { contains: query } };
       const filter = query ? item.view?.filter ? { and: [item.view.filter, titleFilter] } : titleFilter : item.view?.filter;

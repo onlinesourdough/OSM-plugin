@@ -15,13 +15,18 @@ export function previewHome(name, args, scenario) {
     { key: 'memory', label: long.memory || 'Memory', role: 'memory', link, title: long.memory || 'Memory' },
     { key: 'skills', label: long.skills || 'Skills', role: 'skills', link, title: long.skills || 'Skills', describes: true },
   ];
+  // `home-content` and `home-content-denied` add an optional Content source after Knowledge, as a definition that
+  // names a Content route would; without them no Content source exists.
+  if (['home-content', 'home-content-denied'].includes(scenario)) sections.splice(1, 0, { key: 'content', label: 'Content', role: 'content', link, title: 'Content' });
   // Synthetic raster document; no private or remote image bytes.
   const fileIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAPUlEQVR4nGNgoAWIL5/3Hx9et+/6f6oZRJRhxBpE0DBSDMJrGCGD0DF9DXr94QdWPHAuGvXaiPYaRQZRAgAIKehi+n1KDQAAAABJRU5ErkJggg==';
   const icons = ['📚', fileIcon, null, 'https://www.notion.so/icons/copy_lightgray.svg'];
   const gate = { 'home-revoked': 'root_inaccessible', 'home-ended': 'not_connected', 'home-notconnected': 'not_connected', 'home-changed': 'account_changed', 'home-error': 'unavailable', 'home-limited': 'rate_limited' }[scenario];
   const home = { state: gate || 'ready', mapping: 'saved', selectedMode: 'internal_selected_pages', scope,
+    ...(scenario === 'home-access-link' && { manageLink: 'https://www.notion.so/00000000000000000000000000000002' }),
     context: 'https://app.notion.com/p/00000000000000000000000000000001', workspaceName: 'Northwind sample workspace', definitionRevision: 'fictional-preview-r1', verifiedAt: new Date().toISOString(),
-    root: { title: 'Northwind · Sample home', icon: '🗂️', link }, sections,
+    // Like the real status, a Content route is a neutral routing entry: its title and link come back only with its list.
+    root: { title: 'Northwind · Sample home', icon: '🗂️', link }, sections: sections.map(item => item.role === 'content' ? { key: item.key, label: 'Content', role: 'content' } : item),
     builtin: [{ name: 'osm-write-code', description: 'Write and verify code.' }] };
   const result = (kind, data) => ({ content: [], _meta: { 'osm/kind': kind, [`osm/${kind}`]: data } });
   if (gate) { delete home.root; delete home.sections; delete home.workspaceName; delete home.definitionRevision; delete home.verifiedAt; }
@@ -35,7 +40,8 @@ export function previewHome(name, args, scenario) {
       { kind: 'heading', text: 'Sample sources' }, { kind: 'item', text: '📚 Knowledge — goals, offers and working context' },
       { kind: 'item', text: '🗂️ Memory — decisions and lessons' }, { kind: 'item', text: '⚡ Skills — methods we use' }], truncated: scenario === 'home-partial' } });
   if (name === 'osm_home_locate') return result(kind, { state: 'outside', scope });
-  const titles = args.section === 'skills' ? ['Sample weekly update', 'Sample project kickoff', 'Sample review method', 'Sample planning method', 'Sample writing method'] : args.section === 'memory'
+  if (args.section === 'content' && scenario === 'home-content-denied' && ['osm_home_list', 'osm_home_search'].includes(name)) return result(kind, { state: 'inaccessible', scope });
+  const titles = args.section === 'content' ? ['Sample launch plan', 'Sample newsletter', 'Sample case study', 'Sample campaign brief'] : args.section === 'skills' ? ['Sample weekly update', 'Sample project kickoff', 'Sample review method', 'Sample planning method', 'Sample writing method'] : args.section === 'memory'
     ? ['Sample scope decision', 'Sample lesson', 'Sample delivery decision', 'Sample review decision'] : ['Sample goals', 'Sample customers', 'Sample working agreement', 'Sample project notes', 'Sample guide'];
   if (scenario === 'home-long-titles') titles[0] = args.section === 'memory'
     ? 'SampleScopeDecisionWithAnUnbrokenTitleTokenThatHasNoNaturalBreakpointAtNarrowWidths'
@@ -49,7 +55,7 @@ export function previewHome(name, args, scenario) {
       description: args.section === 'skills' ? ['Summarize a week’s work for the team.', 'Prepare a focused first project session.', 'Review a result against its intended outcome.'][i % 3] : undefined,
     })).filter(item => name !== 'osm_home_search' || item.title.toLowerCase().includes(args.query.trim().toLowerCase())).slice(0, name === 'osm_home_search' ? 5 : 10);
     return result(kind, { state: items.length ? 'listed' : 'empty', scope,
-      source: { title: sections.find(s => s.key === args.section)?.title, icon: icons[args.section === 'memory' ? 1 : 0] },
+      source: { title: sections.find(s => s.key === args.section)?.title, icon: icons[args.section === 'memory' ? 1 : 0], ...(args.section === 'content' && { link }) },
       items, hasMore: scenario === 'home-paginated' && !offset && name === 'osm_home_list',
       ...(scenario === 'home-paginated' && name === 'osm_home_list' && { cursor: offset ? undefined : 'fictional-next', withheld: 2 }),
     });

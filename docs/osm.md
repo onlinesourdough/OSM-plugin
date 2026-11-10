@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.31.3
+OSM version: 0.32.0
 
 **Business first. Productivity built in.**
 
@@ -159,7 +159,9 @@ Content production and video are not part of OSM. Content and Diffusion Studio
 left the package in 0.31.0; their history is kept as non-shipped drafts in the
 source repository's `docs/content-drafts/README.md` (not part of the package), a record of five
 configurable areas (setup, intake, prepare, produce and distribute, learn), not a
-plugin or required pipeline. Where an owner chooses a separate Content method,
+plugin or required pipeline. Shared Content methods and templates have their own Git home,
+[OSM-content](https://github.com/onlinesourdough/OSM-content), which owns their future changes; a Notion
+copy is a projection of a stated source revision. Where an owner chooses a separate Content method,
 Notion editorial and Kit are the current selected tools and HyperFrames is an
 unqualified video candidate only. AIOS 0.29.0 no longer ships design skills;
 existing project `DESIGN.md` and `design/` files are unchanged.

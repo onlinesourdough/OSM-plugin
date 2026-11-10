@@ -71,9 +71,17 @@ git push origin refs/tags/vVERSION
 for pull requests, main updates and version tags. On a tag, it also checks that
 the tag commit belongs to main, that its version matches the package and local
 overview, and that its changelog entry exists. Only then does it create the
-matching GitHub prerelease. The repository is public; releases retain the
-pilot prerelease channel. This workflow does not promote a stable release or
-change repository visibility.
+matching GitHub release, in the channel the tagged commit declares in
+`.github/release-channel`: `prerelease` (every release so far, and the default) or
+`stable`. The value is read literally, with ordinary line endings only (spaces, extra
+lines and other case are not normalized), and the workflow fails on any other value in the
+checks job and again in the publish step before any `gh` command. A stable release is therefore an
+ordinary reviewed commit that sets `stable`, validated and tagged by the same exact
+plain `vX.Y.Z` path, with the same CI, tag-on-main and version checks; the package
+validator accepts only `X.Y.Z` and is not widened for suffixed tags. The workflow
+never edits an existing release, so earlier immutable tags and their prerelease flags
+stay exactly as published, and no release is promoted by toggling a flag. The
+repository is public; this workflow does not change repository visibility.
 
 Verify workflow completion and the GitHub Release's tag and resolved commit.
 A failed run means release delivery is incomplete. Fix the cause and rerun;

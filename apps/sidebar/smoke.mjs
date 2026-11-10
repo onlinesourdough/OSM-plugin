@@ -19,8 +19,18 @@ try {
   await client.connect(transport);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources',
-    'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection', 'osm_save_connection_route']);
+    'osm_home', 'osm_builtin_read', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection', 'osm_save_connection_route']);
   assert.deepEqual(tools[0]._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
+  // The method reader is app-only, offline and takes a bundled method's name, never a path.
+  const reader = tools.find(tool => tool.name === 'osm_builtin_read');
+  assert.deepEqual(reader._meta.ui.visibility, ['app']); assert.equal(reader.annotations.readOnlyHint, true); assert.equal(reader.annotations.openWorldHint, false);
+  const method = await client.callTool({ name: 'osm_builtin_read', arguments: { name: 'osm-setup' } });
+  assert.equal(method._meta['osm/builtin-record'].state, 'read'); assert.ok(method._meta['osm/builtin-record'].record.blocks.length > 0);
+  for (const name of ['../../README', 'osm-setup/SKILL.md', '/etc/passwd', 'missing-method']) {
+    const refused = await client.callTool({ name: 'osm_builtin_read', arguments: { name } });
+    assert.ok(refused.isError || refused._meta?.['osm/builtin-record']?.state === 'inaccessible', `refused: ${name}`);
+    assert.equal(JSON.stringify(refused).includes('Onlinesourdough'), false, 'no file outside the bundled skills is read');
+  }
   for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read']) {
     assert.deepEqual(tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
     assert.equal(tools.find(tool => tool.name === name).annotations.openWorldHint, true);

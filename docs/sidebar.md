@@ -1,4 +1,4 @@
-# Codex sidebar — local 0.31.3 candidate
+# Codex sidebar — local 0.32.0 candidate
 
 Revision: 2026-11-09
 
@@ -17,7 +17,14 @@ action, which opens its own empty list with Open in Notion and reads nothing mor
 denied, unsupported or unavailable sources keep their state line and recovery and
 get no Open action. Each source head carries Setup's filled numbered circle (the
 source's place in the definition) and the saved-links view uses the same card.
-Related routes only open Notion; support material is excluded from Home and
+An optional Content store (role `content`) is a source only when the selected
+definition names an existing Content route and OSM's own connection proves access
+to it; it then lists, reads, searches and goes Back like Docs. Status names it only as
+a neutral routing entry: its saved title, link and label come back only inside its own
+list result, and Home shows the source only once that list (or a title search) proves
+access, so a denied or failing route shows nothing of it. Absent or denied, no Content
+source or data is shown, and OSM never creates Content. Related routes only
+open Notion, under “More in Notion”; support material is excluded from Home and
 search. Routing and its revision-bound projection cache confer no access.
 
 Search contains page titles within each mapped readable source. Data-source
@@ -37,10 +44,11 @@ visibility events still require host qualification.
 
 The gear opens Settings with Notion connection status and actual checked time,
 Data & Context home in its bordered context picker, a card with Saved links and
-a Built into OSM row (an `aria-expanded` row with an icon, a description and one
-chevron that lists the installed package's existing method names and descriptions
-locally, with a “1 method”/“N methods” summary under the description and no run,
-enable or ownership controls), the optional separate plugin,
+a Built into OSM row (like Saved links, a row with an icon, a description and one
+chevron that opens its own Settings page listing the installed package's methods,
+with a “1 method”/“N methods” summary under the description; choosing one reads its
+text through the name-checked `osm_builtin_read`, with Back to the list and to
+Settings, and no run, enable or ownership controls), the optional separate plugin,
 and explicit agent help. Saved links editing
 is confined to Settings and manual Setup; it neither grants nor revokes access.
 Healthy Home has no connection pill or link editor. Access refresh runs on open,
@@ -57,12 +65,13 @@ unsupported images retain a readable title. Raw signed icon URLs and retrieved
 bytes are not stored. The current reader is bounded text, headings, lists and
 code; it does not claim to embed arbitrary native Notion views or edit pages.
 
-Personal skills show their source descriptions. Built-in method descriptions in Settings
-stay collapsed and do not imply enablement or execution. See the canonical
+Personal skills show their source descriptions. Built-in methods are listed on their own
+Settings page and open as text; listing or reading one does not imply enablement or execution. See the canonical
 [design guide](../design.md) for the editable Paper and flow/state map.
 
-First use offers human **Connect Notion** guidance; browser OAuth is visibly
-unconfigured in this candidate. The person can check an existing OSM connection
+First use offers human **Connect Notion** guidance. Browser sign-in is not configured (it needs
+OSM's own registered client and a secure backend), and that does not block the working internal
+macOS route, which is the supported first-use path today. The person can check an existing OSM connection
 without starting a model. Optional **Set up with agent** sends one fixed setup
 request after a deliberate click using MCP Apps `sendMessage`. A host rejection
 shows a manual prompt fallback and never claims setup succeeded.
@@ -296,19 +305,33 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
   With no projection yet, osm_context_home is the bounded bootstrap read of only
   the selected root, with its optional `check` of up to eight destinations the root's
   text names (access, title, property names and types).
+- osm_builtin_read: app-only read of one bundled method's SKILL.md as bounded plain
+  blocks, by name. The name must be one the package's own skills folder lists. Before
+  any byte is read, the folder must be a real folder that resolves to its own place and
+  the file a real, unlinked SKILL.md within the size bound, and the file is then read
+  through a no-follow handle for at most that bound. A path, a traversal, an unlisted
+  folder, a symlinked folder or file and an oversize file are never listed, so they are
+  inaccessible. It touches no Notion data and returns nothing outside the package.
 - osm_save_connection_route: model, revision-checked per-context non-secret setting
   that turns OSM's macOS Keychain route on or off from the owner's recorded
   selection of the internal connection; osm_sources returns it as `connectionRoute`.
-  See [the connection](home-connection.md#host-credential-route-macos-keychain).
+  It may also hold the link to this connection's own access page in Notion with the
+  bot and workspace it was verified for (`manage`; left out keeps it, null removes it).
+  Settings → Manage access in Notion opens that link only while the live connection
+  is that bot and workspace, and otherwise Notion itself with the Settings →
+  Connections path. After a successful open, the first real return (focus or
+  visibility, at least 1.5 s later) runs one fresh status and access check, never a poll.
+  That check is Manage access's only refresh: closing Settings adds none, and a refused
+  open leaves nothing to refresh. See [the connection](home-connection.md#host-credential-route-macos-keychain).
 - osm_save_home_projection: model, revision-checked whole replacement of Home's
   generated projection; content changes only with a new definition revision.
   osm_sources returns it with its revision. For the first projection its evidence
   comes from osm_context_home's bootstrap read. osm_save_sources accepts the
   definitionRevision that generated links came from.
 
-The context-hub mark identifies OSM. `assets/branding/aios-icon.svg` is the
+The context-hub mark identifies OSM. `assets/branding/osm-icon.svg` is the
 source of `assets/icon.png` (the Codex `composerIcon` and `logo`):
-`rsvg-convert -w 512 -h 512 assets/branding/aios-icon.svg -o assets/icon.png`.
+`rsvg-convert -w 512 -h 512 assets/branding/osm-icon.svg -o assets/icon.png`.
 The sidebar mark is one SVG with the same geometry and no `theme` field, sent
 both as the `osm_open` tool icon, which hosts read first, and as the server icon.
 It is monochrome: it paints only with `currentColor` and sets no colour of its
@@ -374,7 +397,10 @@ source pickers, optional slots, settings Save/discard, failed saves, retry,
 keyboard/focus, light/dark and 320px. GitHub button proof covers its
 presence in setup and dashboard, the exact repository link, and a failed open
 with a visible retryable message. Synthetic host results are distinct from
-native installed-runtime adoption and do not prove new-account OAuth.
+native installed-runtime adoption and do not prove new-account OAuth. One native observation exists:
+the installed 0.31.3 on one macOS Codex host displayed Home and read records through OSM's own
+connection. Windows is unavailable here and is a known limit, not a gate; other hosts, writes through
+the connection and timed or scheduled callers are not qualified.
 
 Page-picker proof includes a real read-only Notion listing and OSM search via
 Codex 0.161.0, zero-turn transport inspection, title/URL validation, disabled

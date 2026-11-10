@@ -2477,3 +2477,37 @@ commit, the three edition values, every other manifest field, the 18 rows agains
 payload files, including skills, manifests and runtime, identical in path and blob to the tag). This binding changes no
 product file, version or changelog entry. It is repository release consistency only and records nothing about the
 release's publication, any installation, any profile, Notion or the macOS Keychain; earlier dated entries are unchanged.
+
+## 10 November 2026 — 0.32.0 candidate: Manage access, optional Content, Built into OSM, finite cleanup
+
+Source, fixtures and the bundled stdio server. Nothing was staged, committed, tagged, released or installed by this
+change, and no Notion, credential, grant, account or profile action happened. Every read in the tests is a fictional
+workspace behind a fake transport. The inactive publisher stays bound to v0.31.3, and the public guide's last verified
+edition is v0.30.0. Settings gains Manage access in Notion (the verified access page for the live bot and workspace,
+else Notion itself with the real Settings path, and one fresh check on the first real return); Home gains an optional
+Content source and "More in Notion"; Built into OSM is a Settings page that reads one bundled method by name. The
+cleanup corrects stale qualification and Content-template copy, moves the old banner to history, aligns the fallback
+mark, takes a private preview checkpoint out of the root, and makes the release channel an explicit reviewed value.
+
+| Check | Result |
+| --- | --- |
+| New and changed behaviour tests (`app`, `home`, `preview-home`) | Content valid, denied and absent plus the read boundary (including an unknown key); a Content route's saved title, link and label never reach status and nothing of them reaches a denied result, for a data-source and a named-pages route; Content hidden while its own list is pending yet requested, then Docs-like, and hidden and unnamed when denied or failing, in the overview and in search; the access link known, unknown and mismatched, and its save rules; the return check runs once, ignores a bounce, never polls, a refused open arms nothing, and closing Settings adds no second refresh; Built into OSM list, read, Back and focus, a failing read, and a late read that must not replace another; the bundled-method boundary for a symlinked file, a symlinked folder and an oversize file, none of which is listed or read; the fixture modes. Superseded tests were rewritten, not deleted |
+| Mutation controls on a clean baseline (`home.test` 48 of 48, `app.test` 145 of 145, the workflow check passing) | twenty-two deliberate breaks of these boundaries, each caught by the test written for it: twenty by the node tests and two (the channel read with all whitespace stripped, and the publish step treating an unknown channel as stable) by the actual-workflow stub check. Two earlier survivors were closed by strengthening tests, and the focused review's four findings each have a break that fails |
+| `npm ci --ignore-scripts`, `npm run build`, `npm test` (sidebar) | exit 0; 249 of 249 Node tests and the bundled stdio server passed (it also checks the name-only method reader against the built bundle); a second build is byte-identical |
+| Payload against the v0.31.3 tag (117 files) | inventory identical, nothing added, removed or renamed; `assets/icon.png` and `.codex-plugin/mcp.json` identical; six manifests differ by their version line (the Codex description also changed), plus `README.md`, `docs/osm.md`, the two runtime files and two `osm-data-context` skill files (3.1.0, minor). The two asset moves are byte-identical (100% rename) |
+| `validate.py --release-tag v0.32.0 --baseline v0.31.3` on a committed private copy of the exact candidate | passed; plain `validate.py` passed |
+| Documentation, skill-version, onboarding, layout, continuity, context-footprint, responsibility, context-architecture and consumer-selection rehearsals; `publisher.py reconcile --check` | all passed |
+| `publisher-rehearsal.py` | 71 rehearsals and 76 mutation controls passed |
+| Release channel (`.github/release-channel` and the workflow) | the actual workflow steps were run against a stub `gh` with no network: `prerelease` creates with `--prerelease`, `stable` creates without it, an existing release is only looked up; a CRLF file and a missing final newline are accepted as ordinary line endings; a missing, unknown, wrong-case, internally spaced (`sta ble`), leading- or trailing-space or two-line value fails the checks job and the publish step before any `gh` command. It has not been run on GitHub |
+| `git diff --check` | clean |
+
+Revised after a focused review of the first freeze (four findings): the built-in reader now checks the package boundary
+(a real folder, an unlinked file, the size bound) before any byte is read, for the list and the text alike; a Content route
+is named in status only as a neutral routing entry and is drawn only after its own list proves access; the channel is read
+literally instead of with all whitespace stripped, so a malformed value cannot become `stable`; and Manage access has a
+single refresh owner, the return check. The checks above are those of the revised bytes.
+
+Not established: the native panel with these changes, a normal installation of 0.32.0, hosts other than macOS Codex
+(Windows is unavailable here and is a known limit), writes through OSM's connection, timed or scheduled callers such
+as Dreaming, browser sign-in, and the workflow's stable path on GitHub. Browser interaction on the fixtures is the
+maintainer's.

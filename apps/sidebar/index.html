@@ -4,7 +4,7 @@
 <body>
 <main>
   <header id="page-header" class="page-header">
-    <div class="brand"><span id="brand-mark" class="brand-mark" aria-hidden="true" hidden><svg width="29" height="29" viewBox="0 0 512 512"><rect width="512" height="512" rx="104" fill="#2B1B12"/><rect x="100" y="100" width="94" height="94" rx="10" fill="#B86F36"/><rect x="207" y="100" width="94" height="94" rx="10" fill="#D8B995"/><rect x="314" y="100" width="94" height="94" rx="10" fill="#B86F36"/><rect x="100" y="207" width="94" height="94" rx="10" fill="#D8B995"/><rect x="207" y="207" width="94" height="94" rx="10" fill="#FFF2DF"/><rect x="314" y="207" width="94" height="94" rx="10" fill="#AC7750"/><rect x="100" y="314" width="94" height="94" rx="10" fill="#8A5A36"/><rect x="207" y="314" width="94" height="94" rx="10" fill="#D8B995"/><rect x="314" y="314" width="94" height="94" rx="10" fill="#B86F36"/></svg></span><h1 id="heading" tabindex="-1">Get started</h1></div>
+    <div class="brand"><span id="brand-mark" class="brand-mark" aria-hidden="true" hidden><svg width="29" height="29" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.25" fill="currentColor"/><circle cx="3.75" cy="3.75" r="2"/><circle cx="16.25" cy="3.75" r="2"/><circle cx="3.75" cy="16.25" r="2"/><circle cx="16.25" cy="16.25" r="2"/><path d="M5.2 5.2l2.4 2.4M14.8 5.2l-2.4 2.4M5.2 14.8l2.4-2.4M14.8 14.8l-2.4-2.4"/></svg></span><h1 id="heading" tabindex="-1">Get started</h1></div>
     <div class="header-actions">
       <span id="home-status" class="home-status" data-state="neutral" hidden><span class="dot" aria-hidden="true"></span><span id="home-status-label"></span></span>
       <span id="badge" class="badge" hidden>Notion plugin</span>
@@ -97,7 +97,7 @@
       <section id="home-panel" aria-label="Home content"></section>
 
     </div>
-    <section id="home-gate" class="gate" hidden><h2 id="gate-title" class="visually-hidden"></h2><p id="gate-copy" class="intro"></p><div class="gate-actions"><button id="gate-notion" class="btn btn-primary" type="button" hidden>Open page in Notion ↗</button><button id="gate-connect" class="btn btn-primary" type="button">Manage OSM connection</button><button id="gate-action" class="btn btn-ghost cursor-interaction" type="button"></button><button id="gate-setup" class="btn btn-ghost" type="button">Continue with agent</button></div></section>
+    <section id="home-gate" class="gate" hidden><h2 id="gate-title" class="visually-hidden"></h2><p id="gate-copy" class="intro"></p><div class="gate-actions"><button id="gate-notion" class="btn btn-primary" type="button" hidden>Manage access in Notion ↗</button><button id="gate-connect" class="btn btn-primary" type="button">Manage OSM connection</button><button id="gate-action" class="btn btn-ghost cursor-interaction" type="button"></button><button id="gate-setup" class="btn btn-ghost" type="button">Continue with agent</button></div></section>
   </div>
 
   <div id="feedback" class="feedback" hidden><span id="feedback-text" role="status" aria-live="polite"></span><button id="reload-draft" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>
@@ -113,7 +113,7 @@
     <p id="connection-state" role="status" aria-live="polite">Not checked</p>
     <button id="connection-check" class="btn btn-secondary" type="button">Check existing OSM connection</button>
     <h3>Choose access in Notion</h3>
-    <p>Open the page in Notion, then ••• → Connections. Add OSM to share it, or Disconnect to remove access. Sharing a parent also shares its children.</p>
+    <p>In Notion, open Settings → Connections, choose OSM, then Manage access (or Edit access) to select the pages OSM can read, and Save. Sharing a parent page also shares its children. If OSM isn’t listed yet, open a page, choose ••• → Connections and add OSM.</p>
     <button id="osm-connection-guide" class="btn btn-ghost" type="button">Open Notion connection guide ↗</button>
     <p class="hint">A separate Notion plugin has its own connection. Saved links do not grant or revoke access.</p>
   </div>
@@ -127,13 +127,13 @@
       <h3>Notion connection</h3><p id="osm-workspace"></p><p id="osm-checked" class="hint" hidden></p>
       <p id="connection-provisioning" class="hint">Browser sign-in needs OSM’s own registration and backend and is not available in this preview.</p>
       <p id="organisation-copy" hidden></p>
-      <p id="connection-guidance" class="hint">In Notion, open a page’s ••• menu → Connections and add OSM. Home checks again when you come back.</p>
-      <div class="gate-actions"><button id="settings-connection" class="btn btn-primary" type="button">Connect Notion</button><button id="manage-access" class="btn btn-secondary" type="button">Choose pages in Notion ↗</button><button id="home-recheck" class="btn btn-ghost" type="button">Check again</button></div>
+      <p id="connection-guidance" class="hint">This opens Notion. There, go to Settings → Connections, choose OSM, then Manage access (or Edit access), select the pages to share and Save. If OSM isn’t listed yet, open a page, choose ••• → Connections and add OSM. Home checks again when you come back.</p>
+      <div class="gate-actions"><button id="settings-connection" class="btn btn-primary" type="button">Connect Notion</button><button id="manage-access" class="btn btn-secondary" type="button">Manage access in Notion ↗</button><button id="home-recheck" class="btn btn-ghost" type="button">Check again</button></div>
     </section>
     <section><h3>Data & Context home</h3><div id="settings-context"></div><p id="home-definition" class="hint"></p></section>
     <div class="osm-card settings-card">
       <section class="step"><button id="saved-links-toggle" class="step-head setting-head" type="button" aria-controls="saved-links"><span class="setting-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 11.5a3 3 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-.9.9M11.5 8.5a3 3 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l.9-.9"/></svg></span><span class="setting-text"><span class="step-label">Saved links</span><span class="setting-desc">Quick links to open your sources</span><span id="saved-links-summary" class="summary"></span></span></button></section>
-      <section class="step"><button id="builtin-toggle" class="step-head setting-head" type="button" aria-expanded="false" aria-controls="builtin-panel"><span class="setting-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5 16.5 6v8L10 17.5 3.5 14V6L10 2.5ZM3.5 6 10 9.5 16.5 6M10 9.5v8"/></svg></span><span class="setting-text"><span class="step-label">Built into OSM</span><span class="setting-desc">Methods that ship with the plugin</span><span id="builtin-summary" class="summary"></span></span></button><div id="builtin-panel" class="step-panel" hidden><div id="builtin-content"></div><p class="hint">From the installed OSM package. Reading a method here doesn’t run it.</p></div></section>
+      <section class="step"><button id="builtin-toggle" class="step-head setting-head" type="button" aria-controls="builtin-skills"><span class="setting-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5 16.5 6v8L10 17.5 3.5 14V6L10 2.5ZM3.5 6 10 9.5 16.5 6M10 9.5v8"/></svg></span><span class="setting-text"><span class="step-label">Built into OSM</span><span class="setting-desc">Methods that ship with the plugin</span><span id="builtin-summary" class="summary"></span></span></button></section>
     </div>
     <section><h3>Separate Notion plugin</h3><p class="hint">This connection is used only for the optional page picker. OSM Home uses its own connection.</p>
       <div class="status-row"><span id="drawer-connection" class="status"></span><button id="drawer-refresh" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Refresh Notion connection" title="Refresh connection"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 7a6.5 6.5 0 1 0 .3 5M16 3v4h-4"/></svg></button></div>
@@ -146,6 +146,10 @@
       <div id="settings-docs"></div><div id="settings-personalSkills"></div><div id="settings-teamSkills"></div><div id="settings-memory"></div><div id="settings-teamMemory"></div>
       <button id="show-links" class="btn btn-ghost" type="button">Show saved links</button>
     </section>
+    <section id="builtin-skills" hidden><p class="hint">From the installed OSM package. Reading a method here doesn’t run it.</p>
+      <div id="builtin-list"></div>
+    </section>
+    <section id="builtin-skill" hidden><p id="builtin-skill-meta" class="hint"></p><div id="builtin-skill-body" class="reader-body"></div></section>
     <div id="drawer-feedback" class="feedback" hidden><span id="drawer-feedback-text" role="status" aria-live="polite"></span><button id="drawer-reload" class="btn btn-ghost cursor-interaction" type="button" hidden>Load latest</button></div>
   </div>
   <div id="settings-footer" class="drawer-foot" hidden>

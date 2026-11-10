@@ -51,9 +51,11 @@ is a versioned explanatory and reference projection of them. Its last verified
 projection reflects v0.30.0 (`314dcf1`); the latest tagged release is v0.31.3 and
 the guide has not been advanced to it, so the guide is never the installed method
 and never proof of what a given install does.
-The guide's Content templates are a separate Notion-authored draft edition; that
-edition, not the preserved Git drafts under [content-drafts](content-drafts/README.md),
-is the current template source. How the projection is kept aligned, and what is
+Shared Content methods and templates are owned by their own Git home,
+[OSM-content](https://github.com/onlinesourdough/OSM-content): Git owns their future changes, and a
+Notion copy is a projection of a stated source revision, current only once its pages, downloads and
+source marker are verified. The earlier Notion-authored template edition and the preserved Git drafts
+under [content-drafts](content-drafts/README.md) are history, not the current source. How the projection is kept aligned, and what is
 and is not yet automated, is in [publication](publication.md). A customer's Notion
 context home is a different, customer-owned destination. Agentic Systems is a separate
 method and package; its documentation is not copied into OSM.
@@ -79,8 +81,11 @@ follows its tag; see [publication](publication.md#current-release-alignment).
 
 The skill set at v0.31.3 (18 skills, Notion-only core) is declared and fixture-tested and
 was exercised in disposable native installs. Its published prerelease and any normal-profile
-installation are recorded in GitHub Releases and [verification](verification.md), not here;
-its native panel rendering and live Notion behavior are unqualified.
+installation are recorded in GitHub Releases and [verification](verification.md), not here. One
+observation is recorded there: in the installed 0.31.3 on one macOS Codex host, Home displayed and
+read records through OSM's own Notion connection. Not qualified: other hosts and operating systems
+(Windows included), writes through that connection, timed or scheduled callers such as Dreaming, and
+browser sign-in.
 
 ### Documentation consumers
 

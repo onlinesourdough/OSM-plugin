@@ -39,6 +39,28 @@ A scoped connection limits only itself. If the same agent can also call a
 broader Notion route, such as the official plugin, OSM's scope does not fence
 that route.
 
+## Changing what OSM can read
+
+Notion documents the manual path: Settings → Connections, choose the integration,
+then Manage access (or Edit access), select the pages and Save, plus Manage page access
+for Enterprise ([adding and managing connections](https://www.notion.com/help/add-and-manage-connections-with-the-api),
+[authorization](https://developers.notion.com/guides/authorization/overview)). It documents
+no API to grant an existing internal integration access to pages, and OSM adds none: no
+permission writes, no private endpoint, no admin token and no simulated editor.
+
+Settings → **Manage access in Notion** only opens Notion, through the host's open-link
+contract (the browser by default). It opens the connection's own access page when Setup saved
+a link for it together with the bot and workspace it was verified for, and only while the live
+connection is that same bot and workspace; otherwise it opens the verified home page in Notion
+and says to follow the Settings path. Notion documents no URL for a connection's access page,
+so none is built from identifiers, and a link to a developer page that shows the credential is
+refused. If the host cannot open the link, Settings says so and claims nothing. After a
+successful open, the first real return (a focus or visibility change at least a second and a
+half later) runs one fresh status and access check, never a poll. That check is Manage access's
+only refresh: closing Settings adds none. Whether access changed is what that check reads, not
+what the button did. If OSM is not listed yet, the first share is the
+page's ••• → Connections menu.
+
 ## API contract
 
 The adapter (`apps/sidebar/notion-internal.mjs`) sends `Notion-Version:
@@ -180,7 +202,8 @@ inventory of Notion grants or a restriction on other installed connectors.
 
 The preferred human onboarding is browser OAuth with OSM's own registered
 integration and Notion's native page picker. The current Connect dialog honestly
-states that browser sign-in is not configured. The registration, owner decisions,
+states that browser sign-in is not configured; that does not block the working internal route,
+and the macOS Keychain route above is the supported first-use path today. The registration, owner decisions,
 callback and token-custody proposal, plus why hosted MCP PKCE is not an equivalent
 scope, are in [browser connection architecture](notion-browser-connection.md). No
 shared client secret, new app, account or backend is included or activated here.
@@ -209,4 +232,17 @@ The fixtures do not prove:
 - the Keychain prompt on a real Mac;
 - Setup writes through this connection.
 
-Those need approved native holders under #61, with a synthetic workspace.
+One observation goes beyond the fixtures: in the installed 0.31.3 on one macOS Codex host, Home
+displayed and read records through OSM's own connection against the real API. That is one host. Windows
+is unavailable here and is a known limit, not a gate. Other hosts, writes through this connection and
+timed or scheduled callers are not qualified, and the fixtures above do not stand in for them.
+
+Observed on one owner pilot, 10 November 2026: the dedicated item's first provisioning had a creator
+partition that did not match the supported native reader (`/usr/bin/security`). The owner provisioned it
+again natively, with the same credential under the same service and account. The Notion token was not
+rotated, no grant changed, no application was given unrestricted access to the item, and the credential
+was never placed on a command line, in a file, in a log or on the clipboard. The reader then read it back in
+well under a second and OSM reported the same bot and workspace as ready. The fifteen-second bound from 0.31.3
+allows for a slow cold start and was not what repaired this case. This is one observed case, not a universal
+cause: a read that keeps failing is not necessarily a deadline problem, and how the item was created is one
+thing to check before waiting longer. Provisioning stays with the owner, outside OSM, as described above.

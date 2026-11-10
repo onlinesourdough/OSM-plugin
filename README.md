@@ -244,13 +244,16 @@ OSM is open source under the [MIT license](LICENSE).
 
 The public guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
 is a reference projection; its last verified edition is v0.30.0 and it can trail the current
-package. Git and the installed skills remain the instructions. Its Content templates are a
-separate Notion-authored draft edition, and that edition (not the preserved Git drafts) is the
-current template source. Published versions are on GitHub Releases above, and the installed
-manifest and `docs/osm.md` show what a given install contains. The skills are declared and
-fixture-tested, and their packaging and discovery were exercised in disposable native installs;
-native panel rendering and live Notion behavior are unqualified. See
-[What a statement can mean](docs/README.md#what-a-statement-can-mean).
+package. Git and the installed skills remain the instructions. Shared Content methods and
+templates are owned by their own Git home, [OSM-content](https://github.com/onlinesourdough/OSM-content);
+a Notion copy is a projection of a stated source revision, and is current only once its pages,
+downloads and source marker have been verified. Published versions are on GitHub Releases above,
+and the installed manifest and `docs/osm.md` show what a given install contains. The skills are
+declared and fixture-tested, and their packaging and discovery were exercised in disposable native
+installs. In the installed 0.31.3 on one macOS Codex host, Home was observed to display and to read
+records through OSM's own Notion connection. Not qualified: other hosts and operating systems
+(Windows included), writes through that connection, timed or scheduled callers such as Dreaming, and
+browser sign-in. See [What a statement can mean](docs/README.md#what-a-statement-can-mean).
 
 Upgrading from AIOS? Use [Earlier names](docs/osm.md#earlier-names) for the
 supported switch and recovery procedure. Existing owner-data filenames and
