@@ -18,7 +18,7 @@ SKILL_NAMES = {
     "osm-manage-data-context", "osm-manage-skills",
     "osm-setup", "osm-data-context", "osm-interview", "osm-orchestrate-workers", "osm-review-work",
     "osm-risky-changes", "osm-ship-work", "osm-spec-work", "osm-triage-improvement",
-    "osm-human-writing", "osm-write-code", "osm-clarify",
+    "osm-human-writing", "osm-write-code", "osm-clarify", "osm-dreaming",
 }
 # OSM 0.31.0 folded these into `osm` references or moved them out of the package.
 # They get no alias skill; `osm` routes the old names.
@@ -190,7 +190,8 @@ def validate(root=ROOT, release_tag=None):
 
     primary_targets = set(link_targets(skill_root / "osm/SKILL.md"))
     for name in ("osm-data-context", "osm-manage-data-context", "osm-manage-skills",
-                 "osm-human-writing", "osm-write-code", "osm-interview", "osm-setup"):
+                 "osm-human-writing", "osm-write-code", "osm-interview", "osm-setup",
+                 "osm-dreaming"):
         require((skill_root / name / "SKILL.md").resolve() in primary_targets,
                 f"built-in method route missing: {name}")
     for caller in ("osm-build-work", "osm-review-work"):

@@ -33,3 +33,18 @@ test('fictional icons cover emoji, transported PNG, native URL and absent metada
   assert.equal(pageIcon(rows[2].icon), null); assert.match(pageIcon(rows[3].icon), /^https:\/\/www.notion.so\/icons\//);
   for (const row of rows) assert.equal(value('osm_home_read', { section: 'knowledge', id: row.id }, 'home-ready', 'home-record').record.icon, row.icon);
 });
+test('long-title scenario gives each source a multiword or unbroken real-looking title and leaves the default scenario short', () => {
+  const sourceTitle = (scenario, section) => value('osm_home_list', { section }, scenario, 'home-list').source.title;
+  const ready = ['knowledge', 'memory', 'skills'].map(section => sourceTitle('home-ready', section));
+  assert.deepEqual(ready, ['Knowledge', 'Memory', 'Skills']);
+  const long = ['knowledge', 'memory', 'skills'].map(section => sourceTitle('home-long-titles', section));
+  assert.ok(long[0].includes(' ') && long[0].length > 60); assert.ok(long[2].includes(' ') && long[2].length > 60);
+  assert.ok(!/\s/.test(long[1]) && long[1].length > 60);
+  const status = value('osm_home', {}, 'home-long-titles', 'home');
+  assert.deepEqual(status.sections.map(section => section.label), long);
+  for (const section of ['knowledge', 'memory', 'skills']) {
+    const first = value('osm_home_list', { section }, 'home-long-titles', 'home-list').items[0];
+    assert.ok(first.title.length > 45);
+    assert.equal(value('osm_home_read', { section, id: first.id }, 'home-long-titles', 'home-record').record.title, first.title);
+  }
+});

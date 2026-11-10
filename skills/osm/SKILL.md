@@ -2,7 +2,7 @@
 name: osm
 description: Explain OSM and route a person or agent to the relevant method, documentation or procedure, bringing in owner context only when a task needs it.
 metadata:
-  version: "4.0.2"
+  version: "4.1.0"
 ---
 
 # OSM:context-and-methods
@@ -24,6 +24,7 @@ Choose the owner for the request:
   [Data & Context](../osm-data-context/SKILL.md).
 - Retrieve, take in, curate or repair owner context, including the existing
   scheduled run: [Manage Data & Context](../osm-manage-data-context/SKILL.md).
+- Reflect across completed work between sessions: [Dreaming](../osm-dreaming/SKILL.md).
 - Create or change a personal or team method:
   [Manage Skills](../osm-manage-skills/SKILL.md).
 - Explore or find direction: [Interview](../osm-interview/SKILL.md). Reuse accepted

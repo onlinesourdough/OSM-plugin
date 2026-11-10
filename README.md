@@ -5,7 +5,7 @@
 The Onlinesourdough Method (OSM) helps you give your AI assistant a useful
 foundation: relevant data, business context and reusable ways of working.
 It helps the assistant plan work, build it, review the result and retain useful
-decisions. Install it in the app you use. The same 17 skills work from one shared
+decisions. Install it in the app you use. The same 18 skills work from one shared
 source, with native packaging for Codex, Pi, Claude Code, Gemini CLI, Copilot CLI
 and Cursor.
 

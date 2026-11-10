@@ -2038,3 +2038,105 @@ visual acceptance of R5 therefore remains pending. The Saved links row's
 short summary can repeat “Personal”; that small copy issue awaits the designer.
 Native Paper pixels, native Codex behavior, live Home, OAuth and release remain
 unqualified. Publisher, credentials, grants and normal profiles are unchanged.
+
+## 9 November 2026 — final-review fix: long source titles at narrow widths (#74)
+
+An independent review found one blocking presentation defect in the Setup
+cohesion work: `.source-head .step-label` kept Setup's `flex: none`, so a long
+real source title could not shrink into a narrow card despite its wrapping
+declarations. The source label now shrinks and wraps inside its heading, and the
+`Open ‹Source›` and `Load more from ‹Source›` captions on Home wrap inside the
+card (full caption and accessible name kept, no truncation or generic name)
+instead of keeping Setup's one-line, fixed-height `nowrap` button shape. Setup's
+own step labels and buttons are unchanged, as are all scope, access, account,
+search, recovery, keyboard and Back rules and the Memory Open link.
+
+The synthetic host gained a `home-long-titles` scenario for 320px checks: a
+multiword title and an unbroken 94-character token as source titles, plus long
+row titles. It is fictional fixture data, not live Notion evidence. Two tests
+were added: one asserts the fixture scenario's shape and that the default
+scenario is unchanged; one drives Home with long real titles and asserts the
+whole title reaches the heading, the Open caption (as its accessible name), the
+source list heading and Load more, and is never replaced. The test DOM has no
+layout engine, so the overflow fix itself is not asserted by a test; it needs a
+real-browser check of that scenario at 320px.
+
+On Node.js 22, `npm test --prefix apps/sidebar` passed **230 tests, zero
+failures**, plus the bundled stdio smoke. `npm run build --prefix apps/sidebar`
+passed twice with identical SHA-256 hashes for all three runtime files; only
+`runtime/sidebar/index.html` differs from HEAD. No credentials, account, grants,
+profile, publisher, manifest, version, `design.md` or Paper change; nothing was
+committed, pushed or published. Native Codex UI, live Notion, OAuth, Paper pixel
+rendering, installation and release remain unqualified.
+
+## 9 November 2026 — OSM Dreaming source candidate (#93, within #88)
+
+Source checkpoint `c884255fddd55ff4da420e23469268e552383869`, with the narrow-title
+Home fix above still uncommitted in the same tree. Added one skill, `osm-dreaming`
+1.0.0 (new name, so initial version): deliberate reflection across useful completed or
+changed work between sessions. It selects inputs, checks candidate conclusions against
+their sources and hands every write to Manage Data & Context and any reusable method
+change to Manage Skills. It adds no scheduler, store, service, transcript mirror or
+model choice, and task-time capture is unchanged. Reused, not restated: the record
+lifecycle, upkeep and readback rules, the home write policy and uncertain-write
+reconciliation. One rule was added to their canonical home, the architecture's item and
+stage failure rules: a source item still in progress when discovered stays pending by its
+stable identity, no created-since position retires it, and it is selected again once
+complete. Setup's optional-upkeep step, the `osm` router and the scheduled-caller
+paragraph of the update reference now point to it; the caller paragraph says pointing the
+existing job at Dreaming is a separate, optional change that waits for a reviewed
+installed version and a checked invocation, with one job and one writer.
+
+Versions: `osm-dreaming` 1.0.0 (new), `osm` 4.0.2 to 4.1.0, `osm-setup` 3.0.1 to 3.0.2,
+`osm-data-context` 3.0.0 to 3.0.1. `osm-manage-data-context` (3.0.0) and
+`osm-manage-skills` (3.0.0) are unchanged and do not link back to Dreaming; the responsibility
+rehearsal pins that edge direction, with a negative control for a Manage Data & Context link back into Dreaming.
+
+Source and fixture evidence, from the working tree:
+
+- `tests/validate.py --baseline` passed against `c884255`, `v0.30.1` and `v0.30.0`, with
+  18 versioned skill frontmatters. `tests/skill-version-rehearsal.py` ran 14 tests, OK.
+- `tests/responsibility-rehearsal.py` passed for 18 owners, with Dreaming as a leaf whose
+  only calls are Manage Data & Context and Manage Skills, and with new owner, trigger and
+  calls-table controls (two of them reject a Setup or Dreaming row that omits a callee). `tests/context-footprint.py` passed; the `worker-build` journey has
+  114 bytes of headroom (37,985 of 38,099), so further growth of `osm/SKILL.md` or startup
+  metadata needs a budget decision.
+- `tests/context-architecture-rehearsal.py` now has 91 cases (89 before): 91 positives, 79
+  variants and 473 negatives, zero failures (89, 74 and 456 before). New case 90 walks
+  recorded runs of a created-since selection for a session that is active at discovery and
+  completes after the boundary. Its 11 negatives reject a skipped active session, pending
+  keyed by anything but the stable identity, an active session read as final, a late session
+  not revisited, a checkpoint past a pending or uninspected or unverified item, a write before
+  inspection, a pending item cleared without a verified write, and an unchanged replay that
+  writes, duplicates a record or changes a date. Two valid variants cover a session that stays
+  active for another run and one that is complete at discovery. New case 91 checks what a
+  reflection keeps: a direct owner decision or verified attributable correction is durable at
+  its first occurrence, an inference or pattern stays provisional until confirmed or
+  independently evidenced (repetition alone does not upgrade it), a later source edit or
+  re-extraction never outranks an owner correction, and a live operational value is read at its
+  owner and kept in the home only as a dated snapshot with a stated use. Its six negatives and
+  three valid variants each isolate one of those.
+- A reference-runner exercise in the same rehearsal replays the same synthetic session
+  timelines through a created-since-only runner and through the pending-by-identity rule. The
+  first never writes the late session and is rejected; the second writes each session once
+  and its unchanged final run selects and writes nothing. Evidence class: deterministic
+  fixture exercise of the selection rule. It uses no model, host, native session or Notion
+  and shows the failure and the rule, not that any agent follows it.
+- `tests/documentation-rehearsal.py` (7 tests), `consumer-selection-rehearsal.py`,
+  `onboarding-rehearsal.py`, `layout-rehearsal.py` and `continuity-rehearsal.py` passed.
+  `docs-publisher/publisher.py reconcile --check` reports the same two inherited problems
+  and 22 pending artifacts as before the change; the publisher hold and manifest are
+  untouched, and an unreleased skill has no released-packet row. `git diff --check` passed.
+  The skill-creator `quick_validate.py` could not run because PyYAML is not installed, and
+  nothing was installed; the repository validator covers the skill shape.
+
+Counts of 17 skills in the README, `docs/README.md`, `docs/architecture.md` and
+`docs/skills.md` now say 18. Dated installation and release records that name 17 are history
+and were left as they are.
+
+Not proven by any of this: installation, native discovery or invocation of the skill,
+fresh-session recall of a retained correction, a second host consuming the same context,
+timed or unattended runs, removed-access handling on a real source, an economical-model
+comparison, or the live caller. The existing scheduled caller keeps its installed method;
+nothing was installed, scheduled, switched or written to a real home, and the cutover and
+actual-invocation qualification stay open under #73.

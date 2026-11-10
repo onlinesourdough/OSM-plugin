@@ -38,7 +38,9 @@ by default; existing entries and customer names remain theirs.
 root, one definition and the core Knowledge, Memory and Skills stores, reusing
 what exists and creating only what is missing. [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md)
 retrieves, takes in and curates context afterwards, for a manual request, a task
-checkpoint or an existing scheduled run. The host keeps a short pointer to the
+checkpoint or an existing scheduled run. [Dreaming](../skills/osm-dreaming/SKILL.md)
+adds deliberate reflection across useful completed work between sessions and hands
+every write to Manage Data & Context; it adds no scheduler. The host keeps a short pointer to the
 approved entry; the agent reads only relevant sources and personal methods.
 Reuse full-page Docs, native Skills and Memory, with Spaces for business and
 brand scopes. Start with one useful workflow in an existing workspace; no

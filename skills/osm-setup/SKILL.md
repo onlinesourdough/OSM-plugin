@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task.
 metadata:
-  version: "3.0.1"
+  version: "3.0.2"
 ---
 
 # OSM:setup
@@ -47,8 +47,11 @@ outside that chain):
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
    assumed. Add the thin host pointer only at the intended scope.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/SKILL.md)
-   serves manual and task-time curation. A scheduled run needs an explicit
-   request and exact authority; setup authority alone does not create one.
+   serves manual and task-time curation, and [Dreaming](../osm-dreaming/SKILL.md)
+   adds deliberate reflection across completed work. A scheduled run of either
+   needs an explicit request and exact authority; setup authority alone does not
+   create one. Record only history and source routes that are actually readable;
+   an unavailable or unqualified route stays an explicit gap.
 7. **First useful task.** Complete the agreed result, then check the
    [setup scenarios](references/setup-scenarios.md) that apply and report
    unavailable proof honestly. An unchanged resume needs only its task checks.

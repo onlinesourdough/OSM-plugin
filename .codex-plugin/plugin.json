@@ -16,7 +16,7 @@
     "composerIcon": "./assets/icon.png",
     "logo": "./assets/icon.png",
     "shortDescription": "The Onlinesourdough Method",
-    "longDescription": "Open your selected Notion Data & Context page inside Codex. Read its content, browse mapped sources and manage OSM setup from a quiet settings menu. OSM uses its own connection; the optional official Notion plugin page picker is separate. Browser OAuth is not configured in this local candidate. Seventeen shared skills help with context, writing, code and reviewed delivery.",
+    "longDescription": "Open your selected Notion Data & Context page inside Codex. Read its content, browse mapped sources and manage OSM setup from a quiet settings menu. OSM uses its own connection; the optional official Notion plugin page picker is separate. Browser OAuth is not configured in this local candidate. Eighteen shared skills help with context, writing, code and reviewed delivery.",
     "developerName": "onlinesourdough",
     "category": "Productivity",
     "capabilities": [

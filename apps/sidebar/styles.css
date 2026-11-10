@@ -148,8 +148,15 @@ h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text
 #home-panel:focus-visible { outline: none; }
 .source-head { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; margin: 0; padding: 0 16px; }
 .source-head .source-slot { border: 0; border-radius: 0; }
-.source-head .step-label { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+/* Setup's .step-label is flex: none because its labels are short and fixed. A source title is
+   real metadata of any length, so here the label may shrink and wrap inside the card. */
+.source-head .step-label { flex: 0 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .source-panel { padding: 4px 16px 16px 48px; }
+/* "Open ‹Source›" and "Load more from ‹Source›" carry the real source title. Setup's .btn is a
+   one-line, fixed-height nowrap pill; here the full caption wraps inside the card instead of
+   overflowing it. A short caption keeps the standard 32px control. */
+#home-panel .step-actions .btn { height: auto; min-width: 0; max-width: 100%; padding-top: 6px; padding-bottom: 6px;
+  line-height: 1.4; white-space: normal; overflow-wrap: anywhere; text-align: left; }
 .record-list { margin: 0; padding: 0; list-style: none; }
 #home .row { width: calc(100% + 24px); margin: 0 -12px; gap: 8px; }
 #home .row-title { font-weight: 400; white-space: normal; }
@@ -208,13 +215,14 @@ h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text
 #saved-links { margin-top: 12px; }
 #show-links { margin-top: 16px; }
 .links-note { margin: 0 0 16px; }
-@media (max-width: 699px) {
-  .reader-bar .breadcrumb-root { display: none; }
-  .reader-bar .breadcrumbs > .breadcrumb-root + .breadcrumb-segment::before { content: none; }
-  .reader-bar { flex-wrap: wrap; gap: 4px 12px; }
-  .reader-leading { flex-basis: 180px; min-width: min(100%, 180px); }
-  .reader-tools { justify-content: flex-end; }
-}
+/* The Home column is 600px at every width, so the reader bar uses one composition everywhere:
+   no root crumb, crumbs first and the actions right-aligned, wrapping to a second row only if
+   they do not fit. */
+.reader-bar .breadcrumb-root { display: none; }
+.reader-bar .breadcrumbs > .breadcrumb-root + .breadcrumb-segment::before { content: none; }
+.reader-bar { flex-wrap: wrap; gap: 4px 12px; }
+.reader-leading { flex-basis: 180px; min-width: min(100%, 180px); }
+.reader-tools { justify-content: flex-end; }
 @media (max-width: 440px) {
   .reader h2, .source-title-h { font-size: 22px; }
   .source-panel { padding-left: 16px; }

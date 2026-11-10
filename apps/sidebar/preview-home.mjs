@@ -3,10 +3,17 @@
 export function previewHome(name, args, scenario) {
   const scope = 'fictional-preview-scope';
   const link = 'https://www.notion.so/00000000000000000000000000000001';
+  // `home-long-titles` gives each source real-looking long metadata to check wrapping at 320px: a
+  // multiword title, an unbroken token with no natural break, and long row titles. Synthetic only.
+  const long = scenario === 'home-long-titles' ? {
+    knowledge: 'Northwind customer research, pricing history and long-term account planning notes (sample)',
+    memory: 'NorthwindSampleDecisionLogWithAnUnbrokenTitleTokenThatHasNoNaturalBreakpointAtNarrowWidths2026',
+    skills: 'Reusable weekly client update and project kickoff methods for every sample engagement',
+  } : {};
   const sections = [
-    { key: 'knowledge', label: 'Knowledge', role: 'documents', link, title: 'Knowledge' },
-    { key: 'memory', label: 'Memory', role: 'memory', link, title: 'Memory' },
-    { key: 'skills', label: 'Skills', role: 'skills', link, title: 'Skills', describes: true },
+    { key: 'knowledge', label: long.knowledge || 'Knowledge', role: 'documents', link, title: long.knowledge || 'Knowledge' },
+    { key: 'memory', label: long.memory || 'Memory', role: 'memory', link, title: long.memory || 'Memory' },
+    { key: 'skills', label: long.skills || 'Skills', role: 'skills', link, title: long.skills || 'Skills', describes: true },
   ];
   // Synthetic raster document; no private or remote image bytes.
   const fileIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAPUlEQVR4nGNgoAWIL5/3Hx9et+/6f6oZRJRhxBpE0DBSDMJrGCGD0DF9DXr94QdWPHAuGvXaiPYaRQZRAgAIKehi+n1KDQAAAABJRU5ErkJggg==';
@@ -30,6 +37,9 @@ export function previewHome(name, args, scenario) {
   if (name === 'osm_home_locate') return result(kind, { state: 'outside', scope });
   const titles = args.section === 'skills' ? ['Sample weekly update', 'Sample project kickoff', 'Sample review method', 'Sample planning method', 'Sample writing method'] : args.section === 'memory'
     ? ['Sample scope decision', 'Sample lesson', 'Sample delivery decision', 'Sample review decision'] : ['Sample goals', 'Sample customers', 'Sample working agreement', 'Sample project notes', 'Sample guide'];
+  if (scenario === 'home-long-titles') titles[0] = args.section === 'memory'
+    ? 'SampleScopeDecisionWithAnUnbrokenTitleTokenThatHasNoNaturalBreakpointAtNarrowWidths'
+    : 'Sample ' + (args.section === 'skills' ? 'weekly update with a long descriptive title' : 'goals and priorities for the coming year, including targets for customers, offers and delivery');
   if (['osm_home_list', 'osm_home_search'].includes(name)) {
     if (scenario === 'home-source-denied' && args.section === 'memory') return result(kind, { state: 'inaccessible', scope });
     if (scenario === 'home-empty' || scenario === 'home-q02' && name === 'osm_home_search') return result(kind, { state: 'empty', scope, items: [] });

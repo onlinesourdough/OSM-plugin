@@ -73,7 +73,7 @@ is distinct from the latest published package. The newer v0.30.1 tag and current
 release sentence intentionally hold the unchanged publisher reconciliation; a
 future reviewed publication binding must resolve it before activation.
 
-The skill set on this branch (17 skills, Notion-only core) is declared and
+The skill set on this branch (18 skills, Notion-only core) is declared and
 fixture-tested, unreleased and not installed or native-tested anywhere.
 
 ### Documentation consumers
@@ -88,9 +88,9 @@ Keep the existing entrypoints stable when editing the README:
 - An installed agent reads its packaged methods and versioned overview. It does
   not fetch instructions from Resources to perform a task.
 
-The README introduction Resources selects says "The same 17 skills", and the disclosure that this tree is
+The README introduction Resources selects says "The same 18 skills", and the disclosure that this tree is
 unreleased sits under `## More`, which that selection omits. A consumer that adopts an untagged
-revision shows the 17 with no state; it should pin a tagged release or carry the state itself.
+revision shows the 18 with no state; it should pin a tagged release or carry the state itself.
 
 `tests/consumer-selection-rehearsal.py` rehearses both selections locally against this
 repository (headings present once and non-empty, links resolvable, no private data); it

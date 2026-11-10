@@ -12,6 +12,9 @@ const connectUrl = 'https://chatgpt.com/apps/notion/asdk_app_69c18c28f1188191bf5
 const repositoryUrl = 'https://github.com/onlinesourdough/OSM-plugin';
 const slotLabels = { docs: 'Docs', personalSkills: 'Personal', teamSkills: 'Team', memory: 'Personal', teamMemory: 'Team' };
 const stepRoles = [[], ['docs'], ['personalSkills', 'teamSkills'], ['memory', 'teamMemory']];
+// Settings' Saved links summary names each category that has a saved link once, personal and team slots alike.
+const savedCategories = [['Docs', ['docs']], ['Skills', ['personalSkills', 'teamSkills']], ['Memory', ['memory', 'teamMemory']]];
+const savedSummary = links => savedCategories.filter(([, roles]) => roles.some(role => links[role])).map(([label]) => label).join(' · ') || 'None';
 const connectable = ['not_connected', 'disabled', 'unavailable'];
 // status is the latest accepted snapshot. draft holds pending source edits with
 // the revisions they were read from; only an explicit reload replaces edits.
@@ -234,7 +237,7 @@ function renderSettings(locked) {
   $('drawer-cancel').disabled = saving; $('drawer-close').disabled = saving;
   $('settings-main').hidden = settingsView !== 'main';
   $('saved-links').hidden = settingsView !== 'links';
-  $('saved-links-summary').textContent = home.suppressed() ? 'None' : sourceRoles.filter(role => status.sources.links[role]).map(role => slotLabels[role]).join(' · ') || 'None';
+  $('saved-links-summary').textContent = home.suppressed() ? 'None' : savedSummary(status.sources.links);
   $('settings-back').hidden = settingsView !== 'links';
   $('drawer-title').textContent = settingsView === 'links' ? 'Saved links' : 'Settings';
   $('settings-footer').hidden = settingsView !== 'links' && !discardPrompt;

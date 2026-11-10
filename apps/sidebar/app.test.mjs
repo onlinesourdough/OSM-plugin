@@ -2356,3 +2356,56 @@ test('empty and denied sources retain their truthful state and have no source Op
   assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
   assert.ok(u.buttonNamed('How to share it ›'));
 });
+
+test('long real source titles reach the heading, Open caption, source list and Load more in full and are never replaced', async () => {
+  const titles = {
+    about: 'Northwind customer research, pricing history and long-term account planning notes (sample)',
+    memory: 'NorthwindSampleDecisionLogWithAnUnbrokenTitleTokenThatHasNoNaturalBreakpointAtNarrowWidths2026',
+    skills: 'Reusable weekly client update and project kickoff methods for every sample engagement',
+  };
+  const base = homeHost();
+  const u = await homeUi({ ...base, handler: (name, args) => {
+    const result = base.handler(name, args);
+    const list = result._meta['osm/home-list'];
+    if (name === 'osm_home_list' && titles[args.section] && list?.state === 'listed') list.source = { title: titles[args.section], icon: '📚' };
+    return result;
+  } });
+  const heads = u.nodes().filter(node => node.getAttribute('class') === 'source-head').map(node => node.textContent);
+  for (const title of Object.values(titles)) assert.ok(heads.some(head => head === '📚' + title), 'heading keeps the whole title after its icon: ' + title);
+  // Each full title is also the Open caption's accessible name; nothing is shortened or generic.
+  for (const [key, title] of Object.entries(titles)) {
+    const open = u.get('source-' + key);
+    assert.equal(open.textContent, 'Open ' + title); assert.equal(open.tagName, 'BUTTON');
+    assert.equal(open.getAttribute('aria-label'), null, 'no separate generic accessible name');
+    assert.equal(open.hidden, false);
+  }
+  // Open still works and the source list keeps the title in its heading and Load more caption.
+  await u.click('source-memory'); await settle();
+  const heading = u.get('home-panel').children.find(node => node.tagName === 'H2');
+  assert.equal(heading.textContent, '📚' + titles.memory);
+  assert.ok(u.buttonNamed('Load more from ' + titles.memory), 'Load more names the whole source title');
+  assert.equal(u.buttonNamed('Load more from ' + titles.memory).textContent, 'Load more from ' + titles.memory);
+});
+
+test('Saved links summary names each populated category once, in Docs, Skills, Memory order', async () => {
+  const link = name => ({ title: name, target: 'https://example.com/' + name });
+  const cases = [
+    [{ teamMemory: link('t-memory'), memory: link('p-memory'), teamSkills: link('t-skills'), personalSkills: link('p-skills'), docs: link('docs') }, 'Docs · Skills · Memory'],
+    [{ memory: link('p-memory'), teamMemory: link('t-memory') }, 'Memory'],
+    [{ teamSkills: link('t-skills'), teamMemory: link('t-memory') }, 'Skills · Memory'],
+    [{ personalSkills: link('p-skills'), teamSkills: link('t-skills') }, 'Skills'],
+    [{}, 'None'],
+  ];
+  for (const [links, expected] of cases) {
+    const host = homeHost(), u = await ui(configured(), saved(links), { home: host.handler }); await settle();
+    await u.click('settings');
+    assert.equal(u.text('saved-links-summary'), expected, Object.keys(links).join(','));
+  }
+});
+
+test('Saved links summary stays None while an observed account change hides the saved links', async () => {
+  const host = homeHost(); Object.assign(host.s, { state: 'account_changed', mapping: 'saved' });
+  const u = await ui(configured(), saved({ docs: { title: 'Docs', target: 'https://example.com/docs' }, memory: { title: 'Memory', target: 'https://example.com/memory' } }), { home: host.handler });
+  await settle(); await u.click('settings');
+  assert.equal(u.text('saved-links-summary'), 'None');
+});

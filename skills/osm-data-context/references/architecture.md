@@ -352,6 +352,12 @@ A failure belongs to the affected item or stage, not to the whole run.
 - Keep the discovery position separate from the successful content and curation
   checkpoints and the explicit pending set. A source boundary or credential
   failure holds that source, not the others.
+- A source item still in progress when discovered, such as an active
+  conversation, is incomplete, not final. It stays pending by its stable source
+  identity, and no created-since or other discovery position retires it. It is
+  selected again once complete, so a position that has passed its creation time
+  never skips it permanently. Inspection and the verified write advance on their
+  own checkpoints, and the pending item clears only as above.
 - An uncertain target write is reconciled before further conflicting writes.
   Unchanged known failures are not retried forever or shown as green.
 - A changed source revision reopens extraction and reconciles the derived

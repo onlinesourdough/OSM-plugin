@@ -76,6 +76,18 @@ Build to 2.0.2 and Create Project to 5.0.2; Write Code retains main's 2.0.1.
   - Still open: the neutral-root Home projection revision gap and the missing
     Home credential route (unsupported host) are carried unchanged. The package
     stays at the unreleased `0.31.0`; this is not an installed or released build.
+- OSM Dreaming (`osm-dreaming`, #93) makes the shipped set 18 skills. It is deliberate
+  reflection across useful completed or changed work between sessions: it selects
+  inputs, checks conclusions against their sources and hands every write to Manage
+  Data & Context and any reusable method change to Manage Skills, with no second
+  writer, scheduler, store or model choice. Task-time capture is unchanged. The
+  architecture's item and stage failure rules add one: a session still active when
+  discovered stays pending by its stable identity and is selected again once complete,
+  so a created-since position cannot skip it. Setup and `osm` route to it; Data &
+  Context 3.0.1, Setup 3.0.2 and `osm` 4.1.0. Fixture cases 90 and 91 and a reference-runner
+  exercise cover the selection rule and what a reflection keeps (synthetic only). Source only: the existing
+  scheduled caller keeps its installed method until a separately reviewed installation
+  and cutover under #73, and no native, second-host or live qualification is claimed.
 - The OSM Context Architecture (`skills/osm-data-context/references/architecture.md`)
   is the one shared contract for a customer's Data & Context root. It covers:
   - one neutral root with one definition;

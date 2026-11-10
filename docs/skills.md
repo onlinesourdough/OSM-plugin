@@ -1,6 +1,6 @@
 # OSM skills
 
-OSM ships 17 native skills. Method skills are named `osm` or `osm-*`; their
+OSM ships 18 native skills. Method skills are named `osm` or `osm-*`; their
 titles and Codex display names use `OSM:skill-name`: uppercase `OSM`, a colon
 without spaces, and lowercase hyphenated names. The display label omits the
 redundant leading `osm-` from the canonical name, and the `osm` entry shows as
@@ -11,8 +11,9 @@ renamed the earlier `aios`, `aios-*`, `clarify`, `human-writing` and
 `osm-context` to `osm-data-context` and `osm-maintain-context` to
 `osm-manage-data-context`, folded Check, Update and Select model into
 references under `osm`, and moved Content and Diffusion Studio out of the
-package. Update explicit callers on adoption; `osm` routes the old names and
-there is no alias skill. Each carries an independent quoted `metadata.version`;
+package. It also adds `osm-dreaming` (#93), a new skill with no earlier name.
+Update explicit callers on adoption; `osm` routes the old names and there is no
+alias skill. Each carries an independent quoted `metadata.version`;
 see [version maintenance](skill-versioning.md). Repository development methods in
 `.agents/skills/` are separate and are not product skills.
 
@@ -32,6 +33,7 @@ skills; see [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/rele
 | [OSM:create-project](../skills/osm-create-project/SKILL.md) | Establish a useful project workspace, context and simple structure; Git is optional |
 | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) | Retrieve, take in and curate owner context and repair routes, schema and the definition; one method for manual, task-time and scheduled use |
 | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | Manage personal and installed skill lifecycles |
+| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Reflect across useful completed or changed work between sessions and hand the authorized curation to Manage Data & Context; manual or through an existing native caller |
 | [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume the Notion Data & Context foundation, from access to a useful first task |
 | [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Prepare and recover delegated workers when the caller retains coordination and acceptance |
 | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | Assess consequential changes proportionately |
@@ -53,16 +55,17 @@ chain schema is required. Working material stays in the project.
 ## Triggers and calls
 
 One owner per operation. "Calls" lists what a skill may hand work to; nothing in the
-Setup, Data & Context, Manage Data & Context and Manage Skills chain calls back into
-Setup. The check in `tests/responsibility-rehearsal.py` keeps this table's owners
+Setup, Data & Context, Manage Data & Context, Dreaming and Manage Skills chain calls back into
+Setup, and nothing calls back into Dreaming. The check in `tests/responsibility-rehearsal.py` keeps this table's owners
 consistent with the skill text.
 
 | Trigger | Owner | Calls |
 | --- | --- | --- |
 | Explain OSM, pick a method, use a retired name | [OSM:context-and-methods](../skills/osm/SKILL.md) | Any owner below (routing only) |
-| Set up or resume the foundation | [OSM:setup](../skills/osm-setup/SKILL.md) | Interview (only if context is missing), Data & Context, Manage Data & Context, Manage Skills |
+| Set up or resume the foundation | [OSM:setup](../skills/osm-setup/SKILL.md) | Interview (only if context is missing), Data & Context, Manage Data & Context, Dreaming (optional upkeep), Manage Skills |
 | Engineer the Notion home | [OSM:data-context](../skills/osm-data-context/SKILL.md) | None |
 | Retrieve, take in or curate context; scheduled upkeep | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) | Data & Context (its contract), Manage Skills (method changes only) |
+| Reflect across completed work between sessions | [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Manage Data & Context (all writes), Manage Skills (method changes only) |
 | Create or change a personal or team method | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | None in the context chain |
 | Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers), Manage Data & Context (durable owner facts only) |
 | Resolve a work contract | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Interview, Risky Changes, Orchestrate workers, Build; model advice |

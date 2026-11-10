@@ -23,6 +23,7 @@ JOB_PREFIXES = {
     "osm-create-project": "Start ",
     "osm-manage-data-context": "Retrieve ",
     "osm-manage-skills": "Manage ",
+    "osm-dreaming": "Reflect ",
     "osm-setup": "Set up or resume ",
     "osm-data-context": "Engineer ",
     "osm-interview": "Interview ",

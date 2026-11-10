@@ -425,9 +425,11 @@ test('a changed context cannot reuse or overwrite another context mapping', asyn
 
 test('built-in methods come from the installed package skill metadata', async () => {
   const skills = await readBuiltinSkills(new URL('../../skills', import.meta.url).pathname);
-  assert.equal(skills.length, 17);
+  assert.equal(skills.length, 18);
   const setup = skills.find(skill => skill.name === 'osm-setup');
   assert.match(setup.description, /^Set up or resume OSM/);
+  const dreaming = skills.find(skill => skill.name === 'osm-dreaming');
+  assert.match(dreaming.description, /^Reflect across useful completed or changed sessions/);
 });
 
 // Contract delta 1: one definition, explicit mode, support material, schema honesty, read counts.

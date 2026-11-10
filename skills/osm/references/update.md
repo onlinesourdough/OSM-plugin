@@ -72,6 +72,12 @@ schedule.
 4. An uncertain outcome is inspected, not retried blindly. If the job changed
    in a way you did not intend, restore the recorded prompt from step 1.
 
+Pointing that same job at [Dreaming](../../osm-dreaming/SKILL.md) is a separate,
+optional change. Make it only after a reviewed installed version of Dreaming exists
+and an actual invocation has been checked, use the same four steps and keep
+exactly one job. Dreaming hands every write to Manage Data & Context, so the job
+still has one writer. Until then the job keeps its installed method.
+
 ## Apply and verify
 
 Under existing exact installation authority, use supported native actions for

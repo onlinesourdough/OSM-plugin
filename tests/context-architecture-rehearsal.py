@@ -1760,6 +1760,156 @@ def checkpoint_identity(data, ws):
     return unique(reasons)
 
 
+@check("late-session-selection")
+def late_session_selection(data, ws):
+    """Walk the recorded runs of a created-since selection and test the invariants that keep a
+    session that was active at discovery from being skipped, or its record duplicated."""
+    reasons = []
+    created, at_discovery, pending, inspected, verified, records = {}, {}, set(), set(), set(), {}
+    for run in data["runs"].values():
+        now, selected, pending_at_start, changed_here = run["state_now"], set(), set(pending), set()
+        for event in run["events"]:
+            op, sid = event["op"], event.get("id")
+            if op == "discover":
+                created[sid], at_discovery[sid] = event["created"], event["state"]
+            elif op == "pending":
+                if event["key"] != sid:
+                    reasons.append("pending-not-by-identity")
+                pending.add(sid)
+            elif op == "select":
+                selected.add(sid)
+            elif op == "inspect":
+                if now.get(sid) != "completed":
+                    reasons.append("active-session-read-as-final")
+                inspected.add(sid)
+            elif op == "write":
+                if sid not in inspected:
+                    reasons.append("write-before-inspection")
+                if not event["changed"]:
+                    reasons.append("unchanged-write")
+                else:
+                    changed_here.add(event["record"])
+                if records.setdefault(sid, event["record"]) != event["record"]:
+                    reasons.append("duplicate-record")
+            elif op == "verify":
+                if sid in records:
+                    verified.add(sid)
+            elif op == "clear":
+                if event["by"] != "authorised-exclusion" and not (event["by"] == "verified-write" and sid in verified):
+                    reasons.append("pending-cleared-unverified")
+                pending.discard(sid)
+            elif op == "date":
+                if event["record"] not in changed_here:
+                    reasons.append("date-churn")
+            elif op == "checkpoint" and event["kind"] == "discovery":
+                for other, when in created.items():
+                    if at_discovery[other] == "active" and when <= event["position"] and other not in pending:
+                        reasons.append("active-session-skipped")
+            elif op == "checkpoint":
+                covered = set(event["through"])
+                if covered & pending:
+                    reasons.append("checkpoint-past-pending")
+                if event["kind"] == "write" and covered - verified:
+                    reasons.append("write-checkpoint-past-unverified")
+                if event["kind"] == "inspection" and covered - inspected:
+                    reasons.append("inspection-checkpoint-past-uninspected")
+        for sid in pending_at_start:
+            if now.get(sid) == "completed" and sid not in selected:
+                reasons.append("late-session-not-revisited")
+    return unique(reasons)
+
+
+@check("reflection-support")
+def reflection_support(data, ws):
+    """What a reflection keeps follows the support and authority of each fact, not repetition or recency."""
+    reasons = []
+    for item in data["candidates"]:
+        direct = item["kind"] in ("owner-decision", "verified-correction")
+        if direct and item["attributed"] and item["evidence_kept"]:
+            if item["class"] != "durable":
+                reasons.append("decision-forced-provisional")
+        elif item["class"] == "durable" and not (item["confirmed"] or item["independent_evidence"]):
+            reasons.append("unsupported-inference-durable")
+    for fact in data["facts"]:
+        if fact["kind"] == "owner-correction" and fact["resolved"] != fact["correction"]:
+            reasons.append("correction-outranked-by-source")
+        if fact["kind"] == "live-operational":
+            if fact["resolved"] != fact["live_value"]:
+                reasons.append("note-over-live-source")
+            if fact["stored_as"] == "current":
+                reasons.append("live-value-copied")
+            if fact["stored_as"] == "dated-snapshot" and not (fact["dated"] and fact["use"]):
+                reasons.append("undated-snapshot")
+    return unique(reasons)
+
+
+def simulate(strategy, timeline):
+    """Deterministic reference runner over synthetic session snapshots. It emits the trace that
+    late_session_selection reads. `created-since` keeps only a watermark; `pending-by-identity`
+    also keeps every session that was still active when found. No model, host or native session."""
+    trace, watermark, pending, records = {}, 0, [], {}
+    inspected_all, verified_all = [], []
+    for number, snapshot in enumerate(timeline, 1):
+        events, now = [], {sid: item["state"] for sid, item in snapshot.items()}
+        found = [sid for sid, item in snapshot.items() if item["created"] > watermark]
+        chosen = []
+        for sid in list(pending):
+            events.append({"op": "select", "id": sid, "via": "pending"})
+            chosen.append(sid)
+        for sid in found:
+            events.append({"op": "discover", "id": sid, "created": snapshot[sid]["created"], "state": snapshot[sid]["state"]})
+            chosen.append(sid)
+        for sid in chosen:
+            if now[sid] != "completed":
+                if strategy == "pending-by-identity" and sid not in pending:
+                    events.append({"op": "pending", "id": sid, "key": sid, "reason": "active at discovery"})
+                    pending.append(sid)
+                continue
+            events.append({"op": "inspect", "id": sid})
+            inspected_all.append(sid)
+            records[sid] = "rec-" + sid
+            events += [{"op": "write", "id": sid, "record": records[sid], "changed": True}, {"op": "verify", "id": sid}]
+            verified_all.append(sid)
+            if sid in pending:
+                events.append({"op": "clear", "id": sid, "by": "verified-write"})
+                pending.remove(sid)
+        if found:
+            watermark = max([watermark] + [snapshot[sid]["created"] for sid in found])
+            events.append({"op": "checkpoint", "kind": "discovery", "position": watermark})
+        if any(e["op"] == "inspect" for e in events):
+            events.append({"op": "checkpoint", "kind": "inspection", "through": sorted(inspected_all)})
+            events.append({"op": "checkpoint", "kind": "write", "through": sorted(verified_all)})
+        trace[str(number)] = {"state_now": now, "events": events}
+    return {"runs": trace}, records
+
+
+def reference_exercise():
+    """Isolated method exercise: the same synthetic timelines through a created-since-only runner and
+    through the pending-by-identity rule. It shows the failure and the fix; it is not native evidence."""
+    s1 = {"created": 10, "state": "completed"}
+    done = lambda created: {"created": created, "state": "completed"}
+    active = lambda created: {"created": created, "state": "active"}
+    late = [{"fict-sess-1": s1, "fict-sess-2": active(11)}, {"fict-sess-1": s1, "fict-sess-2": done(11)},
+            {"fict-sess-1": s1, "fict-sess-2": done(11)}]
+    slow = [late[0], late[0], late[1], late[2]]
+    failures, lines = [], []
+    for name, timeline in (("session finishes before the next run", late), ("session stays active for two runs", slow)):
+        identity, records = simulate("pending-by-identity", timeline)
+        naive, naive_records = simulate("created-since", timeline)
+        found, naive_found = late_session_selection(identity, None), late_session_selection(naive, None)
+        replay = identity["runs"][str(len(timeline))]["events"]
+        results = (("identity runner satisfies the invariants", not found, found),
+                   ("identity runner writes each session once", sorted(records) == ["fict-sess-1", "fict-sess-2"], records),
+                   ("unchanged final run selects and writes nothing", replay == [], replay),
+                   ("created-since-only runner is rejected", "active-session-skipped" in naive_found, naive_found),
+                   ("created-since-only runner never writes the late session", "fict-sess-2" not in naive_records, naive_records))
+        for label, ok, detail in results:
+            lines.append(f"reference exercise [{name}]: {label} -> {'PASS' if ok else 'FAIL'}")
+            if not ok:
+                failures.append(f"reference exercise [{name}]: {label}: {detail}")
+    return failures, lines
+
+
 def fictional(value, path="fixture"):
     problems = []
     if isinstance(value, dict):
@@ -1798,8 +1948,8 @@ def main():
     failures += problems
 
     ids = [case["id"] for case in cases]
-    if ids != list(range(1, 90)):
-        failures.append(f"case ids are not 1..89: {ids}")
+    if ids != list(range(1, 92)):
+        failures.append(f"case ids are not 1..91: {ids}")
     for case in cases:
         label = f"case {case['id']:>2} {case['name']}"
         document, _, anchor = case["contract"].partition("#")
@@ -1833,6 +1983,11 @@ def main():
             if not ok:
                 failures.append(f"{label}: negative {index} expected {negative['expect']}, got {found}")
 
+    exercise_failures, exercise_lines = reference_exercise()
+    print("REFERENCE EXERCISE (deterministic runner over synthetic session timelines; no model, host, native session or Notion)")
+    for line in exercise_lines:
+        print(line)
+    failures += exercise_failures
     print(f"positives={positives} variants={variants} negatives={negatives} failures={len(failures)}")
     for failure in failures:
         print(f"FAIL {failure}")

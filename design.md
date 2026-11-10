@@ -23,8 +23,10 @@ OpenPaperDesign Paper **3438e04fc0d64ffe**, project library `repo`, is saved in
 through the native Paper Home project library and start at page
 `R0 · Revision 9 Nov · start here`. Pages R1–R4 hold this revision's flows and
 states. Page R5 shows the Setup foundation carried to Home and Settings and
-governs the visual expression wherever it differs from R1–R4. Pages 00–05 and
-the three Reference pages are preserved earlier versions.
+governs the visual expression wherever it differs from R1–R4. Page A1 is the
+generic Data & Context architecture for #93; it is not a Home screen, and any
+owner-specific configuration view is kept in a private Paper outside this
+repository. Pages 00–05 and the three Reference pages are preserved earlier versions.
 
 This file is the canonical product design guide. The Paper's DESIGN.md points
 here and documents only illustration scope. A drawing is not runtime evidence.
@@ -156,11 +158,13 @@ the field is emptied and any pending search is cancelled. Result rows live only
 in their search view and are never persisted.
 
 **Reader (R01–R03).** One bar replaces the OSM bar: Back (labeled with its
-destination), breadcrumb, Copy link and Open in Notion ↗. In wide everything
-sits on one row; in compact the actions wrap to a right-aligned second row. The
-breadcrumb is `root / source / page` from the projection, not Notion's parent
-chain. Segments other than the current page are buttons, and compact drops the
-root segment without a leading separator. Crumbs navigate without adding
+destination), breadcrumb, Copy link and Open in Notion ↗. Because Home uses the
+600px Setup column at every width, the bar uses one composition everywhere: Back
+and the breadcrumb on the first row, the actions right-aligned on a second row
+when they do not fit. The breadcrumb is `source / page` from the projection, not
+Notion's parent chain; the root segment is not shown in the bar (Back and the
+source list reach it), and no leading separator remains. Segments other than the
+current page are buttons. Crumbs navigate without adding
 history. The root crumb clears history and search. The source crumb opens the
 source list and keeps the previous entry, so Back still returns to the view that
 opened the reader. Back never opens a page by itself.
@@ -187,8 +191,10 @@ Order:
    hint: “Definition revision ‹rev› routes Home to N sources. It routes; access
    comes from OSM’s connection.”
 3. **One card with two rows**, using Setup's row heads without numbers:
-   - **Saved links:** summary is the saved slot labels joined with “ · ”, or
-     “None”. It opens the Saved links sub-view.
+   - **Saved links:** summary names each category that has at least one saved
+     link, once and in this order: Docs, Skills, Memory (personal or team slots
+     both count as their category), joined with “ · ”; “None” when nothing is
+     saved. It opens the Saved links sub-view.
    - **Built into OSM:** summary “N methods”. It expands in place like a Setup
      step (`aria-expanded`). The panel lists each method from the installed
      package's existing metadata, name then description, followed by “From the
@@ -283,7 +289,7 @@ picker, #83 skills. No new issue.
 | Boards | Flow / state | Source / issue | Status |
 | --- | --- | --- | --- |
 | R0 | Revision index and contract | design.md | Design |
-| R5 | Setup foundation carried to Home and Settings | design.md Shared foundation; `styles.css`, `index.html`, `home.mjs`, `app.mjs` | Implemented locally; fresh Opus render review pending |
+| R5 | Setup foundation carried to Home and Settings | design.md Shared foundation; `styles.css`, `index.html`, `home.mjs`, `app.mjs` | Implemented; synthetic-accepted, including the reader-bar and Saved links summary corrections |
 | H01–H02 | Overview compact / wide, light / dark | `home.mjs`, `index.html`, `styles.css`; #74 | Synthetic-accepted |
 | H03 | Source list, Load more, withheld | `home.mjs`, `home-service.mjs`; #74 | Synthetic-accepted |
 | Q01–Q02 | Title search, no match, pasted link, link Back, incomplete sources | `home.mjs`, `home-service.mjs` search/locate; #74 | Q01/Q02 synthetic-accepted; link Back and incomplete-source rules implemented, not image-reviewed |
@@ -311,10 +317,15 @@ No design blockers remain for that candidate.
 
 That acceptance covered layout and behavior before the Setup-foundation cohesion
 correction (R5). The new visual expression, the always-present “Open ‹Source›”
-and the Built into OSM row are implemented locally. Their fresh Opus render
-review remains pending: the post-implementation call was rejected by the SDK
-session limit (reset reported for 18:20 Europe/Copenhagen on 9 November). No
-quota reset or replacement designer was used.
+and the Built into OSM row are implemented. After the session hold, the designer
+reviewed actual browser screenshots (320px and wide, light and dark, including a
+long-title fixture) and accepted the cohesion, Open Memory, the Built into OSM row
+and long-title containment. Sonnet then made the two bounded corrections stated
+above (one reader-bar composition at every width; Saved links summary by
+category). The final browser check shows the wide reader crumb in full and “Docs ·
+Skills · Memory”. At 320px that summary ellipsizes visually with its full
+accessible text kept, which the final independent review accepted as
+nonblocking.
 
 It is not acceptance of:
 
