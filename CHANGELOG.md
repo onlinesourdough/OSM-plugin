@@ -1,5 +1,46 @@
 # Changelog
 
+## 0.31.1 — 2026-11-10
+
+Pilot patch. First use of Home through OSM's own connection on a normally installed
+Mac. In 0.31.0 the packaged setup exposed no per-context opt-in (the Keychain route
+turned on only with an environment variable the package does not set), and the selected
+root could not be read before a projection existed. Checked as source, with fictional
+data behind a fake transport, through the bundled stdio server and the package
+validators; see Limits.
+
+### Connection and first use
+
+- The macOS Keychain route is turned on per context by one small non-secret setting,
+  saved with `osm_save_connection_route` from the owner's recorded selection of the
+  internal connection (`aios/panel/<hash>.connection.json` under `CODEX_HOME`). It is
+  revision-checked, backed up, atomic, refuses symlinks and a non-Notion context or an
+  official mapping, and reads no credential. `OSM_NOTION_KEYCHAIN=1` still works. The
+  secret stays in the private Keychain item the owner adds, reusing the existing
+  connection's credential without rotating it; OSM creates nothing.
+- `osm_connection`, Home's gate and the Settings check now say why the route cannot be
+  used: `unsupported_host`, `not_enabled`, `not_connected`, `keychain_blocked`,
+  `keychain_timeout` or `unavailable`. A Mac without the setting is `not_enabled`, no
+  longer `unsupported_host`. Text only, no layout or style change.
+- With no projection yet, `osm_context_home` is a bounded bootstrap read of only the
+  selected root through the same identity check, returning its bounded definition text
+  and the evidence `osm_save_home_projection` needs (bot and workspace, context and
+  revision). An optional `check` reads access, title and property names and types of up
+  to eight destinations the root's own text names. No search, no other page, no write.
+- Setup and Data & Context name this order and the one private human step (patch bumps:
+  `osm-setup` 3.0.3, `osm-data-context` 3.0.2). The browser connection document now
+  holds a reviewable owner-action and deployment proposal; nothing is registered or
+  deployed.
+
+### Limits
+
+- Not qualified against a real Notion workspace, the real Keychain item and its macOS
+  prompt, the native Codex panel or a normal installation of this version.
+- Browser sign-in is not configured: it needs OSM's own registered client and a secure
+  backend, which the proposal describes and does not provide.
+- The Keychain exit statuses on a real Mac and the real API's responses to the bootstrap
+  read are unproven until that connection is used for a real first task.
+
 ## 0.31.0 — 2026-11-10
 
 Pilot prerelease. OSM becomes a Notion-only context foundation with a selected-home

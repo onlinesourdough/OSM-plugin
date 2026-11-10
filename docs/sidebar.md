@@ -1,4 +1,4 @@
-# Codex sidebar — local 0.31.0 candidate
+# Codex sidebar — local 0.31.1 candidate
 
 Revision: 2026-11-09
 
@@ -284,13 +284,22 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
 - osm_home_search / osm_home_locate: app-only scoped title query and link
   membership checks, using the same credential, mapping and containment checks.
 - osm_home_page: app-only read of the actual selected root page.
-- osm_connection: app/model identity and mapping check using OSM's credential;
+- osm_connection: app/model check using OSM's credential: why the route can or
+  cannot be used, the bot and workspace identity and whether a mapping exists;
   no token or complete grant inventory is returned.
 - osm_context_home / osm_context_list / osm_context_read: model-visible reads
   through the same service and access checks as Home, with no connector fallback.
+  With no projection yet, osm_context_home is the bounded bootstrap read of only
+  the selected root, with its optional `check` of up to eight destinations the root's
+  text names (access, title, property names and types).
+- osm_save_connection_route: model, revision-checked per-context non-secret setting
+  that turns OSM's macOS Keychain route on or off from the owner's recorded
+  selection of the internal connection; osm_sources returns it as `connectionRoute`.
+  See [the connection](home-connection.md#host-credential-route-macos-keychain).
 - osm_save_home_projection: model, revision-checked whole replacement of Home's
   generated projection; content changes only with a new definition revision.
-  osm_sources returns it with its revision. osm_save_sources accepts the
+  osm_sources returns it with its revision. For the first projection its evidence
+  comes from osm_context_home's bootstrap read. osm_save_sources accepts the
   definitionRevision that generated links came from.
 
 The context-hub mark identifies OSM. `assets/branding/aios-icon.svg` is the

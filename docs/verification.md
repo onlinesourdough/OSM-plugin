@@ -2324,3 +2324,39 @@ On the live tree the reconcile check refuses until this is committed, because it
 the committed source, which still names v0.30.1. The full CI set, the sidebar suite, build and native checks
 were not repeated; none of their inputs changed. Qualification is unchanged: the publisher is source and
 fixtures only, and nothing here is native, live or public-page evidence.
+
+## 10 November 2026 — first use through OSM's own connection, 0.31.1
+
+Source, fixtures and the compiled 0.31.1 runtime. Nothing was staged, committed, installed or released;
+`v0.31.0` and the inactive publisher binding are unchanged, and the normal installation is still 0.31.0. No
+Notion, Keychain, credential, grant, account or profile action happened: the Keychain item is still absent,
+and every read below ran against a fictional workspace behind a fake transport and a fake `security`
+executable. The independent whole-candidate review has not happened yet.
+
+What changed: a per-context non-secret opt-in for the Keychain route
+(`apps/sidebar/connection-route.mjs`, `osm_save_connection_route`), distinct credential states, the bounded
+bootstrap read in `osm_context_home` with its named-destination `check`, text-only copy for the new states,
+Setup and Data & Context wiring, the 0.31.1 version and the owner-action proposal in
+`notion-browser-connection.md`.
+
+| Check | Result |
+| --- | --- |
+| Focused tests: `credential.test.mjs`, `home.test.mjs`, `app.test.mjs` | 184 passed, 0 failed |
+| Protected boundaries covered | no credential or Notion request without the saved route (also per context); each Keychain failure its own state and no OS text; the setting is revisioned, a no-op when unchanged, recoverable from a damaged file, refused for a symlink, a non-Notion context, another mode and an official mapping (off always allowed); bootstrap reads only the selected root, requests only destinations its text names, reports `truncated`, and never opens for a damaged projection or the official mode; a different bot or workspace is refused after the identity read alone; opt-in, bootstrap, projection save and a useful read work in one path; dialog and gate text per state |
+| Mutation controls on a clean baseline | `home.test.mjs` and `credential.test.mjs` run unmutated in a temporary copy of `apps/sidebar` plus the public `skills/` folder (which `home.test.mjs` reads): 45 of 45 passed. Eight protective changes (credential ignores the opt-in; a timeout folded into `unavailable`; the unnamed-destination gate removed; an official mapping no longer blocks enabling; the recorded mode not asserted; the route not passed to the credential reader; a trashed root ignored by the bootstrap read; the context revision dropped from the evidence) were applied one at a time to fresh copies, and each failed at least one test written for that boundary (3, 1, 1, 1, 1, 2, 1 and 1 failing tests; M1 also fails the platform and opt-in tests, M6 the no-opt-in test). Harness and outputs are kept outside the repository |
+| Runtime build (`npm run build`, locked dependencies, no consumer install) | `Built OSM 0.31.1 sidebar`, exit 0; `runtime/sidebar` now compiled from this source |
+| Full Node sidebar suite and the bundled stdio server | 237 of 237 passed, 0 failed; `PASS: bundled stdio server, global entrypoint, fullscreen resource, Home projection and isolated first run` (the stdio check lists 20 tools) |
+| Clean committed copy of the working tree (disposable) | made, commit on top of `6b39e83` inside the copy only |
+| `validate.py` against the `v0.31.0` baseline | per-skill version maintenance, package declarations with 18 versioned skills, discovery contracts and isolation checks all PASS |
+| Skill-version, documentation, onboarding, responsibility and consumer-selection rehearsals; `publisher.py reconcile --check`; whitespace | all passed (14, 7 and 7 unit tests, 18 owners, both consumer selections); reconcile reports 18 artifacts pending handoff and writes nothing; whitespace clean |
+
+The finite check window ran all eleven checks in 38.8 seconds. It ran on the tree before the final prose
+corrections (release-neutral changelog heading, the environment wording in `home-connection.md` and
+`connection-route.mjs`'s comment, and the manual-provisioning guidance), which change no code and no bundle byte;
+the runtime is minified and holds no comments. The first mutation run used a copy without `skills/`, so its
+baseline had one unrelated failure; the row above replaces it.
+
+Not established: a real Mac prompt and the Keychain exit statuses, the real Notion API (the bootstrap `check`
+reads and the root Definition fitting the per-block bound), a live Home read, the native Codex panel, a browser
+check of the new copy, a normal installation of 0.31.1, and browser sign-in. The release-tag validator run on the
+final committed copy and the independent whole-candidate review remain.

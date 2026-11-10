@@ -399,8 +399,11 @@ OSM Home and model-visible `osm_connection`, `osm_context_home`,
 OSM's dedicated connection differs from the official Notion plugin. The optional
 manual page picker still uses that separate plugin and is labeled accordingly.
 
-The pilot route reads a dedicated macOS Keychain item only after explicit
-configuration. No credential is entered in Home, chat, source or a packaged
+The pilot route reads a dedicated macOS Keychain item only after the owner's
+saved per-context route setting (or the earlier explicit pilot variable). The
+Setting is non-secret and made from the owner's recorded selection. Missing
+opt-in, missing item, locked or declined Keychain and a timeout are separate
+states. No credential is entered in Home, chat, source or a packaged
 manifest. Human Connect is primary; agent assistance is available through a
 deliberate user action using MCP Apps `sendMessage`; opening Home never starts
 a model turn.

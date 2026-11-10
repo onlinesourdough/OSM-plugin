@@ -32,11 +32,18 @@ it only as the selected-pages option; an owner who chose the official full-user
 connection keeps it and need not create this one. Its token comes only from a supported host secret store, never chat or
 the panel. Hosts without one report Home as unavailable; continue with saved
 links. A scoped connection does not limit any other Notion route the agent can
-use. Record the owner's selected mode and never switch it after a denial. Save
-Home's projection of the definition with Context's
+use. Record the owner's selected mode and never switch it after a denial. The
+shipped route is the macOS Keychain, turned on per context with
+`osm_save_connection_route` from the owner's recorded selection; `OSM_NOTION_KEYCHAIN=1`
+in the server's environment is the earlier pilot opt-in. Verify in this order: the
+connection (`osm_connection` names why it cannot be used), the bootstrap read of the
+selected root and its named destinations (`osm_context_home`), then Home's projection
+of the definition with Context's
 [dashboard-link procedure](../../osm-data-context/references/panel-links.md#home-projection),
 and only when the root's verified identity and an already recorded definition
 revision exist; otherwise leave it unsaved and pending and keep the saved links.
+Only the private Keychain item and any OS prompt wait on the human. Other hosts
+stay unsupported, and browser sign-in is not part of this route.
 
 The panel stores navigation names and links, and the Home projection's identities and labels. Company information remains
 in its source; shared methods remain in the plugin. Its saved link is not an

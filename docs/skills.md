@@ -22,6 +22,8 @@ fixture-tested and was exercised in disposable native installs; its published pr
 any normal-profile installation are recorded in GitHub Releases and
 [verification](verification.md). The previous release, v0.30.1, shipped 22 skills; see
 [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
+The source on `main` is the unreleased `0.31.1` candidate. It renames and adds no
+skill; only Setup and Data & Context change, as patch bumps, to wire OSM's Keychain route.
 
 | Skill | Responsibility |
 | --- | --- |

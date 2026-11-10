@@ -1,6 +1,6 @@
 # OSM's internal Notion connection
 
-Revision: 2026-11-09
+Revision: 2026-11-10
 
 Home reads the owner's mapped Notion records through the connection mode the
 projection records (#82, #74). This release implements one mode,
@@ -97,22 +97,81 @@ Every Home call reads the identity again. A different bot or workspace from the
 mapping returns `account_changed`, and the panel then clears its lists, bodies
 and sections.
 
-## Host credential route in the local candidate
+## Host credential route (macOS Keychain)
 
-The local candidate adds an explicit macOS Keychain opt-in. It does not change
-any installed profile. With `OSM_NOTION_KEYCHAIN=1` in the OSM server's existing
-configuration, `apps/sidebar/credential.mjs` reads only the generic-password item
-with service `com.onlinesourdough.osm.notion` and account `osm`, using the absolute
-system `security` executable with a five-second bound. The secret remains in the
-server closure and is never sent to Home, tools, errors or saved projections.
-Without opt-in, or on another OS, the route remains `unsupported_host`.
+The route reads one generic-password item from the macOS Keychain, service
+`com.onlinesourdough.osm.notion` and account `osm`, through the absolute system
+`security` executable with a five-second bound (`apps/sidebar/credential.mjs`). The
+secret stays in the server closure and never reaches Home, tools, errors or saved
+files. The credential is the existing selected internal connection's own; OSM never
+creates it, copies another tool's, or reads another item.
 
-Provisioning is manual for this pilot. In macOS Keychain Access the human creates
-or selects the dedicated OSM item and enters the credential privately. Do not
-reuse another integration's credential or paste a key in chat/terminal history.
-A missing item means not connected; a locked/denied/timed-out store means the
-connection could not be checked. OS prompts belong to the human. No credential
-was provisioned or accessed as part of this candidate's synthetic tests.
+**Turning the route on.** The installed package's MCP declaration
+(`.codex-plugin/mcp.json`) sets no environment, so the packaged setup had no exposed
+per-context opt-in: `OSM_NOTION_KEYCHAIN=1` reached the server only if someone edited
+the installed cache or set host-wide state, neither of which a normal install should
+need. The OpenAI documentation reviewed covers a config file for a local script and
+installed-server policy overrides, and does not establish a general environment override.
+That is a gap in what the documents show, not a claim that Codex cannot configure an
+environment. The route is therefore one small non-secret setting per context, which the
+owner's recorded selection of `internal_selected_pages` turns on through
+`osm_save_connection_route`:
+
+- It is the file `aios/panel/<context hash>.connection.json` under `CODEX_HOME`
+  (default `~/.codex`), beside that context's links and projection. It holds the
+  format, the context identity, the route name, the mode and `enabled`. No
+  credential, identity or page content.
+- It is saved with the same guards as the links and projection: whole replacement,
+  revision-checked, one lock, the replaced bytes backed up, an atomic rename, no
+  symlink or hard-linked file, and a recheck that the context is unchanged. Saving
+  the same value is a no-op. A damaged file reads as off and can be replaced.
+- It belongs to one context. Another context has another file and stays off.
+  Turning it on is refused for a non-Notion context and when the saved Home mapping
+  selected the official connection; turning it off is always allowed. The mapping's
+  mode is still checked before any credential is requested.
+- It reads no credential, creates no Keychain item, grant or account and bypasses no
+  OS prompt. `OSM_NOTION_KEYCHAIN=1` in the server's environment keeps working as the
+  earlier explicit pilot opt-in.
+
+**What the human does.** Only the private part: reuse the credential of the existing
+selected connection, adding it to Keychain Access under the service and account above,
+and approve any macOS prompt. Do not rotate or revoke that connection to fill the
+Keychain: other authorized callers of it must keep working. Never paste the credential
+in chat, a terminal, the frontend or a file, read or copy the maintenance tool's or the
+official plugin's credential, or create another connection. This is guidance; OSM
+provisions nothing and asks for no second selection of the mode or the root.
+
+**Why it can or cannot be used.** `osm_connection`, Home's gate and the Settings
+check name the actual reason:
+
+| State | Meaning | Next |
+| --- | --- | --- |
+| `unsupported_host` | Not macOS | None here yet; saved links still work |
+| `not_enabled` | macOS, route off for this context | Setup saves the route from the recorded selection |
+| `not_connected` | No Keychain item, or Notion returned 401 | Add or restore the item privately |
+| `keychain_blocked` | Keychain locked, or the prompt was declined (`security` exit 36, 51 or 128) | Unlock or approve, check again |
+| `keychain_timeout` | No answer in five seconds; a prompt may be waiting | Approve, check again |
+| `unavailable` | Any other failure | Try again later |
+
+No state carries `security`'s text, a Notion message or the credential. The exit
+statuses are the low byte of macOS's OSStatus codes; an unrecognised status is
+`unavailable`, never guessed. Non-Mac hosts stay unsupported.
+
+**Before a projection exists.** The projection is generated from the definition, which
+lives in the root page, so reading the root needs no projection. With the route on,
+`osm_connection` reports `unmapped` with OSM's own bot and workspace, and
+`osm_context_home` becomes a bounded bootstrap read of only the root the owner already
+selected as the context home: the same identity check, no search and no other page. It
+returns the root's bounded content (the definition, as untrusted source content) with
+the connection identity, the context and its revision and the projection's revision,
+which `osm_save_home_projection` takes as its evidence. Its optional `check` names up to
+eight destinations the root's own text names, and returns each one's access, title and,
+for a data source, property names and types; never values or bodies. An ID the text does
+not name is not requested; a destination outside the grant reads as inaccessible. The
+check does not grant, and does not apply containment: every later list and read still
+applies the support check and the grant. A root longer than the read bound returns
+`truncated: true`, and nothing is mapped from a partial definition. A damaged projection
+or the official mode never opens this path.
 
 Home and the agent's `osm_connection`, `osm_context_home`, `osm_context_list` and
 `osm_context_read` share the same service and identity checks. These are read
@@ -121,11 +180,10 @@ inventory of Notion grants or a restriction on other installed connectors.
 
 The preferred human onboarding is browser OAuth with OSM's own registered
 integration and Notion's native page picker. The current Connect dialog honestly
-states that browser sign-in is not configured. The precise registration,
-confidential-client callback/backend and token-custody dependency, plus why
-hosted MCP PKCE is not an equivalent scope, are in
-[browser connection architecture](notion-browser-connection.md). No shared client
-secret, new app, account or backend is included or activated here.
+states that browser sign-in is not configured. The registration, owner decisions,
+callback and token-custody proposal, plus why hosted MCP PKCE is not an equivalent
+scope, are in [browser connection architecture](notion-browser-connection.md). No
+shared client secret, new app, account or backend is included or activated here.
 
 ## Proven and unproven
 
@@ -136,7 +194,11 @@ transport:
 - revocation, account change and scope change;
 - the bounds;
 - hostile text;
-- that the token appears in no output.
+- that the token appears in no output;
+- that nothing is requested without the saved route, per context, and that each
+  Keychain failure is its own state;
+- the bootstrap read, its named-destination checks and the path from route to
+  projection to a useful read, including a different bot or workspace being refused.
 
 The fixtures do not prove:
 
@@ -144,6 +206,7 @@ The fixtures do not prove:
 - how mentions resolve for unshared pages;
 - real grants and revocation;
 - Codex or Claude native behaviour;
+- the Keychain prompt on a real Mac;
 - Setup writes through this connection.
 
 Those need approved native holders under #61, with a synthetic workspace.

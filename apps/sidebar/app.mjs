@@ -284,8 +284,12 @@ async function checkConnection() {
   try {
     const result = await app.callServerTool({ name: 'osm_connection', arguments: {} });
     const connection = JSON.parse(result?.content?.find(item => item.type === 'text')?.text || '{}');
-    const states = { unsupported_host: 'The OSM credential route is not enabled on this host.', not_connected: 'OSM’s connection is not connected or was revoked.',
-      unmapped: 'OSM’s connection is available. Choose your Data & Context home next.', ready: 'OSM’s connection and mapping are available. Refresh Home to check page access.',
+    const states = { unsupported_host: 'OSM’s Keychain route needs macOS. It isn’t available on this computer yet.',
+      not_enabled: 'OSM’s Mac route is off for your Data & Context home. Ask OSM Setup in chat to turn it on.',
+      not_connected: 'OSM found no connection in Keychain, or Notion revoked it. Add it privately in Keychain Access (service com.onlinesourdough.osm.notion, account osm), then check again.',
+      keychain_blocked: 'macOS Keychain is locked or didn’t allow OSM to read its item. Unlock or approve it, then check again.',
+      keychain_timeout: 'macOS Keychain didn’t answer in time. An approval prompt may be waiting. Approve it, then check again.',
+      unmapped: 'OSM’s connection is available. Ask OSM Setup in chat to read your home and prepare Home.', ready: 'OSM’s connection and mapping are available. Refresh Home to check page access.',
       account_changed: 'The connection changed. Check setup before opening saved sources.', official_mode: 'The saved mapping selected the separate official connection.',
       unavailable: 'OSM’s connection could not be checked. Try again.' };
     $('connection-state').textContent = states[connection.state] || states.unavailable;

@@ -11,16 +11,27 @@ test('OSM credential access is opt-in, bounded and limited to its own Keychain i
     assert.equal(options.timeout, 5000);
     return { stdout: 'fictional-test-value\n' };
   };
-  for (const [platform, env] of [['linux', { OSM_NOTION_KEYCHAIN: '1' }], ['darwin', {}]]) {
-    assert.deepEqual(await hostCredential({ platform, env, run }), { state: 'unsupported_host' });
+  // Another OS is unsupported whatever is set; a Mac without an opt-in is a different state.
+  // Neither requests the item.
+  for (const [platform, env, enabled, state] of [['linux', { OSM_NOTION_KEYCHAIN: '1' }, true, 'unsupported_host'], ['win32', {}, true, 'unsupported_host'],
+    ['darwin', {}, false, 'not_enabled'], ['darwin', { OSM_NOTION_KEYCHAIN: '0' }, false, 'not_enabled']]) {
+    assert.deepEqual(await hostCredential({ platform, env, run, enabled }), { state });
   }
   assert.equal(calls, 0);
-  assert.deepEqual(await hostCredential({ platform: 'darwin', env: { OSM_NOTION_KEYCHAIN: '1' }, run }),
-    { state: 'available', token: 'fictional-test-value' });
-  for (const code of [44, 36, 'ETIMEDOUT']) {
-    const result = await hostCredential({ platform: 'darwin', env: { OSM_NOTION_KEYCHAIN: '1' }, run: async () => {
-      throw Object.assign(new Error('fictional secret in OS error'), { code });
-    } });
-    assert.deepEqual(result, { state: code === 44 ? 'not_connected' : 'unavailable' });
+  // Either opt-in works: the owner's saved route for the selected context, or the earlier
+  // explicit environment variable.
+  for (const options of [{ env: { OSM_NOTION_KEYCHAIN: '1' } }, { env: {}, enabled: true }]) {
+    assert.deepEqual(await hostCredential({ platform: 'darwin', run, ...options }), { state: 'available', token: 'fictional-test-value' });
+  }
+  assert.equal(calls, 2);
+});
+
+test('a Keychain failure is reported as one distinct state and never forwards OS text', async () => {
+  const fail = error => hostCredential({ platform: 'darwin', env: {}, enabled: true, run: async () => { throw Object.assign(new Error('fictional secret in OS error'), error); } });
+  const cases = [[{ code: 44 }, 'not_connected'], [{ code: 36 }, 'keychain_blocked'], [{ code: 51 }, 'keychain_blocked'], [{ code: 128 }, 'keychain_blocked'],
+    [{ code: null, killed: true, signal: 'SIGTERM' }, 'keychain_timeout'], [{ code: 'ETIMEDOUT' }, 'keychain_timeout'], [{ code: 1 }, 'unavailable'], [{ code: 'ENOENT' }, 'unavailable']];
+  for (const [error, state] of cases) assert.deepEqual(await fail({ stderr: 'fictional secret on stderr', ...error }), { state });
+  for (const stdout of ['', '   \n', 'two words', 'x'.repeat(4097)]) {
+    assert.deepEqual(await hostCredential({ platform: 'darwin', env: {}, enabled: true, run: async () => ({ stdout }) }), { state: 'not_connected' });
   }
 });

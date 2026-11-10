@@ -56,6 +56,7 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
       }
       calls.push({ name, args: plain(args) }); if (delay) await delay;
       if (fail) throw new Error('Request failed');
+      if (name === 'osm_connection' && options.connection) return { content: [{ type: 'text', text: JSON.stringify(options.connection) }] };
       if (name === 'osm_notion_pages') return { _meta: { 'osm/pages': await options.pages(args.query) } };
       if (name === 'osm_notion_icons') return { _meta: { 'osm/kind': 'icons', 'osm/icons': await options.icons(args.targets) } };
       time += 10;
@@ -801,7 +802,8 @@ test('Skills descriptions remain text and built-in methods live in Settings', as
 });
 
 test('gates: unsupported host with a mapping, not connected and unmapped; saved links stay reachable', async () => {
-  for (const [state, title, mapping] of [['unsupported_host', 'Home isn’t available here yet', 'saved'], ['not_connected', 'Reconnect Notion', 'saved'], ['unmapped', 'Continue OSM Setup', 'missing']]) {
+  for (const [state, title, mapping] of [['unsupported_host', 'Home isn’t available here yet', 'saved'], ['not_connected', 'Reconnect Notion', 'saved'], ['unmapped', 'Continue OSM Setup', 'missing'],
+    ['not_enabled', 'Turn on OSM’s Mac route', 'saved'], ['keychain_blocked', 'Keychain needs approval', 'saved'], ['keychain_timeout', 'Keychain didn’t answer', 'saved']]) {
     const host = homeHost(); Object.assign(host.s, { state, mapping });
     const u = await homeUi(host);
     assert.equal(u.shown('home-gate'), true, state); assert.equal(u.text('gate-title'), title);
@@ -1853,6 +1855,21 @@ test('human connection guide checks OSM explicitly and cancels without changing 
   assert.equal(u.get('connection-dialog').open, false);
   assert.equal(u.messages.length, 0);
   assert.equal(u.status.context.state, 'missing');
+});
+
+test('the connection check names each way the Mac route can fail, with no OS or Notion text', async () => {
+  const seen = new Map();
+  for (const state of ['unsupported_host', 'not_enabled', 'not_connected', 'keychain_blocked', 'keychain_timeout', 'unmapped', 'unavailable']) {
+    const u = await ui(undefined, undefined, { connection: { state, detail: 'fictional provider text' } });
+    await u.click('connect-osm'); await u.click('connection-check');
+    const text = u.text('connection-state');
+    assert.equal(text.includes('fictional provider text'), false);
+    seen.set(text, state);
+  }
+  assert.equal(seen.size, 7, 'every state has its own text');
+  const missing = [...seen].find(([, state]) => state === 'not_connected')[0];
+  assert.match(missing, /Keychain Access/); assert.match(missing, /com\.onlinesourdough\.osm\.notion/);
+  assert.match([...seen].find(([, state]) => state === 'not_enabled')[0], /Setup/);
 });
 
 

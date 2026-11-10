@@ -6,6 +6,9 @@ import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
+// A Mac without OSM's saved Keychain route is not_enabled; another OS is unsupported. The scratch
+// environment sets no opt-in, so nothing here reads the Keychain.
+const unready = process.platform === 'darwin' ? 'not_enabled' : 'unsupported_host';
 const scratch = await mkdtemp(join(tmpdir(), 'osm-sidebar-smoke-'));
 const client = new Client({ name: 'osm-sidebar-check', version: '1' });
 const transport = new StdioClientTransport({
@@ -16,7 +19,7 @@ try {
   await client.connect(transport);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map((tool) => tool.name), ['osm_open', 'osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_settings', 'osm_save_context', 'osm_sources', 'osm_save_sources',
-    'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection']);
+    'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read', 'osm_connection', 'osm_context_list', 'osm_context_read', 'osm_home_page', 'osm_context_home', 'osm_save_home_projection', 'osm_save_connection_route']);
   assert.deepEqual(tools[0]._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
   for (const name of ['osm_notion_pages', 'osm_notion_icons', 'osm_status', 'osm_home', 'osm_home_list', 'osm_home_search', 'osm_home_locate', 'osm_home_read']) {
     assert.deepEqual(tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
@@ -76,19 +79,27 @@ try {
   assert.equal(JSON.parse(metadata.content[0].text).home.state, 'missing');
   // Without explicit credential opt-in, Home and agent tools report unsupported and read nothing.
   const home = await client.callTool({ name: 'osm_home', arguments: {} });
-  assert.equal(home._meta['osm/home'].state, 'unsupported_host');
+  assert.equal(home._meta['osm/home'].state, unready);
   // L-2: the bundled server's status names the context it was read for.
   assert.equal(home._meta['osm/home'].context, target);
   assert.deepEqual(home.content, []);
   assert.ok(home._meta['osm/home'].builtin.some(skill => skill.name === 'osm-setup'));
-  assert.equal((await client.callTool({ name: 'osm_home_list', arguments: { section: 'memory' } }))._meta['osm/home-list'].state, 'unsupported_host');
-  assert.equal((await client.callTool({ name: 'osm_home_search', arguments: { section: 'memory', query: 'sample' } }))._meta['osm/home-list'].state, 'unsupported_host');
-  assert.equal((await client.callTool({ name: 'osm_home_locate', arguments: { link: target } }))._meta['osm/home-location'].state, 'unsupported_host');
+  assert.equal((await client.callTool({ name: 'osm_home_list', arguments: { section: 'memory' } }))._meta['osm/home-list'].state, unready);
+  assert.equal((await client.callTool({ name: 'osm_home_search', arguments: { section: 'memory', query: 'sample' } }))._meta['osm/home-list'].state, unready);
+  assert.equal((await client.callTool({ name: 'osm_home_locate', arguments: { link: target } }))._meta['osm/home-location'].state, unready);
   const connection = JSON.parse((await client.callTool({ name: 'osm_connection', arguments: {} })).content[0].text);
-  assert.equal(connection.state, 'unsupported_host');
+  assert.equal(connection.state, unready);
   assert.equal(connection.accessInventory, 'mapped-sources-only');
-  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_list', arguments: { section: 'memory' } })).content[0].text).state, 'unsupported_host');
-  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_read', arguments: { section: 'memory', id: '00000000000000000000000000000001' } })).content[0].text).state, 'unsupported_host');
+  // The bootstrap read needs the same opt-in. The route is never turned on here: on a Mac the next
+  // read would ask the real Keychain. Only the tool's registration and a no-op disable are exercised.
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_home', arguments: {} })).content[0].text).state, unready);
+  assert.equal(JSON.parse(metadata.content[0].text).connectionRoute.state, 'missing');
+  const routeOff = await client.callTool({ name: 'osm_save_connection_route', arguments: { target, expectedContextRevision: read._meta['osm/status'].context.revision,
+    expectedRevision: JSON.parse(metadata.content[0].text).connectionRoute.revision, selectedMode: 'internal_selected_pages', enabled: false } });
+  assert.equal(routeOff.isError, undefined);
+  assert.equal(JSON.parse(routeOff.content[0].text).connectionRoute.enabled, false);
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_list', arguments: { section: 'memory' } })).content[0].text).state, unready);
+  assert.equal(JSON.parse((await client.callTool({ name: 'osm_context_read', arguments: { section: 'memory', id: '00000000000000000000000000000001' } })).content[0].text).state, unready);
   for (const name of ['osm_context_list', 'osm_context_read']) {
     assert.equal(tools.find(tool => tool.name === name)._meta?.ui?.visibility?.includes('app'), undefined);
     assert.equal(tools.find(tool => tool.name === name).annotations.readOnlyHint, true);

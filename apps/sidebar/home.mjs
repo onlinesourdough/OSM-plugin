@@ -8,6 +8,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   const copy = {
     unsupported_host: 'OSM’s own Notion connection is not supported on this host yet.',
     not_connected: 'OSM’s Notion connection is not connected or was revoked.',
+    not_enabled: 'OSM’s Mac route is off for this Data & Context home.',
+    keychain_blocked: 'macOS Keychain is locked or didn’t allow OSM to read its item.',
+    keychain_timeout: 'macOS Keychain didn’t answer in time.',
     inaccessible: 'This source can’t be read with the current connection.',
     unsupported: 'This source can’t be shown here.',
     rate_limited: 'Notion asked OSM to wait. Try again shortly.',
@@ -16,6 +19,9 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   const gates = {
     not_connected: ['Reconnect Notion', 'OSM isn’t connected to Notion, or its connection was removed, so nothing from your home is shown.'],
     unsupported_host: ['Home isn’t available here yet', copy.unsupported_host + ' Your saved links still work.'],
+    not_enabled: ['Turn on OSM’s Mac route', copy.not_enabled + ' Ask OSM Setup in chat to turn it on. Your saved links still work.'],
+    keychain_blocked: ['Keychain needs approval', copy.keychain_blocked + ' Unlock or approve it, then check again.'],
+    keychain_timeout: ['Keychain didn’t answer', copy.keychain_timeout + ' An approval prompt may be waiting. Approve it, then check again.'],
     unmapped: ['Continue OSM Setup', 'Your connection is ready. Ask OSM Setup in chat to locate or prepare your AI Operating Model.'],
     account_changed: ['Continue OSM Setup', 'This Home was set up for a different Notion connection, so nothing from it is shown. Ask OSM Setup in chat to map it again.'],
     root_inaccessible: ['Your home page can’t be read', 'OSM’s connection can’t read your home. In Notion, open the page’s ••• menu → Connections and add OSM.'],
@@ -25,7 +31,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
   };
   const labels = { ready: 'Notion · Connected', unmapped: 'Notion · Home not set up', root_inaccessible: 'Notion · Home can’t be read',
     account_changed: 'Notion · Different connection', not_connected: 'Notion · Not connected', unsupported_host: 'Notion · Not available here',
-    mapping_unavailable: 'Notion · Needs attention' };
+    mapping_unavailable: 'Notion · Needs attention', not_enabled: 'Notion · Route off', keychain_blocked: 'Notion · Keychain blocked', keychain_timeout: 'Notion · Keychain timed out' };
   // I2: every service state a list or read can return, classified once. Section states
   // keep the view when they carry the current scope; every other state, including
   // not_connected, account_changed, unsupported_host, unmapped, mapping_unavailable,

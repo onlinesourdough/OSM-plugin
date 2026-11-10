@@ -21,6 +21,11 @@ runtime.
    Choose a secret store suited to the customer's OS and runtime, test
    unattended availability, fail closed on access loss, and define refresh,
    revocation and recovery; one platform's choice is not another's contract.
+   OSM's shipped route is the macOS Keychain (see the
+   [panel reference](panel.md)): the owner provisions the item privately, reusing
+   the existing selected connection's credential without rotating or revoking it,
+   and approves the OS prompt; the agent only saves the non-secret route setting from
+   the recorded selection and reads the root through `osm_context_home`.
 4. **Qualify the runtime.** On the pinned selected runtime, qualify read,
    create, update and readback once across the selected stores and nested pages;
    inherited access for new records; and denial of an outside page. Use a useful, real, idempotent write. A connection name, a
