@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.31.3 — 2026-11-10
+
+Pilot patch. The macOS Keychain read now waits up to fifteen seconds instead of five. The
+first read after the Keychain has been idle or locked was measured at about seven seconds on
+a real Mac, so a valid item was reported as `keychain_timeout`. The deadline is still finite:
+`execFile` stops a read that never answers and the state stays `keychain_timeout`. Nothing
+else in the reader changed: the same fixed `security` executable, the one OSM item, the opt-in,
+the mode checks and the rule that no error carries OS text or the credential. No new feature,
+no caching, no identity fallback, no skill change (all 18 skill versions unchanged), no change
+to the package's entry points, and no change to the UI: its copy, layout and styles are those of
+0.31.2, and only the version in the page and the server bundle differs.
+
+### Limits
+
+- A tool call keeps the host's default request budget (sixty seconds in the MCP SDK the sidebar
+  bundles; the app sets no tool timeout). A fifteen-second read plus the Notion identity read,
+  which has its own fifteen-second abort, fits it. The host's own tool limit is outside this
+  repository and was not inspected here.
+- Checked as source and with a fake child process; not run against a real Keychain, a real
+  Notion workspace or a normal installation of this version.
+
 ## 0.31.2 — 2026-11-10
 
 Pilot patch. Home, the saved-links view and Settings now look and read like Setup, and an

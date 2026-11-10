@@ -2439,3 +2439,26 @@ merged commit itself passes with the old binding, because a tag is not counted a
 repository release consistency only. It says nothing about the release's publication, any installation, any profile or
 Notion; those are separate readbacks. Not rerun, since their inputs are unchanged: the candidate's full Node and npm
 proof (see the 0.31.2 candidate entry above) and native checks.
+
+## 10 November 2026 — 0.31.3 candidate: the Keychain read allows a cold start
+
+Source, fixtures and a fake child process. Nothing was staged, committed, tagged, released or installed by this change,
+and it says nothing about any installation, profile, Notion workspace or live Home. The change: the macOS Keychain read
+had a five-second bound, and the first read after the Keychain was idle or locked was measured at about seven seconds
+on a real Mac, so a valid item was reported as `keychain_timeout`. The bound is now fifteen seconds. It is still finite:
+`execFile` stops a read that never answers and the state stays `keychain_timeout`. The reader's path, service, account,
+opt-in, mode checks and error privacy are unchanged; no UI copy, layout or style changed; no skill changed.
+
+| Check | Result |
+| --- | --- |
+| Deadline budget, from the sources | The SDK request default is 60000 ms (`DEFAULT_REQUEST_TIMEOUT_MSEC` in the bundled SDK 1.31.0, present in the built page as `6e4`); the app passes no tool timeout (its only explicit ones are 12 s on connect and on the chat message); each Notion request has its own 15 s abort. A 15 s read plus the identity read fits the default 60 s. The host's own tool limit is outside this repository and was not inspected |
+| Fake-child latency experiment (not a product test, no Keychain, no credential) | A child answering after 6.9 s is rejected by the previous reader as `keychain_timeout` at 5 s and accepted by the new one at 6.9 s. A child that never answers is stopped and reported as `keychain_timeout` at 5 s and 15 s respectively, and the child process is gone afterwards. The result carries no credential |
+| `credential.test.mjs` boundary assertion | updated to the 15 s bound; passes |
+| `npm ci --ignore-scripts`, `npm run build`, `npm test` (sidebar) | exit 0; 237 of 237 Node tests and the bundled stdio server passed; a second build is byte-identical |
+| Generated runtime against 0.31.2 | `index.html` equals the 0.31.2 page with its two version strings replaced. `server.cjs` differs by the version and the compiled deadline (`15e3` in place of `5e3`); the minifier also renumbered identifiers, and a token-level diff showed only those renames, the deadline and the version digits |
+| Payload against the v0.31.2 tag (117 files) | inventory identical; skills byte-identical; `.codex-plugin/mcp.json` identical; six native or package manifests differ by their `version` line only; `docs/osm.md` by its label; the runtime as above. The publisher binding (released edition v0.31.2, commit `65ce3be`) is unchanged |
+| `validate.py --release-tag v0.31.3 --baseline v0.31.2` on a committed private copy of the exact candidate | passed |
+| Documentation, skill-version, onboarding, responsibility and consumer-selection rehearsals; `publisher.py reconcile --check`; `git diff --check` | all passed; reconcile reports 18 artifacts pending handoff and writes nothing |
+
+Not established: a real Keychain read at a cold start, the real Notion API, a native-panel observation, and a normal
+installation of 0.31.3. The full Python suite and the full publisher rehearsal are left to the repository's CI.

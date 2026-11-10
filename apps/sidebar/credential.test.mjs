@@ -8,7 +8,7 @@ test('OSM credential access is opt-in, bounded and limited to its own Keychain i
     calls++;
     assert.equal(file, '/usr/bin/security');
     assert.deepEqual(args, ['find-generic-password', '-s', keychainService, '-a', 'osm', '-w']);
-    assert.equal(options.timeout, 5000);
+    assert.equal(options.timeout, 15_000, 'finite, and long enough for a cold Keychain read');
     return { stdout: 'fictional-test-value\n' };
   };
   // Another OS is unsupported whatever is set; a Mac without an opt-in is a different state.

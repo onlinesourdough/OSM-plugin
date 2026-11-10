@@ -10,6 +10,15 @@ export const keychainService = 'com.onlinesourdough.osm.notion';
 // stays a plain failure; no OS text is ever read.
 const blockedStatuses = new Set([36, 51, 128]);
 
+// The read is bounded, and the bound has to clear a cold start: the first read after the
+// Keychain was locked or idle was measured at about seven seconds on a real Mac, which a
+// five-second bound turned into a false keychain_timeout while the item was valid. Fifteen
+// seconds leaves headroom and still fits inside a tool call's default sixty-second request
+// budget together with the Notion identity read, which has its own fifteen-second abort.
+// execFile's timeout stops the child (SIGTERM) and rejects with a killed error, so a read
+// that never answers is ended and reported as keychain_timeout, never left running.
+const readDeadlineMs = 15_000;
+
 // The caller says whether the owner turned this route on for the selected context
 // (`enabled`, from OSM's own non-secret configuration); `OSM_NOTION_KEYCHAIN=1` in the
 // server's environment is the earlier explicit pilot opt-in and still works. Without
@@ -20,7 +29,7 @@ export async function hostCredential({ platform = process.platform, env = proces
   if (!enabled && env.OSM_NOTION_KEYCHAIN !== '1') return { state: 'not_enabled' };
   try {
     const { stdout } = await run('/usr/bin/security', ['find-generic-password', '-s', keychainService, '-a', 'osm', '-w'],
-      { timeout: 5000, maxBuffer: 8192, encoding: 'utf8' });
+      { timeout: readDeadlineMs, maxBuffer: 8192, encoding: 'utf8' });
     const token = stdout.trim();
     return token && token.length <= 4096 && !/\s/.test(token) ? { state: 'available', token } : { state: 'not_connected' };
   } catch (error) {

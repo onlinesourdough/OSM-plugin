@@ -1,4 +1,4 @@
-# Codex sidebar — local 0.31.2 candidate
+# Codex sidebar — local 0.31.3 candidate
 
 Revision: 2026-11-09
 

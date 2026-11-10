@@ -101,7 +101,7 @@ and sections.
 
 The route reads one generic-password item from the macOS Keychain, service
 `com.onlinesourdough.osm.notion` and account `osm`, through the absolute system
-`security` executable with a five-second bound (`apps/sidebar/credential.mjs`). The
+`security` executable with a fifteen-second bound (`apps/sidebar/credential.mjs`), long enough for the slower first read after the Keychain was idle or locked (measured at about seven seconds on a real Mac), and short enough to fit a tool call's default sixty-second budget beside the Notion identity read. A read that never answers is stopped and reported as `keychain_timeout`. The
 secret stays in the server closure and never reaches Home, tools, errors or saved
 files. The credential is the existing selected internal connection's own; OSM never
 creates it, copies another tool's, or reads another item.
@@ -150,7 +150,7 @@ check name the actual reason:
 | `not_enabled` | macOS, route off for this context | Setup saves the route from the recorded selection |
 | `not_connected` | No Keychain item, or Notion returned 401 | Add or restore the item privately |
 | `keychain_blocked` | Keychain locked, or the prompt was declined (`security` exit 36, 51 or 128) | Unlock or approve, check again |
-| `keychain_timeout` | No answer in five seconds; a prompt may be waiting | Approve, check again |
+| `keychain_timeout` | No answer in fifteen seconds, and the read was stopped; a prompt may be waiting | Approve, check again |
 | `unavailable` | Any other failure | Try again later |
 
 No state carries `security`'s text, a Notion message or the credential. The exit
