@@ -47,9 +47,10 @@ flowchart LR
 
 Git owns the executable method instructions: the skills and their references. The
 public Notion guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
-is a versioned explanatory and reference projection of them. Its released edition
-reflects v0.30.0 (`314dcf1`); this working branch is newer and unreleased, so the
-guide is never the installed method and never proof of what a given install does.
+is a versioned explanatory and reference projection of them. Its last verified
+projection reflects v0.30.0 (`314dcf1`); the latest published package is v0.30.1,
+and this working branch is newer and unreleased, so the guide is never the
+installed method and never proof of what a given install does.
 The guide's Content templates are a separate Notion-authored draft edition; that
 edition, not the preserved Git drafts under [content-drafts](content-drafts/README.md),
 is the current template source. How the projection is kept aligned, and what is
@@ -68,13 +69,17 @@ Documentation here separates four states, and no text should blur them:
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
 | Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.30.1 is the latest published package (prerelease) |
 
-The public guide and publisher manifest remain frozen at v0.30.0. That projection
-is distinct from the latest published package. The newer v0.30.1 tag and current
-release sentence intentionally hold the unchanged publisher reconciliation; a
-future reviewed publication binding must resolve it before activation.
+The inactive publisher manifest binds its released edition to the latest published
+package, v0.30.1 (`ff1b50e`), so its release guard and this sentence agree with the
+tags. That is repository release consistency only: the public Notion guide was not
+read or advanced, its last verified projection is still v0.30.0, and the publisher
+stays inactive. Recording a later release is a separate reviewed binding that
+follows its tag; see [publication](publication.md#current-release-alignment).
 
 The skill set on this branch (18 skills, Notion-only core) is declared and
-fixture-tested, unreleased and not installed or native-tested anywhere.
+fixture-tested and was exercised only in disposable native installs. It is unreleased, not
+installed in any normal profile, and its native panel rendering and live Notion behavior are
+unqualified; see [verification](verification.md).
 
 ### Documentation consumers
 

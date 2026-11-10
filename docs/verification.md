@@ -2140,3 +2140,136 @@ timed or unattended runs, removed-access handling on a real source, an economica
 comparison, or the live caller. The existing scheduled caller keeps its installed method;
 nothing was installed, scheduled, switched or written to a real home, and the cutover and
 actual-invocation qualification stay open under #73.
+
+## 10 November 2026 — release preparation for 0.31.0 (before its tag)
+
+Source `55b9d1d5ac3f250db479d07129a02f5c300617b4`, with these release-preparation edits
+uncommitted. Nothing was committed, tagged, pushed, installed or published, and no UI,
+runtime, skill, manifest or package source changed (`apps`, `skills`, `runtime`, the native
+manifests and `package.json` are identical to that commit).
+
+- **One changelog entry.** `CHANGELOG.md` now has a single `0.31.0 — 2026-11-10` entry in
+  place of the Unreleased section and the separate 2026-10-29 entry, covering the final
+  candidate: the Setup-styled selected-home Home, its connection and access limits, the
+  Notion-only core and the retired names, Dreaming 1.0.0 as source, the 18-skill set, the
+  skill versions against v0.30.1, migration steps and what is not qualified. Releases
+  0.30.1 and earlier are unchanged.
+- **Publisher release binding.** The inactive publisher manifest's released edition was
+  bound to v0.30.0 while v0.30.1 already existed, so the unchanged release guard rejected
+  it and the reconcile check and the publisher rehearsal failed. It now binds the
+  published v0.30.1 at `ff1b50e3e052651f4d85bb72c3374e4d45fd6709` (tag, label and
+  commit), and the docs index says `v0.30.1 is the latest`. All 22 class A source paths
+  resolve in v0.30.1. Activation stays false, `public_reader` stays null, and no class B,
+  G or C ownership, row, page, grant or credential changed. The public Notion guide was
+  not read or advanced; its last verified projection remains v0.30.0.
+- **Fixture coupling.** `tests/publisher-rehearsal.py` hardcoded `v0.30.0` in ten places
+  while reading the approved commit from the manifest, so rebinding the manifest alone
+  made it fail. It now reads the tag and label from the manifest. A new scenario,
+  `the_release_binding_follows_the_manifest_through_a_pre_tag_build_and_its_follow_up`,
+  uses a synthetic edition that is no real OSM version and shows that a tagged, bound
+  edition is consistent; that a tag on the build's own commit does not block that build;
+  that the next commit fails until a reviewed binding records the release; that the
+  follow-up binding is consistent; and that a moved tag or a stale latest sentence is
+  refused. It also requires the working docs index to agree with the shipped manifest
+  before commit. One new mutation control (a tag on the build's own commit blocks it)
+  joins the existing "newer tag not noticed" and "latest sentence not checked" controls.
+  No test or control was skipped or weakened.
+- **Docs.** The docs index, publication, activation, distribution procedure, README skill
+  index and test notes describe the binding, the pre-tag bootstrap and the unchanged
+  public guide; statements that the candidate is unreleased and not installed stay until
+  a release is read back.
+
+Checks ran in a disposable copy of the tree without Finder `.DS_Store` files (the live
+tree has macOS Finder files in several directories, which the package validator's product
+scan and the publisher rehearsal's repository scan reject), with the working tree
+committed on top of `55b9d1d` inside the copy only, because the reconcile check reads
+`docs/README.md` from the committed source while the manifest comes from the working file.
+
+| Check | Before | After |
+| --- | --- | --- |
+| `tests/publisher-rehearsal.py` | failed at the real-repository guard | passed: 70 rehearsals and 76 mutation controls (69 and 75 before the new scenario and control) |
+| `publisher.py reconcile --check` | exit 1, two PROBLEM lines (v0.30.1 newer than the binding; stale latest sentence) | exit 0, no problems, 22 artifacts pending handoff, no write |
+| `validate.py --release-tag v0.31.0 --baseline v0.30.1` | not reached in the live tree (Finder file) | passed: 18 versioned skills, links, isolation, security, native manifests, changelog entry |
+| `documentation-rehearsal.py`, `consumer-selection-rehearsal.py`, `responsibility-rehearsal.py` | passed | passed |
+
+The old fixtures fail against the new binding (a tag that exists resolves to the old
+commit) and the new fixtures fail against the old binding (the real guard), so each
+direction was exercised. With a copy-only `v0.31.0` tag on the candidate, the tag build's
+reconcile check and release validator passed; the next commit failed with the documented
+`release tag v0.31.0 is newer than the manifest's v0.30.1`. On the live tree the
+reconcile check also exits 0 (manifest from the working file, docs from committed HEAD).
+`git diff --check` passed. The sidebar suite, build and `npm ci` were not run here;
+unrelated rehearsals were not repeated.
+
+Open, not changed here: the later binding to 0.31.0 is not a tag and SHA swap. Seven
+class A rows have no source in 0.31.0 (`content`, `diffusion-studio`, `osm-check`,
+`osm-context`, `osm-maintain-context`, `osm-select-model`, `osm-update`), three shipped
+skills have no row (`osm-data-context`, `osm-manage-data-context`, `osm-dreaming`) and
+`renames` is empty, so a reviewed publication decision on those rows must accompany it.
+The existing scheduled caller still names the installed `osm-maintain-context` and must be
+retargeted in the same job before the update, as `skills/osm/references/update.md`
+describes. Nothing here installed or qualified anything natively, live or on a second
+host, and the publisher remains source and fixtures only.
+
+## 10 November 2026 — package inventory correction and native transport evidence
+
+**Finding.** `docs/distribution.md` listed a root `.app.json` among the release files, and
+`docs/native-installation.md` described it as an OSM package component (an optional official
+Notion connection managed by Codex). No such file exists (`git cat-file -e
+55b9d1d:.app.json` fails), `package.json` `files`, the validator's `PRODUCT_PATHS` and
+`tests/native_manifests.py` all exclude it, and that test requires that no app binding is
+embedded. Staging a package from the documented list failed before any native install; staging
+from the actual package files worked. Both documents now list the real inventory (the three native
+manifest directories, `gemini-extension.json`, `package.json`, `assets/icon.png`, `LICENSE`,
+`README.md`, `skills/`, `runtime/sidebar`, `docs/osm.md`; the Codex marketplace file resolves the
+root) and say the package ships no `.app.json`, Notion app binding, auth wrapper or second Notion
+server. The official Notion plugin stays a separate optional installation, and OSM's own
+connection never adopts its credentials. The same sentence in `native-installation.md` that
+called the Notion app a connection declaration was corrected; the Codex adapter reference
+already said OSM ships no binding. Three state sentences that said the working tree was not
+natively tested or installed (`README.md`, `docs/README.md`, `docs/skills.md`) and the changelog
+limits now state what was observed. Package files changed since `55b9d1d`: `README.md` only
+(source of that sentence); no skill, runtime or manifest byte changed.
+
+**Native transport evidence (coordinator's integration run, recorded here; not run by this
+writer).** Disposable environments, from the frozen `55b9d1d` product:
+
+- Locked `npm ci` exited 0; the build exited 0 with zero runtime diff; the sidebar suite passed
+  232 of 232 and the bundled stdio smoke passed.
+- Claude Code: validation, inline discovery of 18 skills and isolated install, update, removal
+  and coexistence, exit 0. Pi 1.0.4: 18 skills, local install, discovery, removal and
+  coexistence, exit 0. Gemini CLI 0.42: 18 skills, version transition and preservation, exit 0.
+- Codex CLI 0.167 installed 0.31.0 into a disposable `CODEX_HOME`; `skills/list` with
+  `forceReload` returned 18 enabled entries in the exact `osm:` namespace with zero errors, and all
+  117 installed payload files matched the source. The native API names are `osm:osm…` while the
+  source front matter names stay bare and unchanged; an observer in the private test harness
+  that expected bare names was corrected there, with no product change.
+- The real app server booted `osm@online-sourdough` with server info `osm` 0.31.0, 19 tools, zero
+  tool errors and the UI resource `ui://osm/home-v1`. `resource/read` returned 524,250 bytes with
+  SHA-256 `60f921a8e4e035ffa35c3270a7ad4b976aa57b0aa95688b03f88ff70b16bad6c`, the reviewed runtime.
+- No model was called, no credential was copied and the normal profile was unchanged. Ambient
+  `~/.agents` skill metadata stayed discoverable under the preserved HOME; this is disposable
+  install state, not a claim that no ambient metadata exists.
+
+This is native transport, install and discovery evidence for the frozen candidate. It does not
+qualify native GUI rendering, clipboard or visibility events, live Notion reads, scope grants, browser
+sign-in, a model curating an owner's home or timed Dreaming; those stay unqualified. The tagged Git
+bytes are a separate readback after the tag.
+
+Checks run for this correction only: `tests/documentation-rehearsal.py`,
+`tests/consumer-selection-rehearsal.py`, `tests/validate.py --release-tag v0.31.0 --baseline v0.30.1`
+(on a copy without Finder files, as before) and `git diff --check`. The publisher rehearsal and
+reconcile check were not rerun: neither the publisher inputs nor the binding changed.
+
+**README release-neutral wording.** The shipped `README.md` paragraph about the public guide no
+longer names the latest published package, "unreleased" or "not installed in a normal profile",
+because a tagged archive would carry those temporary states after the release. It now keeps the
+guide's last verified edition (v0.30.0) as a recorded limit and its separate Notion authorship,
+points to GitHub Releases for published versions and to the installed manifest and `docs/osm.md`
+for what an install contains, and states the recorded disposable native packaging and discovery
+proof with native panel rendering and live Notion behavior unqualified. The current release binding
+(v0.30.1 until the post-tag follow-up) stays in the author documents and the publisher manifest.
+Rechecked after this edit: the release validator (`--release-tag v0.31.0 --baseline v0.30.1`), the
+documentation rehearsal and the consumer-selection rehearsal passed, and `git diff --check` was
+clean. The paragraph is under `## More`, which no consumer selection reads; compared section by
+section with `HEAD`, no other README section changed, so the selected README sections are unchanged. The parent's full CI-equivalent set had passed on the preceding preparation.

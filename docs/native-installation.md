@@ -116,20 +116,21 @@ the plugin.
 | --- | --- |
 | `docs/osm.md` | Version-matched local overview, selected through the OSM documentation route |
 | `.codex-plugin/plugin.json` | Codex identity, interface and native Setup skill |
-| `.app.json` | Optional official Notion connection managed by Codex |
+| `.codex-plugin/mcp.json` | Codex sidebar MCP server declaration; the bundled runtime is `runtime/sidebar` |
 | `.agents/plugins/marketplace.json` | Codex repository marketplace |
 | `.claude-plugin/plugin.json` and `marketplace.json` | Claude Code and Copilot-compatible plugin distribution |
 | `.cursor-plugin/plugin.json` | Cursor-format compatibility metadata |
 | `gemini-extension.json` | Gemini CLI extension identity |
 | `package.json` | Pi package with only `pi.skills` |
 
-Every native declaration selects the same `skills/` source. Codex uses its
-supported compatibility manifest because 0.160.1 skips app bindings when a
-portable root manifest takes precedence. The package therefore omits that root
-manifest. Claude/Copilot, Cursor, Gemini and Pi retain their native metadata.
-The optional Notion app is a connection declaration, not an installed runtime
-dependency. There are no executable extensions, hooks, settings payloads or
-duplicated instruction bodies. See [onboarding evidence](archive/issue-38-onboarding.md).
+Every native declaration selects the same `skills/` source. Codex uses
+`.codex-plugin/plugin.json`, and the package omits a portable root `plugin.json`
+that would take precedence over it. The package ships no `.app.json`, Notion app
+binding, auth wrapper or second Notion server: the optional official Notion
+plugin is a separate installation with its own connection, and OSM's own
+connection never adopts its credentials. Claude/Copilot, Cursor, Gemini and Pi
+retain their native metadata. There are no executable extensions, hooks, settings
+payloads or duplicated instruction bodies. See [onboarding evidence](archive/issue-38-onboarding.md).
 
 From 0.21.0, Codex also loads the explicitly declared local sidebar MCP from
 `.codex-plugin/mcp.json`. Node.js 22+ must be on the execution host's PATH;

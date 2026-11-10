@@ -1,9 +1,13 @@
 # Review and release OSM
 
-Revision: 2026-10-11
+Revision: 2026-11-10
 
-The release unit is this repository root: the native manifests, `.app.json`, `package.json`, `gemini-extension.json`, `assets/`, `LICENSE`,
-`README.md`, the single `skills/` source, `runtime/sidebar` and `docs/osm.md`. The overview
+The release unit is this repository root. Its shipped files are the native manifests
+(`.codex-plugin/`, `.claude-plugin/`, `.cursor-plugin/`), `gemini-extension.json`, `package.json`
+(its `files` list), `assets/icon.png`, `LICENSE`, `README.md`, the single `skills/` source,
+`runtime/sidebar` and `docs/osm.md`; the Codex marketplace file resolves this root. There is
+no `.app.json` and no Notion app binding: the optional official Notion plugin is a separate
+installation. The overview
 is package documentation, read only when needed. Other documentation, tests and
 the optional specialist shelf remain author material, not product skills.
 This repository carries no local generic lifecycle skills.
@@ -51,7 +55,11 @@ python3 tests/documentation-rehearsal.py
 Replace both placeholders with the actual reviewed versions. After the tag exists, a later
 reviewed commit updates the released edition in `docs-publisher/manifest.json` (tag, commit,
 label) and the "is the latest" sentence in `docs/README.md`. `docs-publisher/publisher.py
-reconcile --check` fails on a commit after a newer release tag until both agree. Under the accepted
+reconcile --check` fails on a commit after a newer release tag until both agree. Before the new tag
+exists, the manifest names the previously published release at its exact commit and `docs/README.md`
+says that release is the latest; a tag on the build's own commit is not counted against that build, so
+the tag build passes. The new release's own exact commit is recorded only after its tag exists, and this
+changes the source projection binding, not the public Notion guide. Under the accepted
 release authority, create and push only that version tag:
 
 ```sh

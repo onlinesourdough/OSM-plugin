@@ -243,11 +243,14 @@ progress, not installed capabilities. Contributors start with [AGENTS.md](AGENTS
 OSM is open source under the [MIT license](LICENSE).
 
 The public guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
-is a reference projection of released v0.30.0. Git and the installed skills remain the
-instructions. Its Content templates are a separate Notion-authored draft edition, and
-that edition (not the preserved Git drafts) is the current template source. The skill set
-in this working tree is declared and fixture-tested only; it is unreleased and has not been
-native-tested or installed. See [What a statement can mean](docs/README.md#what-a-statement-can-mean).
+is a reference projection; its last verified edition is v0.30.0 and it can trail the current
+package. Git and the installed skills remain the instructions. Its Content templates are a
+separate Notion-authored draft edition, and that edition (not the preserved Git drafts) is the
+current template source. Published versions are on GitHub Releases above, and the installed
+manifest and `docs/osm.md` show what a given install contains. The skills are declared and
+fixture-tested, and their packaging and discovery were exercised in disposable native installs;
+native panel rendering and live Notion behavior are unqualified. See
+[What a statement can mean](docs/README.md#what-a-statement-can-mean).
 
 Upgrading from AIOS? Use [Earlier names](docs/osm.md#earlier-names) for the
 supported switch and recovery procedure. Existing owner-data filenames and

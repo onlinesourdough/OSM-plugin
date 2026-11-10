@@ -60,6 +60,7 @@ Home projection was missing at the last authorized read; no maintenance token
 was adopted. Home never falls back to the separate official Notion plugin.
 
 #74/#82 remain open for live/native adoption; #58 manual navigation is preserved.
-The inherited publisher binding hold is unchanged: public v0.30.0 versus the
-newer v0.30.1 tag. Publisher checks remain red; publication is not authorized by
-this candidate.
+For release preparation the inactive publisher manifest now binds the published
+v0.30.1, so its release guard and reconcile check agree with the tags. The public
+Notion guide was not read or advanced (its last verified projection is v0.30.0),
+the publisher stays inactive and publication is not authorized by this candidate.

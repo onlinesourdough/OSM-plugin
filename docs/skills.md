@@ -18,8 +18,9 @@ see [version maintenance](skill-versioning.md). Repository development methods i
 `.agents/skills/` are separate and are not product skills.
 
 State: this describes the working tree, the unreleased `0.31.0`. It is declared and
-fixture-tested, and not installed or native-tested. The released v0.30.0 ships 22
-skills; see [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
+fixture-tested, was exercised only in disposable native installs, and is not installed in a
+normal profile. The latest published release, v0.30.1,
+ships 22 skills; see [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
 
 | Skill | Responsibility |
 | --- | --- |

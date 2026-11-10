@@ -36,7 +36,8 @@ SETUP_ZIP = next(a for a in MANIFEST["artifacts"] if a["key"] == "notion.content
 RECORDED_PUBLIC = [v for v in MANIFEST["bindings"].values() if isinstance(v, str) and len(v) > 20] + [SETUP_ZIP]
 HEX32 = re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")
 RECORDED_IDS = {i for v in RECORDED_PUBLIC for i in HEX32.findall(v.replace("-", ""))}
-APPROVED = MANIFEST["editions"]["released"]["commit"]
+RELEASED = MANIFEST["editions"]["released"]
+APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
@@ -54,6 +55,12 @@ def test(function=None, slow=False):
 def require(condition, message):
     if not condition:
         raise AssertionError(message)
+
+
+def newer_tag(tag):
+    """The next minor release after `tag`, to model a release made after the bound edition."""
+    major, minor, _ = (int(n) for n in tag.lstrip("v").split("."))
+    return f"v{major}.{minor + 1}.0"
 
 
 # --- scenario worlds: one interface over the fixture transport and NotionTransport + FakeNotion -------
@@ -861,7 +868,7 @@ def the_released_edition_resolves_to_the_exact_approved_commit():
     else:
         raise AssertionError("an absent tag must fail")
     require(pub.resolve_released(MANIFEST, lambda tag: None, require_tag=False) == APPROVED, "the credential-free check may note an absent tag instead")
-    real = pub.git_tag_resolver(ROOT)("v0.30.0")
+    real = pub.git_tag_resolver(ROOT)(TAG)
     require(real in (None, APPROVED), f"a tag that exists resolves to the approved commit: {real}")
     unapproved = copy.deepcopy(MANIFEST)
     unapproved["editions"]["released"]["approved"] = False
@@ -876,7 +883,7 @@ def the_released_edition_resolves_to_the_exact_approved_commit():
 @test
 def an_absent_tag_is_noted_by_the_credential_free_check_and_never_silent():
     note = pub.tag_note(MANIFEST, lambda tag: None)
-    require(note and "v0.30.0 is not present" in note and "not checked (unsupported)" in note, f"the note names the tag and says not checked: {note}")
+    require(note and f"{TAG} is not present" in note and "not checked (unsupported)" in note, f"the note names the tag and says not checked: {note}")
     require(pub.tag_note(MANIFEST, lambda tag: APPROVED) is None, "a tag that resolves needs no note")
     result = pub.plan(MANIFEST, pub.DictSource(working_files(), "c"), None, released_source=released_source())
     result["notes"] = [note]
@@ -889,7 +896,7 @@ def reconcile_prints_the_absent_tag_note_through_main_and_none_when_the_tag_reso
         def git(*args):
             return subprocess.run(["git", "-C", tmp, "-c", "user.name=t", "-c", "user.email=t@t", *args], check=True, capture_output=True, text=True).stdout.strip()
         git("init", "-q")
-        for name, text in (("README.md", "readme"), ("docs/README.md", "v0.30.0 is the latest"), ("docs/osm.md", "o"), ("docs/architecture.md", "a"), ("docs/skills.md", "s")):
+        for name, text in (("README.md", "readme"), ("docs/README.md", f"{LABEL} is the latest"), ("docs/osm.md", "o"), ("docs/architecture.md", "a"), ("docs/skills.md", "s")):
             (Path(tmp) / name).parent.mkdir(exist_ok=True)
             (Path(tmp) / name).write_text(text)
         git("add", "."); git("commit", "-q", "-m", "one")
@@ -903,16 +910,16 @@ def reconcile_prints_the_absent_tag_note_through_main_and_none_when_the_tag_reso
                 code = pub.main(["reconcile", "--repo", tmp, "--ref", "HEAD", "--check"], manifest=mini)
             return code, out.getvalue()
         code, text = reconcile()
-        require(code == 0 and "Note: released tag v0.30.0 is not present in this checkout" in text and "not checked (unsupported)" in text,
+        require(code == 0 and f"Note: released tag {TAG} is not present in this checkout" in text and "not checked (unsupported)" in text,
                 f"a tagless checkout prints the note and still passes: {code}\n{text}")
-        git("tag", "v0.30.0")
+        git("tag", TAG)
         code, text = reconcile()
         require(code == 0 and "is not present" not in text, f"a tag that resolves prints no note: {text}")
 
 
 @test
 def a_new_release_tag_must_reach_the_manifest_and_the_latest_sentence():
-    readme = pub.DictSource({"docs/README.md": "v0.30.0 is the latest"}, "c")
+    readme = pub.DictSource({"docs/README.md": f"{LABEL} is the latest"}, "c")
     require(pub.release_problems(MANIFEST, readme) == [], "consistent")
     stale = pub.DictSource({"docs/README.md": "v0.29.0 is the latest"}, "c")
     require(any("is the latest" in p for p in pub.release_problems(MANIFEST, stale)), "a stale 'latest' sentence is a problem")
@@ -921,15 +928,72 @@ def a_new_release_tag_must_reach_the_manifest_and_the_latest_sentence():
             subprocess.run(["git", "-C", tmp, "-c", "user.name=t", "-c", "user.email=t@t", *args], check=True, capture_output=True)
         git("init", "-q")
         (Path(tmp) / "docs").mkdir()
-        (Path(tmp) / "docs/README.md").write_text("v0.30.0 is the latest")
-        git("add", "."); git("commit", "-q", "-m", "one"); git("tag", "v0.30.0")
-        git("commit", "-q", "--allow-empty", "-m", "two"); git("tag", "v0.31.0")
+        (Path(tmp) / "docs/README.md").write_text(f"{LABEL} is the latest")
+        git("add", "."); git("commit", "-q", "-m", "one"); git("tag", TAG)
+        following = newer_tag(TAG)
+        git("commit", "-q", "--allow-empty", "-m", "two"); git("tag", following)
         git("commit", "-q", "--allow-empty", "-m", "three")
-        tagged = pub.GitSource(tmp, "v0.31.0")
-        require(tagged.release_tags() == ["v0.30.0"] and not [p for p in pub.release_problems(MANIFEST, tagged) if "newer" in p],
+        tagged = pub.GitSource(tmp, following)
+        require(tagged.release_tags() == [TAG] and not [p for p in pub.release_problems(MANIFEST, tagged) if "newer" in p],
                 "the tag build itself is not blocked by the tag it is building")
         later = pub.GitSource(tmp, "HEAD")
-        require(any("v0.31.0 is newer" in p for p in pub.release_problems(MANIFEST, later)), "a later commit must record the new release")
+        require(any(f"{following} is newer" in p for p in pub.release_problems(MANIFEST, later)), "a later commit must record the new release")
+
+
+@test
+def the_release_binding_follows_the_manifest_through_a_pre_tag_build_and_its_follow_up():
+    """The shipped manifest binds whichever release is current; no check may assume which. A synthetic
+    edition that is not any real OSM version proves the binding, the latest sentence, the tag-to-commit
+    guard and the pre-tag bootstrap all follow the manifest. The working tree's own docs index must also
+    agree with the shipped manifest before it is committed, and the bound edition must be a full commit."""
+    working = (ROOT / "docs/README.md").read_text()
+    require(pub.release_problems(MANIFEST, pub.DictSource({"docs/README.md": working}, "working-tree")) == [],
+            f"the working docs index does not say '{LABEL} is the latest': the manifest and docs must be edited together")
+    require(RELEASED["tag"] == RELEASED["label"] and re.fullmatch(r"[0-9a-f]{40}", RELEASED["commit"]), "a released edition is a tag and one exact commit")
+    bound, upcoming = "v7.3.2", "v7.4.0"
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args):
+            return subprocess.run(["git", "-C", tmp, "-c", "user.name=t", "-c", "user.email=t@t", *args], check=True, capture_output=True, text=True).stdout.strip()
+
+        def write_docs(label):
+            for name, text in (("README.md", "readme"), ("docs/README.md", f"{label} is the latest"), ("docs/osm.md", "o"), ("docs/architecture.md", "a"), ("docs/skills.md", "s")):
+                (Path(tmp) / name).parent.mkdir(exist_ok=True)
+                (Path(tmp) / name).write_text(text)
+
+        def edition(tag, commit):
+            mini = copy.deepcopy(MANIFEST)
+            mini["artifacts"] = [a for a in mini["artifacts"] if a["class"] == "W"]
+            mini["editions"]["released"] = {"label": tag, "tag": tag, "commit": commit, "approved": True}
+            return mini
+
+        def reconcile(mini):
+            out = io.StringIO()
+            with redirect_stdout(out):
+                code = pub.main(["reconcile", "--repo", tmp, "--ref", "HEAD", "--check"], manifest=mini)
+            return code, out.getvalue()
+
+        git("init", "-q"); write_docs(bound)
+        git("add", "."); git("commit", "-q", "-m", "released"); first = git("rev-parse", "HEAD"); git("tag", bound)
+        code, text = reconcile(edition(bound, first))
+        require(code == 0 and "PROBLEM" not in text, f"a bound, tagged edition with its sentence is consistent: {text}")
+        # The reviewed release commit is tagged: that build must not be blocked by the tag it is building.
+        git("commit", "-q", "--allow-empty", "-m", "release candidate"); candidate = git("rev-parse", "HEAD"); git("tag", upcoming)
+        code, text = reconcile(edition(bound, first))
+        require(code == 0 and "PROBLEM" not in text, f"the pre-tag build is not blocked by its own tag: {text}")
+        # The next commit after the tag fails until a reviewed binding records the release.
+        git("commit", "-q", "--allow-empty", "-m", "after the tag")
+        code, text = reconcile(edition(bound, first))
+        require(code == 1 and f"PROBLEM: release tag {upcoming} is newer than the manifest's {bound}" in text, f"a later commit must record the new release: {text}")
+        # The follow-up binds the new tag to its exact commit and says so in the docs index: consistent again.
+        write_docs(upcoming); git("add", "."); git("commit", "-q", "-m", "bind the release")
+        code, text = reconcile(edition(upcoming, candidate))
+        require(code == 0 and "PROBLEM" not in text, f"the follow-up binding is consistent: {text}")
+        # A binding to the wrong commit, or without its sentence, is refused whatever the version is.
+        code, text = reconcile(edition(upcoming, first))
+        require(code == 1 and f"released edition {upcoming} resolves to {candidate}, not the approved {first}" in text, f"a tag that moved is refused: {text}")
+        write_docs(bound); git("add", "."); git("commit", "-q", "-m", "stale sentence")
+        code, text = reconcile(edition(upcoming, candidate))
+        require(code == 1 and f"does not say '{upcoming} is the latest'" in text, f"a stale latest sentence is refused: {text}")
 
 
 @test
@@ -1126,7 +1190,7 @@ def the_header_labels_the_edition_and_says_unreleased():
             "the header names the edition")
     require("Unreleased main working revision; not an installed or released edition." in working.split("\n")[1], "and a visible line says unreleased")
     released = pub.render(arts["osm.released.skill.osm"], released_source())
-    require("edition: v0.30.0" in released.split("\n")[0] and "Released edition v0.30.0" in released.split("\n")[1], "a released row says released and which")
+    require(f"edition: {LABEL}" in released.split("\n")[0] and f"Released edition {LABEL}" in released.split("\n")[1], "a released row says released and which")
     require(pub.body_hash(working) == pub.body_hash(pub.render(arts[README], pub.DictSource(working_files(), "c-2"))), "the receipt hash ignores the commit")
 
 
@@ -1285,6 +1349,8 @@ MUTATIONS = [
     ("the class B hash check does not say it was not run", P, [('detail += f" | frozen ZIP hash: {NOT_CHECKED}: no reader hashes the live export"', "pass")]),
     ("the absent-tag note is not printed by reconcile", P, [("        notes += [n for n in [tag_note(manifest, resolve)] if n]\n", "")]),
     ("the absent-tag note is dropped", P, [('    if tag_resolver(ed["tag"]) is None:\n        return f"released tag', '    if False:\n        return f"released tag')]),
+    ("a tag on the build's own commit blocks it", P, [("""
+                and self._git("rev-parse", "--verify", "--end-of-options", t + "^{commit}").strip() != self.commit]""", "]")]),
     ("a newer release tag is not noticed", P, [("        if newer:\n            out.append", "        if False:\n            out.append")]),
     ("the latest sentence is not checked", P, [("""if f"{ed['label']} is the latest" not in text:""", "if False:")]),
     ("a fixture row is created by set_status", F, [('        if key not in self.rows:\n            raise PublisherError(f"no row with the Key {key} to mark {status}")', "        self.rows.setdefault(key, {'writer': 'ci', 'status': status, 'receipt_after': None, 'receipt_before': None, 'body_hash': None, 'body': None, 'commit': None})")]),

@@ -47,7 +47,7 @@ A row's content is replaced non-atomically; the row stays pending until the read
 
 | Class | What | Public writer | The publisher |
 | --- | --- | --- | --- |
-| A | The 22 released instruction and reference packets at v0.30.0 | existing upkeep until handoff, then CI | Pending handoff: no write. After handoff it changes only at a new tagged, approved commit, and only for a row that already carries its Key |
+| A | The 22 released instruction and reference packets of the bound release, v0.30.1 (the public pages' last verified projection is still v0.30.0) | existing upkeep until handoff, then CI | Pending handoff: no write. After handoff it changes only at a new tagged, approved commit, and only for a row that already carries its Key |
 | B | Content templates and their setup, configuration and diagram explanations (Draft edition 2026-11-05.1) | Notion-authored | Never writes, derives or repairs. The ZIP hash check is not run |
 | G | Public guide pages (edition 2026-11-05.2, the before-source) | Notion-authored | Never overwrites. A newer original is not detected yet |
 | W | Main-working documentation projection, labelled unreleased | CI | Writes once active |

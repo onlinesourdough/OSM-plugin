@@ -11,7 +11,7 @@ no live proof. With no qualified public content reader, no live run can reach `c
 
 | Class | Artifacts | Public writer |
 | --- | --- | --- |
-| A | The 22 released packets, frozen at v0.30.0 (`314dcf1`) | The existing upkeep route until a recorded handoff, then CI |
+| A | The 22 released packets of the bound release, v0.30.1 (`ff1b50e`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
 | B | The five Content templates and their setup, configuration and diagram explanations: a separate Notion-authored Draft edition 2026-11-05.1 | Notion-authored; the publisher never writes, derives or repairs them |
 | G | The public guide pages, edition 2026-11-05.2 (the before-source) | Notion-authored; the publisher never overwrites them |
 | W | Five documentation pages (README, docs index, overview, architecture, skill index), labelled unreleased | CI, once activated |
@@ -43,14 +43,22 @@ The job exits non-zero unless every row was written, unchanged, resumed, retired
 
 ## Current release alignment
 
-As of 2026-11-06, v0.30.1 is a published prerelease. The public guide and this
-publisher manifest still describe the approved v0.30.0 projection. With the
-real newer tag present, the unchanged release guard rejects that frozen
-binding; the corrected latest-package sentence also differs from its expected
-v0.30.0 sentence. This is a publication HOLD, not a product installation
-failure. No manifest, released row or public page was advanced. A separate
-reviewed binding decision is required before current publication checks can
-pass or the publisher can be activated.
+As of 2026-11-10, in release preparation for 0.31.0 and before its tag, the
+inactive manifest's released edition is bound to the published prerelease v0.30.1
+at its exact commit `ff1b50e`, and `docs/README.md` says `v0.30.1 is the latest`.
+The release guard is unchanged: it rejected the earlier v0.30.0 binding once the
+newer tag existed, and it passes this one. The 22 class A source paths all
+resolve in v0.30.1. This is repository release consistency, not publication:
+the public Notion guide was not read or advanced, its last verified projection
+remains v0.30.0, and no row, page, grant, credential or ownership changed.
+Activation stays false and `public_reader` stays null.
+
+A tag on a build's own commit is not counted against that build, so the tag build
+of 0.31.0 passes while the manifest still names v0.30.1. The next commit after
+that tag fails the guard until a separate reviewed binding records 0.31.0 at its
+exact tag commit, after the tag exists; that exact SHA cannot be written in
+advance. Reviewing a new release into the public guide stays a separate publication
+decision, and a source-only publisher is no gate for live Notion projection.
 
 ## What it cannot observe yet
 
