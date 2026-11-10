@@ -2420,3 +2420,22 @@ mode, mapping or state semantics changed, and no skill changed.
 Not run here, and left to the repository's CI: the full Python suite and the full publisher rehearsal. Not established:
 a real Mac Keychain prompt, the real Notion API, a live Home read, a browser or native-panel observation of this UI,
 a normal installation of 0.31.2, and browser sign-in.
+
+## 10 November 2026 — post-tag publisher release binding for v0.31.2 (source only)
+
+After the `v0.31.2` tag (annotated object `359da19`, commit `65ce3be`, which is also `main`), the inactive publisher
+manifest's released edition is bound to that tag and commit, and `docs/README.md` says `v0.31.2 is the latest`; the
+author documents that name the latest released edition (`docs/publication.md`, `docs/skills.md`, `ACTIVATION.md`,
+`TEST-TOMORROW.md`) say the same. In the manifest only the released edition's label, tag and commit changed. The 18
+class A rows, every artifact, `renames`, writers, CI data, bindings and the activation flags (inactive, `public_reader`
+null) are byte-identical, and the public guide's last verified projection is still v0.30.0. The 117 payload files,
+including skills, native manifests and the runtime, are identical in path and blob to the tag; this binding changes no
+product file, version or changelog entry. On a private committed copy (a shared clone at the tag commit with the binding
+files applied): `publisher.py reconcile --check`, the documentation and consumer-selection rehearsals and the whitespace
+check passed; a 15-assertion identity check (tag object and commit, the three edition values, every other manifest field,
+the 18 rows against the tag's skill folders, the payload) passed; and, on a commit after the tag, the existing guard
+rejected the old v0.31.1 binding, a wrong tag commit and a stale `latest` sentence, and accepted the new binding. The
+merged commit itself passes with the old binding, because a tag is not counted against its own commit. This records
+repository release consistency only. It says nothing about the release's publication, any installation, any profile or
+Notion; those are separate readbacks. Not rerun, since their inputs are unchanged: the candidate's full Node and npm
+proof (see the 0.31.2 candidate entry above) and native checks.
