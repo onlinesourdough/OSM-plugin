@@ -48,3 +48,14 @@ test('long-title scenario gives each source a multiword or unbroken real-looking
     assert.equal(value('osm_home_read', { section, id: first.id }, 'home-long-titles', 'home-record').record.title, first.title);
   }
 });
+test('follow-up fixture modes: an optional Content source (valid and denied) and a verified access link appear only in their own mode', () => {
+  const keys = scenario => value('osm_home', {}, scenario, 'home').sections.map(section => section.key);
+  assert.deepEqual(keys('home-ready'), ['knowledge', 'memory', 'skills']);
+  assert.deepEqual(keys('home-content'), ['knowledge', 'content', 'memory', 'skills']);
+  assert.deepEqual(keys('home-content-denied'), ['knowledge', 'content', 'memory', 'skills']);
+  assert.equal(value('osm_home_list', { section: 'content' }, 'home-content', 'home-list').state, 'listed');
+  assert.equal(value('osm_home_read', { section: 'content', id: '1' }, 'home-content', 'home-record').record.title, 'Sample launch plan');
+  assert.equal(value('osm_home_list', { section: 'content' }, 'home-content-denied', 'home-list').state, 'inaccessible');
+  assert.equal(value('osm_home', {}, 'home-ready', 'home').manageLink, undefined);
+  assert.match(value('osm_home', {}, 'home-access-link', 'home').manageLink, /^https:\/\/www\.notion\.so\//);
+});

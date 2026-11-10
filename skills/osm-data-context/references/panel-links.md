@@ -52,13 +52,18 @@ and the YAML need not contain it.
    with a note that Home can't read through it yet.
 2. Project each route the definition names into a section: a short `key`, the
    owner's `label`, an explicit `role` (`profile`, `memory`, `documents`,
-   `skills` or `related`) and `order`. Record core rules, the source index,
+   `content`, `skills` or `related`) and `order`. Use `content` only for an
+   existing Content store the definition names; never create one, never map it
+   when the definition has no such route, and never use it for core context,
+   control records or memory. Record core rules, the source index,
    writing, access and evidence procedures, maintenance and recovery snapshots as
    `role: support` with their `kind`, so Home never shows them as context. Never
    infer a role from a title.
 3. Use the definition's real IDs: a data source with its verified field map
    (`title`; optional `description`; for memory `fact`, `decision`, `why`,
-   `evidence`), up to six named pages, or for `related` only a link. Add a
+   `evidence`; for `content` only `title` and an optional `description`, since a
+   selected Content store keeps its own workflow fields), up to six named pages,
+   or for `related` only a link. Add a
    saved filter or sort only when the definition names it.
 4. For `internal_selected_pages`, take the identity and access evidence from OSM's
    own connection before the first projection exists, never from memory, the
@@ -74,7 +79,13 @@ and the YAML need not contain it.
       `internal_selected_pages` for this root, so call `osm_save_connection_route`
       with that mode and `enabled: true`, with the revisions from step 1, and ask
       nothing again. It saves a small non-secret setting and provisions nothing;
-      never call it for another mode, after a denial or to fill a gap. On
+      never call it for another mode, after a denial or to fill a gap. If the
+      owner gives the link to this connection's own access page in Notion (from
+      Settings → Connections), it may be saved with the same call as `manage`
+      with the `botId` and `workspaceId` from `osm_connection`; never build a link
+      from identifiers, and never use a developer page that shows the credential.
+      Home offers that link only while the live connection is that bot and
+      workspace. On
       `not_connected` the one human step is private: the owner reuses the existing
       selected connection's credential, adding it in macOS Keychain Access (service
       `com.onlinesourdough.osm.notion`, account `osm`), and approves any OS prompt.

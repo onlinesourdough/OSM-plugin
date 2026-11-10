@@ -10,7 +10,7 @@ import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources } from './sources.mjs';
 import { readHomeProjection, saveHomeProjection } from './home-map.mjs';
 import { readConnectionRoute, saveConnectionRoute } from './connection-route.mjs';
-import { createHomeService, hostCredential, readBuiltinSkills } from './home-service.mjs';
+import { createHomeService, hostCredential, readBuiltinSkill, readBuiltinSkills } from './home-service.mjs';
 import { fetchTransport } from './notion-internal.mjs';
 import { z } from 'zod';
 import { NotionPages } from './notion-pages.mjs';
@@ -26,13 +26,16 @@ const readProjection = async () => {
 // The Keychain route is on only when the owner turned it on for the selected context
 // (OSM's own saved setting) or set the earlier explicit pilot variable.
 const readRoute = async target => {
-  if (process.env.OSM_NOTION_KEYCHAIN === '1') return { enabled: true, source: 'env' };
-  return target && (await readConnectionRoute(target)).enabled ? { enabled: true, source: 'config' } : { enabled: false, source: 'none' };
+  // The saved access link is read whichever opt-in is in force; Home still checks it against the live bot.
+  const saved = target ? await readConnectionRoute(target) : { enabled: false };
+  if (process.env.OSM_NOTION_KEYCHAIN === '1') return { enabled: true, source: 'env', manage: saved.manage };
+  return saved.enabled ? { enabled: true, source: 'config', manage: saved.manage } : { enabled: false, source: 'none', manage: saved.manage };
 };
 const home = createHomeService({ credential: hostCredential, route: readRoute, transport: fetchTransport, readProjection });
 let builtin;
-const builtinSkills = async () => (builtin ??= await readBuiltinSkills(join(__dirname, '../../skills')));
-// Context-hub mark; assets/branding/aios-icon.svg renders the same geometry as assets/icon.png.
+const skillsRoot = join(__dirname, '../../skills');
+const builtinSkills = async () => (builtin ??= await readBuiltinSkills(skillsRoot));
+// Context-hub mark; assets/branding/osm-icon.svg renders the same geometry as assets/icon.png.
 // A monochrome SVG drawn only in currentColor, with no colour of its own, so the host can colour
 // it like its other sidebar icons. It is the global tool icon and the server icon.
 const icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.25" fill="currentColor"/><circle cx="3.75" cy="3.75" r="2"/><circle cx="16.25" cy="3.75" r="2"/><circle cx="3.75" cy="16.25" r="2"/><circle cx="16.25" cy="16.25" r="2"/><path d="M5.2 5.2l2.4 2.4M14.8 5.2l-2.4 2.4M5.2 14.8l2.4-2.4M14.8 14.8l-2.4-2.4"/></svg>';
@@ -156,6 +159,16 @@ appTool('osm_home', {
   try { return homeResult('home', { ...await home.status(), builtin: await builtinSkills() }); }
   catch { return homeResult('home', { state: 'unavailable', builtin: [] }); }
 });
+// The installed package's own skills, read as text for Settings. The name must be one the package
+// lists; no path or file is ever accepted, and nothing here touches Notion or the owner's data.
+appTool('osm_builtin_read', {
+  title: 'Read a built-in method', description: 'Read one of the installed OSM package’s own skills as text, by name, for display in Settings. Names are checked against the bundled skills folder; no path is accepted.',
+  inputSchema: { name: z.string().regex(/^[a-z0-9-]{1,60}$/) },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }, _meta: { ui: { visibility: ['app'] } },
+}, async ({ name }) => {
+  try { return homeResult('builtin-record', await readBuiltinSkill(skillsRoot, name)); }
+  catch { return homeResult('builtin-record', { state: 'unavailable' }); }
+});
 appTool('osm_home_list', {
   title: 'List Home records', description: 'List up to ten record titles from one mapped Home section through OSM’s own Notion connection.',
   inputSchema: { section: z.string().regex(/^[a-z0-9-]{1,40}$/), cursor: z.string().max(200).optional() },
@@ -229,7 +242,7 @@ modelTool('osm_context_home', {
 const homeObject = z.object({}).passthrough();
 modelTool('osm_save_home_projection', {
   title: 'Save the OSM Home projection',
-  description: 'Save the Home projection Setup generated from one revision of the AI Operating Model’s Data and Context Definition, for the selected personal context. Never edit it by hand or field by field: content changes only with a new definition revision, and the same revision with different content is refused. Format osm-home-projection/1: definition {id, title, revision, generatedAt}; selectedMode official_notion_user or internal_selected_pages (record the owner’s choice; never switch it); connection {kind "notion-internal", botId, workspaceId} for internal_selected_pages only; root {id, title, link, observed}; and sections {key, label, role: profile|memory|documents|skills|related|support, kind (support only: core_rules|source_index|writing_procedure|access|evidence|maintenance|recovery_snapshot), order, destination, view?, fields?, observed}. Support sections are recorded so Home never shows them as context. A destination is {type: "data_source", id, databaseId?, title, link} with fields {title, description?, and for memory fact?, decision?, why?, evidence?} naming verified properties, or {type: "pages", title, link, pages: [{id, title, link}]} (up to six), or for related {title, link} only. observed is {at, access: readable|inaccessible|unsupported, capabilities?}. Use the definition’s actual IDs and labels; never infer roles from titles, invent fields or store page content, private defaults or secrets. Replaces the whole projection. Read osm_sources for current revisions first. Before any projection exists, take the connection identity, the context and its revision and the root from the bootstrap read of osm_context_home, not from memory or another connector.',
+  description: 'Save the Home projection Setup generated from one revision of the AI Operating Model’s Data and Context Definition, for the selected personal context. Never edit it by hand or field by field: content changes only with a new definition revision, and the same revision with different content is refused. Format osm-home-projection/1: definition {id, title, revision, generatedAt}; selectedMode official_notion_user or internal_selected_pages (record the owner’s choice; never switch it); connection {kind "notion-internal", botId, workspaceId} for internal_selected_pages only; root {id, title, link, observed}; and sections {key, label, role: profile|memory|documents|content|skills|related|support, kind (support only: core_rules|source_index|writing_procedure|access|evidence|maintenance|recovery_snapshot), order, destination, view?, fields?, observed}. content is an optional selected existing Content store, only when the definition names that route; it is read like documents and never created. Support sections are recorded so Home never shows them as context. A destination is {type: "data_source", id, databaseId?, title, link} with fields {title, description?, and for memory fact?, decision?, why?, evidence?} naming verified properties, or {type: "pages", title, link, pages: [{id, title, link}]} (up to six), or for related {title, link} only. observed is {at, access: readable|inaccessible|unsupported, capabilities?}. Use the definition’s actual IDs and labels; never infer roles from titles, invent fields or store page content, private defaults or secrets. Replaces the whole projection. Read osm_sources for current revisions first. Before any projection exists, take the connection identity, the context and its revision and the root from the bootstrap read of osm_context_home, not from memory or another connector.',
   inputSchema: { target: z.string().min(1).max(2048), expectedContextRevision: z.string().regex(/^[a-f0-9]{64}$/), expectedRevision: z.string().regex(/^[a-f0-9]{64}$/),
     projection: z.object({ definition: homeObject, selectedMode: z.enum(['official_notion_user', 'internal_selected_pages']), connection: homeObject.optional(), root: homeObject, sections: z.array(homeObject).min(1).max(16) }).strict() },
   annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
@@ -241,9 +254,10 @@ modelTool('osm_save_home_projection', {
 });
 modelTool('osm_save_connection_route', {
   title: 'Save OSM’s Keychain route setting',
-  description: 'Turn OSM’s own macOS Keychain connection route on or off for the selected personal context. Use only when the owner’s Definition or answer already selected internal_selected_pages for this context; never to fill a gap, after a denial or for another mode. This saves a small non-secret setting beside the context’s other panel state. It reads no credential, creates no Keychain item, grant or account and bypasses no macOS prompt: the owner provisions the secret privately in Keychain Access. Refused for a non-Notion context, or when the saved Home mapping chose the official connection. Replaces the whole setting; read osm_sources for its revisions first.',
+  description: 'Turn OSM’s own macOS Keychain connection route on or off for the selected personal context. Use only when the owner’s Definition or answer already selected internal_selected_pages for this context; never to fill a gap, after a denial or for another mode. This saves a small non-secret setting beside the context’s other panel state. It reads no credential, creates no Keychain item, grant or account and bypasses no macOS prompt: the owner provisions the secret privately in Keychain Access. Optionally saves the link to this connection’s own access page in Notion with the bot and workspace it was verified for: Home offers it only while the live connection is that bot and workspace, and otherwise shows the generic Settings path. Leave manage out to keep the saved link, pass null to remove it; never build a link from identifiers, and never use a developer or credential page. Refused for a non-Notion context, or when the saved Home mapping chose the official connection. Replaces the whole setting; read osm_sources for its revisions first.',
   inputSchema: { target: z.string().min(1).max(2048), expectedContextRevision: z.string().regex(/^[a-f0-9]{64}$/), expectedRevision: z.string().regex(/^[a-f0-9]{64}$/),
-    selectedMode: z.literal('internal_selected_pages'), enabled: z.boolean() },
+    selectedMode: z.literal('internal_selected_pages'), enabled: z.boolean(),
+    manage: z.object({ link: z.string().max(2048), botId: z.string().max(36), workspaceId: z.string().max(36) }).strict().nullable().optional() },
   annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
 }, async args => {
   try {

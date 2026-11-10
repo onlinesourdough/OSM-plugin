@@ -7,6 +7,8 @@ coverage/
 .tmp/
 # Local lead handoff retains exact machine/session attestation; never distribute.
 /HANDOFF.md
+# Private historical preview checkpoint: kept in Git history and privately, not a plugin root document.
+/TEST-TOMORROW.md
 .env
 .env.*
 !.env.example

@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createNotionClient, notionVersion, readBlocks, readLimits } from './notion-internal.mjs';
-import { createHomeService, hostCredential, readBuiltinSkills } from './home-service.mjs';
+import { createHomeService, hostCredential, readBuiltinSkill, readBuiltinSkills } from './home-service.mjs';
 import { normalizeProjection, readHomeProjection, saveHomeProjection, projectionFormat } from './home-map.mjs';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources } from './sources.mjs';
@@ -19,7 +19,8 @@ const ids = { bot: hex(0xb01), botB: hex(0xb02), ws: hex(0xa01), wsB: hex(0xa02)
   sharedOuter: hex(11), childPage: hex(12), childDb: hex(13), deep: hex(14), definition: hex(15), rules: hex(16), snapshot: hex(17), evidence: hex(18), evidenceDb: hex(19), procedureRow: hex(0x300),
   underRules: hex(0x302), underRow: hex(0x303), sibling: hex(20), siblingRow: hex(0x304), innerDb: hex(21), inner: hex(22), innerRow: hex(0x305),
   inColumn: hex(0x306), deepA: hex(0x307), deepB: hex(0x308), deepC: hex(0x309), deepD: hex(0x30a), deepE: hex(0x30b),
-  syncedDb: hex(23), synced: hex(24), syncedRow: hex(0x311), synced2: hex(25), synced2Row: hex(0x312) };
+  syncedDb: hex(23), synced: hex(24), syncedRow: hex(0x311), synced2: hex(25), synced2Row: hex(0x312),
+  contentDb: hex(26), content: hex(27), contentRow: hex(0x320), extContentDb: hex(28), extContent: hex(29), extContentRow: hex(0x321) };
 const dashed = id => `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20)}`;
 const rich = text => [{ type: 'text', plain_text: text, text: { content: text } }];
 const titled = text => ({ Name: { type: 'title', title: rich(text) } });
@@ -88,6 +89,13 @@ function world() {
   add(ids.synced2, { object: 'data_source', database_parent: under(ids.root), properties: { Name: { type: 'title' } } },
     { type: 'data_source_id', data_source_id: dashed(ids.memory), database_id: dashed(ids.memoryDb) });
   page(ids.synced2Row, 'Fictional synced row', { type: 'data_source_id', data_source_id: dashed(ids.synced2), database_id: dashed(ids.memoryDb) });
+  // An optional Content store under the root (granted with it), and one outside the root's grant.
+  add(ids.contentDb, { object: 'database', data_sources: [{ id: dashed(ids.content), name: 'Content' }] }, under(ids.root));
+  add(ids.content, { object: 'data_source', database_parent: under(ids.root), properties: { Name: { type: 'title' }, Notes: { type: 'rich_text' } } }, { type: 'database_id', database_id: dashed(ids.contentDb) });
+  page(ids.contentRow, 'Fictional launch plan', { type: 'data_source_id', data_source_id: dashed(ids.content), database_id: dashed(ids.contentDb) });
+  add(ids.extContentDb, { object: 'database', data_sources: [{ id: dashed(ids.extContent), name: 'Content' }] }, under(ids.sharedOuter));
+  add(ids.extContent, { object: 'data_source', database_parent: under(ids.sharedOuter), properties: { Name: { type: 'title' } } }, { type: 'database_id', database_id: dashed(ids.extContentDb) });
+  page(ids.extContentRow, 'Fictional private campaign', { type: 'data_source_id', data_source_id: dashed(ids.extContent), database_id: dashed(ids.extContentDb) });
   // The About page body: text, a nested toggle, a child page and database (never opened),
   // unsupported content, a mention of an outside page and nesting beyond the depth bound.
   const block = (id, type, value, more = {}) => ({ object: 'block', id: dashed(id), type, [type]: value, has_children: false, ...more });
@@ -971,4 +979,146 @@ test('the bootstrap read refuses without a selected Notion root and reads nothin
   // A root longer than the read bound says it is partial, so a definition is never mapped from a cut.
   const long = await boot(selected, fake => fake.children.set(ids.root, Array.from({ length: 300 }, (_, n) => ({ object: 'block', id: dashed(hex(0x2000 + n)), type: 'paragraph', has_children: false, paragraph: { rich_text: rich(`Line ${n}`) } }))));
   assert.equal(long.result.truncated, true);
+});
+
+// Follow-up: an optional Content route, the saved access link, and the bundled method reader.
+test('a Content route lists and reads like Docs only when the definition names it and the same connection proves access', async () => {
+  const withContent = (id, databaseId) => { const map = studioProjection();
+    map.sections.push({ key: 'content', label: 'Content', role: 'content', order: 5, observed: seen,
+      destination: { type: 'data_source', id, databaseId, title: 'Content', link: notionLink(databaseId) }, fields: { title: 'Name', description: 'Notes' } });
+    return map; };
+  // Valid: it is a mapped section, listed and read through the same checks as every other source.
+  let fake = fakeNotion(), home = service(fake, withContent(ids.content, ids.contentDb));
+  assert.equal((await home.status()).sections.find(item => item.key === 'content').role, 'content');
+  const list = await home.list({ key: 'content' });
+  assert.deepEqual([list.state, list.items.map(item => item.title)], ['listed', ['Fictional launch plan']]);
+  const read = await home.read({ key: 'content', id: ids.contentRow });
+  assert.deepEqual([read.state, read.record.title, read.record.meta], ['read', 'Fictional launch plan', 'Content · Content item']);
+  // The model tools use this service, so the boundary holds for them: nothing outside the section is readable
+  // through the Content key, and a Content row is not readable through another section's key.
+  const refused = [await home.read({ key: 'content', id: ids.outside }), await home.read({ key: 'content', id: ids.extContentRow }), await home.read({ key: 'memory', id: ids.contentRow }),
+    await home.read({ key: 'not-a-section', id: ids.contentRow })];
+  for (const result of refused) assert.equal(result.state, 'inaccessible');
+  assert.equal(reveals(refused, outsideTitle, 'Fictional private campaign'), false);
+  // Denied: the route names a source the connection cannot read. Nothing of it is listed or read, and nothing leaks.
+  fake = fakeNotion(); home = service(fake, withContent(ids.extContent, ids.extContentDb));
+  const denied = [await home.list({ key: 'content' }), await home.read({ key: 'content', id: ids.extContentRow })];
+  assert.deepEqual(denied.map(result => result.state), ['inaccessible', 'inaccessible']);
+  assert.equal(reveals(denied, 'Fictional private campaign'), false);
+  // Absent: a definition without a Content route has no such source, even for a guessed key, and nothing is requested for it.
+  fake = fakeNotion(); home = service(fake, studioProjection());
+  assert.equal((await home.list({ key: 'content' })).state, 'unmapped');
+  assert.equal((await home.read({ key: 'content', id: ids.contentRow })).state, 'inaccessible');
+  assert.equal(fake.requests.some(request => [ids.content, ids.contentDb, ids.contentRow].some(id => request.path.includes(dashed(id)))), false);
+  // An older projection with no Content section is still valid, and the role is part of the contract.
+  assert.equal(normalizeProjection(studioProjection()).sections.some(item => item.role === 'content'), false);
+  assert.throws(() => normalizeProjection({ ...studioProjection(), sections: [{ ...withContent(ids.content, ids.contentDb).sections.at(-1), fields: { title: 'Name', decision: 'Notes' } }] }), /fields/);
+});
+
+test('the saved access link is offered only while the live connection is the bot and workspace it was verified for', async () => {
+  const link = 'https://www.notion.so/fictional-connection-access';
+  const statusWith = async (manage, tweak = () => {}) => {
+    const fake = fakeNotion(); tweak(fake);
+    return createHomeService({ credential: () => ({ state: 'available', token: credentialA }), route: async () => ({ enabled: true, source: 'config', manage }), transport: fake.transport,
+      readProjection: async () => ({ state: 'saved', revision: 'r', projection: normalizeProjection(studioProjection()) }) }).status();
+  };
+  const bound = { link, botId: ids.bot, workspaceId: ids.ws };
+  assert.equal((await statusWith(bound)).manageLink, link, 'known: bound to the live bot and workspace');
+  assert.equal((await statusWith(undefined)).manageLink, undefined, 'unknown: none saved');
+  assert.equal((await statusWith({ ...bound, botId: ids.botB })).manageLink, undefined, 'mismatched bot');
+  assert.equal((await statusWith({ ...bound, workspaceId: ids.wsB })).manageLink, undefined, 'mismatched workspace');
+  const changed = await statusWith({ ...bound, botId: ids.botB }, fake => { fake.state.bot = ids.botB; });
+  assert.deepEqual([changed.state, changed.manageLink], ['account_changed', undefined], 'a different account never gets a link');
+});
+
+test('the access link is saved only for Notion pages that are not developer pages, is kept when omitted and can be removed', async t => {
+  const { options, route } = await contextFixture(t);
+  const link = 'https://www.notion.so/fictional-connection-access', manage = { link, botId: ids.bot, workspaceId: ids.ws };
+  const first = await saveConnectionRoute(routeArgs(route, { expectedRevision: (await readConnectionRoute(context, options)).revision, manage }), options);
+  assert.deepEqual(first.manage, manage);
+  const file = JSON.parse(await readFile(join(options.codexHome, 'aios/panel', (await readdir(join(options.codexHome, 'aios/panel'))).find(name => name.endsWith('.connection.json'))), 'utf8'));
+  assert.deepEqual(Object.keys(file), ['format', 'contextIdentity', 'route', 'mode', 'enabled', 'manage']);
+  // Left out, the saved link stays, also when the route is turned off; null removes it.
+  const kept = await saveConnectionRoute(routeArgs(route, { expectedRevision: first.revision }), options);
+  assert.deepEqual([kept.revision, kept.manage], [first.revision, manage]);
+  const off = await saveConnectionRoute(routeArgs(route, { expectedRevision: first.revision, enabled: false }), options);
+  assert.deepEqual([off.enabled, off.manage], [false, manage]);
+  const cleared = await saveConnectionRoute(routeArgs(route, { expectedRevision: off.revision, enabled: false, manage: null }), options);
+  assert.equal(cleared.manage, undefined);
+  // Only Notion's own https pages: never another site, a credential in the URL, or a developer page that shows the credential.
+  for (const bad of ['https://example.com/x', 'http://www.notion.so/x', 'https://evil.example/www.notion.so', 'https://user:pw@www.notion.so/x', 'https://acme.notion.site/x', 'javascript:alert(1)',
+    'https://www.notion.so/my-integrations', 'https://www.notion.so/profile/integrations/internal/abc', 'https://www.notion.com/PROFILE/integrations']) {
+    await assert.rejects(saveConnectionRoute(routeArgs(route, { expectedRevision: cleared.revision, enabled: false, manage: { ...manage, link: bad } }), options), undefined, bad);
+  }
+  for (const badIds of [{ botId: 'x' }, { workspaceId: '' }]) await assert.rejects(saveConnectionRoute(routeArgs(route, { expectedRevision: cleared.revision, enabled: false, manage: { ...manage, ...badIds } }), options));
+});
+
+test('a bundled method is read only by a name the package lists, as bounded text, from a regular file inside it', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'osm-skills-')); t.after(() => rm(root, { recursive: true, force: true }));
+  const front = name => `---\nname: ${name}\ndescription: A fictional method.\nmetadata:\n  version: "1.0.0"\n---\n`;
+  const skill = async (name, text) => { await mkdir(join(root, name), { recursive: true }); await writeFile(join(root, name, 'SKILL.md'), text); };
+  await skill('osm-a', front('osm-a') + '# Fictional method\n\nUse it when asked.\nIt continues here.\n\n- First step\n1. Second step\n\n```sh\necho fictional\n```\n');
+  await skill('osm-big', front('osm-big') + 'x'.repeat(200 * 1024));
+  await skill('notskill', 'no frontmatter at all');
+  // Content outside the package, reachable only through a link: once as a linked file and once as a linked folder.
+  const away = await mkdtemp(join(tmpdir(), 'osm-outside-')); t.after(() => rm(away, { recursive: true, force: true }));
+  const marker = front('osm-link') + 'private-marker-not-in-the-package';
+  await writeFile(join(away, 'outside.md'), marker);
+  await mkdir(join(root, 'osm-link')); await symlink(join(away, 'outside.md'), join(root, 'osm-link', 'SKILL.md'));
+  await mkdir(join(away, 'osm-dirlink')); await writeFile(join(away, 'osm-dirlink', 'SKILL.md'), front('osm-dirlink') + 'private-marker-not-in-the-package');
+  await symlink(join(away, 'osm-dirlink'), join(root, 'osm-dirlink'));
+  const ok = await readBuiltinSkill(root, 'osm-a');
+  assert.equal(ok.state, 'read'); assert.equal(ok.record.description, 'A fictional method.');
+  assert.deepEqual(ok.record.blocks.map(block => [block.kind, block.text]), [['heading', 'Fictional method'], ['text', 'Use it when asked. It continues here.'], ['item', 'First step'], ['item', 'Second step'], ['code', 'echo fictional']]);
+  assert.equal(JSON.stringify(ok).includes('metadata'), false, 'the frontmatter is not shown');
+  // Names only: a path, a traversal, an unlisted folder or a wrong type is refused without reading anything.
+  for (const bad of ['../outside', 'osm-a/../osm-a', '/etc/passwd', 'osm-a/SKILL.md', 'OSM-A', '', 'notskill', 'missing', 123, null, undefined]) assert.deepEqual(await readBuiltinSkill(root, bad), { state: 'inaccessible' }, String(bad));
+  // The package boundary is checked before anything is read, for the list and for the text alike: a folder or a
+  // file that is a link, or a file over the bound, is never listed, so it is inaccessible and nothing in it is read.
+  const listed = await readBuiltinSkills(root);
+  assert.deepEqual(listed.map(item => item.name), ['osm-a'], 'a linked folder, a linked file and an oversize file are not listed');
+  for (const name of ['osm-link', 'osm-dirlink', 'osm-big']) {
+    const result = await readBuiltinSkill(root, name);
+    assert.deepEqual(result, { state: 'inaccessible' }, name);
+    assert.equal(JSON.stringify([listed, result]).includes('private-marker'), false, name);
+  }
+  // The real package: every shipped skill is listed and readable, without frontmatter.
+  const bundled = new URL('../../skills', import.meta.url).pathname, skills = await readBuiltinSkills(bundled);
+  assert.equal(skills.length, 18);
+  for (const { name, description } of skills) {
+    const result = await readBuiltinSkill(bundled, name);
+    assert.equal(result.state, 'read', name); assert.equal(result.record.description, description);
+    assert.ok(result.record.blocks.length > 0 && !result.record.blocks.some(block => /^name: |^---$/.test(block.text)), name);
+  }
+});
+
+test('a Content route’s saved title, link and label never reach status before access, and nothing of them reaches a denied result', async () => {
+  const saved = { label: 'Zephyr client work', title: 'Zephyr secret title', link: 'https://www.notion.so/zephyr-secret-link' };
+  const named = destination => { const map = studioProjection();
+    map.sections.push({ key: 'content', label: saved.label, role: 'content', order: 5, observed: seen, destination: { ...destination, title: saved.title, link: saved.link }, ...(destination.type === 'data_source' && { fields: { title: 'Name' } }) });
+    return map; };
+  const source = (id, databaseId) => ({ type: 'data_source', id, databaseId });
+  const page = id => ({ type: 'pages', pages: [{ id, title: 'A page', link: notionLink(id) }] });
+  const mentions = value => /zephyr/i.test(JSON.stringify(value));
+  const neutral = { key: 'content', label: 'Content', role: 'content' };
+  for (const [name, destination] of [['data source', source(ids.extContent, ids.extContentDb)], ['named pages', page(ids.extContentRow)]]) {
+    const home = service(fakeNotion(), named(destination));
+    const status = await home.status();
+    assert.deepEqual(status.sections.find(item => item.key === 'content'), neutral, name + ': status names the route only as a neutral routing entry');
+    assert.equal(mentions(status), false, name);
+    const denied = [await home.list({ key: 'content' }), await home.read({ key: 'content', id: ids.extContentRow }), await home.status()];
+    assert.equal(denied[0].state, 'inaccessible', name); assert.equal(mentions(denied), false, name + ': a denied route yields nothing of the saved mapping');
+  }
+  // Once the route is proven, the same result that proves access carries the saved title and link for display.
+  for (const [name, destination, row] of [['data source', source(ids.content, ids.contentDb), ids.contentRow], ['named pages', page(ids.about), ids.about]]) {
+    const home = service(fakeNotion(), named(destination));
+    assert.equal(mentions(await home.status()), false, name + ': status stays neutral for a valid route too');
+    const proof = await home.list({ key: 'content' });
+    assert.deepEqual([proof.state, proof.source.link], ['listed', saved.link], name);
+    assert.equal((await home.read({ key: 'content', id: row })).state, 'read', name);
+  }
+  // Other roles keep their own status entries, and an older projection without Content is unchanged.
+  const status = await service(fakeNotion(), studioProjection()).status();
+  assert.deepEqual(status.sections.find(item => item.key === 'docs'), { key: 'docs', label: 'Business Docs', role: 'documents', title: 'Docs', link: notionLink(ids.docsDb) });
+  assert.equal(status.sections.some(item => item.role === 'content'), false);
 });

@@ -14,11 +14,25 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      channel: ${{ steps.channel.outputs.value }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
+      # The release channel is a reviewed value in the tagged commit, never a runtime toggle.
+      - name: Read the release channel
+        id: channel
+        run: |
+          # The literal value with ordinary line endings only: command substitution drops trailing newlines and
+          # one trailing CR drops a CRLF. Spaces and extra lines are not stripped, so "sta ble" is rejected.
+          channel="$(cat .github/release-channel)"
+          channel="${channel%$'\r'}"
+          case "$channel" in
+            prerelease|stable) echo "value=$channel" >> "$GITHUB_OUTPUT" ;;
+            *) echo "::error::.github/release-channel must say prerelease or stable"; exit 1 ;;
+          esac
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -62,13 +76,22 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Publish the validated pilot release
+      - name: Publish the validated release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
+          CHANNEL: ${{ needs.checks.outputs.channel }}
         run: |
+          # The channel crosses a job boundary, so it is checked again here, before any gh command:
+          # only an explicit value publishes, and an empty or unknown one stops with a fixed error.
+          case "$CHANNEL" in
+            prerelease) set -- --prerelease ;;
+            stable) set -- ;;
+            *) echo "::error::The release channel from the checks job must be exactly prerelease or stable. Nothing was published."; exit 1 ;;
+          esac
+          # An existing release is never edited, so earlier prerelease flags stay as they are.
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release create "$RELEASE_TAG" --verify-tag --prerelease \
+            gh release create "$RELEASE_TAG" --verify-tag "$@" \
               --title "OSM ${RELEASE_TAG#v}" --generate-notes
           fi

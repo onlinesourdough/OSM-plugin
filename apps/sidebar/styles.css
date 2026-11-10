@@ -162,8 +162,9 @@ h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text
 #home-panel .step-actions .btn { height: auto; min-height: 32px; min-width: 0; max-width: 100%; padding: 5px 12px;
   line-height: 20px; white-space: normal; overflow-wrap: anywhere; text-align: left; }
 .record-list { margin: 0; padding: 0; list-style: none; }
-#home .row, #dashboard .row { width: calc(100% + 24px); margin: 0 -12px; gap: 8px; }
-#home .row-title { white-space: normal; }
+#home .row, #dashboard .row, #builtin-list .row { width: calc(100% + 24px); margin: 0 -12px; gap: 8px; }
+#home .row-title, #builtin-list .row-title { white-space: normal; overflow-wrap: anywhere; }
+#builtin-skill-body { margin-top: 4px; }
 #home .row-title .source-title { white-space: normal; overflow-wrap: anywhere; }
 .record-description { display: block; margin-top: 3px; overflow-wrap: anywhere; }
 .has-icon .record-description { margin-left: 26px; }
@@ -208,24 +209,19 @@ h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text
 #osm-checked { margin: 4px 0 12px; }
 #connection-guidance { margin: 4px 0 8px; line-height: 1.5; }
 .settings-card { margin-top: 28px; }
-/* Unlike a Setup step, this row collapses again, so it stays a button when open. */
-#builtin-toggle[aria-expanded="true"] { cursor: pointer; }
-#builtin-toggle[aria-expanded="true"]:hover { background: var(--osm-hover); }
 /* A Settings row that opens something: icon in Setup's 20px marker column, one full-width text column
    (label, description, then the count) and one chevron. The count sits under the description, never
    beside it, so the description keeps the whole row at any drawer width. The chevron is drawn once,
-   here: it points right for a row that opens another view and turns down for a disclosure that is open. */
+   here, and points right: every such row opens another Settings view. */
 .setting-head { min-height: 64px; padding-top: 10px; padding-bottom: 10px; }
+.step:last-child .setting-head { border-radius: 0 0 13px 13px; }
 .setting-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; color: var(--osm-muted); }
 .setting-text { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
 .setting-desc { font-size: 12px; font-weight: 400; color: var(--osm-muted); }
 .setting-text .summary { max-width: none; margin: 0; overflow: visible; white-space: normal; }
 .setting-text .summary:empty { display: none; }
 .setting-head::after { content: ''; flex: none; width: 6px; height: 6px; margin: 0 4px 0 2px; border-right: 1.5px solid var(--osm-muted); border-bottom: 1.5px solid var(--osm-muted); transform: rotate(-45deg); }
-.setting-head[aria-expanded="true"]::after { transform: rotate(45deg); }
 .drawer-body .settings-card .step { margin-top: 0; }
-.builtin-name { margin: 12px 0 0; font-size: 13px; font-weight: 500; }
-.builtin-method .hint { margin-top: 4px; }
 #settings-agent-setup { margin-top: 16px; }
 #settings-back { min-height: 32px; padding: 0; font-size: 13px; }
 #saved-links { margin-top: 12px; }

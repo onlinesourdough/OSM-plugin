@@ -27,6 +27,10 @@ relative to 0.31.0; only Setup and Data & Context changed, as patch bumps, to wi
 Keychain route. The release before 0.31.0, v0.30.1, shipped 22 skills; see
 [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
 
+The source on `main` is the unreleased `0.32.0` candidate. It renames and adds no skill; only Data & Context
+changes, as a minor bump (3.1.0), to map an optional existing Content route and the link to a connection's own
+access page.
+
 | Skill | Responsibility |
 | --- | --- |
 | [OSM:clarify](../skills/osm-clarify/SKILL.md) | Explain complex topics and decisions with concrete examples and visuals when they help understanding |
@@ -54,7 +58,8 @@ Three procedures live under `osm` instead of separate entries:
 a legacy file or vault home) and
 [model advice](../skills/osm/references/model-advice.md) (only on request).
 Content and Diffusion Studio are not part of the package; their history is kept
-as [non-shipped drafts](content-drafts/README.md). The assistant chains relevant
+as [non-shipped drafts](content-drafts/README.md), and shared Content methods and
+templates have their own Git home, [OSM-content](https://github.com/onlinesourdough/OSM-content). The assistant chains relevant
 skills using the current task and its accepted result; no workflow engine or fixed
 chain schema is required. Working material stays in the project.
 

@@ -21,7 +21,8 @@ const connectable = ['not_connected', 'disabled', 'unavailable'];
 let setupRequested = false;
 let status, draft, checkedAt = -Infinity, firstStatus = true, saving = false, refreshing = false, stale = false;
 let onboarding = false, openStep = 0, confirmSwitch = false, settingsOpen = false, discardPrompt = false;
-let settingsView = 'main', discardDestination = 'close';
+// settingsView: main, links (Saved links), skills (Built into OSM) or skill (one method). builtinSkill is the open method.
+let settingsView = 'main', discardDestination = 'close', builtinSkill = null;
 let message = { text: '', error: false };
 let selectedContext = null;
 const canBrowse = () => Boolean(status?.features?.notionPages && status.notion.state === 'connected');
@@ -97,7 +98,7 @@ const setupContextPicker = createPicker({ id: 'setup-context-picker', label: 'Pa
 $('setup-context').append(setupContextPicker.root);
 // Home reads only through OSM's own tools; it never uses the page picker's connection.
 const home = createHome({ $, call: (name, args) => app.callServerTool({ name, arguments: args }), open: target => open(target), changed: () => render(),
-  linksRevision: () => status?.sources?.definitionRevision });
+  linksRevision: () => status?.sources?.definitionRevision, openBuiltin: name => openBuiltin(name) });
 
 function feedback(text, error = false) { message = { text, error }; paintFeedback(); }
 function paintFeedback() {
@@ -237,9 +238,13 @@ function renderSettings(locked) {
   $('drawer-cancel').disabled = saving; $('drawer-close').disabled = saving;
   $('settings-main').hidden = settingsView !== 'main';
   $('saved-links').hidden = settingsView !== 'links';
+  $('builtin-skills').hidden = settingsView !== 'skills';
+  $('builtin-skill').hidden = settingsView !== 'skill';
+  home.renderBuiltin(settingsView === 'skill' && builtinSkill ? { kind: 'skill', ...builtinSkill } : { kind: 'list' });
   $('saved-links-summary').textContent = home.suppressed() ? 'None' : savedSummary(status.sources.links);
-  $('settings-back').hidden = settingsView !== 'links';
-  $('drawer-title').textContent = settingsView === 'links' ? 'Saved links' : 'Settings';
+  $('settings-back').hidden = settingsView === 'main';
+  $('settings-back').textContent = settingsView === 'skill' ? '‹ Built into OSM' : '‹ Settings';
+  $('drawer-title').textContent = settingsView === 'links' ? 'Saved links' : settingsView === 'skills' ? 'Built into OSM' : settingsView === 'skill' ? builtinSkill?.name || 'Built into OSM' : 'Settings';
   $('settings-footer').hidden = settingsView !== 'links' && !discardPrompt;
   $('foot-edit').hidden = discardPrompt || settingsView !== 'links'; $('foot-discard').hidden = !discardPrompt;
 }
@@ -264,12 +269,13 @@ function apply(result) {
   else if (status.sources.state === 'unavailable') feedback('Saved source links need attention. They have been left unchanged.', true);
   return true;
 }
+// Resolves true only when the host opened the link; a refused, unsupported or failed open says so and is false.
 async function open(target) {
   const route = classifyTarget(target);
-  if (!route) return;
-  if (route.kind === 'path') { feedback(route.target); return; }
-  try { const result = await app.openLink({ url: route.target }); if (result?.isError) throw new Error(); }
-  catch { feedback('Could not open the link. ' + route.target, true); }
+  if (!route) return false;
+  if (route.kind === 'path') { feedback(route.target); return false; }
+  try { const result = await app.openLink({ url: route.target }); if (result?.isError) throw new Error(); return true; }
+  catch { feedback('Could not open the link. ' + route.target, true); return false; }
 }
 let checkingConnection = false, connectionOpener;
 function openConnection() {
@@ -416,15 +422,27 @@ async function continueStep() {
 
 let connectionAction = false;
 $('saved-links-toggle').addEventListener('click', () => { settingsView = 'links'; render(); $('drawer-title').focus(); });
+$('builtin-toggle').addEventListener('click', () => { settingsView = 'skills'; builtinSkill = null; render(); $('drawer-title').focus(); });
+// One method's text, from the package's own skills through a name-checked, bounded read.
+async function openBuiltin(name) {
+  settingsView = 'skill'; builtinSkill = { name, state: 'loading' }; render(); $('drawer-title').focus();
+  const result = await home.readBuiltin(name);
+  if (settingsView !== 'skill' || builtinSkill?.name !== name) return;
+  builtinSkill = { name, state: result.state, ...(result.record && { record: result.record }) }; render();
+}
 $('settings-back').addEventListener('click', () => {
   if (saving) return;
+  if (settingsView === 'skill') { const name = builtinSkill?.name; builtinSkill = null; settingsView = 'skills'; render(); home.focusBuiltin(name); return; }
+  if (settingsView === 'skills') { settingsView = 'main'; render(); $('builtin-toggle').focus(); return; }
   if (pending()) { discardDestination = 'main'; discardPrompt = true; render(); $('keep-editing').focus(); }
   else { settingsView = 'main'; render(); $('saved-links-toggle').focus(); }
 });
-for (const id of ['settings-connection', 'manage-access', 'home-recheck', 'connection-check']) $(id).addEventListener('click', () => { connectionAction = true; });
+// Manage access is deliberately not here. A successful open arms Home's one pending return check, which is that action's only
+// refresh owner: closing Settings adds no second reload, and a refused open arms nothing, so closing after it reloads nothing.
+for (const id of ['settings-connection', 'home-recheck', 'connection-check']) $(id).addEventListener('click', () => { connectionAction = true; });
 function openSettings(role) {
   if (!status || saving || refreshing || settingsOpen || onboarding || status.context.state !== 'configured') return;
-  fillDraft(); settingsOpen = true; discardPrompt = false; settingsView = role ? 'links' : 'main'; discardDestination = 'close';
+  fillDraft(); settingsOpen = true; discardPrompt = false; settingsView = role ? 'links' : 'main'; builtinSkill = null; discardDestination = 'close';
   feedback(status.sources.state === 'unavailable' ? 'Saved source links need attention. They have been left unchanged.' : '', status.sources.state === 'unavailable');
   $('drawer').showModal(); render();
   if (role && status.sources.state !== 'unavailable' && !home.suppressed()) {

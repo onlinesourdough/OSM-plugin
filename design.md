@@ -55,8 +55,13 @@ results live in [verification](docs/verification.md).
    A denial stays a denial: Home never retries through the official Notion
    plugin's connection or any other identity.
 3. **Overview sections** are the projection's sections with role `profile`,
-   `documents`, `memory` or `skills`, in projection order. Role `related` becomes
-   “Elsewhere in Notion” links that open Notion and are never read. Role
+   `documents`, `content`, `memory` or `skills`, in projection order. Role `content`
+   is an optional existing Content store: it appears only when the selected
+   definition names that route and OSM's own connection proves access, and then
+   lists, reads, searches and goes Back exactly like Docs. Status names it only as a
+   neutral routing entry (its saved title, link and label arrive only inside its own
+   list result), and it is drawn only after that list proves access; absent, denied
+   or failing, it shows nothing, not even its label. Role `related` becomes “More in Notion” links that open Notion and are never read. Role
    `support` is never listed, read, searched or counted on Home.
 4. **Titles and icons come from the source.** A section heading shows the list
    result's `source` title and icon (data source metadata); the projection label
@@ -91,7 +96,7 @@ search field, then one card with a section per source in definition order:
   the row label. It is not interactive.
 - **Panel:** up to 3 record rows, then the right-aligned “Open ‹Source›”.
 
-Related links follow the card under “Elsewhere in Notion”. No root body is shown
+Related links follow the card under “More in Notion”. No root body is shown
 on the overview. Compact and wide are the same single 600px column; wide only
 adds side margin. Home never shows step numbers.
 
@@ -184,7 +189,7 @@ manual copy.
 Order:
 
 1. **Notion connection:**
-   - **Connected:** “Connected · ‹workspace›” with “Checked at HH:MM when Home opened”, Choose pages in Notion ↗, one line of native ••• → Connections guidance, and Check again.
+   - **Connected:** “Connected · ‹workspace›” with “Checked at HH:MM when Home opened”, Manage access in Notion ↗, one short note of the Settings → Connections path, and Check again.
    - **Not connected:** Connect Notion as the primary button, opening the existing honest guide (O02), the plain statement that browser sign-in needs OSM’s own registration and backend, and Check again.
    - **No verbose copy:** no mapping inventory or agent-first copy in either state.
 2. **Data & Context home:** the existing context picker in its standard Setup
@@ -198,13 +203,15 @@ Order:
      both count as their category), joined with “ · ”; “None” when nothing is
      saved. It opens the Saved links sub-view.
    - **Built into OSM:** a row with a line icon, the label, a one-line description
-     and, beneath it, the summary “N methods”, then one chevron. It expands in place
-     (`aria-expanded`). The panel lists each method from the installed
-     package's existing metadata, name then description, followed by “From the
-     installed OSM package. Reading a method here doesn’t run it.” There is no
-     native disclosure triangle, no second chevron and no enable, run or ownership
-     control. Saved links is the same row (icon, label, description, summary,
-     right-pointing chevron) and opens its sub-view.
+     and, beneath it, the summary “N methods”, then one chevron. Like Saved links
+     it opens its own Settings page (title “Built into OSM”, “‹ Settings” back):
+     the installed package's methods, name then description, with “From the
+     installed OSM package. Reading a method here doesn’t run it.” Choosing one
+     opens its text on a further page (title is the method's name, “‹ Built into
+     OSM” back); Back returns to the list with focus on that method, and Back
+     again to Settings with focus on the row. The text comes from the package's
+     own skills through a name-checked, size-bounded read, shown as text. There
+     is no nested menu, no second chevron and no enable, run or ownership control.
 4. **Separate Notion plugin:** the optional picker only, with Setup's existing
    status row.
 5. **Get help from your agent**
@@ -243,11 +250,11 @@ existing one-automatic-recovery budget and invalidation rules in
 | Loading | “Opening your home…”, disabled search | X01 |
 | Empty source | “Nothing here yet.” under that source | X02 |
 | Withheld rows | “N pages here can’t be read with OSM’s connection.” | H03, X03 |
-| Source denied | “OSM’s connection can’t read ‹source›.” · one line of ••• → Connections guidance · How to share it › (opens the source in Notion) | X03 |
+| Source denied | “OSM’s connection can’t read ‹source›.” · one line of Settings → Connections → OSM → Manage access guidance · How to share it › (opens the source in Notion) | X03 |
 | Rate limited / unavailable | Source line with Try again; full gate if status fails | X03, E06–E07 |
 | Not connected / removed | “Reconnect Notion”: “OSM isn’t connected to Notion, or its connection was removed, so nothing from your home is shown.” One primary Open connection settings; ghost Show saved links and Get help from your agent | X04 |
 | Different connection | Existing suppression; nothing from the home or saved links shown | X04, E05 |
-| Home page unreadable | “Your home page can’t be read”, naming “your home” because a failed root check exposes no verified title · one primary Open page in Notion ↗ · ghost Check again and Get help from your agent | X05 |
+| Home page unreadable | “Your home page can’t be read”, naming “your home” because a failed root check exposes no verified title · one primary Manage access in Notion ↗ · ghost Check again and Get help from your agent | X05 |
 | Returning from Notion | Recheck on visibility; previous state dimmed until answered | X06 |
 | No projection yet | Existing Continue Setup gate with Connect first | E10, S01 |
 
@@ -382,7 +389,7 @@ wins.
 | Source list | Reader bar; title in the screen-title style with the 24px icon inline, gap 10px; `btn-ghost` “Open in Notion ↗”; one `.osm-card` of `.row`s; `btn-secondary` “Load more from ‹Source›” in `.step-actions` |
 | Reader bar | Back `btn-ghost icon`; breadcrumb `nav`; `btn-ghost` Copy link and “Open in Notion ↗” |
 | Gates | Header title, `.intro` copy, actions row as on Setup's opening |
-| Settings | Existing drawer head and section titles. Connection actions in one row: `btn-secondary` “Choose pages in Notion ↗” or, when not connected, `btn-primary` “Connect Notion”, then `btn-ghost` “Check again”. Then the standard context picker, the two-row card, and `btn-ghost` “Get help from your agent”. |
+| Settings | Existing drawer head and section titles. Connection actions in one row: `btn-secondary` “Manage access in Notion ↗” or, when not connected, `btn-primary` “Connect Notion”, then `btn-ghost` “Check again”. Then the standard context picker, the two-row card, and `btn-ghost` “Get help from your agent”. |
 
 Home keeps no type or button rules of its own:
 
@@ -450,4 +457,6 @@ and [file URL expiry](https://developers.notion.com/reference/file-object).
 Host support for clipboard writes and `visibilitychange` inside the Codex panel
 is unverified and must be checked before relying on them. Native live access,
 new credential provisioning, Notion writes and release remain separate. See
-`TEST-TOMORROW.md` for exact safe preview entrypoints and evidence.
+[the Codex sidebar](docs/sidebar.md) for the safe preview entrypoints. The earlier
+preview checkpoint `TEST-TOMORROW.md` is a private historical record kept in Git
+history, no longer a file in the repository.

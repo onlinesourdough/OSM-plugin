@@ -44,6 +44,13 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
     }
     // Mirrors the server contract: revision and context checks, whole-map replacement.
     async callServerTool({ name, arguments: args }) {
+      // The built-in read is recorded apart: it carries only a method name, and never Notion data.
+      if (name === 'osm_builtin_read') {
+        builtinCalls.push(plain(args));
+        const wrapped = value => ({ content: [], _meta: { 'osm/kind': 'builtin-record', 'osm/builtin-record': value } });
+        return options.builtin ? options.builtin(args, wrapped) : wrapped({ state: 'read', record: { title: args.name, meta: 'Built into OSM', description: 'A fictional method.', fields: [],
+          blocks: [{ kind: 'heading', depth: 0, text: 'When to use' }, { kind: 'text', depth: 0, text: 'Fictional method text for ' + args.name }], truncated: false } });
+      }
       // Home tools are recorded apart; by default the host has no supported connection.
       if (name.startsWith('osm_home')) {
         if (name === 'osm_home_page') {
@@ -74,15 +81,18 @@ async function ui(context = { state: 'missing', revision: 'a'.repeat(64) }, sour
       return snapshot();
     }
   }
+  const windowListeners = {}, builtinCalls = [];
+  const window = { addEventListener: (type, listener) => { (windowListeners[type] ||= []).push(listener); } };
   const mediaListeners = new Set(), media = { matches: Boolean(options.wide), addEventListener: (type, listener) => { if (type === 'change') mediaListeners.add(listener); } };
-  const sandbox = { App, classifyTarget, connectionCopy, __OSM_VERSION__: 'test', applyDocumentTheme() {}, applyHostStyleVariables() {},
+  const sandbox = { App, classifyTarget, connectionCopy, window, __OSM_VERSION__: 'test', applyDocumentTheme() {}, applyHostStyleVariables() {},
     navigator: { clipboard: { writeText: options.writeText || (async () => { throw new Error('Clipboard unavailable'); }) } },
     matchMedia: () => media, document, URL, structuredClone, setTimeout, clearTimeout, Date: class extends Date { static now() { return time; } } };
   await vm.runInNewContext(`(async () => {${source}})()`, sandbox);
   const get = id => document.getElementById(id);
   const u = {
     resize: wide => { media.matches = wide; for (const listener of mediaListeners) listener(); },
-    advance: ms => { time += ms; }, get, calls, homeCalls, links, messages, status, document, names: () => calls.map(call => call.name), focused: () => document.activeElement?.id,
+    advance: ms => { time += ms; }, focusWindow: async () => { for (const listener of windowListeners.focus || []) await listener(); await settle(); },
+    builtinCalls, get, calls, homeCalls, links, messages, status, document, names: () => calls.map(call => call.name), focused: () => document.activeElement?.id,
     text: id => get(id).textContent, shown: id => !get(id).hidden,
     notify: value => host.ontoolresult(value), fail: value => { fail = value; }, failLinks: value => { linkFailure = value; },
     delay() { delay = new Promise(resolve => { release = resolve; }); }, release() { release(); delay = undefined; },
@@ -754,6 +764,7 @@ test('Home previews three titles in stable definition order and opens a named so
   assert.ok(u.panel().includes('Load more from Memory')); await u.press('‹');
   assert.equal(u.focused(), 'source-memory');
   assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
+  assert.ok(u.panel().includes('More in Notion')); assert.equal(u.panel().includes('Elsewhere in Notion'), false);
   await u.press('Tasks ↗'); assert.deepEqual(u.links, ['https://www.notion.so/fictional-tasks']);
   assert.deepEqual(u.names(), []); assert.equal(u.messages.length, 0);
 });
@@ -798,7 +809,8 @@ test('Skills descriptions remain text and built-in methods live in Settings', as
   assert.equal(u.nodes().some(node => node.tagName === 'IMG'), false);
   assert.equal(/\bRun\b|Enabled|Available/.test(u.panel()), false);
   assert.equal(u.panel().includes('osm-setup'), false);
-  await u.click('settings'); assert.ok(u.text('builtin-content').includes('osm-setup')); assert.ok(u.text('builtin-content').includes('Set up or resume OSM.'));
+  await u.click('settings'); await u.click('builtin-toggle');
+  assert.ok(u.text('builtin-list').includes('osm-setup')); assert.ok(u.text('builtin-list').includes('Set up or resume OSM.'));
 });
 
 test('gates: unsupported host with a mapping, not connected and unmapped; saved links stay reachable', async () => {
@@ -2036,7 +2048,7 @@ test('root-denied gate uses neutral copy and selected URL, never unverified retu
     return result;
   } });
   assert.equal(u.text('gate-title'), 'Your home page can’t be read');
-  assert.equal(u.text('gate-copy'), 'OSM’s connection can’t read your home. In Notion, open the page’s ••• menu → Connections and add OSM.');
+  assert.equal(u.text('gate-copy'), 'OSM’s connection can’t read your home. In Notion, open Settings → Connections, choose OSM, then Manage access, and add your home page.');
   assert.equal(u.shown('gate-connect'), false); assert.equal(u.shown('gate-notion'), true);
   assert.equal(u.text('gate-action'), 'Check again'); assert.equal(u.text('gate-setup'), 'Get help from your agent');
   assert.equal(u.text('home-definition').includes('Unverified'), false); assert.equal(u.panel(), '');
@@ -2301,30 +2313,57 @@ test('failed searched-source answers never provide a title or icon for a heading
 });
 
 
-test('Built into OSM expands and collapses locally with metadata and no execution claims', async () => {
+test('Built into OSM opens as a Settings subpage: list, one method, back to the list, back to Settings', async () => {
   const u = await homeUi(); await u.click('settings');
-  const calls = plain(u.homeCalls), names = u.names(), messages = u.messages.length;
+  const names = u.names(), messages = u.messages.length, homeCalls = plain(u.homeCalls);
   assert.equal(u.text('builtin-summary'), '2 methods');
-  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'false');
-  assert.equal(u.get('builtin-toggle').getAttribute('aria-controls'), 'builtin-panel');
-  assert.equal(u.shown('builtin-panel'), false);
-  u.get('builtin-toggle').focus(); await u.click('builtin-toggle');
-  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'true');
-  assert.equal(u.shown('builtin-panel'), true);
-  assert.equal(u.focused(), 'builtin-toggle');
-  assert.ok(u.text('builtin-content').includes('osm-setup'));
-  assert.ok(u.text('builtin-content').includes('Set up or resume OSM.'));
-  assert.ok(u.text('builtin-panel').includes('Reading a method here doesn’t run it.'));
-  assert.doesNotMatch(u.text('builtin-content'), /Enabled|Available|Run/);
-  assert.equal(u.get('settings-main').descendants().some(node => node.tagName === 'DETAILS'), false);
-  assert.equal(u.text('saved-links-summary'), 'Docs');
+  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), null, 'a navigation row like Saved links, not a disclosure');
   await u.click('builtin-toggle');
-  assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'false');
-  assert.equal(u.shown('builtin-panel'), false);
-  assert.deepEqual(plain(u.homeCalls), calls); assert.deepEqual(u.names(), names); assert.equal(u.messages.length, messages);
+  assert.equal(u.shown('settings-main'), false); assert.equal(u.shown('builtin-skills'), true);
+  assert.equal(u.text('drawer-title'), 'Built into OSM'); assert.equal(u.text('settings-back'), '‹ Settings'); assert.equal(u.focused(), 'drawer-title');
+  assert.ok(u.text('builtin-list').includes('osm-setup') && u.text('builtin-list').includes('Set up or resume OSM.'));
+  assert.ok(u.text('builtin-skills').includes('Reading a method here doesn’t run it.'));
+  assert.doesNotMatch(u.text('builtin-skills'), /Enabled|Available|\bRun\b/);
+  const row = name => u.get('builtin-list').descendants().find(node => node.tagName === 'BUTTON' && node.textContent.startsWith(name));
+  await row('osm-data-context').dispatch('click'); await settle();
+  assert.deepEqual(u.builtinCalls, [{ name: 'osm-data-context' }], 'the read carries a name only, never a path');
+  assert.equal(u.shown('builtin-skill'), true); assert.equal(u.shown('builtin-skills'), false);
+  assert.equal(u.text('drawer-title'), 'osm-data-context'); assert.equal(u.text('settings-back'), '‹ Built into OSM');
+  assert.ok(u.text('builtin-skill-body').includes('Fictional method text for osm-data-context'));
+  await u.click('settings-back');
+  assert.equal(u.shown('builtin-skills'), true); assert.equal(u.shown('builtin-skill'), false);
+  assert.equal(u.document.activeElement, row('osm-data-context'), 'Back to the list returns focus to the method just read');
+  await u.click('settings-back');
+  assert.equal(u.shown('settings-main'), true); assert.equal(u.focused(), 'builtin-toggle'); assert.equal(u.text('drawer-title'), 'Settings');
+  assert.deepEqual(plain(u.homeCalls), homeCalls); assert.deepEqual(u.names(), names); assert.equal(u.messages.length, messages, 'no Notion read and no chat from reading a method');
 });
-
-test('Built into OSM summary counts methods with the correct singular and still expands one entry', async () => {
+test('a method that cannot be read says so and can be retried, and a late answer never reopens it after Back', async () => {
+  const openMethod = (u, name) => u.get('builtin-list').descendants().find(node => node.tagName === 'BUTTON' && node.textContent.startsWith(name));
+  const record = text => ({ title: 'osm-setup', meta: 'Built into OSM', description: '', fields: [], blocks: [{ kind: 'text', depth: 0, text }], truncated: false });
+  // The package read fails once: the page is honest and offers a retry that works.
+  let attempts = 0;
+  const failing = await ui(configured(), homeSources, { home: homeHost().handler,
+    builtin: (args, wrap) => ++attempts === 1 ? wrap({ state: 'unavailable' }) : wrap({ state: 'read', record: record('Second try ' + args.name) }) });
+  await settle(); await failing.click('settings'); await failing.click('builtin-toggle');
+  await openMethod(failing, 'osm-setup').dispatch('click'); await settle();
+  assert.ok(failing.text('builtin-skill-body').includes('This method can’t be shown here.'));
+  await failing.get('builtin-skill-body').descendants().find(node => node.tagName === 'BUTTON' && node.textContent === 'Try again').dispatch('click'); await settle();
+  assert.ok(failing.text('builtin-skill-body').includes('Second try osm-setup'));
+  // A slow read for one method that answers after the user went Back and opened another must not replace it.
+  const held = deferred();
+  const slow = await ui(configured(), homeSources, { home: homeHost().handler, builtin: async (args, wrap) => {
+    if (args.name === 'osm-setup') await held.promise;
+    return wrap({ state: 'read', record: record(args.name === 'osm-setup' ? 'Late text for the first method' : 'Text for the second method') }); } });
+  await settle(); await slow.click('settings'); await slow.click('builtin-toggle');
+  const opening = openMethod(slow, 'osm-setup').dispatch('click');
+  await slow.click('settings-back');
+  await openMethod(slow, 'osm-data-context').dispatch('click'); await settle();
+  assert.ok(slow.text('builtin-skill-body').includes('Text for the second method'));
+  held.release(); await opening; await settle();
+  assert.equal(slow.text('drawer-title'), 'osm-data-context'); assert.ok(slow.text('builtin-skill-body').includes('Text for the second method'));
+  assert.equal(slow.text('builtin-skill-body').includes('Late text'), false, 'the first method’s late answer does not replace the one now open');
+});
+test('Built into OSM counts methods with the correct singular and lists one entry or none', async () => {
   for (const [builtin, label] of [[[{ name: 'osm-write-code', description: 'Write and verify code.' }], '1 method'], [[], '0 methods']]) {
     const base = homeHost();
     const u = await homeUi({ ...base, handler: (name, args) => {
@@ -2335,8 +2374,8 @@ test('Built into OSM summary counts methods with the correct singular and still 
     await u.click('settings');
     assert.equal(u.text('builtin-summary'), label);
     await u.click('builtin-toggle');
-    assert.equal(u.get('builtin-toggle').getAttribute('aria-expanded'), 'true');
-    assert.equal(u.text('builtin-content').includes('osm-write-code'), builtin.length === 1);
+    assert.equal(u.text('builtin-list').includes('osm-write-code'), builtin.length === 1);
+    if (!builtin.length) assert.ok(u.text('builtin-list').includes('No built-in methods are listed.'));
   }
 });
 
@@ -2434,4 +2473,123 @@ test('Saved links summary stays None while an observed account change hides the 
   const u = await ui(configured(), saved({ docs: { title: 'Docs', target: 'https://example.com/docs' }, memory: { title: 'Memory', target: 'https://example.com/memory' } }), { home: host.handler });
   await settle(); await u.click('settings');
   assert.equal(u.text('saved-links-summary'), 'None');
+});
+
+// Follow-up: Manage access, an optional Content source, and the corrected sharing copy.
+test('Manage access opens the verified access page, else Notion itself with the Settings path, and re-checks once on return', async () => {
+  const exact = 'https://www.notion.so/fictional-connection-access';
+  for (const [manageLink, url, guidance] of [[exact, exact, /Opens OSM’s connection in Notion/], [undefined, 'https://www.notion.so/fictional-root', /Settings → Connections, choose OSM, then Manage access/]]) {
+    const base = homeHost();
+    const u = await homeUi({ ...base, handler: (name, args) => { const result = base.handler(name, args); if (name === 'osm_home' && manageLink) result._meta['osm/home'].manageLink = manageLink; return result; } });
+    await u.click('settings');
+    assert.match(u.text('connection-guidance'), guidance); assert.equal(u.text('manage-access'), 'Manage access in Notion ↗');
+    assert.doesNotMatch(u.text('connection-guidance'), /page’s ••• menu → Connections and add OSM\./);
+    const checks = () => u.homeCalls.filter(call => call.name === 'osm_home').length, before = checks();
+    await u.click('manage-access'); await settle();
+    assert.deepEqual(u.links, [url]); assert.equal(checks(), before, 'opening reads nothing by itself');
+    await u.focusWindow(); assert.equal(checks(), before, 'a focus bounce right after opening is not a return');
+    u.advance(2000); await u.focusWindow(); assert.equal(checks(), before + 1, 'the first real return checks once');
+    await u.focusWindow(); u.advance(40000); await u.focusWindow(); assert.equal(checks(), before + 1, 'later focus events never check again: no polling');
+  }
+});
+test('a Manage access link the host refuses to open claims nothing and arms no check', async () => {
+  const u = await homeUi(); await u.click('settings');
+  const checks = () => u.homeCalls.filter(call => call.name === 'osm_home').length, before = checks();
+  for (const failure of ['error', 'throw']) {
+    u.failLinks(failure); await u.click('manage-access'); await settle();
+    assert.ok(u.text('drawer-feedback-text').includes('Could not open the link.'), failure);
+    u.advance(5000); await u.focusWindow(); assert.equal(checks(), before, 'nothing was opened, so there is no return to check');
+  }
+});
+test('a mapped Content route stays hidden until its own list proves access, then behaves like Docs; denied and absent show nothing', async () => {
+  // The saved mapping below is deliberately distinctive, to show that none of it is ever drawn.
+  const saved = { key: 'content', label: 'Zephyr client work', role: 'content', title: 'Zephyr secret title', link: 'https://www.notion.so/zephyr-secret-link' };
+  const hostWith = answer => { const base = homeHost(); return { ...base, handler: (name, args) => {
+    const result = base.handler(name, args);
+    if (name === 'osm_home') result._meta['osm/home'].sections.push(saved);
+    if (name === 'osm_home_list' && args.section === 'content') return answer(base);
+    if (name === 'osm_home_read' && args.section === 'content') return { content: [], _meta: { 'osm/kind': 'home-record', 'osm/home-record': { state: 'read', scope: base.s.scope,
+      record: { title: 'Fictional launch plan', meta: 'Content · Content item', fields: [], blocks: [{ kind: 'text', depth: 0, text: 'Fictional launch text.' }], truncated: false, link: 'https://www.notion.so/fictional-c1' } } } };
+    return result;
+  } }; };
+  const wrap = value => ({ content: [], _meta: { 'osm/kind': 'home-list', 'osm/home-list': value } });
+  const listed = base => wrap({ state: 'listed', scope: base.s.scope, source: { title: 'Content', link: 'https://www.notion.so/fictional-content-source' },
+    items: [{ id: 'c1', title: 'Fictional launch plan' }, { id: 'c2', title: 'Fictional newsletter' }], hasMore: false });
+  // Hidden while the list is pending, though it was requested: the list is the proof, so no request would mean it never appears.
+  const held = deferred();
+  const u = await homeUi(hostWith(async base => { await held.promise; return listed(base); }));
+  assert.ok(u.homeCalls.some(call => call.name === 'osm_home_list' && call.args.section === 'content'), 'its list is requested although the section is not yet shown');
+  assert.equal(u.get('source-content'), null); assert.equal(u.panel().includes('Zephyr'), false); assert.equal(u.panel().includes('Content'), false);
+  held.release(); await settle();
+  // Valid: the same overview, source list, reader and Back as Knowledge, Memory and Skills; the saved label is never drawn.
+  assert.equal(u.get('source-content').textContent, 'Open Content'); assert.ok(u.panel().includes('Fictional launch plan')); assert.equal(u.panel().includes('Zephyr'), false);
+  await u.press('Open Content'); assert.ok(u.panel().includes('Fictional newsletter'));
+  await u.press('Open in Notion ↗'); assert.equal(u.links.at(-1), 'https://www.notion.so/fictional-content-source', 'the link comes from the list that proved access');
+  await u.press('Fictional launch plan'); assert.ok(u.panel().includes('Fictional launch text.'));
+  assert.deepEqual(u.homeCalls.filter(call => call.args.section === 'content').map(call => call.name), ['osm_home_list', 'osm_home_read']);
+  await u.press('‹'); await u.press('‹'); assert.equal(u.focused(), 'source-content');
+  // Denied or failing: nothing of it is drawn, not even its saved label; the other sources are unchanged.
+  for (const state of ['inaccessible', 'unavailable', 'rate_limited', 'unsupported']) {
+    const denied = await homeUi(hostWith(base => wrap({ state, scope: base.s.scope })));
+    assert.equal(denied.get('source-content'), null, state); assert.equal(denied.panel().includes('Zephyr'), false, state);
+    assert.equal(denied.links.length, 0, state);
+    assert.ok(denied.panel().includes('OSM’s connection can’t read Business Docs.'), state + ': a core source keeps its own state');
+  }
+  // Absent: a definition without a Content route never shows or requests one.
+  const absent = await homeUi();
+  assert.equal(absent.get('source-content'), null); assert.equal(absent.homeCalls.some(call => call.args.section === 'content'), false);
+});
+test('a Content route appears in search only when its own answer proves access, and its saved label is never named otherwise', async () => {
+  const saved = { key: 'content', label: 'Zephyr client work', role: 'content', title: 'Zephyr secret title', link: 'https://www.notion.so/zephyr-secret-link' };
+  const hostWith = state => { const base = searchableHost(); return { ...base, handler: (name, args) => {
+    const result = base.handler(name, args);
+    if (name === 'osm_home') result._meta['osm/home'].sections.push(saved);
+    // Complete searches, so an honest no-match line can appear when nothing matches.
+    if (name === 'osm_home_search' && result._meta?.['osm/home-list']) result._meta['osm/home-list'].hasMore = false;
+    if (['osm_home_list', 'osm_home_search'].includes(name) && args.section === 'docs') return { _meta: { 'osm/home-list': { state: 'empty', scope: base.s.scope } } };
+    if (['osm_home_list', 'osm_home_search'].includes(name) && args.section === 'content') return { _meta: { 'osm/home-list': state ? { state, scope: base.s.scope }
+      : { state: 'listed', scope: base.s.scope, source: { title: 'Content' }, items: [{ id: 'c1', title: 'Fictional launch plan' }], hasMore: false } } };
+    return result;
+  } }; };
+  const proven = await homeUi(hostWith());
+  await enterHomeSearch(proven, 'launch');
+  assert.ok(proven.panel().includes('Fictional launch plan')); assert.equal(proven.panel().includes('Zephyr'), false);
+  const denied = await homeUi(hostWith('inaccessible'));
+  await enterHomeSearch(denied, 'launch');
+  assert.equal(denied.panel().includes('Fictional launch plan'), false); assert.equal(denied.panel().includes('Zephyr'), false);
+  // A denied Content route neither blocks the honest no-match line nor is named in the list of searched sources.
+  await enterHomeSearch(denied, 'unmatched');
+  assert.ok(denied.panel().includes('No titles in this home match')); assert.ok(denied.panel().includes('Searched '));
+  assert.equal(denied.panel().includes('Zephyr'), false); assert.equal(denied.panel().includes('Content'), false);
+  // A retryable failure is different: the search is incomplete, so no home-wide no-match is claimed, and still nothing of it is named.
+  for (const state of ['unavailable', 'rate_limited']) {
+    const failing = await homeUi(hostWith(state));
+    await enterHomeSearch(failing, 'unmatched');
+    assert.equal(failing.panel().includes('No titles in this home match'), false, state);
+    assert.ok(failing.panel().includes('Part of this home couldn’t be searched right now.'), state);
+    assert.equal(failing.panel().includes('Zephyr'), false, state); assert.equal(failing.panel().includes('Content'), false, state);
+    assert.equal(failing.links.length, 0, state);
+    await enterHomeSearch(failing, 'launch');
+    assert.ok(failing.panel().includes('Part of this home couldn’t be searched right now.'), state + ': also incomplete beside other results');
+  }
+});
+test('Manage access has one refresh owner: a return refreshes once, closing Settings adds none, and a refused open leaves nothing to refresh', async () => {
+  const checks = u => u.homeCalls.filter(call => call.name === 'osm_home').length;
+  const ready = async () => { const u = await homeUi(); await u.click('settings'); return [u, checks(u)]; };
+  // Opened, returned, then Settings closed: the return was the refresh, and closing adds no second one.
+  let [u, before] = await ready();
+  await u.click('manage-access'); await settle();
+  u.advance(2000); await u.focusWindow(); assert.equal(checks(u), before + 1, 'the return refreshes once');
+  await u.click('drawer-close'); await settle(); assert.equal(checks(u), before + 1, 'closing Settings after the return adds no second refresh');
+  // Refused, then Settings closed: nothing was opened, so there is nothing to refresh.
+  [u, before] = await ready();
+  u.failLinks('error'); await u.click('manage-access'); await settle();
+  await u.click('drawer-close'); await settle(); assert.equal(checks(u), before, 'a refused open followed by closing refreshes nothing');
+  u.advance(5000); await u.focusWindow(); assert.equal(checks(u), before, 'and no return is waited for');
+  // Opened, Settings closed first: closing adds none, and the later real return still refreshes exactly once.
+  [u, before] = await ready();
+  await u.click('manage-access'); await settle();
+  await u.click('drawer-close'); await settle(); assert.equal(checks(u), before, 'closing before returning does not refresh');
+  u.advance(2000); await u.focusWindow(); assert.equal(checks(u), before + 1, 'the return refreshes once');
+  await u.focusWindow(); assert.equal(checks(u), before + 1, 'and only once');
 });

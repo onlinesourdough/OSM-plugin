@@ -25,8 +25,10 @@ to this boundary.
   selected tools. HyperFrames is an unqualified video candidate only, not a
   shipped or proven editor. The pinned external editor workflow in
   `skills/diffusion-studio` is a draft of an earlier choice, not a recommendation.
-- No new repository name is chosen here, and the archived Agentic-Content-System
-  is not revived.
+- Shared Content methods and templates have their own Git home,
+  [OSM-content](https://github.com/onlinesourdough/OSM-content), which owns their
+  future changes; these drafts are history and not that source. The archived
+  Agentic-Content-System is not revived.
 - Preserve analog work, human taste and entry at any stage. A short idea need
   not first become long form, and a newsletter is a channel, not a fixed length.
 

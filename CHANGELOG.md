@@ -1,5 +1,62 @@
 # Changelog
 
+## 0.32.0 — 2026-11-10
+
+Minor release. Settings gains a Manage access shortcut, Home gains an optional Content source, and
+Built into OSM becomes a readable Settings page. No change to how OSM reads: it still reads only through
+its own connection, never writes to Notion, and never creates Content. Dependencies are unchanged, and
+the package's entry points are unchanged. Checked as source, fixtures and the bundled stdio server; see Limits.
+
+### Settings: Manage access in Notion
+
+- **Manage access in Notion** opens Notion through the host's open-link contract. It opens this connection's
+  own access page when Setup saved a link for it, only while the live connection is the same bot and
+  workspace; otherwise it opens the verified home page and gives the real path: Settings → Connections →
+  OSM → Manage access (or Edit access) → select pages → Save. No link is built from identifiers, and a
+  developer page that shows the credential is refused. A host that cannot open the link says so.
+- After a successful open, the first real return (a focus or visibility change at least 1.5 s later) runs
+  one fresh status and access check, never a poll; that check is the only refresh Manage access owns, so
+  closing Settings adds none. OSM adds no permission writes, API, token or editor.
+- The old "page ••• menu → Add OSM" instruction, which is wrong for an existing connection, is replaced and
+  kept only as a short fallback for a first share.
+
+### Home: an optional Content source, and "More in Notion"
+
+- A Content store appears as a source (`content` role) only when the selected definition names an existing
+  Content route and OSM's own connection proves access; it then lists, reads, searches and goes Back like
+  Docs. Home's status names it only as a neutral routing entry; its saved title, link and label come back
+  only inside its own list result, so a denied or failing route shows nothing of it. Absent or denied, nothing
+  of it is shown. Existing projections stay valid.
+- "Elsewhere in Notion" is now "More in Notion". Shared Content methods and templates have their own Git
+  home, [OSM-content](https://github.com/onlinesourdough/OSM-content).
+
+### Settings: Built into OSM
+
+- Built into OSM opens its own Settings page listing the installed methods; choosing one reads its text,
+  with Back to the list and to Settings. The read takes a method's name only and is checked against the
+  package's own skills folder (no path, no symlinked folder or file, bounded size, all checked before any read).
+  `osm-data-context` 3.1.0 maps the Content
+  route and the access link in Setup.
+
+### Housekeeping
+
+- README and docs state what is qualified, precisely: in the installed 0.31.3 on one macOS Codex host Home
+  displayed and read through OSM's own connection; other hosts (Windows included), writes, timed callers
+  such as Dreaming, and browser sign-in are not qualified.
+- The fallback mark in the page is the hub mark, `assets/branding/osm-icon.svg` (the source of
+  `assets/icon.png`); the old pixel-bread banner moved unchanged to `docs/history/branding`. A private
+  preview checkpoint left the repository root.
+- Release channel: `.github/release-channel` (`prerelease`, the default, or `stable`) is read from the tagged
+  commit by the existing workflow, so a stable release is a reviewed commit and the same validated plain
+  `vX.Y.Z` tag. Existing releases and their flags are never edited.
+
+### Limits
+
+- Not qualified: the native panel with these changes, a normal installation of this version, hosts other than
+  macOS Codex, writes through OSM's connection, timed or scheduled callers and browser sign-in.
+- The publisher stays inactive and bound to v0.31.3 until a new tag exists; the public guide's last verified
+  edition is v0.30.0.
+
 ## 0.31.3 — 2026-11-10
 
 Pilot patch. The macOS Keychain read now waits up to fifteen seconds instead of five. The

@@ -15,11 +15,12 @@ import { notionId } from './notion-internal.mjs';
 // verified field names, safe links, the selected connection mode and dated
 // observations, never page bodies, records, credentials or policy.
 export const projectionFormat = 'osm-home-projection/1';
-export const contextRoles = ['profile', 'memory', 'documents', 'skills', 'related'];
+// `content` is an optional selected existing Content store, read like Docs and never created or widened here.
+export const contextRoles = ['profile', 'memory', 'documents', 'content', 'skills', 'related'];
 // Support material the definition names but Home never lists, reads or shows as context.
 export const supportKinds = ['core_rules', 'source_index', 'writing_procedure', 'access', 'evidence', 'maintenance', 'recovery_snapshot'];
 export const modes = ['official_notion_user', 'internal_selected_pages'];
-export const fieldKeys = { profile: ['description'], documents: ['description'], skills: ['description'],
+export const fieldKeys = { profile: ['description'], documents: ['description'], content: ['description'], skills: ['description'],
   memory: ['description', 'fact', 'decision', 'why', 'evidence'] };
 const accessStates = ['readable', 'inaccessible', 'unsupported'];
 const capabilities = ['read_content', 'insert_content', 'update_content', 'read_comments'];

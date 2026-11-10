@@ -4,7 +4,7 @@ import { sourceLabel } from './source-label.mjs';
 // current scope: Back clears the body, and any account, scope, access or context
 // change clears every list, body and section. Nothing is cached or stored; all
 // retrieved text is rendered as text.
-export function createHome({ $, call, open, changed, linksRevision = () => undefined }) {
+export function createHome({ $, call, open, changed, linksRevision = () => undefined, openBuiltin = () => {} }) {
   const copy = {
     unsupported_host: 'OSM’s own Notion connection is not supported on this host yet.',
     not_connected: 'OSM’s Notion connection is not connected or was revoked.',
@@ -24,7 +24,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     keychain_timeout: ['Keychain didn’t answer', copy.keychain_timeout + ' An approval prompt may be waiting. Approve it, then check again.'],
     unmapped: ['Continue OSM Setup', 'Your connection is ready. Ask OSM Setup in chat to locate or prepare your AI Operating Model.'],
     account_changed: ['Continue OSM Setup', 'This Home was set up for a different Notion connection, so nothing from it is shown. Ask OSM Setup in chat to map it again.'],
-    root_inaccessible: ['Your home page can’t be read', 'OSM’s connection can’t read your home. In Notion, open the page’s ••• menu → Connections and add OSM.'],
+    root_inaccessible: ['Your home page can’t be read', 'OSM’s connection can’t read your home. In Notion, open Settings → Connections, choose OSM, then Manage access, and add your home page.'],
     mapping_unavailable: ['Continue OSM Setup', 'The Home projection needs attention. It has been left unchanged.'],
     rate_limited: ['Notion asked OSM to wait', copy.rate_limited],
     unavailable: ['Notion could not be read', 'Check your connection, then try again.'],
@@ -48,7 +48,16 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
 
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text) node.textContent = text; if (cls) node.setAttribute('class', cls); return node; };
   const button = (text, cls, onClick) => { const node = el('button', text, cls); node.setAttribute('type', 'button'); node.addEventListener('click', onClick); return node; };
-  const sections = () => data?.state === 'ready' ? data.sections.filter(item => ['profile', 'documents', 'memory', 'skills', 'related'].includes(item.role)) : [];
+  // The sources Home lists and reads. `content` is an optional existing Content store the definition
+  // names; it behaves exactly like Docs here, and Home shows it only when its route is in the status.
+  const listedRoles = ['profile', 'documents', 'content', 'memory', 'skills'];
+  // A Content route shows only once this connection's own answer proves access to it: its list or its title
+  // search came back listed or empty. Until then, and when it is denied or fails, it is absent from the view.
+  const proven = state => ['listed', 'empty'].includes(state);
+  // A Content route's link is only ever the one in its own list result, whatever the status carries; every other
+  // section's comes with the status.
+  const linkOf = section => section.role === 'content' ? lists.get(section.key)?.source?.link : section.link;
+  const sections = () => data?.state === 'ready' ? data.sections.filter(item => [...listedRoles, 'related'].includes(item.role)) : [];
   function clear() { lists = new Map(); reads = new Map(); reader = null; openers = new Map(); view = { kind: 'overview' }; history = []; resetSearch(); }
   function resetSearch() {
     searchResults.clear(); ++searchVersion; clearTimeout(searchTimer); searchTimer = undefined;
@@ -212,13 +221,13 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
         if (version !== searchVersion) return;
         failedSearch = ['unavailable', 'rate_limited'].includes(result.state);
         if (result.state === 'located') {
-          if (!sections().some(section => section.key === result.key && ['profile', 'documents', 'memory', 'skills'].includes(section.role)) || typeof result.id !== 'string') { linkState = 'outside'; changed(); return; }
+          if (!sections().some(section => section.key === result.key && listedRoles.includes(section.role)) || typeof result.id !== 'string') { linkState = 'outside'; changed(); return; }
           locatedSearch = { key: result.key, id: result.id, version, state: 'loading' };
           return read(result.key, result.id, result.key + ':' + result.id);
         }
         linkState = result.state; changed(); return;
       }
-      await Promise.all(sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role)).map(async section => {
+      await Promise.all(sections().filter(item => listedRoles.includes(item.role)).map(async section => {
         let result; try { result = (await call('osm_home_search', { section: section.key, query }))?._meta?.['osm/home-list']; } catch { result = { state: 'unavailable', scope: data?.scope }; }
         if (mine !== generation) return;
         if (!current(result, mine, lists.get(section.key)?.state === 'listed' || searchResults.get(section.key)?.state === 'listed')) return changed();
@@ -254,7 +263,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     box.append(el('p', entry.state === 'inaccessible' ? 'OSM’s connection can’t read ' + section.label + '.' : copy[entry.state] || copy.unavailable));
     // A section's Try again is explicit too, so it resets the budget.
     if (['rate_limited', 'unavailable'].includes(entry.state)) box.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return list(section.key); }));
-    else { if (entry.state === 'inaccessible') box.append(el('p', 'In Notion, use ••• → Connections to share this source with OSM.')); box.append(button(entry.state === 'inaccessible' ? 'How to share it ›' : 'Open in Notion ↗', 'btn btn-ghost', () => open(section.link))); }
+    else { if (entry.state === 'inaccessible') box.append(el('p', 'To add it, open Settings → Connections in Notion, choose OSM, then Manage access.')); box.append(button(entry.state === 'inaccessible' ? 'How to share it ›' : 'Open in Notion ↗', 'btn btn-ghost', () => open(linkOf(section)))); }
     return box;
   }
   // "Open ‹Source›" opens the source's own list. Its caption is the source's real title.
@@ -294,6 +303,57 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     panel.append(nav);
   }
 
+  // Mapped fields, then bounded blocks, always as text. `rest` says where a cut-off remainder lives.
+  function fillRecordBody(body, record, rest = 'The rest of this page is in Notion.') {
+    for (const field of record.fields) { if (field.heading) body.append(el('h3', field.heading)); body.append(el('p', field.text)); }
+    let previous;
+    for (const block of record.blocks) {
+      if ((block.kind === 'unsupported' || block.kind === 'child') && previous === block.kind) continue;
+      previous = block.kind;
+      if (block.kind === 'heading') body.append(el('h3', block.text));
+      else if (block.kind === 'unsupported') body.append(el('p', 'Some content can’t be shown here.', 'muted'));
+      else if (block.kind === 'child') body.append(el('p', 'A sub-page or database here isn’t opened in Home.', 'muted'));
+      else if (block.text) body.append(el('p', block.text, block.kind === 'item' ? 'item' : block.kind === 'code' ? 'code' : null));
+    }
+    if (!record.fields.length && !record.blocks.length) body.append(el('p', 'This record has no text to show.', 'muted'));
+    if (record.fieldsTruncated) body.append(el('p', 'Part of this record is longer than Home shows. The rest is in Notion.', 'muted'));
+    if (record.truncated) body.append(el('p', rest, 'muted'));
+  }
+
+  // Settings → Built into OSM: the installed package's own skills, listed from the status and read one
+  // at a time through the bounded, name-checked osm_builtin_read. Package text, never owner data.
+  let builtinRows = new Map();
+  async function readBuiltin(name) {
+    let result;
+    try { result = (await call('osm_builtin_read', { name }))?._meta?.['osm/builtin-record']; } catch { result = undefined; }
+    return ['read', 'inaccessible', 'unsupported', 'unavailable'].includes(result?.state) ? result : { state: 'unavailable' };
+  }
+  // view: { kind: 'list' } or { kind: 'skill', name, state, record } for the open method.
+  function renderBuiltin(view = { kind: 'list' }) {
+    const methods = data?.builtin || [];
+    $('builtin-summary').textContent = methods.length + (methods.length === 1 ? ' method' : ' methods');
+    const list = $('builtin-list'); list.replaceChildren(); builtinRows = new Map();
+    if (methods.length) {
+      const ul = el('ul', null, 'record-list'); ul.setAttribute('role', 'list');
+      for (const skill of methods) {
+        const row = button('', 'row', () => openBuiltin(skill.name)), words = el('span');
+        words.append(el('span', skill.name, 'row-title'), el('span', skill.description, 'hint record-description'));
+        row.append(words); const item = el('li'); item.append(row); ul.append(item); builtinRows.set(skill.name, row);
+      }
+      const card = el('div', null, 'osm-card source-records'); card.append(ul); list.append(card);
+    } else list.append(el('p', 'No built-in methods are listed.', 'hint'));
+    const body = $('builtin-skill-body'); body.replaceChildren();
+    $('builtin-skill-meta').textContent = view.kind === 'skill' && view.record?.description ? view.record.description : '';
+    if (view.kind !== 'skill') return;
+    if (view.state === 'loading') body.append(el('p', 'Loading…', 'muted'));
+    else if (view.record) fillRecordBody(body, view.record, 'The rest of this method is in the installed package.');
+    else {
+      body.append(el('p', 'This method can’t be shown here.', 'muted'));
+      body.append(button('Try again', 'btn btn-ghost', () => openBuiltin(view.name)));
+    }
+  }
+  const focusBuiltin = name => (builtinRows.get(name) || $('drawer-title'))?.focus();
+
   function renderReader(panel, value = reader) {
     const article = el('article', null, 'reader');
     const section = sections().find(item => item.key === value.key);
@@ -320,21 +380,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       body.append(el('p', copy[value.state] || copy.unavailable, 'unavailable'));
       if (['unavailable', 'rate_limited'].includes(value.state)) body.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return read(value.key, value.id, undefined, true); }));
     }
-    if (record) {
-      for (const field of record.fields) { if (field.heading) body.append(el('h3', field.heading)); body.append(el('p', field.text)); }
-      let previous;
-      for (const block of record.blocks) {
-        if ((block.kind === 'unsupported' || block.kind === 'child') && previous === block.kind) continue;
-        previous = block.kind;
-        if (block.kind === 'heading') body.append(el('h3', block.text));
-        else if (block.kind === 'unsupported') body.append(el('p', 'Some content can’t be shown here.', 'muted'));
-        else if (block.kind === 'child') body.append(el('p', 'A sub-page or database here isn’t opened in Home.', 'muted'));
-        else if (block.text) body.append(el('p', block.text, block.kind === 'item' ? 'item' : block.kind === 'code' ? 'code' : null));
-      }
-      if (!record.fields.length && !record.blocks.length) body.append(el('p', 'This record has no text to show.', 'muted'));
-      if (record.fieldsTruncated) body.append(el('p', 'Part of this record is longer than Home shows. The rest is in Notion.', 'muted'));
-      if (record.truncated) body.append(el('p', 'The rest of this page is in Notion.', 'muted'));
-    }
+    if (record) fillRecordBody(body, record);
     article.append(body);
 
     panel.append(article);
@@ -350,8 +396,16 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     return { root, content };
   }
   function renderOverview(panel) {
-    const card = el('div', null, 'osm-card');
-    for (const [index, section] of sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role)).entries()) {
+    const card = el('div', null, 'osm-card'), shown = [];
+    for (const section of sections().filter(item => listedRoles.includes(item.role))) {
+      if (section.role === 'content') {
+        // Hidden until proven, but asked for once: its list is the proof, so no request would mean it never appears.
+        if (!lists.has(section.key) && data?.state === 'ready') Promise.resolve().then(() => { if (!lists.has(section.key)) void list(section.key); });
+        if (!proven(lists.get(section.key)?.state)) continue;
+      }
+      shown.push(section);
+    }
+    for (const [index, section] of shown.entries()) {
       const entry = lists.get(section.key);
       const source = ['listed', 'empty'].includes(entry?.state) ? entry.source : null;
       const { root, content } = sourceSection(source || { title: section.label }, index + 1);
@@ -359,7 +413,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     }
     panel.append(card);
     const related = sections().filter(item => item.role === 'related');
-    if (related.length) { const aside = el('aside', 'Elsewhere in Notion', 'also'); for (const item of related) aside.append(button(item.label + ' ↗', 'btn btn-ghost', () => open(item.link))); panel.append(aside); }
+    if (related.length) { const aside = el('aside', 'More in Notion', 'also'); for (const item of related) aside.append(button(item.label + ' ↗', 'btn btn-ghost', () => open(item.link))); panel.append(aside); }
   }
   function renderSearch(panel) {
     const locatedState = locatedSearch?.state;
@@ -376,7 +430,8 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       if (/^https:\/\/(?:www\.)?(?:notion\.so|notion\.com|app\.notion\.com)\//i.test(view.query.trim())) panel.append(button('Open in Notion ↗', 'btn btn-ghost', () => open(view.query.trim())));
       return;
     }
-    const searched = sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role));
+    // A Content route is searched like the others but appears, and is named, only when its own answer proves access.
+    const searched = sections().filter(item => listedRoles.includes(item.role) && (item.role !== 'content' || proven(searchResults.get(item.key)?.state)));
     let count = 0;
     const card = el('div', null, 'osm-card');
     for (const [index, section] of searched.entries()) {
@@ -398,7 +453,10 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       else if (failed || result.partial) content.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return search(view.query); }));
     }
     if (card.children.length) panel.append(card);
+    // A hidden Content route that failed for a retryable reason leaves the search incomplete without being named.
+    const incomplete = sections().some(item => item.role === 'content' && ['unavailable', 'rate_limited'].includes(searchResults.get(item.key)?.state));
     if (searching || searchTimer || locatedState === 'loading') panel.append(el('p', 'Searching…', 'reader-meta'));
+    else if (incomplete) panel.append(el('p', 'Part of this home couldn’t be searched right now.', 'reader-meta'), button('Try again', 'btn btn-ghost', () => { rearm(true); return search(view.query); }));
     else if (!locatedSearch && !count && searched.every(section => {
       const result = searchResults.get(section.key);
       return result && ['empty', 'listed'].includes(result.state) && !result.items?.length && !result.hasMore && !result.partial && !result.withheld;
@@ -437,12 +495,11 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     $('settings-connection').textContent = data?.state === 'not_connected' ? 'Connect Notion' : 'Manage OSM connection';
     $('connection-provisioning').hidden = data?.state !== 'not_connected' || suppressed();
     $('connection-guidance').hidden = !ready;
+    $('connection-guidance').textContent = data?.manageLink
+      ? 'Opens OSM’s connection in Notion. Choose Manage access (or Edit access), select the pages to share and Save. Home checks again when you come back.'
+      : 'This opens Notion. There, go to Settings → Connections, choose OSM, then Manage access (or Edit access), select the pages to share and Save. If OSM isn’t listed yet, open a page, choose ••• → Connections and add OSM. Home checks again when you come back.';
     $('manage-access').hidden = !ready;
     $('home-definition').textContent = ready ? 'Definition revision ' + data.definitionRevision + ' routes Home to ' + sections().filter(item => item.role !== 'related').length + ' sources. It routes; access comes from OSM’s connection.' : 'Home not verified';
-    const methods = data?.builtin?.length || 0;
-    $('builtin-summary').textContent = methods + (methods === 1 ? ' method' : ' methods');
-    const builtin = $('builtin-content'); builtin.replaceChildren();
-    for (const skill of data?.builtin || []) { const method = el('div', null, 'builtin-method'); method.append(el('p', skill.name, 'builtin-name'), el('p', skill.description, 'hint')); builtin.append(method); }
     $('organisation-copy').hidden = true;
     $('organisation-copy').textContent = '';
     $('manage-access').disabled = !ready || locked;
@@ -496,7 +553,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
         const heading = el('h2', null, 'source-title-h'); sourceLabel(heading, lists.get(section.key)?.source || { title: section.label });
         const rows = records(section, section.role === 'skills', true), card = el('div', null, 'osm-card source-records');
         if (rows[0]?.tagName === 'UL') card.append(rows.shift());
-        panel.append(heading, button('Open in Notion ↗', 'btn btn-ghost', () => open(section.link)));
+        panel.append(heading, button('Open in Notion ↗', 'btn btn-ghost', () => open(linkOf(section))));
         if (card.children.length) panel.append(card);
         panel.append(...rows);
       }
@@ -517,19 +574,35 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const rows = [...openers.values()], index = rows.indexOf(document.activeElement);
     if (['ArrowDown', 'ArrowUp'].includes(event.key) && index >= 0) { event.preventDefault(); rows[(index + (event.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length]?.focus(); }
   });
-  $('builtin-toggle').addEventListener('click', () => {
-    const expanded = $('builtin-toggle').getAttribute('aria-expanded') !== 'true';
-    $('builtin-toggle').setAttribute('aria-expanded', String(expanded)); $('builtin-panel').hidden = !expanded;
-  });
+  // Manage access opens this connection's own access page when Setup saved a link that is verified for
+  // the live bot and workspace, and otherwise Notion itself (the verified home page), with the Settings
+  // path in the copy. Notion documents no URL for a connection's access page, so none is built here.
+  // A successful open arms exactly one check for the user's return: the first focus or visibility
+  // change at least 1.5 s later runs one fresh status and access read and disarms. A failed open arms
+  // nothing and claims nothing; there is no polling, and a focus burst can't repeat the check.
+  let returnAt = null;
+  async function manageAccess() {
+    if (suppressed()) return;
+    const target = data?.manageLink || (data?.state === 'ready' ? data.root?.link : null) || context;
+    if (!target) return;
+    returnAt = (await open(target)) === true ? Date.now() : null;
+  }
+  function returned() {
+    if (returnAt === null || Date.now() - returnAt < 1500 || loading || !context) return false;
+    returnAt = null; void reload(); return true;
+  }
   let wasHidden = false;
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') { wasHidden = true; return; }
     if (!wasHidden) return; wasHidden = false;
-    const now = Date.now(); if (context && !loading && now - lastVisibleCheck >= 30000) { lastVisibleCheck = now; void reload(); }
+    const now = Date.now();
+    if (returned()) { lastVisibleCheck = now; return; }
+    if (context && !loading && now - lastVisibleCheck >= 30000) { lastVisibleCheck = now; void reload(); }
   });
+  if (typeof window !== 'undefined') window.addEventListener('focus', () => { if (returned()) lastVisibleCheck = Date.now(); });
   $('home-recheck').addEventListener('click', reload);
-  $('gate-notion').addEventListener('click', () => !suppressed() && context && open(context));
-  $('manage-access').addEventListener('click', () => data?.state === 'ready' && open(data.root.link));
+  $('gate-notion').addEventListener('click', manageAccess);
+  $('manage-access').addEventListener('click', () => { if (data?.state === 'ready') return manageAccess(); });
   $('gate-action').addEventListener('click', () => {
     if (retry() || data?.state === 'root_inaccessible') return reload();
     if (suppressed()) return;
@@ -560,5 +633,5 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const evidence = data.state === 'official_mode' || data.mapping === 'missing' || chosen;
     return evidence && (!dashboard || !shown());
   }
-  return { sync, reload, render, shown, suppressed, iconsAllowed, currentRoot: () => data?.state === 'ready' && !suppressed() ? data.root : null };
+  return { sync, reload, render, renderBuiltin, readBuiltin, focusBuiltin, shown, suppressed, iconsAllowed, currentRoot: () => data?.state === 'ready' && !suppressed() ? data.root : null };
 }

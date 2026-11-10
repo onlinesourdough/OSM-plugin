@@ -12,7 +12,7 @@ no live proof. With no qualified public content reader, no live run can reach `c
 | Class | Artifacts | Public writer |
 | --- | --- | --- |
 | A | The 18 released packets of the bound release, v0.31.3 (`d23c558`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
-| B | The five Content templates and their setup, configuration and diagram explanations: a separate Notion-authored Draft edition 2026-11-05.1 | Notion-authored; the publisher never writes, derives or repairs them |
+| B | The five Content templates and their setup, configuration and diagram explanations: a Notion Draft edition 2026-11-05.1, a projection. Their canonical home is the Git repository [OSM-content](https://github.com/onlinesourdough/OSM-content), which owns future template changes; a projection is current only once its pages, downloads and source marker are verified | Notion-authored today; the publisher never writes, derives or repairs them |
 | G | The public guide pages, edition 2026-11-05.2 (the before-source) | Notion-authored; the publisher never overwrites them |
 | W | Five documentation pages (README, docs index, overview, architecture, skill index), labelled unreleased | CI, once activated |
 | C | The owner's private documentation control and daily state | Not a CI source or credential scope |
