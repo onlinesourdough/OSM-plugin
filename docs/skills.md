@@ -17,10 +17,11 @@ alias skill. Each carries an independent quoted `metadata.version`;
 see [version maintenance](skill-versioning.md). Repository development methods in
 `.agents/skills/` are separate and are not product skills.
 
-State: this describes `0.31.2`, tagged `v0.31.2`, with 18 skills. It is declared and
+State: this describes `0.31.3`, tagged `v0.31.3`, with 18 skills. It is declared and
 fixture-tested and was exercised in disposable native installs; its published prerelease and
 any normal-profile installation are recorded in GitHub Releases and
-[verification](verification.md). 0.31.2 changes no skill file relative to 0.31.1 (its
+[verification](verification.md). 0.31.3 changes no skill file relative to 0.31.2 (its change
+is the Keychain read deadline and the version declarations). 0.31.2 changes no skill file relative to 0.31.1 (its
 change is the sidebar UI and the version declarations). 0.31.1 renamed and added no skill
 relative to 0.31.0; only Setup and Data & Context changed, as patch bumps, to wire OSM's
 Keychain route. The release before 0.31.0, v0.30.1, shipped 22 skills; see

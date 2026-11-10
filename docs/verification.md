@@ -2462,3 +2462,18 @@ opt-in, mode checks and error privacy are unchanged; no UI copy, layout or style
 
 Not established: a real Keychain read at a cold start, the real Notion API, a native-panel observation, and a normal
 installation of 0.31.3. The full Python suite and the full publisher rehearsal are left to the repository's CI.
+
+## 10 November 2026 — post-tag publisher release binding for v0.31.3 (source only)
+
+After the `v0.31.3` tag (annotated object `ac214fd`, commit `d23c558`, which is also `main`), the inactive publisher
+manifest's released edition is bound to that tag and commit, and `docs/README.md` says `v0.31.3 is the latest`; the author
+documents that name the latest released edition (`docs/publication.md`, `docs/skills.md`, `ACTIVATION.md`,
+`TEST-TOMORROW.md`) say the same. Only the released edition's label, tag and commit changed in the manifest; the 18 class A
+rows, artifacts, `renames`, writers, CI data, bindings and activation flags (inactive, `public_reader` null) are
+byte-identical, and the public guide's last verified projection is still v0.30.0. On a private committed copy (a shared
+clone at the tag commit with the binding files applied): `publisher.py reconcile --check`, the documentation and
+consumer-selection rehearsals and the whitespace check passed, and a 15-assertion identity check passed (tag object and
+commit, the three edition values, every other manifest field, the 18 rows against the tag's skill folders, and the 117
+payload files, including skills, manifests and runtime, identical in path and blob to the tag). This binding changes no
+product file, version or changelog entry. It is repository release consistency only and records nothing about the
+release's publication, any installation, any profile, Notion or the macOS Keychain; earlier dated entries are unchanged.
