@@ -1,4 +1,4 @@
-# Codex sidebar — local 0.31.1 candidate
+# Codex sidebar — local 0.31.2 candidate
 
 Revision: 2026-11-09
 
@@ -12,8 +12,11 @@ sections show verified source titles/icons and up to three preview rows from the
 first list response at every width. Every successfully listed, non-empty source
 ends with a named “Open ‹source›” action, even when the preview already shows
 all rows, and it opens the full source list with explicit cursor pagination and
-the existing 50-row display cap. Empty sources say so and denied, unsupported or
-unavailable ones keep their state line; neither gets an Open action.
+the existing 50-row display cap. An empty mapped source says so and has the same
+action, which opens its own empty list with Open in Notion and reads nothing more;
+denied, unsupported or unavailable sources keep their state line and recovery and
+get no Open action. Each source head carries Setup's filled numbered circle (the
+source's place in the definition) and the saved-links view uses the same card.
 Related routes only open Notion; support material is excluded from Home and
 search. Routing and its revision-bound projection cache confer no access.
 
@@ -34,9 +37,10 @@ visibility events still require host qualification.
 
 The gear opens Settings with Notion connection status and actual checked time,
 Data & Context home in its bordered context picker, a card with Saved links and
-a Built into OSM row (an `aria-expanded` row that lists the installed package's
-existing method names and descriptions locally, with a “1 method”/“N methods”
-summary and no run, enable or ownership controls), the optional separate plugin,
+a Built into OSM row (an `aria-expanded` row with an icon, a description and one
+chevron that lists the installed package's existing method names and descriptions
+locally, with a “1 method”/“N methods” summary under the description and no run,
+enable or ownership controls), the optional separate plugin,
 and explicit agent help. Saved links editing
 is confined to Settings and manual Setup; it neither grants nor revokes access.
 Healthy Home has no connection pill or link editor. Access refresh runs on open,

@@ -2328,8 +2328,8 @@ fixtures only, and nothing here is native, live or public-page evidence.
 ## 10 November 2026 — first use through OSM's own connection, 0.31.1
 
 Source, fixtures and the compiled 0.31.1 runtime. Nothing was staged, committed, installed or released;
-`v0.31.0` and the inactive publisher binding are unchanged, and the normal installation is still 0.31.0. No
-Notion, Keychain, credential, grant, account or profile action happened: the Keychain item is still absent,
+`v0.31.0` and the inactive publisher binding were unchanged, and at the time of this check the normal installation was
+still 0.31.0. No Notion, Keychain, credential, grant, account or profile action happened: the Keychain item is still absent,
 and every read below ran against a fictional workspace behind a fake transport and a fake `security`
 executable. The independent whole-candidate review has not happened yet.
 
@@ -2360,3 +2360,63 @@ Not established: a real Mac prompt and the Keychain exit statuses, the real Noti
 reads and the root Definition fitting the per-block bound), a live Home read, the native Codex panel, a browser
 check of the new copy, a normal installation of 0.31.1, and browser sign-in. The release-tag validator run on the
 final committed copy and the independent whole-candidate review remain.
+
+## 10 November 2026 — post-tag publisher release binding for v0.31.1 (source only)
+
+After the `v0.31.1` tag (annotated object `547e721`, commit `1aebca1`, which is also `main`), the inactive
+manifest's released edition is bound to that tag and commit, and `docs/README.md` says `v0.31.1 is the latest`.
+The 18 class A rows, their keys, `renames` and every other manifest field are unchanged, because 0.31.1 renames
+and adds no skill. Only the author documents that state the current binding changed
+(`docs/README.md`, `docs/publication.md`, `docs/skills.md`, `docs-publisher/ACTIVATION.md`, `TEST-TOMORROW.md`);
+earlier 0.31.0 proof records are left as written. This is an author-only binding of the inactive publisher
+manifest and documents to the tag. It does not itself publish a release, update any installation or advance the
+public guide, and the binding is not proof of a release or an installation: the published release, a profile's
+installed version and a fresh invocation are separate operator readbacks, and an already open Home or server may
+still be a cached earlier version. The public guide's last verified projection is still v0.30.0.
+
+Scope in time: the payload and identity results in this entry are for the binding commit as it stood then. They do
+not describe later source. The 0.31.2 candidate below changes the sidebar UI, the generated runtime and the version
+declarations, so its payload is intentionally not identical to the v0.31.1 tag.
+
+| Check, on a private copy | Result |
+| --- | --- |
+| Copy | local shared clone of the repository at `1aebca1`: 340 tracked files with identical blobs, including the three Paper files, no Finder files, no `node_modules`; the seven named author files applied and committed inside the copy only |
+| Identity | tag is an annotated object resolving to the manifest's commit and an ancestor of the copy commit; the 18 class A rows equal the tag's skill folders and are byte-identical to the previous binding; every other manifest field is unchanged; activation false, `public_reader` null |
+| Payload | the 117 product payload files are identical in path and blob to the tag; no app, runtime, skill, native manifest or shipped README change |
+| `publisher.py reconcile --check` | exit 0, 18 artifacts pending handoff, nothing written |
+| Release guard, negative controls | rejected: the old v0.31.0 binding, a wrong tag commit and a stale `latest` sentence (each exit 1, with the guard's own message); the restored copy passes again |
+| Documentation and consumer-selection rehearsals; whitespace | passed; clean |
+
+Not rerun, since none of their inputs changed and the repository's CI covers them: the full publisher
+rehearsal, the Node suite, `npm`, native and cross-host checks.
+
+## 10 November 2026 — 0.31.2 candidate: Setup-style continuity and empty sources that open
+
+Source and fixtures. Nothing was staged, committed, tagged, released or installed by this change, and no Notion,
+Keychain, credential, grant, account or profile action happened. This entry does not say the new UI is installed
+anywhere, and it makes no claim about live Notion: the real first-use read through OSM's own connection is still
+pending, and every read in the tests is a fictional workspace behind a fake transport. The published `v0.31.1`
+tag and the inactive publisher binding to it (released edition v0.31.1, commit `1aebca1`) are unchanged; the public
+guide's last verified projection is still v0.30.0.
+
+What changed (`apps/sidebar`: `styles.css`, `index.html`, `home.mjs`, `app.test.mjs`; generated `runtime/sidebar`; the version
+declarations; `CHANGELOG.md`; the design and sidebar documents): one shared font base replaces a blanket Home button
+reset that out-ranked component rules; Setup's label and row hierarchy applies in Home, the saved-links view and
+Settings; Home source heads and the saved-links sections carry Setup's filled numbered circle; "Open ‹Source›" is the
+filled Continue button and "Load more" the secondary one; the two Settings rows are icon, label, description, count and
+one chevron; an empty mapped source shows the same Open action and opens its own empty list. No access, connection,
+mode, mapping or state semantics changed, and no skill changed.
+
+| Check | Result |
+| --- | --- |
+| Behaviour test for the empty source (Open named for its real title, opens the empty list with Open in Notion and reads nothing more, Back refocuses it, denied source keeps its recovery and no Open) | passed; it replaces the earlier assertion that empty sources have no Open action |
+| `npm ci --prefix apps/sidebar --ignore-scripts`, `npm run build --prefix apps/sidebar`, `npm test --prefix apps/sidebar` | all exit 0; `Built OSM 0.31.2 sidebar`; 237 of 237 Node tests passed, and the bundled stdio server passed |
+| Generated runtime | rebuilt twice, byte-identical; `server.cjs` differs from v0.31.1 only in the embedded version string; `index.html` carries the UI |
+| Payload against the v0.31.1 tag (117 files) | inventory identical, no file added, removed or renamed; skills byte-identical (18, all versions unchanged); `.codex-plugin/mcp.json` identical; six native or package manifests differ by their `version` line only; `docs/osm.md` by its version label; `runtime/sidebar` as above |
+| `validate.py --release-tag v0.31.2 --baseline v0.31.1` on a private committed copy of the exact candidate | passed (per-skill versions, package declarations, discovery contracts, isolation) |
+| Documentation, skill-version, onboarding, responsibility and consumer-selection rehearsals; `publisher.py reconcile --check` | all passed; reconcile reports 18 artifacts pending handoff and writes nothing |
+| `git diff --check` | clean |
+
+Not run here, and left to the repository's CI: the full Python suite and the full publisher rehearsal. Not established:
+a real Mac Keychain prompt, the real Notion API, a live Home read, a browser or native-panel observation of this UI,
+a normal installation of 0.31.2, and browser sign-in.

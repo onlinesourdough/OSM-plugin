@@ -2362,14 +2362,23 @@ test('header uses verified root icon and title and removes both after account ch
   }
 });
 
-test('empty and denied sources retain their truthful state and have no source Open action', async () => {
+test('an empty mapped source says so and still opens; a denied one keeps its recovery and no Open action', async () => {
   const base = homeHost();
   const u = await homeUi({ ...base, handler: (name, args) => name === 'osm_home_list' && args.section === 'memory'
     ? { _meta: { 'osm/home-list': { state: 'empty', scope: base.s.scope, source: { title: 'Actual decisions', icon: '📒' }, items: [] } } }
     : base.handler(name, args) });
   assert.ok(u.panel().includes('Actual decisions')); assert.ok(u.panel().includes('Nothing here yet.'));
-  assert.equal(u.buttonNamed('Open Actual decisions'), undefined);
-  assert.equal(u.buttonNamed('Open Business Docs'), undefined);
+  // Memory is empty, yet it has the same Open action as a source with records, named for its real title.
+  assert.equal(u.get('source-memory').textContent, 'Open Actual decisions'); assert.ok(u.get('source-skills'), 'a listed source keeps its Open action');
+  const before = u.homeCalls.length;
+  await u.click('source-memory'); await settle();
+  assert.ok(u.panel().includes('Nothing here yet.'), 'its own list says it is empty, with no invented records');
+  assert.ok(u.buttonNamed('Open in Notion ↗')); assert.equal(u.buttonNamed('Open Actual decisions'), undefined, 'no second Open inside the source');
+  assert.equal(u.homeCalls.length, before, 'opening it reads nothing more');
+  const back = u.get('home-panel').descendants().find(node => node.tagName === 'BUTTON' && node.textContent === '‹');
+  await back.dispatch('click'); await settle(); assert.equal(u.focused(), 'source-memory');
+  // A source the connection can't read keeps its honest state, its recovery and no Open action.
+  assert.equal(u.buttonNamed('Open Business Docs'), undefined); assert.equal(u.get('source-docs'), null);
   assert.ok(u.panel().includes('OSM’s connection can’t read Business Docs.'));
   assert.ok(u.buttonNamed('How to share it ›'));
 });

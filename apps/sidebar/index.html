@@ -66,18 +66,26 @@
     <p id="links-note" class="hint links-note" hidden></p>
     <p id="legacy-route" class="hint links-note" hidden>This context points to a folder or other link. Only a Notion home is supported; it is left unchanged and read-only. See the OSM update guidance, “Legacy file and vault homes”, to move to Notion.</p>
     <div id="notice" class="notice" hidden><span id="notice-text"></span><button id="notice-connect" class="btn btn-ghost cursor-interaction" type="button" hidden>Connect</button></div>
-    <section aria-labelledby="context-title"><h2 id="context-title">Context</h2>
-      <button id="open-context" class="row cursor-interaction" type="button"><span class="row-title">Primary</span><span id="context-meta" class="row-meta"></span></button>
-      <button id="open-docs" class="row cursor-interaction" type="button"><span class="row-title">Docs</span><span id="docs-meta" class="row-meta"></span></button>
-    </section>
-    <section aria-labelledby="skills-title"><h2 id="skills-title">Skills</h2>
-      <button id="open-personalSkills" class="row cursor-interaction" type="button"><span class="row-title">Personal</span><span id="personalSkills-meta" class="row-meta"></span></button>
-      <button id="open-teamSkills" class="row cursor-interaction" type="button"><span class="row-title">Team</span><span id="teamSkills-meta" class="row-meta"></span></button>
-    </section>
-    <section aria-labelledby="memory-title"><h2 id="memory-title">Memory</h2>
-      <button id="open-memory" class="row cursor-interaction" type="button"><span class="row-title">Personal</span><span id="memory-meta" class="row-meta"></span></button>
-      <button id="open-teamMemory" class="row cursor-interaction" type="button"><span class="row-title">Team</span><span id="teamMemory-meta" class="row-meta"></span></button>
-    </section>
+    <div class="osm-card">
+      <section class="step" aria-labelledby="context-title"><h2 id="context-title" class="source-head"><span class="step-number source-slot" data-index="1" aria-hidden="true"></span><span class="step-label">Context</span></h2>
+        <div class="source-panel">
+          <button id="open-context" class="row cursor-interaction" type="button"><span class="row-title">Primary</span><span id="context-meta" class="row-meta"></span></button>
+          <button id="open-docs" class="row cursor-interaction" type="button"><span class="row-title">Docs</span><span id="docs-meta" class="row-meta"></span></button>
+        </div>
+      </section>
+      <section class="step" aria-labelledby="skills-title"><h2 id="skills-title" class="source-head"><span class="step-number source-slot" data-index="2" aria-hidden="true"></span><span class="step-label">Skills</span></h2>
+        <div class="source-panel">
+          <button id="open-personalSkills" class="row cursor-interaction" type="button"><span class="row-title">Personal</span><span id="personalSkills-meta" class="row-meta"></span></button>
+          <button id="open-teamSkills" class="row cursor-interaction" type="button"><span class="row-title">Team</span><span id="teamSkills-meta" class="row-meta"></span></button>
+        </div>
+      </section>
+      <section class="step" aria-labelledby="memory-title"><h2 id="memory-title" class="source-head"><span class="step-number source-slot" data-index="3" aria-hidden="true"></span><span class="step-label">Memory</span></h2>
+        <div class="source-panel">
+          <button id="open-memory" class="row cursor-interaction" type="button"><span class="row-title">Personal</span><span id="memory-meta" class="row-meta"></span></button>
+          <button id="open-teamMemory" class="row cursor-interaction" type="button"><span class="row-title">Team</span><span id="teamMemory-meta" class="row-meta"></span></button>
+        </div>
+      </section>
+    </div>
     <button id="show-home" class="btn btn-ghost cursor-interaction" type="button" hidden>Back to Home</button>
   </div>
 
@@ -124,8 +132,8 @@
     </section>
     <section><h3>Data & Context home</h3><div id="settings-context"></div><p id="home-definition" class="hint"></p></section>
     <div class="osm-card settings-card">
-      <section class="step"><button id="saved-links-toggle" class="step-head" type="button" aria-controls="saved-links"><span class="step-label">Saved links</span><span id="saved-links-summary" class="summary"></span></button></section>
-      <section class="step"><button id="builtin-toggle" class="step-head" type="button" aria-expanded="false" aria-controls="builtin-panel"><span class="step-label">Built into OSM</span><span id="builtin-summary" class="summary"></span></button><div id="builtin-panel" class="step-panel" style="padding-left:16px" hidden><div id="builtin-content"></div><p class="hint">From the installed OSM package. Reading a method here doesn’t run it.</p></div></section>
+      <section class="step"><button id="saved-links-toggle" class="step-head setting-head" type="button" aria-controls="saved-links"><span class="setting-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 11.5a3 3 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-.9.9M11.5 8.5a3 3 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l.9-.9"/></svg></span><span class="setting-text"><span class="step-label">Saved links</span><span class="setting-desc">Quick links to open your sources</span><span id="saved-links-summary" class="summary"></span></span></button></section>
+      <section class="step"><button id="builtin-toggle" class="step-head setting-head" type="button" aria-expanded="false" aria-controls="builtin-panel"><span class="setting-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5 16.5 6v8L10 17.5 3.5 14V6L10 2.5ZM3.5 6 10 9.5 16.5 6M10 9.5v8"/></svg></span><span class="setting-text"><span class="step-label">Built into OSM</span><span class="setting-desc">Methods that ship with the plugin</span><span id="builtin-summary" class="summary"></span></span></button><div id="builtin-panel" class="step-panel" hidden><div id="builtin-content"></div><p class="hint">From the installed OSM package. Reading a method here doesn’t run it.</p></div></section>
     </div>
     <section><h3>Separate Notion plugin</h3><p class="hint">This connection is used only for the optional page picker. OSM Home uses its own connection.</p>
       <div class="status-row"><span id="drawer-connection" class="status"></span><button id="drawer-refresh" class="btn btn-ghost icon cursor-interaction" type="button" aria-label="Refresh Notion connection" title="Refresh connection"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 7a6.5 6.5 0 1 0 .3 5M16 3v4h-4"/></svg></button></div>

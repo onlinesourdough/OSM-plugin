@@ -13,6 +13,9 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --color-background-primary: #181818; --color-text-primary: #ececec; --color-text-secondary: #aaa; --color-border-primary: #383838; --color-background-secondary: #282828; } }
 * { box-sizing: border-box; }
+/* Native controls do not inherit type. One low-specificity rule gives every button and field the
+   surrounding family, size and weight; components then set only what is theirs. */
+button, input, select, textarea { font: inherit; letter-spacing: inherit; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--osm-surface); color: var(--osm-text); font: 14px/1.5 var(--font-sans, system-ui, sans-serif); }
 main { max-width: 600px; margin: 0 auto; padding: 48px 36px 40px; }
@@ -41,7 +44,7 @@ h1:focus, .drawer-head h2:focus { outline: none; }
 /* Onboarding: one card, four rows that are always visible. */
 .osm-card { border: 1px solid var(--osm-line); border-radius: 14px; background: var(--osm-surface); }
 .step + .step { border-top: 1px solid var(--osm-line); }
-.step h2 { margin: 0; font: inherit; }
+.step :is(h2, h3) { margin: 0; font: inherit; }
 .step-head { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 0 16px; border: 0; border-radius: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .step:first-child .step-head { border-radius: 13px 13px 0 0; }
 .step:last-child .step-head[aria-expanded="false"] { border-radius: 0 0 13px 13px; }
@@ -86,12 +89,9 @@ h1:focus, .drawer-head h2:focus { outline: none; }
 /* Dashboard. */
 .notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-bottom: 16px; padding: 6px 6px 6px 14px; border-radius: 10px; background: var(--osm-hover); font-size: 13px; }
 .row { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
-.row-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.row-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .row-meta { min-width: 0; max-width: 60%; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--osm-muted); }
 .row:disabled { opacity: .5; cursor: default; }
-#dashboard section h2 { margin: 36px 0 8px; font-size: 15px; font-weight: 600; }
-#dashboard > section:first-of-type h2 { margin-top: 0; }
-#dashboard section .row { width: calc(100% + 24px); margin: 0 -12px; }
 
 .feedback { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; margin-top: 24px; padding: 4px 4px 4px 14px; border-radius: 10px; background: var(--osm-hover); font-size: 13px; overflow-wrap: anywhere; }
 .feedback[data-error="true"] { color: var(--osm-danger); }
@@ -113,7 +113,7 @@ footer { display: flex; align-items: baseline; justify-content: space-between; g
 .drawer-body { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 24px 24px; }
 .drawer-body section { margin-top: 28px; }
 .drawer-body section:first-child { margin-top: 12px; }
-.drawer-body h3 { margin: 0 0 10px; font-size: 13px; font-weight: 600; }
+.drawer-body h3 { margin: 0 0 10px; font-size: 15px; font-weight: 500; }
 .drawer-body h3 + .hint { margin: 0 0 10px; }
 /* Settings headings name the Context picker, and None marks optional slots; keep
    that label and the repeated Optional annotations for assistive technology only. */
@@ -139,7 +139,7 @@ footer { display: flex; align-items: baseline; justify-content: space-between; g
 .brand-mark { display: inline-flex; flex: none; }
 .brand-mark .source-icon { width: 24px; height: 24px; font-size: 22px; line-height: 24px; }
 body[data-view="home"] #help { display: none; }
-#home button:not(.btn), #show-home:not(.btn) { font: inherit; color: inherit; cursor: pointer; }
+#home button:not(.btn, :disabled), #show-home:not(.btn) { cursor: pointer; }
 .title-link { font: inherit; padding: 0; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; }
 .title-link:hover, .title-link:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
 h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
@@ -147,19 +147,23 @@ h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text
 #home-search { margin-bottom: 16px; }
 #home-panel:focus-visible { outline: none; }
 .source-head { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; margin: 0; padding: 0 16px; }
-.source-head .source-slot { border: 0; border-radius: 0; }
+/* Every source panel is open, so its marker is Setup's open (filled) circle. The number is the
+   source's place in the definition and is drawn from data-index, so it is never heading text. */
+.source-head .step-number { border-color: transparent; background: var(--osm-text); color: var(--osm-surface); }
+.source-slot::before { content: attr(data-index); }
 /* Setup's .step-label is flex: none because its labels are short and fixed. A source title is
-   real metadata of any length, so here the label may shrink and wrap inside the card. */
-.source-head .step-label { flex: 0 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+   real metadata of any length, so here the label holds its icon and title, may shrink and wraps. */
+.source-head .step-label { display: flex; align-items: center; gap: 8px; flex: 0 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.source-head .source-title { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
 .source-panel { padding: 4px 16px 16px 48px; }
 /* "Open ‹Source›" and "Load more from ‹Source›" carry the real source title. Setup's .btn is a
-   one-line, fixed-height nowrap pill; here the full caption wraps inside the card instead of
-   overflowing it. A short caption keeps the standard 32px control. */
-#home-panel .step-actions .btn { height: auto; min-width: 0; max-width: 100%; padding-top: 6px; padding-bottom: 6px;
-  line-height: 1.4; white-space: normal; overflow-wrap: anywhere; text-align: left; }
+   one-line, fixed-height nowrap pill; here a long caption wraps inside the card instead of
+   overflowing it. One line is exactly Setup's 32px control: 5 + 20 + 5 plus the 1px borders. */
+#home-panel .step-actions .btn { height: auto; min-height: 32px; min-width: 0; max-width: 100%; padding: 5px 12px;
+  line-height: 20px; white-space: normal; overflow-wrap: anywhere; text-align: left; }
 .record-list { margin: 0; padding: 0; list-style: none; }
-#home .row { width: calc(100% + 24px); margin: 0 -12px; gap: 8px; }
-#home .row-title { font-weight: 400; white-space: normal; }
+#home .row, #dashboard .row { width: calc(100% + 24px); margin: 0 -12px; gap: 8px; }
+#home .row-title { white-space: normal; }
 #home .row-title .source-title { white-space: normal; overflow-wrap: anywhere; }
 .record-description { display: block; margin-top: 3px; overflow-wrap: anywhere; }
 .has-icon .record-description { margin-left: 26px; }
@@ -207,6 +211,18 @@ h1, h2, .title-link .source-title { white-space: normal; overflow: visible; text
 /* Unlike a Setup step, this row collapses again, so it stays a button when open. */
 #builtin-toggle[aria-expanded="true"] { cursor: pointer; }
 #builtin-toggle[aria-expanded="true"]:hover { background: var(--osm-hover); }
+/* A Settings row that opens something: icon in Setup's 20px marker column, one full-width text column
+   (label, description, then the count) and one chevron. The count sits under the description, never
+   beside it, so the description keeps the whole row at any drawer width. The chevron is drawn once,
+   here: it points right for a row that opens another view and turns down for a disclosure that is open. */
+.setting-head { min-height: 64px; padding-top: 10px; padding-bottom: 10px; }
+.setting-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; color: var(--osm-muted); }
+.setting-text { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+.setting-desc { font-size: 12px; font-weight: 400; color: var(--osm-muted); }
+.setting-text .summary { max-width: none; margin: 0; overflow: visible; white-space: normal; }
+.setting-text .summary:empty { display: none; }
+.setting-head::after { content: ''; flex: none; width: 6px; height: 6px; margin: 0 4px 0 2px; border-right: 1.5px solid var(--osm-muted); border-bottom: 1.5px solid var(--osm-muted); transform: rotate(-45deg); }
+.setting-head[aria-expanded="true"]::after { transform: rotate(45deg); }
 .drawer-body .settings-card .step { margin-top: 0; }
 .builtin-name { margin: 12px 0 0; font-size: 13px; font-weight: 500; }
 .builtin-method .hint { margin-top: 4px; }

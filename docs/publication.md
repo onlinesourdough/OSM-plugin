@@ -11,7 +11,7 @@ no live proof. With no qualified public content reader, no live run can reach `c
 
 | Class | Artifacts | Public writer |
 | --- | --- | --- |
-| A | The 18 released packets of the bound release, v0.31.0 (`3429755`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
+| A | The 18 released packets of the bound release, v0.31.1 (`1aebca1`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
 | B | The five Content templates and their setup, configuration and diagram explanations: a separate Notion-authored Draft edition 2026-11-05.1 | Notion-authored; the publisher never writes, derives or repairs them |
 | G | The public guide pages, edition 2026-11-05.2 (the before-source) | Notion-authored; the publisher never overwrites them |
 | W | Five documentation pages (README, docs index, overview, architecture, skill index), labelled unreleased | CI, once activated |
@@ -43,14 +43,16 @@ The job exits non-zero unless every row was written, unchanged, resumed, retired
 
 ## Current release alignment
 
-As of 2026-11-10, after the v0.31.0 tag, the inactive manifest's released edition is
-bound to v0.31.0 at its exact tag commit `3429755`, and `docs/README.md` says `v0.31.0 is
-the latest`. The release guard is unchanged. It had refused every commit after the tag
+As of 2026-11-10, after the v0.31.1 tag, the inactive manifest's released edition is
+bound to v0.31.1 at its exact tag commit `1aebca1`, and `docs/README.md` says `v0.31.1 is
+the latest`. It was bound to v0.31.0 (`3429755`) first and moved at the next tag, with
+the 18 class A rows, their keys and `renames` unchanged, because 0.31.1 renames and adds
+no skill. The release guard is unchanged. It had refused every commit after the tag
 until this binding recorded it, as the release procedure says: a tag on a build's own
 commit is not counted against that build, and its exact commit can be written only once
 the tag exists.
 
-The class A rows are now one per skill of that release, 18 where the earlier edition had
+The class A rows are one per skill of the release, 18 where the 0.30.x edition had
 22. `osm-data-context`, `osm-manage-data-context` and `osm-dreaming` are added, and seven
 keys are removed because their source is absent from 0.31.0. Their history is kept, not
 restated by hand: the manifest's `renames` maps `osm-context` and `osm-maintain-context`
@@ -64,7 +66,7 @@ upkeep's, pending handoff.
 This is repository release consistency, not publication: the public Notion guide was not
 read or advanced, its last verified projection remains v0.30.0, and no row, page, grant,
 credential or ownership changed, including the public pages of the retired keys.
-Activation stays false and `public_reader` stays null. Reviewing 0.31.0 into the public
+Activation stays false and `public_reader` stays null. Reviewing 0.31.1 into the public
 guide, and what happens to those pages, stay separate publication decisions, and a
 source-only publisher is no gate for live Notion projection.
 

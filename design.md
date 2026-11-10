@@ -71,8 +71,10 @@ results live in [verification](docs/verification.md).
    response, with no extra request, and shows up to 3 rows at every width.
    - **Listed source:** always ends with “Open ‹Source›”, which opens its in-Home
      source list. It appears whether or not more rows exist.
-   - **Empty readable source:** shows “Nothing here yet.” and no Open action,
-     because its list would be empty.
+   - **Empty readable source:** shows “Nothing here yet.” and the same “Open
+     ‹Source›” (0.31.2), so a mapped Memory with no records opens like a populated
+     Skills. Its list repeats that it is empty and offers Open in Notion; opening it
+     reads nothing more.
    - **Denied, unsupported, rate-limited or unavailable source:** keeps its state
      line and existing recovery, with no Open action, no count and no metadata
      beyond the projection label.
@@ -195,11 +197,14 @@ Order:
      link, once and in this order: Docs, Skills, Memory (personal or team slots
      both count as their category), joined with “ · ”; “None” when nothing is
      saved. It opens the Saved links sub-view.
-   - **Built into OSM:** summary “N methods”. It expands in place like a Setup
-     step (`aria-expanded`). The panel lists each method from the installed
+   - **Built into OSM:** a row with a line icon, the label, a one-line description
+     and, beneath it, the summary “N methods”, then one chevron. It expands in place
+     (`aria-expanded`). The panel lists each method from the installed
      package's existing metadata, name then description, followed by “From the
      installed OSM package. Reading a method here doesn’t run it.” There is no
-     native disclosure triangle and no enable, run or ownership control.
+     native disclosure triangle, no second chevron and no enable, run or ownership
+     control. Saved links is the same row (icon, label, description, summary,
+     right-pointing chevron) and opens its sub-view.
 4. **Separate Notion plugin:** the optional picker only, with Setup's existing
    status row.
 5. **Get help from your agent**
@@ -373,8 +378,8 @@ wins.
 | --- | --- |
 | Home header | `.page-header` + `.brand`: root icon (24px) in the brand slot, root title as the `h1`, gear as `btn-ghost icon` |
 | Search | `.form-control`, full width, 16px below |
-| Sources and search results | One `.osm-card`. Each source is a section with a non-interactive head (icon slot + label), a panel of `.row` records, and `.step-actions` with `btn-ghost` “Open ‹Source›”. State lines are hints; Try again is `btn-ghost`. |
-| Source list | Reader bar; title in the screen-title style with the 24px icon inline, gap 10px; `btn-ghost` “Open in Notion ↗”; one `.osm-card` of `.row`s; `btn-ghost` “Load more from ‹Source›” in `.step-actions` |
+| Sources and search results | One `.osm-card`. Each source is a section with a non-interactive head (Setup's filled 20px circle numbered by the source's place in the definition, then the source icon and label), a panel of `.row` records, and `.step-actions` with `btn-primary` “Open ‹Source›” (0.31.2; the same filled Continue button). State lines are hints; Try again is `btn-ghost`. |
+| Source list | Reader bar; title in the screen-title style with the 24px icon inline, gap 10px; `btn-ghost` “Open in Notion ↗”; one `.osm-card` of `.row`s; `btn-secondary` “Load more from ‹Source›” in `.step-actions` |
 | Reader bar | Back `btn-ghost icon`; breadcrumb `nav`; `btn-ghost` Copy link and “Open in Notion ↗” |
 | Gates | Header title, `.intro` copy, actions row as on Setup's opening |
 | Settings | Existing drawer head and section titles. Connection actions in one row: `btn-secondary` “Choose pages in Notion ↗” or, when not connected, `btn-primary` “Connect Notion”, then `btn-ghost` “Check again”. Then the standard context picker, the two-row card, and `btn-ghost` “Get help from your agent”. |

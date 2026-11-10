@@ -257,20 +257,26 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     else { if (entry.state === 'inaccessible') box.append(el('p', 'In Notion, use ••• → Connections to share this source with OSM.')); box.append(button(entry.state === 'inaccessible' ? 'How to share it ›' : 'Open in Notion ↗', 'btn btn-ghost', () => open(section.link))); }
     return box;
   }
+  // "Open ‹Source›" opens the source's own list. Its caption is the source's real title.
+  function openAction(section, title) {
+    const actions = el('div', null, 'step-actions'), action = button('Open ' + title, 'btn btn-primary', () => sourceView(section));
+    action.id = 'source-' + section.key; actions.append(action);
+    return actions;
+  }
   function records(section, describe, full = false, searched = false) {
     const entry = searched ? searchResults.get(section.key) : lists.get(section.key);
     if (!searched && !entry && data?.state === 'ready') Promise.resolve().then(() => { if (!lists.has(section.key)) void list(section.key); });
+    // An empty mapped source says so and still opens, like a listed one; its list repeats that and offers
+    // Open in Notion. A denied, unsupported or failed source keeps its own recovery and no Open.
+    if (entry?.state === 'empty' && !full && !searched) return [sourceState(section, entry), openAction(section, entry.source?.title || section.label)];
     if (entry?.state !== 'listed') return [sourceState(section, entry)];
     const limit = 3;
     const all = full || searched ? entry.items : entry.items.slice(0, limit);
     const ul = el('ul', null, 'record-list'); ul.setAttribute('role', searched ? 'group' : 'list');
     for (const item of all) { const li = el('li'); li.append(recordButton(section, item, describe, searched)); ul.append(li); }
     const nodes = [ul], title = entry.source?.title || section.label;
-    if (!full && !searched && entry.state === 'listed' && entry.items.length) {
-      const actions = el('div', null, 'step-actions');
-      const action = button('Open ' + title, 'btn btn-ghost', () => sourceView(section)); action.id = 'source-' + section.key; actions.append(action); nodes.push(actions);
-    }
-    if (full && entry.hasMore) { const actions = el('div', null, 'step-actions'); actions.append(button(entry.loading ? 'Loading…' : 'Load more from ' + title, 'btn btn-ghost', () => list(section.key, true))); nodes.push(actions); }
+    if (!full && !searched && entry.state === 'listed' && entry.items.length) nodes.push(openAction(section, title));
+    if (full && entry.hasMore) { const actions = el('div', null, 'step-actions'); actions.append(button(entry.loading ? 'Loading…' : 'Load more from ' + title, 'btn btn-secondary', () => list(section.key, true))); nodes.push(actions); }
     if (full && entry.capped) nodes.push(el('p', 'Home shows up to 50 pages. Open this source in Notion for the rest.', 'reader-meta'));
     if (entry.partial) nodes.push(el('p', 'Notion stopped this list early. Open it in Notion for the rest.', 'reader-meta'));
     if (entry.withheld) nodes.push(el('p', entry.withheld + ' pages here can’t be read with OSM’s connection.', 'reader-meta'));
@@ -333,23 +339,22 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
 
     panel.append(article);
   }
-  function sourceSection(source) {
+  // The marker is Setup's open circle carrying the source's place in the definition. It is decoration
+  // (the number is drawn from data-index), so the heading's text and name stay the source's own title.
+  function sourceSection(source, index) {
     const root = el('section', null, 'step'), heading = el('h3', null, 'source-head');
-    const label = el('span'); sourceLabel(label, source);
-    const slot = el('span', null, 'step-number source-slot');
-    const icon = [...label.children].find(node => node.className === 'source-icon');
-    if (icon) slot.append(icon);
-    const title = [...label.children].find(node => node.className === 'source-title');
-    title.className = 'step-label'; heading.append(slot, title);
+    const slot = el('span', null, 'step-number source-slot'); slot.setAttribute('aria-hidden', 'true'); slot.setAttribute('data-index', String(index));
+    const title = el('span', null, 'step-label'); sourceLabel(title, source);
+    heading.append(slot, title);
     const content = el('div', null, 'source-panel'); root.append(heading, content);
     return { root, content };
   }
   function renderOverview(panel) {
     const card = el('div', null, 'osm-card');
-    for (const section of sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role))) {
+    for (const [index, section] of sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role)).entries()) {
       const entry = lists.get(section.key);
       const source = ['listed', 'empty'].includes(entry?.state) ? entry.source : null;
-      const { root, content } = sourceSection(source || { title: section.label });
+      const { root, content } = sourceSection(source || { title: section.label }, index + 1);
       content.append(...records(section, section.role === 'skills')); card.append(root);
     }
     panel.append(card);
@@ -374,13 +379,13 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
     const searched = sections().filter(item => ['profile', 'documents', 'memory', 'skills'].includes(item.role));
     let count = 0;
     const card = el('div', null, 'osm-card');
-    for (const section of searched) {
+    for (const [index, section] of searched.entries()) {
       const result = searchResults.get(section.key); if (!result) continue;
       const failed = !['listed', 'empty'].includes(result.state);
       const items = result.state === 'listed' ? (result.items || []).slice(0, 5) : [];
       if (!items.length && !failed && !result.hasMore && !result.partial && !result.withheld) continue;
       const source = !failed && result.source?.title ? result.source : { title: section.label };
-      const { root, content } = sourceSection(source); card.append(root);
+      const { root, content } = sourceSection(source, index + 1); card.append(root);
       if (items.length) {
         const ul = el('ul', null, 'record-list'); ul.setAttribute('role', 'group');
         for (const item of items) { const li = el('li'); li.append(recordButton(section, item, section.role === 'skills', true)); ul.append(li); }
@@ -389,7 +394,7 @@ export function createHome({ $, call, open, changed, linksRevision = () => undef
       if (failed) content.append(el('p', source.title + ' couldn’t be searched right now', 'reader-meta'));
       else if (result.hasMore || result.partial) content.append(el('p', source.title + ' couldn’t be searched completely', 'reader-meta'));
       if (result.withheld) content.append(el('p', result.withheld + ' pages here can’t be read with OSM’s connection.', 'reader-meta'));
-      if (result.hasMore && !failed) { const actions = el('div', null, 'step-actions'), action = button('Open ' + source.title, 'btn btn-ghost', () => sourceView(section)); action.id = 'source-' + section.key; actions.append(action); content.append(actions); }
+      if (result.hasMore && !failed) content.append(openAction(section, source.title));
       else if (failed || result.partial) content.append(button('Try again', 'btn btn-ghost', () => { rearm(true); return search(view.query); }));
     }
     if (card.children.length) panel.append(card);

@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.31.2 — 2026-11-10
+
+Pilot patch. Home, the saved-links view and Settings now look and read like Setup, and an
+empty mapped source has its Open action. A visual and navigation change only: no new feature,
+no change to access, connection, mode or mapping, no skill change (all 18 skill versions are
+unchanged) and no change to the package's entry points. Checked as source and fixtures; see Limits.
+
+### Setup-style continuity (Home, saved links, Settings)
+
+- One shared base gives every button and field the surrounding font. A blanket Home rule
+  had out-ranked the Home component styles (breadcrumb links lost their size and muted colour),
+  and some native controls had no font reset at all; both are gone.
+- Setup's hierarchy applies throughout: 15px medium labels, regular rows, 24px page titles.
+  Each Home source head carries Setup's filled circle numbered by the source's place in the
+  definition (decoration only; headings and names stay the source's own title), followed by
+  the source icon. The saved-links view uses the same card.
+- "Open ‹Source›" is Setup's filled Continue button and keeps Setup's 32px height, wrapping a long
+  title inside the card; "Load more" is the secondary button.
+- In Settings, "Saved links" and "Built into OSM" are rows with an icon, a label, a one-line
+  description, the count beneath it and one chevron, with no second chevron or native triangle.
+  Keyboard behaviour is unchanged.
+
+### Empty sources open
+
+- An empty mapped source, such as a new Memory, says "Nothing here yet." and shows the same
+  Open action as a populated one. It opens that source's own empty list with Open in Notion and
+  reads nothing more. A source that is denied, unsupported or unavailable still shows its state
+  and recovery with no Open action.
+
+### Limits
+
+- Not qualified against a real Notion workspace or Keychain item, in the native Codex panel or in
+  a normal installation of this version. The real first-use read through OSM's own connection
+  is still pending.
+- The public Notion guide's last verified projection is still v0.30.0; this release does not
+  advance it.
+
 ## 0.31.1 — 2026-11-10
 
 Pilot patch. First use of Home through OSM's own connection on a normally installed
