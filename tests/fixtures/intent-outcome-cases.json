@@ -1,0 +1,121 @@
+[
+  {
+    "id": "rough-onboarding",
+    "request": "Help me make our onboarding work for new customers.",
+    "context": "Existing repository with a signup flow, a welcome email and a data-import step. The latest usage report in the repository shows that many new customers never complete their first import. No spec, criteria or issue exists and the request names no method. Implementation in this repository is authorized.",
+    "expected": {
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "criteria_owner": "spec",
+      "next_method": "spec",
+      "verdict": "none"
+    },
+    "bounds": {"min_criteria": 2, "max_criteria": 5},
+    "must_cover": [
+      {"label": "the first import is the outcome", "any": ["import"]},
+      {"label": "it is about new customers", "any": ["new customer", "new user"]},
+      {"label": "how it will be observed", "field": "observed_by", "any": ["report", "count", "rate", "log", "metric", "analytics", "funnel", "measure"]}
+    ]
+  },
+  {
+    "id": "mixed-mapping-dashboard",
+    "request": "Three things for our offers: first, map where our customer and offer data lives; second, capture the notes from sales calls into it automatically; third, give me one dashboard I can check each Friday that shows open offers. I also keep wondering what to call this whole setup, but don't spend long on that.",
+    "context": "Mixed request. A name is not needed to do any of the three and holds nothing up. Authority to plan and build locally is given.",
+    "expected": {
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "criteria_owner": "spec",
+      "next_method": "spec",
+      "verdict": "none"
+    },
+    "bounds": {"min_criteria": 3, "max_criteria": 6},
+    "must_cover": [
+      {"label": "the data map", "any": ["map", "where"]},
+      {"label": "the automatic call-note capture", "all": [["note", "call"], ["automatic", "automated", "without manual", "no manual", "unattended"]]},
+      {"label": "a dashboard of open offers", "all": [["dashboard"], ["open"]]},
+      {"label": "Friday use", "any": ["friday"]},
+      {"label": "naming is set aside", "field": "out_of_scope", "any": ["nam", "call this", "brand"]}
+    ]
+  },
+  {
+    "id": "small-edit-proportionate",
+    "request": "Change the copyright year in the site footer from 2025 to 2026.",
+    "context": "One string in one template file. Reversible. Nothing else is requested. The repository has a build and a lint check.",
+    "expected": {
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "criteria_owner": "none",
+      "next_method": ["none", "write-code", "build"],
+      "verdict": "none"
+    },
+    "bounds": {"min_criteria": 1, "max_criteria": 2},
+    "must_cover": [
+      {"label": "the requested year 2026", "any": ["2026"]}
+    ]
+  },
+  {
+    "id": "resumed-with-steer",
+    "request": "Continue. One more thing: names with æ, ø and å must also come through correctly.",
+    "context": "Resumed task, build half done. Accepted earlier: the goal is a CSV export of open offers, with three criteria: (1) one row per open offer, (2) columns offer, customer, amount and due date exactly as agreed, (3) closed offers never appear. The new steering adds Danish characters.",
+    "expected": {
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "criteria_owner": "spec",
+      "next_method": "build",
+      "verdict": "none"
+    },
+    "bounds": {"min_criteria": 4, "max_criteria": 7},
+    "must_cover": [
+      {"label": "one row per open offer is kept", "any": ["one row", "per open offer", "a row", "each open offer"]},
+      {"label": "the agreed columns are kept", "all": [["column"], ["amount"], ["due date"]]},
+      {"label": "closed offers stay out", "all": [["closed"], ["never", "not ", "exclu", "omit", "without", "only open"]]},
+      {"label": "the new Danish-character steering is added", "any": ["æ", "ø", "å", "danish"]}
+    ]
+  },
+  {
+    "id": "polished-but-incomplete",
+    "request": "Review the onboarding work against what I originally asked for and tell me if it is done.",
+    "context": "Review-only request: nothing beyond the review is authorized, and the reviewed work is not to be changed. Original request: new customers should reach their first successful data import within one day, and the team should be able to see how many do. Delivered: a polished welcome email, a redesigned signup page and a clean checklist document; all tests pass. Not delivered or evidenced: any change to the import step itself, and any count of how many customers reach their first import. No other gaps are known.",
+    "expected": {
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "criteria_owner": "spec",
+      "next_method": "review",
+      "verdict": "REVISE"
+    },
+    "bounds": {"min_criteria": 2, "max_criteria": 6},
+    "must_cover": [
+      {"label": "the import requirement is checked", "any": ["import"]},
+      {"label": "the visibility requirement is checked", "any": ["count", "how many"]},
+      {"label": "the unmet import change is named as a gap", "field": "gaps", "any": ["import"]},
+      {"label": "the missing count is named as a gap", "field": "gaps", "any": ["count", "how many"]},
+      {"label": "the review does not edit the reviewed work", "field": "out_of_scope", "any": ["edit", "implement", "change", "fix", "redesign"]}
+    ]
+  },
+  {
+    "id": "issue-brief-request",
+    "request": "Write an implementation issue for the CSV import crash we just hit, and publish it to our product repository's issue list.",
+    "context": "Explicit authority to publish one issue to that repository is given in this task. The crash was reproduced with a synthetic file. The worker's notes contain a customer name and a private file path that must not leave the machine. Searching the repository's issues for a duplicate is allowed.",
+    "expected": {
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "criteria_owner": "spec",
+      "next_method": "spec",
+      "verdict": "none"
+    },
+    "bounds": {"min_criteria": 3, "max_criteria": 7},
+    "must_cover": [
+      {"label": "observable acceptance", "any": ["acceptance", "reproduc", "replay"]},
+      {"label": "the private details are removed", "all": [["customer", "private", "path"], ["remove", "sanit", "redact", "strip", "without", "absent", "exclude", "omit", "withhold"]]},
+      {"label": "a duplicate is checked", "any": ["duplicate", "existing issue"]},
+      {"label": "the published issue is read back", "any": ["read back", "readback", "read-back"]},
+      {"label": "exclusions are stated", "field": "out_of_scope", "any": ["fix", "pull request", "implement"]}
+    ]
+  }
+]

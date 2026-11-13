@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.32.1 — 2026-11-13
+
+Patch release and the first on the stable channel. OSM's mark becomes the O, three instruction clarifications change how an
+ordinary request becomes an outcome, and the release channel is set to stable. No change to Home, Settings, OSM's connection,
+how OSM reads, or any logic of the sidebar; the package's entry points, dependencies and metadata names and identifiers are
+unchanged.
+
+### The mark
+
+- The O replaces the hub mark: two mirrored ellipse halves that meet in a narrow seam at the top and bottom, with no dot or
+  nodes. `assets/icon.png` (512 px, the Codex `composerIcon` and `logo`) is brown `#2B1B12` on cream `#F8F2E8`, rendered from
+  `assets/branding/osm-icon.svg`. The sidebar header and the 16 px server and tool icon draw the same two paths with
+  `currentColor`, so the host colours them. Icon paths and names in the manifests are unchanged.
+
+### Methods
+
+- **Spec** (2.0.2). An ordinary request gets a short interpretation and a proportionate outcome from the evidence
+  already available: what must be true, what would count as failure, how it is observed and what is out of scope,
+  then the work proceeds, with no requirements document, routine permission or question. A one-line edit or an
+  exploration needs no checklist, and a decision the evidence cannot settle holds only the work it affects. An
+  explicitly requested implementation issue brief is Spec's output; it reuses Triage's sanitation and duplicate
+  search by link, and Ship publishes and reads it back under existing authority. Spec owns the accepted contract and
+  its criteria, and Build and Review record accepted steering in that same contract. Resuming or steering alone
+  starts no new Spec phase; a materially changed decision reopens the affected part of Spec in that same contract.
+  Its discovery description now names an ordinary request and an explicitly requested issue brief, and keeps
+  small tasks direct.
+- **Triage Improvement** (2.0.1). Says that an explicit request for an issue brief selects Spec, which reuses
+  Triage's sanitation and duplicate search; an independently detected improvement signal still triggers Triage as
+  before.
+- **OSM entry** (4.1.1). The routing reference points an ordinary request to Spec.
+
+### Release channel
+
+- `.github/release-channel` is `stable`, the documented switch: the existing workflow creates this version's GitHub Release
+  without the prerelease flag when its validated tag is pushed. Earlier releases keep their flags.
+
+### Limits
+
+- The method wording was checked by the validators, the skill-version and responsibility rehearsals and synthetic decision
+  probes whose scorer reads named requirements, not answer quality. It was also exercised in actual native first responses
+  and same-thread follow-ups on one macOS Codex host, in an isolated profile with these source skills loaded. Not every
+  native case went without a question: the rough-onboarding response still asked one where the case held only a summary,
+  and the issue-brief and mixed cases asked for inputs the synthetic context lacked. That is not a result for other hosts,
+  an owner end-to-end run or a claim about every request, and the broader behavior qualification stays open.
+- The O was rendered from vector and inspected small and large on light and dark grounds; it was not observed in a native
+  app panel by its author.
+- Not qualified: hosts other than macOS Codex (Windows included), writes through OSM's connection, other timed or scheduled
+  callers and browser sign-in. This release does not resolve the open issues, change repository security settings or complete
+  the stopped distribution secret-check qualification (#60).
+- The inactive publisher stays bound to the published v0.31.3 until this version's tag exists.
+
 ## 0.32.0 — 2026-11-10
 
 Minor release. Settings gains a Manage access shortcut, Home gains an optional Content source, and

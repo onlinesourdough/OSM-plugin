@@ -232,10 +232,13 @@ The fixtures do not prove:
 - the Keychain prompt on a real Mac;
 - Setup writes through this connection.
 
-One observation goes beyond the fixtures: in the installed 0.31.3 on one macOS Codex host, Home
-displayed and read records through OSM's own connection against the real API. That is one host. Windows
-is unavailable here and is a known limit, not a gate. Other hosts, writes through this connection and
-timed or scheduled callers are not qualified, and the fixtures above do not stand in for them.
+Observations go beyond the fixtures, on one macOS Codex host: in the installed 0.31.3, Home displayed
+and read records through OSM's own connection against the real API, and 0.32.0, installed from a pinned
+source commit with no tag or release, listed and read an existing Content route through the same
+connection. That is one host. Windows is unavailable here and is a known limit, not a gate. Other hosts,
+writes through this connection and other timed or scheduled callers are not qualified, and the fixtures
+above do not stand in for them. A scheduled Dreaming run on 11 November 2026 used the owner's own
+route and shows nothing about writes through this connection; see [verification](verification.md).
 
 Observed on one owner pilot, 10 November 2026: the dedicated item's first provisioning had a creator
 partition that did not match the supported native reader (`/usr/bin/security`). The owner provisioned it

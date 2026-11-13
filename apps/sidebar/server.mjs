@@ -35,10 +35,10 @@ const home = createHomeService({ credential: hostCredential, route: readRoute, t
 let builtin;
 const skillsRoot = join(__dirname, '../../skills');
 const builtinSkills = async () => (builtin ??= await readBuiltinSkills(skillsRoot));
-// Context-hub mark; assets/branding/osm-icon.svg renders the same geometry as assets/icon.png.
+// OSM's O, two mirrored ellipse halves; assets/branding/osm-icon.svg draws the same geometry as assets/icon.png.
 // A monochrome SVG drawn only in currentColor, with no colour of its own, so the host can colour
 // it like its other sidebar icons. It is the global tool icon and the server icon.
-const icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.25" fill="currentColor"/><circle cx="3.75" cy="3.75" r="2"/><circle cx="16.25" cy="3.75" r="2"/><circle cx="3.75" cy="16.25" r="2"/><circle cx="16.25" cy="16.25" r="2"/><path d="M5.2 5.2l2.4 2.4M14.8 5.2l-2.4 2.4M5.2 14.8l2.4-2.4M14.8 14.8l-2.4-2.4"/></svg>';
+const icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt"><path d="M11.25 3.04A8 9 0 0 0 11.25 20.96"/><path d="M12.75 3.04A8 9 0 0 1 12.75 20.96"/></svg>';
 const icons = [{ src: `data:image/svg+xml;base64,${Buffer.from(icon).toString('base64')}`, mimeType: 'image/svg+xml', sizes: ['16x16'] }];
 const server = new McpServer({ name: 'osm', title: 'OSM', version: __OSM_VERSION__, icons });
 new OpenAIExtensions(server);

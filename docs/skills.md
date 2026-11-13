@@ -27,9 +27,11 @@ relative to 0.31.0; only Setup and Data & Context changed, as patch bumps, to wi
 Keychain route. The release before 0.31.0, v0.30.1, shipped 22 skills; see
 [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
 
-The source on `main` is the unreleased `0.32.0` candidate. It renames and adds no skill; only Data & Context
-changes, as a minor bump (3.1.0), to map an optional existing Content route and the link to a connection's own
-access page.
+The reviewed `0.32.0` source on `main` renames and adds no skill; only Data & Context changed, as a minor bump
+(3.1.0), to map an optional existing Content route and the link to a connection's own access page. It has no tag or
+release. The `0.32.1` source, on the stable release channel and not yet tagged, also renames and adds no skill; Spec (2.0.2), Triage Improvement (2.0.1) and
+the `osm` entry (4.1.1) change as patch clarifications of how an ordinary request, an explicitly requested issue
+brief and a resumed task get their outcome and criteria.
 
 | Skill | Responsibility |
 | --- | --- |

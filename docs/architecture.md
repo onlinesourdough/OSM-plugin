@@ -87,6 +87,74 @@ policy, and delegates skill or method changes to Manage Skills, which owns
 personal-skill placement and native adoption. The `osm` entry hosts the read-only
 check, the update/rollback procedure and on-request model advice.
 
+## Capture, Dreaming and curation
+
+Context enters the home in two ways, and one method writes it. During ordinary
+work an important correction is saved when it happens. Between tasks,
+[Dreaming](../skills/osm-dreaming/SKILL.md) selects useful completed or changed
+work, reflects across it with due or flagged records, and checks what it would
+keep against its source. Both hand the write to
+[Manage Data & Context](../skills/osm-manage-data-context/SKILL.md), the one
+curation owner. A genuine reusable method change goes to
+[Manage Skills](../skills/osm-manage-skills/SKILL.md); a note does not become a
+skill by itself.
+
+```mermaid
+flowchart TB
+  SRC["Native histories and original business systems<br/>(they stay where they are)"]
+  TASK["Ordinary task<br/>task-time capture"]
+  DREAM["Dreaming<br/>select, reflect, check against source"]
+  MDC["Manage Data & Context<br/>the one curation owner"]
+  MSK["Manage Skills<br/>reusable method changes"]
+  NEXT["Next session<br/>reads only what the task needs"]
+  subgraph HOME["Selected Notion Data & Context home"]
+    ENTRY["Thin entry and definition"]
+    K["Knowledge"]
+    M["Memory"]
+    S["Skills"]
+    C["Existing Content<br/>optional, curated like any store"]
+  end
+  SRC -->|"selected evidence"| TASK
+  SRC -->|"completed or changed items"| DREAM
+  TASK -->|"a correction, saved now"| MDC
+  DREAM -->|"proposed or authorized curation"| MDC
+  DREAM -->|"genuine method change"| MSK
+  MDC -->|"verified write"| K
+  MDC -->|"verified write"| M
+  MDC -.->|"verified write, only if selected"| C
+  MSK -->|"verified write"| S
+  ENTRY --> K
+  ENTRY --> M
+  ENTRY --> S
+  ENTRY -.-> C
+  ENTRY -->|"relevant context"| NEXT
+```
+
+- **Originals stay put.** Operational records and original histories keep their
+  own systems and access. Only the history and source routes the host can
+  actually read are used; an unavailable route is a reported gap, and
+  transcripts are never copied wholesale into the home.
+- **Thin entry.** A fresh session starts from the small entry and its
+  definition, then reads by metadata before bodies; see
+  [retrieval](../skills/osm-data-context/references/architecture.md#retrieval).
+- **Dreaming is a caller, not a service.** A person or an existing native
+  caller invokes it. It creates no schedule, store or caller, names no model,
+  and leaves unchanged content and its dates alone; see the
+  [maintenance loop](../skills/osm-data-context/references/architecture.md#maintenance-loop)
+  and [item and stage failures](../skills/osm-data-context/references/architecture.md#item-and-stage-failures)
+  for how an item still active when found stays pending until it completes.
+- **Existing Content is curated like any store.** When the owner has selected a
+  Content collection, Manage Data & Context maintains it as a store of context
+  with the same lifecycle and write policy, without a Content module and without
+  creating one. Producing or publishing content belongs to the separate Content
+  method, not to Dreaming or to Manage Data & Context.
+
+This shows who owns what; it is not a runtime, an ingestion service or a claim
+that any run happened. Observed behavior and its limits are recorded in
+[verification](verification.md), and responsibilities in
+[ownership](ownership.md). The accepted architecture boards remain the design
+basis; this is their repository-native text form.
+
 ## Selective loading
 
 The harness discovers skill names and descriptions. Load the selected skill,

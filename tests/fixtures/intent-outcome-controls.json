@@ -1,0 +1,233 @@
+{
+  "compliant": [
+    {
+      "id": "rough-onboarding",
+      "outcome": "More new customers complete their first data import after signing up, by improving where the existing signup, email and import step lose them.",
+      "must_be_true": [
+        "A new customer can finish the import step on the first try",
+        "The signup flow hands a new customer straight into the import",
+        "The share of new customers who complete a first import can be read from the existing report"
+      ],
+      "failure": [
+        "New customers still stall at the import step",
+        "The change breaks the existing signup or welcome email"
+      ],
+      "observed_by": "Compare the first-import rate in the existing usage report before and after.",
+      "out_of_scope": ["A redesign of pricing or of the product beyond onboarding"],
+      "criteria_owner": "spec",
+      "next_method": "spec",
+      "verdict": "none",
+      "gaps": [],
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "next_action": "Inspect the import step and the report, then make the smallest change that helps new customers finish it.",
+      "reply": "I read this as getting more new customers through their first import. I will start with the import step and the usage report, change what loses people, and check the first-import rate afterwards."
+    },
+    {
+      "id": "mixed-mapping-dashboard",
+      "outcome": "A map of where offer data lives, automatic capture of sales-call notes into it and a Friday dashboard of open offers; the setup's name can wait.",
+      "must_be_true": [
+        "The map shows where customer and offer data lives and who owns each source",
+        "Notes from sales calls are captured into that data without manual copying",
+        "One dashboard shows the open offers and can be checked each Friday"
+      ],
+      "failure": [
+        "The dashboard lists closed or stale offers",
+        "Call notes land in the wrong place or get duplicated"
+      ],
+      "observed_by": "Walk three sample offers from the map through to the Friday dashboard.",
+      "out_of_scope": ["Choosing a name for the setup"],
+      "criteria_owner": "spec",
+      "next_method": "spec",
+      "verdict": "none",
+      "gaps": [],
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "next_action": "Start with the data map, then the capture, then the dashboard; leave the name.",
+      "reply": "I will do the three pieces in order: the data map, the call-note capture and the Friday dashboard of open offers. The name can wait until they work."
+    },
+    {
+      "id": "small-edit-proportionate",
+      "outcome": "The site footer says 2026 instead of 2025 and nothing else changes.",
+      "must_be_true": ["The footer shows 2026"],
+      "failure": ["Any other footer text changes or the build fails"],
+      "observed_by": "The build and lint check pass and the footer text is checked once.",
+      "out_of_scope": [],
+      "criteria_owner": "none",
+      "next_method": "none",
+      "verdict": "none",
+      "gaps": [],
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "next_action": "Edit the one string and run the existing build and lint check.",
+      "reply": "Changing the footer year to 2026 now and running the build and lint check."
+    },
+    {
+      "id": "resumed-with-steer",
+      "outcome": "The CSV export of open offers keeps its three accepted criteria and now also carries Danish characters correctly.",
+      "must_be_true": [
+        "There is still one row per open offer",
+        "The columns offer, customer, amount and due date stay exactly as agreed",
+        "Closed offers never appear in the export",
+        "Names with æ, ø and å come through correctly in the file"
+      ],
+      "failure": [
+        "Danish names are garbled in the exported file",
+        "An earlier criterion regresses while the new one is added"
+      ],
+      "observed_by": "Export a few synthetic offers with Danish names and compare the file with the agreed columns.",
+      "out_of_scope": ["Changing the agreed columns or the export format"],
+      "criteria_owner": "spec",
+      "next_method": "build",
+      "verdict": "none",
+      "gaps": [],
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "next_action": "Finish the build, then check encoding on a synthetic file with æ, ø and å.",
+      "reply": "Carrying on with the same export. The three accepted criteria stay, and I am adding that æ, ø and å must come through correctly."
+    },
+    {
+      "id": "polished-but-incomplete",
+      "outcome": "A review of whether the onboarding work meets the original request: a first import within a day, and a visible count of how many customers reach it.",
+      "must_be_true": [
+        "New customers reach a first successful import within one day",
+        "The team can see how many customers reach that first import"
+      ],
+      "failure": ["Polished artifacts are accepted while the requested outcome is missing"],
+      "observed_by": "Compare each original requirement with the delivered artifacts and any measured result.",
+      "out_of_scope": ["Editing or redesigning the reviewed work"],
+      "criteria_owner": "spec",
+      "next_method": "review",
+      "verdict": "REVISE",
+      "gaps": [
+        "The import step itself was not changed or evidenced",
+        "No count of customers reaching a first import exists"
+      ],
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "next_action": "Return REVISE with the two missing requirements; change nothing in the reviewed work.",
+      "reply": "Not done yet: the polished pieces are fine, but the import step and a count of customers reaching a first import are missing. The work goes back to its writer to add both."
+    },
+    {
+      "id": "issue-brief-request",
+      "outcome": "One sanitized, deduplicated implementation issue for the CSV import crash exists in the product repository.",
+      "must_be_true": [
+        "The issue states the crash with a synthetic reproduction and an observable acceptance check",
+        "Customer names and private paths are removed before anything is searched or published",
+        "The repository's issues are searched for a duplicate first",
+        "The published issue is read back and its identity reported"
+      ],
+      "failure": [
+        "A private detail reaches the issue",
+        "A duplicate issue is created"
+      ],
+      "observed_by": "Compare the published issue with the sanitized draft.",
+      "out_of_scope": ["Fixing the crash or opening a pull request"],
+      "criteria_owner": "spec",
+      "next_method": "spec",
+      "verdict": "none",
+      "gaps": [],
+      "proceeds": true,
+      "asks": false,
+      "new_artifact": false,
+      "next_action": "Draft the brief with acceptance, remove private details, search for a duplicate, then publish once and read it back.",
+      "reply": "I will write the brief with a synthetic reproduction and acceptance check, strip the customer name and private path, check for a duplicate, then publish it once and confirm it."
+    }
+  ],
+  "weakened": [
+    {
+      "id": "mixed-mapping-dashboard", "field": "must_be_true",
+      "from": "Notes from sales calls are captured into that data without manual copying",
+      "to": "Notes from sales calls are captured manually by the team",
+      "fails": "does not cover: the automatic call-note capture"
+    },
+    {
+      "id": "mixed-mapping-dashboard", "field": "must_be_true",
+      "from": "One dashboard shows the open offers and can be checked each Friday",
+      "to": "One dashboard shows the open offers whenever it is convenient",
+      "fails": "does not cover: Friday use"
+    },
+    {
+      "id": "mixed-mapping-dashboard", "field": "must_be_true",
+      "from": "One dashboard shows the open offers and can be checked each Friday",
+      "to": "One dashboard shows every offer and can be checked each Friday",
+      "fails": "does not cover: a dashboard of open offers"
+    },
+    {
+      "id": "small-edit-proportionate", "field": "must_be_true",
+      "from": "The footer shows 2026",
+      "to": "The footer shows 2025",
+      "fails": "does not cover: the requested year 2026"
+    },
+    {
+      "id": "resumed-with-steer", "field": "must_be_true",
+      "from": "Closed offers never appear in the export",
+      "to": "Closed offers are listed separately",
+      "fails": "does not cover: closed offers stay out"
+    },
+    {
+      "id": "resumed-with-steer", "field": "must_be_true",
+      "from": "Names with æ, ø and å come through correctly in the file",
+      "to": "Names come through correctly in the file",
+      "fails": "does not cover: the new Danish-character steering is added"
+    },
+    {
+      "id": "resumed-with-steer", "field": "must_be_true",
+      "from": "The columns offer, customer, amount and due date stay exactly as agreed",
+      "to": "The columns stay as agreed",
+      "fails": "does not cover: the agreed columns are kept"
+    },
+    {
+      "id": "polished-but-incomplete", "field": "out_of_scope",
+      "from": "Editing or redesigning the reviewed work",
+      "to": "Judging the visual quality of the email or the page",
+      "fails": "does not cover: the review does not edit the reviewed work"
+    },
+    {
+      "id": "polished-but-incomplete", "field": "gaps",
+      "from": "No count of customers reaching a first import exists",
+      "to": "Nothing else is missing",
+      "fails": "does not cover: the missing count is named as a gap"
+    },
+    {
+      "id": "issue-brief-request", "field": "must_be_true",
+      "from": "Customer names and private paths are removed before anything is searched or published",
+      "to": "Customer names and private paths are kept in the draft",
+      "fails": "does not cover: the private details are removed"
+    },
+    {
+      "id": "issue-brief-request", "field": "must_be_true",
+      "from": "Customer names and private paths are removed before anything is searched or published",
+      "to": "Details are absent from everything that is published",
+      "fails": "does not cover: the private details are removed"
+    },
+    {
+      "id": "issue-brief-request", "field": "must_be_true",
+      "from": "Customer names and private paths are removed before anything is searched or published",
+      "to": "Customer names and private paths stay in the published issue",
+      "fails": "does not cover: the private details are removed"
+    }
+  ],
+  "acceptable": [
+    {
+      "id": "issue-brief-request", "field": "must_be_true",
+      "from": "Customer names and private paths are removed before anything is searched or published",
+      "to": "The customer name and private file path are absent from searches, published content and the handback"
+    },
+    {
+      "id": "issue-brief-request", "field": "must_be_true",
+      "from": "Customer names and private paths are removed before anything is searched or published",
+      "to": "Customer names and private paths are excluded from the search and the published issue"
+    },
+    {
+      "id": "issue-brief-request", "field": "must_be_true",
+      "from": "Customer names and private paths are removed before anything is searched or published",
+      "to": "Customer names and private paths are omitted from the draft and withheld from the search"
+    }
+  ]
+}

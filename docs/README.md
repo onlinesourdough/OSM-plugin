@@ -81,11 +81,13 @@ follows its tag; see [publication](publication.md#current-release-alignment).
 
 The skill set at v0.31.3 (18 skills, Notion-only core) is declared and fixture-tested and
 was exercised in disposable native installs. Its published prerelease and any normal-profile
-installation are recorded in GitHub Releases and [verification](verification.md), not here. One
-observation is recorded there: in the installed 0.31.3 on one macOS Codex host, Home displayed and
-read records through OSM's own Notion connection. Not qualified: other hosts and operating systems
-(Windows included), writes through that connection, timed or scheduled callers such as Dreaming, and
-browser sign-in.
+installation are recorded in GitHub Releases and [verification](verification.md), not here. The
+observations recorded there are for one macOS Codex host: Home displayed and read records
+through OSM's own Notion connection (0.31.3 installed; 0.32.0 installed from a pinned source commit,
+with no 0.32.0 tag or release), and one existing scheduled Dreaming caller completed a run on
+11 November 2026 through the owner's own route, which is not a write by OSM's app. Not qualified:
+other hosts and operating systems (Windows included), writes through OSM's connection, other timed
+or scheduled callers, and browser sign-in.
 
 ### Documentation consumers
 

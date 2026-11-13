@@ -1,4 +1,4 @@
-# Codex sidebar — local 0.32.0 candidate
+# Codex sidebar — local 0.32.1 candidate
 
 Revision: 2026-11-09
 
@@ -329,10 +329,10 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
   comes from osm_context_home's bootstrap read. osm_save_sources accepts the
   definitionRevision that generated links came from.
 
-The context-hub mark identifies OSM. `assets/branding/osm-icon.svg` is the
-source of `assets/icon.png` (the Codex `composerIcon` and `logo`):
-`rsvg-convert -w 512 -h 512 assets/branding/osm-icon.svg -o assets/icon.png`.
-The sidebar mark is one SVG with the same geometry and no `theme` field, sent
+The O identifies OSM: two mirrored ellipse halves meeting in a narrow seam, with no dot or nodes.
+`assets/branding/osm-icon.svg` is the source of `assets/icon.png` (the Codex `composerIcon` and `logo`, 512 px,
+brown `#2B1B12` on cream `#F8F2E8`); any SVG renderer at 512 px reproduces it, and the committed PNG was rendered with
+resvg-js 2.6.2. The sidebar mark is one SVG with the same two paths in a 24-unit box and no `theme` field, sent
 both as the `osm_open` tool icon, which hosts read first, and as the server icon.
 It is monochrome: it paints only with `currentColor` and sets no colour of its
 own, so the host can colour it like its other sidebar icons. Earlier candidates
@@ -397,10 +397,13 @@ source pickers, optional slots, settings Save/discard, failed saves, retry,
 keyboard/focus, light/dark and 320px. GitHub button proof covers its
 presence in setup and dashboard, the exact repository link, and a failed open
 with a visible retryable message. Synthetic host results are distinct from
-native installed-runtime adoption and do not prove new-account OAuth. One native observation exists:
-the installed 0.31.3 on one macOS Codex host displayed Home and read records through OSM's own
-connection. Windows is unavailable here and is a known limit, not a gate; other hosts, writes through
-the connection and timed or scheduled callers are not qualified.
+native installed-runtime adoption and do not prove new-account OAuth. Native observations exist for
+one macOS Codex host: the installed 0.31.3 displayed Home and read records through OSM's own
+connection, and 0.32.0, installed from a pinned source commit with no tag or release, read an
+existing Content route through it. Windows is unavailable here and is a known limit, not a gate; other
+hosts, writes through the connection and other timed or scheduled callers are not qualified. The
+11 November 2026 scheduled Dreaming run in [verification](verification.md) used the owner's own
+route, not this panel.
 
 Page-picker proof includes a real read-only Notion listing and OSM search via
 Codex 0.161.0, zero-turn transport inspection, title/URL validation, disabled
