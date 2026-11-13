@@ -2574,3 +2574,25 @@ code or icon changed is superseded by this entry. The inactive publisher stays b
 Not established: the O in a native panel, a normal installation of 0.32.1, any host other than macOS Codex (Windows is a known
 limit), writes through OSM's connection, browser sign-in, the stopped distribution secret-check work (#60), and any open issue's
 remaining acceptance. Enabling GitHub security settings or resolving issues is not part of this release.
+
+## 13 November 2026 — 0.32.1 delivery readback (public release and primary installation)
+
+Recorded after delivery; the preparation entries above stay as dated history. Pull request
+[#101](https://github.com/onlinesourdough/OSM-plugin/pull/101) was merged on 13 November as commit
+`184d6381f7281998705abba48facaf4c60dbaab6` (tree `95646b147f8e6d3c14cd03cbce218be6eed8b4ab`), the exact tree an independent review passed.
+The immutable tag `v0.32.1` points at that commit, and the [v0.32.1 GitHub Release](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.32.1)
+is published, not a draft and not a prerelease (stable channel). The pull request ([run 43411023741](https://github.com/onlinesourdough/OSM-plugin/actions/runs/43411023741)),
+`main` ([run 43411361213](https://github.com/onlinesourdough/OSM-plugin/actions/runs/43411361213)) and the tag-and-release workflow
+([run 43411410629](https://github.com/onlinesourdough/OSM-plugin/actions/runs/43411410629)) all succeeded. Release readback is the GitHub release record, not the package listing. The inactive publisher's released edition and the
+docs index now name v0.32.1 at that commit; activation stays false, no live proof was run and the public Notion guide was neither read
+nor written.
+
+| Check | Result |
+| --- | --- |
+| Primary profile installation | Done through Codex's supported marketplace route only: the OSM marketplace registration was removed and added again at `v0.32.1` and `osm@online-sourdough` was added. No cache or configuration file was edited directly. The only configuration difference was the marketplace reference; the six saved context-route files were unchanged and no Notion, credential, keychain or history write happened. The main app was not restarted |
+| Headless native readback | A fresh headless app server on the primary profile reported MCP server 0.32.1, 18 enabled skills and no discovery errors, served the Home page over the resource read (HTML sha256 prefix `1257f63c597989e4`, the page this source builds), and listed the tool icon over MCP as the O drawn as exactly two halves. The 512 px icon PNG was byte-checked in the installed payload (sha256 prefix `92d4dbd8f9d16eda`); it was not served or read through a native image view. An independent comparison of 343 tracked Git blobs against the installed release found none missing or different. It made no model or Notion call |
+| What this is | Installed metadata and serving, read headlessly. It is not a view of the primary app, and not evidence that instructions already read into an active chat or open panel were reloaded |
+
+Not established, and not changed by this release: the O in a native panel; hosts other than macOS Codex (Windows is a known limit);
+writes through OSM's connection; browser sign-in; the broader behavior qualification of #75 and the first-use acceptance of #69, which stay
+open; and the stopped distribution secret-check work (#60), which stays held with no repository security setting changed.

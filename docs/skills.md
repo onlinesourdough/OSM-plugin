@@ -17,10 +17,10 @@ alias skill. Each carries an independent quoted `metadata.version`;
 see [version maintenance](skill-versioning.md). Repository development methods in
 `.agents/skills/` are separate and are not product skills.
 
-State: this describes `0.31.3`, tagged `v0.31.3`, with 18 skills. It is declared and
-fixture-tested and was exercised in disposable native installs; its published prerelease and
-any normal-profile installation are recorded in GitHub Releases and
-[verification](verification.md). 0.31.3 changes no skill file relative to 0.31.2 (its change
+State: this describes `0.32.1`, tagged `v0.32.1`, a stable GitHub Release, with 18 skills. It is
+declared and fixture-tested and was exercised in disposable native installs; its published release
+and the primary-profile installation are recorded in GitHub Releases and
+[verification](verification.md). Earlier history: 0.31.3 changes no skill file relative to 0.31.2 (its change
 is the Keychain read deadline and the version declarations). 0.31.2 changes no skill file relative to 0.31.1 (its
 change is the sidebar UI and the version declarations). 0.31.1 renamed and added no skill
 relative to 0.31.0; only Setup and Data & Context changed, as patch bumps, to wire OSM's
@@ -28,8 +28,8 @@ Keychain route. The release before 0.31.0, v0.30.1, shipped 22 skills; see
 [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases).
 
 The reviewed `0.32.0` source on `main` renames and adds no skill; only Data & Context changed, as a minor bump
-(3.1.0), to map an optional existing Content route and the link to a connection's own access page. It has no tag or
-release. The `0.32.1` source, on the stable release channel and not yet tagged, also renames and adds no skill; Spec (2.0.2), Triage Improvement (2.0.1) and
+(3.1.0), to map an optional existing Content route and the link to a connection's own access page. It was never tagged
+or released. `0.32.1` also renames and adds no skill; Spec (2.0.2), Triage Improvement (2.0.1) and
 the `osm` entry (4.1.1) change as patch clarifications of how an ordinary request, an explicitly requested issue
 brief and a resumed task get their outcome and criteria.
 

@@ -250,10 +250,10 @@ a Notion copy is a projection of a stated source revision, and is current only o
 downloads and source marker have been verified. Published versions are on GitHub Releases above,
 and the installed manifest and `docs/osm.md` show what a given install contains. The skills are
 declared and fixture-tested, and their packaging and discovery were exercised in disposable native
-installs. In the installed 0.31.3 on one macOS Codex host, Home was observed to display and to read
-records through OSM's own Notion connection. Not qualified: other hosts and operating systems
-(Windows included), writes through that connection, timed or scheduled callers such as Dreaming, and
-browser sign-in. See [What a statement can mean](docs/README.md#what-a-statement-can-mean).
+installs. On one macOS Codex host, Home was observed to display and to read records through OSM's own
+Notion connection, and the installed 0.32.1 was served natively with its 18 skills and its icon. Not
+qualified: other hosts and operating systems (Windows included), writes through that connection, other
+timed or scheduled callers, and browser sign-in. See [What a statement can mean](docs/README.md#what-a-statement-can-mean).
 
 Upgrading from AIOS? Use [Earlier names](docs/osm.md#earlier-names) for the
 supported switch and recovery procedure. Existing owner-data filenames and
