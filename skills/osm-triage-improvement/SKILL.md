@@ -2,7 +2,7 @@
 name: osm-triage-improvement
 description: Triage a concrete underlying improvement signal into a sanitized, deduplicated and authorized issue action.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:triage-improvement
@@ -15,7 +15,11 @@ run an extra disposition workflow.
 
 The delivery gate remains independent. A result can be correct and still
 reveal an opportunity; a result can need `REVISE` and also carry a signal.
-Neither signal triage nor its delivery changes the worker's primary goal.
+Neither signal triage nor its delivery changes the worker's primary goal. An
+explicit request for an implementation issue brief selects
+[Spec](../osm-spec-work/SKILL.md), which writes it and reuses the sanitation and
+duplicate search below. An independently detected improvement signal still
+triggers this skill as above.
 
 ## Inspect and decide
 

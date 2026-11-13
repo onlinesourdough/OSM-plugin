@@ -47,17 +47,15 @@ try {
   assert.deepEqual(icon.sizes, ['16x16']);
   assert.ok(icon.src.startsWith('data:image/svg+xml;base64,'));
   const svg = Buffer.from(icon.src.slice(icon.src.indexOf(',') + 1), 'base64').toString();
-  assert.match(svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" [^>]*viewBox="0 0 20 20"[^>]*>.*<\/svg>$/s);
+  assert.match(svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" [^>]*viewBox="0 0 24 24"[^>]*>.*<\/svg>$/s);
   // A monochrome icon leaves its colour to the host: it paints only with currentColor and sets no
   // colour, style, opacity or filter of its own.
   for (const [, attribute, value] of svg.matchAll(/\s(fill|stroke)="([^"]*)"/g)) assert.ok(['none', 'currentColor'].includes(value), `${attribute}="${value}"`);
   assert.doesNotMatch(svg, /<style|\sstyle=|\scolor=|opacity|filter/i);
-  // The context-hub mark: one filled hub at the centre and four outline nodes placed symmetrically around it.
-  const circles = [...svg.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="[\d.]+"( fill="currentColor")?\/>/g)].map(([, x, y, filled]) => ({ x: +x, y: +y, filled: !!filled }));
-  assert.deepEqual(circles.filter(circle => circle.filled), [{ x: 10, y: 10, filled: true }]);
-  const nodes = circles.filter(circle => !circle.filled);
-  assert.equal(nodes.length, 4);
-  for (const { x, y } of nodes) assert.ok(nodes.some(other => other.x === 20 - x && other.y === 20 - y), `node ${x},${y} has an opposite`);
+  // OSM's O: exactly two mirrored ellipse halves with a 2-unit butt-capped stroke, and nothing else drawn.
+  assert.match(svg, /stroke-width="2" stroke-linecap="butt"/);
+  assert.deepEqual([...svg.matchAll(/<(\w+)/g)].map(([, tag]) => tag), ['svg', 'path', 'path']);
+  assert.deepEqual([...svg.matchAll(/ d="([^"]*)"/g)].map(([, d]) => d), ['M11.25 3.04A8 9 0 0 0 11.25 20.96', 'M12.75 3.04A8 9 0 0 1 12.75 20.96']);
   const view = await client.readResource({ uri: 'ui://osm/home-v1' });
   assert.equal(view.contents[0].mimeType, 'text/html;profile=mcp-app');
   assert.deepEqual(view.contents[0]._meta['openai/ui'], { preferredDisplayMode: 'fullscreen', availableDisplayModes: ['fullscreen'] });

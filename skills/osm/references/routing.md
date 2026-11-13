@@ -21,14 +21,15 @@ Record a material decision and its rationale in the source that owns the work.
 - [Human writing](../../osm-human-writing/SKILL.md) makes prose clear and natural.
   Editorial production beyond that belongs to a separate Content method the owner
   has chosen; OSM ships none.
-- Shared [lifecycle](lifecycle.md) supplies specification, implementation, review
-  and authorized delivery with the task's local requirements.
+- [Spec](../../osm-spec-work/SKILL.md) sets an ordinary request's outcome; the shared
+  [lifecycle](lifecycle.md) supplies implementation, review and authorized
+  delivery with the task's local requirements.
 
-Select methods for their contribution to the result. Design and content work may
+Select methods for what they contribute. Design and content work may
 proceed independently or pass relevant reviewed material to each other. Preserve
-source identity, version and review when it matters; do not invent a cross-System
-handoff for work with the same owner. Domain review remains necessary where
-selected; deterministic validity alone does not establish quality.
+source identity, version and review when it matters; invent no cross-System
+handoff within one owner. Domain review remains necessary where selected;
+validity alone does not establish quality.
 
 Working material belongs in the project's design/ or content/ folders as needed.
 Use the actual project's context and keep one authoritative source for each
@@ -38,8 +39,8 @@ artifact. The plugin owns methods and helpers, not deliverables or customer data
 
 A System is a separately maintained specialist solution, chosen when its
 capability is useful. Skills, code or a repository alone do not require this
-label. Use native skills/packages and tools instead of introducing another
-execution framework. [Creation](creation.md) establishes a workspace for new
+label. Use native skills/packages and tools, not another execution framework.
+[Creation](creation.md) establishes a workspace for new
 project work when useful; Git is optional. A small task needs no project setup.
 
 Power BI remains an optional specialist for Power BI model/report work. Its

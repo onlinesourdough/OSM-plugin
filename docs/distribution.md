@@ -72,8 +72,8 @@ for pull requests, main updates and version tags. On a tag, it also checks that
 the tag commit belongs to main, that its version matches the package and local
 overview, and that its changelog entry exists. Only then does it create the
 matching GitHub release, in the channel the tagged commit declares in
-`.github/release-channel`: `prerelease` (every release so far, and the default) or
-`stable`. The value is read literally, with ordinary line endings only (spaces, extra
+`.github/release-channel`: `prerelease` (the default) or
+`stable` (the 0.32.1 commit sets it). The value is read literally, with ordinary line endings only (spaces, extra
 lines and other case are not normalized), and the workflow fails on any other value in the
 checks job and again in the publish step before any `gh` command. A stable release is therefore an
 ordinary reviewed commit that sets `stable`, validated and tagged by the same exact

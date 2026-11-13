@@ -1,8 +1,8 @@
 ---
 name: osm-spec-work
-description: Specify or revise substantive work when its outcome, boundaries or proof need clarification.
+description: Specify or revise substantive work from an ordinary request or an explicitly requested implementation issue brief when outcome, boundaries or proof need clarification; small tasks stay direct.
 metadata:
-  version: "2.0.1"
+  version: "2.0.2"
 ---
 
 # OSM:spec-work
@@ -11,7 +11,11 @@ Before substantive Spec, run the [native tracking SOP](../osm/references/lifecyc
 with accepted requirements and carried goal authorization. READY returns its
 actual tool/readback evidence or declared file fallback, alongside the contract.
 Scope changes update that same list; no phase goals or duplicate live lists.
-An accepted contract is sufficient input; do not recreate it for a new phase.
+Spec owns the accepted contract and its criteria; Build and Review carry it and
+record accepted steering in the same contract. Resuming or steering alone starts
+no new Spec phase; a materially changed decision reopens the affected part of
+Spec in that same contract. An accepted contract is sufficient input; do not
+recreate it for a new phase.
 
 Reuse any [Interview](../osm-interview/SKILL.md) result as accepted input,
 preserving decisions, sources and explicit unknowns. Select Interview only for
@@ -30,6 +34,15 @@ facts, technical inferences and material gaps; no field-by-field audit for an
 unchanged contract. Resolve facts before asking one material owner
 question. Reversible bounded technical inferences may proceed; never infer
 external authority, product direction or acceptance.
+
+Turn an ordinary request into a proportionate outcome from the evidence already
+available: a short interpretation of the intended change, then proceed with the
+supported next work, without a requirements document, routine permission or
+question. Define only what the task needs: what must be true, what would count as
+failure, how it will be observed and what is out of scope. A one-line edit or an
+exploration needs a sentence, not a checklist. An owner decision or external
+authority that the evidence cannot settle stays an explicit unknown and holds
+only the work it affects.
 
 For repository work, start from local AGENTS, relevant specialist methods and
 accepted inputs. This shared Spec owns the procedure; the repository owns its
@@ -62,6 +75,11 @@ requirements are clear. For model-executed work use
 its evidence and material gaps into READY. It does not own the deliverable or
 continuation decision. A requested brief needs only the relevant preparation,
 sources and specialist guidance, followed by the lifecycle's usable handoff.
+An explicitly requested implementation issue brief is Spec's output: the desired
+result, evidence, dependencies, acceptance and exclusions. Reuse the
+[sanitation and duplicate search](../osm-triage-improvement/SKILL.md#inspect-and-decide)
+by link without making Triage a general intake; [Ship](../osm-ship-work/SKILL.md)
+publishes and reads it back under existing authority.
 
 For sensitive data, authentication/authorization, external interfaces,
 privileged automation or deployment, use the conditional

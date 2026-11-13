@@ -2511,3 +2511,66 @@ Not established: the native panel with these changes, a normal installation of 0
 (Windows is unavailable here and is a known limit), writes through OSM's connection, timed or scheduled callers such
 as Dreaming, browser sign-in, and the workflow's stable path on GitHub. Browser interaction on the fixtures is the
 maintainer's.
+
+## 11 November 2026 — 0.32.0 after merge: native adoption evidence (sanitized)
+
+Records observations made after the 0.32.0 candidate entry above, which stays as dated history. Source is `main`
+`3ab8926c1e2461ce992177e9043b964288948859` (CI succeeded on it). There is still no `v0.32.0` tag or release: the latest
+GitHub Release is v0.31.3, a prerelease, and `.github/release-channel` says `prerelease`. The inactive publisher stays bound
+to v0.31.3. Private identifiers, paths, counts and screenshots are kept out of this record on purpose.
+
+| Observation | What it is, and what it is not |
+| --- | --- |
+| Normal Codex profile adopted 0.32.0 | The marketplace was added at the exact `main` commit above and `osm@online-sourdough` 0.32.0 installed. A fresh native check listed the 18 skills (including `osm-dreaming`) with no discovery errors, verified the installed payload files against the source, and made no model call. It is a commit-pinned install, not a release. Already running native MCP processes were seen with 0.31.3 working directories, but a working directory does not establish which MCP version a process has loaded, so which version an already open chat panel uses was not verified |
+| Home read an existing Content route | The route was regenerated from the owner's canonical definition revision. Through OSM's own connection a fresh resource listed the Content records and read one record with its nested blocks; the projection check passed. Permissions, credential and source were unchanged and no link was saved. This is OSM reading; the panel never writes to Notion |
+| Guided Edit access path | Notion's native app and its authenticated web UI exposed no address for a connection's access page, so none is built or required. The guided path Settings → Connections → Connected → the connection → Edit access was observed; its dialog was cancelled with nothing saved. The owner accepted this guided route |
+| Owner acceptance of the 0.32 flow | **Reported, not independently observed.** The coordinator reported on 11 November that the owner approved the flow visually after an isolated stock-app launch; the launch receipt records no GUI observation by the worker. It says nothing about every clean-customer, host or failure path |
+| First timed Dreaming run | The existing daily maintenance caller, whose identity, cadence, scope and exclusions were not changed, ran on schedule with the installed Dreaming as its entry and completed: it corrected a stale roadmap record and reconciled the definition, a fresh read recalled the correction, a replay made no extra write or date change, and active work and known gaps stayed pending. The procedure record that an earlier, separate manual qualification corrected is a different record and a different run. The route is a script outside this package using the owner's own internal Notion route. It is scheduled curation, not a write by OSM's app, and not a result for any other host or caller |
+
+Still not established: writes through OSM's connection (the panel has none); any host other than this macOS Codex host
+(Windows is unavailable here and is a known limit, not a gate); Claude Code or other scheduling paths; a session that was
+active when selected and completes later, being picked up in a live run; live retry, overlap and removed-access runs;
+browser sign-in; a normal-profile install of a published 0.32.0 release; and delivery of the architecture boards as images
+to Notion. Source snapshots of the existing common and private Paper designs already exist in Notion, and Paper's connection
+to the same workspace is connected, but exporting the boards as images and reading them back is blocked: native rendering
+was unavailable (no browser for the app, and the host denied computer use for the app on safety grounds), no fallback was
+used and no permission was requested. The installed payload was also compared against the Git blobs of the source commit
+(341 tracked files, none missing or different).
+Fixture and source checks (including the architecture rehearsal's late-active-session case) remain fixture evidence.
+
+## 11 November 2026 — 0.32.1 candidate: how a request becomes an outcome (#75, source only)
+
+Source and a synthetic decision probe. Nothing was committed, tagged, released or installed, and no Notion, GitHub,
+credential, schedule or app action happened. The installed 0.32.0 is the reviewed `main` commit and is untouched. The
+inactive publisher stays bound to v0.31.3. Three patch clarifications in instruction text: Spec 2.0.1 to 2.0.2, Triage
+Improvement 2.0.0 to 2.0.1 and the `osm` entry 4.1.0 to 4.1.1 (its routing reference only). Home, Settings and every line
+of sidebar logic are unchanged.
+
+| Check | Result |
+| --- | --- |
+| What changed | Spec: an ordinary request gets a short interpretation and a proportionate outcome (what must be true, failure, observation, exclusions) and proceeds without a requirements document, routine permission or question; a one-line edit or exploration needs no checklist. Spec owns the accepted contract and criteria while Build and Review record accepted steering in it, so resuming or steering alone starts no new Spec phase while a materially changed decision reopens the affected part in the same contract. An explicitly requested issue brief is Spec's output and reuses Triage's sanitation and duplicate search by link; Ship publishes and reads back. Spec's description now names an ordinary request and a requested issue brief and keeps small tasks direct. Triage says an explicit brief request selects Spec, and an independently detected signal still triggers Triage. Routing links Spec for an ordinary request and trims a few redundant words to stay within the footprint budget |
+| Why | Saved first-response and follow-up native sessions (ordinary onboarding, resumed CSV task, read-only review) already followed the intended behavior, so the rough-request change is a clarification of the existing interpretation-and-proceed rule, not a redesign. The synthetic probe's model answer chose Triage for a requested issue brief and Interview for a rough request; the issue-brief routing was a real gap. A forced-schema packet is not native proof |
+| Instruction checks | `validate.py --release-tag v0.32.1 --baseline v0.31.3` and `--baseline` the 0.32.0 commit passed; skill-version rehearsal (14 tests) and responsibility rehearsal passed; `context-footprint.py` passed with the `worker-build` journey at 38,087 of 38,099 bytes (12 bytes of headroom; the budget was not raised) |
+| Build | `npm ci --ignore-scripts` and `npm run build` gave `runtime/sidebar/index.html` and `server.cjs` that equal the accepted 0.32.0 files after replacing only the version string (two occurrences each); a second build was byte-identical; the bundled stdio smoke passed. The 249 functional tests were not rerun: no sidebar source changed. Dependencies and lockfile differ only by the two version lines |
+| Matched probe packets | The same six cases, schema and prompt were prepared for the 0.32.0 sources and for these sources. Only `osm/SKILL.md` (version line), the routing reference, Spec and Triage differ among the ten method files; the other six are byte-identical. Expectations are withheld from both |
+
+Not established: how a native session follows the new wording (the lead qualifies it separately with an isolated profile), a
+release or installation of 0.32.1, and any result on another host.
+
+## 13 November 2026 — 0.32.1 release preparation: the O and the stable channel (source)
+
+Source and the bundled stdio server. Nothing was committed, tagged, released or installed by this change, and no Notion,
+credential, account or profile action happened. The 11 November 0.32.1 entry above stays as dated history; its statement that no
+code or icon changed is superseded by this entry. The inactive publisher stays bound to v0.31.3 until a 0.32.1 tag exists.
+
+| Check | Result |
+| --- | --- |
+| The mark | The approved O, two mirrored ellipse halves (`M11.25 3.04A8 9 0 0 0 11.25 20.96` and its mirror, stroke 2, butt caps, no dot or node), replaces the hub mark in `assets/branding/osm-icon.svg`, the 512 px `assets/icon.png` (brown `#2B1B12` on cream `#F8F2E8`), the sidebar header and the 16 px server and tool icon. The PNG was rendered from the SVG with resvg-js 2.6.2 and re-rendering gave identical bytes. A vector inspection sheet at 16, 29 and 96 px and the 512 px PNG on light and dark grounds read as an O with a fine seam at every size. This is a render, not an observation in a native panel |
+| Sidebar build | `npm run build` twice gave identical `index.html` and `server.cjs`. Against the accepted 0.32.0 files, and after replacing only the version string, each differs in one span, the icon markup, and nothing else. The bundled stdio smoke passed with its icon assertion rewritten to require exactly two paths with the approved geometry, only `currentColor` and `none` paint, and no other element. `app.test` and `preview-home.test` passed (151 of 151); the other sidebar tests and the full 249 were not rerun because no logic changed |
+| Release channel | `.github/release-channel` is `stable`; versions stay 0.32.1 in every declaration. The workflow is unchanged and reads the channel literally. Nothing was published or run on GitHub |
+| Package and docs checks | `validate.py --release-tag v0.32.1` against both `v0.31.3` and the 0.32.0 commit passed; documentation, consumer-selection, skill-version and responsibility rehearsals passed; `context-footprint.py` passed at the unchanged limit (38,087 of 38,099 bytes); `publisher.py reconcile --check` passed; the eval scorer's selftest held 148 of 148 controls. The skills are unchanged since the exercised final wording |
+| Method wording evidence (#75) | The same six-case packet (same preamble, schema and cases, expectations withheld) was run against the 0.32.0 sources and these sources: 4 of 6 and 6 of 6 named-requirement and decision controls, and the existing 12-case decision probe passed 12 of 12. These are bounded lexical and decision checks, so neither the difference nor the totals measure answer quality or general reliability. The same final source skills (18, identical hashes) were also exercised in native first responses and same-thread follow-ups on one macOS Codex host in an isolated profile, six cases and seven turns, in a read-only synthetic setting: the resumed export and its follow-up kept the accepted criteria and added the new one, the review returned REVISE without edits, the one-line edit stayed direct, and the issue brief was drafted but asked for the missing reproduction notes and repository identity, with nothing published. The rough-onboarding response inferred the first import and proposed investigating it, but still asked one question about what stops customers because the case held only a summary and no usage report; the mixed request asked which tools hold the records. This is not an owner end-to-end run or a result for another host, and #75's broader behavior qualification stays open |
+
+Not established: the O in a native panel, a normal installation of 0.32.1, any host other than macOS Codex (Windows is a known
+limit), writes through OSM's connection, browser sign-in, the stopped distribution secret-check work (#60), and any open issue's
+remaining acceptance. Enabling GitHub security settings or resolving issues is not part of this release.
