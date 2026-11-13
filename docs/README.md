@@ -48,7 +48,7 @@ flowchart LR
 Git owns the executable method instructions: the skills and their references. The
 public Notion guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
 is a versioned explanatory and reference projection of them. Its last verified
-projection reflects v0.30.0 (`314dcf1`); the latest tagged release is v0.31.3 and
+projection reflects v0.30.0 (`314dcf1`); the latest tagged release is v0.32.1 and
 the guide has not been advanced to it, so the guide is never the installed method
 and never proof of what a given install does.
 Shared Content methods and templates are owned by their own Git home,
@@ -69,23 +69,24 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.31.3 is the latest tagged release; confirm its published prerelease on GitHub Releases |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.32.1 is the latest tagged release, a stable GitHub Release; v0.31.3 and earlier are prereleases |
 
 The inactive publisher manifest binds its released edition to the latest tagged
-release, v0.31.3 (`d23c558`), with one class A row per skill of that release and the
+release, v0.32.1 (`184d638`), with one class A row per skill of that release and the
 retired 0.30.x keys kept in its `renames`, so its release guard and this sentence
 agree with the tags. That is repository release consistency only: the public Notion
 guide was not read or advanced, its last verified projection is still v0.30.0, and the
 publisher stays inactive. Recording a later release is a separate reviewed binding that
 follows its tag; see [publication](publication.md#current-release-alignment).
 
-The skill set at v0.31.3 (18 skills, Notion-only core) is declared and fixture-tested and
-was exercised in disposable native installs. Its published prerelease and any normal-profile
+The skill set at v0.32.1 (18 skills, Notion-only core) is declared and fixture-tested and
+was exercised in disposable native installs. Its published release and the primary-profile
 installation are recorded in GitHub Releases and [verification](verification.md), not here. The
 observations recorded there are for one macOS Codex host: Home displayed and read records
-through OSM's own Notion connection (0.31.3 installed; 0.32.0 installed from a pinned source commit,
-with no 0.32.0 tag or release), and one existing scheduled Dreaming caller completed a run on
-11 November 2026 through the owner's own route, which is not a write by OSM's app. Not qualified:
+through OSM's own Notion connection (observed in 0.31.3 and, from a pinned source commit, 0.32.0), the
+installed 0.32.1 was served natively with its 18 skills and approved icon, and one existing scheduled
+Dreaming caller completed a run on 11 November 2026 through the owner's own route, which is not a
+write by OSM's app. Not qualified:
 other hosts and operating systems (Windows included), writes through OSM's connection, other timed
 or scheduled callers, and browser sign-in.
 

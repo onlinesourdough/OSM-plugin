@@ -11,7 +11,7 @@ no live proof. With no qualified public content reader, no live run can reach `c
 
 | Class | Artifacts | Public writer |
 | --- | --- | --- |
-| A | The 18 released packets of the bound release, v0.31.3 (`d23c558`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
+| A | The 18 released packets of the bound release, v0.32.1 (`184d638`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
 | B | The five Content templates and their setup, configuration and diagram explanations: a Notion Draft edition 2026-11-05.1, a projection. Their canonical home is the Git repository [OSM-content](https://github.com/onlinesourdough/OSM-content), which owns future template changes; a projection is current only once its pages, downloads and source marker are verified | Notion-authored today; the publisher never writes, derives or repairs them |
 | G | The public guide pages, edition 2026-11-05.2 (the before-source) | Notion-authored; the publisher never overwrites them |
 | W | Five documentation pages (README, docs index, overview, architecture, skill index), labelled unreleased | CI, once activated |
@@ -43,11 +43,12 @@ The job exits non-zero unless every row was written, unchanged, resumed, retired
 
 ## Current release alignment
 
-As of 2026-11-10, after the v0.31.3 tag, the inactive manifest's released edition is
-bound to v0.31.3 at its exact tag commit `d23c558`, and `docs/README.md` says `v0.31.3 is
+As of 2026-11-13, after the v0.32.1 tag, the inactive manifest's released edition is
+bound to v0.32.1 at its exact tag commit `184d638`, and `docs/README.md` says `v0.32.1 is
 the latest`. It was bound to v0.31.0 (`3429755`) first and moved at each next tag (v0.31.1,
-v0.31.2, then v0.31.3), with the 18 class A rows, their keys and `renames` unchanged, because
-no release since v0.31.0 renames or adds a skill, and neither 0.31.2 nor 0.31.3 changes a skill file. The release guard is unchanged. It had refused every commit after the tag
+v0.31.2, v0.31.3, then v0.32.1; 0.32.0 was never tagged), with the 18 class A rows, their keys and `renames`
+unchanged, because no release since v0.31.0 renames or adds a skill. 0.32.1 edits three of their skill sources
+(Spec, Triage Improvement and the `osm` entry) as patch changes. The release guard is unchanged. It had refused every commit after the tag
 until this binding recorded it, as the release procedure says: a tag on a build's own
 commit is not counted against that build, and its exact commit can be written only once
 the tag exists.
@@ -66,7 +67,7 @@ upkeep's, pending handoff.
 This is repository release consistency, not publication: the public Notion guide was not
 read or advanced, its last verified projection remains v0.30.0, and no row, page, grant,
 credential or ownership changed, including the public pages of the retired keys.
-Activation stays false and `public_reader` stays null. Reviewing 0.31.3 into the public
+Activation stays false and `public_reader` stays null. Reviewing 0.32.1 into the public
 guide, and what happens to those pages, stay separate publication decisions, and a
 source-only publisher is no gate for live Notion projection.
 
