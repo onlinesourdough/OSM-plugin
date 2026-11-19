@@ -7,8 +7,9 @@
   session and give Dreaming a short reference to the repair.
 - Dreaming reads the current definition, checks recent work and selected sources,
   recovers missed decisions and repairs confirmed context errors.
-- Rename Orchestrate Workers to Council for independent reviews and bounded
-  help from native workers or a selected CLI. Interview reuses Log for lasting
+- Replace Orchestrate Workers with Council for independent reviews and bounded
+  help. Council puts read-only reviews first and retains the lead’s authority
+  and tracking for delegated implementation. Interview reuses Log for lasting
   owner decisions.
 - Use the Geist Pixel Square OSM wordmark for the plugin and its sidebar.
 - Update direct invocations of `osm-orchestrate-workers` to `osm-council`

@@ -21,8 +21,16 @@ perspective or separable contribution would materially improve the result.
    effective access to inherited instructions, memory and connectors before
    passing information. Use a route that can enforce those limits, or keep
    the work local. Private Notion access requires its own selection.
+   For implementation or existing tracked work, use the
+   [native tracking rules](../osm/references/lifecycle.md#native-tracking-sop).
+   Verify the root, branch, instructions, permissions and existing goal
+   linkage before edits. Resolve a mismatch before work proceeds.
 3. Check findings against the artifact and test any changes. The lead agent
-   owns the result, decisions, Prime and Log. If a writer is interrupted,
+   owns the result, decisions, Prime and Log. Workers leave owner Memory to
+   the lead. Delegation grants no new account, project, issue, publication
+   or sidebar-task authority. If a writer is interrupted,
    [verify state and effects before retrying](../osm/references/recovery.md).
    Use the [handoff route](../osm/references/continuation.md) for a user-owned
-   chat or continuation of the whole task.
+   chat or continuation of the whole task. Codex's `create_thread` requires
+   an explicit request for a new user-owned chat. Archive a user-owned chat
+   only under its existing authority after verified handoff.

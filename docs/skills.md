@@ -1,6 +1,6 @@
 # OSM skills
 
-The working source contains 20 native skills. Method skills are named `osm` or `osm-*`; their
+OSM 0.33.0 contains 20 native skills. Method skills are named `osm` or `osm-*`; their
 titles and Codex display names use `OSM:skill-name`: uppercase `OSM`, a colon
 without spaces, and lowercase hyphenated names. The display label omits the
 redundant leading `osm-` from the canonical name, and the `osm` entry shows as
@@ -17,11 +17,9 @@ alias skill. Each carries an independent quoted `metadata.version`;
 see [version maintenance](skill-versioning.md). Repository development methods in
 `.agents/skills/` are separate and are not product skills.
 
-The catalog below includes unreleased Prime and Log. The last stable release
-`v0.32.1` has 18 skills. It is
-declared and fixture-tested and was exercised in disposable native installs; its published release
-and the primary-profile installation are recorded in GitHub Releases and
-[verification](verification.md). Earlier history: 0.31.3 changes no skill file relative to 0.31.2 (its change
+The catalog below describes OSM 0.33.0, including Prime, Log and Council.
+The previous stable release v0.32.1 has 18 skills. See [verification](verification.md)
+for recorded runtime and installation evidence. Earlier history: 0.31.3 changes no skill file relative to 0.31.2 (its change
 is the Keychain read deadline and the version declarations). 0.31.2 changes no skill file relative to 0.31.1 (its
 change is the sidebar UI and the version declarations). 0.31.1 renamed and added no skill
 relative to 0.31.0; only Setup and Data & Context changed, as patch bumps, to wire OSM's

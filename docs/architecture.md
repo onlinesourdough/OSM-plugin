@@ -96,7 +96,7 @@ reads the relevant route and sources when the task needs them.
 tasks, [Dreaming](../skills/osm-dreaming/SKILL.md) uses the current definition
 to select changed, unfinished or archived work and due sources. It recovers
 missed decisions, repairs evidence-backed context errors and surfaces useful
-open progress in its existing destination. Both hand the write to
+open progress in its existing destination. Log and Dreaming hand the write to
 [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md), the one
 curation owner. A genuine reusable method change goes to
 [Manage Skills](../skills/osm-manage-skills/SKILL.md); a note does not become a

@@ -17,8 +17,9 @@ no live proof. With no qualified public content reader, no live run can reach `c
 | W | Seven documentation pages (README, docs index, overview, architecture, skill index, starter and native installation), labelled unreleased | CI, once activated |
 | C | The owner's private documentation control and daily state | Not a CI source or credential scope |
 
-Skills are not published as working rows: a changed skill is reported as pending release
-propagation and reaches the public guide only at a new tagged release. An unreleased commit is
+Skill instructions are published as released packets. A changed skill is reported as
+pending release propagation. The working starter may include the exact Data & Context
+definition template as a documented setup asset. An unreleased commit is
 never published as released or installed. A released edition resolves to its exact approved
 commit and changes only at a new tagged, approved commit.
 

@@ -6,7 +6,7 @@ OSM gives your AI assistant a Notion home for business context, decisions and
 reusable skills. Install it in the agent app you already use and start with
 one useful task.
 
-[Install](#install-in-your-app) · [Try one task](#start-with-a-real-task) · [Public guide](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a)
+[Install](#install-in-your-app) · [Try one task](#start-with-a-real-task) · [Setup guide](docs/starter.md)
 
 ## Your data and context
 
