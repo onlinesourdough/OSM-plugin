@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.33.0 — 2026-11-19
+
+- Add Prime for scoped context at session start and Log for verified capture
+  at meaningful checkpoints. Both correct verified errors in the current
+  session and give Dreaming a short reference to the repair.
+- Dreaming reads the current definition, checks recent work and selected sources,
+  recovers missed decisions and repairs confirmed context errors.
+- Replace Orchestrate Workers with Council for independent reviews and bounded
+  help. Council puts read-only reviews first and retains the lead’s authority
+  and tracking for delegated implementation. Interview reuses Log for lasting
+  owner decisions.
+- Use the Geist Pixel Square OSM wordmark for the plugin and its sidebar.
+- Update direct invocations of `osm-orchestrate-workers` to `osm-council`
+  when adopting this release.
+- Add scoped credential setup and a two-chat Notion starter. The
+  documentation publisher maps the starter to one unreleased working row.
+- Start new Notion homes with the definition and native destinations. New host
+  instructions link to the selected root with `Data and Context:`, call Prime
+  and Log, and prefer the host's built-in workspace and tools. Existing
+  `Context:` entries remain readable.
+
+The owner pilot exercised Prime, Log, fresh-chat recall and manual Dreaming.
+The first scheduled run of the new Dreaming binding remains to be observed.
+See [verification](docs/verification.md) for the tested hosts and scope.
+
 ## 0.32.1 — 2026-11-13
 
 Patch release and the first on the stable channel. OSM's mark becomes the O, three instruction clarifications change how an

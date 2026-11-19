@@ -1,8 +1,8 @@
 ---
 name: osm-human-writing
-description: Draft or revise prose for clear, concise, natural communication suited to its intended reader.
+description: Draft or revise prose as a deliverable for its intended reader. Preserve facts, uncertainty and the author's voice.
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # OSM:human-writing
@@ -56,11 +56,6 @@ choices, not a required tone or a list of forbidden words:
 | A forced contrast or mechanical list | Replace "We don't just plan; we redefine planning" with the supported purpose of the plan. Keep a contrast or list when the distinctions help the reader. |
 | Repetition disguised as variety | Use the same name for the same thing; remove repeated conclusions rather than cycling through synonyms or adding another summary. |
 | Hidden actor or stacked hedges | "The draft was reviewed by the team" can become "The team reviewed the draft." "Could potentially possibly help" can become "may help"; retain material uncertainty. |
-
-Apply these choices to the requested prose, including documentation and PR
-descriptions when those are the deliverable. Preserve deliberate rhythm,
-technical precision and the author's voice instead of making every text sound
-alike. Do not add an opinion or personal anecdote to make a draft feel human.
 
 ## Preserve the evidence
 

@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.32.1
+OSM version: 0.33.0
 
 **Business first. Productivity built in.**
 
@@ -36,12 +36,20 @@ by default; existing entries and customer names remain theirs.
 
 [Data & Context](../skills/osm-data-context/SKILL.md) engineers the Notion home: its
 root, one definition and the core Knowledge, Memory and Skills stores, reusing
-what exists and creating only what is missing. [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md)
-retrieves, takes in and curates context afterwards, for a manual request, a task
-checkpoint or an existing scheduled run. [Dreaming](../skills/osm-dreaming/SKILL.md)
-adds deliberate reflection across useful completed work between sessions and hands
-every write to Manage Data & Context; it adds no scheduler. The host keeps a short pointer to the
-approved entry; the agent reads only relevant sources and personal methods.
+what exists and creating only what is missing.
+[Prime](../skills/osm-prime/SKILL.md) uses the host's short pointer to find the
+smallest relevant context and [Log](../skills/osm-log/SKILL.md) saves lasting
+changes after meaningful work or on request. [Dreaming](../skills/osm-dreaming/SKILL.md)
+reads the current definition, checks recent work and due sources, and can
+correct proven context errors. It uses an existing caller for a daily run.
+[Manage Data & Context](../skills/osm-manage-data-context/SKILL.md) owns
+retrieval and verified curation for all three. The shared
+[host instruction template](../skills/osm-data-context/assets/bridge.md)
+prefers the host's built-in workspace and tools, including its side panel
+where available.
+[Council](../skills/osm-council/SKILL.md) is available for an independent
+review or bounded help from another agent. Update saved direct calls to
+`osm-orchestrate-workers` to use `osm-council`.
 Reuse full-page Docs, native Skills and Memory, with Spaces for business and
 brand scopes. Start with one useful workflow in an existing workspace; no
 wholesale migration is required.

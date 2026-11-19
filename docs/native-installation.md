@@ -47,6 +47,38 @@ Other apps may expose names differently; use their actual discovery rather
 than rewriting the canonical skill files. Native project/local scopes are
 available in some apps; use the same scope for later updates and removal.
 
+## Start with a clean agent workspace
+
+Open the actual project in your host. Keep one short set of OSM instructions
+per profile or project, and one verified route to the selected Notion home.
+Have Setup write the supported instruction file, then check it in a fresh
+session. Prefer the host's own workspace and tools, including its side panel
+when available. Use a desktop app or an external browser only when needed.
+
+| Host | Instructions | Approvals and tools |
+| --- | --- | --- |
+| Codex | `~/.codex/AGENTS.md` for a profile and `AGENTS.md` for a project. | Start with workspace access. Choose file scope and approval behavior independently. Use the in-app workspace for its supported browser and panel tools. macOS Computer Use has separate system permissions. [Instructions](https://learn.chatgpt.com/docs/agent-configuration/agents-md) · [Sandbox and approvals](https://learn.chatgpt.com/docs/security) · [Computer Use](https://learn.chatgpt.com/docs/computer-use) |
+| Claude Code | `~/.claude/CLAUDE.md` or the project's `CLAUDE.md`. | Start with `default`; `acceptEdits` reduces prompts for edits. Inspect effective tool rules with `/permissions`. Use `auto` where supported if you want reviewed automation. [Instructions](https://code.claude.com/docs/en/memory) · [Permissions](https://code.claude.com/docs/en/permissions) |
+| Antigravity | Global or workspace rules. The app, IDE and CLI can read a workspace `AGENTS.md`. | For the CLI, check the active mode and `/permissions`. `accept-edits` permits workspace edits, and `auto` uses the terminal sandbox when supported. App and IDE users should check their own tool settings. [Rules](https://antigravity.google/docs/rules-workflows) · [CLI modes](https://antigravity.google/docs/cli/modes) |
+| Cursor | A root `AGENTS.md` or a project rule in `.cursor/rules/`. | Open **Settings → Agents → Approvals & Execution**. Choose **Auto-review** for sandboxing and review of remaining calls or **Allowlist** for a small known set of calls. [Rules](https://cursor.com/docs/rules) · [Run modes](https://cursor.com/docs/agent/security/run-modes) |
+| Pi | Project `AGENTS.md` plus the selected Pi settings and packages. | Inspect the enabled extensions and tools. Use `--tools` to control the tools available for a session and a separate environment for filesystem isolation. [CLI](https://docs.pi.dev/latest/cli) · [Security](https://docs.pi.dev/latest/security) |
+
+Check one project read and one intended edit on dummy data before enabling
+broader unattended work. For a worker or Council review, give that session
+only the tools, inputs and connector access it needs. Reuse the same Notion
+home across hosts only after verifying their actual accounts, scopes and reads.
+
+### Codex full-access example
+
+A dedicated profile can use `sandbox_mode = "danger-full-access"` with
+`approval_policy = "never"`. That profile runs shell commands without the
+filesystem sandbox or interactive sandbox escalation. Automatic review is
+separately configured for approval requests. Computer Use and access to
+Notion each have their own permissions. Keep these choices explicit in a
+profile. The OSM instructions only express how the agent should work.
+[Configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference) ·
+[Computer Use](https://learn.chatgpt.com/docs/computer-use)
+
 ## Update, rollback and removal
 
 Moving from `aios@online-sourdough` (0.29.x or earlier) to `osm` is a new

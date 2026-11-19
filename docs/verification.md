@@ -2596,3 +2596,130 @@ nor written.
 Not established, and not changed by this release: the O in a native panel; hosts other than macOS Codex (Windows is a known limit);
 writes through OSM's connection; browser sign-in; the broader behavior qualification of #75 and the first-use acceptance of #69, which stay
 open; and the stopped distribution secret-check work (#60), which stays held with no repository security setting changed.
+
+## Prime, Log and Dreaming context candidate
+
+Local verification on 2026-11-19 against `d87da78`. The candidate keeps the
+existing context connection and daily caller. Prime selects relevant sources,
+Log delegates durable capture to Manage Data & Context, and Dreaming selects
+due sources from the current definition and delegates verified repairs.
+
+- The sidebar build matches the checked-in runtime. All 249 sidebar tests
+  passed. Package and individual skill versions passed against the baseline.
+- Documentation, onboarding, layout, continuity, skill-version, context
+  footprint, responsibility, context architecture, publisher and consumer
+  selection checks passed. The architecture rehearsal exercised 91 cases,
+  79 variants and 474 negative controls. The publisher is inactive.
+- An isolated Claude Fable 5.2 High review and five fictional decision cases
+  supported the narrow root-first route, independent repository isolation,
+  in-place repair, unchanged replay, source scope and revoked-access behavior.
+  They exercised decisions in text with tools disabled. They provide no proof
+  of native plugin invocation, actual writes or scheduled execution.
+- On one selected macOS Notion connection an exact data source ID returned
+  a bounded Memory result. A date-filtered native query and a fresh
+  Prime-to-Log-to-Prime roundtrip on the candidate are still unqualified.
+  A native Codex archive listing returned one bounded item. This proves the
+  desktop listing surface on this host, while the existing daily route still
+  needs an archive-reader qualification and cutover.
+
+### Short host instructions and unattended upkeep
+
+The new bridge uses `Data and Context:` and shares the built-in workspace
+preference across hosts. The sidebar round-trips both labels, preserves older
+instructions on a URL change, and refuses mixed duplicate routes. All 249
+sidebar tests and the bundled smoke check passed. Package validation, context
+footprint, responsibility, architecture, documentation and onboarding checks
+also passed.
+
+Dreaming 1.2.0 spells out unattended repair, Memory review and bounded
+definition upkeep. The existing selected Mac writer preserves Memory origin
+fields, including Source date. A correction to a protected field is held in
+the current run result. Live cutover and a scheduled run are still unqualified.
+
+### Task-time repair and retained skills
+
+Three Claude Fable 5.2 High passes reviewed the retained skills and successive
+versions of the Prime–Log–Dreaming loop. The final read-only review passed
+after revisions to CLI isolation, interview handoff, definition bindings and
+repair evidence. The final run used the installed CLI's safe mode with tools and
+external connectors disabled. The case outcomes are reasoning evidence.
+
+Package, skill-version, link and responsibility checks, architecture and
+onboarding rehearsals, the context footprint and 249 sidebar tests passed.
+A read of the existing owner definition verified its mapped roles, source map,
+operating policy and maintenance bindings. Native repair readback, scheduled
+adoption and alternate CLI execution beyond the observed Claude review remain
+to be qualified.
+
+### Memory research check and first-use starter
+
+The candidate uses source histories for evidence, durable notes for useful
+learning, targeted retrieval and a thin startup instruction. The
+[Anthropic memory article](https://www.anthropic.com/research/components-of-agent-memory)
+supports those design choices in its own experiments. Log now explicitly
+keeps routinely retrievable facts at their sources. The article supplies
+design evidence for this choice, while live OSM behavior still needs the
+representative native and scheduled checks above.
+
+On 2026-11-19 the public Notion Setup page was read in the built-in browser.
+It still offered other context homes. The new Git starter uses Notion as the
+home and links the same template and credential guidance as the repository.
+On `2e752a0`, credential-free reconciliation selected one working row when
+scoped to the starter and reported no source change against the same commit.
+All 72 publisher rehearsals and 76 mutation controls passed, including
+source identity for the starter and replay through the fixture transports.
+Public parity still needs the corresponding publication and readback.
+
+### Active owner pilot, 2026-11-19
+
+The pinned candidate at `1f18c65` was installed in the active Codex and
+Claude Code profiles from a frozen export. Installed skill bytes matched the
+export. Codex also recognised the package and all 20 skills in a disposable
+profile and in the active profile. A real Codex task read Prime and Log, saved
+one approved owner preference through the selected Notion writer and read it
+back. A new task read Prime and recovered the same preference with provenance.
+A replay made zero writes. After the manual upkeep run, one row remained with
+matching content hash and last edit time.
+
+Read-only schema inspection and two Fable 5.2 High reviews distinguished a
+client-origin selector from the actual evidence reference. The existing
+Knowledge, Memory and Skills stores provide the required types. Memory's
+Decision and Skills' Personal skill are registered defaults with Needs review
+and unset Key and Space. Knowledge has no registered default. The starter
+documents the types, optional fields and exact shared definition template.
+Existing schemas were preserved.
+
+The existing Dreaming job uses the candidate's verified skill files. Its
+read-only Codex history transport was requalified on the installed CLI for
+active and archived listings and completed-turn reads. The local manifest and
+Notion Runtime binding were reconciled, and a manual run verified candidate
+versions and read back its maintenance result. History and media coverage
+was partial. The temporary schedules produced configuration events but no
+scheduler-originated heartbeat for this candidate. The same job was restored
+to its active daily schedule. Scheduled execution and public release parity
+remain to be observed.
+
+### Council, icon and working guide, 2026-11-19
+
+Local package candidate `070b25b` replaces the worker skill with
+`osm-council` 3.0.0. The OSM router handles requests that use the old name.
+Saved explicit invocations need to use the new identifier when adopting the
+candidate.
+
+- A disposable Codex 0.170.0 installation discovered 20 enabled OSM skills
+  and exactly one Council entry, with zero discovery errors. The installed
+  Council instructions and icon matched the frozen candidate byte for byte.
+  Claude Code discovered Council and passed its isolated install, cache,
+  upgrade, coexistence and removal rehearsal.
+- An independent sidebar build reproduced the bundled files. All 249 tests
+  and the stdio smoke passed, including matching monochrome icon geometry
+  in the server, global tool and Home header.
+- Package and documentation checks passed, including 72 publisher rehearsals
+  and 76 mutation controls. Credential-free reconciliation mapped seven
+  working documentation rows. Both Mermaid views rendered in Codex's
+  built-in browser. The public Notion entry still marks v0.32.1
+  reconciliation as pending.
+- Fable review of this exact candidate requires an authenticated isolated
+  profile. The attempted isolated Claude call returned before model use.
+  The visible active Codex sidebar and the first actual scheduled run of
+  the installed owner pilot remain separate verification steps.

@@ -38,7 +38,7 @@ migration evidence also accounts for the two other historical Global methods:
 | --- | --- |
 | `clarify` | Adopted as native [Clarify](../../osm-clarify/SKILL.md) in AIOS 0.16.0 for complex explanations and optional visuals; the former mandatory HTML output is intentionally adapted |
 | `manage-skills` | Its accepted responsibility moved to native [Manage Skills](../../osm-manage-skills/SKILL.md); no external body existed in the snapshot to migrate |
-| `orchestrate-workers` | Its accepted responsibility moved to native [Orchestrate workers](../../osm-orchestrate-workers/SKILL.md); no external body existed in the snapshot to migrate |
+| `orchestrate-workers` | Its accepted responsibility moved to native [Council](../../osm-council/SKILL.md); no external body existed in the snapshot to migrate |
 | `route-models` | Retired at historical change `8b81375`; current model advice lives in [model advice](../../osm/references/model-advice.md), without restoring a model catalog |
 | `shape-offer` | Retained in the public Global Skills archive; not adopted or actively routed by AIOS |
 
@@ -54,7 +54,7 @@ template's placeholder owner files.
 Useful native workforms beyond the direct legacy keep rows:
 [Check](../../osm/references/check.md) for installation/format/harness evidence (a read-only reference under `osm`, as are Update and model advice) and
 [Manage Data & Context](../../osm-manage-data-context/SKILL.md) for durable facts/routes,
-and [Orchestrate workers](../../osm-orchestrate-workers/SKILL.md) for an actual
+and [Council](../../osm-council/SKILL.md) for an actual
 lead worker plan, launch or recovery. [Manage Skills](../../osm-manage-skills/SKILL.md)
 owns personal skill placement/discovery and reviewed capability adoption,
 update, removal and rollback.

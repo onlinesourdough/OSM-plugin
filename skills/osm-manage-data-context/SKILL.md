@@ -2,7 +2,7 @@
 name: osm-manage-data-context
 description: Retrieve relevant context, take in sources, curate concise durable records and repair routes, schema and the definition in the Notion Data & Context home. One method for manual, task-time and scheduled use. Formerly OSM Maintain Context.
 metadata:
-  version: "3.0.0"
+  version: "3.2.0"
 ---
 
 # OSM:manage-data-context
@@ -74,6 +74,10 @@ conflict the evidence cannot settle, are not merged: keep both and return them a
 flagged results with the question for the owner.
 
 ## Upkeep
+
+For Log or Dreaming apply the shared
+[progress and checkpoint rules](references/activity.md). Keep useful work
+status at its existing owner and curate supported durable changes in place.
 
 Work from useful new evidence, supported route or definition drift and records
 that are due or flagged, not only the latest edit or a due queue. Reconcile by

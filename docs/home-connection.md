@@ -24,6 +24,9 @@ which the Context Architecture's
 [home write policy](../skills/osm-data-context/references/architecture.md#home-write-policy)
 defines.
 
+For an additional source or a credential change, follow
+[credential setup and verification](../skills/osm-setup/references/credentials.md).
+
 Grants Setup asks the owner for:
 
 - the OSM root page, which covers its child pages and child databases;

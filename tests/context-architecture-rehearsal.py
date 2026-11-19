@@ -829,7 +829,7 @@ def method_placement(data, ws):
         reasons.append("architecture-copied")
     if "architecture" in data["ordinary_use_reads"]:
         reasons.append("architecture-preloaded")
-    if not {"orientation", "rules", "definition"} <= set(data["root_contains"]):
+    if not {"definition", "destinations", "governing policy route"} <= set(data["root_contains"]):
         reasons.append("entry-incomplete")
     return reasons
 

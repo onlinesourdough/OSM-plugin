@@ -16,9 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL_NAMES = {
     "osm", "osm-build-work", "osm-create-project",
     "osm-manage-data-context", "osm-manage-skills",
-    "osm-setup", "osm-data-context", "osm-interview", "osm-orchestrate-workers", "osm-review-work",
+    "osm-setup", "osm-data-context", "osm-interview", "osm-council", "osm-review-work",
     "osm-risky-changes", "osm-ship-work", "osm-spec-work", "osm-triage-improvement",
     "osm-human-writing", "osm-write-code", "osm-clarify", "osm-dreaming",
+    "osm-prime", "osm-log",
 }
 # OSM 0.31.0 folded these into `osm` references or moved them out of the package.
 # They get no alias skill; `osm` routes the old names.
@@ -57,7 +58,7 @@ LEGACY_ROUTE_TARGETS = {
 LEGACY_EXTERNAL_TARGETS = {
     "clarify": "](../../osm-clarify/SKILL.md)",
     "manage-skills": "](../../osm-manage-skills/SKILL.md)",
-    "orchestrate-workers": "](../../osm-orchestrate-workers/SKILL.md)",
+    "orchestrate-workers": "](../../osm-council/SKILL.md)",
     "route-models": "historical change `8b81375`",
     "shape-offer": "Retained in the public Global Skills archive",
 }
@@ -274,13 +275,12 @@ def validate(root=ROOT, release_tag=None):
             "| Optional autonomous-use guardrails |" in workflow_scenarios and
             "setup-guardrails" not in SKILL_NAMES,
             "optional guardrails route boundary")
-    orchestrate = (skill_root / "osm-orchestrate-workers/SKILL.md").read_text()
     # Ownership and portability invariants; behavior needs independent model rehearsal.
     selection = skill_root / "osm/references/model-advice.md"
-    for caller in ("osm-spec-work", "osm-build-work", "osm-orchestrate-workers"):
+    for caller in ("osm-spec-work", "osm-build-work", "osm-council"):
         require(selection.resolve() in set(link_targets(skill_root / caller / "SKILL.md")),
                 f"model selection route missing: {caller}")
-    for source in (selection, skill_root / "osm-orchestrate-workers/SKILL.md"):
+    for source in (selection, skill_root / "osm-council/SKILL.md"):
         require(not re.search(r"\b(?:gpt-\d|claude-\d|gemini-\d)", source.read_text()),
                 f"nonportable model default: {source}")
     require(not (skill_root / "osm-setup/assets").exists(),
@@ -379,9 +379,14 @@ def validate(root=ROOT, release_tag=None):
     lines = bridge.splitlines()
     require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
             "owner bridge markers")
-    require("use OSM Manage Data & Context" in bridge and
-            "Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
-            "legacy bridge route")
+    require(lines[1:4] == [
+        "Always start with the OSM Prime skill.",
+        "Data and Context: <verified-notion-root-entry-url>",
+        "Always run OSM Log at meaningful checkpoints or when asked.",
+    ],
+            "new bridge route")
+    require("Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
+            "retained context names")
     sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()
     sidebar_route = (root / "apps/sidebar/context-route.mjs").read_text()
     require("['aios', 'panel']" in sidebar_state and "'.aios-lock'" in sidebar_route and
@@ -635,9 +640,13 @@ def negative_controls():
         path = root / "skills/osm-data-context/assets/bridge.md"
         path.write_text(path.read_text().replace("AIOS:BEGIN", "OSM:BEGIN"))
 
-    def dropped_legacy_bridge_route(root):
+    def dropped_retained_context_names(root):
         path = root / "skills/osm-data-context/SKILL.md"
         path.write_text(path.read_text().replace(" Formerly OSM Context and AIOS Context.", ""))
+
+    def dropped_log_trigger(root):
+        path = root / "skills/osm-data-context/assets/bridge.md"
+        path.write_text(path.read_text().replace("Always run OSM Log", "Consider writing a note"))
 
     def renamed_panel_storage(root):
         path = root / "apps/sidebar/sources.mjs"
@@ -666,7 +675,8 @@ def negative_controls():
     rejected(disable_after_acceptance, "aios to osm switch procedure")
     rejected(retired_skill_copy, "skill inventory")
     rejected(renamed_bridge_marker, "owner bridge markers")
-    rejected(dropped_legacy_bridge_route, "legacy bridge route")
+    rejected(dropped_retained_context_names, "retained context names")
+    rejected(dropped_log_trigger, "new bridge route")
     rejected(renamed_panel_storage, "persisted sidebar state namespace")
     rejected(prefix_only_classification, "package identity classification")
     rejected(native_version_drift, 'native identity/version drift')

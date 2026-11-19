@@ -41,7 +41,7 @@ Return the remaining judgment, model and effort, evidence, reason, how to apply
 it, and any gaps in the existing task contract. Low remaining judgment permits a
 cheaper candidate, not automatic delegation. A material capability or cost gap
 reopens the shared [task-result decision](lifecycle.md).
-[Orchestrate workers](../../osm-orchestrate-workers/SKILL.md) uses advice only
+[Council](../../osm-council/SKILL.md) uses advice only
 for already selected delegated execution.
 
 Apply an authorized, exposed in-session switch when appropriate. If only the user

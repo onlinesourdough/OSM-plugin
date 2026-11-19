@@ -514,11 +514,12 @@
      {"expect": "status-overwritten", "data": {"from_positive": true, "override": {"after": {"status": "Ongoing"}}}},
      {"expect": "kind-from-source-type", "data": {"from_positive": true, "override": {"after": {"kind": "document"}}}}]},
   {"id": 46, "name": "shared method versus customer configuration", "check": "method-placement", "contract": "architecture.md#osm-context-architecture",
-   "positive": {"root_contains": ["orientation", "rules", "definition", "mappings"], "planned_pages": [{"id": "fict-a-root", "contains_architecture": false}],
+   "positive": {"root_contains": ["definition", "destinations", "governing policy route"], "planned_pages": [{"id": "fict-a-root", "contains_architecture": false}],
                 "ordinary_use_reads": ["root entry", "selected bodies"]},
    "negatives": [
      {"expect": "architecture-copied", "data": {"from_positive": true, "override": {"planned_pages": [{"id": "fict-a-architecture", "contains_architecture": true}]}}},
-     {"expect": "architecture-preloaded", "data": {"from_positive": true, "override": {"ordinary_use_reads": ["root entry", "architecture", "selected bodies"]}}}]},
+     {"expect": "architecture-preloaded", "data": {"from_positive": true, "override": {"ordinary_use_reads": ["root entry", "architecture", "selected bodies"]}}},
+     {"expect": "entry-incomplete", "data": {"from_positive": true, "override": {"root_contains": ["definition", "destinations"]}}}]},
   {"id": 47, "name": "task-authorised edit to a human document", "check": "human-document-edit", "contract": "architecture.md#human-originals-and-selected-excerpts",
    "positive": {"edits": [{"actor": "task", "target": "fict-a-handbook", "target_is_human_library": true, "applied_to": "original", "recorded": true}]},
    "negatives": [

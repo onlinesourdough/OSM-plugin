@@ -17,12 +17,20 @@ test('first-run save persists only the context bridge and can be read after rest
   const after = await saveContextRoute({ target, expectedRevision: before.revision }, options);
   assert.equal(after.target, target); assert.equal(after.state, 'configured');
   assert.deepEqual(await readContextRoute(options), after);
-  assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), bridge.replace('<verified-notion-root-entry-url>', target));
+  const saved = await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8');
+  assert.equal(saved, bridge.replace('<verified-notion-root-entry-url>', target));
+  assert.deepEqual(saved.split('\n').slice(1, 4), [
+    'Always start with the OSM Prime skill.',
+    `Data and Context: ${target}`,
+    'Always run OSM Log at meaningful checkpoints or when asked.',
+  ]);
   assert.deepEqual(await readdir(options.codexHome), ['AGENTS.md']);
 });
 test('changes retain custom policy and unrelated bytes, back up the original and replay without writes', async (t) => {
   const options = await fixture(t);
-  const original = 'Unrelated rule\n' + bridge.replace('<verified-notion-root-entry-url>', target).replace('Report gaps;', 'Extra approved rule.\nReport gaps;') + '\nAnother rule\n';
+  const configured = bridge.replace('<verified-notion-root-entry-url>', target)
+    .replace('<!-- AIOS:END -->', 'Extra approved rule.\n<!-- AIOS:END -->');
+  const original = 'Unrelated rule\n' + configured + '\nAnother rule\n';
   await writeFile(join(options.codexHome, 'AGENTS.md'), original);
   const before = await readContextRoute(options), nextTarget = moved;
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
@@ -36,7 +44,6 @@ test('a 0.29.0 AIOS block stays readable and only its Context line changes', asy
   // Persisted owner state keeps the AIOS markers and wording written by earlier builds.
   const options = await fixture(t);
   const legacy = `<!-- AIOS:BEGIN -->\nContext: ${target}.\nFor work using or changing this context, use AIOS Context and read its\nguidance once per session. Load only what the task needs.\nReport gaps; do not invent context or silently switch sources.\n<!-- AIOS:END -->\n`;
-  assert.match(bridge, /^<!-- AIOS:BEGIN -->\n[\s\S]*use OSM Manage Data & Context[\s\S]*<!-- AIOS:END -->\n$/);
   await writeFile(join(options.codexHome, 'AGENTS.md'), legacy);
   const before = await readContextRoute(options);
   assert.equal(before.state, 'configured'); assert.equal(before.target, target);
@@ -93,6 +100,7 @@ test('malformed same-line markers and empty duplicate routes never change instru
     `<!-- AIOS:BEGIN -->Context: https://old.example/.\n<!-- AIOS:END -->`,
     `<!-- AIOS:BEGIN -->\nContext: https://old.example/.<!-- AIOS:END -->`,
     `<!-- AIOS:BEGIN -->\nContext:\nContext: https://old.example/.\n<!-- AIOS:END -->`,
+    `<!-- AIOS:BEGIN -->\nData and Context: ${target}\nContext: ${moved}.\n<!-- AIOS:END -->`,
   ]) {
     await writeFile(path, original); const before = await readContextRoute(options);
     await assert.rejects(saveContextRoute({ target, expectedRevision: before.revision }, options), /need attention/);

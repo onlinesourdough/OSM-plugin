@@ -19,7 +19,7 @@ proposing a system. Avoid demanding an arbitrary target or deadline.
 
 When the location of needed knowledge is unclear, ask where that particular
 work happens. Use existing authorized access. New connections and registration
-belong to [Setup](../../osm-setup/SKILL.md) only when needed and authorized;
-otherwise continue from available context. Source routes and unique local facts
-use Manage Data & Context's [curation](../../osm-manage-data-context/references/curation.md).
+belong to [Setup](../../osm-setup/SKILL.md) only when needed and authorized.
+Use the context already available and apply the interview's closing rule for
+any lasting owner facts.
 Understanding can itself be the small useful result.

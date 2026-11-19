@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { classifyTarget } from './target.mjs';
 
 const LIMIT = 64 * 1024;
+const contextLine = /^((?:Data and Context|Context):[ \t]*)([^\r\n]*)/gm;
 const defaultHome = () => process.env.CODEX_HOME || join(homedir(), '.codex');
 const revision = (text) => createHash('sha256').update(text === null ? 'missing' : 'file:' + text).digest('hex');
 export function parseContextRoute(text) {
@@ -15,9 +16,11 @@ export function parseContextRoute(text) {
   if (starts.length !== 1 || ends.length !== 1 || starts[0].index >= ends[0].index) return { state: 'ambiguous' };
   if (!/^<!-- AIOS:BEGIN -->\r?$/m.test(text) || !/^<!-- AIOS:END -->\r?$/m.test(text)) return { state: 'ambiguous' };
   const block = text.slice(starts[0].index + starts[0][0].length, ends[0].index);
-  const routes = [...block.matchAll(/^Context:[ \t]*(.*)$/gm)];
+  const routes = [...block.matchAll(contextLine)];
   if (routes.length !== 1) return { state: 'ambiguous' };
-  const route = classifyTarget(routes[0][1].trim().replace(/\.$/, ''));
+  const [, prefix, value] = routes[0];
+  const target = value.trim();
+  const route = classifyTarget(prefix.startsWith('Context:') ? target.replace(/\.$/, '') : target);
   return route ? { state: 'configured', ...route } : { state: 'ambiguous' };
 }
 async function snapshot(codexHome) {
@@ -57,7 +60,11 @@ export function replaceContext(text, target, bridge) {
   if (current.state === 'configured') {
     // Preserve every rule; replace only the owned location inside the single routing block.
     const next = original.replace(/<!-- AIOS:BEGIN -->[\s\S]*?<!-- AIOS:END -->/, (block) =>
-      block.replace(/^Context:[^\r\n]*/m, () => `Context: ${route.target}.`));
+      block.replace(contextLine, (_, prefix, value) => {
+        const trimmed = value.trimEnd();
+        const period = prefix.startsWith('Context:') ? '.' : '';
+        return prefix + route.target + period + value.slice(trimmed.length);
+      }));
     if (parseContextRoute(next).target !== route.target) throw new Error('Existing context instructions need attention. They have been left unchanged.');
     return next;
   }

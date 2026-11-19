@@ -13,7 +13,7 @@ task; OSM has no model runner, background service or permission system.
 | Skills | Reusable methods, standards and judgment, with references and small helpers as needed |
 | Project workspace | Local requirements, working files, outputs, proof and recovery; Git is selected when useful |
 | Optional System | A separately maintained specialist with its own dependencies or operational needs |
-| Native manifests | Package identity and discovery over the same 18 skills |
+| Native manifests | Package identity and discovery over the shared skill catalog |
 | Codex sidebar | A host-managed local MCP App for numbered source setup and a dashboard; stores private navigation names/links, with no company-content copy or chat handoff |
 
 ## Work and methods
@@ -89,11 +89,14 @@ check, the update/rollback procedure and on-request model advice.
 
 ## Capture, Dreaming and curation
 
-Context enters the home in two ways, and one method writes it. During ordinary
-work an important correction is saved when it happens. Between tasks,
-[Dreaming](../skills/osm-dreaming/SKILL.md) selects useful completed or changed
-work, reflects across it with due or flagged records, and checks what it would
-keep against its source. Both hand the write to
+The home starts with one compact definition and its native databases. The
+host's short entry link selects the home. [Prime](../skills/osm-prime/SKILL.md)
+reads the relevant route and sources when the task needs them.
+[Log](../skills/osm-log/SKILL.md) saves lasting changes at a checkpoint. Between
+tasks, [Dreaming](../skills/osm-dreaming/SKILL.md) uses the current definition
+to select changed, unfinished or archived work and due sources. It recovers
+missed decisions, repairs evidence-backed context errors and surfaces useful
+open progress in its existing destination. Log and Dreaming hand the write to
 [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md), the one
 curation owner. A genuine reusable method change goes to
 [Manage Skills](../skills/osm-manage-skills/SKILL.md); a note does not become a
@@ -102,7 +105,10 @@ skill by itself.
 ```mermaid
 flowchart TB
   SRC["Native histories and original business systems<br/>(they stay where they are)"]
-  TASK["Ordinary task<br/>task-time capture"]
+  TASK["Work in the host"]
+  PRIME["Prime<br/>find the relevant context"]
+  LOG["Log<br/>save lasting changes"]
+  COUNCIL["Council<br/>optional second opinion or help"]
   DREAM["Dreaming<br/>select, reflect, check against source"]
   MDC["Manage Data & Context<br/>the one curation owner"]
   MSK["Manage Skills<br/>reusable method changes"]
@@ -116,7 +122,10 @@ flowchart TB
   end
   SRC -->|"selected evidence"| TASK
   SRC -->|"completed or changed items"| DREAM
-  TASK -->|"a correction, saved now"| MDC
+  ENTRY --> PRIME --> TASK --> LOG
+  TASK -.-> COUNCIL
+  COUNCIL -.->|"findings or bounded work"| TASK
+  LOG -->|"lasting decisions and corrections"| MDC
   DREAM -->|"proposed or authorized curation"| MDC
   DREAM -->|"genuine method change"| MSK
   MDC -->|"verified write"| K
@@ -142,7 +151,8 @@ flowchart TB
   and leaves unchanged content and its dates alone; see the
   [maintenance loop](../skills/osm-data-context/references/architecture.md#maintenance-loop)
   and [item and stage failures](../skills/osm-data-context/references/architecture.md#item-and-stage-failures)
-  for how an item still active when found stays pending until it completes.
+  for tracking active work. A completed turn can support a status update
+  while its active turn stays pending.
 - **Existing Content is curated like any store.** When the owner has selected a
   Content collection, Manage Data & Context maintains it as a store of context
   with the same lifecycle and write policy, without a Content module and without
@@ -161,7 +171,7 @@ The harness discovers skill names and descriptions. Load the selected skill,
 then only the references needed for its operation. Explaining a method does not
 execute its lifecycle. Model advice, only on request, assesses the remaining work under the
 user's configured default; worker orchestration is conditional on a concrete
-gain or a request. Shared continuation retains existing action authority.
+gain or a request through [Council](../skills/osm-council/SKILL.md). Shared continuation retains existing action authority.
 Risky Changes applies to consequential changes, without creating routine gates.
 
 Clarify is an included explanation method, separate from visual design. The

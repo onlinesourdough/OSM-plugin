@@ -92,7 +92,7 @@ and its owning phases, not this audit.
   a mandatory lead. Technology and generic audit guidance have one shared owner.
   For actual delegation only, verify the concrete benefit or user request,
   minimum context, root, worker-goal linkage and caller acceptance through
-  Orchestrate workers; ordinary repository work does not load it.
+  Council; ordinary repository work does not load it.
   Sensitive changes retain repository-owned security context, scoped negative
   tests, validated findings and affected deployment/retest proof; optional tools
   do not become required scans for ordinary edits.

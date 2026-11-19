@@ -53,7 +53,7 @@ transfer would mostly repeat discovery. No universal token or performance
 advantage is claimed for either execution mode.
 
 Delegation with retained caller coordination/acceptance selects
-[Orchestrate workers](../../osm-orchestrate-workers/SKILL.md).
+[Council](../../osm-council/SKILL.md).
 [User-owned continuation and whole-task handoff](continuation.md) belong to this
 shared lifecycle. Load that procedure only for a selected/requested handoff;
 it owns the usable prompt, receiving context and supported transfer. A new-task
@@ -122,9 +122,9 @@ waiting-review and revisions. Completion requires all accepted obligations and
 any required independent acceptance; logical waits are not native terminal states.
 
 [Routing](routing.md) selects the owner/workflow before production.
-[Orchestration](../../osm-orchestrate-workers/SKILL.md) carries the tracking
-state, request authority and bounded worker requirements without widening action
-or sidebar authority. Independent repositories use this same tracking SOP with local evidence pointers.
+Keep tracking and action authority with the lead when
+[Council](../../osm-council/SKILL.md) delegates bounded work.
+Independent repositories use this same tracking SOP with local evidence pointers.
 
 Only for interruption or goal-state mismatch, use [recovery](recovery.md#native-state-deadlock).
 Its fallback applies only to an

@@ -329,14 +329,12 @@ runtime/sidebar. Resource: ui://osm/home-v1. Tools:
   comes from osm_context_home's bootstrap read. osm_save_sources accepts the
   definitionRevision that generated links came from.
 
-The O identifies OSM: two mirrored ellipse halves meeting in a narrow seam, with no dot or nodes.
-`assets/branding/osm-icon.svg` is the source of `assets/icon.png` (the Codex `composerIcon` and `logo`, 512 px,
-brown `#2B1B12` on cream `#F8F2E8`); any SVG renderer at 512 px reproduces it, and the committed PNG was rendered with
-resvg-js 2.6.2. The sidebar mark is one SVG with the same two paths in a 24-unit box and no `theme` field, sent
-both as the `osm_open` tool icon, which hosts read first, and as the server icon.
-It is monochrome: it paints only with `currentColor` and sets no colour of its
-own, so the host can colour it like its other sidebar icons. Earlier candidates
-that set their own greys looked wrong in the native sidebar. MCP SDK 1.31's `McpServer` drops
+The mark spells OSM in Geist Pixel Square. The Codex manifest uses the 512 px
+brown-on-cream `assets/icon.png`, with its source at `assets/branding/osm-icon.svg`.
+The sidebar header, MCP server and global `osm_open` tool use the same three paths
+from `assets/branding/osm-icon-glyph.svg`. The monochrome glyph uses
+`currentColor`, so it takes on the host’s icon color in light and dark themes.
+MCP SDK 1.31's `McpServer` drops
 tool icons, so the server sets its own `tools/list` handler through the SDK's
 public low-level server; it lists the registered tools unchanged apart from that
 icon.

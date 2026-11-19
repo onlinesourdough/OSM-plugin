@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import subprocess
 
-from skill_metadata import RENAMED_SKILLS
+from skill_metadata import skill_lineage
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ROOT / "tests/fixtures/model-selection-cases.json"
@@ -18,7 +18,7 @@ SOURCES = [
     "skills/osm/references/lifecycle.md",
     "skills/osm-spec-work/SKILL.md",
     "skills/osm-build-work/SKILL.md",
-    "skills/osm-orchestrate-workers/SKILL.md",
+    "skills/osm-council/SKILL.md",
 ]
 FIELDS = {
     "id": {"type": "string"},
@@ -40,24 +40,18 @@ FIELDS = {
 }
 
 
-def baseline_path(relative):
-    """Map a current source to its pre-0.30.0 skill folder for older baselines."""
-    parts = relative.split("/")
-    parts[1] = RENAMED_SKILLS.get(parts[1], parts[1])
-    return "/".join(parts)
-
-
 def prepare(destination, baseline):
     destination.mkdir(parents=True, exist_ok=True)
     snippets = []
     hashes = {}
     for relative in SOURCES:
         if baseline:
-            result = subprocess.run(["git", "show", f"{baseline}:{relative}"], cwd=ROOT,
-                                    text=True, capture_output=True)
-            if result.returncode and baseline_path(relative) != relative:
-                result = subprocess.run(["git", "show", f"{baseline}:{baseline_path(relative)}"],
+            prefix, name, suffix = relative.split("/", 2)
+            for old_name in skill_lineage(name):
+                result = subprocess.run(["git", "show", f"{baseline}:{prefix}/{old_name}/{suffix}"],
                                         cwd=ROOT, text=True, capture_output=True)
+                if result.returncode == 0:
+                    break
             if result.returncode and relative == "skills/osm/references/continuation.md":
                 # Before shared ownership, the same conditional procedure lived here.
                 result = subprocess.run(["git", "show", f"{baseline}:skills/aios-select-model/references/continuation.md"],
