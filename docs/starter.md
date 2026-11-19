@@ -44,14 +44,24 @@ names and Notion types for a new home.
 | Memory | Name (Title), Key (Text), Status (Select), Source (Text with the evidence reference), Space (Multi-select). | Type (Select), Source date, Imported, Revised, Review due (Date), Related docs (Relation). Where Source is already a client label, keep it and record the exact reference in Evidence (Text). |
 | Skills | Skill name (Title), Description (Text), Space (Multi-select), Status and Audience (Select). | Files (Files & media), Owner (Person), and Key and Source (Text) for managed skills. |
 
-Use `Current`, `Needs review` and `Superseded` for Status. A verified,
-useful decision can be Current. Leave uncertain evidence visible for review,
-and reference the replacement when marking a record Superseded. Knowledge's
-temporal scope describes the period as Ongoing or Historical. For Skills,
-Audience is Personal or Team. Set Owner when a real maintainer is known.
-Notion sharing determines access. Space, Audience and views help people find
-things. A Key supports deduplication within visible records; check for
-existing matches before creating one.
+Use `Current` for records selected for normal use with supporting evidence,
+`Needs review` when the evidence is missing, disputed or contradicted, and
+`Superseded` when a replacement is known. A passed Review due calls for a
+check. For live or time-sensitive facts, read the owning source. Link the
+replacement in the page body. Add a relation only if the team needs to
+follow replacement chains regularly.
+
+Use the Key for a stable topic, such as `first-client-review-day`. A change
+from Tuesday to Wednesday then updates the same decision. Keep the reason
+and the exact evidence reference with it. Keep Source date, Imported and
+Revised distinct. Use Review due when there is a useful date to check again.
+
+Knowledge's temporal scope describes the period as Ongoing or Historical.
+For Skills, Audience is Personal or Team. Set Owner when a real maintainer
+is known. Notion sharing determines access. Space, Audience and views help
+people find things. Check visible records for an existing Key before creating
+one. Record source authority in the source agreement. Give a new field a
+specific lookup or maintenance purpose before adding it.
 
 Use a native New-menu template if you already have one. Keep its body simple:
 Summary and evidence for Knowledge, decision and reason for Memory, and
