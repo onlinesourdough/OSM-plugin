@@ -50,7 +50,9 @@ RELEASED = MANIFEST["editions"]["released"]
 APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
 # One class A row per skill of the bound release. It changes only with a new binding, and the
 # identity test below ties it to that commit's actual tree rather than to this number alone.
-CLASS_A_ROWS = 20
+RELEASED_SKILLS = sorted(path.split('/')[1] for path in pub.GitSource(ROOT, APPROVED).paths()
+                         if re.fullmatch(r'skills/[^/]+/SKILL\.md', path))
+CLASS_A_ROWS = len(RELEASED_SKILLS)
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
@@ -424,16 +426,16 @@ def artifacts_not_handed_to_ci_get_no_write_and_no_duplicate_row(w):
     require(not any(k.startswith("osm.released.") for k in w.upserted()), "no write to a row CI does not own")
     require(f"{CLASS_A_ROWS} artifact(s) are pending handoff" in pub.reconciliation_text(result), "the pending handoff is visible")
     handed = copy.deepcopy(MANIFEST)
-    one = next(x for x in handed["artifacts"] if x["key"] == "osm.released.skill.osm")
+    one = next(x for x in handed["artifacts"] if x["key"] == "osm.released.skill.osm-setup")
     one["public_writer"], one["adoption_state"] = "ci", "adopted"
     require(not pub.validate_manifest(handed), "an adopted row may belong to CI")
     # Existing rows carry no Key, so a first write would duplicate the row: refused until the Key is bound.
     result = run(w, handed, working_files(), "run-2")
-    require(outcomes(result)["osm.released.skill.osm"] == pub.BLOCKED and "osm.released.skill.osm" not in w.upserted(), "no duplicate row")
-    w.seed("osm.released.skill.osm", "released osm.released.skill.osm", status="complete")
-    require(outcomes(run(w, handed, working_files(), "run-3"))["osm.released.skill.osm"] in (pub.UNCHANGED, pub.WRITTEN), "a row that carries the Key is handled")
+    require(outcomes(result)["osm.released.skill.osm-setup"] == pub.BLOCKED and "osm.released.skill.osm-setup" not in w.upserted(), "no duplicate row")
+    w.seed("osm.released.skill.osm-setup", "released osm.released.skill.osm-setup", status="complete")
+    require(outcomes(run(w, handed, working_files(), "run-3"))["osm.released.skill.osm-setup"] in (pub.UNCHANGED, pub.WRITTEN), "a row that carries the Key is handled")
     wrong = copy.deepcopy(MANIFEST)
-    next(x for x in wrong["artifacts"] if x["key"] == "osm.released.skill.osm")["public_writer"] = "ci"
+    next(x for x in wrong["artifacts"] if x["key"] == "osm.released.skill.osm-setup")["public_writer"] = "ci"
     require(any("only after handoff" in p for p in pub.validate_manifest(wrong)), "no CI writer before the handoff state")
 
 
@@ -582,14 +584,14 @@ def a_failed_retirement_holds_the_set(w):
 
 @test
 def a_changed_skill_is_pending_release_propagation_whether_or_not_a_row_maps_it():
-    source = pub.DictSource({**working_files(), "skills/osm/SKILL.md": "x"}, "c-1")
-    changed = ["skills/osm/SKILL.md", "skills/alpha/SKILL.md", "docs/architecture.md"]
+    source = pub.DictSource({**working_files(), "skills/osm-setup/SKILL.md": "x"}, "c-1")
+    changed = ["skills/osm-setup/SKILL.md", "skills/alpha/SKILL.md", "docs/architecture.md"]
     result = pub.plan(MANIFEST, source, None, changed, released_source=released_source(), base="b")
-    require(result["changed_skills"] == ["skills/alpha", "skills/osm"], f"a mapped and an unmapped skill are both reported: {result['changed_skills']}")
+    require(result["changed_skills"] == ["skills/alpha", "skills/osm-setup"], f"a mapped and an unmapped skill are both reported: {result['changed_skills']}")
     require(result["unmapped_changes"] == [], "a skill path is not also listed as an unmapped change")
     text = pub.reconciliation_text(result)
-    require("pending release propagation" in text and "`skills/osm`" in text and "`skills/alpha`" in text, text)
-    require(outcomes(result)["osm.released.skill.osm"] == pub.PENDING_HANDOFF, "and the released row still gets no write")
+    require("pending release propagation" in text and "`skills/osm-setup`" in text and "`skills/alpha`" in text, text)
+    require(outcomes(result)["osm.released.skill.osm-setup"] == pub.PENDING_HANDOFF, "and the released row still gets no write")
     quiet = pub.plan(MANIFEST, source, None, ["docs/architecture.md"], released_source=released_source(), base="b")
     require(quiet["changed_skills"] == [] and "pending release propagation" not in pub.reconciliation_text(quiet), "no skill changed, none reported")
 
@@ -1047,8 +1049,7 @@ def the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_
     sys.path.insert(0, str(ROOT / "tests"))
     from skill_metadata import RENAMED_SKILLS
     rows = [a for a in MANIFEST["artifacts"] if a["class"] == "A"]
-    tree = subprocess.run(["git", "-C", str(ROOT), "ls-tree", "-d", "--name-only", APPROVED, "skills/"], check=True, capture_output=True, text=True).stdout.split()
-    names = sorted(line.split("/", 1)[1] for line in tree)
+    names = RELEASED_SKILLS
     require(len(rows) == CLASS_A_ROWS == len(names), f"one row per skill of {LABEL}: {len(rows)} rows, {len(names)} skills")
     require(sorted(a["key"] for a in rows) == sorted(f"osm.released.skill.{n}" for n in names)
             and sorted(a["source_paths"][0] for a in rows) == sorted(f"skills/{n}/" for n in names)
@@ -1257,7 +1258,7 @@ def the_header_labels_the_edition_and_says_unreleased():
     require(working.startswith("<!-- osm-doc-key: osm.working.readme edition: Main working revision (unreleased) commit: c-1 -->\n"),
             "the header names the edition")
     require("Unreleased main working revision; not an installed or released edition." in working.split("\n")[1], "and a visible line says unreleased")
-    released = pub.render(arts["osm.released.skill.osm"], released_source())
+    released = pub.render(arts["osm.released.skill.osm-setup"], released_source())
     require(f"edition: {LABEL}" in released.split("\n")[0] and f"Released edition {LABEL}" in released.split("\n")[1], "a released row says released and which")
     require(pub.body_hash(working) == pub.body_hash(pub.render(arts[README], pub.DictSource(working_files(), "c-2"))), "the receipt hash ignores the commit")
 
