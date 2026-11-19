@@ -132,6 +132,13 @@ class RenameBaselineTests(unittest.TestCase):
                 with self.assertRaisesRegex(AssertionError, "osm-spec-work: " + message):
                     validate_baseline(root, "HEAD", {"osm-spec-work"})
 
+    def test_council_keeps_its_version_lineage_in_both_packages(self):
+        for predecessor in ("osm-orchestrate-workers", "aios-orchestrate-workers"):
+            with self.subTest(predecessor=predecessor):
+                root = self.repository({predecessor: '"2.1.0"'})
+                self.rename(root, predecessor, "osm-council", '"3.0.0"')
+                validate_baseline(root, "HEAD", {"osm-council"})
+
     def test_unmapped_name_is_a_new_skill(self):
         root = self.repository({"aios-spec-work": '"2.2.1"'})
         self.rename(root, "aios-spec-work", "osm-unmapped", '"3.0.0"')

@@ -14,7 +14,7 @@ SKILLS = ROOT / "skills"
 EXPECTED = {
     "osm", "osm-build-work", "osm-clarify", "osm-create-project", "osm-data-context",
     "osm-dreaming", "osm-human-writing", "osm-interview", "osm-manage-data-context", "osm-manage-skills",
-    "osm-orchestrate-workers", "osm-review-work", "osm-risky-changes", "osm-setup",
+    "osm-council", "osm-review-work", "osm-risky-changes", "osm-setup",
     "osm-ship-work", "osm-spec-work", "osm-triage-improvement", "osm-write-code",
     "osm-prime", "osm-log",
 }
@@ -33,7 +33,7 @@ OWNERS = {
     "update and rollback": ("osm/references/update.md", ["osm/SKILL.md", "osm-setup/references/legacy-parity.md"]),
     "model advice": ("osm/references/model-advice.md",
                      ["osm/SKILL.md", "osm-spec-work/SKILL.md", "osm-build-work/SKILL.md",
-                      "osm-orchestrate-workers/SKILL.md"]),
+                      "osm-council/SKILL.md"]),
     "personal-skill lifecycle": ("osm-manage-skills/references/owner-skills.md", ["osm-setup/SKILL.md"]),
 }
 CHAIN = {"osm-setup", "osm-data-context", "osm-manage-data-context", "osm-manage-skills",
@@ -79,7 +79,7 @@ TRIGGER_ROWS = {
     "Review recent work": "osm-dreaming/SKILL.md",
     "Explore direction": "osm-interview/SKILL.md", "Resolve a work contract": "osm-spec-work/SKILL.md",
     "Implement accepted work": "osm-build-work/SKILL.md", "Inspect the result": "osm-review-work/SKILL.md",
-    "Deliver a reviewed": "osm-ship-work/SKILL.md", "Delegate to workers": "osm-orchestrate-workers/SKILL.md",
+    "Deliver a reviewed": "osm-ship-work/SKILL.md", "Get another agent’s review": "osm-council/SKILL.md",
     "Start a project": "osm-create-project/SKILL.md", "Route an improvement": "osm-triage-improvement/SKILL.md",
     "Assess a consequential": "osm-risky-changes/SKILL.md", "Write prose, code": "osm-human-writing/SKILL.md",
     "Inspect installation": "osm/references/check.md", "Update, roll back": "osm/references/update.md",

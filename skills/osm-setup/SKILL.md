@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task.
 metadata:
-  version: "3.0.4"
+  version: "3.0.5"
 ---
 
 # OSM:setup

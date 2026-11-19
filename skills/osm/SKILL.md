@@ -2,7 +2,7 @@
 name: osm
 description: Explain OSM and route a person or agent to the relevant method, documentation or procedure, bringing in owner context only when a task needs it.
 metadata:
-  version: "4.2.0"
+  version: "4.3.0"
 ---
 
 # OSM:context-and-methods
@@ -30,7 +30,7 @@ If a source is unavailable, report the gap and continue independent work.
   use local requirements and the [lifecycle](references/lifecycle.md) for
   results, plans, continuation and the persistent-goal request boundary.
 - Also: [project creation](../osm-create-project/SKILL.md),
-  [workers](../osm-orchestrate-workers/SKILL.md) and
+  [Council](../osm-council/SKILL.md) and
   [improvement triage](../osm-triage-improvement/SKILL.md).
 
 ## Procedures kept here
@@ -52,6 +52,7 @@ skill and no second discovery entry.
 | --- | --- |
 | `osm-context`, `OSM Context`, `AIOS Context` | [Data & Context](../osm-data-context/SKILL.md) for the home, [Manage Data & Context](../osm-manage-data-context/SKILL.md) for retrieval and upkeep |
 | `osm-maintain-context`, `Maintain Context`, `osm sync` | [Manage Data & Context](../osm-manage-data-context/SKILL.md); folder-home Sync is retired, see the [legacy-home guidance](references/update.md#legacy-file-and-vault-homes) |
+| `osm-orchestrate-workers`, `aios-orchestrate-workers` | [Council](../osm-council/SKILL.md) for another agent’s review or bounded help |
 | `osm-check` | [check](references/check.md) |
 | `osm-update` | [update](references/update.md) |
 | `osm-select-model` | [model advice](references/model-advice.md) |

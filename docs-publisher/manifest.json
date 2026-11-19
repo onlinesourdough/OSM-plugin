@@ -354,6 +354,18 @@
       "adoption_state": "unpublished"
     },
     {
+      "key": "osm.working.native-installation",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "docs/native-installation.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
       "key": "notion.guide.entry",
       "class": "G",
       "edition": "guide",

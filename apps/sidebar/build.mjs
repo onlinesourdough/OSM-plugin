@@ -14,9 +14,12 @@ await mkdir(out, { recursive: true });
 const options = { absWorkingDir: source, bundle: true, minify: true, metafile: true, define: { __OSM_VERSION__: JSON.stringify(version) } };
 const app = await build({ ...options, entryPoints: ['app.mjs'], platform: 'browser', format: 'esm', write: false });
 const css = await build({ ...options, entryPoints: ['styles.css'], loader: { '.woff2': 'dataurl' }, write: false });
-const server = await build({ ...options, entryPoints: ['server.mjs'], platform: 'node', format: 'cjs', target: 'node22', outfile: join(out, 'server.cjs') });
+const server = await build({ ...options, entryPoints: ['server.mjs'], platform: 'node', format: 'cjs', loader: { '.svg': 'text' }, target: 'node22', outfile: join(out, 'server.cjs') });
 const template = await readFile(join(source, 'index.html'), 'utf8');
-await writeFile(join(out, 'index.html'), template.replace('/*APP_CSS*/', () => css.outputFiles[0].text)
+const brandGlyph = (await readFile(join(root, 'assets/branding/osm-icon-glyph.svg'), 'utf8')).trim();
+await writeFile(join(out, 'index.html'), template
+  .replace('<!--BRAND_GLYPH-->', () => brandGlyph.replace('width="24" height="24"', 'width="29" height="29"'))
+  .replace('/*APP_CSS*/', () => css.outputFiles[0].text)
   .replace('/*APP_JS*/', () => app.outputFiles[0].text.replace(/<\/script/gi, '<\\/script')));
 
 const packageRoots = new Set();

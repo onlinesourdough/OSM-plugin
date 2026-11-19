@@ -2,7 +2,7 @@
 name: osm-spec-work
 description: Specify or revise substantive work from an ordinary request or an explicitly requested implementation issue brief when outcome, boundaries or proof need clarification; small tasks stay direct.
 metadata:
-  version: "2.0.2"
+  version: "2.0.3"
 ---
 
 # OSM:spec-work
@@ -49,7 +49,7 @@ accepted inputs. This shared Spec owns the procedure; the repository owns its
 technical truth, constraints and proof. Do not load personal owner context or
 look for another local Spec skill. Owner-level selection uses
 [routing](../osm/references/routing.md). Continue here by default. Use
-[Orchestrate workers](../osm-orchestrate-workers/SKILL.md) for justified delegation
+[Council](../osm-council/SKILL.md) for justified delegation
 with retained caller responsibility; the shared lifecycle owns whole-task handoff.
 
 Keep the existing working stack. For a new or materially changed technology

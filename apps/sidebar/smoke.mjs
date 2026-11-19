@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -52,11 +52,11 @@ try {
   // colour, style, opacity or filter of its own.
   for (const [, attribute, value] of svg.matchAll(/\s(fill|stroke)="([^"]*)"/g)) assert.ok(['none', 'currentColor'].includes(value), `${attribute}="${value}"`);
   assert.doesNotMatch(svg, /<style|\sstyle=|\scolor=|opacity|filter/i);
-  // OSM's O: exactly two mirrored ellipse halves with a 2-unit butt-capped stroke, and nothing else drawn.
-  assert.match(svg, /stroke-width="2" stroke-linecap="butt"/);
-  assert.deepEqual([...svg.matchAll(/<(\w+)/g)].map(([, tag]) => tag), ['svg', 'path', 'path']);
-  assert.deepEqual([...svg.matchAll(/ d="([^"]*)"/g)].map(([, d]) => d), ['M11.25 3.04A8 9 0 0 0 11.25 20.96', 'M12.75 3.04A8 9 0 0 1 12.75 20.96']);
+  const glyph = (await readFile(new URL('../../assets/branding/osm-icon-glyph.svg', import.meta.url), 'utf8')).trim();
+  assert.equal(svg, glyph.replace('width="24" height="24"', 'width="16" height="16"'));
+  assert.deepEqual([...svg.matchAll(/<(\w+)/g)].map(([, tag]) => tag), ['svg', 'path', 'path', 'path']);
   const view = await client.readResource({ uri: 'ui://osm/home-v1' });
+  assert.ok(view.contents[0].text.includes(glyph.replace('width="24" height="24"', 'width="29" height="29"')));
   assert.equal(view.contents[0].mimeType, 'text/html;profile=mcp-app');
   assert.deepEqual(view.contents[0]._meta['openai/ui'], { preferredDisplayMode: 'fullscreen', availableDisplayModes: ['fullscreen'] });
   assert.ok(view.contents[0].text.includes('onlinesourdough'));

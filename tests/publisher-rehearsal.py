@@ -46,7 +46,8 @@ README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs
                                          "osm.working.architecture", "osm.working.skill-index")
 STARTER = "osm.working.starter"
 ROOT_TEMPLATE = "skills/osm-data-context/assets/data-and-context-root.md"
-W_KEYS = sorted([README, INDEX, OVERVIEW, ARCH, SKILLS, STARTER])
+NATIVE_INSTALLATION = "osm.working.native-installation"
+W_KEYS = sorted([README, INDEX, OVERVIEW, ARCH, SKILLS, STARTER, NATIVE_INSTALLATION])
 TESTS = []          # (name, callable, slow)
 
 
@@ -210,7 +211,7 @@ def working_files(version="v1", readme_lines=4):
     body = lambda name, n=4: "\n".join([f"{name} {version}"] + [f"{name} line {i}" for i in range(n)])
     return {"README.md": body("readme", readme_lines), "docs/README.md": body("index"), "docs/osm.md": body("overview"),
             "docs/architecture.md": body("arch"), "docs/skills.md": body("skills"), "docs/starter.md": body("starter"),
-            ROOT_TEMPLATE: "starter definition template",
+            "docs/native-installation.md": body("native installation"), ROOT_TEMPLATE: "starter definition template",
             "skills/alpha/SKILL.md": f"alpha {version}", "docs/content-drafts/skills/content/method-draft.md": "old bundled content draft"}
 
 

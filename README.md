@@ -208,6 +208,10 @@ For a first run using your own Notion home, follow the
 [two-chat starter](docs/starter.md). It covers installation, the first
 scoped read and checking that a decision survives a fresh chat.
 
+The [agent workspace guide](docs/native-installation.md#start-with-a-clean-agent-workspace)
+covers instructions, tool access and approvals for Codex, Claude Code,
+Antigravity, Cursor and Pi.
+
 After installation, try:
 
 - “Help me turn this idea into a clear plan.”

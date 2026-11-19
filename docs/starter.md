@@ -11,7 +11,9 @@ Follow [Install in your app](https://github.com/onlinesourdough/OSM-plugin#insta
 then ask your assistant to set up OSM using your chosen Notion page. Reuse an
 existing working connection and verify a scoped read in the intended account.
 OSM uses Notion for the context home. Your documents, project files and
-operational systems keep their originals.
+operational systems keep their originals. Use the
+[agent workspace guide](native-installation.md#start-with-a-clean-agent-workspace)
+to check the host's instructions, tools and approvals.
 
 ## 2. Map only what the first task needs
 
@@ -92,6 +94,24 @@ Prime loads the context a task needs. Log retains useful decisions at
 checkpoints and when you ask. Optional Dreaming checks recent work and due
 sources between sessions, corrects supported errors and leaves live values in
 their source systems.
+
+```mermaid
+flowchart LR
+  HOME["Notion · Data & Context<br/>Definition, Knowledge, Memory, Skills"]
+  SOURCES["Original sources<br/>Project files, CRM, finance, work history"]
+  PRIME["Prime"]
+  TASK["Work in your agent"]
+  LOG["Log"]
+  DREAM["Dreaming · daily if scheduled"]
+  COUNCIL["Council · optional second opinion"]
+  HOME --> PRIME --> TASK --> LOG --> HOME
+  SOURCES -->|"Relevant evidence"| PRIME
+  SOURCES -->|"Recent work and due checks"| DREAM
+  HOME -->|"Definition and existing records"| DREAM
+  DREAM -->|"Verified repairs and useful progress"| HOME
+  TASK -.-> COUNCIL
+  COUNCIL -.->|"Findings or bounded help"| TASK
+```
 
 When resuming or migrating, start from the same Notion home and verify its
 current sources. A missing or revoked connection shows up as a specific gap.

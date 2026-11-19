@@ -7,8 +7,10 @@
   session and give Dreaming a short reference to the repair.
 - Dreaming reads the current definition, checks recent work and selected sources,
   recovers missed decisions and repairs confirmed context errors.
-- Give Orchestrate a small read-only review path and a scoped alternate CLI
-  route. Interview reuses Log for lasting owner decisions.
+- Rename Orchestrate Workers to Council for independent reviews and bounded
+  help from native workers or a selected CLI. Interview reuses Log for lasting
+  owner decisions.
+- Use the Geist Pixel Square OSM wordmark for the plugin and its sidebar.
 - Add scoped credential setup and a two-chat Notion starter. The
   documentation publisher maps the starter to one unreleased working row.
 - Start new Notion homes with the definition and native destinations. New host

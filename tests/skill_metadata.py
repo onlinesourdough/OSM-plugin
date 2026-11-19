@@ -20,12 +20,22 @@ RENAMED_SKILLS = {
     "osm": "aios",
     **{f"osm-{name}": f"aios-{name}" for name in (
         "build-work", "create-project", "interview", "manage-skills",
-        "orchestrate-workers", "review-work", "risky-changes", "setup",
+        "review-work", "risky-changes", "setup",
         "ship-work", "spec-work", "triage-improvement")},
+    "osm-council": "osm-orchestrate-workers",
     "osm-data-context": "osm-context",
     "osm-manage-data-context": "osm-maintain-context",
     **{f"osm-{name}": name for name in ("clarify", "human-writing", "write-code")},
 }
+# Council also has a predecessor older than the OSM package name.
+HISTORICAL_SKILL_NAMES = {"osm-orchestrate-workers": "aios-orchestrate-workers"}
+
+
+def skill_lineage(name, renamed=RENAMED_SKILLS):
+    previous = renamed.get(name)
+    return tuple(candidate for candidate in (name, previous, HISTORICAL_SKILL_NAMES.get(previous)) if candidate)
+
+
 SEMVER = re.compile(
     r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)"
     r"(?:-((?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)"
@@ -145,8 +155,11 @@ def validate_baseline(root, ref, names, renamed=RENAMED_SKILLS):
         cwd=root).decode().split("\0")
     for name in sorted(names):
         prefix = f"skills/{name}/"
-        is_renamed = name in renamed and not any(path.startswith(prefix) for path in paths)
-        source = f"skills/{renamed[name]}/" if is_renamed else prefix
+        source = next(
+            (candidate for candidate in (f"skills/{old_name}/" for old_name in skill_lineage(name, renamed))
+             if any(path.startswith(candidate) for path in paths)),
+            prefix,
+        )
         before = {path[len(source):]: subprocess.check_output(
             ["git", "show", f"{commit}:{path}"], cwd=root)
             for path in paths if path.startswith(source)}
@@ -154,7 +167,7 @@ def validate_baseline(root, ref, names, renamed=RENAMED_SKILLS):
         after = {path.relative_to(folder).as_posix(): path.read_bytes()
                  for path in folder.rglob("*") if path.is_file()}
         try:
-            validate_change(before, after, renamed=is_renamed and bool(before))
+            validate_change(before, after, renamed=source != prefix)
         except AssertionError as error:
             raise AssertionError(f"{name}: {error}") from error
     return commit

@@ -14,6 +14,7 @@ selected documentation for people; it is a reader of this source.
 | How do the parts and their responsibilities fit together? | [Architecture](architecture.md) |
 | Which method should I use? | [Skill index](skills.md), then the relevant skill |
 | How do I install, update, switch or recover an app registration? | [Native installation](native-installation.md) |
+| How do I set up a clean workspace with the right tools and approvals? | [Agent workspace guide](native-installation.md#start-with-a-clean-agent-workspace) |
 | How is my context home organised, what may agents write there, and how are records kept current? | [Context Architecture](../skills/osm-data-context/references/architecture.md): its [home write policy](../skills/osm-data-context/references/architecture.md#home-write-policy) and [record lifecycle](../skills/osm-data-context/references/architecture.md#record-lifecycle) |
 | What does the Codex panel actually do? | [Sidebar](sidebar.md) |
 | How is the public Notion guide kept aligned, and who writes what? | [Publication](publication.md) |

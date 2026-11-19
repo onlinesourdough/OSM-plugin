@@ -105,7 +105,10 @@ skill by itself.
 ```mermaid
 flowchart TB
   SRC["Native histories and original business systems<br/>(they stay where they are)"]
-  TASK["Ordinary task<br/>task-time capture"]
+  TASK["Work in the host"]
+  PRIME["Prime<br/>find the relevant context"]
+  LOG["Log<br/>save lasting changes"]
+  COUNCIL["Council<br/>optional second opinion or help"]
   DREAM["Dreaming<br/>select, reflect, check against source"]
   MDC["Manage Data & Context<br/>the one curation owner"]
   MSK["Manage Skills<br/>reusable method changes"]
@@ -119,7 +122,10 @@ flowchart TB
   end
   SRC -->|"selected evidence"| TASK
   SRC -->|"completed or changed items"| DREAM
-  TASK -->|"a correction, saved now"| MDC
+  ENTRY --> PRIME --> TASK --> LOG
+  TASK -.-> COUNCIL
+  COUNCIL -.->|"findings or bounded work"| TASK
+  LOG -->|"lasting decisions and corrections"| MDC
   DREAM -->|"proposed or authorized curation"| MDC
   DREAM -->|"genuine method change"| MSK
   MDC -->|"verified write"| K
@@ -165,7 +171,7 @@ The harness discovers skill names and descriptions. Load the selected skill,
 then only the references needed for its operation. Explaining a method does not
 execute its lifecycle. Model advice, only on request, assesses the remaining work under the
 user's configured default; worker orchestration is conditional on a concrete
-gain or a request. Shared continuation retains existing action authority.
+gain or a request through [Council](../skills/osm-council/SKILL.md). Shared continuation retains existing action authority.
 Risky Changes applies to consequential changes, without creating routine gates.
 
 Clarify is an included explanation method, separate from visual design. The

@@ -50,12 +50,16 @@ brief and a resumed task get their outcome and criteria.
 | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | Manage personal and installed skill lifecycles |
 | [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Review changed work and selected sources, repair confirmed context errors and surface open progress between sessions through a manual or existing native caller |
 | [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume the Notion Data & Context foundation, from access to a useful first task |
-| [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Prepare and recover delegated workers when the caller retains coordination and acceptance |
+| [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent for an independent review, a second opinion or help with bounded work |
 | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | Assess consequential changes proportionately |
 | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Inspect the final result against its contract; caller acceptance remains separate for delegated work |
 | [OSM:ship-work](../skills/osm-ship-work/SKILL.md) | Deliver an exactly reviewed result under authority |
 | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Resolve a substantive OSM work contract |
 | [OSM:triage-improvement](../skills/osm-triage-improvement/SKILL.md) | Route a concrete underlying improvement signal |
+
+Council replaces `osm-orchestrate-workers` in this candidate. If you call it
+by identifier in a script or saved prompt, update the caller to `osm-council`
+when you update the installed package.
 
 Three procedures live under `osm` instead of separate entries:
 [check](../skills/osm/references/check.md) (read-only inspection),
@@ -86,11 +90,11 @@ consistent with the skill text.
 | Review recent work and repair context between sessions | [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Manage Data & Context (all writes), Manage Skills (method changes only) |
 | Create or change a personal or team method | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | None in the context chain |
 | Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Active specification method when needed, Log (durable owner facts only) |
-| Resolve a work contract | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Interview, Risky Changes, Orchestrate workers, Build; model advice |
-| Implement accepted work | [OSM:build-work](../skills/osm-build-work/SKILL.md) | Write Code, Review, Orchestrate workers; model advice |
+| Resolve a work contract | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Interview, Risky Changes, Council, Build; model advice |
+| Implement accepted work | [OSM:build-work](../skills/osm-build-work/SKILL.md) | Write Code, Review, Council; model advice |
 | Inspect the result | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Risky Changes, Write Code, Ship, Triage |
 | Deliver a reviewed result | [OSM:ship-work](../skills/osm-ship-work/SKILL.md) | Review |
-| Delegate to workers | [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Native workers or a selected CLI; model advice when needed |
+| Get another agent’s review or bounded help | [OSM:council](../skills/osm-council/SKILL.md) | Native workers or a selected CLI; model advice when needed |
 | Start a project workspace | [OSM:create-project](../skills/osm-create-project/SKILL.md) | Spec, Build, Review, Write Code, Human Writing, Manage Skills |
 | Route an improvement signal | [OSM:triage-improvement](../skills/osm-triage-improvement/SKILL.md) | Ship |
 | Assess a consequential change | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | None |

@@ -2,7 +2,7 @@
 name: osm-build-work
 description: Implement and verify accepted work through in-scope fixes and Review.
 metadata:
-  version: "2.0.3"
+  version: "2.0.4"
 ---
 
 # OSM:build-work
@@ -28,7 +28,7 @@ root, branch, local AGENTS, accepted inputs and available tools before mutation.
 Use that repository's specialist workflow and local proof/recovery contract;
 do not preload personal owner context or look for a second local Build skill.
 Owner-level work uses [routing](../osm/references/routing.md) to select its owner.
-Use [Orchestrate workers](../osm-orchestrate-workers/SKILL.md) for justified
+Use [Council](../osm-council/SKILL.md) for justified
 delegation with retained caller responsibility or worker recovery. The shared
 lifecycle owns whole-task handoff; repository ownership alone requires no delegation.
 Keep one writer for each overlapping change.

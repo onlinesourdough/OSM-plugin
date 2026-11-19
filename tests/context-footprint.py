@@ -29,7 +29,7 @@ JOB_PREFIXES = {
     "osm-setup": "Set up or resume ",
     "osm-data-context": "Engineer ",
     "osm-interview": "Interview ",
-    "osm-orchestrate-workers": "Delegate ",
+    "osm-council": "Ask another agent ",
     "osm-risky-changes": "Assess ",
     "osm-review-work": "Review ",
     "osm-ship-work": "Deliver ",
@@ -61,7 +61,7 @@ CURRENT_JOURNEYS = {
         "skills/osm-build-work/SKILL.md",
         "skills/osm-write-code/SKILL.md",
         "skills/osm/references/model-advice.md",
-        "skills/osm-orchestrate-workers/SKILL.md",
+        "skills/osm-council/SKILL.md",
         "skills/osm/references/lifecycle.md",
     ),
     "installation-check-basic": (
