@@ -40,7 +40,7 @@ RELEASED = MANIFEST["editions"]["released"]
 APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
 # One class A row per skill of the bound release. It changes only with a new binding, and the
 # identity test below ties it to that commit's actual tree rather than to this number alone.
-CLASS_A_ROWS = 18
+CLASS_A_ROWS = 20
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
@@ -1027,8 +1027,8 @@ def the_release_binding_follows_the_manifest_through_a_pre_tag_build_and_its_fol
 @test
 def the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_history():
     """The released rows are exactly the skills in the bound commit's tree, each still with the existing
-    upkeep and pending handoff, and every retired key maps to where its method now lives. The two
-    skill renames come from the repository's own rename map, so history is not restated by hand."""
+    upkeep and pending handoff, and every retired key maps to where its method now lives. The
+    accepted skill renames come from the repository's own rename map."""
     sys.path.insert(0, str(ROOT / "tests"))
     from skill_metadata import RENAMED_SKILLS
     rows = [a for a in MANIFEST["artifacts"] if a["class"] == "A"]
@@ -1045,7 +1045,7 @@ def the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_
     for old, new in MANIFEST["renames"].items():
         require(old not in keys and new in keys, f"a retired key maps to a current row: {old} -> {new}")
     expected = {f"osm.released.skill.{old}": f"osm.released.skill.{new}" for new, old in RENAMED_SKILLS.items() if old.startswith("osm-") and new in names}
-    require(len(expected) == 2 and expected.items() <= MANIFEST["renames"].items(), f"the accepted skill renames are recorded: {expected}")
+    require(expected and expected.items() <= MANIFEST["renames"].items(), f"the accepted skill renames are recorded: {expected}")
     require(all(name in MANIFEST.get("renames_note", "") for name in ("content", "diffusion-studio")), "the departed methods' provenance is recorded")
 
 

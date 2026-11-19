@@ -49,10 +49,10 @@ flowchart LR
 
 Git owns the executable method instructions: the skills and their references. The
 public Notion guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
-is a versioned explanatory and reference projection of them. Its last verified
-projection reflects v0.30.0 (`314dcf1`); the latest tagged release is v0.32.1 and
-the guide has not been advanced to it, so the guide is never the installed method
-and never proof of what a given install does.
+is a versioned explanatory and reference projection of them. Its public
+overview, setup and architecture now link to v0.33.0. The legacy catalogue's
+last fully verified edition is v0.30.0 (`314dcf1`). The installed manifest
+identifies what a given install uses.
 Shared Content methods and templates are owned by their own Git home,
 [OSM-content](https://github.com/onlinesourdough/OSM-content): Git owns their future changes, and a
 Notion copy is a projection of a stated source revision, current only once its pages, downloads and
@@ -71,25 +71,23 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.32.1 is the latest tagged release, a stable GitHub Release; v0.31.3 and earlier are prereleases |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.33.0 is the latest tagged release, a stable GitHub Release; v0.31.3 and earlier are prereleases |
 
 The inactive publisher manifest binds its released edition to the latest tagged
-release, v0.32.1 (`184d638`), with one class A row per skill of that release and the
-retired 0.30.x keys kept in its `renames`, so its release guard and this sentence
-agree with the tags. The public Notion guide's last verified release projection is
-still v0.30.0, and the publisher stays inactive. Recording a later release is a reviewed binding that
+release, v0.33.0 (`a9a18ca`), with one class A row per skill of that release and the
+retired keys kept in its `renames`, so its release guard and this sentence
+agree with the tags. The legacy Notion catalogue's last fully verified edition
+is v0.30.0. The publisher stays inactive. Recording a later release is a reviewed binding that
 follows its tag; see [publication](publication.md#current-release-alignment).
 
-The skill set at v0.32.1 (18 skills, Notion-only core) is declared and fixture-tested and
-was exercised in disposable native installs. Its published release and the primary-profile
-installation are recorded in GitHub Releases and [verification](verification.md), not here. The
-observations recorded there are for one macOS Codex host: Home displayed and read records
-through OSM's own Notion connection (observed in 0.31.3 and, from a pinned source commit, 0.32.0), the
-installed 0.32.1 was served natively with its 18 skills and approved icon, and one existing scheduled
-Dreaming caller completed a run on 11 November 2026 through the owner's own route, which is not a
-write by OSM's app. Not qualified:
-other hosts and operating systems (Windows included), writes through OSM's connection, other timed
-or scheduled callers, and browser sign-in.
+OSM v0.33.0 declares 20 skills. Its stable release passed package checks and
+the sidebar fixtures. The owner installed the exact release in the active macOS
+Codex and Claude Code profiles. A fresh Codex app-server served the shipped
+sidebar byte for byte. That native MCP observation covers one macOS Codex
+host. Other hosts, browser sign-in and writes through the sidebar's own
+connection still require a separate proof. The first scheduled invocation after binding this
+release remains to be observed. See [verification](verification.md) for
+the checks and their scope.
 
 ### Documentation consumers
 
@@ -103,8 +101,8 @@ Keep the existing entrypoints stable when editing the README:
 - An installed agent reads its packaged methods and versioned overview. It does
   not fetch instructions from Resources to perform a task.
 
-The README introduces the shared skill source. The starter separates its
-working walkthrough from released capabilities. Consumers pin a tagged release
+The README introduces the shared skill source. The starter names the release its
+walkthrough requires. Consumers pin a tagged release
 or label their working revision.
 
 `tests/consumer-selection-rehearsal.py` rehearses both selections locally against this

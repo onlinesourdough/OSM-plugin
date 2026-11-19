@@ -11,9 +11,9 @@ no live proof. With no qualified public content reader, no live run can reach `c
 
 | Class | Artifacts | Public writer |
 | --- | --- | --- |
-| A | The 18 released packets of the bound release, v0.32.1 (`184d638`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
+| A | The 20 released packets of the bound release, v0.33.0 (`a9a18ca`). The legacy public catalogue's last fully verified edition is v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
 | B | The five Content templates and their setup, configuration and diagram explanations: a Notion Draft edition 2026-11-05.1, a projection. Their canonical home is the Git repository [OSM-content](https://github.com/onlinesourdough/OSM-content), which owns future template changes; a projection is current only once its pages, downloads and source marker are verified | Notion-authored today; the publisher never writes, derives or repairs them |
-| G | The public guide pages, edition 2026-11-05.2 (the before-source) | Notion-authored; the publisher never overwrites them |
+| G | The public guide pages, edition 2026-11-05.2 as the fixed before-source for the publisher; the guide also receives manual updates | Notion-authored; the publisher never overwrites them |
 | W | Seven documentation pages (README, docs index, overview, architecture, skill index, starter and native installation), labelled unreleased | CI, once activated |
 | C | The owner's private documentation control and daily state | Not a CI source or credential scope |
 
@@ -52,17 +52,18 @@ The job exits non-zero unless every row was written, unchanged, resumed, retired
 
 ## Current release alignment
 
-As of 2026-11-13, after the v0.32.1 tag, the inactive manifest's released edition is
-bound to v0.32.1 at its exact tag commit `184d638`, and `docs/README.md` says `v0.32.1 is
-the latest`. It was bound to v0.31.0 (`3429755`) first and moved at each next tag (v0.31.1,
-v0.31.2, v0.31.3, then v0.32.1; 0.32.0 was never tagged), with the 18 class A rows, their keys and `renames`
-unchanged, because no release since v0.31.0 renames or adds a skill. 0.32.1 edits three of their skill sources
-(Spec, Triage Improvement and the `osm` entry) as patch changes. The release guard is unchanged. It had refused every commit after the tag
-until this binding recorded it, as the release procedure says: a tag on a build's own
-commit is not counted against that build, and its exact commit can be written only once
-the tag exists.
+The inactive manifest is bound to v0.33.0 at `a9a18ca`. The released
+set includes Prime and Log and maps the previous Orchestrate Workers key to
+Council. The Git binding identifies the source for public readback. It does not
+edit the public Notion catalogue.
 
-The class A rows are one per skill of the release, 18 where the 0.30.x edition had
+The binding moved through v0.31.0, v0.31.1, v0.31.2, v0.31.3 and v0.32.1
+before v0.33.0. The untagged 0.32.0 candidate did not change the release
+binding. v0.32.1 retained 18 packets and its then-current rename map.
+The guard requires a new binding on commits after the release tag and
+excludes a tag on the build's own commit.
+
+Class A has one row per skill in the bound release. v0.32.1 had 18 rows and the 0.30.x edition had
 22. `osm-data-context`, `osm-manage-data-context` and `osm-dreaming` are added, and seven
 keys are removed because their source is absent from 0.31.0. Their history is kept, not
 restated by hand: the manifest's `renames` maps `osm-context` and `osm-maintain-context`
@@ -73,13 +74,12 @@ key. The v0.30.1 tag and `docs/content-drafts` hold their source history. The `r
 map only labels a retired row that CI owns; every released row is still the existing
 upkeep's, pending handoff.
 
-This binding establishes repository release consistency. The public guide's last
-verified release projection remains v0.30.0. The November 19 public Setup page
-still offered other context homes, although the package uses Notion for that role.
-The working starter records the correct path for the next public guide handoff.
-Activation stays false and `public_reader` stays null. Reviewing 0.32.1 into the public
-guide, and what happens to those pages, stay separate publication decisions, and a
-source-only publisher is no gate for live Notion projection.
+The public guide's overview, Setup and architecture were manually updated
+and read back for v0.33.0. The tagged source supplies the definition template,
+architecture diagram and current 20-skill index. The legacy Notion catalogue
+and its downloadable packets still await complete reconciliation. The last
+fully verified legacy catalogue remains v0.30.0. Activation stays false and
+`public_reader` stays null.
 
 ## What it cannot observe yet
 
