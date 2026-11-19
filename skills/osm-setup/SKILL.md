@@ -25,11 +25,12 @@ Data & Context, Manage Data & Context and Manage Skills nothing calls back into
 Setup (Interview links Setup only for a new connection, which is conditional and
 outside that chain):
 
-1. **Connection and access.** Inspect exposed connections before proposing one,
-   and check whether the official Notion plugin is installed and connected in
-   this host. For ordinary user setup, install it through the supported host
-   route under the user's setup authority when missing, then guide the account
-   connection and verify the intended workspace with a useful read. Use a
+1. **Connection and access.** Inspect exposed connections first and reuse a
+   working connection or recorded choice. For new ordinary user setup, check
+   whether the official Notion plugin is installed and connected. When its
+   installation is authorized, install it through the supported host route,
+   guide account connection and verify the intended workspace with a scoped
+   safe read. Use a
    dedicated connection when the selected team, worker or unattended workflow
    needs its own identity or access scope. Preserve an existing recorded choice.
    Unavailable or declined access stays an explicit gap while other work
@@ -51,8 +52,10 @@ outside that chain):
    replay creates no duplicate. Setup never creates Content. It discovers the actual
    types and metadata of existing stores before mapping and follows the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
-   The root body starts with the definition, followed by its databases. Keep
-   onboarding explanations in this conversation and the public method guide.
+   A newly generated root body starts with the definition, followed by its
+   databases. Changes to an existing root follow the owner's request and write
+   policy. Explain onboarding in the conversation, using the public guide's
+   durable description when useful.
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
    assumed. Add the thin host pointer only at the intended scope.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)

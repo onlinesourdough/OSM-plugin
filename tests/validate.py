@@ -364,9 +364,11 @@ def validate(root=ROOT, release_tag=None):
 
     # The bundled Notion page is new-customer product copy; existing pages keep theirs.
     root_template = (skill_root / "osm-data-context/assets/data-and-context-root.md").read_text()
+    require("\n# Data & Context\n" in root_template, "context root title")
     root_body = root_template.split("\n# Data & Context\n", 1)[1].lstrip()
     require(root_body.startswith("## Data and Context Definition\n\n```yaml\n"),
             "context root starts with definition")
+    require(root_body.rstrip().endswith("\n```"), "context root ends with definition")
     notion_page = skill_root / "osm-data-context/assets/notion-osm.md"
     require(notion_page.is_file() and not (skill_root / "osm-data-context/assets/notion-aios.md").exists(),
             "new Notion page template")

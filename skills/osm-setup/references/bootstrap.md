@@ -8,21 +8,23 @@ This text describes the sequence; executing it depends on the selected host and
 runtime.
 
 1. **Workspace.** A usable Notion account and workspace is a prerequisite
-   outside OSM. Check for the official Notion plugin in the selected host and
-   install it through the supported route when missing under setup authority.
-   Guide sign-in and verify the intended account and workspace. Reuse a working
-   connection and the owner's existing choice.
+   outside OSM. Do not build account creation or training into the plugin.
 2. **Root.** The owner selects or creates one blank root (suggest
    "Data & Context"), or explicitly selects an existing compatible home. An
    internal token cannot bootstrap an ungranted first root: the person creates or
    selects that page first, unless a separately authorized existing route can.
    Select the root by its link or ID through the selected connection; reading it
    never requires an unselected broader connector.
-3. **Connection.** Use the official Notion plugin for ordinary user setup. A
+3. **Connection.** Reuse a working connection and the owner's recorded choice.
+   For new ordinary user setup, check the official Notion plugin in the selected
+   host. When installation is authorized, install it through the supported route
+   if missing, guide sign-in and verify the account with a scoped safe read.
+   Read the selected root through that plugin and record its verified URL in
+   the short host pointer. A
    dedicated connection is an option when a selected team workflow, worker or
    unattended job needs a distinct identity or access scope. A team member can
    use their own authorized Notion account. For a selected internal connection,
-   guide its creation, page selection and secure credential input and storage.
+   guide its creation, exact selected-page scope and secure credential input and storage.
    Never paste a token into chat, owner pages, logs or source files.
    Choose a secret store suited to the customer's OS and runtime, test
    unattended availability, fail closed on access loss, and define refresh,
@@ -42,9 +44,10 @@ runtime.
    the unattended run's effective tool set in its real launch mode, and report
    any limit the host cannot enforce.
 5. **Build.** Setup builds or adapts the one definition and only useful
-   destinations inside the chosen boundary. The root body begins with the
-   definition and then its native databases. Keep introductory method and setup
-   instructions in the conversation or public guide. Discover actual tools, accounts and
+   destinations inside the chosen boundary. A newly generated root body begins
+   with the definition and then its native databases. Existing roots follow the
+   owner's request and write policy. Explain onboarding in the conversation.
+   Discover actual tools, accounts and
    canonical owners; ask what the customer uses and which outcomes matter; record
    each source's placement and lifecycle choice. Record the owner's write policy
    once in the definition (whole-home is proposed, never assumed; an existing
