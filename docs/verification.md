@@ -2650,3 +2650,22 @@ A read of the existing owner definition verified its mapped roles, source map,
 operating policy and maintenance bindings. Native repair readback, scheduled
 adoption and alternate CLI execution beyond the observed Claude review remain
 to be qualified.
+
+### Memory research check and first-use starter
+
+The candidate uses source histories for evidence, durable notes for useful
+learning, targeted retrieval and a thin startup instruction. The
+[Anthropic memory article](https://www.anthropic.com/research/components-of-agent-memory)
+supports those design choices in its own experiments. Log now explicitly
+keeps routinely retrievable facts at their sources. The article supplies
+design evidence for this choice, while live OSM behavior still needs the
+representative native and scheduled checks above.
+
+On 2026-11-19 the public Notion Setup page was read in the built-in browser.
+It still offered other context homes. The new Git starter uses Notion as the
+home and links the same template and credential guidance as the repository.
+On `2e752a0`, credential-free reconciliation selected one working row when
+scoped to the starter and reported no source change against the same commit.
+All 72 publisher rehearsals and 76 mutation controls passed, including
+source identity for the starter and replay through the fixture transports.
+Public parity still needs the corresponding publication and readback.
