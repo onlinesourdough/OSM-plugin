@@ -2698,3 +2698,28 @@ was partial. The temporary schedules produced configuration events but no
 scheduler-originated heartbeat for this candidate. The same job was restored
 to its active daily schedule. Scheduled execution and public release parity
 remain to be observed.
+
+### Council, icon and working guide, 2026-11-19
+
+Local package candidate `070b25b` replaces the worker skill with
+`osm-council` 3.0.0. The OSM router handles requests that use the old name.
+Saved explicit invocations need to use the new identifier when adopting the
+candidate.
+
+- A disposable Codex 0.170.0 installation discovered 20 enabled OSM skills
+  and exactly one Council entry, with zero discovery errors. The installed
+  Council instructions and icon matched the frozen candidate byte for byte.
+  Claude Code discovered Council and passed its isolated install, cache,
+  upgrade, coexistence and removal rehearsal.
+- An independent sidebar build reproduced the bundled files. All 249 tests
+  and the stdio smoke passed, including matching monochrome icon geometry
+  in the server, global tool and Home header.
+- Package and documentation checks passed, including 72 publisher rehearsals
+  and 76 mutation controls. Credential-free reconciliation mapped seven
+  working documentation rows. Both Mermaid views rendered in Codex's
+  built-in browser. The public Notion entry still marks v0.32.1
+  reconciliation as pending.
+- Fable review of this exact candidate requires an authenticated isolated
+  profile. The attempted isolated Claude call returned before model use.
+  The visible active Codex sidebar and the first actual scheduled run of
+  the installed owner pilot remain separate verification steps.
