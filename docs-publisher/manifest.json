@@ -138,7 +138,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "41d6d2e17f5681c2a37ed361fd849ba8",
+      "row_key": "osm:osm-dreaming"
     },
     {
       "key": "osm.released.skill.osm-human-writing",
@@ -150,7 +152,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "40d6d2e17f5681509070fb57ce599bcd",
+      "row_key": "osm:osm-human-writing"
     },
     {
       "key": "osm.released.skill.osm-interview",
@@ -162,7 +166,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "40d6d2e17f5681349ac5c2c48acbf6ed",
+      "row_key": "osm:osm-interview"
     },
     {
       "key": "osm.released.skill.osm-manage-data-context",
@@ -198,7 +204,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "40d6d2e17f56812e9326c206a8b4a66e",
+      "row_key": "osm:osm-council"
     },
     {
       "key": "osm.released.skill.osm-log",
@@ -210,7 +218,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "41d6d2e17f568177bedac9379fb63e89",
+      "row_key": "osm:osm-log"
     },
     {
       "key": "osm.released.skill.osm-prime",
@@ -222,7 +232,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "41d6d2e17f56818e82d9eafc328251bf",
+      "row_key": "osm:osm-prime"
     },
     {
       "key": "osm.released.skill.osm-review-work",
@@ -258,7 +270,9 @@
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff"
+      "adoption_state": "pending-handoff",
+      "notion": "40d6d2e17f5681f8bdf6c519aee306b5",
+      "row_key": "osm:osm-setup"
     },
     {
       "key": "osm.released.skill.osm-ship-work",
@@ -785,5 +799,17 @@
     "osm.released.skill.osm-select-model": "osm.released.skill.osm",
     "osm.released.skill.osm-orchestrate-workers": "osm.released.skill.osm-council"
   },
-  "renames_note": "Class A keys retired from the 0.30.x set. osm-context and osm-maintain-context were renamed to osm-data-context and osm-manage-data-context. osm-check, osm-update and osm-select-model were folded into references under osm; the mapped key is where the method now lives. content and diffusion-studio left the package and have no destination key; their history is the v0.30.1 tag and docs/content-drafts. Informational only: it changes no writer, row or public page. OSM 0.33.0 replaces osm-orchestrate-workers with osm-council."
+  "renames_note": "Class A keys retired from the 0.30.x set. osm-context and osm-maintain-context were renamed to osm-data-context and osm-manage-data-context. osm-check, osm-update and osm-select-model were folded into references under osm; the mapped key is where the method now lives. content and diffusion-studio left the package and have no destination key; their history is the v0.30.1 tag and docs/content-drafts. Informational only: it changes no writer, row or public page. OSM 0.33.0 replaces osm-orchestrate-workers with osm-council.",
+  "reading_export": {
+    "root": "40d6d2e17f568124af82ceb93dabf77a",
+    "catalogue": "6abfc738a9604ddc806432721813712b",
+    "skill_source": "13cc2fee3a796563cb4695ebada834e45fee88d4",
+    "supplements": [
+      {
+        "id": "40d6d2e17f5681219a81e13317a19339",
+        "title": "Content \u00b7 optional extension",
+        "path": "docs-publisher/originals/notion.content.entry.md"
+      }
+    ]
+  }
 }

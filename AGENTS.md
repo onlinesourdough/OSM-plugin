@@ -42,6 +42,8 @@ Keep one writer per overlapping change and verify the selected checkout first.
 Optional Notion adapter, with Node.js 22 or later:
 
 ```sh
+python3 docs-publisher/build-guide.py
+git diff --exit-code -- docs-publisher/public-guide.json
 npm ci --prefix apps/notion --ignore-scripts
 npm run build --prefix apps/notion
 git diff --exit-code -- runtime/notion

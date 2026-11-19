@@ -54,7 +54,11 @@ Moved or missing release tags are refused by live publication.
 
 Codex receives a checked public guide export and a bundled fallback. It is a
 reading surface, not a private context dashboard or a full Notion editor. The
-public export contains no account credential or owner context. See
+public export contains no account credential or owner context.
+`python3 docs-publisher/build-guide.py` builds it from the bound guide originals,
+the explicitly frozen optional Content introduction and seven exact Git skill
+sources. The virtual skill index links those same public page identities.
+The build checks this export before bundling the reader. See
 [Codex integration](sidebar.md) for runtime behavior and native qualification.
 
 ## CI and activation

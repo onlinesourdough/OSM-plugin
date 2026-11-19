@@ -40,6 +40,8 @@ jobs:
           cache-dependency-path: apps/notion/package-lock.json
       - name: Build and verify the bundled Notion tools
         run: |
+          python3 docs-publisher/build-guide.py
+          git diff --exit-code -- docs-publisher/public-guide.json
           npm ci --prefix apps/notion --ignore-scripts --no-fund
           npm run build --prefix apps/notion
           git diff --exit-code -- runtime/notion

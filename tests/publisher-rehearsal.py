@@ -44,7 +44,8 @@ SETUP_ZIP = next(a for a in MANIFEST["artifacts"] if a["key"] == "notion.content
 RECORDED_PUBLIC = [v for v in MANIFEST["bindings"].values() if isinstance(v, str) and len(v) > 20] + [SETUP_ZIP]
 HEX32 = re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")
 RECORDED_IDS = {i for v in RECORDED_PUBLIC for i in HEX32.findall(v.replace("-", ""))}
-RECORDED_IDS.update(a["notion"] for a in MANIFEST["artifacts"] if a["class"] == "G")
+RECORDED_IDS.update(a["notion"] for a in MANIFEST["artifacts"] if a.get("notion"))
+RECORDED_IDS.add(MANIFEST["reading_export"]["catalogue"])
 RELEASED = MANIFEST["editions"]["released"]
 APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
 # One class A row per skill of the bound release. It changes only with a new binding, and the
