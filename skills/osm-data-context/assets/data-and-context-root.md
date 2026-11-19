@@ -19,7 +19,10 @@ coverage gaps explicitly. Refer to the agreement for source authority, cadence
 and freshness details. Map selected chat history as a source with its exact
 host or account, scope and reader.
 
-The page starts at the next heading.
+The page starts at the next heading. Put its title in the page title property.
+The body begins with the definition and then the native child databases.
+Keep this template's authoring instructions and all onboarding prose outside
+the generated page body.
 
 # Data & Context
 

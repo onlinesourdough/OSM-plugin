@@ -8,23 +8,29 @@ This text describes the sequence; executing it depends on the selected host and
 runtime.
 
 1. **Workspace.** A usable Notion account and workspace is a prerequisite
-   outside OSM. Do not build account creation or training into the plugin.
+   outside OSM. Check for the official Notion plugin in the selected host and
+   install it through the supported route when missing under setup authority.
+   Guide sign-in and verify the intended account and workspace. Reuse a working
+   connection and the owner's existing choice.
 2. **Root.** The owner selects or creates one blank root (suggest
    "Data & Context"), or explicitly selects an existing compatible home. An
    internal token cannot bootstrap an ungranted first root: the person creates or
    selects that page first, unless a separately authorized existing route can.
    Select the root by its link or ID through the selected connection; reading it
    never requires an unselected broader connector.
-3. **Connection.** Guide the internal connection's creation, the exact root-only
-   selection and secure credential input and storage. Never paste a token into
-   chat, owner pages, logs or source files.
+3. **Connection.** Use the official Notion plugin for ordinary user setup. A
+   dedicated connection is an option when a selected team workflow, worker or
+   unattended job needs a distinct identity or access scope. A team member can
+   use their own authorized Notion account. For a selected internal connection,
+   guide its creation, page selection and secure credential input and storage.
+   Never paste a token into chat, owner pages, logs or source files.
    Choose a secret store suited to the customer's OS and runtime, test
    unattended availability, fail closed on access loss, and define refresh,
    revocation and recovery; one platform's choice is not another's contract.
-   OSM's shipped route is the macOS Keychain (see the
+   OSM's existing internal route uses macOS Keychain (see the
    [panel reference](panel.md)): the owner provisions the item privately, reusing
    the existing selected connection's credential without rotating or revoking it,
-   and approves the OS prompt; the agent only saves the non-secret route setting from
+   and approves the OS prompt. For that route, the agent saves the non-secret route setting from
    the recorded selection and reads the root through `osm_context_home`.
 4. **Qualify the runtime.** On the pinned selected runtime, qualify read,
    create, update and readback once across the selected stores and nested pages;
@@ -36,7 +42,9 @@ runtime.
    the unattended run's effective tool set in its real launch mode, and report
    any limit the host cannot enforce.
 5. **Build.** Setup builds or adapts the one definition and only useful
-   destinations inside the chosen boundary. Discover actual tools, accounts and
+   destinations inside the chosen boundary. The root body begins with the
+   definition and then its native databases. Keep introductory method and setup
+   instructions in the conversation or public guide. Discover actual tools, accounts and
    canonical owners; ask what the customer uses and which outcomes matter; record
    each source's placement and lifecycle choice. Record the owner's write policy
    once in the definition (whole-home is proposed, never assumed; an existing

@@ -363,6 +363,10 @@ def validate(root=ROOT, release_tag=None):
             "package identity classification")
 
     # The bundled Notion page is new-customer product copy; existing pages keep theirs.
+    root_template = (skill_root / "osm-data-context/assets/data-and-context-root.md").read_text()
+    root_body = root_template.split("\n# Data & Context\n", 1)[1].lstrip()
+    require(root_body.startswith("## Data and Context Definition\n\n```yaml\n"),
+            "context root starts with definition")
     notion_page = skill_root / "osm-data-context/assets/notion-osm.md"
     require(notion_page.is_file() and not (skill_root / "osm-data-context/assets/notion-aios.md").exists(),
             "new Notion page template")
@@ -607,6 +611,11 @@ def negative_controls():
         path = root / "skills/osm-data-context/assets/notion-osm.md"
         path.write_text(path.read_text().replace("\n# OSM\n", "\n# OSM\n\nYour AI operating system.\n"))
 
+    def introduction_before_definition(root):
+        path = root / "skills/osm-data-context/assets/data-and-context-root.md"
+        path.write_text(path.read_text().replace("\n# Data & Context\n",
+                                               "\n# Data & Context\n\nIntroduction.\n", 1))
+
     def overlapping_acceptance(root):
         path = root / "docs/osm.md"
         path.write_text(path.read_text() + "\nInstall osm, start a fresh chat, then remove `aios`.\n")
@@ -617,6 +626,7 @@ def negative_controls():
             "Disable `aios` through the app's supported control before acceptance", "Later, remove `aios`"))
 
     rejected(retired_brand_template, "new Notion page template")
+    rejected(introduction_before_definition, "context root starts with definition")
     rejected(overlapping_acceptance, "aios to osm switch procedure: docs/osm.md")
     rejected(disable_after_acceptance, "aios to osm switch procedure")
     rejected(retired_skill_copy, "skill inventory")
