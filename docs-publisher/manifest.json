@@ -341,6 +341,18 @@
       "adoption_state": "unpublished"
     },
     {
+      "key": "osm.working.starter",
+      "class": "W",
+      "edition": "main-working",
+      "owner": "git",
+      "source_paths": [
+        "docs/starter.md"
+      ],
+      "target_subtree": "main-working/docs",
+      "public_writer": "ci",
+      "adoption_state": "unpublished"
+    },
+    {
       "key": "notion.guide.entry",
       "class": "G",
       "edition": "guide",

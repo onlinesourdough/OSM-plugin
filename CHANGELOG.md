@@ -9,6 +9,8 @@
   recovers missed decisions and repairs confirmed context errors.
 - Give Orchestrate a small read-only review path and a scoped alternate CLI
   route. Interview reuses Log for lasting owner decisions.
+- Add scoped credential setup and a two-chat Notion starter. The
+  documentation publisher maps the starter to one unreleased working row.
 - Start new Notion homes with the definition and native destinations. New host
   instructions link to the selected root with `Data and Context:`, call Prime
   and Log, and prefer the host's built-in workspace and tools. Existing

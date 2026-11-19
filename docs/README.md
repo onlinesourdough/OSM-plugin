@@ -9,6 +9,7 @@ selected documentation for people; it is a reader of this source.
 | Question | Read |
 | --- | --- |
 | What is OSM, and how do I start? | [Repository introduction](../README.md) |
+| How do I take a first task from setup to a fresh chat? | [Notion starter](starter.md) |
 | What does my installed version provide? | [Versioned OSM overview](osm.md), shipped with the plugin |
 | How do the parts and their responsibilities fit together? | [Architecture](architecture.md) |
 | Which method should I use? | [Skill index](skills.md), then the relevant skill |
@@ -74,9 +75,8 @@ Documentation here separates four states, and no text should blur them:
 The inactive publisher manifest binds its released edition to the latest tagged
 release, v0.32.1 (`184d638`), with one class A row per skill of that release and the
 retired 0.30.x keys kept in its `renames`, so its release guard and this sentence
-agree with the tags. That is repository release consistency only: the public Notion
-guide was not read or advanced, its last verified projection is still v0.30.0, and the
-publisher stays inactive. Recording a later release is a separate reviewed binding that
+agree with the tags. The public Notion guide's last verified release projection is
+still v0.30.0, and the publisher stays inactive. Recording a later release is a reviewed binding that
 follows its tag; see [publication](publication.md#current-release-alignment).
 
 The skill set at v0.32.1 (18 skills, Notion-only core) is declared and fixture-tested and
@@ -102,9 +102,9 @@ Keep the existing entrypoints stable when editing the README:
 - An installed agent reads its packaged methods and versioned overview. It does
   not fetch instructions from Resources to perform a task.
 
-The README introduction Resources selects says "The same 18 skills". The shipped README is
-release-neutral and carries no release-state disclosure, so a consumer that adopts an untagged
-revision shows the 18 with no state; it should pin a tagged release or carry the state itself.
+The README introduces the shared skill source. The starter separates its
+working walkthrough from released capabilities. Consumers pin a tagged release
+or label their working revision.
 
 `tests/consumer-selection-rehearsal.py` rehearses both selections locally against this
 repository (headings present once and non-empty, links resolvable, no private data); it

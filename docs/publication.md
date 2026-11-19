@@ -14,7 +14,7 @@ no live proof. With no qualified public content reader, no live run can reach `c
 | A | The 18 released packets of the bound release, v0.32.1 (`184d638`). The public pages' last verified projection is still v0.30.0 | The existing upkeep route until a recorded handoff, then CI |
 | B | The five Content templates and their setup, configuration and diagram explanations: a Notion Draft edition 2026-11-05.1, a projection. Their canonical home is the Git repository [OSM-content](https://github.com/onlinesourdough/OSM-content), which owns future template changes; a projection is current only once its pages, downloads and source marker are verified | Notion-authored today; the publisher never writes, derives or repairs them |
 | G | The public guide pages, edition 2026-11-05.2 (the before-source) | Notion-authored; the publisher never overwrites them |
-| W | Five documentation pages (README, docs index, overview, architecture, skill index), labelled unreleased | CI, once activated |
+| W | Six documentation pages (README, docs index, overview, architecture, skill index and starter), labelled unreleased | CI, once activated |
 | C | The owner's private documentation control and daily state | Not a CI source or credential scope |
 
 Skills are not published as working rows: a changed skill is reported as pending release
@@ -23,6 +23,14 @@ never published as released or installed. A released edition resolves to its exa
 commit and changes only at a new tagged, approved commit.
 
 ## What the publisher does
+
+[The starter](starter.md) is the Git source for the first-use walkthrough.
+The README links to it, and `osm.working.starter` maps this same file into the
+unreleased working documentation. For a public guide handoff, check the
+rendered Notion setup against the approved tag, installed capability claims,
+starter steps and linked template. Record the tag and public readback before
+calling the guide current. The existing Notion-authored guide retains its
+Class G ownership.
 
 On a pull request or main merge it builds an impact diff from a frozen source commit, mapping the
 changed paths since the base to the Keys they affect, and always returns a visible result; no
@@ -64,9 +72,10 @@ key. The v0.30.1 tag and `docs/content-drafts` hold their source history. The `r
 map only labels a retired row that CI owns; every released row is still the existing
 upkeep's, pending handoff.
 
-This is repository release consistency, not publication: the public Notion guide was not
-read or advanced, its last verified projection remains v0.30.0, and no row, page, grant,
-credential or ownership changed, including the public pages of the retired keys.
+This binding establishes repository release consistency. The public guide's last
+verified release projection remains v0.30.0. The November 19 public Setup page
+still offered other context homes, although the package uses Notion for that role.
+The working starter records the correct path for the next public guide handoff.
 Activation stays false and `public_reader` stays null. Reviewing 0.32.1 into the public
 guide, and what happens to those pages, stay separate publication decisions, and a
 source-only publisher is no gate for live Notion projection.

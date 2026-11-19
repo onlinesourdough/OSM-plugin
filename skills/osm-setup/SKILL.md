@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task.
 metadata:
-  version: "3.0.3"
+  version: "3.0.4"
 ---
 
 # OSM:setup
@@ -28,7 +28,9 @@ outside that chain):
    explain the useful read, and guide one supported native connection step under
    current authority. Verify the intended account and a scoped safe read.
    Unavailable or declined access stays an explicit gap while other work
-   continues. No secrets in chat or context.
+   continues. If the selected route requires a credential or rotation, use
+   [credential setup and verification](references/credentials.md).
+   No secrets in chat or context.
 2. **Understand the business.** Use the [business coverage check](references/business-context.md)
    for goals, offers, customers, positioning and systems, reusing what the
    workspace already shows. [Interview](../osm-interview/SKILL.md) only where

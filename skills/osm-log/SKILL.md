@@ -2,7 +2,7 @@
 name: osm-log
 description: Save lasting context when meaningful work finishes or the user asks to remember or log something. Use the verified home, read back authorized changes, and resume without logging the same work twice.
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # OSM:log
@@ -14,8 +14,9 @@ since the last verified checkpoint.
 The lead retains Log in delegated work. Dreaming uses its own run result.
 
 1. Review the useful result, decisions and explicit corrections since that
-   checkpoint. Keep work artifacts, ordinary session history and live task
-   status in their existing project or original systems.
+   checkpoint. Retain what would help the next relevant session act. Leave
+   routinely retrievable facts, work artifacts and live status at their
+   existing sources.
 2. Resolve the target and effective write authority from the current task. Use
    the home verified for that scope, even when the host has a different
    personal default. Without a verified destination and authority, keep a

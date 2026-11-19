@@ -204,6 +204,10 @@ See the [versioned overview](docs/osm.md) and
 
 ## Start with a real task
 
+For a first run using your own Notion home, follow the
+[two-chat starter](docs/starter.md). It covers installation, the first
+scoped read and checking that a decision survives a fresh chat.
+
 After installation, try:
 
 - “Help me turn this idea into a clear plan.”

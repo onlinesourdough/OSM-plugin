@@ -44,7 +44,8 @@ CLASS_A_ROWS = 18
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
-W_KEYS = sorted([README, INDEX, OVERVIEW, ARCH, SKILLS])
+STARTER = "osm.working.starter"
+W_KEYS = sorted([README, INDEX, OVERVIEW, ARCH, SKILLS, STARTER])
 TESTS = []          # (name, callable, slow)
 
 
@@ -207,7 +208,7 @@ def scenario(function):
 def working_files(version="v1", readme_lines=4):
     body = lambda name, n=4: "\n".join([f"{name} {version}"] + [f"{name} line {i}" for i in range(n)])
     return {"README.md": body("readme", readme_lines), "docs/README.md": body("index"), "docs/osm.md": body("overview"),
-            "docs/architecture.md": body("arch"), "docs/skills.md": body("skills"),
+            "docs/architecture.md": body("arch"), "docs/skills.md": body("skills"), "docs/starter.md": body("starter"),
             "skills/alpha/SKILL.md": f"alpha {version}", "docs/content-drafts/skills/content/method-draft.md": "old bundled content draft"}
 
 
@@ -241,12 +242,12 @@ def outcomes(result):
 @scenario
 def unchanged_source_is_a_valid_no_op(w):
     run(w, MANIFEST, working_files(), "run-1")
-    require(sorted(w.upserted()) == W_KEYS, f"the first run writes exactly the five CI-owned rows: {w.upserted()}")
+    require(sorted(w.upserted()) == W_KEYS, f"the first run writes exactly the CI-owned working rows: {w.upserted()}")
     before = len(w.upserted())
     result = run(w, MANIFEST, working_files(), "run-2")
     require(len(w.upserted()) == before, "an unchanged source writes nothing")
     text = pub.reconciliation_text(result, True)
-    require("Result: no documentation impact (a valid no-op)." in text and "| unchanged | 5 |" in text and f"| pending-handoff | {CLASS_A_ROWS} |" in text,
+    require("Result: no documentation impact (a valid no-op)." in text and f"| unchanged | {len(W_KEYS)} |" in text and f"| pending-handoff | {CLASS_A_ROWS} |" in text,
             "the no-op is stated visibly, with the exact counts")
     require(not pub.failing(result), "a no-op leaves the run green")
 
@@ -470,10 +471,10 @@ def no_qualified_reader_holds_every_row_as_unsupported(w):
     require({outcomes(result)[k] for k in W_KEYS} == {pub.UNSUPPORTED}, f"every affected row is unsupported: {outcomes(result)}")
     require(all(w.snapshot(k)["status"] == "pending" for k in W_KEYS), "every row stays pending")
     text = pub.reconciliation_text(result, True)
-    require("Result: HOLD" in text and "no row can reach complete" in text and "| unsupported | 5 |" in text, "HOLD is reported plainly")
-    require(len(pub.failing(result)) == 5, "and the run is red")
+    require("Result: HOLD" in text and "no row can reach complete" in text and f"| unsupported | {len(W_KEYS)} |" in text, "HOLD is reported plainly")
+    require(len(pub.failing(result)) == len(W_KEYS), "and the run is red")
     again = run(w, MANIFEST, working_files(), "run-2")
-    require(len(w.upserted()) == 5 and {outcomes(again)[k] for k in W_KEYS} == {pub.UNSUPPORTED}, "a retry reads back without rewriting and stays on HOLD")
+    require(len(w.upserted()) == len(W_KEYS) and {outcomes(again)[k] for k in W_KEYS} == {pub.UNSUPPORTED}, "a retry reads back without rewriting and stays on HOLD")
     if w.kind == "notion":
         require(all(url.startswith("https://api.notion.com/") for _m, url, _a in w.n.requests), "no public request was made, so none counted as proof")
 
@@ -499,7 +500,7 @@ def the_affected_set_is_held_until_every_member_passes(w):
 
 @scenario
 def a_plan_time_failure_holds_the_written_rows(w):
-    run(w, MANIFEST, working_files(), "run-1")                       # all five rows complete
+    run(w, MANIFEST, working_files(), "run-1")
     w.hand_edit(ARCH, "hand edit")                                   # the page body only
     result = run(w, MANIFEST, working_files("v2"), "run-2")          # one source change touches every row
     got = outcomes(result)
@@ -761,13 +762,13 @@ def publish_exits_non_zero_and_writes_its_result_unless_everything_is_complete_o
         # Today: no reader, so the run ends at HOLD and exits non-zero. The file is written for the artifact.
         code, text, n = run_main(base, active_manifest())
         require(code == 4 and "Result: HOLD" in text and result.read_text() == text, f"unsupported exits 4: {code}\n{text}")
-        require(all(not p["props"]["Status"] == "complete" for p in n.pages.values()) and len(n.pages) == 5, "five pending rows, none complete")
+        require(all(not p["props"]["Status"] == "complete" for p in n.pages.values()) and len(n.pages) == len(W_KEYS), "working rows are pending")
         require(not any(u for _m, u, _a in n.requests if not u.startswith(n.api_base)), "no public request")
         # Only an explicitly enabled test reader can reach complete, and then the exit is zero.
         fake = FakeNotion()
         code, text, n = run_main(base + ["--public-base", fake.public_base, "--public-catalogue", fake.catalogue_url], active_manifest(reader=True), n=fake)
         require(code == 0 and "written and read back" in text, f"a verified set exits 0: {code}\n{text}")
-        require(all(p["props"]["Status"] == "complete" for p in n.pages.values()), "all five complete")
+        require(all(p["props"]["Status"] == "complete" for p in n.pages.values()), "all working rows complete")
         code, text, n = run_main(base + ["--only", README], active_manifest())
         require(code == 4 and len(n.pages) == 1 and README in text, "the one-row route writes one row")
         code, text, _ = run_main(base + ["--only", "no.such.key"], active_manifest())
@@ -792,7 +793,7 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
     with redirect_stdout(out):
         code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "HEAD"])
     text = out.getvalue()
-    require(code == 0 and "valid no-op" in text and "| no-source-change | 5 |" in text and "would-write" not in text, text)
+    require(code == 0 and "valid no-op" in text and f"| no-source-change | {len(W_KEYS)} |" in text and "would-write" not in text, text)
     table = text.split("| Outcome | Artifacts |")[1].split("\n\n")[0]
     require("| written" not in table and "| unchanged" not in table, "the credential-free result never says written or unchanged")
     base = pub.DictSource(working_files(), "c-1")
@@ -816,9 +817,28 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
 
 
 @test
+def starter_uses_one_working_source():
+    starter = next(a for a in pub.expand(MANIFEST) if a["key"] == STARTER)
+    require(starter["class"] == "W" and starter["source_paths"] == ["docs/starter.md"],
+            "the Notion starter is a projection of one working source")
+    require("](docs/starter.md)" in (ROOT / "README.md").read_text(),
+            "the repository entry links to the same source")
+    actual = (ROOT / "docs/starter.md").read_text()
+    source = pub.DictSource({"docs/starter.md": actual}, "starter-revision")
+    body = pub.render(starter, source)
+    require("Unreleased main working revision" in body and body.endswith(actual),
+            "the projected starter carries the exact source and working edition")
+    result = pub.plan(MANIFEST, source, None, {"docs/starter.md"}, released_source=released_source())
+    require({key for key, value in outcomes(result).items() if value == pub.WOULD_WRITE} == {STARTER},
+            "a starter edit affects only its working row")
+
+
+@test
 def the_manifest_has_no_skill_generator_and_one_row_route_exists():
     require("generators" not in MANIFEST and not pub.validate_manifest(MANIFEST), "no skill rows are generated")
-    require(len(pub.expand(MANIFEST)) == CLASS_A_ROWS + 16 and sum(a["class"] == "W" for a in MANIFEST["artifacts"]) == 5, f"{CLASS_A_ROWS} A, 5 W, 2 G and 9 B rows")
+    require(len(pub.expand(MANIFEST)) == CLASS_A_ROWS + len(W_KEYS) + 11 and
+            {a["key"] for a in MANIFEST["artifacts"] if a["class"] == "W"} == set(W_KEYS),
+            "released, working and Notion-authored artifact inventories")
     bad = copy.deepcopy(MANIFEST)
     bad["generators"] = [{"key": "osm.working.skill.{name}"}]
     require(any("generator" in p for p in pub.validate_manifest(bad)), "a generator is refused")
@@ -1286,7 +1306,7 @@ def the_credential_free_reconciliation_check_passes_on_this_repository():
     require(code == 0, text)
     require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
     require(f"| pending-handoff | {CLASS_A_ROWS} |" in text and f"{CLASS_A_ROWS} artifact(s) are pending handoff" in text, f"the {CLASS_A_ROWS} released packets are pending handoff")
-    require("| unknown-no-receipts | 5 |" in text and "| written" not in text, "no row claims to be written")
+    require(f"| unknown-no-receipts | {len(W_KEYS)} |" in text and "| written" not in text, "no row claims to be written")
     since = io.StringIO()
     with redirect_stdout(since):
         pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "00d29e2"])
