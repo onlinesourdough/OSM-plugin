@@ -10,8 +10,11 @@ execution host; never repair by copying credentials or resetting Notion auth.
 The panel saves the short context pointer in Codex instructions and keeps source
 names/links in private per-context navigation state. Both preserve changed prior
 bytes in backups. See the sidebar recovery procedure; package rollback does not
-roll back these local choices. Company content remains at its source.
-It stores no business content. A package
+roll back these local choices.
+For a rollback to a sidebar that only reads `Context:`, restore that line
+from the matching backup or change the label on the selected URL to
+`Context:`. Preserve the marker block and any later user instructions.
+Business content remains at its source. A package
 rollback to the reviewed 0.20.0 tag removes this Codex runtime and keeps the
 existing home and pointer. Preserve any later customer edits. See
 [sidebar boundaries](sidebar.md).

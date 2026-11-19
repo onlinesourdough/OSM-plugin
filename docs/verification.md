@@ -2621,3 +2621,17 @@ due sources from the current definition and delegates verified repairs.
   A native Codex archive listing returned one bounded item. This proves the
   desktop listing surface on this host, while the existing daily route still
   needs an archive-reader qualification and cutover.
+
+### Short host instructions and unattended upkeep
+
+The new bridge uses `Data and Context:` and shares the built-in workspace
+preference across hosts. The sidebar round-trips both labels, preserves older
+instructions on a URL change, and refuses mixed duplicate routes. All 249
+sidebar tests and the bundled smoke check passed. Package validation, context
+footprint, responsibility, architecture, documentation and onboarding checks
+also passed.
+
+Dreaming 1.2.0 spells out unattended repair, Memory review and bounded
+definition upkeep. The existing selected Mac writer preserves Memory origin
+fields, including Source date. A correction to a protected field is held in
+the current run result. Live cutover and a scheduled run are still unqualified.

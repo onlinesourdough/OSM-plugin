@@ -380,8 +380,9 @@ def validate(root=ROOT, release_tag=None):
     lines = bridge.splitlines()
     require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
             "owner bridge markers")
-    require("Start with OSM Prime" in bridge and "Run OSM Log" in bridge and
-            "<verified-notion-root-entry-url>" in bridge, "new bridge route")
+    require(lines[1] == "Data and Context: <verified-notion-root-entry-url>" and
+            "Always start with the OSM Prime skill." in bridge and "Run OSM Log" in bridge,
+            "new bridge route")
     require("Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
             "retained context names")
     sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()

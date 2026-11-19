@@ -7,7 +7,9 @@
 - Dreaming reads the current definition, checks recent work and selected sources,
   recovers missed decisions and repairs confirmed context errors.
 - Start new Notion homes with the definition and native destinations. New host
-  instructions link to the selected root and call Prime and Log.
+  instructions link to the selected root with `Data and Context:`, call Prime
+  and Log, and prefer the host's built-in workspace and tools. Existing
+  `Context:` entries remain readable.
 
 ## 0.32.1 — 2026-11-13
 

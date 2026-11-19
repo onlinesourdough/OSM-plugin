@@ -30,7 +30,8 @@ grant access merely because you installed a plugin.
 In the current source, Prime finds the smallest relevant context for a task,
 Log saves lasting changes at a useful checkpoint, and Dreaming checks recent
 work and selected sources between tasks. Your Notion home keeps the definition
-and databases. The host only needs the entry link and the selected connection.
+and databases. The short host instructions link to it and prefer the host's
+built-in workspace and tools, including its side panel where available.
 
 That foundation can support different tasks and AI apps. You can reuse what
 already works, add context when a real task needs it and improve the methods as

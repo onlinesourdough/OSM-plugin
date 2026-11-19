@@ -1,7 +1,7 @@
 <!-- AIOS:BEGIN -->
-Context: <verified-notion-root-entry-url>.
-Start with OSM Prime. Use the selected context by default and load
-only what the task needs. Keep clearly independent work in its project.
-Run OSM Log when meaningful work finishes or I ask you to save it.
-Follow the selected write policy and verify any change.
+Data and Context: <verified-notion-root-entry-url>
+Always start with the OSM Prime skill.
+Run OSM Log at meaningful checkpoints or when asked.
+Use the host's built-in workspace and tools first, including its side panel when available.
+Use external browsers or desktop apps only when the built-in tools cannot do the work.
 <!-- AIOS:END -->

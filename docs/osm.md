@@ -43,7 +43,10 @@ changes after meaningful work or on request. [Dreaming](../skills/osm-dreaming/S
 reads the current definition, checks recent work and due sources, and can
 correct proven context errors. It uses an existing caller for a daily run.
 [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md) owns
-retrieval and verified curation for all three.
+retrieval and verified curation for all three. The shared
+[host instruction template](../skills/osm-data-context/assets/bridge.md)
+prefers the host's built-in workspace and tools, including its side panel
+where available.
 Reuse full-page Docs, native Skills and Memory, with Spaces for business and
 brand scopes. Start with one useful workflow in an existing workspace; no
 wholesale migration is required.
