@@ -2723,3 +2723,24 @@ candidate.
   profile. The attempted isolated Claude call returned before model use.
   The visible active Codex sidebar and the first actual scheduled run of
   the installed owner pilot remain separate verification steps.
+
+### OSM 0.33.0 stable release and owner adoption, 2026-11-19
+
+The reviewed source commit `a9a18ca` was tagged as v0.33.0 after protected
+GitHub checks passed. Release CI ran package validation,
+documentation and publisher rehearsals, a reproducible sidebar build,
+249 sidebar tests and the bundled MCP smoke. [Release CI](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44543189819)
+published the stable [GitHub Release](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.33.0).
+Codex and Claude Code installed the frozen tagged export. In the active Codex
+profile, a fresh app-server discovered 20 OSM skills and exposed the exact
+shipped sidebar HTML and icon through its native MCP path.
+
+The existing daily Dreaming job stayed active at its original cadence and
+now references v0.33.0. Its three pinned Dreaming and curation files matched
+the previously qualified pilot bytes. The first scheduler-originated run
+using the release remains pending.
+
+The public Notion overview, Setup and architecture show v0.33.0. The
+saved definition and diagram source match the tag. The legacy Notion skill
+catalogue and downloadable packets are still pending reconciliation. The
+repo publisher remains inactive.

@@ -40,7 +40,7 @@ RELEASED = MANIFEST["editions"]["released"]
 APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
 # One class A row per skill of the bound release. It changes only with a new binding, and the
 # identity test below ties it to that commit's actual tree rather than to this number alone.
-CLASS_A_ROWS = 18
+CLASS_A_ROWS = 20
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")

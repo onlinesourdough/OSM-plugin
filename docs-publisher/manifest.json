@@ -9,9 +9,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.32.1",
-      "tag": "v0.32.1",
-      "commit": "184d6381f7281998705abba48facaf4c60dbaab6",
+      "label": "v0.33.0",
+      "tag": "v0.33.0",
+      "commit": "a9a18caf6f0b8193ab970d996e0ef1f1d88a566f",
       "approved": true
     },
     "main-working": {
@@ -185,12 +185,36 @@
       "adoption_state": "pending-handoff"
     },
     {
-      "key": "osm.released.skill.osm-orchestrate-workers",
+      "key": "osm.released.skill.osm-council",
       "class": "A",
       "edition": "released",
       "owner": "git",
       "source_paths": [
-        "skills/osm-orchestrate-workers/"
+        "skills/osm-council/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-log",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-log/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "existing-upkeep",
+      "adoption_state": "pending-handoff"
+    },
+    {
+      "key": "osm.released.skill.osm-prime",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/osm-prime/"
       ],
       "target_subtree": "released-packets",
       "public_writer": "existing-upkeep",
@@ -500,7 +524,8 @@
     "osm.released.skill.osm-maintain-context": "osm.released.skill.osm-manage-data-context",
     "osm.released.skill.osm-check": "osm.released.skill.osm",
     "osm.released.skill.osm-update": "osm.released.skill.osm",
-    "osm.released.skill.osm-select-model": "osm.released.skill.osm"
+    "osm.released.skill.osm-select-model": "osm.released.skill.osm",
+    "osm.released.skill.osm-orchestrate-workers": "osm.released.skill.osm-council"
   },
-  "renames_note": "Class A keys retired from the 0.30.x set. osm-context and osm-maintain-context were renamed to osm-data-context and osm-manage-data-context. osm-check, osm-update and osm-select-model were folded into references under osm; the mapped key is where the method now lives. content and diffusion-studio left the package and have no destination key; their history is the v0.30.1 tag and docs/content-drafts. Informational only: it changes no writer, row or public page."
+  "renames_note": "Class A keys retired from the 0.30.x set. osm-context and osm-maintain-context were renamed to osm-data-context and osm-manage-data-context. osm-check, osm-update and osm-select-model were folded into references under osm; the mapped key is where the method now lives. content and diffusion-studio left the package and have no destination key; their history is the v0.30.1 tag and docs/content-drafts. Informational only: it changes no writer, row or public page. OSM 0.33.0 replaces osm-orchestrate-workers with osm-council."
 }
