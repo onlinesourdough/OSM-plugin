@@ -1045,7 +1045,7 @@ def the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_
     for old, new in MANIFEST["renames"].items():
         require(old not in keys and new in keys, f"a retired key maps to a current row: {old} -> {new}")
     expected = {f"osm.released.skill.{old}": f"osm.released.skill.{new}" for new, old in RENAMED_SKILLS.items() if old.startswith("osm-") and new in names}
-    require(expected.items() <= MANIFEST["renames"].items(), f"the accepted skill renames are recorded: {expected}")
+    require(expected and expected.items() <= MANIFEST["renames"].items(), f"the accepted skill renames are recorded: {expected}")
     require(all(name in MANIFEST.get("renames_note", "") for name in ("content", "diffusion-studio")), "the departed methods' provenance is recorded")
 
 
