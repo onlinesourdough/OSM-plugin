@@ -540,6 +540,7 @@ def content_folders(paths):
 def folder_problems(manifest, paths):
     """Every method content folder names its public guide page; every technical folder states its role."""
     folders, guide, out = manifest.get("folders") or {}, guide_pages(manifest), []
+    method_pages = set(guide) | {a["key"] for a in manifest["artifacts"] if a["class"] == "A" and a.get("notion")}
     needed = content_folders(paths)
     out += [f"folder {f} has no entry in the folder map: name its guide page or its technical role" for f in sorted(needed - set(folders))]
     out += [f"folder map entry {f} names no folder at this commit" for f in sorted(set(folders) - needed)]
@@ -547,8 +548,8 @@ def folder_problems(manifest, paths):
         page, role = entry.get("page"), entry.get("role")
         if (page is None) == (role is None) or (role is not None and not str(role).strip()):
             out.append(f"folder {folder} names exactly one of a guide page or a technical role")
-        elif page is not None and page not in guide:
-            out.append(f"folder {folder} names {page}, which is not a guide original")
+        elif page is not None and page not in method_pages:
+            out.append(f"folder {folder} names {page}, which is not a bound public method page")
         elif page is None and folder.startswith("skills/"):
             out.append(f"folder {folder} is method content: it names its guide page, not a technical role")
     return out

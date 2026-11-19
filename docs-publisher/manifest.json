@@ -710,16 +710,16 @@
       "page": "notion.guide.work"
     },
     "skills/osm-council/": {
-      "page": "notion.guide.work"
+      "page": "osm.released.skill.osm-council"
     },
     "skills/osm-human-writing/": {
-      "page": "notion.guide.work"
+      "page": "osm.released.skill.osm-human-writing"
     },
     "skills/osm-interview/": {
-      "page": "notion.guide.work"
+      "page": "osm.released.skill.osm-interview"
     },
     "skills/osm-setup/": {
-      "page": "notion.guide.setup"
+      "page": "osm.released.skill.osm-setup"
     },
     "skills/osm-data-context/": {
       "page": "notion.guide.data-context"
@@ -728,13 +728,13 @@
       "page": "notion.guide.upkeep"
     },
     "skills/osm-prime/": {
-      "page": "notion.guide.upkeep"
+      "page": "osm.released.skill.osm-prime"
     },
     "skills/osm-log/": {
-      "page": "notion.guide.upkeep"
+      "page": "osm.released.skill.osm-log"
     },
     "skills/osm-dreaming/": {
-      "page": "notion.guide.upkeep"
+      "page": "osm.released.skill.osm-dreaming"
     },
     "skills/osm-manage-skills/": {
       "page": "notion.guide.entry"
@@ -807,7 +807,7 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content · optional extension",
+        "title": "Content \u00b7 optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md"
       }
     ]

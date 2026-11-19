@@ -30,8 +30,9 @@ unchanged private settings. Package, documentation, onboarding, layout, continui
 skill versioning, context footprint, responsibilities and consumer selections
 passed. Context architecture passed 91 positives, 79 variants and 474 negatives
 after updating the renamed bootstrap anchor. Publisher transport rehearsal passed
-72 cases and 75 mutation controls; ten new parity/Markdown-reader tests passed, including a guide conflict that
-stops publication before any write.
+72 cases and 75 mutation controls; eleven new parity/Markdown-reader tests passed, including a guide conflict that
+stops publication before any write and a check that each skill folder maps to
+its actual public method page.
 These fixture results do not prove native rendering or live CI publication.
 
 A real Codex app-server recognized Setup, seven discoverable skills and the

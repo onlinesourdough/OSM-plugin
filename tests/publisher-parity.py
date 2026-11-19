@@ -118,6 +118,18 @@ class Parity(unittest.TestCase):
         self.assertFalse(pub.folder_problems(self.manifest, [PATH]))
         self.assertTrue(pub.folder_problems(self.manifest, [PATH, 'skills/new/SKILL.md']))
 
+class FolderPages(unittest.TestCase):
+    def test_method_folders_point_to_their_public_skill_pages(self):
+        manifest = pub.load_manifest()
+        for artifact in manifest['artifacts']:
+            if artifact['class'] == 'A' and artifact.get('notion'):
+                folder = artifact['source_paths'][0]
+                self.assertEqual(manifest['folders'][folder]['page'], artifact['key'])
+        self.assertFalse(pub.folder_problems(manifest, pub.DirSource(ROOT).paths()))
+        bad = copy.deepcopy(manifest)
+        bad['folders']['skills/osm-prime/']['page'] = 'unbound-private-page'
+        self.assertTrue(pub.folder_problems(bad, pub.DirSource(ROOT).paths()))
+
 class MarkdownReader(unittest.TestCase):
     def read(self, **response):
         self.requests = []
