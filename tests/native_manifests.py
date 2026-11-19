@@ -18,7 +18,9 @@ def validate_native(root, require):
     require(all(isinstance(codex[k], str) and codex[k] for k in common - {'author'}) and
             codex['author'] == {'name': 'onlinesourdough'}, 'native metadata types')
     require(set(codex) == common | {'skills', 'interface', 'extensions', 'mcpServers'} and
-            set(claude) == common | {'skills'} and
+            # Claude display and directory-listing metadata; no component field.
+            set(claude) == common | {'skills', 'displayName', 'homepage', 'keywords',
+                                     'icon', 'documentationUrl', 'supportUrl'} and
             set(cursor) == {'name', 'version', 'description', 'skills'} and
             set(gemini) == {'name', 'version', 'description'}, 'unexpected native component field')
     require('apps' not in codex and not (root / '.app.json').exists(),

@@ -1,7 +1,8 @@
 {
   "name": "online-sourdough",
   "owner": {
-    "name": "onlinesourdough"
+    "name": "onlinesourdough",
+    "url": "https://github.com/onlinesourdough"
   },
   "metadata": {
     "description": "The Onlinesourdough Method (OSM) for portable owner context and reviewed work."
