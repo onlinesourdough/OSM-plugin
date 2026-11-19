@@ -12,6 +12,13 @@ Native child pages and databases (the knowledge store, Memory, Skills and the
 maintenance pages) appear on the root itself. Do not add a second manual link
 list to them; the definition names them by exact ID.
 
+Before saving, verify the root and destinations, the recorded scope and write
+policy, and every selected source's account, reader and agreement. Where a
+scheduled job is selected, verify the route to its existing checkpoint. Name
+coverage gaps explicitly. Refer to the agreement for source authority, cadence
+and freshness details. Map selected chat history as a source with its exact
+host or account, scope and reader.
+
 The page starts at the next heading.
 
 # Data & Context
@@ -22,6 +29,8 @@ The page starts at the next heading.
 definition:
   version: 1
   root:
+    id: "[exact root page ID]"
+    account: "[verified Notion workspace or connection binding]"
     title: "[exact root title]"
     role: data-and-context-root
     purpose: "[whose context this is and what it is used for]"
@@ -34,6 +43,9 @@ definition:
     content: {id: "[id]"}  # optional; only when the owner selects Content
   # The owner's recorded choice. Setup proposes whole-home and never assumes it.
   write_policy: {choice: "[whole-home | narrower | not yet chosen]", include: ["[exact identities; narrower only]"], exclude: ["[exact identities]"], recorded: "[owner decision source and date]"}
+  controls:
+    operating_policy: "[exact policy ID, when a separate page is required]"
+    checkpoints: {kind: "[notion-record | runtime-binding]", ref: "[exact existing checkpoint reference for scheduled upkeep]"}
   areas:
     business-and-relationships: {coverage: "[source keys or gap]"}
     work-and-knowledge: {coverage: "[source keys or gap]"}
@@ -44,13 +56,13 @@ definition:
     - key: "[stable source key]"
       area: "[area]"
       provider: "[provider]"
+      account: "[exact account or workspace identity, or its verified reference]"
       scope: "[selected objects, or a deliberately broader account/workspace-visible scope, by identity]"
       lifecycle: "[current-recurring | historical-one-off | deferred | excluded]"
       placement: "[direct | projection | both]"
       reader: "[route that reads it, or none]"
-      agreement: "[pipeline agreement ID, or none]"
+      agreement: "[exact pipeline agreement ID; required for recurring work]"
       # Readiness is observed state, kept in progress records, never here.
   references:
-    - "[exact owner operating policy ID, when a separate page is required]"
     - "[deeper domain contract or supporting page by ID]"
 ```

@@ -2,7 +2,7 @@
 name: osm-interview
 description: Interview to explore context, restate goals and the underlying problem, or find direction when requested or materially unclear at the start; clear work and isolated questions continue directly.
 metadata:
-  version: "2.0.1"
+  version: "2.1.0"
 ---
 
 # OSM:interview
@@ -77,12 +77,12 @@ material assumptions or unknowns and next action; resolve only a correction
 that would change that action. Do not require a separate approval of the summary
 when the answers already establish direction and authority.
 
-Continue the original authorized task with those answers. When substantive
-execution needs a contract, pass them to [Spec](../osm-spec-work/SKILL.md);
-Spec owns scope and proof, and does not repeat discovery. An interview-only
-request ends with the useful understanding, without manufacturing a build task.
+Continue the original authorized task with those answers. When it needs a work
+contract, use its active specification method or state the scope and proof
+directly. Reuse the accepted answers. An interview-only request ends with the
+useful understanding.
 
 Keep project decisions with the project and external facts at their source.
-Only relevant durable owner facts use [Manage Data & Context](../osm-manage-data-context/SKILL.md)
+Only relevant durable owner facts use [Log](../osm-log/SKILL.md)
 under existing authority. Do not save raw transcripts, temporary project plans
 or speculative answers as owner memory. A separate document is optional.

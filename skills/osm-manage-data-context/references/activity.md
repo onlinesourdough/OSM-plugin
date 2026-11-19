@@ -52,3 +52,29 @@ each destination; if it is absent, keep the supported change as a proposal.
 For a repair, keep the earlier source or revision reference and the new
 evidence where the destination's policy permits. Verify the repaired record in
 place. This gives the owner a way to inspect or reverse a mistaken repair.
+
+## Repair in the current session
+
+When Prime or Log discovers a verified context error, correct the route,
+interpretation or result in the current session. If a stored OSM record also
+needs repair, resolve the canonical record and governing write policy. Use
+Manage Data & Context to patch and read back the smallest authorized change.
+Reconcile any uncertain prior write before retrying. A gap in evidence, access
+or writer capability limits only that repair.
+
+Leave one short note in the current chat for Dreaming. Give the workflow,
+affected record or route, exact evidence reference, change, and observed outcome.
+Keep private content at its source. A compact JSON line is sufficient:
+
+```json
+{"osm_repair":"prime","target":"record or route ID","evidence":"source or turn reference","change":"selected the correct source","result":"corrected-in-session"}
+```
+
+Use `prime` or `log` as the workflow and one observed result:
+`corrected-in-session`, `stored-verified`, `stored-uncertain`,
+`not-authorized` or `writer-refused`. If a patch partly succeeds and a field's
+state remains uncertain, use `stored-uncertain` and name that field in `change`.
+Read back the record and keep the verified part. Use the
+existing chat and turn identity. Dreaming checks the cited evidence and
+current record before acting. The note is a search hint and creates no
+Memory record.

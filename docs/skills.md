@@ -85,12 +85,12 @@ consistent with the skill text.
 | Save lasting context at a checkpoint | [OSM:log](../skills/osm-log/SKILL.md) | Manage Data & Context (authorized writes) |
 | Review recent work and repair context between sessions | [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Manage Data & Context (all writes), Manage Skills (method changes only) |
 | Create or change a personal or team method | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | None in the context chain |
-| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers), Manage Data & Context (durable owner facts only) |
+| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Active specification method when needed, Log (durable owner facts only) |
 | Resolve a work contract | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Interview, Risky Changes, Orchestrate workers, Build; model advice |
 | Implement accepted work | [OSM:build-work](../skills/osm-build-work/SKILL.md) | Write Code, Review, Orchestrate workers; model advice |
 | Inspect the result | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Risky Changes, Write Code, Ship, Triage |
 | Deliver a reviewed result | [OSM:ship-work](../skills/osm-ship-work/SKILL.md) | Review |
-| Delegate to workers | [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Triage; model advice |
+| Delegate to workers | [OSM:orchestrate-workers](../skills/osm-orchestrate-workers/SKILL.md) | Native workers or a selected CLI; model advice when needed |
 | Start a project workspace | [OSM:create-project](../skills/osm-create-project/SKILL.md) | Spec, Build, Review, Write Code, Human Writing, Manage Skills |
 | Route an improvement signal | [OSM:triage-improvement](../skills/osm-triage-improvement/SKILL.md) | Ship |
 | Assess a consequential change | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | None |

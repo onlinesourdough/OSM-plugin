@@ -3,9 +3,12 @@
 ## Unreleased
 
 - Add Prime for scoped context at session start and Log for verified capture
-  at meaningful checkpoints. Both use the existing Manage Data & Context method.
+  at meaningful checkpoints. Both correct verified errors in the current
+  session and give Dreaming a short reference to the repair.
 - Dreaming reads the current definition, checks recent work and selected sources,
   recovers missed decisions and repairs confirmed context errors.
+- Give Orchestrate a small read-only review path and a scoped alternate CLI
+  route. Interview reuses Log for lasting owner decisions.
 - Start new Notion homes with the definition and native destinations. New host
   instructions link to the selected root with `Data and Context:`, call Prime
   and Log, and prefer the host's built-in workspace and tools. Existing

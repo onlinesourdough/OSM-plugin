@@ -380,8 +380,11 @@ def validate(root=ROOT, release_tag=None):
     lines = bridge.splitlines()
     require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
             "owner bridge markers")
-    require(lines[1] == "Data and Context: <verified-notion-root-entry-url>" and
-            "Always start with the OSM Prime skill." in bridge and "Run OSM Log" in bridge,
+    require(lines[1:4] == [
+        "Always start with the OSM Prime skill.",
+        "Data and Context: <verified-notion-root-entry-url>",
+        "Always run OSM Log at meaningful checkpoints or when asked.",
+    ],
             "new bridge route")
     require("Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
             "retained context names")
@@ -644,7 +647,7 @@ def negative_controls():
 
     def dropped_log_trigger(root):
         path = root / "skills/osm-data-context/assets/bridge.md"
-        path.write_text(path.read_text().replace("Run OSM Log", "Consider writing a note"))
+        path.write_text(path.read_text().replace("Always run OSM Log", "Consider writing a note"))
 
     def renamed_panel_storage(root):
         path = root / "apps/sidebar/sources.mjs"

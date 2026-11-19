@@ -29,7 +29,7 @@ JOB_PREFIXES = {
     "osm-setup": "Set up or resume ",
     "osm-data-context": "Engineer ",
     "osm-interview": "Interview ",
-    "osm-orchestrate-workers": "Prepare, launch, coordinate and recover ",
+    "osm-orchestrate-workers": "Delegate ",
     "osm-risky-changes": "Assess ",
     "osm-review-work": "Review ",
     "osm-ship-work": "Deliver ",

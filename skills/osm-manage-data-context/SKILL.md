@@ -2,7 +2,7 @@
 name: osm-manage-data-context
 description: Retrieve relevant context, take in sources, curate concise durable records and repair routes, schema and the definition in the Notion Data & Context home. One method for manual, task-time and scheduled use. Formerly OSM Maintain Context.
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
 ---
 
 # OSM:manage-data-context

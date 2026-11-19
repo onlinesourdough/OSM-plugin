@@ -90,7 +90,7 @@ CALLS_CHECKED = {"osm-setup": None, "osm-data-context": None, "osm-manage-data-c
                  "osm-interview": None, "osm-prime": None, "osm-log": None, "osm-dreaming": None}
 DISPLAY = {"osm-interview": r"Interview", "osm-data-context": r"(?<!Manage )Data & Context",
            "osm-manage-data-context": r"Manage Data & Context", "osm-manage-skills": r"Manage Skills", "osm-spec-work": r"Spec",
-           "osm-dreaming": r"Dreaming"}
+           "osm-dreaming": r"Dreaming", "osm-log": r"\bLog\b"}
 ACTIVE_DENY = ("AIOS_ROOT", "provider selection", "existing-home", "Use a folder or other link",
                "file bridge", "legacy-file-home")
 
@@ -328,12 +328,12 @@ def negative_controls():
     rejected(history_exempt_file, "shipped text names")
     rejected(link_back, "curation links back to Setup")
     rejected(dropped_owner_row, "docs/skills.md omits the owner")
-    interview_row = "| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Spec (reuses answers), Manage Data & Context (durable owner facts only) |"
+    interview_row = "| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Active specification method when needed, Log (durable owner facts only) |"
     rejected(table_edit(interview_row + "\n", ""), "triggers table has no row for 'Explore direction'")
     rejected(table_edit("| Engineer the Notion home | [OSM:data-context](../skills/osm-data-context/SKILL.md) |",
                         "| Engineer the Notion home | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) |"),
              "does not name osm-data-context/SKILL.md as owner")
-    rejected(table_edit(", Manage Data & Context (durable owner facts only)", ""), "Calls for osm-interview omits osm-manage-data-context")
+    rejected(table_edit(", Log (durable owner facts only)", ""), "Calls for osm-interview omits osm-log")
     rejected(table_edit("| Interview (only if context is missing), Data & Context, Manage Data & Context, Dreaming (optional upkeep), Manage Skills |",
                         "| Interview (only if context is missing), Manage Data & Context, Dreaming (optional upkeep), Manage Skills |"), "Calls for osm-setup omits osm-data-context")
     rejected(table_edit("Dreaming (optional upkeep), ", ""), "Calls for osm-setup omits osm-dreaming")

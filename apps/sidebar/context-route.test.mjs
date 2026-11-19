@@ -20,9 +20,9 @@ test('first-run save persists only the context bridge and can be read after rest
   const saved = await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8');
   assert.equal(saved, bridge.replace('<verified-notion-root-entry-url>', target));
   assert.deepEqual(saved.split('\n').slice(1, 4), [
-    `Data and Context: ${target}`,
     'Always start with the OSM Prime skill.',
-    'Run OSM Log at meaningful checkpoints or when asked.',
+    `Data and Context: ${target}`,
+    'Always run OSM Log at meaningful checkpoints or when asked.',
   ]);
   assert.deepEqual(await readdir(options.codexHome), ['AGENTS.md']);
 });

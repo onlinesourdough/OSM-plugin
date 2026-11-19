@@ -2635,3 +2635,18 @@ Dreaming 1.2.0 spells out unattended repair, Memory review and bounded
 definition upkeep. The existing selected Mac writer preserves Memory origin
 fields, including Source date. A correction to a protected field is held in
 the current run result. Live cutover and a scheduled run are still unqualified.
+
+### Task-time repair and retained skills
+
+Three Claude Fable 5.2 High passes reviewed the retained skills and successive
+versions of the Prime–Log–Dreaming loop. The final read-only review passed
+after revisions to CLI isolation, interview handoff, definition bindings and
+repair evidence. The final run used the installed CLI's safe mode with tools and
+external connectors disabled. The case outcomes are reasoning evidence.
+
+Package, skill-version, link and responsibility checks, architecture and
+onboarding rehearsals, the context footprint and 249 sidebar tests passed.
+A read of the existing owner definition verified its mapped roles, source map,
+operating policy and maintenance bindings. Native repair readback, scheduled
+adoption and alternate CLI execution beyond the observed Claude review remain
+to be qualified.
