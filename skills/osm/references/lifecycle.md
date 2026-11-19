@@ -28,13 +28,10 @@ for that work. Its capability/cost evidence may reopen this decision; it does no
 define the deliverable or take over responsibility for continuation. Keep source
 ownership distinct from the app, harness or session doing the work.
 
-Spec, Build, Review and Ship are shared OSM plugin skills. The repository's
-AGENTS, specialist skills, requirements, checks and recovery records supply
-local truth. Resolve shared skills through the current harness; do not copy,
-wrap, rename, symlink or vendor them into each System or Project. Plugin
-discovery is independent of filesystem ancestry and supplies no runtime
-dependency, personal context or additional authority. Read only the active
-phase and conditional references needed for the change, once per revision.
+The project's instructions, specialist skills, requirements, checks and
+recovery records govern implementation and delivery. Use the host's active
+method and open only the references needed for the change. Discovery grants
+no runtime or account authority.
 
 Continue in the current task by default, including substantive repository work,
 design exploration and closely coupled changes. A task opened directly in a
@@ -57,8 +54,8 @@ Delegation with retained caller coordination/acceptance selects
 [User-owned continuation and whole-task handoff](continuation.md) belong to this
 shared lifecycle. Load that procedure only for a selected/requested handoff;
 it owns the usable prompt, receiving context and supported transfer. A new-task
-request alone does not select orchestration; native authorization rules still apply.
-Otherwise stay here and do not load orchestration. Prefer a scoped review pass in the same
+request alone does not select Council; native authorization rules still apply.
+Otherwise stay here and do not load Council. Prefer a scoped review pass in the same
 task unless a distinct reviewer is requested or materially improves confidence;
 consequential output may require independent evidence. Review remains a separate
 inspection of the final subject, even when the same session performs it.

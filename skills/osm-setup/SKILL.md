@@ -1,6 +1,6 @@
 ---
 name: osm-setup
-description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task.
+description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
   version: "3.0.6"
 ---

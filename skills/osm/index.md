@@ -39,13 +39,17 @@ skill and no second discovery entry.
 | `osm-data-context` | [Data & Context setup](../osm-data-context/index.md), loaded by Setup. |
 | `osm-manage-data-context` | [Context curation](../osm-manage-data-context/index.md) for manual use and writes. [Dreaming](../osm-dreaming/SKILL.md) owns new schedules. |
 | `osm-manage-skills` | [Personal and team skill maintenance](../osm-manage-skills/index.md). |
-| `osm-context`, `OSM Context`, `AIOS Context` | [Data & Context](../osm-data-context/index.md) for the home, [Manage Data & Context](../osm-manage-data-context/index.md) for retrieval and upkeep |
-| `osm-maintain-context`, `Maintain Context`, `osm sync` | [Manage Data & Context](../osm-manage-data-context/index.md); folder-home Sync is retired, see the [legacy-home guidance](references/update.md#legacy-file-and-vault-homes) |
+| `osm-context`, `OSM Context`, `AIOS Context` | [Data & Context](../osm-data-context/index.md) for the home, [Manage Data & Context](../osm-manage-data-context/index.md) for manual retrieval and upkeep. Use [Dreaming](../osm-dreaming/SKILL.md) for new schedules. |
+| `osm-maintain-context`, `Maintain Context`, `osm sync` | [Manage Data & Context](../osm-manage-data-context/index.md) for manual upkeep. Use [Dreaming](../osm-dreaming/SKILL.md) for new schedules. For folder-home Sync, see the [legacy-home guidance](references/update.md#legacy-file-and-vault-homes) |
 | `osm-orchestrate-workers`, `aios-orchestrate-workers` | [Council](../osm-council/SKILL.md) for another agent’s review or bounded help |
 | `osm-check` | [check](references/check.md) |
 | `osm-update` | [update](references/update.md) |
 | `osm-select-model` | [model advice](references/model-advice.md) |
+| Build Work, Create Project, Clarify, Review Work, Risky Changes, Ship Work, Spec Work, Triage Improvement, Write Code | Use the project or host method. Ask [Council](../osm-council/SKILL.md) for an independent review. [Earlier release archive](https://github.com/onlinesourdough/OSM-plugin/tree/v0.33.0/skills) |
 | `content`, `diffusion-studio` | Outside OSM: a separate, tailored Content method. Drafts are history only |
+
+Keep existing pinned scheduled callers on their verified release until a
+replacement Dreaming caller has been tested.
 
 Answer stable OSM method facts directly; otherwise select only needed
 [shipped documentation](references/documentation.md). Current product/harness

@@ -1,21 +1,9 @@
 # OSM skills
 
-OSM 0.33.0 contains 20 native skills. Method skills are named `osm` or `osm-*`; their
-titles and Codex display names use `OSM:skill-name`: uppercase `OSM`, a colon
-without spaces, and lowercase hyphenated names. The display label omits the
-redundant leading `osm-` from the canonical name, and the `osm` entry shows as
-`Procedure index`. Automatic selection uses each skill description;
-explicit invocation uses the canonical name and native namespace. OSM 0.30.0
-renamed the earlier `aios`, `aios-*`, `clarify`, `human-writing` and
-`write-code` skills; Setup earlier replaced `aios-onboard`. OSM 0.31.0 renamed
-`osm-context` to `osm-data-context` and `osm-maintain-context` to
-`osm-manage-data-context`, folded Check, Update and Select model into
-references under `osm`, and moved Content and Diffusion Studio out of the
-package. It also adds `osm-dreaming` (#93), a new skill with no earlier name.
-Update explicit callers on adoption; `osm` routes the old names and there is no
-alias skill. Each carries an independent quoted `metadata.version`;
-see [version maintenance](skill-versioning.md). Repository development methods in
-`.agents/skills/` are separate and are not product skills.
+The host selects skills by their descriptions and invokes them by their
+canonical names, for example `osm-setup`. Codex may display the same skill
+as `OSM:setup`. Each entry carries an independent `metadata.version`.
+Repository development methods live separately. [Version maintenance](skill-versioning.md)
 
 The standard package exposes seven skill entries. Context setup, curation and
 personal skill maintenance are linked procedures. The previous 20-skill package
@@ -27,7 +15,7 @@ is available at [v0.33.0](https://github.com/onlinesourdough/OSM-plugin/blob/v0.
 | [OSM:interview](../skills/osm-interview/SKILL.md) | Explore context, challenge assumptions and find direction when requested or materially needed at the start; no routine interruption of execution |
 | [OSM:prime](../skills/osm-prime/SKILL.md) | Start with the smallest relevant context in the selected scope |
 | [OSM:log](../skills/osm-log/SKILL.md) | Save lasting changes at a meaningful checkpoint or on request |
-| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Review changed work and selected sources, repair confirmed context errors and surface open progress between sessions through a manual or existing native caller |
+| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Review changed work and selected sources, repair confirmed context errors and surface open progress between sessions, manually or through an authorized native schedule |
 | [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume the Notion Data & Context foundation, from access to a useful first task |
 | [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent for a read-only review or delegate bounded work with a scoped brief |
 
@@ -35,7 +23,7 @@ Council replaces `osm-orchestrate-workers` in OSM 0.33.0. If you call it
 by identifier in a script or saved prompt, update the caller to `osm-council`
 when you update the installed package.
 
-Three procedures live under `osm` instead of separate entries:
+The [procedure index](../skills/osm/index.md) also covers
 [check](../skills/osm/references/check.md) (read-only inspection),
 [update and rollback](../skills/osm/references/update.md) (including guidance for
 a legacy file or vault home) and
