@@ -5,11 +5,13 @@ import { readContextRoute } from './context-route.mjs';
 import { contextIdentity, location, snapshot, stateRevision, replaceState } from './sources.mjs';
 import { notionId } from './notion-internal.mjs';
 
-// Home's view state is a generated projection of one revision of the AI Operating
-// Model's Data and Context Definition, which alone owns source and query identities.
-// Setup generates it; it is replaced whole when that revision changes, refused
-// without a revision, and never edited here or field by field. It is saved beside the
-// context's navigation links as aios/panel/<hash>.home.json. Format
+// The Home projection is generated from one revision of the AI Operating Model's
+// Data and Context Definition, which alone owns source and query identities. It maps
+// what OSM's own connection may list and read. Setup generates it; it is replaced whole
+// when that revision changes, refused without a revision, and never edited here or
+// field by field. It is saved beside the context's navigation links as
+// aios/panel/<hash>.home.json (the folder keeps its earlier name so saved state stays
+// readable). Format
 // osm-home-projection/1 is OSM's reviewed product contract; owner-preview schemas and
 // legacy or custom models map into it through Setup. It holds identities, labels,
 // verified field names, safe links, the selected connection mode and dated
@@ -17,7 +19,7 @@ import { notionId } from './notion-internal.mjs';
 export const projectionFormat = 'osm-home-projection/1';
 // `content` is an optional selected existing Content store, read like Docs and never created or widened here.
 export const contextRoles = ['profile', 'memory', 'documents', 'content', 'skills', 'related'];
-// Support material the definition names but Home never lists, reads or shows as context.
+// Support material the definition names; it is never listed or read as context.
 export const supportKinds = ['core_rules', 'source_index', 'writing_procedure', 'access', 'evidence', 'maintenance', 'recovery_snapshot'];
 export const modes = ['official_notion_user', 'internal_selected_pages'];
 export const fieldKeys = { profile: ['description'], documents: ['description'], content: ['description'], skills: ['description'],

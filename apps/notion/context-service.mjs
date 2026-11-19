@@ -1,12 +1,7 @@
 import { createHash } from 'node:crypto';
-import { constants } from 'node:fs';
-import { lstat, open, readdir, realpath } from 'node:fs/promises';
-import { join } from 'node:path';
 import { classifyTarget } from './target.mjs';
 import { contextIdentity } from './sources.mjs';
 import { createNotionClient, NotionReadError, notionId, pageTitle, plainText, propertyText, readBlocks, textProperties, readLimits } from './notion-internal.mjs';
-
-import { readPageIcon } from './notion-icons.mjs';
 import { hostCredential } from './credential.mjs';
 export { hostCredential } from './credential.mjs';
 
@@ -24,81 +19,11 @@ const linkId = value => {
 // Every state the host credential can report that stops a read before any request.
 const credentialStops = new Set(['unsupported_host', 'not_enabled', 'unavailable', 'keychain_blocked', 'keychain_timeout']);
 
-// The method list and a method's text both come through this one loader, so the package boundary is the
-// same for both. Under the package's skills folder it needs a real folder (a symlinked folder is not one,
-// and the folder must resolve to its own place), then a real, unlinked SKILL.md within the size bound, and
-// all of that is checked before a byte is read. The file is then opened without following a link and read
-// through the handle for at most the bound, so a file that changes after the check still cannot be read
-// past it. Anything else returns null: it is neither listed nor readable.
-const skillTextLimit = 128 * 1024, skillBlockLimit = 400, skillBlockText = 4000;
-async function bundledSkillText(root, name) {
-  if (typeof name !== 'string' || !/^[a-z0-9][a-z0-9-]{0,59}$/.test(name)) return null;
-  const folder = join(root, name), file = join(folder, 'SKILL.md');
-  let handle;
-  try {
-    if (!(await lstat(folder)).isDirectory()) return null;
-    if (await realpath(folder) !== join(await realpath(root), name)) return null;
-    const info = await lstat(file);
-    if (!info.isFile() || info.size > skillTextLimit) return null;
-    handle = await open(file, constants.O_RDONLY | (constants.O_NOFOLLOW || 0));
-    const opened = await handle.stat();
-    if (!opened.isFile() || opened.dev !== info.dev || opened.ino !== info.ino || opened.size > skillTextLimit) return null;
-    const buffer = Buffer.alloc(skillTextLimit + 1);
-    const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
-    return bytesRead > skillTextLimit ? null : new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, bytesRead));
-  } catch { return null; } finally { await handle?.close(); }
-}
-
-// Shared OSM methods, from the installed package's own skill metadata.
-export async function readBuiltinSkills(root) {
-  const skills = [];
-  for (const name of (await readdir(root).catch(() => [])).sort().slice(0, 60)) {
-    const text = await bundledSkillText(root, name) ?? '';
-    const front = text.startsWith('---\n') ? text.slice(4, text.indexOf('\n---', 4)) : '';
-    const field = key => front.match(new RegExp(`^${key}: (.+)$`, 'm'))?.[1].trim().replace(/^(["'])(.*)\1$/, '$2');
-    const id = field('name'), description = field('description');
-    if (id === name && description) skills.push({ name: id.slice(0, 60), description: description.slice(0, 300) });
-  }
-  return skills;
-}
-
-// One bundled skill's SKILL.md as plain blocks, for the Settings reader. The name must be one the package's
-// own skills folder lists (never a path); a folder or file that is a link or over the bound is not listed, so
-// it is inaccessible here, and nothing outside the package is read. The text is bounded package content, not
-// owner data, and is shown as text only.
-export async function readBuiltinSkill(root, name) {
-  const listed = typeof name === 'string' ? (await readBuiltinSkills(root)).find(skill => skill.name === name) : undefined;
-  if (!listed) return { state: 'inaccessible' };
-  const text = await bundledSkillText(root, name);
-  if (text === null) return { state: 'unavailable' };
-  const front = text.startsWith('---\n') ? text.indexOf('\n---', 4) : -1;
-  const body = front > 0 ? text.slice(front + 4).replace(/^\r?\n/, '') : text;
-  const blocks = []; let paragraph = [], fence = null, truncated = false;
-  const push = (kind, value) => {
-    if (blocks.length >= skillBlockLimit) { truncated = true; return; }
-    const clipped = value.length > skillBlockText; if (clipped) truncated = true;
-    blocks.push({ kind, depth: 0, text: value.slice(0, skillBlockText) });
-  };
-  const flush = () => { if (paragraph.length) push('text', paragraph.join(' ')); paragraph = []; };
-  for (const line of body.split(/\r?\n/)) {
-    if (/^```/.test(line)) { if (fence) { push('code', fence.join('\n')); fence = null; } else { flush(); fence = []; } continue; }
-    if (fence) { fence.push(line); continue; }
-    const heading = line.match(/^#{1,6}\s+(.*\S)\s*$/), item = line.match(/^\s*(?:[-*]|\d+\.)\s+(.*\S)\s*$/);
-    if (heading) { flush(); push('heading', heading[1]); }
-    else if (item) { flush(); push('item', item[1]); }
-    else if (!line.trim()) flush();
-    else paragraph.push(line.trim());
-  }
-  if (fence) push('code', fence.join('\n'));
-  flush();
-  return { state: 'read', record: { title: name, meta: 'Built into OSM', description: listed.description, fields: [], blocks, truncated } };
-}
-
-// Home reads only through the projection's selected connection mode and never moves to
-// another mode or connection after a denial or when the mode is unavailable. This
-// release reads through OSM's internal connection only: an official_notion_user
+// Context reads go only through the projection's selected connection mode and never move
+// to another mode or connection after a denial or when the mode is unavailable. This
+// service reads through OSM's internal connection only: an official_notion_user
 // projection reports official_mode and makes no request.
-export function createHomeService({ credential = hostCredential, route = async () => ({ enabled: false, source: 'none' }), transport, readProjection }) {
+export function createContextService({ credential = hostCredential, route = async () => ({ enabled: false, source: 'none' }), transport, readProjection }) {
   // Every call checks the mode, then the owner's opt-in for this context, the current
   // credential and its identity against the projection. No opt-in means no credential read.
   async function open() {
@@ -180,44 +105,17 @@ export function createHomeService({ credential = hostCredential, route = async (
     }
   }
 
-  // Agent and Home share this service, credential and verified identity. No
-  // raw token or external connector identity crosses the tool boundary.
+  // Every tool shares this service, credential and verified identity. No raw token or
+  // external connector identity crosses the tool boundary. The saved access link is
+  // returned only while open() matched it to the live bot and workspace.
   async function connection() {
     const session = await open();
-    return { state: session.state, ...(session.identity && { connection: session.identity }),
-      credentialRoute: 'macos-keychain-opt-in', ...(session.optIn && { optIn: session.optIn }), accessInventory: 'mapped-sources-only' };
+    return { state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }), ...(session.identity && { connection: session.identity }),
+      credentialRoute: 'macos-keychain-opt-in', ...(session.optIn && { optIn: session.optIn }), ...(session.manage && { manageLink: session.manage }),
+      accessInventory: 'mapped-sources-only' };
   }
 
-  async function status() {
-    const checkedAt = new Date().toISOString();
-    const session = await open();
-    const saved = session.mapping.state === 'saved' ? session.mapping.projection : null;
-    // L-2: every status names the context its projection was read for; all returns below spread base.
-    const base = { mapping: session.mapping.state, checkedAt, ...(session.mapping.target && { context: session.mapping.target }),
-      ...(session.identity && { workspaceName: session.identity.workspaceName }),
-      ...(saved && { definitionRevision: saved.definition.revision, selectedMode: saved.selectedMode }),
-      ...(session.manage && { manageLink: session.manage }) };
-    if (session.state !== 'ready') return { ...base, state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
-    const { root, sections } = saved;
-    // Connected requires this identity and a successful read of the mapped root now.
-    // A trashed root is not a readable Home.
-    let rootPage;
-    try { rootPage = await session.client.page(root.id); if (rootPage.in_trash) return { ...base, state: 'root_inaccessible' }; }
-    catch (error) {
-      const problem = failed(error);
-      return { ...base, state: problem.state === 'inaccessible' ? 'root_inaccessible' : problem.state, ...(problem.retryAfter && { retryAfter: problem.retryAfter }) };
-    }
-    const support = sections.filter(item => item.role === 'support').length;
-    return { ...base, state: 'ready', scope: session.scope, verifiedAt: new Date().toISOString(), root: { title: pageTitle(rootPage) || root.title, icon: await readPageIcon(rootPage.icon), link: root.link },
-      // Status verifies only the root. A Content route is optional and its saved title, link and label are
-      // the owner's, so status names it only as a neutral routing entry (its key and role): Home asks for its
-      // list, and the title and link come back only inside that list's own result, which proves access to it.
-      sections: sections.filter(item => item.role !== 'support').map(item => item.role === 'content' ? { key: item.key, label: 'Content', role: 'content' }
-        : { key: item.key, label: item.label, role: item.role, title: item.destination.title, link: item.destination.link,
-          ...(item.role === 'skills' && { describes: Boolean(item.fields?.description) }) }), ...(support && { supportHidden: support }) };
-  }
-
-  async function list({ key, cursor, query = '' }) {
+  async function list({ key, cursor }) {
     const session = await open();
     if (session.state !== 'ready') return { state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
     const item = section(session, key);
@@ -231,14 +129,14 @@ export function createHomeService({ credential = hostCredential, route = async (
           try {
             const value = await session.client.page(page.id);
             const where = value.in_trash ? 'trash' : await containment(session, page.id, value.parent, walk);
-            if (where === 'support') excluded++; else if (where !== 'clear') denied++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled', icon: await readPageIcon(value.icon) });
+            if (where === 'support') excluded++; else if (where !== 'clear') denied++; else items.push({ id: page.id, title: pageTitle(value) || 'Untitled' });
           } catch (error) { if (failed(error).state !== 'inaccessible') throw error; denied++; }
         }
         const notes = excluded ? { supportExcluded: excluded } : {};
-        // For a Content route, a result that proves access also carries the saved title and link for display.
+        // For a Content route, a result that proves access also carries the saved title and link.
         const named = item.role === 'content' ? { source: { title: item.label, link: target.link } } : {};
         if (!items.length) return { state: denied ? 'inaccessible' : 'empty', scope: session.scope, ...(!denied && named), ...notes };
-        return { state: 'listed', scope: session.scope, ...named, items: query ? items.filter(item => item.title.toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, 5) : items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
+        return { state: 'listed', scope: session.scope, ...named, items, hasMore: false, ...(denied && { withheld: denied }), ...notes };
       }
       // The data source's schema must still hold the verified fields before any query.
       const schema = await session.client.dataSource(target.id);
@@ -249,24 +147,20 @@ export function createHomeService({ credential = hostCredential, route = async (
       if (where !== 'clear') return { state: 'unsupported', scope: session.scope, contained: where };
       const types = Object.fromEntries(Object.entries(schema.properties || {}).map(([name, value]) => [name, value?.type]));
       if (types[item.fields.title] !== 'title') return { state: 'unsupported', scope: session.scope };
-      const source = { title: plainText(schema.title).trim().slice(0, 200) || item.label, icon: await readPageIcon(schema.icon),
-        ...(item.role === 'content' && { link: item.destination.link }) };
+      const source = { title: plainText(schema.title).trim().slice(0, 200) || item.label, ...(item.role === 'content' && { link: item.destination.link }) };
       const description = item.fields.description && textProperties.has(types[item.fields.description]) ? item.fields.description : undefined;
-      const titleFilter = { property: item.fields.title, title: { contains: query } };
-      const filter = query ? item.view?.filter ? { and: [item.view.filter, titleFilter] } : titleFilter : item.view?.filter;
-      const result = await session.client.query(target.id, { filter, sorts: item.view?.sorts, cursor,
-        size: query ? 5 : readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
+      const result = await session.client.query(target.id, { filter: item.view?.filter, sorts: item.view?.sorts, cursor,
+        size: readLimits.pageSize, properties: [item.fields.title, ...(description ? [description] : [])] });
       const rows = (Array.isArray(result.results) ? result.results : [])
         .filter(page => page?.object === 'page' && !page.in_trash && notionId(page.parent?.data_source_id) === target.id && notionId(page.id));
       // The same predicate per row; rows share the source's chain, so this reads nothing more.
       const places = [];
       for (const page of rows) places.push(await containment(session, notionId(page.id), page.parent, walk));
       const excluded = places.filter(place => place === 'support').length, withheld = places.filter(place => place === 'unresolved').length;
-      const items = await Promise.all(rows.filter((page, index) => places[index] === 'clear')
-        .slice(0, query ? 5 : readLimits.pageSize).map(async page => {
-          const text = description ? propertyText(page.properties?.[description]).trim().slice(0, 300) : '';
-          return { id: notionId(page.id), icon: await readPageIcon(page.icon), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
-        }));
+      const items = rows.filter((page, index) => places[index] === 'clear').slice(0, readLimits.pageSize).map(page => {
+        const text = description ? propertyText(page.properties?.[description]).trim().slice(0, 300) : '';
+        return { id: notionId(page.id), title: propertyText(page.properties?.[item.fields.title]).trim().slice(0, 200) || 'Untitled', ...(text && { description: text }) };
+      });
       const next = result.has_more && typeof result.next_cursor === 'string' && result.next_cursor.length <= 200 ? result.next_cursor : undefined;
       const notes = { ...(result.request_status?.type === 'incomplete' && { partial: true }), ...(excluded && { supportExcluded: excluded }), ...(withheld && { withheld }) };
       if (!items.length && !cursor && !next) return { state: 'empty', scope: session.scope, source, ...notes };
@@ -296,7 +190,7 @@ export function createHomeService({ credential = hostCredential, route = async (
       }
       if (await containment(session, recordId, page.parent, walk) !== 'clear') return { state: 'inaccessible', scope: session.scope };
       const properties = page.properties || {};
-      // Property text over the display bound is cut and the article says it is partial.
+      // Property text over the bound is cut and the record says it is partial.
       let cut = false;
       const value = name => {
         if (!name || !textProperties.has(properties[name]?.type)) return '';
@@ -316,49 +210,23 @@ export function createHomeService({ credential = hostCredential, route = async (
       }
       const { blocks, truncated } = await readBlocks(session.client, recordId);
       const noun = roleNouns[item.role];
-      return { state: 'read', scope: session.scope, record: { title, icon: await readPageIcon(page.icon), meta: noun.toLowerCase() === item.label.toLowerCase() ? item.label : `${item.label} · ${noun}`,
+      return { state: 'read', scope: session.scope, record: { title, meta: noun.toLowerCase() === item.label.toLowerCase() ? item.label : `${item.label} · ${noun}`,
         fields, blocks, truncated, ...(cut && { fieldsTruncated: true }), link: safeLink(page.url, `https://www.notion.so/${recordId}`) } };
     } catch (error) { return { ...failed(error), scope: session.scope }; }
   }
-  // Resolve links without exposing any metadata until membership and containment pass.
-  async function locate({ link }) {
-    const session = await open();
-    if (session.state !== 'ready') return { state: session.state };
-    const target = classifyTarget(link), id = target?.kind === 'notion' ? linkId(link) : null;
-    if (!id || supportIds(session).has(id)) return { state: 'outside', scope: session.scope };
-    try {
-      const value = await session.client.page(id);
-      if (value.in_trash) return { state: 'inaccessible', scope: session.scope };
-      for (const item of session.mapping.projection.sections.filter(readable)) {
-        const dest = item.destination;
-        if (!(dest.type === 'pages' ? dest.pages.some(page => page.id === id) : notionId(value.parent?.data_source_id) === dest.id)) continue;
-        let walk = walkFor();
-        if (dest.type === 'data_source') {
-          const schema = await session.client.dataSource(dest.id);
-          if (dest.databaseId && notionId(schema.parent?.database_id) !== dest.databaseId) continue;
-          walk = walkFor([[dest.id, schema]]);
-        }
-        if (await containment(session, id, value.parent, walk) === 'clear') return { state: 'located', scope: session.scope, key: item.key, id };
-      }
-      return { state: 'outside', scope: session.scope };
-    } catch (error) { return { ...failed(error), scope: session.scope }; }
-  }
   async function readPage(session) {
-    if (session.state !== 'ready') return { state: session.state };
+    if (session.state !== 'ready') return { state: session.state, ...(session.retryAfter && { retryAfter: session.retryAfter }) };
     try {
       const root = session.mapping.projection.root;
       const value = await session.client.page(root.id);
       if (value.in_trash) return { state: 'root_inaccessible', scope: session.scope };
       const content = await readBlocks(session.client, root.id);
-      return { state: 'read', scope: session.scope, record: { title: pageTitle(value) || root.title,
-        icon: await readPageIcon(value.icon), meta: 'Data & Context', fields: [], ...content, link: root.link } };
+      return { state: 'read', scope: session.scope, record: { title: pageTitle(value) || root.title, meta: 'Data & Context', fields: [], ...content, link: root.link } };
     } catch (error) {
       const result = failed(error);
       return { ...result, state: result.state === 'inaccessible' ? 'root_inaccessible' : result.state, scope: session.scope };
     }
   }
-  const page = async () => readPage(await open());
-
   // Before any projection exists there is nothing to map from, so the bootstrap read goes
   // only to the root the owner already selected as the context home, through the same
   // connection and identity check, never a search or another page. It returns the root's
@@ -416,12 +284,12 @@ export function createHomeService({ credential = hostCredential, route = async (
       return { ...result, state: result.state === 'inaccessible' ? 'root_inaccessible' : result.state };
     }
   }
-  // The model's view of the home: the mapped root once Home is ready, or the bootstrap read
-  // while the selected context has no projection yet. Every other state reads nothing.
+  // The home read: the mapped root once the projection and connection are ready, or the bootstrap
+  // read while the selected context has no projection yet. Every other state reads nothing.
   async function contextHome({ check = [] } = {}) {
     const session = await open();
     if (session.state === 'unmapped') return bootstrap(session, check);
     return readPage(session);
   }
-  return { connection, status, list, read, page, locate, contextHome };
+  return { connection, list, read, contextHome };
 }

@@ -35,8 +35,9 @@ export function normalizeSources({ title, links }) {
   }
   return { title: title.trim(), links: clean };
 }
-// Each context has its own files here: <hash>.json for navigation links and,
-// since the Home reader, <hash>.home.json for its generated projection.
+// Each context has its own files here: <hash>.json for navigation links,
+// <hash>.home.json for its generated projection and <hash>.connection.json for its
+// route setting. The aios/panel folder keeps its name so earlier saved state loads.
 export async function location(codexHome, target, create = false, suffix = '.json') {
   let folder = codexHome;
   for (const name of ['aios', 'panel']) {
@@ -66,7 +67,7 @@ export async function snapshot(path, limit = 16384) {
   } finally { await handle?.close(); }
 }
 export const stateRevision = revision;
-// One guarded replacement of a panel state file: per-file lock, revision check,
+// One guarded replacement of a saved state file: per-file lock, revision check,
 // backup of the prior bytes, atomic rename and a recheck of the caller's context.
 // Returns false when the decoded state already matches and nothing was written.
 // I4: the new bytes must fit the same UTF-8 byte limit snapshot() reads with, checked

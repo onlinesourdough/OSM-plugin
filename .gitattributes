@@ -1,3 +1,2 @@
 # Preserve generated SDK strings; source files retain normal whitespace checks.
-runtime/sidebar/index.html linguist-generated=true -whitespace
-runtime/sidebar/server.cjs linguist-generated=true -whitespace
+runtime/notion/server.cjs linguist-generated=true -whitespace

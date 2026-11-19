@@ -64,7 +64,7 @@ FORBIDDEN_BOUNDARY_TEXT = {
 FORBIDDEN_SHIPPED_PATTERNS = (r"\bnpx skills\b", r"\bskills\.sh\b")
 PRODUCT_PATHS = (".codex-plugin", ".claude-plugin", ".cursor-plugin",
                  "gemini-extension.json", "skills", "assets/icon.png", "LICENSE",
-                 "docs/osm.md", "runtime/sidebar")
+                 "docs/osm.md", "runtime/notion")
 FORBIDDEN_KEYS = {"scripts", "dependencies", "devDependencies", "peerDependencies"}
 SECRET_PATTERNS = (
     r"AKIA[0-9A-Z]{16}",
@@ -346,11 +346,12 @@ def validate(root=ROOT, release_tag=None):
             "new bridge route")
     require("OSM Context and AIOS Context." in (skill_root / "osm-data-context/index.md").read_text(),
             "retained context names")
-    sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()
-    sidebar_route = (root / "apps/sidebar/context-route.mjs").read_text()
-    require("['aios', 'panel']" in sidebar_state and "'.aios-lock'" in sidebar_route and
-            "'backups', 'aios-context'" in sidebar_route and
-            sidebar_route.count("<!-- AIOS:BEGIN -->") == 3,
+    # Saved state keeps its earlier aios/panel names after the sidebar folder became apps/notion.
+    notion_state = (root / "apps/notion/sources.mjs").read_text()
+    notion_route = (root / "apps/notion/context-route.mjs").read_text()
+    require("['aios', 'panel']" in notion_state and "'.aios-lock'" in notion_route and
+            "'backups', 'aios-context'" in notion_route and
+            notion_route.count("<!-- AIOS:BEGIN -->") == 3,
             "persisted sidebar state namespace")
     identity = (skill_root / "osm-setup/references/migration.md").read_text()
     require(all(row in identity for row in (
@@ -450,10 +451,9 @@ def validate(root=ROOT, release_tag=None):
                 ui = (len(parts) == 4 and parts[0] == "skills" and
                       parts[1] in SKILL_NAMES and parts[2] == "agents" and
                       path.name == "openai.yaml")
-                sidebar = path.relative_to(root).as_posix() in {
-                    'runtime/sidebar/server.cjs', 'runtime/sidebar/index.html',
-                    'runtime/sidebar/THIRD-PARTY-NOTICES.md'}
-                allowed = (path.suffix in {".md", ".json"} or ui or sidebar or
+                notion = path.relative_to(root).as_posix() in {
+                    'runtime/notion/server.cjs', 'runtime/notion/THIRD-PARTY-NOTICES.md'}
+                allowed = (path.suffix in {".md", ".json"} or ui or notion or
                            path.name == "LICENSE" or
                            path == root / "assets/icon.png")
                 require(allowed, f"unexpected product file: {path}")
@@ -601,7 +601,7 @@ def negative_controls():
         path.write_text(path.read_text().replace("Always run OSM Log", "Consider writing a note"))
 
     def renamed_panel_storage(root):
-        path = root / "apps/sidebar/sources.mjs"
+        path = root / "apps/notion/sources.mjs"
         path.write_text(path.read_text().replace("['aios', 'panel']", "['osm', 'panel']"))
 
     def prefix_only_classification(root):

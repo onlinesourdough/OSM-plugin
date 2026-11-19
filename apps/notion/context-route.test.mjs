@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, writeFile, readdir, rm, symlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { readContextRoute, saveContextRoute, replaceContext } from './context-route.mjs';
+import { parseContextRoute, readContextRoute, saveContextRoute, replaceContext } from './context-route.mjs';
+import { classifyTarget } from './target.mjs';
 const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
 const target = 'https://app.notion.com/p/00000000000000000000000000000001';
 const moved = 'https://app.notion.com/p/00000000000000000000000000000002';
@@ -52,7 +53,7 @@ test('a 0.29.0 AIOS block stays readable and only its Context line changes', asy
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), legacy.replace(target, nextTarget));
   assert.equal(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md'), 'utf8'), legacy);
 });
-test('concurrent panels and external edits cannot overwrite a newer observed revision', async (t) => {
+test('concurrent saves and external edits cannot overwrite a newer observed revision', async (t) => {
   const options = await fixture(t), before = await readContextRoute(options);
   const results = await Promise.allSettled([target, moved].map(target => saveContextRoute({ target, expectedRevision: before.revision }, options)));
   assert.equal(results.filter(r => r.status === 'fulfilled').length, 1);
@@ -128,4 +129,33 @@ test('a BOM immediately before the context block is read and preserved on save',
   assert.equal(after.target, nextTarget);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));
   assert.deepEqual(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md')), original);
+});
+
+const block = (route) => `unrelated private instructions\n<!-- AIOS:BEGIN -->\nContext: ${route}.\nOnly load relevant context.\n<!-- AIOS:END -->\nmore private instructions`;
+test('reads only the exact routing block and rejects ambiguous legacy instructions', () => {
+  assert.deepEqual(parseContextRoute(block('https://app.notion.com/p/example')), {
+    state: 'configured', target: 'https://app.notion.com/p/example', kind: 'notion',
+  });
+  assert.deepEqual(parseContextRoute('Context: https://example.com'), { state: 'missing' });
+  assert.deepEqual(parseContextRoute(block('https://example.com') + block('https://other.com')), { state: 'ambiguous' });
+  assert.deepEqual(parseContextRoute(block('https://a.com\nContext: https://b.com')), { state: 'ambiguous' });
+  assert.deepEqual(parseContextRoute('<!-- AIOS:BEGIN -->\nold prose'), { state: 'ambiguous' });
+});
+
+test('the shipped context bridge round-trips web, Unix and Windows locations', async () => {
+  const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
+  for (const target of ['https://app.notion.com/p/example', 'https://example.com/context.', '/work/my vault', '/work/company.', 'C:\\Work\\Knowledge']) {
+    const saved = bridge.replace('<verified-notion-root-entry-url>', target);
+    assert.deepEqual(parseContextRoute(saved), { state: 'configured', ...classifyTarget(target) });
+  }
+});
+
+test('route read does not fall back to another home; bounded files only', async (t) => {
+  const folder = await mkdtemp(join(tmpdir(), 'osm-route-'));
+  t.after(() => rm(folder, { recursive: true, force: true }));
+  assert.equal((await readContextRoute({ codexHome: folder })).state, 'missing');
+  await writeFile(join(folder, 'AGENTS.md'), block('https://example.com'));
+  assert.equal((await readContextRoute({ codexHome: folder })).target, 'https://example.com/');
+  await writeFile(join(folder, 'AGENTS.md'), 'x'.repeat(65537));
+  assert.deepEqual(await readContextRoute({ codexHome: folder }), { state: 'unavailable' });
 });

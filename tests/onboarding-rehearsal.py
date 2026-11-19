@@ -70,9 +70,18 @@ class OnboardingTest(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "unexpected native runtime"):
             validate_native(self.root, require)
 
-    def test_sidebar_must_be_bundled_and_explicit(self):
+    def test_notion_tools_must_be_bundled_and_explicit(self):
         self.edit('.codex-plugin/mcp.json', lambda d: d['mcpServers']['osm'].update(command='npx'))
-        with self.assertRaisesRegex(AssertionError, 'unexpected sidebar'):
+        with self.assertRaisesRegex(AssertionError, 'unexpected Notion tools'):
+            validate_native(self.root, require)
+
+    def test_no_dashboard_runtime(self):
+        (self.root / "runtime/notion/index.html").write_text("<html></html>")
+        with self.assertRaisesRegex(AssertionError, "extra Notion tools runtime file"):
+            validate_native(self.root, require)
+        (self.root / "runtime/notion/index.html").unlink()
+        (self.root / "runtime/sidebar").mkdir()
+        with self.assertRaisesRegex(AssertionError, "retired sidebar runtime"):
             validate_native(self.root, require)
 
 
@@ -118,7 +127,7 @@ def native_check():
         expected_skills = len(list((ROOT / "skills").glob("*/SKILL.md")))
         require(len(detail["skills"]) == expected_skills and detail["mcpServers"] == ["osm"] and not detail["hooks"],
                 "Unexpected native inventory")
-        print(f"PASS: Codex recognizes separate providers, Setup, {expected_skills} skills and the declared OSM sidebar server; no hooks")
+        print(f"PASS: Codex recognizes separate providers, Setup, {expected_skills} skills and the declared headless OSM Notion tools server; no hooks")
     finally:
         selector.close()
         process.terminate()

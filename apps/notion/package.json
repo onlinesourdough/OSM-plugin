@@ -1,17 +1,14 @@
 {
-  "name": "osm-sidebar-build",
+  "name": "osm-notion-build",
   "version": "0.34.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node --test *.test.mjs && node smoke.mjs",
-    "preview": "node fixture.mjs"
+    "test": "node --test *.test.mjs && node smoke.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/ext-apps": "1.7.5",
     "@modelcontextprotocol/sdk": "1.31.0",
-    "@openai/mcp-extensions": "0.1.0",
     "zod": "4.4.3"
   },
   "devDependencies": {

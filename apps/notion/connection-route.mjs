@@ -1,14 +1,14 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { readContextRoute } from './context-route.mjs';
-import { readHomeProjection } from './home-map.mjs';
+import { readHomeProjection } from './home-projection.mjs';
 import { contextIdentity, location, snapshot, stateRevision, replaceState } from './sources.mjs';
 import { classifyTarget } from './target.mjs';
 import { notionId } from './notion-internal.mjs';
 
 // The owner's recorded choice of OSM's own internal connection, read from the macOS
 // Keychain, for one selected context. It is a small non-secret file beside the context's
-// other panel state (aios/panel/<hash>.connection.json under CODEX_HOME), because the
+// other saved state (aios/panel/<hash>.connection.json under CODEX_HOME), because the
 // installed package's MCP declaration sets no environment, so the packaged setup exposed no
 // per-context opt-in. The documentation reviewed does not establish a general override; that
 // is a gap in what it shows, not a claim that none exists. It holds no credential, token,
@@ -25,8 +25,8 @@ const unavailable = 'OSM’s connection route setting is unavailable. It has bee
 const notionContext = target => contextIdentity(target).startsWith('notion:');
 
 // An optional link to this connection's own access page in Notion, saved with the bot and workspace
-// it was verified for. Home offers it only while the live connection is that same bot and workspace;
-// otherwise it falls back to the generic Settings path. Notion documents no URL for a connection's
+// it was verified for. The connection check returns it only while the live connection is that same
+// bot and workspace. Notion documents no URL for a connection's
 // access page, so a link is never built from identifiers: it is whatever the owner's Setup saved.
 // Only Notion's own hosts are accepted, and never the developer pages that show a credential.
 const manageHosts = new Set(['notion.so', 'www.notion.so', 'notion.com', 'www.notion.com', 'app.notion.com']);

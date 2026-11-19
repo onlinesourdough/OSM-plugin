@@ -37,13 +37,13 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: apps/sidebar/package-lock.json
-      - name: Build and verify the bundled sidebar
+          cache-dependency-path: apps/notion/package-lock.json
+      - name: Build and verify the bundled Notion tools
         run: |
-          npm ci --prefix apps/sidebar --ignore-scripts --no-fund
-          npm run build --prefix apps/sidebar
-          git diff --exit-code -- runtime/sidebar
-          npm test --prefix apps/sidebar
+          npm ci --prefix apps/notion --ignore-scripts --no-fund
+          npm run build --prefix apps/notion
+          git diff --exit-code -- runtime/notion
+          npm test --prefix apps/notion
       - name: Validate package and local documentation
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
