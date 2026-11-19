@@ -2,6 +2,22 @@
 
 ## 19 November 2026 · seven-skill candidate and public reader
 
+The subsequent immutable candidate `90d00c2` was installed in the owner's active
+Codex and Claude profiles. Both exposed seven entrypoints and all 74 skill-source
+files matched the export; Codex's server, reader HTML and icon matched too.
+A real fresh Codex chat using Prime 1.2.0 found the newly saved source-only
+accounting policy in the definition and source map without another chat's history,
+financial-record reads or writes. It observed Log 1.2.0 and Dreaming 1.4.0.
+
+The public reader's root, architecture, seven-skill index and Council navigation
+rendered in the in-app browser. This is browser proof of the bundled UI, not a
+native Codex sidebar click: the computer-use tool refused the Codex application.
+The GitHub organization avatar update was accepted and then visually observed
+without the old image cache. Public catalogue readback returned the seven Draft
+references; 18 older references were marked Historical and five Content drafts
+were preserved. Final release packets and anonymous catalogue checks remain pending.
+
+
 This is candidate evidence, before release and final independent acceptance.
 Opus 5.5 High removed the old dashboard in `e2c988b` (integrated as `0e203dd`).
 The lead added the separately requested public guide reader. Fable's earlier
@@ -14,7 +30,8 @@ unchanged private settings. Package, documentation, onboarding, layout, continui
 skill versioning, context footprint, responsibilities and consumer selections
 passed. Context architecture passed 91 positives, 79 variants and 474 negatives
 after updating the renamed bootstrap anchor. Publisher transport rehearsal passed
-72 cases and 75 mutation controls; nine new parity/Markdown-reader tests passed.
+72 cases and 75 mutation controls; ten new parity/Markdown-reader tests passed, including a guide conflict that
+stops publication before any write.
 These fixture results do not prove native rendering or live CI publication.
 
 A real Codex app-server recognized Setup, seven discoverable skills and the

@@ -85,6 +85,23 @@ class Parity(unittest.TestCase):
         self.assertEqual(self.path.read_bytes(), before)
         self.assertFalse((self.root / pub.frozen_path(KEY)).exists())
 
+    def test_original_conflict_stops_publication_before_any_write(self):
+        from fixture_transport import FixtureTransport
+        self.export()
+        self.manifest['artifacts'].append({'key': 'test.working', 'class': 'W',
+            'edition': 'main-working', 'owner': 'git', 'source_paths': ['README.md'],
+            'public_writer': 'ci', 'adoption_state': 'adopted'})
+        (self.root / 'README.md').write_text('Changed public page')
+        remote = copy.deepcopy(self.snapshot)
+        remote['pages'][KEY] = self.read(BODY.replace('source-only', 'changed'))
+        transport = FixtureTransport()
+        approved = self.manifest['editions']['released']['commit']
+        with self.assertRaisesRegex(pub.PublisherError, 'guide original parity failed'):
+            pub.publish(self.manifest, pub.DirSource(self.root), transport, 'test',
+                        lambda tag: approved, allow_fixture=True, originals=remote)
+        self.assertEqual(transport.rows, {})
+        self.assertFalse(any(event[0] in ('upsert', 'status') for event in transport.log))
+
     def test_snapshot_identity_truncation_and_revision_are_checked(self):
         for patch in ({'notion': 'b' * 32}, {'truncated': True}, {'unknown_block_ids': ['block']},
                       {'revision': '0' * 64}, {'body': ''}):

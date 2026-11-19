@@ -1042,6 +1042,9 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
     transport.claim_run(run_id)
     try:
         result = plan(manifest, source, transport, released_source=released_source, only=only, originals=originals)
+        guide_errors = [r for r in result["rows"] if r["class"] == "G" and r["outcome"] not in OK_OUTCOMES]
+        if guide_errors:
+            raise PublisherError(f"guide original parity failed for {guide_errors[0]['key']}; no publication writes were attempted")
         arts = {a["key"]: a for a in expand(manifest)}
         rows = {r["key"]: r for r in result["rows"]}
         use = lambda a: (released_source or source) if a["edition"] == "released" else source

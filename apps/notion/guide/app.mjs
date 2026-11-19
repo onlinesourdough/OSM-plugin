@@ -36,6 +36,10 @@ function show(id, remember = true) {
   current = id;
   linkBox.hidden = true;
   document.getElementById('page-title').textContent = page.title;
+  const edition = document.getElementById('reading-edition');
+  const readAt = new Date(page.source_read_at || '');
+  edition.hidden = !Number.isFinite(readAt.valueOf());
+  edition.textContent = edition.hidden ? '' : 'Guide snapshot · ' + new Intl.DateTimeFormat('en-GB', {dateStyle:'medium',timeZone:'UTC'}).format(readAt);
   trail.textContent = id === guide.root ? '' : 'OSM';
   trail.hidden = id === guide.root;
   back.hidden = history.length === 0;

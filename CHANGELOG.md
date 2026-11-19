@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.34.0 — Unreleased candidate
+## 0.34.0 — 2026-11-20
 
 - Limit default discovery to Setup, Prime, Log, Dreaming, Interview, Human
   Writing and Council. Keep home setup, curation and personal skill maintenance
