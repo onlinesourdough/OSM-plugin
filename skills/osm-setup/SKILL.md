@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.0.6"
+  version: "3.1.0"
 ---
 
 # OSM:setup
@@ -25,9 +25,14 @@ Data & Context, Manage Data & Context and Manage Skills nothing calls back into
 Setup (Interview links Setup only for a new connection, which is conditional and
 outside that chain):
 
-1. **Connection and access.** Inspect exposed connections before proposing one,
-   explain the useful read, and guide one supported native connection step under
-   current authority. Verify the intended account and a scoped safe read.
+1. **Connection and access.** Inspect exposed connections first and reuse a
+   working connection or recorded choice. For new ordinary user setup, check
+   whether the official Notion plugin is installed and connected. When its
+   installation is authorized, install it through the supported host route,
+   guide account connection and verify the intended workspace with a scoped
+   safe read. Use a
+   dedicated connection when the selected team, worker or unattended workflow
+   needs its own identity or access scope. Preserve an existing recorded choice.
    Unavailable or declined access stays an explicit gap while other work
    continues. If the selected route requires a credential or rotation, use
    [credential setup and verification](references/credentials.md).
@@ -47,6 +52,10 @@ outside that chain):
    replay creates no duplicate. Setup never creates Content. It discovers the actual
    types and metadata of existing stores before mapping and follows the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
+   A newly generated root body starts with the definition, followed by its
+   databases. Changes to an existing root follow the owner's request and write
+   policy. Explain onboarding in the conversation, using the public guide's
+   durable description when useful.
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
    assumed. Add the thin host pointer only at the intended scope.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)

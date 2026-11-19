@@ -15,16 +15,24 @@ runtime.
    selects that page first, unless a separately authorized existing route can.
    Select the root by its link or ID through the selected connection; reading it
    never requires an unselected broader connector.
-3. **Connection.** Guide the internal connection's creation, the exact root-only
-   selection and secure credential input and storage. Never paste a token into
-   chat, owner pages, logs or source files.
+3. **Connection.** Reuse a working connection and the owner's recorded choice.
+   For new ordinary user setup, check the official Notion plugin in the selected
+   host. When installation is authorized, install it through the supported route
+   if missing, guide sign-in and verify the account with a scoped safe read.
+   Read the selected root through that plugin and record its verified URL in
+   the short host pointer. A
+   dedicated connection is an option when a selected team workflow, worker or
+   unattended job needs a distinct identity or access scope. A team member can
+   use their own authorized Notion account. For a selected internal connection,
+   guide its creation, exact selected-page scope and secure credential input and storage.
+   Never paste a token into chat, owner pages, logs or source files.
    Choose a secret store suited to the customer's OS and runtime, test
    unattended availability, fail closed on access loss, and define refresh,
    revocation and recovery; one platform's choice is not another's contract.
-   OSM's shipped route is the macOS Keychain (see the
+   OSM's existing internal route uses macOS Keychain (see the
    [panel reference](panel.md)): the owner provisions the item privately, reusing
    the existing selected connection's credential without rotating or revoking it,
-   and approves the OS prompt; the agent only saves the non-secret route setting from
+   and approves the OS prompt. For that route, the agent saves the non-secret route setting from
    the recorded selection and reads the root through `osm_context_home`.
 4. **Qualify the runtime.** On the pinned selected runtime, qualify read,
    create, update and readback once across the selected stores and nested pages;
@@ -36,7 +44,10 @@ runtime.
    the unattended run's effective tool set in its real launch mode, and report
    any limit the host cannot enforce.
 5. **Build.** Setup builds or adapts the one definition and only useful
-   destinations inside the chosen boundary. Discover actual tools, accounts and
+   destinations inside the chosen boundary. A newly generated root body begins
+   with the definition and then its native databases. Existing roots follow the
+   owner's request and write policy. Explain onboarding in the conversation.
+   Discover actual tools, accounts and
    canonical owners; ask what the customer uses and which outcomes matter; record
    each source's placement and lifecycle choice. Record the owner's write policy
    once in the definition (whole-home is proposed, never assumed; an existing
