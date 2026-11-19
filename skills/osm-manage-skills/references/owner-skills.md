@@ -6,7 +6,7 @@ skill, and when Setup places owner methods. Callers link here; do not copy these
 steps into another skill. It keeps personal placement, registration and
 discovery in the same capability-management lifecycle as installation, update,
 removal and rollback. Owner facts and curation remain with
-[Manage Data & Context](../../osm-manage-data-context/SKILL.md). This is a
+[Manage Data & Context](../../osm-manage-data-context/index.md). This is a
 task-boundary procedure, not a watcher or permission to audit unrelated skill
 libraries on every message. The owner's recorded write policy decides whether a
 skill write is allowed; this procedure decides how it is done, for Manage Data &

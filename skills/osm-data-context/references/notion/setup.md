@@ -106,7 +106,7 @@ Reuse one native Skills database with Audience views when its permissions fit;
 keep private/team destinations separate when access differs. A solo setup needs
 no empty team database. Do not infer sharing consent from a Team label.
 
-Migrate selected personal or team methods through [Manage Skills](../../../osm-manage-skills/SKILL.md)
+Migrate selected personal or team methods through [Manage Skills](../../../osm-manage-skills/index.md)
 and the [Notion skill lifecycle](../../../osm-manage-skills/references/notion-skills.md). Preserve every
 supporting file and repair references before retiring an old registration.
 
@@ -174,7 +174,7 @@ restate it. An existing recorded form (a `protected:` list, an Updates note or a
 CONNECTIONS entry) is read and kept, and a rerun never drops a narrower choice.
 See the architecture's [home write policy](../architecture.md#home-write-policy).
 
-Make [Manage Data & Context](../../../osm-manage-data-context/SKILL.md) usable at natural task
+Make [Manage Data & Context](../../../osm-manage-data-context/index.md) usable at natural task
 checkpoints within the recorded read/write policy. No timer is required.
 Setup or general upkeep authority does not authorize a recurring task. Use the
 host's scheduler only for an explicit recurring-work request with bounded

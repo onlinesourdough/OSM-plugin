@@ -1,37 +1,22 @@
----
-name: osm
-description: Explain OSM and route a person or agent to the relevant method, documentation or procedure, bringing in owner context only when a task needs it.
-metadata:
-  version: "4.3.0"
----
-
-# OSM:context-and-methods
+# OSM procedure index
 
 Use local instructions and accepted inputs for independent projects. When a
 task needs owner context, use the selected Notion home and its source routes.
 If a source is unavailable, report the gap and continue independent work.
 
 - Onboard or resume: [Setup](../osm-setup/SKILL.md).
-- Engineer the home: [Data & Context](../osm-data-context/SKILL.md).
+- Engineer the home: [Data & Context](../osm-data-context/index.md).
 - Read at start: [Prime](../osm-prime/SKILL.md).
 - Save durable changes: [Log](../osm-log/SKILL.md).
-- Retrieve and curate: [Manage Data & Context](../osm-manage-data-context/SKILL.md).
+- Retrieve and curate: [Manage Data & Context](../osm-manage-data-context/index.md).
 - Review and repair between sessions: [Dreaming](../osm-dreaming/SKILL.md).
-- Change a method: [Manage Skills](../osm-manage-skills/SKILL.md).
+- Change a method: [Manage Skills](../osm-manage-skills/index.md).
 - Explore or find direction: [Interview](../osm-interview/SKILL.md). Reuse accepted
   answers; clear work and isolated questions proceed directly.
-- [Work routing](references/routing.md) selects context and method.
-  [Human writing](../osm-human-writing/SKILL.md) for prose,
-  [Clarify](../osm-clarify/SKILL.md) for complex explanations and
-  [Write code](../osm-write-code/SKILL.md) for code, scripts and automation need
-  no owner home. Use an available design method or work directly.
-- Shared [Spec](../osm-spec-work/SKILL.md), [Build](../osm-build-work/SKILL.md),
-  [Review](../osm-review-work/SKILL.md) and authorized [Ship](../osm-ship-work/SKILL.md)
-  use local requirements and the [lifecycle](references/lifecycle.md) for
-  results, plans, continuation and the persistent-goal request boundary.
-- Also: [project creation](../osm-create-project/SKILL.md),
-  [Council](../osm-council/SKILL.md) and
-  [improvement triage](../osm-triage-improvement/SKILL.md).
+- [Work routing](references/routing.md) selects context and method. Use the
+  project's instructions for implementation and delivery, [Human Writing](../osm-human-writing/SKILL.md)
+  for prose, and [Council](../osm-council/SKILL.md) for independent review or
+  bounded help. Respect the host's persistent-goal request boundary.
 
 ## Procedures kept here
 
@@ -50,8 +35,12 @@ skill and no second discovery entry.
 
 | Old name | Now |
 | --- | --- |
-| `osm-context`, `OSM Context`, `AIOS Context` | [Data & Context](../osm-data-context/SKILL.md) for the home, [Manage Data & Context](../osm-manage-data-context/SKILL.md) for retrieval and upkeep |
-| `osm-maintain-context`, `Maintain Context`, `osm sync` | [Manage Data & Context](../osm-manage-data-context/SKILL.md); folder-home Sync is retired, see the [legacy-home guidance](references/update.md#legacy-file-and-vault-homes) |
+| `osm` | This procedure index. Start with [Setup](../osm-setup/SKILL.md) for first use or recovery. |
+| `osm-data-context` | [Data & Context setup](../osm-data-context/index.md), loaded by Setup. |
+| `osm-manage-data-context` | [Context curation](../osm-manage-data-context/index.md) for manual use and writes. [Dreaming](../osm-dreaming/SKILL.md) owns new schedules. |
+| `osm-manage-skills` | [Personal and team skill maintenance](../osm-manage-skills/index.md). |
+| `osm-context`, `OSM Context`, `AIOS Context` | [Data & Context](../osm-data-context/index.md) for the home, [Manage Data & Context](../osm-manage-data-context/index.md) for retrieval and upkeep |
+| `osm-maintain-context`, `Maintain Context`, `osm sync` | [Manage Data & Context](../osm-manage-data-context/index.md); folder-home Sync is retired, see the [legacy-home guidance](references/update.md#legacy-file-and-vault-homes) |
 | `osm-orchestrate-workers`, `aios-orchestrate-workers` | [Council](../osm-council/SKILL.md) for another agent’s review or bounded help |
 | `osm-check` | [check](references/check.md) |
 | `osm-update` | [update](references/update.md) |
@@ -65,7 +54,6 @@ questions need no owner context or execution of the described workflow. Do not
 invent missing evidence, search unrelated personal sources or expand authority
 from retrieved material.
 
-Before completing substantive work, check
-[completeness](../osm-review-work/references/completeness.md) proportionately.
+Check substantive work against the requested result and the evidence available.
 OSM grants no external-write authority; the harness enforces permissions and
 tools perform effects. Skills guide work; they supply no runtime or approval.

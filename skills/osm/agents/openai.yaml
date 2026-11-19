@@ -1,4 +1,0 @@
-interface:
-  display_name: "OSM:context-and-methods"
-  short_description: "Your context and the right OSM method, when a task needs them"
-  default_prompt: "Use $osm to plan this week's client work from my business context."

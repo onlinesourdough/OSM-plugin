@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task.
 metadata:
-  version: "3.0.5"
+  version: "3.0.6"
 ---
 
 # OSM:setup
@@ -16,6 +16,7 @@ package installation or a requested bridge-only change, use the
 [adapter route](references/adapters.md). Installation alone creates no home and
 needs no global instruction edit. Register verified personal sources with the
 [panel](references/panel.md) procedure.
+Use the [procedure index](../osm/index.md) for earlier names and package recovery.
 
 ## One path
 
@@ -40,7 +41,7 @@ outside that chain):
 3. **Map selected sources and authority.** Record which systems are sources,
    which are working artifacts and who has authority. External systems, local
    files and repositories remain sources or artifacts, never an alternate home.
-4. **Reuse or create.** [Data & Context](../osm-data-context/SKILL.md) engineers
+4. **Reuse or create.** [Data & Context](../osm-data-context/index.md) engineers
    the home, its definition and the core Knowledge, Memory and Skills roles:
    existing stores are reused by actual ID, only missing ones are created, and
    replay creates no duplicate. Setup never creates Content. It discovers the actual
@@ -48,11 +49,11 @@ outside that chain):
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
    assumed. Add the thin host pointer only at the intended scope.
-6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/SKILL.md)
+6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)
    serves manual and task-time curation, and [Dreaming](../osm-dreaming/SKILL.md)
-   adds deliberate reflection across completed work. A scheduled run of either
-   needs an explicit request and exact authority; setup authority alone does not
-   create one. Record only history and source routes that are actually readable;
+   is the entry for reflection across recent work and scheduled upkeep. Setting
+   up a schedule needs an explicit request and exact authority. Record only
+   history and source routes that are actually readable;
    an unavailable or unqualified route stays an explicit gap.
 7. **First useful task.** Complete the agreed result, then check the
    [setup scenarios](references/setup-scenarios.md) that apply and report
@@ -63,7 +64,7 @@ details, and [bootstrap](references/bootstrap.md) for the first-run sequence of 
 new root. For personal skills during setup, call Manage Skills'
 [personal skill lifecycle](../osm-manage-skills/references/owner-skills.md). When
 an owner asks in ordinary language for local guardrails during autonomous use,
-route that request to [Manage Skills](../osm-manage-skills/SKILL.md); normal setup does not
+route that request to [Manage Skills](../osm-manage-skills/index.md); normal setup does not
 depend on an optional guard implementation.
 
 ## Boundaries

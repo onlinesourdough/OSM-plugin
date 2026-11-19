@@ -2,7 +2,7 @@
 name: osm-prime
 description: Start each new session in an OSM-configured profile with the selected Notion context. Keep clearly independent work in its project and retrieve only relevant sources.
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # OSM:prime
@@ -20,7 +20,7 @@ inputs selected by the lead.
    (or the existing `Context:` line) through the host's authorized connection.
    If the root is missing or unreadable, identify the missing prerequisite and
    continue independent work. Use only the selected home and account.
-3. Follow [Manage Data & Context](../osm-manage-data-context/SKILL.md) for
+3. Follow [Manage Data & Context](../osm-manage-data-context/index.md) for
    retrieval. Read the Data and Context Definition and its required controls
    once, then use metadata to find only what the task needs. Use a scoped
    Memory query for a past decision and the selected

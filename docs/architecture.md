@@ -1,7 +1,7 @@
 # Architecture
 
-OSM combines portable owner context with Agent Skills for planning, writing
-and reviewed delivery. Native manifests load one root `skills/`
+OSM combines portable owner context with Agent Skills for onboarding, context, writing
+and collaboration. Native manifests load one root `skills/`
 directory. Focused helpers belong to their skills and run only for a selected
 task; OSM has no model runner, background service or permission system.
 
@@ -18,8 +18,9 @@ task; OSM has no model runner, background service or permission system.
 
 ## Work and methods
 
-Continue in the current task and workspace. The shared lifecycle resolves the
-outcome, then applies Spec, Build, Review and authorized Ship proportionately.
+Continue in the current task and workspace. Project instructions own the
+implementation, verification and delivery workflow. Use Council to request
+an independent review or a bounded contribution.
 Visual design uses an installed design method if the host provides one,
 otherwise direct work or a reported missing method. There is no chain
 configuration language, mandatory department model or fixed sequence between
@@ -40,8 +41,7 @@ only selects a method. See the [skill index](skills.md), the historical
 An optional System is useful for a bounded specialist with independent upkeep,
 such as Power BI and its Windows Desktop workflow. Its repository owns its
 requirements, dependencies, proof and recovery. A script or a long skill alone
-does not require a System. Create Project establishes the appropriate workspace
-and context. A selected repository template is an optional seed; it does not add
+does not require a System. The project chooses its workspace and context. A repository template is optional; it does not add
 a second project identity or copy OSM phases. Create System is retired;
 reusable methods use Manage Skills. Project Foundation was retired in 0.28.0;
 substantial software engineering foundations use a separately selected method,
@@ -70,7 +70,7 @@ or `AIOS_FORMAT` home is recognized read-only and preserved; the
 the migration guidance and [legacy-file-home](legacy-file-home/README.md) keeps the
 retired format and Sync records for history.
 
-[Data & Context](../skills/osm-data-context/SKILL.md) engineers the Notion home and
+[Data & Context](../skills/osm-data-context/index.md) engineers the Notion home and
 owns the common home contract. A small host pointer supplies fresh-session
 discovery; the entry identifies authoritative sources, Spaces, personal methods
 and maintenance scope. Source systems retain their operational records and access
@@ -97,9 +97,9 @@ tasks, [Dreaming](../skills/osm-dreaming/SKILL.md) uses the current definition
 to select changed, unfinished or archived work and due sources. It recovers
 missed decisions, repairs evidence-backed context errors and surfaces useful
 open progress in its existing destination. Log and Dreaming hand the write to
-[Manage Data & Context](../skills/osm-manage-data-context/SKILL.md), the one
+[Manage Data & Context](../skills/osm-manage-data-context/index.md), the one
 curation owner. A genuine reusable method change goes to
-[Manage Skills](../skills/osm-manage-skills/SKILL.md); a note does not become a
+[Manage Skills](../skills/osm-manage-skills/index.md); a note does not become a
 skill by itself.
 
 ```mermaid

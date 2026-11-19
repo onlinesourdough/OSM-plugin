@@ -13,7 +13,7 @@ reusing existing sources and answers.
 Use Manage Data & Context's [framework](../../osm-manage-data-context/references/curation.md)
 for relevant answers, source/scope, confirmation and gaps. Inspect what is
 already known; keep source facts at their owner and missing values unknown.
-Sort what setup learns with its [intake classes](../../osm-manage-data-context/SKILL.md#classify-what-comes-in):
+Sort what setup learns with its [intake classes](../../osm-manage-data-context/index.md#classify-what-comes-in):
 durable, provisional (the snapshot below until confirmed) or source-only.
 
 When the purpose or context for useful first work needs exploration, use
@@ -39,7 +39,7 @@ useful result from accepted intent; understanding can itself be that result.
 ## Home and harness
 
 The home is the Notion Data & Context home that
-[Data & Context](../../osm-data-context/SKILL.md) engineers: [bootstrap](bootstrap.md)
+[Data & Context](../../osm-data-context/index.md) engineers: [bootstrap](bootstrap.md)
 the root and connection, then [Notion setup](../../osm-data-context/references/notion/setup.md)
 for stores, routes and acceptance. Read before writing and reuse by actual ID.
 External systems, local files and repositories are selected sources, not homes.

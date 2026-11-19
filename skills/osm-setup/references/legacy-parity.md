@@ -8,22 +8,22 @@ Client facts and personal methods are not copied into this package.
 
 | Legacy method | Public route and canonical procedure | Disposition and preserved behavior |
 | --- | --- | --- |
-| aios | [osm](../../osm/SKILL.md), [Setup](../SKILL.md), [Check](../../osm/references/check.md), [Manage Data & Context](../../osm-manage-data-context/SKILL.md), [Update](../../osm/references/update.md) | Split by trigger: owner coordination and shortest justified route stay in `osm`; setup/resume, state inspection, context mutation and package adoption each use their focused owner; independent repositories remain local-first |
-| aios-build-work | [Build](../../osm-build-work/SKILL.md) | Keep: verified repository root, current-task execution by default, one writer, linked lead/worker goals when explicitly required, bounded contract, relevant local checks and evidence |
-| aios-create-project | [Create Project](../../osm-create-project/SKILL.md) | Broadened: useful project workspace and context without mandatory Git; a selected repository seed retains verified source, documented creation and independent ownership |
-| aios-create-system | [Manage Skills](../../osm-manage-skills/SKILL.md), [Create Project](../../osm-create-project/SKILL.md) | Retired: reusable methods use skill management; a new independently maintained solution uses ordinary project creation and its own requirements, ownership and proof |
-| aios-evaluate-completeness | [Review](../../osm-review-work/SKILL.md), [final completeness](../../osm-review-work/references/completeness.md) | Embed: explicit requirement-to-final-evidence gate before done; also used proportionately by ordinary AIOS handback and Ship reconciliation |
-| aios-evaluate-publish-safety | [Ship](../../osm-ship-work/SKILL.md), [final action check](../../osm-ship-work/references/publish-safety.md) | Embed: exact content, identity, authority, privacy, claims and commitments checked last before effect |
-| aios-evaluate-spec-work | [Spec](../../osm-spec-work/SKILL.md), [readiness](../../osm-spec-work/references/readiness.md) | Embed: explicit pre-Build gate for maturity, evidence, source preservation, local invariants and bounded READY contract |
+| aios | [osm](../../osm/index.md), [Setup](../SKILL.md), [Check](../../osm/references/check.md), [Manage Data & Context](../../osm-manage-data-context/index.md), [Update](../../osm/references/update.md) | Split by trigger: owner coordination and shortest justified route stay in `osm`; setup/resume, state inspection, context mutation and package adoption each use their focused owner; independent repositories remain local-first |
+| aios-build-work | [Build](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-build-work/SKILL.md) | Keep: verified repository root, current-task execution by default, one writer, linked lead/worker goals when explicitly required, bounded contract, relevant local checks and evidence |
+| aios-create-project | [Create Project](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-create-project/SKILL.md) | Broadened: useful project workspace and context without mandatory Git; a selected repository seed retains verified source, documented creation and independent ownership |
+| aios-create-system | [Manage Skills](../../osm-manage-skills/index.md), [Create Project](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-create-project/SKILL.md) | Retired: reusable methods use skill management; a new independently maintained solution uses ordinary project creation and its own requirements, ownership and proof |
+| aios-evaluate-completeness | [Review](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-review-work/SKILL.md), [final completeness](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-review-work/references/completeness.md) | Embed: explicit requirement-to-final-evidence gate before done; also used proportionately by ordinary AIOS handback and Ship reconciliation |
+| aios-evaluate-publish-safety | [Ship](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-ship-work/SKILL.md), [final action check](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-ship-work/references/publish-safety.md) | Embed: exact content, identity, authority, privacy, claims and commitments checked last before effect |
+| aios-evaluate-spec-work | [Spec](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-spec-work/SKILL.md), [readiness](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-spec-work/references/readiness.md) | Embed: explicit pre-Build gate for maturity, evidence, source preservation, local invariants and bounded READY contract |
 | aios-onboard | [Setup](../SKILL.md), conditional [Interview](../../osm-interview/SKILL.md) | Renamed: setup/resume, sourced context, first useful result and native readback stay in Setup; exploratory conversation uses Interview when needed |
-| aios-review-work | [Review](../../osm-review-work/SKILL.md) | Keep: PASS/REVISE/BLOCKED; independent caller acceptance when delegated, latest-byte evidence, same-writer revision and any applicable worker goal active through waiting-review |
-| aios-route-agentic-content-system | [osm](../../osm/SKILL.md), [System routing](../../osm/references/routing.md) | Retired from the package in OSM 0.31.0: Content is a separate, tailored method outside OSM. Its history is kept as non-shipped drafts; external publication remains separately authorized |
-| aios-route-agentic-design-system | [osm](../../osm/SKILL.md), [System routing](../../osm/references/routing.md) | Retired in AIOS 0.29.0: the design method embedded here earlier was removed from the package. Visual work uses an installed design method if the host provides one, otherwise direct work or a reported missing method; existing project `DESIGN.md` and `design/` files stay in their project |
-| aios-route-business-constraint | [osm](../../osm/SKILL.md), [business routing](../../osm/references/routing.md) | Embed: current Offer/Operations/Demand constraint, Eliminate/Automate/Delegate and smallest owner; no mandatory business interview |
-| aios-ship-work | [Ship](../../osm-ship-work/SKILL.md) | Keep: exact Review plus authority, same writer/goals rather than a Ship goal, destination readback, recovery and three outcome states |
-| aios-spec-work | [Spec](../../osm-spec-work/SKILL.md) | Keep: four maturities, ten evidence dimensions, preserved sources, one authorized goal plus concise todo, worker linkage only when delegated and one readiness gate |
-| aios-sync | [Manage Data & Context](../../osm-manage-data-context/SKILL.md) | Retired with the file home in OSM 0.31.0: folder-home Sync is not an active route; a legacy folder or vault home is read-only and the [update reference](../../osm/references/update.md) has a legacy-home section with the migration guidance |
-| aios-triage-improvement | [Triage improvement](../../osm-triage-improvement/SKILL.md) | Keep: concrete-signal trigger, lead disposition, sanitized deduplicated brief, authorized issue/comment and exactly-once readback without changing the primary gate |
+| aios-review-work | [Review](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-review-work/SKILL.md) | Keep: PASS/REVISE/BLOCKED; independent caller acceptance when delegated, latest-byte evidence, same-writer revision and any applicable worker goal active through waiting-review |
+| aios-route-agentic-content-system | [osm](../../osm/index.md), [System routing](../../osm/references/routing.md) | Retired from the package in OSM 0.31.0: Content is a separate, tailored method outside OSM. Its history is kept as non-shipped drafts; external publication remains separately authorized |
+| aios-route-agentic-design-system | [osm](../../osm/index.md), [System routing](../../osm/references/routing.md) | Retired in AIOS 0.29.0: the design method embedded here earlier was removed from the package. Visual work uses an installed design method if the host provides one, otherwise direct work or a reported missing method; existing project `DESIGN.md` and `design/` files stay in their project |
+| aios-route-business-constraint | [osm](../../osm/index.md), [business routing](../../osm/references/routing.md) | Embed: current Offer/Operations/Demand constraint, Eliminate/Automate/Delegate and smallest owner; no mandatory business interview |
+| aios-ship-work | [Ship](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-ship-work/SKILL.md) | Keep: exact Review plus authority, same writer/goals rather than a Ship goal, destination readback, recovery and three outcome states |
+| aios-spec-work | [Spec](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-spec-work/SKILL.md) | Keep: four maturities, ten evidence dimensions, preserved sources, one authorized goal plus concise todo, worker linkage only when delegated and one readiness gate |
+| aios-sync | [Manage Data & Context](../../osm-manage-data-context/index.md) | Retired with the file home in OSM 0.31.0: folder-home Sync is not an active route; a legacy folder or vault home is read-only and the [update reference](../../osm/references/update.md) has a legacy-home section with the migration guidance |
+| aios-triage-improvement | [Triage improvement](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-triage-improvement/SKILL.md) | Keep: concrete-signal trigger, lead disposition, sanitized deduplicated brief, authorized issue/comment and exactly-once readback without changing the primary gate |
 | aios-update | [Update](../../osm/references/update.md), [identity migration](migration.md) | Keep: independent package-adoption intent, pinned release, native registration, collision proof and rollback; no legacy updater runtime |
 
 ## Whole snapshot inventory
@@ -36,8 +36,8 @@ migration evidence also accounts for the two other historical Global methods:
 
 | Named external method | Current owner/disposition |
 | --- | --- |
-| `clarify` | Adopted as native [Clarify](../../osm-clarify/SKILL.md) in AIOS 0.16.0 for complex explanations and optional visuals; the former mandatory HTML output is intentionally adapted |
-| `manage-skills` | Its accepted responsibility moved to native [Manage Skills](../../osm-manage-skills/SKILL.md); no external body existed in the snapshot to migrate |
+| `clarify` | Adopted as native [Clarify](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-clarify/SKILL.md) in AIOS 0.16.0 for complex explanations and optional visuals; the former mandatory HTML output is intentionally adapted |
+| `manage-skills` | Its accepted responsibility moved to native [Manage Skills](../../osm-manage-skills/index.md); no external body existed in the snapshot to migrate |
 | `orchestrate-workers` | Its accepted responsibility moved to native [Council](../../osm-council/SKILL.md); no external body existed in the snapshot to migrate |
 | `route-models` | Retired at historical change `8b81375`; current model advice lives in [model advice](../../osm/references/model-advice.md), without restoring a model catalog |
 | `shape-offer` | Retained in the public Global Skills archive; not adopted or actively routed by AIOS |
@@ -53,9 +53,9 @@ template's placeholder owner files.
 
 Useful native workforms beyond the direct legacy keep rows:
 [Check](../../osm/references/check.md) for installation/format/harness evidence (a read-only reference under `osm`, as are Update and model advice) and
-[Manage Data & Context](../../osm-manage-data-context/SKILL.md) for durable facts/routes,
+[Manage Data & Context](../../osm-manage-data-context/index.md) for durable facts/routes,
 and [Council](../../osm-council/SKILL.md) for an actual
-lead worker plan, launch or recovery. [Manage Skills](../../osm-manage-skills/SKILL.md)
+lead worker plan, launch or recovery. [Manage Skills](../../osm-manage-skills/index.md)
 owns personal skill placement/discovery and reviewed capability adoption,
 update, removal and rollback.
 They are distinct from artifact Review and package Update. OSM 0.1.x's `osm`,
@@ -64,7 +64,7 @@ OSM 0.30.0 reuses three of those names for different bodies, so classify by sour
 and version, never by name ([identity migration](migration.md));
 the old umbrella's lifecycle is now directly invocable as Spec/Build/Review/Ship.
 
-Conditional [principles, voice and visual checks](../../osm-review-work/references/contextual-quality.md)
+Conditional [principles, voice and visual checks](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-review-work/references/contextual-quality.md)
 belong in Review. They retain observable judgment but use the selected client's
 sources, not the author's preferences. Clarify is now independently discoverable in this package; the former offer
 method remains archived. Neither is a prerequisite for unrelated work. Native management, orchestration and triage are conditional

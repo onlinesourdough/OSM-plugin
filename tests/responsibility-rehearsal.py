@@ -12,39 +12,40 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
 EXPECTED = {
-    "osm", "osm-build-work", "osm-clarify", "osm-create-project", "osm-data-context",
-    "osm-dreaming", "osm-human-writing", "osm-interview", "osm-manage-data-context", "osm-manage-skills",
-    "osm-council", "osm-review-work", "osm-risky-changes", "osm-setup",
-    "osm-ship-work", "osm-spec-work", "osm-triage-improvement", "osm-write-code",
-    "osm-prime", "osm-log",
+    "osm-council", "osm-dreaming", "osm-human-writing", "osm-interview",
+    "osm-log", "osm-prime", "osm-setup",
 }
-RETIRED = {"osm-check", "osm-update", "osm-select-model", "osm-context",
-           "osm-maintain-context", "content", "diffusion-studio"}
+REFERENCES = {"osm", "osm-data-context", "osm-manage-data-context", "osm-manage-skills"}
+RETIRED = {
+    "osm-check", "osm-update", "osm-select-model", "osm-context", "osm-maintain-context",
+    "content", "diffusion-studio", "osm-build-work", "osm-clarify", "osm-create-project",
+    "osm-review-work", "osm-risky-changes", "osm-ship-work", "osm-spec-work",
+    "osm-triage-improvement", "osm-write-code",
+}
 # One owner per operation; each caller must link to it.
 OWNERS = {
-    "conduct onboarding": ("osm-setup/SKILL.md", ["osm/SKILL.md"]),
-    "engineer the Notion home": ("osm-data-context/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md"]),
-    "retrieve and curate context": ("osm-manage-data-context/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md", "osm-prime/SKILL.md", "osm-log/SKILL.md", "osm-dreaming/SKILL.md"]),
-    "start with the selected scope": ("osm-prime/SKILL.md", ["osm/SKILL.md"]),
-    "save lasting changes": ("osm-log/SKILL.md", ["osm/SKILL.md"]),
-    "review recent work and repair context": ("osm-dreaming/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md"]),
-    "skill lifecycle": ("osm-manage-skills/SKILL.md", ["osm/SKILL.md", "osm-manage-data-context/SKILL.md", "osm-dreaming/SKILL.md"]),
-    "read-only check": ("osm/references/check.md", ["osm/SKILL.md", "osm-manage-skills/SKILL.md"]),
-    "update and rollback": ("osm/references/update.md", ["osm/SKILL.md", "osm-setup/references/legacy-parity.md"]),
+    "conduct onboarding": ("osm-setup/SKILL.md", ["osm/index.md"]),
+    "engineer the Notion home": ("osm-data-context/index.md", ["osm/index.md", "osm-setup/SKILL.md"]),
+    "retrieve and curate context": ("osm-manage-data-context/index.md", ["osm/index.md", "osm-setup/SKILL.md", "osm-prime/SKILL.md", "osm-log/SKILL.md", "osm-dreaming/SKILL.md"]),
+    "start with the selected scope": ("osm-prime/SKILL.md", ["osm/index.md"]),
+    "save lasting changes": ("osm-log/SKILL.md", ["osm/index.md"]),
+    "review recent work and repair context": ("osm-dreaming/SKILL.md", ["osm/index.md", "osm-setup/SKILL.md"]),
+    "skill lifecycle": ("osm-manage-skills/index.md", ["osm/index.md", "osm-manage-data-context/index.md", "osm-dreaming/SKILL.md"]),
+    "read-only check": ("osm/references/check.md", ["osm/index.md", "osm-manage-skills/index.md"]),
+    "update and rollback": ("osm/references/update.md", ["osm/index.md", "osm-setup/references/legacy-parity.md"]),
     "model advice": ("osm/references/model-advice.md",
-                     ["osm/SKILL.md", "osm-spec-work/SKILL.md", "osm-build-work/SKILL.md",
-                      "osm-council/SKILL.md"]),
+                     ["osm/index.md", "osm-council/SKILL.md"]),
     "personal-skill lifecycle": ("osm-manage-skills/references/owner-skills.md", ["osm-setup/SKILL.md"]),
 }
 CHAIN = {"osm-setup", "osm-data-context", "osm-manage-data-context", "osm-manage-skills",
          "osm-prime", "osm-log", "osm-dreaming"}
 # Files that may still name retired things, because they explain the retirement.
-HISTORY = {"osm/SKILL.md", "osm/references/update.md", "osm/references/check.md",
+HISTORY = {"osm/index.md", "osm/references/update.md", "osm/references/check.md",
            "osm-setup/references/migration.md", "osm-setup/references/legacy-parity.md",
            "osm-setup/references/setup.md", "osm-setup/references/setup-scenarios.md",
            "osm-setup/references/adapters.md", "osm-manage-skills/references/owner-skills.md",
-           "osm-manage-data-context/SKILL.md", "osm-manage-data-context/references/curation.md",
-           "osm-data-context/SKILL.md", "osm-data-context/references/architecture.md",
+           "osm-manage-data-context/index.md", "osm-manage-data-context/references/curation.md",
+           "osm-data-context/index.md", "osm-data-context/references/architecture.md",
            "osm-setup/SKILL.md"}
 # Never allowed in any shipped skill text, history files included. Whitespace is normalized
 # first so a line break cannot hide a phrase. Nothing needs an exemption today.
@@ -55,13 +56,13 @@ PINS = (
      "only with a stated meaning (what it asserts), its evidence"),
     ("import is not evidence time", "osm-data-context/references/architecture.md",
      "an import time is never the comparable evidence time"),
-    ("readback before checkpoint", "osm-manage-data-context/SKILL.md",
+    ("readback before checkpoint", "osm-manage-data-context/index.md",
      "only after reading back the saved result"),
-    ("source-only class", "osm-manage-data-context/SKILL.md",
+    ("source-only class", "osm-manage-data-context/index.md",
      "copy nothing and create no record"),
-    ("flagged results", "osm-manage-data-context/SKILL.md",
+    ("flagged results", "osm-manage-data-context/index.md",
      "are not merged: keep both and return them as flagged results"),
-    ("items without a record", "osm-manage-data-context/SKILL.md",
+    ("items without a record", "osm-manage-data-context/index.md",
      "go to a labelled line on the maintenance or control record the definition names"),
     ("relation rule in the contract", "osm-data-context/references/architecture.md",
      "states its meaning, evidence and attribution"),
@@ -72,16 +73,14 @@ PINS = (
 # The triggers-and-calls table in docs/skills.md: each row's trigger starts with the key and its Owner
 # column must link the value. Every owner is then pinned, so a deleted or re-assigned row fails.
 TRIGGER_ROWS = {
-    "Explain OSM": "osm/SKILL.md", "Set up or resume": "osm-setup/SKILL.md", "Engineer the Notion home": "osm-data-context/SKILL.md",
-    "Retrieve, take in": "osm-manage-data-context/SKILL.md", "Create or change a personal": "osm-manage-skills/SKILL.md",
+    "Explain OSM": "osm/index.md", "Set up or resume": "osm-setup/SKILL.md", "Engineer the Notion home": "osm-data-context/index.md",
+    "Retrieve, take in": "osm-manage-data-context/index.md", "Create or change a personal": "osm-manage-skills/index.md",
     "Start a configured session": "osm-prime/SKILL.md",
     "Save lasting context": "osm-log/SKILL.md",
     "Review recent work": "osm-dreaming/SKILL.md",
-    "Explore direction": "osm-interview/SKILL.md", "Resolve a work contract": "osm-spec-work/SKILL.md",
-    "Implement accepted work": "osm-build-work/SKILL.md", "Inspect the result": "osm-review-work/SKILL.md",
-    "Deliver a reviewed": "osm-ship-work/SKILL.md", "Get another agent’s review": "osm-council/SKILL.md",
-    "Start a project": "osm-create-project/SKILL.md", "Route an improvement": "osm-triage-improvement/SKILL.md",
-    "Assess a consequential": "osm-risky-changes/SKILL.md", "Write prose, code": "osm-human-writing/SKILL.md",
+    "Explore direction": "osm-interview/SKILL.md",
+    "Get another agent’s review": "osm-council/SKILL.md",
+    "Write prose": "osm-human-writing/SKILL.md",
     "Inspect installation": "osm/references/check.md", "Update, roll back": "osm/references/update.md",
     "Model advice": "osm/references/model-advice.md",
 }
@@ -89,7 +88,7 @@ TRIGGER_ROWS = {
 CALLS_CHECKED = {"osm-setup": None, "osm-data-context": None, "osm-manage-data-context": None, "osm-manage-skills": None,
                  "osm-interview": None, "osm-prime": None, "osm-log": None, "osm-dreaming": None}
 DISPLAY = {"osm-interview": r"Interview", "osm-data-context": r"(?<!Manage )Data & Context",
-           "osm-manage-data-context": r"Manage Data & Context", "osm-manage-skills": r"Manage Skills", "osm-spec-work": r"Spec",
+           "osm-manage-data-context": r"Manage Data & Context", "osm-manage-skills": r"Manage Skills",
            "osm-dreaming": r"Dreaming", "osm-log": r"\bLog\b"}
 ACTIVE_DENY = ("AIOS_ROOT", "provider selection", "existing-home", "Use a folder or other link",
                "file bridge", "legacy-file-home")
@@ -123,6 +122,10 @@ def has_cycle(graph):
     return any(node not in state and visit(node) for node in list(graph))
 
 
+def entry(name):
+    return name + ("/index.md" if name in REFERENCES else "/SKILL.md")
+
+
 def check(root=ROOT):
     skills = root / "skills"
     names = {p.parent.name for p in skills.glob("*/SKILL.md")}
@@ -137,15 +140,15 @@ def check(root=ROOT):
         for caller in callers:
             require(target in set(links(skills / caller)), f"{caller} does not call the {operation} owner")
 
-    # Delegation graph between the context skills: from SKILL.md files only.
+    # Delegation graph between the context skills: from skill entries and their reference equivalents.
     graph = {name: set() for name in CHAIN}
     for name in CHAIN:
-        for target in links(skills / name / "SKILL.md"):
+        for target in links(skills / entry(name)):
             try:
                 other = target.relative_to(skills.resolve()).parts[0]
             except ValueError:
                 continue
-            if other in CHAIN and other != name and target.name == "SKILL.md":
+            if other in CHAIN and other != name and target.name == Path(entry(other)).name:
                 graph[name].add(other)
     require(not has_cycle(graph), f"delegation loop: {graph}")
     require(not any("osm-setup" in graph[name] for name in CHAIN - {"osm-setup"}),
@@ -187,8 +190,7 @@ def check(root=ROOT):
     if skills_doc.exists():
         listed = normalized(skills_doc)
         for operation, (owner, _callers) in OWNERS.items():
-            shown = owner if owner.endswith("SKILL.md") or owner.startswith("osm/references/") \
-                else owner.split("/")[0] + "/SKILL.md"
+            shown = owner if owner.startswith("osm/references/") else entry(owner.split("/")[0])
             require(f"skills/{shown}" in listed, f"docs/skills.md omits the owner of {operation}")
 
     if skills_doc.exists():
@@ -207,28 +209,28 @@ def check(root=ROOT):
             require(owner in owner_links[row[0]], f"triggers table row {key!r} does not name {owner} as owner")
         require(len(owner_links) == len(TRIGGER_ROWS), "triggers table has a row this check does not know")
         for name in CALLS_CHECKED:
-            row = next(t for t in owner_links if f"{name}/SKILL.md" in owner_links[t])
+            row = next(t for t in owner_links if entry(name) in owner_links[t])
             calls = rows[row][2]
-            linked = {t.relative_to(skills.resolve()).parts[0] for t in links(skills / name / "SKILL.md")
-                      if t.name == "SKILL.md" and t.parent.name != name and t.is_relative_to(skills.resolve())}
+            linked = {t.relative_to(skills.resolve()).parts[0] for t in links(skills / entry(name))
+                      if t.name == Path(entry(t.parent.name)).name and t.parent.name != name and t.is_relative_to(skills.resolve())}
             for other in linked & set(DISPLAY):
                 require(re.search(DISPLAY[other], calls), f"triggers table Calls for {name} omits {other}")
             if not linked & set(DISPLAY):
                 require(calls.startswith("None"), f"triggers table Calls for {name} should say None")
 
     setup = (skills / "osm-setup/SKILL.md").read_text()
-    data = (skills / "osm-data-context/SKILL.md").read_text()
+    data = (skills / "osm-data-context/index.md").read_text()
     require("Setup never creates Content" in setup and "Never create Content" in data,
             "Content creation boundary")
-    router = (skills / "osm/SKILL.md").read_text()
+    router = (skills / "osm/index.md").read_text()
     for old in ("osm-context", "osm-maintain-context", "osm-check", "osm-update",
                 "osm-select-model", "content", "diffusion-studio"):
         require(f"`{old}`" in router, f"retired name not routed: {old}")
-    manage = (skills / "osm-manage-data-context/SKILL.md").read_text()
+    manage = (skills / "osm-manage-data-context/index.md").read_text()
     require("## Classify what comes in" in manage and "needs-attention list" in manage and
             "reuses the same record identity" in manage and "no global truth, health or freshness score" in manage,
             "intake classes, needs-attention list or checkpoint rule missing")
-    require("(../../osm-manage-data-context/SKILL.md#classify-what-comes-in)" in
+    require("(../../osm-manage-data-context/index.md#classify-what-comes-in)" in
             (skills / "osm-setup/references/setup.md").read_text(), "Setup intake does not point at the classes")
     for path in skills.rglob("*.md"):
         require(not re.search(r"\bHealthy\b", path.read_text()), f"global health verdict wording: {path.name}")
@@ -258,15 +260,15 @@ def rejected(mutate, expected):
 
 def negative_controls():
     def call_back(root):
-        path = root / "skills/osm-manage-skills/SKILL.md"
+        path = root / "skills/osm-manage-skills/index.md"
         path.write_text(path.read_text() + "\nSee [Setup](../osm-setup/SKILL.md).\n")
 
     def reverse_edge(root):
-        path = root / "skills/osm-data-context/SKILL.md"
-        path.write_text(path.read_text() + "\nSee [Manage](../osm-manage-data-context/SKILL.md).\n")
+        path = root / "skills/osm-data-context/index.md"
+        path.write_text(path.read_text() + "\nSee [Manage](../osm-manage-data-context/index.md).\n")
 
     def into_dreaming(root):
-        path = root / "skills/osm-manage-data-context/SKILL.md"
+        path = root / "skills/osm-manage-data-context/index.md"
         path.write_text(path.read_text() + "\nSee [Dreaming](../osm-dreaming/SKILL.md).\n")
 
     def alias(root):
@@ -274,11 +276,11 @@ def negative_controls():
         (root / "skills/osm-check/SKILL.md").write_text("---\nname: osm-check\n---\n")
 
     def file_home_route(root):
-        path = root / "skills/osm-spec-work/SKILL.md"
+        path = root / "skills/osm-council/SKILL.md"
         path.write_text(path.read_text() + "\nUse the file bridge.\n")
 
     def unrouted_old_name(root):
-        path = root / "skills/osm/SKILL.md"
+        path = root / "skills/osm/index.md"
         path.write_text(path.read_text().replace("`osm-select-model`", "`other`"))
 
     def health_verdict(root):
@@ -330,16 +332,16 @@ def negative_controls():
     rejected(dropped_owner_row, "docs/skills.md omits the owner")
     interview_row = "| Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Active specification method when needed, Log (durable owner facts only) |"
     rejected(table_edit(interview_row + "\n", ""), "triggers table has no row for 'Explore direction'")
-    rejected(table_edit("| Engineer the Notion home | [OSM:data-context](../skills/osm-data-context/SKILL.md) |",
-                        "| Engineer the Notion home | [OSM:manage-data-context](../skills/osm-manage-data-context/SKILL.md) |"),
-             "does not name osm-data-context/SKILL.md as owner")
-    rejected(table_edit(", Log (durable owner facts only)", ""), "Calls for osm-interview omits osm-log")
+    rejected(table_edit("| Engineer the Notion home | [Data & Context setup](../skills/osm-data-context/index.md) |",
+                        "| Engineer the Notion home | [OSM:manage-data-context](../skills/osm-manage-data-context/index.md) |"),
+             "omits the owner of engineer the Notion home")
+    rejected(table_edit("Log (durable owner facts only)", "None"), "Calls for osm-interview omits osm-log")
     rejected(table_edit("| Interview (only if context is missing), Data & Context, Manage Data & Context, Dreaming (optional upkeep), Manage Skills |",
                         "| Interview (only if context is missing), Manage Data & Context, Dreaming (optional upkeep), Manage Skills |"), "Calls for osm-setup omits osm-data-context")
     rejected(table_edit("Dreaming (optional upkeep), ", ""), "Calls for osm-setup omits osm-dreaming")
     rejected(table_edit("| Manage Data & Context (all writes), Manage Skills (method changes only) |", "| Manage Skills (method changes only) |"),
              "Calls for osm-dreaming omits osm-manage-data-context")
-    rejected(table_edit("| Ship |\n", "| Ship |\n| Surprise row | [OSM:review-work](../skills/osm-review-work/SKILL.md) | None |\n"),
+    rejected(table_edit("## Triggers and calls\n", "## Triggers and calls\n| Surprise row | [OSM:log](../skills/osm-log/SKILL.md) | None |\n"),
              "has a row this check does not know")
     for name, relative, phrase in PINS:
         rejected(delete_rule(name, relative, phrase), f"rule text missing: {name}")

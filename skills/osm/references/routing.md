@@ -15,15 +15,14 @@ Record a material decision and its rationale in the source that owns the work.
 - [Interview](../../osm-interview/SKILL.md) develops shared understanding when
   requested or when material uncertainty at the start prevents choosing a
   direction. Use its activation rules; ordinary execution continues without it.
-- [Clarify](../../osm-clarify/SKILL.md) explains complex topics with examples and useful visuals.
 - For visual direction and assets, use an installed design method if the host
   provides one; otherwise do the work directly or report the missing method.
 - [Human writing](../../osm-human-writing/SKILL.md) makes prose clear and natural.
   Editorial production beyond that belongs to a separate Content method the owner
   has chosen; OSM ships none.
-- [Spec](../../osm-spec-work/SKILL.md) sets an ordinary request's outcome; the shared
-  [lifecycle](lifecycle.md) supplies implementation, review and authorized
-  delivery with the task's local requirements.
+- Follow the project or host method for defining its result, carrying out the
+  work and verifying authorized delivery by readback. Use [Council](../../osm-council/SKILL.md) when an
+  independent review or bounded contribution would help.
 
 Select methods for what they contribute. Design and content work may
 proceed independently or pass relevant reviewed material to each other. Preserve

@@ -36,11 +36,9 @@ The method supports business work, decisions, writing and practical automation.
 Its code guidance and verification stay proportional to the task. Projects own
 their source, engineering standards, design and delivery configuration.
 
-Projects can be content, research, learning, business work or software. Create
-Project establishes the useful workspace and context; Git and GitHub are
-optional. Small coding work stays direct with Write Code and the shared Spec,
-Build and Review. None of this requires a particular sidebar or execution
-environment.
+Projects keep their own instructions, engineering standards and delivery tools.
+OSM's standard skills cover context, onboarding, writing and bounded agent
+collaboration.
 
 ## Why I built this
 
@@ -49,7 +47,7 @@ relevant data, business context and reusable ways of working, kept in sources
 I control.
 
 The method installs as a native plugin in Codex and Claude Code and adds reusable
-skills for planning, building, reviewing and writing. It builds on open formats
+skills for context, onboarding, writing and collaboration. It builds on open formats
 such as Agent Skills and on what those apps already provide, so I mostly write
 methods and small adaptations, with little code to maintain.
 
@@ -57,23 +55,20 @@ Your context stays in a home you choose, in Notion. The app
 provides the models, tools and permissions; the method helps the assistant find and
 maintain the context it needs.
 
-## Agentic systems and skill chains
+## How OSM helps
 
-Select the steps the task needs; these are useful routes, not a fixed ritual.
-
-| Need | Method |
+| Need | Skill |
 | --- | --- |
-| Understand an idea or difficult decision | Interview and Clarify |
-| Complete substantial work | Spec → Build → Review → authorized Ship |
-| Write clearly | Human Writing |
-| Get another agent's help | Council for independent review or a bounded delegation |
-| Establish a useful workspace | Create Project; Git is optional |
-| Connect and maintain owner context | Setup → Data & Context, then Manage Data & Context |
-| Add a reusable capability | Manage Skills; optional specialists keep their own ownership |
+| Connect a Notion home and complete a first task | Setup |
+| Retrieve relevant context in a new session | Prime |
+| Save a lasting decision at a useful checkpoint | Log |
+| Review recent work and maintain context between tasks | Dreaming |
+| Explore an unresolved goal or decision | Interview |
+| Draft or edit user-facing prose | Human Writing |
+| Get another agent's independent review or bounded help | Council |
 
-Read the [skill index](docs/skills.md) for the actual entrypoints and the
-[architecture](docs/architecture.md) for responsibilities and selective loading.
-The agent loads only the relevant skill and references.
+Use the [skill index](docs/skills.md) for entrypoints and the
+[architecture](docs/architecture.md) for the shared context procedures.
 
 [Agentic Systems](https://github.com/arcitai/agentic-systems) is an open-source framework for
 building and operating agentic systems. It brings Foundation, AgentOps and domain

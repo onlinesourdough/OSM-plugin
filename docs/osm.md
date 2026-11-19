@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.33.0
+OSM version: 0.34.0
 
 **Business first. Productivity built in.**
 
@@ -34,7 +34,7 @@ helps with the first task. Personal and Team skills retain actual permissions;
 Audience and Space are not access control. A new Notion entry is called **OSM**
 by default; existing entries and customer names remain theirs.
 
-[Data & Context](../skills/osm-data-context/SKILL.md) engineers the Notion home: its
+[Data & Context](../skills/osm-data-context/index.md) engineers the Notion home: its
 root, one definition and the core Knowledge, Memory and Skills stores, reusing
 what exists and creating only what is missing.
 [Prime](../skills/osm-prime/SKILL.md) uses the host's short pointer to find the
@@ -42,7 +42,7 @@ smallest relevant context and [Log](../skills/osm-log/SKILL.md) saves lasting
 changes after meaningful work or on request. [Dreaming](../skills/osm-dreaming/SKILL.md)
 reads the current definition, checks recent work and due sources, and can
 correct proven context errors. It uses an existing caller for a daily run.
-[Manage Data & Context](../skills/osm-manage-data-context/SKILL.md) owns
+[Manage Data & Context](../skills/osm-manage-data-context/index.md) owns
 retrieval and verified curation for all three. The shared
 [host instruction template](../skills/osm-data-context/assets/bridge.md)
 prefers the host's built-in workspace and tools, including its side panel
@@ -95,73 +95,19 @@ source, that is an evidence gap—not a reason to invent an answer from memory.
 
 ## Native harnesses and access
 
-Clear writing and code quality are included methods. Visual design
-uses an installed design method if the host provides one; otherwise the
-assistant does the work directly or reports the missing method. Write code
-applies to application code, scripts and automation, with verification suited
-to the change. The native app owns
-projects and sessions; OSM adds no second project register. Spaces hold relevant
-business context, while optional specialist Systems keep their own upkeep.
-Design and writing working material stays in the project.
+[Human Writing](../skills/osm-human-writing/SKILL.md) helps with prose while
+preserving meaning, evidence and voice. [Interview](../skills/osm-interview/SKILL.md)
+helps when an unresolved question changes the next action. Setup uses it when
+existing context leaves a material gap. Project work uses the project's own
+instructions or a selected specialist. The native app owns projects, sessions
+and effective permissions. Verify authority before external actions and confirm
+their result at the destination.
 
-For a visible UI change, Build's [review handoff](../skills/osm-build-work/references/review-handoff.md)
-compares a real baseline and candidate capture of the same state, viewport and
-data. Human Writing includes concrete
-editing examples while preserving the author's meaning, evidence and voice.
-Write Code helps distinguish useful sharing from superficially similar code
-and keeps refactoring scoped to the affected behavior.
-
-## Connected work methods
-
-[Clarify](../skills/osm-clarify/SKILL.md) owns explanations of complex topics and
-decisions: a useful mental model, concrete examples and visuals when they help.
-It uses the available visualization tools for presentation and can return a
-short text answer. It is independently selectable and needs no design process
-or compulsory HTML artifact.
-
-
-[Interview](../skills/osm-interview/SKILL.md) helps establish shared context and
-direction when requested or materially needed at the start. It reuses known
-answers, challenges assumptions and returns a useful next action. Clear work
-already underway needs no interview. [Setup](../skills/osm-setup/SKILL.md)
-uses that conversation when needed while retaining installation, home readiness
-and continuity. Setup replaces the former `osm-onboard` entrypoint.
-
-Thinking aloud can start with Interview restating the goal and underlying problem
-before asking only what changes the next action. Spec can resolve a material
-solution choice through a [small local trial](../skills/osm-spec-work/references/local-trials.md).
-Visual variants use an available canvas or preview; a runnable interaction or sample workflow can
-resolve other choices. These steps are conditional and reuse accepted answers;
-ordinary work gains no mandatory interview, prototype or parallel agents.
-
-The shared delivery path is Spec → Build → Review → authorized Ship. Spec
-reuses interview decisions. These methods connect only where the accepted result
-needs them. Project setup, context maintenance, skill management and package
-updates retain their focused owners; check, update and model advice are
-references under `osm`. Reusable methods use Manage Skills; the former Create System entrypoint
-is retired.
-
-[Create Project](../skills/osm-create-project/SKILL.md) establishes a useful
-workspace, context and simple structure for content, learning, business work or
-software. A folder can be sufficient; Git, GitHub and a template are optional.
-Native sidebar/project controls are conveniences rather than a required OSM
-registration. Existing useful files and locations survive.
-
-Small coding work stays direct with Write Code and the shared lifecycle.
-Workspace or template creation alone does not prove an application ready.
-AIOS 0.28.0 retired the former Project Foundation skill: engineering preparation
-of a new or existing software project uses the separately usable
-[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
-skill directly in Codex or Claude; T3 Code is not required. When no such method is selected, OSM reports the
-gap rather than improvising an engineering contract.
-
-[Agentic Systems](https://github.com/arcitai/agentic-systems) is an independent package of
-Foundation, AgentOps and ADLC methods, such as implement and review, for T3 Code
-and native coding agents. OSM and Agentic Systems are independent packages: neither
-depends on nor installs the other. An operator may select Agentic Systems for a project,
-carrying its accepted scope and sources while preserving each environment's own
-instructions, credentials and execution controls. Human involvement does not
-itself enforce a filesystem or tool boundary.
+The standard package exposes Setup, Prime, Log, Dreaming, Interview, Human
+Writing and Council. Context setup, curation and personal skill maintenance
+have linked procedures. Update older saved calls to a retired entry to use
+the relevant procedure or the project's own workflow. Previous entries remain
+available from [v0.33.0](https://github.com/onlinesourdough/OSM-plugin/tree/v0.33.0/skills).
 
 Content production and video are not part of OSM. Content and Diffusion Studio
 left the package in 0.31.0; their history is kept as non-shipped drafts in the
@@ -180,14 +126,10 @@ work.
 
 ## Skill names
 
-Method skills use `osm` or an `osm-` prefix, such as `osm-build-work`, and show
-as `OSM:build-work`; a plugin-qualified host may show `osm:osm-build-work`. OSM
-0.31.0 renamed `osm-context` to `osm-data-context` and `osm-maintain-context` to
-`osm-manage-data-context`, and folded Check, Update and Select model into
-references under `osm`; `osm` routes the old names and ships no alias skill. Each skill declares its canonical
-name; the harness owns its native namespace. Personal methods keep their own
-names and ownership. Renames update the body, callers and native registration
-together.
+Method skills use an `osm-` prefix, such as `osm-setup`. A plugin-qualified
+host may show `osm:osm-setup`. Personal methods keep their own names and
+ownership. [Earlier method routes](../skills/osm/index.md#renamed-and-retired-entries)
+identify the current procedures for existing callers.
 
 ## Earlier names
 

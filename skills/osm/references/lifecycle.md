@@ -113,11 +113,10 @@ non-native; it does not provide native cross-turn continuation.
 
 ## Phase use and conditional recovery
 
-[Spec](../../osm-spec-work/SKILL.md) runs the SOP before READY;
-[Build](../../osm-build-work/SKILL.md) updates it before implementation or scope
-changes; [Review](../../osm-review-work/SKILL.md) checks requirement-to-evidence
-coverage; authorized [Ship](../../osm-ship-work/SKILL.md) retains pending delivery
-until readback. Keep the same task or selected worker, root, contract and applicable goals through
+Use the project workflow to confirm the intended result, make changes under
+the recorded authority and check the evidence. Verify specific authority for
+each external action and keep delivery pending until the destination has been
+read back. Keep the same task or selected worker, root, contract and applicable goals through
 waiting-review and revisions. Completion requires all accepted obligations and
 any required independent acceptance; logical waits are not native terminal states.
 

@@ -15,26 +15,13 @@ MANIFEST = ROOT / "tests/fixtures/context-footprint-legacy.json"
 MAX_SKILL_BODY_BYTES = 8192
 MAX_DESCRIPTION_BYTES = 240
 JOB_PREFIXES = {
-    "osm-clarify": "Explain ",
     "osm-human-writing": "Draft ",
-    "osm-write-code": "Write ",
-    "osm": "Explain ",
-    "osm-build-work": "Implement ",
-    "osm-create-project": "Start ",
-    "osm-manage-data-context": "Retrieve ",
-    "osm-manage-skills": "Manage ",
     "osm-dreaming": "Reflect ",
     "osm-prime": "Start ",
     "osm-log": "Save ",
     "osm-setup": "Set up or resume ",
-    "osm-data-context": "Engineer ",
     "osm-interview": "Interview ",
     "osm-council": "Ask another agent ",
-    "osm-risky-changes": "Assess ",
-    "osm-review-work": "Review ",
-    "osm-ship-work": "Deliver ",
-    "osm-spec-work": "Specify or revise ",
-    "osm-triage-improvement": "Triage ",
 }
 # The Notion-only flow ships one thin host pointer and no owner-file scaffold.
 CURRENT_NEUTRAL_SCAFFOLD = (
@@ -43,29 +30,12 @@ CURRENT_NEUTRAL_SCAFFOLD = (
 CURRENT_JOURNEYS = {
     "independent-local-negative-preload": (),
     "owner-business-route": (
-        "skills/osm/SKILL.md",
-        "skills/osm-data-context/SKILL.md",
+        "skills/osm/index.md",
+        "skills/osm-data-context/index.md",
         "skills/osm/references/routing.md",
-    ),
-    "spec-ready": (
-        "skills/osm/SKILL.md",
-        "skills/osm/references/routing.md",
-        "skills/osm-spec-work/SKILL.md",
-        "skills/osm/references/model-advice.md",
-        "skills/osm/references/lifecycle.md",
-        "skills/osm-spec-work/references/readiness.md",
-    ),
-    "worker-build": (
-        "skills/osm/SKILL.md",
-        "skills/osm/references/routing.md",
-        "skills/osm-build-work/SKILL.md",
-        "skills/osm-write-code/SKILL.md",
-        "skills/osm/references/model-advice.md",
-        "skills/osm-council/SKILL.md",
-        "skills/osm/references/lifecycle.md",
     ),
     "installation-check-basic": (
-        "skills/osm/SKILL.md",
+        "skills/osm/index.md",
         "skills/osm/references/check.md",
     ),
     "codex-package-and-bridge-pre-verification": (
@@ -265,18 +235,12 @@ def main():
     measurement = ROOT / "skills/osm/references/model-measurement.md"
     print(f"conditional_model_measurement_extra_bytes={measurement.stat().st_size}")
     print("NOTE: performance-claim/comparison tasks add that reference; no matched legacy measurement path is claimed")
-    trials = ROOT / "skills/osm-spec-work/references/local-trials.md"
-    print(f"conditional_local_trials_extra_bytes={trials.stat().st_size}")
-    print("NOTE: a material unresolved choice adds this reference; ordinary Spec and Build routes do not")
     handoff = ROOT / "skills/osm/references/continuation.md"
     print(f"conditional_whole_task_handoff_extra_bytes={handoff.stat().st_size}")
     print("NOTE: portable/whole-task transfer adds that reference, not worker orchestration; no matched legacy transfer path is claimed")
-    review_handoff = ROOT / "skills/osm-build-work/references/review-handoff.md"
-    print(f"conditional_human_review_handoff_extra_bytes={review_handoff.stat().st_size}")
-    print("NOTE: substantive human handoff adds this reference; visual capture uses its inline baseline/candidate rule and difficult explanation can add Clarify. The worker-build benchmark stops before handoff; no matched legacy or runtime saving is claimed")
     notion = sum((ROOT / path).stat().st_size for path in (
-        "skills/osm/SKILL.md",
-        "skills/osm-data-context/SKILL.md",
+        "skills/osm/index.md",
+        "skills/osm-data-context/index.md",
         "skills/osm-manage-data-context/references/operating.md",
     )) + startup
     print(f"conditional_notion_owner_route_bytes={notion}")

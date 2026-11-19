@@ -170,7 +170,7 @@ connection checks use its signed-in Codex CLI. The panel has no hosted service
 or consumer dependency-install step. Other client manifests still expose skills
 only. See [sidebar setup and recovery](sidebar.md).
 
-[Data & Context](../skills/osm-data-context/SKILL.md) resolves the chosen home independently
+[Data & Context](../skills/osm-data-context/index.md) resolves the chosen home independently
 of installation. Use its [short host pointer](../skills/osm-data-context/assets/bridge.md)
 for a verified Notion context entry URL. Notion is the only supported home; no
 failure falls back to `~/.AIOS` or another provider. A legacy folder or vault home
