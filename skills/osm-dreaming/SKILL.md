@@ -2,7 +2,7 @@
 name: osm-dreaming
 description: "Reflect across completed, unfinished or recently archived work and selected sources between tasks. Recover missed learning, maintain Memory and repair verified context drift. Manual or via an existing daily caller."
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # OSM:dreaming
@@ -10,7 +10,7 @@ metadata:
 Deliberate learning between sessions. Find meaningful progress, overlooked
 decisions and changes in selected sources. Check what would be kept against
 its source, and hand authorized curation to
-[Manage Data & Context](../osm-manage-data-context/SKILL.md). It complements
+[Manage Data & Context](../osm-manage-data-context/index.md). It complements
 task-time Log, which captures lasting context when a piece of work finishes
 or the owner asks to save it.
 
@@ -59,7 +59,7 @@ Look across what you selected for what a later session will act on: decisions,
 corrections and constraints, and any pattern that several items support.
 
 Classify each candidate with Manage Data & Context's
-[intake classes](../osm-manage-data-context/SKILL.md#classify-what-comes-in). A
+[intake classes](../osm-manage-data-context/index.md#classify-what-comes-in). A
 direct owner decision or a verified, attributable correction is durable at its
 first occurrence: repetition is neither required nor proof. Only an inference or
 pattern that nobody has confirmed or independently evidenced stays provisional and
@@ -112,11 +112,11 @@ changes policy, skills or access, or sends anything.
 ## Curate
 
 Manage Data & Context owns the write: classify, revise the one current record and
-verify by readback under its [upkeep rules](../osm-manage-data-context/SKILL.md#upkeep)
+verify by readback under its [upkeep rules](../osm-manage-data-context/index.md#upkeep)
 and the recorded
 [home write policy](../osm-data-context/references/architecture.md#home-write-policy).
 There is no second writer. A genuine reusable method change goes to
-[Manage Skills](../osm-manage-skills/SKILL.md); a note does not become a skill by
+[Manage Skills](../osm-manage-skills/index.md); a note does not become a skill by
 itself. When neither the mandate nor a recorded policy covers a result, return
 the proposed change.
 

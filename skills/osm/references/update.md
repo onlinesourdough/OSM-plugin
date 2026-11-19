@@ -3,7 +3,7 @@
 Adopt or roll back a reviewed OSM package, or maintain a selected optional
 specialist. This is separate from a read-only [check](check.md) (a check never
 authorizes an update) and from curating owner content (that belongs to
-[Manage Data & Context](../../osm-manage-data-context/SKILL.md)). It reuses the
+[Manage Data & Context](../../osm-manage-data-context/index.md)). It reuses the
 authority the task already has and adds no approval ceremony of its own.
 
 For a selected System installation or an explicit System-code update, use

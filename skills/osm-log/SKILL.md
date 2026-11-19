@@ -2,7 +2,7 @@
 name: osm-log
 description: Save lasting context when meaningful work finishes or the user asks to remember or log something. Use the verified home, read back authorized changes, and resume without logging the same work twice.
 metadata:
-  version: "1.1.1"
+  version: "1.1.2"
 ---
 
 # OSM:log
@@ -21,7 +21,7 @@ The lead retains Log in delegated work. Dreaming uses its own run result.
    the home verified for that scope, even when the host has a different
    personal default. Without a verified destination and authority, keep a
    concrete proposed update with the task. Leave unrelated project work local.
-3. Use [Manage Data & Context](../osm-manage-data-context/SKILL.md) for intake,
+3. Use [Manage Data & Context](../osm-manage-data-context/index.md) for intake,
    record identity and verified writes. Save supported lasting context
    automatically within verified authority. Hold an uncertain or conflicting
    change as pending. Skip routine or unchanged material.

@@ -1,10 +1,3 @@
----
-name: osm-manage-skills
-description: Manage an authorized skill creation, edit, installation, update, removal or rollback.
-metadata:
-  version: "3.0.0"
----
-
 # OSM:manage-skills
 
 Manage a capability change deliberately. Independent projects remain operable

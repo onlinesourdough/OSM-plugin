@@ -14,50 +14,42 @@ from package_documentation import check as validate_documentation
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_NAMES = {
-    "osm", "osm-build-work", "osm-create-project",
-    "osm-manage-data-context", "osm-manage-skills",
-    "osm-setup", "osm-data-context", "osm-interview", "osm-council", "osm-review-work",
-    "osm-risky-changes", "osm-ship-work", "osm-spec-work", "osm-triage-improvement",
-    "osm-human-writing", "osm-write-code", "osm-clarify", "osm-dreaming",
-    "osm-prime", "osm-log",
+    "osm-council", "osm-dreaming", "osm-human-writing", "osm-interview",
+    "osm-log", "osm-prime", "osm-setup",
 }
-# OSM 0.31.0 folded these into `osm` references or moved them out of the package.
-# They get no alias skill; `osm` routes the old names.
-RETIRED_SKILL_NAMES = {
-    "osm-check", "osm-update", "osm-select-model", "osm-context",
-    "osm-maintain-context", "content", "diffusion-studio",
-}
+REFERENCE_ONLY = {"osm", "osm-data-context", "osm-manage-data-context", "osm-manage-skills"}
+RELEASE_ARCHIVE = "https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/"
 LEGACY_ROUTE_TARGETS = {
-    "aios": ("../../osm/SKILL.md", "../SKILL.md", "../../osm/references/check.md",
-             "../../osm-manage-data-context/SKILL.md", "../../osm/references/update.md"),
-    "aios-build-work": ("../../osm-build-work/SKILL.md",),
-    "aios-create-project": ("../../osm-create-project/SKILL.md",),
-    "aios-create-system": ("../../osm-manage-skills/SKILL.md",
-                           "../../osm-create-project/SKILL.md"),
-    "aios-evaluate-completeness": ("../../osm-review-work/SKILL.md",
-                                   "../../osm-review-work/references/completeness.md"),
-    "aios-evaluate-publish-safety": ("../../osm-ship-work/SKILL.md",
-                                     "../../osm-ship-work/references/publish-safety.md"),
-    "aios-evaluate-spec-work": ("../../osm-spec-work/SKILL.md",
-                                "../../osm-spec-work/references/readiness.md"),
+    "aios": ("../../osm/index.md", "../SKILL.md", "../../osm/references/check.md",
+             "../../osm-manage-data-context/index.md", "../../osm/references/update.md"),
+    "aios-build-work": (RELEASE_ARCHIVE + "osm-build-work/SKILL.md",),
+    "aios-create-project": (RELEASE_ARCHIVE + "osm-create-project/SKILL.md",),
+    "aios-create-system": ("../../osm-manage-skills/index.md",
+                           RELEASE_ARCHIVE + "osm-create-project/SKILL.md"),
+    "aios-evaluate-completeness": (RELEASE_ARCHIVE + "osm-review-work/SKILL.md",
+                                   RELEASE_ARCHIVE + "osm-review-work/references/completeness.md"),
+    "aios-evaluate-publish-safety": (RELEASE_ARCHIVE + "osm-ship-work/SKILL.md",
+                                     RELEASE_ARCHIVE + "osm-ship-work/references/publish-safety.md"),
+    "aios-evaluate-spec-work": (RELEASE_ARCHIVE + "osm-spec-work/SKILL.md",
+                                RELEASE_ARCHIVE + "osm-spec-work/references/readiness.md"),
     "aios-onboard": ("../SKILL.md",),
-    "aios-review-work": ("../../osm-review-work/SKILL.md",),
-    "aios-route-agentic-content-system": ("../../osm/SKILL.md",
+    "aios-review-work": (RELEASE_ARCHIVE + "osm-review-work/SKILL.md",),
+    "aios-route-agentic-content-system": ("../../osm/index.md",
                                            "../../osm/references/routing.md"),
-    "aios-route-agentic-design-system": ("../../osm/SKILL.md",
+    "aios-route-agentic-design-system": ("../../osm/index.md",
                                           "../../osm/references/routing.md"),
-    "aios-route-business-constraint": ("../../osm/SKILL.md",
+    "aios-route-business-constraint": ("../../osm/index.md",
                                        "../../osm/references/routing.md"),
-    "aios-ship-work": ("../../osm-ship-work/SKILL.md",),
-    "aios-spec-work": ("../../osm-spec-work/SKILL.md",),
-    "aios-sync": ("../../osm-manage-data-context/SKILL.md",
+    "aios-ship-work": (RELEASE_ARCHIVE + "osm-ship-work/SKILL.md",),
+    "aios-spec-work": (RELEASE_ARCHIVE + "osm-spec-work/SKILL.md",),
+    "aios-sync": ("../../osm-manage-data-context/index.md",
                   "../../osm/references/update.md"),
-    "aios-triage-improvement": ("../../osm-triage-improvement/SKILL.md",),
+    "aios-triage-improvement": (RELEASE_ARCHIVE + "osm-triage-improvement/SKILL.md",),
     "aios-update": ("../../osm/references/update.md", "migration.md"),
 }
 LEGACY_EXTERNAL_TARGETS = {
-    "clarify": "](../../osm-clarify/SKILL.md)",
-    "manage-skills": "](../../osm-manage-skills/SKILL.md)",
+    "clarify": "](" + RELEASE_ARCHIVE + "osm-clarify/SKILL.md)",
+    "manage-skills": "](../../osm-manage-skills/index.md)",
     "orchestrate-workers": "](../../osm-council/SKILL.md)",
     "route-models": "historical change `8b81375`",
     "shape-offer": "Retained in the public Global Skills archive",
@@ -67,10 +59,7 @@ FORBIDDEN_BOUNDARY_TEXT = {
     "skills/osm/references/routing.md": (
         "ACS", "OpenPencil", "DESIGN.md", "HANDOFF.md", ".op",
     ),
-    "skills/osm-create-project/SKILL.md": (
-        "scripts/create-project.sh", "--in-place", "--source-url", "--source-sha",
-    ),
-    "skills/osm-manage-skills/SKILL.md": ("skills.sh", "npx skills"),
+    "skills/osm-manage-skills/index.md": ("skills.sh", "npx skills"),
 }
 FORBIDDEN_SHIPPED_PATTERNS = (r"\bnpx skills\b", r"\bskills\.sh\b")
 PRODUCT_PATHS = (".codex-plugin", ".claude-plugin", ".cursor-plugin",
@@ -161,8 +150,14 @@ def validate(root=ROOT, release_tag=None):
 
     # Retired names have no alias, wrapper or copied body anywhere in the package,
     # and nothing discoverable ships outside skills/.
-    require(not (RETIRED_SKILL_NAMES & {path.parent.name for path in skill_files}),
-            "skill inventory")
+    require(set(skill_root.rglob("SKILL.md")) == set(skill_files),
+            "nested skill inventory")
+    require({path.name for path in skill_root.iterdir()} == SKILL_NAMES | REFERENCE_ONLY,
+            "skill root inventory")
+    for name in REFERENCE_ONLY:
+        folder = skill_root / name
+        require((folder / "index.md").is_file() and not (folder / "agents").exists(),
+                f"reference-only route missing or still advertised: {name}")
     require(not list((root / "docs").rglob("SKILL.md")), "non-shipped drafts discoverable")
     # Repository authoring does not duplicate the shipped skills. No local aliases,
     # wrappers or copied bodies may silently become a second discovery source.
@@ -176,10 +171,8 @@ def validate(root=ROOT, release_tag=None):
         require(not re.search(r"\.agents/skills/(?:spec|build|review|ship|audit)-(?:project|solution)/|"
                               r"\.agents/skills/choose-technology/", caller.read_text()),
                 "removed local phase caller")
-    skill_fields = {}
     for path in skill_files:
         fields = frontmatter(path)
-        skill_fields[path.parent.name] = fields
         try:
             skill_version(fields)
         except AssertionError as error:
@@ -189,50 +182,27 @@ def validate(root=ROOT, release_tag=None):
                 f"skill description: {path}")
         require("disable-model-invocation" not in fields, f"implicit invocation: {path}")
 
-    primary_targets = set(link_targets(skill_root / "osm/SKILL.md"))
-    for name in ("osm-data-context", "osm-manage-data-context", "osm-manage-skills",
-                 "osm-human-writing", "osm-write-code", "osm-interview", "osm-setup",
-                 "osm-dreaming"):
+    procedure_index = skill_root / "osm/index.md"
+    primary_targets = set(link_targets(procedure_index))
+    retired_routes = {"osm-build-work", "osm-create-project", "osm-spec-work",
+                      "osm-write-code", "osm-review-work", "osm-risky-changes",
+                      "osm-ship-work", "osm-triage-improvement", "osm-clarify"}
+    procedure_text = procedure_index.read_text()
+    require(all(f"`{name}`" in procedure_text and not (skill_root / name).exists()
+                for name in retired_routes), "retired work skill route")
+    for name in ("osm-human-writing", "osm-interview", "osm-setup", "osm-dreaming"):
         require((skill_root / name / "SKILL.md").resolve() in primary_targets,
                 f"built-in method route missing: {name}")
-    for caller in ("osm-build-work", "osm-review-work"):
-        require((skill_root / "osm-write-code/SKILL.md").resolve() in
-                set(link_targets(skill_root / caller / "SKILL.md")),
-                f"shared code-quality route missing: {caller}")
-    creation_targets = set(link_targets(skill_root / "osm-create-project/SKILL.md"))
-    seed_reference = skill_root / "osm-create-project/references/repository-seed.md"
-    require(seed_reference.resolve() in creation_targets,
-            "optional repository-seed route missing")
-    # Engineering foundation is a separately selected external method; OSM
-    # must not reintroduce a bundled engineering contract under any name.
+    for name in ("osm-data-context", "osm-manage-data-context", "osm-manage-skills"):
+        require((skill_root / name / "index.md").resolve() in primary_targets,
+                f"built-in reference route missing: {name}")
     require(not (skill_root / "osm-project-foundation").exists(),
             "retired engineering-foundation skill shipped")
-    # Spec owns contract preparation; tracking is one linked shared owner.
-    # Native decisions require the independent behavioral probes, not wording tests.
-    spec_targets = set(link_targets(skill_root / "osm-spec-work/SKILL.md"))
-    for target in ("osm/references/lifecycle.md", "osm-spec-work/references/readiness.md",
-                   "osm-build-work/SKILL.md"):
-        require((skill_root / target).resolve() in spec_targets,
-                f"Spec contract route missing: {target}")
-    risky_changes = (skill_root / "osm-risky-changes/SKILL.md").read_text()
-    spec_work = (skill_root / "osm-spec-work/SKILL.md").read_text()
-    review_work = (skill_root / "osm-review-work/SKILL.md").read_text()
-    require(skill_fields["osm-risky-changes"]["description"].startswith("Assess ") and
-            "not routine edits or lifecycle management" in risky_changes and
-            "Name the material real-world assumptions" in risky_changes and
-            "proportional baseline or check" in risky_changes and
-            "safe recovery or stop path" in risky_changes and
-            "unit test alone as representative proof" in risky_changes and
-            "Compare the same representative pre- and post-change" in risky_changes and
-            "residual unknowns" in risky_changes and
-            "does not create a lifecycle, goal, worker" in risky_changes,
-            "risky-change owner boundary")
-    require("[Risky Changes](../osm-risky-changes/SKILL.md)" in spec_work and
-            "Routine edits do not select it." in spec_work and
-            "[Risky Changes](../osm-risky-changes/SKILL.md)" in review_work and
-            "Review still owns acceptance and does not gain Ship authority" in review_work,
-            "risky-change caller routing")
-    primary = (skill_root / "osm/SKILL.md").read_text()
+    for name in ("osm-prime", "osm-log", "osm-dreaming"):
+        require((skill_root / "osm-manage-data-context/index.md").resolve() in
+                set(link_targets(skill_root / name / "SKILL.md")),
+                f"shared context route missing: {name}")
+    primary = (skill_root / "osm/index.md").read_text()
     lifecycle = (skill_root / "osm/references/lifecycle.md").read_text()
     require("persistent-goal request boundary" in primary and
             re.search(r"If activation requires an explicit request and none\s+exists", lifecycle) and
@@ -254,16 +224,11 @@ def validate(root=ROOT, release_tag=None):
     require("| Native-state deadlock |" in workflow_scenarios and
             "| Native-only continuation |" in workflow_scenarios and
             "| No native task list |" in workflow_scenarios and
-            "without hunting a session, deleting, reactivating, replacing or duplicating a goal or worker" in workflow_scenarios and
-            "[native tracking SOP](../osm/references/lifecycle.md)" in spec_work and
-            "[native tracking SOP](../osm/references/lifecycle.md)" in review_work,
+            "without hunting a session, deleting, reactivating, replacing or duplicating a goal or worker" in workflow_scenarios,
             "native-state deadlock scenario")
-    require("| Routine risky-change boundary |" in workflow_scenarios and
-            "do not load Risky Changes or create a lifecycle, goal, worker, or extra test suite" in workflow_scenarios,
-            "routine risky-change negative route")
     onboard = (skill_root / "osm-setup/SKILL.md").read_text()
-    manage_skills = (skill_root / "osm-manage-skills/SKILL.md").read_text()
-    require("[Manage Skills](../osm-manage-skills/SKILL.md)" in onboard and
+    manage_skills = (skill_root / "osm-manage-skills/index.md").read_text()
+    require("[Manage Skills](../osm-manage-skills/index.md)" in onboard and
             re.search(r"normal setup does not\s+depend on an optional guard implementation", onboard, re.I) and
             "setup-guardrails" in manage_skills and
             "[protection coverage](../osm-setup/references/harness-protection.md)" in manage_skills and
@@ -277,9 +242,8 @@ def validate(root=ROOT, release_tag=None):
             "optional guardrails route boundary")
     # Ownership and portability invariants; behavior needs independent model rehearsal.
     selection = skill_root / "osm/references/model-advice.md"
-    for caller in ("osm-spec-work", "osm-build-work", "osm-council"):
-        require(selection.resolve() in set(link_targets(skill_root / caller / "SKILL.md")),
-                f"model selection route missing: {caller}")
+    require(selection.resolve() in set(link_targets(skill_root / "osm-council/SKILL.md")),
+            "Council model-selection reference missing")
     for source in (selection, skill_root / "osm-council/SKILL.md"):
         require(not re.search(r"\b(?:gpt-\d|claude-\d|gemini-\d)", source.read_text()),
                 f"nonportable model default: {source}")
@@ -300,15 +264,11 @@ def validate(root=ROOT, release_tag=None):
             "initialize a fresh local Git registration" in sync and
             "Never copy\nthe source or temporary staging checkout's `.git`, config, hooks" in sync,
             "legacy sync record")
-    maintain = (skill_root / "osm-manage-data-context/SKILL.md").read_text()
-    build = (skill_root / "osm-build-work/SKILL.md").read_text()
-    readiness = (skill_root / "osm-spec-work/references/readiness.md").read_text()
+    maintain = (skill_root / "osm-manage-data-context/index.md").read_text()
     require("Keep the record lifecycle" in maintain and
             "Skill or method changes go through" in maintain and
             "creates or edits a\nschedule" in maintain and
-            "fallback applies only to an\nalready verified goal state" in lifecycle and
-            "does not waive initial activation" in build and
-            "canonical blocked/terminal fallback applies only after prior verified activation" in readiness,
+            "fallback applies only to an\nalready verified goal state" in lifecycle,
             "sync missing-home and native-goal gate ordering")
     canonical_sources = skill_root / "osm/references/canonical-sources.md"
     require(canonical_sources.is_file(), "missing canonical source route")
@@ -357,13 +317,13 @@ def validate(root=ROOT, release_tag=None):
             "duplicate personal-skill owner")
     caller_targets = set()
     for relative in (
-        "skills/osm/SKILL.md",
+        "skills/osm/index.md",
         "skills/osm-setup/SKILL.md",
         "skills/osm/references/check.md",
         "skills/osm-manage-data-context/references/curation.md",
     ):
         caller_targets.update(link_targets(root / relative))
-    require((manager / "SKILL.md").resolve() in caller_targets, "Manage Skills not routed")
+    require((manager / "index.md").resolve() in caller_targets, "Manage Skills not routed")
     require(owner_lifecycle.resolve() in caller_targets, "personal-skill procedure not routed")
 
     bridge = (skill_root / "osm-data-context/assets/bridge.md").read_text()
@@ -372,8 +332,7 @@ def validate(root=ROOT, release_tag=None):
 
     # OSM 0.30.0 renamed the package, not the owner state. Persisted names stay
     # readable by earlier builds; renamed skills have exactly one current copy.
-    require(set(RENAMED_SKILLS) <= SKILL_NAMES and
-            not any(path.parent.name.startswith("aios") or path.parent.name in RENAMED_SKILLS.values()
+    require(not any(path.parent.name.startswith("aios") or path.parent.name in RENAMED_SKILLS.values()
                     for path in skill_files),
             "retired package skill name")
     lines = bridge.splitlines()
@@ -385,7 +344,7 @@ def validate(root=ROOT, release_tag=None):
         "Always run OSM Log at meaningful checkpoints or when asked.",
     ],
             "new bridge route")
-    require("Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
+    require("OSM Context and AIOS Context." in (skill_root / "osm-data-context/index.md").read_text(),
             "retained context names")
     sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()
     sidebar_route = (root / "apps/sidebar/context-route.mjs").read_text()
@@ -467,16 +426,6 @@ def validate(root=ROOT, release_tag=None):
                         for pattern in FORBIDDEN_SHIPPED_PATTERNS),
                 f"external owner coupling: {path.relative_to(root)}")
 
-    readiness = (skill_root / "osm-spec-work/references/readiness.md").read_text()
-    completeness = (skill_root / "osm-review-work/references/completeness.md").read_text()
-    require("[Risky Changes](../../osm-risky-changes/SKILL.md)" in readiness and
-            "baseline/check, recovery, and evidence-gap result" in readiness and
-            "routine edits do not select it" in readiness,
-            "consequential behavior contract")
-    require("[Risky Changes](../../osm-risky-changes/SKILL.md)" in completeness and
-            "representative before/after comparison and residual-unknown result" in completeness,
-            "consequential behavior review")
-
     icon = (root / "assets/icon.png").read_bytes()
     require(icon[:8] == b"\x89PNG\r\n\x1a\n" and icon[12:16] == b"IHDR", "icon format")
     width, height = struct.unpack(">II", icon[16:24])
@@ -545,23 +494,18 @@ def rejected(mutator, expected):
 
 def negative_controls():
     def missing_skill_version(root):
-        path = root / "skills/osm/SKILL.md"
+        path = root / "skills/osm-setup/SKILL.md"
         path.write_text(re.sub(r'^  version: [^\n]*\n', '', path.read_text(), count=1, flags=re.M))
 
     def unquoted_skill_version(root):
-        path = root / "skills/osm/SKILL.md"
+        path = root / "skills/osm-setup/SKILL.md"
         path.write_text(re.sub(r'^  version: [^\n]*', '  version: 1.0.0',
                                path.read_text(), count=1, flags=re.M))
 
-    def missing_spec_tracking_route(root):
-        path = root / "skills/osm-spec-work/SKILL.md"
-        path.write_text(path.read_text().replace(
-            "[native tracking SOP](../osm/references/lifecycle.md)", "tracking"))
-
     def missing_domain_route(root):
-        path = root / "skills/osm/SKILL.md"
+        path = root / "skills/osm/index.md"
         path.write_text(path.read_text().replace(
-            "](../osm-data-context/SKILL.md)", "](../osm-human-writing/SKILL.md)"))
+            "](../osm-data-context/index.md)", "](../osm-human-writing/SKILL.md)"))
 
     def alias_skill(root):
         folder = root / "skills/osm-check"
@@ -599,7 +543,7 @@ def negative_controls():
     def missing_legacy_route(root):
         path = root / "skills/osm-setup/references/legacy-parity.md"
         path.write_text(path.read_text().replace(
-            "](../../osm-triage-improvement/SKILL.md)", "](missing-triage.md)", 1))
+            "](" + RELEASE_ARCHIVE + "osm-triage-improvement/SKILL.md)", "](missing-triage.md)", 1))
 
     def duplicate_legacy_route(root):
         path = root / "skills/osm-setup/references/legacy-parity.md"
@@ -610,7 +554,7 @@ def negative_controls():
     def local_phase_copy(root):
         folder = root / ".agents/skills/spec-project"
         folder.mkdir(parents=True)
-        shutil.copyfile(root / "skills/osm-spec-work/SKILL.md", folder / "SKILL.md")
+        shutil.copyfile(root / "skills/osm-setup/SKILL.md", folder / "SKILL.md")
 
     def local_phase_wrapper(root):
         folder = root / ".agents/skills/build-project"
@@ -634,15 +578,17 @@ def negative_controls():
         (root / 'hooks/hooks.json').write_text('{}')
 
     def retired_skill_copy(root):
-        shutil.copytree(root / "skills/osm-clarify", root / "skills/aios-clarify")
+        folder = root / "skills/osm-build-work"
+        folder.mkdir()
+        (folder / "SKILL.md").write_text("---\nname: osm-build-work\ndescription: Retired.\n---\n")
 
     def renamed_bridge_marker(root):
         path = root / "skills/osm-data-context/assets/bridge.md"
         path.write_text(path.read_text().replace("AIOS:BEGIN", "OSM:BEGIN"))
 
     def dropped_retained_context_names(root):
-        path = root / "skills/osm-data-context/SKILL.md"
-        path.write_text(path.read_text().replace(" Formerly OSM Context and AIOS Context.", ""))
+        path = root / "skills/osm-data-context/index.md"
+        path.write_text(path.read_text().replace("OSM Context and AIOS Context.", ""))
 
     def dropped_log_trigger(root):
         path = root / "skills/osm-data-context/assets/bridge.md"
@@ -683,7 +629,7 @@ def negative_controls():
     rejected(native_split_source, 'native split skill source')
     rejected(implicit_hook, 'unexpected native runtime')
 
-    rejected(missing_domain_route, "built-in method route missing")
+    rejected(missing_domain_route, "built-in reference route missing")
     rejected(alias_skill, "skill inventory")
     rejected(discoverable_draft, "non-shipped drafts discoverable")
     rejected(shipped_owner_template, "file-home owner template shipped")
@@ -698,7 +644,6 @@ def negative_controls():
     rejected(local_phase_wrapper, "duplicate generic repository skill payload")
     rejected(missing_skill_version, "missing metadata.version")
     rejected(unquoted_skill_version, "metadata values must be quoted strings")
-    rejected(missing_spec_tracking_route, "Spec contract route missing")
 
 
 if __name__ == "__main__":

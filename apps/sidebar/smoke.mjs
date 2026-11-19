@@ -54,7 +54,8 @@ try {
   assert.doesNotMatch(svg, /<style|\sstyle=|\scolor=|opacity|filter/i);
   const glyph = (await readFile(new URL('../../assets/branding/osm-icon-glyph.svg', import.meta.url), 'utf8')).trim();
   assert.equal(svg, glyph.replace('width="24" height="24"', 'width="16" height="16"'));
-  assert.deepEqual([...svg.matchAll(/<(\w+)/g)].map(([, tag]) => tag), ['svg', 'path', 'path', 'path']);
+  assert.deepEqual([...svg.matchAll(/<(\w+)/g)].map(([, tag]) => tag), ['svg', 'circle', 'g', 'rect', 'path']);
+  assert.match(svg, /<svg [^>]*fill="none" stroke="currentColor"/);
   const view = await client.readResource({ uri: 'ui://osm/home-v1' });
   assert.ok(view.contents[0].text.includes(glyph.replace('width="24" height="24"', 'width="29" height="29"')));
   assert.equal(view.contents[0].mimeType, 'text/html;profile=mcp-app');

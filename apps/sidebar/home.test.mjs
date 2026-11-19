@@ -438,7 +438,10 @@ test('a changed context cannot reuse or overwrite another context mapping', asyn
 
 test('built-in methods come from the installed package skill metadata', async () => {
   const skills = await readBuiltinSkills(new URL('../../skills', import.meta.url).pathname);
-  assert.equal(skills.length, 20);
+  assert.deepEqual(skills.map(skill => skill.name).sort(), [
+    'osm-council', 'osm-dreaming', 'osm-human-writing', 'osm-interview',
+    'osm-log', 'osm-prime', 'osm-setup',
+  ]);
   const setup = skills.find(skill => skill.name === 'osm-setup');
   assert.match(setup.description, /^Set up or resume OSM/);
   const dreaming = skills.find(skill => skill.name === 'osm-dreaming');
@@ -1086,7 +1089,7 @@ test('a bundled method is read only by a name the package lists, as bounded text
   }
   // The real package: every shipped skill is listed and readable, without frontmatter.
   const bundled = new URL('../../skills', import.meta.url).pathname, skills = await readBuiltinSkills(bundled);
-  assert.equal(skills.length, 20);
+  assert.equal(skills.length, 7);
   for (const { name, description } of skills) {
     const result = await readBuiltinSkill(bundled, name);
     assert.equal(result.state, 'read', name); assert.equal(result.record.description, description);

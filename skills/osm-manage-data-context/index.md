@@ -1,14 +1,7 @@
----
-name: osm-manage-data-context
-description: Retrieve relevant context, take in sources, curate concise durable records and repair routes, schema and the definition in the Notion Data & Context home. One method for manual, task-time and scheduled use. Formerly OSM Maintain Context.
-metadata:
-  version: "3.2.0"
----
-
 # OSM:manage-data-context
 
 Manage the Notion Data & Context home that
-[Data & Context](../osm-data-context/SKILL.md) engineers: relevant retrieval,
+[Data & Context](../osm-data-context/index.md) engineers: relevant retrieval,
 source intake and reconciliation, concise durable curation, justified schema or
 route repair, and metadata and definition upkeep. One method serves a manual
 request, a task-time checkpoint and the existing scheduled invocation; the
@@ -101,7 +94,7 @@ there is no global truth, health or freshness score.
 
 A selected existing Content store is maintained like any other store, without any
 Content module and without creating one. Skill or method changes go through
-[Manage Skills](../osm-manage-skills/SKILL.md), which owns capability lifecycle
+[Manage Skills](../osm-manage-skills/index.md), which owns capability lifecycle
 and discovery; do not duplicate or resume skill management here.
 
 Keep shared facts in routed Notion records, durable corrections in Memory, and

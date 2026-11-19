@@ -642,7 +642,7 @@ Source, index and semantic-control records (the definition, pipeline agreements,
 source maps, mapping tables, progress records) and Skills are maintained
 records. They need owner meaning, provenance, stable identity and a
 useful-change reason. The scope decides whether a write is allowed; for Skills,
-[Manage Skills](../../osm-manage-skills/SKILL.md) keeps the lifecycle procedure
+[Manage Skills](../../osm-manage-skills/index.md) keeps the lifecycle procedure
 and decides how it is done.
 
 - **Pins and host bindings.** A supported runtime or configuration change updates
@@ -753,13 +753,13 @@ flagged records (flagged means marked Needs review, or carrying an owner or
 drift flag at the record itself). Each new input is first classified durable,
 provisional or source-only, and ambiguous placement or an unsettled authority
 conflict is a flagged result, never a merge (see
-[Manage Data & Context](../../osm-manage-data-context/SKILL.md#classify-what-comes-in)).
+[Manage Data & Context](../../osm-manage-data-context/index.md#classify-what-comes-in)).
 For each: reread, revise the concise current
 record, keep relevant history, verify, and set only meaningful dates. A missing source or
 owner choice becomes a precise pending item. Unchanged content gets no rewrite
 and no date. Context upkeep stays core without any Content store and keeps
 one existing job with its runtime, scope and checkpoints. A run returns the
-needs-attention list that [Manage Data & Context](../../osm-manage-data-context/SKILL.md#upkeep)
+needs-attention list that [Manage Data & Context](../../osm-manage-data-context/index.md#upkeep)
 defines, and advances a checkpoint only after readback.
 
 - **Completing a review.** A completed review with no substantive change leaves

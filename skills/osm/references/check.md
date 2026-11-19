@@ -11,12 +11,12 @@ proof of activation, a source link is not proof of an installed specialist, a
 URL is not a backup, and a successful push is not live equality.
 
 If repair is already authorized, apply it through its responsible owner:
-[Manage Data & Context](../../osm-manage-data-context/SKILL.md) for owner
+[Manage Data & Context](../../osm-manage-data-context/index.md) for owner
 context, [Setup](../../osm-setup/SKILL.md) for readiness, the
 [update procedure](update.md) for the package, or shared Build with the
 repository contract. Then evaluate the final bytes again. Otherwise report the
 proposed repair. Preserve owner decisions, authority and existing work.
-Artifact quality and lifecycle gates belong to [Review](../../osm-review-work/SKILL.md)
+Artifact quality and lifecycle gates belong to the project workflow
 and its owning phases, not this audit.
 
 - Setup, when requested: assess relevant outcome/context/memory/Space,

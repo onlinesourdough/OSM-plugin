@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.34.0 — Unreleased candidate
 
+- Limit default discovery to Setup, Prime, Log, Dreaming, Interview, Human
+  Writing and Council. Keep home setup, curation and personal skill maintenance
+  as linked procedures. Earlier general work methods remain available at v0.33.0.
 - Split Council into read-only review and bounded delegation with a scoped work brief.
+- Use compact, bolder OSM lettering inside an outlined circle for Codex.
 
 ## 0.33.0 — 2026-11-19
 

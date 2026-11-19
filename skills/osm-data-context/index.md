@@ -1,11 +1,6 @@
----
-name: osm-data-context
-description: "Engineer the Notion Data & Context home: root, one definition and core Knowledge, Memory and Skills stores. Reuses stores by ID, creates only what is missing, never Content. Formerly OSM Context and AIOS Context."
-metadata:
-  version: "3.3.0"
----
+# Data & Context setup
 
-# OSM:data-context
+Earlier entry names were OSM Context and AIOS Context.
 
 Own the idempotent engineering of one customer-owned Notion Data & Context home.
 The [Context Architecture](references/architecture.md) is the one contract for
