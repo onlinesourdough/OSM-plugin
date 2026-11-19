@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "purpose": "Per-artifact source and ownership manifest for the public OSM documentation projection. Not shipped in the package.",
+  "schemaVersion": 2,
+  "purpose": "Per-artifact source and ownership manifest for the public OSM documentation: which side holds the original, how a Notion-authored original is bound to its Git exports, and who may write each public artifact. Not shipped in the package.",
   "activation": {
     "active": false,
     "live_proof": "not-run",
@@ -21,7 +21,7 @@
     },
     "guide": {
       "label": "2026-11-05.2",
-      "state": "verified public handoff; recorded before-source",
+      "state": "Notion-authored originals bound per page and package edition; read times and content revisions are recorded on each artifact.",
       "owner": "notion"
     },
     "content-templates": {
@@ -32,16 +32,16 @@
     }
   },
   "classes": {
-    "A": "Released OSM instruction and reference packets. Git-owned, unchanged at the released commit; changes only at a new tagged approved commit.",
+    "A": "Released skill bundles. Git owns executable skill behavior and the installable tagged package; a bundle is unchanged at the released commit and changes only at a new tagged, approved commit.",
     "B": "Content templates and their setup, configuration and diagram explanations. Notion-authored Draft edition; frozen ZIP exports; never written by the publisher.",
-    "G": "Public guide pages. Notion-authored; the 2026-11-05.2 original is the before-source; a newer original is a conflict.",
-    "W": "Main-working documentation projection. Labelled unreleased; the one class the publisher may write once handed to CI.",
+    "G": "Public guide pages: the readable human version of the repository. Notion-authored originals, authoritative for the method explanation, the Data & Context definition template, setup and configuration special cases and diagrams. Bound by page id and content revision, exported to Git deliberately and never written from Git.",
+    "W": "Git working documentation, public natively in the repository. Its optional Notion projection is labelled unreleased and needs a working database only if the owner provisions one.",
     "C": "The owner's private documentation control and daily state. Not a CI source or credential scope; deliberately absent from this manifest."
   },
   "writers": {
     "existing-upkeep": "The existing private maintenance route; relinquishes these exact rows to CI at activation.",
     "ci": "The publisher in CI, using the dedicated connection limited to the public subtree.",
-    "notion-authored": "Edited by hand in Notion; the publisher never writes it."
+    "notion-authored": "Edited by hand in Notion; the publisher reads it to freeze a snapshot and never writes it."
   },
   "ci_inputs": [
     {
@@ -50,7 +50,11 @@
     },
     {
       "kind": "ci-receipt",
-      "note": "Per-row receipt stored on the CI-owned public row"
+      "note": "Per-row receipt: a property set on a working-database row, or one paragraph on a bound public page"
+    },
+    {
+      "kind": "notion-original-snapshot",
+      "note": "Frozen, read-only snapshot of the public guide originals: readable bodies with their content revisions"
     }
   ],
   "bindings": {
@@ -61,7 +65,7 @@
     "content_config": "40f6d2e17f5681d68525d83503a457d5",
     "template_catalogue_data_source": "6ff724a0-558c-4845-a0e1-a2e7fab86642",
     "working_subtree": null,
-    "working_subtree_note": "Not provisioned. The owner creates a labelled public subtree (a database whose title property may have any name) and a dedicated connection at activation; with active true, publish refuses any other --database."
+    "working_subtree_note": "Not provisioned and not required. Only the optional main-working projection uses a database (its title property may have any name); with it null those rows report not-provisioned and nothing is written for them. An existing public page is bound by id on its own artifact and needs no database. With active true, publish refuses any other --database."
   },
   "artifacts": [
     {
@@ -397,12 +401,168 @@
       "source_paths": [],
       "target_subtree": "guide",
       "public_writer": "notion-authored",
-      "adoption_state": "frozen-original",
-      "before_source": {
-        "edition": "2026-11-05.2",
-        "original_hash": null,
-        "note": "No hash is recorded, and no reader records one. A later guide edition is not detected (not checked: unsupported) until a reader and a recorded hash exist."
+      "adoption_state": "original",
+      "notion": "40d6d2e17f568124af82ceb93dabf77a",
+      "title": "OSM (Onlinesourdough Method)",
+      "authoritative_for": "The method overview: what OSM is, the foundation it builds and where each topic is explained",
+      "original": {
+        "notion": "40d6d2e17f568124af82ceb93dabf77a",
+        "revision": "f0b88e0173de85016689e6dc30bba9ad7c35710a7f0ed2e59857cdbff4202ea5",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T21:55:59.387Z"
       }
+    },
+    {
+      "key": "notion.guide.definition",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "original",
+      "notion": "40d6d2e17f56811885ced64930bb22ba",
+      "title": "OSM definition",
+      "authoritative_for": "The method explanation: data and context, what each place owns, shared method and personal configuration",
+      "original": {
+        "notion": "40d6d2e17f56811885ced64930bb22ba",
+        "revision": "81b6fe0c6ac27928a0c43b3eceba17e3dcbec53b3ecb8ee173ba29d71ceb1822",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T21:05:07.719Z"
+      }
+    },
+    {
+      "key": "notion.guide.setup",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "original",
+      "notion": "40d6d2e17f56812bb597fef2bdc1265d",
+      "title": "Setup & tools",
+      "authoritative_for": "Setup and configuration explanation and its special cases: Notion access choices, provider API keys, agent workspace and tools",
+      "original": {
+        "notion": "40d6d2e17f56812bb597fef2bdc1265d",
+        "revision": "e658a9a8e12151fc29935ec7385ebb141f8ff53e322031690142b9cda1059668",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T21:59:24.710Z"
+      }
+    },
+    {
+      "key": "notion.guide.data-context",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "original",
+      "notion": "40d6d2e17f56816da06ff15c39dcc038",
+      "title": "Data & context",
+      "authoritative_for": "The Data & Context explanation and the Data & Context definition template (the YAML block)",
+      "original": {
+        "notion": "40d6d2e17f56816da06ff15c39dcc038",
+        "revision": "cee15973c4fb0bc90c5d321bfa59fb2fd09cba7d7857978a857e8c8b3549e42b",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T22:03:46.418Z"
+      },
+      "exports": [
+        {
+          "path": "skills/osm-data-context/assets/data-and-context-root.md",
+          "git": {
+            "fence": "yaml"
+          },
+          "notion": {
+            "fence": "yaml"
+          },
+          "sha256": "5cd2c0fcd7c639e7fa9ae550539a1892b367e06d22f17d65d115359add0f5982"
+        }
+      ]
+    },
+    {
+      "key": "notion.guide.work",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "original",
+      "notion": "40d6d2e17f56815eaf53cab824a40eb3",
+      "title": "Work & evaluation",
+      "authoritative_for": "How work is taken from an understood need to a checked result, and how the result is judged",
+      "original": {
+        "notion": "40d6d2e17f56815eaf53cab824a40eb3",
+        "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-06T12:00:03.341Z"
+      }
+    },
+    {
+      "key": "notion.guide.upkeep",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "original",
+      "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
+      "title": "Automations & upkeep",
+      "authoritative_for": "Upkeep and recurring work: curation, freshness, Prime, Log and Dreaming, and keeping the guide and repository aligned",
+      "original": {
+        "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
+        "revision": "a6aa783dd688a2bd3860e4a9ed89c7b93b689663870c73ad1c7cf782df932bc2",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T21:57:03.922Z"
+      }
+    },
+    {
+      "key": "notion.guide.diagram",
+      "class": "G",
+      "edition": "guide",
+      "owner": "notion",
+      "source_paths": [],
+      "target_subtree": "guide",
+      "public_writer": "notion-authored",
+      "adoption_state": "original",
+      "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
+      "title": "Architecture diagram",
+      "authoritative_for": "The architecture diagrams, including the working-relationships map (the Mermaid block)",
+      "original": {
+        "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
+        "revision": "ef69903d9bf9e9e216fc70dea91fd3ec92227d4518a36cc83061d6fe4744a17d",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T21:56:00.299Z"
+      },
+      "exports": [
+        {
+          "path": "docs/starter.md",
+          "git": {
+            "fence": "mermaid"
+          },
+          "notion": {
+            "fence": "mermaid"
+          },
+          "sha256": "0b2f74d13a218165a9c121c6a973046918298ed0d52a92d97238153cbcdf2f73"
+        }
+      ]
     },
     {
       "key": "notion.guide.releases",
@@ -412,7 +572,18 @@
       "source_paths": [],
       "target_subtree": "guide",
       "public_writer": "notion-authored",
-      "adoption_state": "frozen-original"
+      "adoption_state": "original",
+      "notion": "40d6d2e17f5681f6accff01259bc2ab4",
+      "title": "Releases & documentation",
+      "authoritative_for": "The release reference, the guide's own changelog and where documentation lives",
+      "original": {
+        "notion": "40d6d2e17f5681f6accff01259bc2ab4",
+        "revision": "e2af6491c05307ea8520ca72c61b37575f3babe37e93e838126cf90e96212d48",
+        "edition": "0.34.0",
+        "reader": "notion-mcp-fetch",
+        "read_at": "2026-11-19T22:18:19.475Z",
+        "last_edited_time": "2026-11-19T21:05:08.534Z"
+      }
     },
     {
       "key": "notion.content.template-01",
@@ -519,6 +690,93 @@
       "adoption_state": "frozen-export"
     }
   ],
+  "folders_note": "Every method content folder names the public guide page that explains it; every technical folder states its own role. skills/ and docs/ are mapped one level down, every other top-level folder as one unit. reconcile --check fails on a folder with no entry.",
+  "folders": {
+    "skills/osm/": {
+      "page": "notion.guide.work"
+    },
+    "skills/osm-council/": {
+      "page": "notion.guide.work"
+    },
+    "skills/osm-human-writing/": {
+      "page": "notion.guide.work"
+    },
+    "skills/osm-interview/": {
+      "page": "notion.guide.work"
+    },
+    "skills/osm-setup/": {
+      "page": "notion.guide.setup"
+    },
+    "skills/osm-data-context/": {
+      "page": "notion.guide.data-context"
+    },
+    "skills/osm-manage-data-context/": {
+      "page": "notion.guide.upkeep"
+    },
+    "skills/osm-prime/": {
+      "page": "notion.guide.upkeep"
+    },
+    "skills/osm-log/": {
+      "page": "notion.guide.upkeep"
+    },
+    "skills/osm-dreaming/": {
+      "page": "notion.guide.upkeep"
+    },
+    "skills/osm-manage-skills/": {
+      "page": "notion.guide.entry"
+    },
+    "docs/": {
+      "page": "notion.guide.releases"
+    },
+    "docs/archive/": {
+      "role": "Dated lifecycle and candidate records; history, not current method"
+    },
+    "docs/content-drafts/": {
+      "role": "Preserved non-shipped Content and Diffusion Studio drafts; their current home is the OSM-content repository"
+    },
+    "docs/evidence/": {
+      "role": "Dated implementation and design proof referenced by verification"
+    },
+    "docs/history/": {
+      "role": "Retired branding kept for provenance"
+    },
+    "docs/legacy-file-home/": {
+      "role": "Read-only compatibility reference for the retired file home"
+    },
+    "docs-publisher/": {
+      "role": "This manifest, the publisher and parity check, and the frozen guide originals"
+    },
+    "tests/": {
+      "role": "Author checks and fixtures; never shipped"
+    },
+    "apps/": {
+      "role": "Public guide reader and optional scoped Notion adapter source"
+    },
+    "runtime/": {
+      "role": "Reproducible public guide and scoped Notion tools; never edited by hand"
+    },
+    "assets/": {
+      "role": "Package icon and branding"
+    },
+    "Paper/": {
+      "role": "Editable design artwork and its notes"
+    },
+    ".agents/": {
+      "role": "Repository specialist shelf and the Codex marketplace declaration"
+    },
+    ".claude-plugin/": {
+      "role": "Native manifest: Claude plugin and marketplace identity"
+    },
+    ".codex-plugin/": {
+      "role": "Native manifest: Codex plugin identity and connection"
+    },
+    ".cursor-plugin/": {
+      "role": "Native manifest: Cursor plugin identity"
+    },
+    ".github/": {
+      "role": "Package and release workflow and the release channel"
+    }
+  },
   "renames": {
     "osm.released.skill.osm-context": "osm.released.skill.osm-data-context",
     "osm.released.skill.osm-maintain-context": "osm.released.skill.osm-manage-data-context",

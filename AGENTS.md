@@ -26,7 +26,7 @@ Keep one writer per overlapping change and verify the selected checkout first.
 
 - `skills/` holds the shipped product skills. Edit them as product code and
   maintain each skill's metadata [SemVer](docs/skill-versioning.md).
-- `apps/notion` is the optional headless Notion adapter source. `runtime/notion` is its
+- `apps/notion` contains the public guide reader and optional scoped Notion adapter. `runtime/notion` is its
   reproducible build; never edit it by hand.
 - Native manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`,
   `gemini-extension.json`), `package.json` and `docs/osm.md` keep one
@@ -61,6 +61,7 @@ python3 tests/context-footprint.py
 python3 tests/responsibility-rehearsal.py
 python3 tests/context-architecture-rehearsal.py
 python3 tests/publisher-rehearsal.py
+python3 tests/publisher-parity.py
 python3 tests/consumer-selection-rehearsal.py
 python3 docs-publisher/publisher.py reconcile --check
 ```

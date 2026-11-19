@@ -7,9 +7,10 @@ import { readConnectionRoute, saveConnectionRoute } from './connection-route.mjs
 import { createContextService, hostCredential } from './context-service.mjs';
 import { fetchTransport } from './notion-internal.mjs';
 import { z } from 'zod';
+import { registerPublicGuide } from './guide.mjs';
 
-// A headless stdio server: model tools only. It registers no UI resource, entrypoint or
-// app-only tool, starts no other process and reads nothing until a tool is called.
+// The public guide entrypoint and optional scoped-context tools share a process.
+// Opening the guide never reads the private route or credentials.
 // The mapping names the context it was read for, from this same route read.
 const readProjection = async () => {
   const context = await readContextRoute();
@@ -25,7 +26,7 @@ const readRoute = async target => {
 };
 const notion = createContextService({ credential: hostCredential, route: readRoute, transport: fetchTransport, readProjection });
 const server = new McpServer({ name: 'osm', title: 'OSM', version: __OSM_VERSION__ }, {
-  instructions: 'Optional and headless. osm_sources and the save tools keep the selected context’s saved links, Home projection and route setting for either connection mode. The read tools go only through OSM’s own scoped Notion connection, for an owner who selected internal_selected_pages. When the official Notion plugin is the selected route, use that plugin: the read tools then report official_mode or not_enabled and read nothing.',
+  instructions: 'OSM provides a public method guide reader and a separate optional scoped Notion adapter. osm_sources and the save tools keep the selected context’s saved links, Home projection and route setting for either connection mode. The read tools go only through OSM’s own scoped Notion connection, for an owner who selected internal_selected_pages. When the official Notion plugin is the selected route, use that plugin: the read tools then report official_mode or not_enabled and read nothing.',
 });
 
 const json = value => ({ content: [{ type: 'text', text: JSON.stringify(value) }] });
@@ -111,6 +112,8 @@ server.registerTool('osm_save_connection_route', {
   try { return json({ connectionRoute: await saveConnectionRoute(args) }); }
   catch (error) { return refused(error); }
 });
+
+registerPublicGuide(server);
 
 server.connect(new StdioServerTransport()).catch(() => {
   console.error('OSM’s Notion tools could not start. Check the Node runtime and plugin installation.');

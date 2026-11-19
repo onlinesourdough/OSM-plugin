@@ -1,41 +1,35 @@
 # Ownership
 
-Revision: 2026-11-09
-
-| Responsibility | Owner and canonical truth |
+| Responsibility | Owner |
 | --- | --- |
-| Product instructions, declarations, and neutral assets | OSM maintainer in this repository |
-| Implementation and local verification | Current repository task or deliberately selected worker; the 9 November Home revision has one implementation writer |
-| Accepted Home design (#74/#82) | Completed Claude Opus 5.5 design in canonical `design.md` and its Paper; implementation does not redesign it |
-| Home native visual and host qualification | Coordinating owner task; local implementation tests do not qualify native clipboard, visibility events, live grants or Paper rendering. On one macOS Codex host, the installed 0.31.3 displayed Home and read records through OSM's own connection, and 0.32.0 read an existing Content route the same way from a pinned source commit with no tag or release; one existing scheduled Dreaming caller completed a run on its own route (see [verification](verification.md)). Other hosts, writes through OSM's connection and other timed callers are not qualified |
-| Human review presentation | Build's [review handoff](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/osm-build-work/references/review-handoff.md); Review checks claims and Ship verifies the destination. Domain proof remains with its existing owner |
-| Requirement tracking SOP offered to users | `skills/osm/references/lifecycle.md` for all phases of the shipped OSM lifecycle; developing this repository follows the root `AGENTS.md` contract with any harness method |
-| Task deliverable, continuation and whole-task handoff | Shared OSM lifecycle; Spec clarifies the contract and `osm` model advice supplies model/reasoning evidence on request |
-| Exploratory interview and shared question procedure | Interview owns activation, adaptive questioning, waiting and resumption; Setup and Spec reuse accepted answers |
-| Notion home contract and core stores | Data & Context owns the common contract and engineers the home; Setup conducts onboarding and calls it |
-| Facts, source routes and durable corrections | Manage Data & Context applies the curation procedure under the owner's recorded write policy |
-| Context at task start and after meaningful work (#72) | Prime selects the scope. Log selects lasting changes. Both correct verified errors in the current session and delegate authorized stored repairs to Manage Data & Context |
-| Reflection and repair between sessions (#93) | Dreaming reads the current definition and checks selected work and sources. Manage Data & Context owns context writes and Manage Skills owns method changes. Live caller cutover is reviewed separately under #73 |
-| Consequential-change assessment | `osm-risky-changes`; conditionally routed by Spec and Review |
-| Acceptance and delivery instruction | Reviewer bound to an exact artifact; independent caller acceptance for delegated work |
-| Private Git destination and release | Authorized OSM maintainer or Ship worker |
-| Owner context, personal facts, and access decisions | Client in the chosen context home and authoritative source systems |
-| Notion setup and personal/team-skill routing | Data & Context's setup procedure and Manage Skills; client owns content/permissions, harness owns access |
-| Owner continuity | Notion holds the home; Manage Data & Context owns named-source reconciliation. Folder-home Sync is retired and a legacy file home is read-only |
-| Customer or externally owned documentation | Its source system; OSM may retain only a scoped pointer and freshness boundary |
-| Native installation, connections, and cutover | Authorized client or lead using native controls and readback |
-| Public documentation projection (Notion guide) and its publisher | Per artifact: Git-owned released packets, Notion-authored guide originals, Content templates (owned in Git by [OSM-content](https://github.com/onlinesourdough/OSM-content), with Notion holding a projection of a stated revision) and CI-owned working rows; see [publication](publication.md). The publisher is source and fixtures only |
-| Codex sidebar source and bundled runtime | `apps/sidebar` and reproducible `runtime/sidebar` in this repository; Codex owns launch, account access and UI placement |
-| Home reader and OSM's internal Notion connection | The AI Operating Model definition owns source identities; Setup generates the Home projection from one revision and records the selected mode; the sidebar reads; Notion grants define what is readable; OSM supports a dedicated macOS Keychain item (since 0.31.1), turned on per context by a non-secret setting from the owner's recorded selection (see [Home connection](home-connection.md#host-credential-route-macos-keychain)); preferred browser OAuth remains dependent on OSM's own registration and confidential auth service; native grant and revocation proof stays with approved native holders |
-| Projects and optional specialists | Their own working files, deliverables, dependencies, proof and recovery; Git and native project controls are selected when useful, without mandatory OSM registration |
-| Software engineering foundation (setup, checks, CI/delivery, engineering documents) | A separately selected method such as [Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation); the project owns the resulting files. OSM neither ships, installs nor depends on it |
-| Writing and code methods | Built-in skills; project files remain owned by the project. Human Writing and Write Code retain prose and implementation responsibilities. Content and Diffusion Studio are outside the package (non-shipped drafts) |
-| Selected upstream System installation/code updates | The `osm` update reference's [System maintenance](../skills/osm/references/systems.md) routes authorized work; each System owns compatibility and recovery |
-| Complex explanations | Included `clarify`; native visualization tools own their presentation contracts |
-| Historical Global Skills and Skills Atlas | Their public archived repositories; only Clarify is adopted in this package |
-| Optional autonomous-use guardrails | Native harness controls and reviewed maintained implementations selected for an explicit request; the former Global implementation remains archived |
+| Installable skills, shared references, runtime and declarations | OSM maintainer in this repository; a release names one exact Git commit |
+| Public method explanation, starter definition and diagrams | The public Notion guide; deliberately exported source revisions are bound in the publisher manifest |
+| Setup, access selection and first useful task | Setup, using the owner's existing tools and recorded choices |
+| Session context | Prime retrieves the definition and only relevant sources |
+| Lasting checkpoint context | Log, using the shared curation reference and permitted source/destination handling |
+| Reflection between sessions | Dreaming; the owner selects an existing daily caller, its identity, sources, limits and schedule |
+| Exploratory questions | Interview; clear tasks continue directly |
+| General prose | Human Writing; the author retains facts, uncertainty, wording and voice |
+| Independent review or bounded delegated work | Council; the caller remains responsible for scope, access, acceptance and final delivery |
+| Private definition, facts, memory and personal methods | The owner in the selected Notion home and authoritative source systems |
+| Source access, processing and retention | The source's approved route and handling agreement; a home write grant does not allow copying source-only material |
+| Public guide reader | `apps/notion/guide/` and the reproducible `runtime/notion/guide.html`; Codex owns sidebar placement |
+| Optional scoped Notion adapter | `apps/notion/` and `runtime/notion/`; provider grants and the selected host credential store own access |
+| Public documentation automation | The per-artifact manifest, declared export selectors and dedicated public-only CI identity; private maintenance credentials are excluded |
+| Native installation and cutover | Authorized owner or lead using native controls and readback; tests alone do not establish adoption |
+| Projects and specialist methods | Their own sources, engineering standards, checks and delivery tools |
+| Content methods | The separate OSM Content library; its five templates remain optional examples |
+| Paper design copy | The separate OpenPaperDesign package and its artifact-specific method |
 
-The product repository is not an owner-data home. Repository specialist methods stay local; generic
-development methods come from each contributor's own harness, not from a copy of
-the shipped skills. Delegated workers return proposed shared
-learning to their caller instead of writing client memory.
+OSM distributes seven discoverable skills. Context architecture, curation, personal
+skill maintenance and package guidance are supporting references, not extra
+user-invoked skills. They are still source that must be maintained and reviewed.
+
+The repository contains no owner context home. Workers receive only the bounded
+context their task and the source's handling rules allow. They return results to
+the caller; delegation itself grants no extra data access or publication authority.
+
+Earlier Home/dashboard implementation and native observations remain dated evidence
+in [verification](verification.md) and Git history. They do not describe the current
+public guide reader. [Publication](publication.md) defines the source bindings and
+activation limits; [recovery](recovery.md) preserves installed-state compatibility.

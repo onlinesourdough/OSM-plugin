@@ -6,10 +6,16 @@ separate from the owner's private Data & Context home.
 
 ## Home
 
-The sidebar entry is reserved for a reading view of the public OSM guide.
+The sidebar entry opens a reading view of the public OSM guide.
 It does not select a private home or configure connections. Notion's normal
 website refuses third-party iframe embedding; respect that restriction and
-the host's built-in workspace preference. Native viewer qualification is
+the host's built-in workspace preference. The reader renders a checked public
+export, including the architecture diagram, inside an MCP App. On opening it
+checks the fixed public GitHub export URL; an unavailable update uses the bundled
+copy. It loads no private context, account token or connection settings. Links
+within the exported guide stay in the reader; other links can be copied without
+opening another app. It is a guide reader, not the full Notion editor.
+Native viewer qualification is
 recorded in [verification](verification.md), separately from a declaration.
 
 ## Setup
@@ -35,7 +41,8 @@ Codex starts the stdio process with Node.js 22+. Consumers install no build depe
 | `osm_save_home_projection` | Save the definition's derived mapping |
 | `osm_save_connection_route` | Save the selected context's Keychain opt-in |
 
-The adapter has no dashboard or app-only tools. Home projection is the
+The scoped adapter has no dashboard or app-only tools. The separate
+`osm_guide` app-only tool serves the public reader. Home projection is the
 compatibility name of a derived mapping, not a user interface.
 Content remains at its source. The adapter writes no remote Notion content
 and borrows no other plugin's credentials. The official Notion plugin works

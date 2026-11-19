@@ -16,51 +16,30 @@ selected documentation for people; it is a reader of this source.
 | How do I install, update, switch or recover an app registration? | [Native installation](native-installation.md) |
 | How do I set up a clean workspace with the right tools and approvals? | [Agent workspace guide](native-installation.md#start-with-a-clean-agent-workspace) |
 | How is my context home organised, what may agents write there, and how are records kept current? | [Context Architecture](../skills/osm-data-context/references/architecture.md): its [home write policy](../skills/osm-data-context/references/architecture.md#home-write-policy) and [record lifecycle](../skills/osm-data-context/references/architecture.md#record-lifecycle) |
-| What does the Codex panel actually do? | [Sidebar](sidebar.md) |
+| What does the Codex entry show? | [Codex integration](sidebar.md) |
 | How is the public Notion guide kept aligned, and who writes what? | [Publication](publication.md) |
 | How do I contribute? | [Repository contract](../AGENTS.md) |
 
 An agent can use the installed [documentation route](../skills/osm/references/documentation.md)
 to select one relevant source. Reading this whole library is unnecessary.
 
-## One source, different uses
+## Source and documentation
 
-```mermaid
-flowchart LR
-    repo["OSM repository"] --> skills["Skills and supporting tools"]
-    repo --> docs["Method and user documentation"]
-    skills --> plugin["Native plugin installation"]
-    docs --> overview["Versioned overview in the plugin"]
-    docs --> resources["Resources: selected, pinned documentation"]
-    plugin --> agent["Agent in the chosen app"]
-    overview --> agent
-    context["Owner's selected context and source systems"] --> agent
-```
+The [public Notion method guide](https://gustavanderson.notion.site/40d6d2e17f568124af82ceb93dabf77a)
+is the human-readable guide to OSM. It contains the method, definition template,
+setup cases and architecture. Git versions the installable plugin, executable
+skill instructions and technical implementation. The publisher binds the exact
+Notion originals and declared exports; it never overwrites a guide original from
+Git. See [publication](publication.md) for the technical procedure.
 
-| Material | Canonical owner |
-| --- | --- |
-| Reusable methods and executable helpers | The relevant `skills/` directory; documentation explains and links to it |
-| Package behavior and capabilities | Source, manifests and verification for the selected revision |
-| User introduction and installation examples | Root README; detailed app behavior and limits stay in the linked guides |
-| The installed agent's overview | `docs/osm.md`, versioned with the package |
-| Public teaching and presentation | Resources owns its lessons and presentation; selected product documentation remains owned here |
-| Company facts, decisions and personal methods | The owner's chosen context home and authoritative sources, outside this repository |
-| Project deliverables and live work | Their own project and operational systems |
+A company uses its own private Data & Context home. That definition directs agents
+to relevant Knowledge, Memory, Skills and original systems. Operational data need
+not be copied into Notion. Access, permitted processing and retention are separate
+choices.
 
-Git owns the executable method instructions: the skills and their references. The
-public Notion guide, [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a),
-is a versioned explanatory and reference projection of them. Its public
-overview, setup and architecture now link to v0.33.0. The legacy catalogue's
-last fully verified edition is v0.30.0 (`314dcf1`). The installed manifest
-identifies what a given install uses.
-Shared Content methods and templates are owned by their own Git home,
-[OSM-content](https://github.com/onlinesourdough/OSM-content): Git owns their future changes, and a
-Notion copy is a projection of a stated source revision, current only once its pages, downloads and
-source marker are verified. The earlier Notion-authored template edition and the preserved Git drafts
-under [content-drafts](content-drafts/README.md) are history, not the current source. How the projection is kept aligned, and what is
-and is not yet automated, is in [publication](publication.md). A customer's Notion
-context home is a different, customer-owned destination. Agentic Systems is a separate
-method and package; its documentation is not copied into OSM.
+OSM Content and Agentic System are separate methods with their own repositories.
+They are not installed by OSM. Resources selects stated source revisions for its
+own lessons and presentation.
 
 ### What a statement can mean
 
@@ -73,21 +52,10 @@ Documentation here separates four states, and no text should blur them:
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
 | Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.33.0 is the latest tagged release, a stable GitHub Release; v0.31.3 and earlier are prereleases |
 
-The inactive publisher manifest binds its released edition to the latest tagged
-release, v0.33.0 (`a9a18ca`), with one class A row per skill of that release and the
-retired keys kept in its `renames`, so its release guard and this sentence
-agree with the tags. The legacy Notion catalogue's last fully verified edition
-is v0.30.0. The publisher stays inactive. Recording a later release is a reviewed binding that
-follows its tag; see [publication](publication.md#current-release-alignment).
-
-OSM v0.33.0 declares 20 skills. Its stable release passed package checks and
-the sidebar fixtures. The owner installed the exact release in the active macOS
-Codex and Claude Code profiles. A fresh Codex app-server served the shipped
-sidebar byte for byte. That native MCP observation covers one macOS Codex
-host. Other hosts, browser sign-in and writes through the sidebar's own
-connection still require a separate proof. The first scheduled invocation after binding this
-release remains to be observed. See [verification](verification.md) for
-the checks and their scope.
+The manifest currently binds v0.33.0 to its exact release commit. The seven-skill
+0.34.0 package on the working branch remains a candidate until its checks,
+independent review, release and native adoption are complete. A passing fixture
+or a guide update alone does not establish those outcomes.
 
 ### Documentation consumers
 

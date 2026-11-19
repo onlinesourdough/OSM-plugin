@@ -2,7 +2,7 @@
 name: osm-dreaming
 description: "Reflect across completed, unfinished or recently archived work and selected sources between tasks. Recover missed learning, maintain Memory and repair verified context drift. Manual or via an existing daily caller."
 metadata:
-  version: "1.3.1"
+  version: "1.4.0"
 ---
 
 # OSM:dreaming
@@ -29,6 +29,13 @@ agreement and report the coverage gap. A CRM or accounting connection can
 supply useful changes when selected and due. Use the selected history and
 source routes available to this host. Keep transcripts and live records with their owners.
 Report an unavailable or unqualified route.
+
+The definition is a gateway to sources, not an ingestion list. A due check may
+query an AI-native accounting tool or CRM directly without importing its
+records. Apply the source's permitted use, processing environment and retention
+rules to reads, proposed memories and run results. Keep source-only or restricted
+material at its owner; neither a summary nor a run receipt may become a hidden
+copy. Retain only allowed context and content-free progress where appropriate.
 
 An unattended run uses the recorded mandate and already available evidence.
 Apply supported, authorized repairs without waiting for the owner. Complete the

@@ -6,7 +6,17 @@
   Writing and Council. Keep home setup, curation and personal skill maintenance
   as linked procedures. Earlier general work methods remain available at v0.33.0.
 - Split Council into read-only review and bounded delegation with a scoped work brief.
-- Use compact, bolder OSM lettering inside an outlined circle for Codex.
+- Use the plain, bolder OSM wordmark without a surrounding circle.
+- Replace the private dashboard with a public method-guide reader. Setup runs
+  in conversation through the official Notion plugin. Keep the optional scoped
+  connection and compatible local settings.
+- Treat Data & Context as a gateway to original systems, with explicit permitted
+  processing and retention. Prime, Log, Dreaming and Council keep source-only
+  records in their owning system.
+- Bind public guide originals and definition/diagram exports by exact revisions;
+  prepare a credential-gated documentation workflow without private credentials.
+- Preserve original wording and genre in Human Writing and add Claude listing
+  metadata and the shared icon.
 
 ## 0.33.0 — 2026-11-19
 

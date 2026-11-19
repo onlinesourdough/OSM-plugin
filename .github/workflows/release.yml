@@ -58,6 +58,7 @@ jobs:
           python3 tests/responsibility-rehearsal.py
           python3 tests/context-architecture-rehearsal.py
           python3 tests/publisher-rehearsal.py
+          python3 tests/publisher-parity.py
           python3 tests/consumer-selection-rehearsal.py
           python3 docs-publisher/publisher.py reconcile --check ${BASE:+--base "$BASE"}
       - name: Validate release version and main ancestry
@@ -76,6 +77,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - name: Publish the validated release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -92,6 +97,9 @@ jobs:
           esac
           # An existing release is never edited, so earlier prerelease flags stay as they are.
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            archive="osm-${RELEASE_TAG#v}-source.zip"
+            git archive --format=zip --prefix="osm-${RELEASE_TAG#v}/" "$RELEASE_TAG" > "$archive"
+            sha256sum "$archive" > "$archive.sha256"
             gh release create "$RELEASE_TAG" --verify-tag "$@" \
-              --title "OSM ${RELEASE_TAG#v}" --generate-notes
+              --title "OSM ${RELEASE_TAG#v}" --generate-notes "$archive" "$archive.sha256"
           fi

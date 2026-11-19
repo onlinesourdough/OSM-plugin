@@ -48,11 +48,11 @@ def validate_native(root, require):
             read('.codex-plugin/mcp.json') == {'mcpServers': {'osm': {
                 'command': 'node', 'args': ['./runtime/notion/server.cjs'], 'cwd': '.'}}},
             'unexpected Notion tools command or server')
-    for name in ('server.cjs', 'THIRD-PARTY-NOTICES.md'):
+    for name in ('server.cjs', 'guide.html', 'THIRD-PARTY-NOTICES.md'):
         require((root / 'runtime/notion' / name).is_file() and
                 not (root / 'runtime/notion' / name).is_symlink(), 'missing bundled Notion tools')
     require({p.name for p in (root / 'runtime/notion').iterdir()} ==
-            {'server.cjs', 'THIRD-PARTY-NOTICES.md'}, 'extra Notion tools runtime file')
+            {'server.cjs', 'guide.html', 'THIRD-PARTY-NOTICES.md'}, 'extra Notion tools runtime file')
     # The retired dashboard leaves no source or runtime folder behind.
     require(not (root / 'runtime/sidebar').exists() and not (root / 'apps/sidebar').exists(),
             'retired sidebar runtime')

@@ -11,7 +11,9 @@ the running agent; it is not a background sync.
 
 OSM is an AI-assisted method and framework for solo founders and small teams.
 Data and context are its two foundation parts, and skills sit inside context.
-Notion is where that foundation lives. External systems, local files and
+Notion holds its shared definition and selected business context. The definition
+is a gateway to the actual sources, their access routes and handling rules.
+External systems, local files and
 repositories remain valid sources or working artifacts; they are not alternate
 context homes, and nothing here sets up a folder, vault or other provider home.
 

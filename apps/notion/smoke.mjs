@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Script } from 'node:vm';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
@@ -19,15 +20,15 @@ const transport = new StdioClientTransport({
 const text = result => JSON.parse(result.content[0].text);
 try {
   await client.connect(transport);
-  // Headless: model tools only, no resource, prompt, icon, UI entrypoint or app-only tool.
+  // One public guide entrypoint; private context tools have no app surface.
   const capabilities = client.getServerCapabilities();
-  assert.ok(capabilities.tools); assert.equal(capabilities.resources, undefined); assert.equal(capabilities.prompts, undefined);
+  assert.ok(capabilities.tools); assert.ok(capabilities.resources); assert.equal(capabilities.prompts, undefined);
   assert.equal(client.getServerVersion().icons, undefined);
   assert.match(client.getInstructions(), /official Notion plugin/);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(tool => tool.name), ['osm_sources', 'osm_save_sources', 'osm_connection', 'osm_context_list', 'osm_context_read',
-    'osm_context_home', 'osm_save_home_projection', 'osm_save_connection_route']);
-  for (const tool of tools) {
+    'osm_context_home', 'osm_save_home_projection', 'osm_save_connection_route', 'osm_guide']);
+  for (const tool of tools.filter(tool => tool.name !== 'osm_guide')) {
     assert.equal(tool._meta, undefined, `${tool.name} carries no UI metadata`); assert.equal(tool.icons, undefined);
     assert.doesNotMatch(tool.description, /\b(panel|dashboard|sidebar|picker|fullscreen)\b/i, tool.name);
   }
@@ -40,6 +41,17 @@ try {
   // A first run has no selected context, so nothing is saved or read.
   const empty = text(await client.callTool({ name: 'osm_sources', arguments: {} }));
   assert.equal(empty.context.state, 'missing'); assert.equal(empty.home.state, 'missing'); assert.equal(empty.connectionRoute.state, 'missing');
+  const entry = tools.find(tool => tool.name === 'osm_guide');
+  assert.deepEqual(entry._meta.ui.visibility, ['app']);
+  assert.deepEqual(entry._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
+  const resources = await client.listResources();
+  assert.deepEqual(resources.resources.map(item => item.uri), ['ui://osm/guide-v1']);
+  const view = await client.readResource({ uri: 'ui://osm/guide-v1' });
+  const html = view.contents[0].text;
+  new Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
+  const guide = await client.callTool({ name: 'osm_guide', arguments: {} });
+  assert.equal(guide._meta['osm/publicGuide'].root, '40d6d2e17f568124af82ceb93dabf77a');
+  assert.deepEqual(text(await client.callTool({ name: 'osm_sources', arguments: {} })), empty);
   // Setup records the selected root in the managed instructions block; the fixture writes it the same way.
   const target = 'https://app.notion.com/p/00000000000000000000000000000001';
   const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
@@ -86,5 +98,5 @@ try {
   const refused = await client.callTool({ name: 'osm_save_connection_route', arguments: { target, expectedContextRevision: read.context.revision,
     expectedRevision: text(routeOff).connectionRoute.revision, selectedMode: 'internal_selected_pages', enabled: true } });
   assert.equal(refused.isError, true);
-  console.log('PASS: headless stdio server, model tools only, saved context state, Home projection and isolated first run.');
+  console.log('PASS: public guide, scoped model tools, unchanged private state, mapping and isolated first run.');
 } finally { await client.close(); await rm(scratch, { recursive: true, force: true }); }

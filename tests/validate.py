@@ -452,7 +452,7 @@ def validate(root=ROOT, release_tag=None):
                       parts[1] in SKILL_NAMES and parts[2] == "agents" and
                       path.name == "openai.yaml")
                 notion = path.relative_to(root).as_posix() in {
-                    'runtime/notion/server.cjs', 'runtime/notion/THIRD-PARTY-NOTICES.md'}
+                    'runtime/notion/server.cjs', 'runtime/notion/guide.html', 'runtime/notion/THIRD-PARTY-NOTICES.md'}
                 allowed = (path.suffix in {".md", ".json"} or ui or notion or
                            path.name == "LICENSE" or
                            path == root / "assets/icon.png")

@@ -1,5 +1,41 @@
 # Verification
 
+## 19 November 2026 · seven-skill candidate and public reader
+
+This is candidate evidence, before release and final independent acceptance.
+Opus 5.5 High removed the old dashboard in `e2c988b` (integrated as `0e203dd`).
+The lead added the separately requested public guide reader. Fable's earlier
+full-session scope audit completed; the later exact-code review hit the provider's
+session limit and has not been counted as a review.
+
+The combined working source passed 67 runtime tests and MCP smoke checks for
+one public reading entrypoint, eight scoped tools, parseable bundled app code and
+unchanged private settings. Package, documentation, onboarding, layout, continuity,
+skill versioning, context footprint, responsibilities and consumer selections
+passed. Context architecture passed 91 positives, 79 variants and 474 negatives
+after updating the renamed bootstrap anchor. Publisher transport rehearsal passed
+72 cases and 75 mutation controls; nine new parity/Markdown-reader tests passed.
+These fixture results do not prove native rendering or live CI publication.
+
+A real Codex app-server recognized Setup, seven discoverable skills and the
+Notion server declaration. Claude's isolated native lifecycle passed install,
+listing/details, update, coexistence and uninstall with exact cached skill bytes.
+Neither observation changes the owner's active registrations or proves a Claude
+icon rendered: its directory-only icon field is not a CLI display guarantee.
+
+One ephemeral Codex run applied the candidate Human Writing instructions to four
+synthetic SMS, email and LinkedIn cases. It left the two casual messages intact,
+preserved the approved opening and tentative Friday target, and invented no
+estimate, apology, deadline or measurement. This is one observed run, not a
+cross-model effectiveness benchmark. It made no private-context read or write.
+
+The public Notion guide and private owner's definition were actually edited
+through the official connector. Source-only accounting handling was verified in
+the definition and source map. Numina account metadata was checked without
+querying accounting records. No live public-only CI credential or anonymous
+publisher reader has been qualified; automated writing remains inactive.
+
+
 On 2026-11-06 the #85 publisher repair (r2, `8c17e94`) was repaired a third time after a second independent
 review, which confirmed B-1 and requested changes on two blocking items. The repair head is `e5aa91f`, on
 `feat/osm-85-docs-publisher-20261105`; this record is the commit after it. It is local only: nothing was

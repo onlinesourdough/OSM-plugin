@@ -1,0 +1,118 @@
+The foundation consists of data and context. Skills are part of context: reusable ways to do the work. The reference setup organizes both in Notion while keeping operational originals with their owners.
+
+## A gateway to your sources
+
+The Data & Context definition tells the agent which system owns information, when to use it, which approved account and tool can reach it, and what may be processed or retained where. Notion provides a common foundation; it does not need to store every record.
+
+For example, keep the accounting in an AI-native system such as Numina. Prime follows the selected route and the agent queries the relevant current information there. Log may retain a permitted business decision or source pointer; Dreaming may perform a relevant due check. Neither needs a second ledger, invoice archive or recurring report mirror in Notion.
+
+A source can permit a read in an approved environment while prohibiting storage in Notion or another destination. Record that handling rule explicitly. Apply it to Memory, summaries, logs and delegated briefs too. A fictional clinical system could therefore remain the only permitted location for patient records while its definition holds only the approved route and handling requirements. The actual source agreement determines the permitted use; a connection alone does not decide it.
+
+## Storage responsibilities
+
+| Store | Purpose |
+| --- | --- |
+| Knowledge | Current explanations, goals, audiences, offers, positioning and selected configuration. |
+| Memory | Durable decisions, preferences and lessons, with dated reasons and attribution. |
+| Skills | Personal or shared ways of working, with their source and selected revision. |
+| Content, when selected | Sources, ideas, actual material, channel editions and observed response. |
+
+These are organizational choices, not new pillars. A database may contain evidence and interpreted meaning. A view is a way to find records, not an access boundary.
+
+## Create and revise
+
+Find the existing topic, stable identity and scope before creating anything. Accepted new information about the same topic updates the current explanation and Summary. Add genuinely new detail in its proper section.
+
+Create a new record for an independent topic, purpose, scope or lifecycle. A different author alone does not create a new meaning. Split a topic when parts need different maintenance. Preserve original human material and meaningful earlier decisions; clearly historical pages are read when a question needs their reasons or past state.
+
+## Metadata that helps
+
+| Signal | What it means |
+| --- | --- |
+| Identity, role and scope | Which topic this is, what it owns and where it applies. |
+| Status and provenance | What is selected, uncertain, replaced or attributed to a source. |
+| Source/evidence time | When the event, observation or source belongs. |
+| Revised | When the current record changed in substance. Carried-forward facts may not have been rechecked. |
+| Review due | A justified point for reconsidering something temporary or changeable. |
+
+These optional revision/review fields can be mapped to a Notion home. Source, import, publication, processing and released-version dates retain their different meanings. Plain pages can carry a short role, status and revision in their body. An unknown date stays unknown; there is no automatic mass backfill.
+
+## Relevant first, then comparable freshness
+
+Use the current task and selected owner controls, scope, topic and Summary to find useful material. Consider accepted authority and source quality before comparing evidence age. An older current decision can be more relevant than a new suggestion.
+
+A due/flagged view helps identify review candidates. It does not declare their content false. A mechanical edit or a global recency score cannot determine a future task's relevance.
+
+## Keep the foundation useful
+
+Maintain useful new information, source changes and real review signals. Read before editing, make the smallest coherent update and verify it. A run with no useful change leaves content and revision dates alone.
+
+Keep private context and customer material in their chosen home. This guide contains generic methods and reference material; using it does not require making your own foundation public.
+
+## Data & Context home template
+
+A new private home starts with its Data and Context Definition, followed by the Knowledge, Memory and Skills databases. Setup fills the definition from the company's actual sources and verified destinations. Its own onboarding explanations stay in the conversation. An optional Content database is added only when selected.
+
+```yaml
+definition:
+  version: 1
+  root:
+    id: "[exact root page ID]"
+    account: "[verified Notion workspace or connection binding]"
+    title: "[exact root title]"
+    role: data-and-context-root
+    purpose: "[whose context this is and what it is used for]"
+  contract: osm-context-architecture  # plugin reference; not copied here
+  destinations:  # native children, and any other store this home names, by exact ID; labels are the owner's
+    knowledge: {label: "Knowledge", id: "[id]"}
+    memory: {id: "[id]"}
+    skills: {id: "[id]"}
+    maintenance: {id: "[id]"}  # pipeline agreements and other control records
+    content: {id: "[id]"}  # optional; only when the owner selects Content
+  # The owner's recorded choice. Setup proposes whole-home and never assumes it.
+  write_policy: {choice: "[whole-home | narrower | not yet chosen]", include: ["[exact identities; narrower only]"], exclude: ["[exact identities]"], recorded: "[owner decision source and date]"}
+  controls:
+    operating_policy: "[exact policy ID, when a separate page is required]"
+    checkpoints: {kind: "[notion-record | runtime-binding]", ref: "[exact existing checkpoint reference for scheduled upkeep]"}
+  areas:
+    business-and-relationships: {coverage: "[source keys or gap]"}
+    work-and-knowledge: {coverage: "[source keys or gap]"}
+    communication: {coverage: "[source keys or gap]"}
+    finance: {coverage: "[source keys, gap or deferred]"}
+    products-market-operations: {coverage: "[source keys or gap]"}
+  sources:
+    - key: "[stable source key]"
+      area: "[area]"
+      provider: "[provider]"
+      account: "[exact account or workspace identity, or its verified reference]"
+      scope: "[selected objects, or a deliberately broader account/workspace-visible scope, by identity]"
+      lifecycle: "[current-recurring | historical-one-off | deferred | excluded]"
+      placement: "[direct | projection | both]"  # retrieval mode; not permission to retain data
+      purpose: "[questions or work this source supports; what it owns]"
+      reader: "[approved tool or connection that reads it, or none]"
+      permitted_use: "[allowed actions and processing environments]"
+      retention: "[source-only, or exact permitted context/output locations and exclusions]"
+      freshness: "[when to query the live source or use dated evidence]"
+      agreement: "[existing source-handling agreement or this definition section; required for selected recurring checks]"
+      # Readiness is observed state, kept in progress records, never here.
+  references:
+    - "[deeper domain contract or supporting page by ID]"
+```
+
+Setup replaces placeholders with verified page and database identities and adapts the routes to the business. The definition points to the original CRM, finance and other systems, with the selected account, scope and permitted use. Credentials stay in the provider or host credential store. Source-handling rules can live in the definition or link to an existing agreement. Using an AI-native source directly requires no separate importer or Notion copy.
+
+## Database fields
+
+Knowledge covers the selected understanding of the person and business, offers, customers and their language, voice, positioning, strategy, relevant numbers, team and source map. Live operational facts stay with their owning systems. These are useful topics, not a mandatory set of columns or a requirement to copy each system into Notion.
+
+| Store | Starting properties and Notion types | Add when useful |
+| --- | --- | --- |
+| Knowledge | Name (Title), Summary and Source (Text), Kind and Status (Select), Space (Multi-select) or Scope (Text), Key (Text) for managed topics | Evidence from (Multi-select), Temporal scope (Select), Evidence period, Revised and Review due (Date). Preserve existing Type and Category fields. |
+| Memory | Name (Title), Key (Text), Status (Select), Space (Multi-select), and an exact evidence reference in Source or Evidence (Text) | Type (Select), Source date, Imported, Revised and Review due (Date), Related docs (Relation). If Source already names the editing client as a Select, keep it and use Evidence for the actual source. |
+| Skills | Native Skill name (Title), Description (Text), Files (Files & media), Status and Audience (Select), Space (Multi-select) | Owner (Person), Key and Source (Text), Revised and Review due (Date). A method's actual source/version is distinct from its record revision. |
+
+Reuse native database types and suitable existing properties. Add a relation only when its meaning and evidence are clear. Review due and substantive revision dates are useful when they change retrieval or maintenance. A label, view or team audience does not grant access. Source dates describe the source; editing or importing a record is a different event.
+
+## How the three context skills use this home
+
+Prime reads the definition and relevant sources at session start. Log saves supported lasting changes at meaningful checkpoints or when asked. Dreaming reviews recent work, unfinished progress and selected connected sources, consolidates useful context and repairs verified drift. Each follows the selected home, account and write authority.

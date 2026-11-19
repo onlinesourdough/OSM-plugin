@@ -127,7 +127,7 @@ def native_check():
         expected_skills = len(list((ROOT / "skills").glob("*/SKILL.md")))
         require(len(detail["skills"]) == expected_skills and detail["mcpServers"] == ["osm"] and not detail["hooks"],
                 "Unexpected native inventory")
-        print(f"PASS: Codex recognizes separate providers, Setup, {expected_skills} skills and the declared headless OSM Notion tools server; no hooks")
+        print(f"PASS: Codex recognizes separate providers, Setup, {expected_skills} skills and the declared OSM Notion tools server; no hooks")
     finally:
         selector.close()
         process.terminate()

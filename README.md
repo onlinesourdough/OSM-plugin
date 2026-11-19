@@ -14,7 +14,7 @@ one useful task.
 other information in your existing tools. **Context explains what it means:**
 how your business works, your goals, decisions, standards and what a useful
 result should achieve. **Skills describe how the assistant should work**, such
-as planning a task, writing clearly or reviewing a result.
+as finding context, writing clearly or requesting a second opinion.
 
 You choose a home for the context you want to keep. Operational data stays in
 its source systems; the agent uses the relevant sources through access you have
@@ -35,10 +35,6 @@ you learn. Start with one useful task rather than organizing everything first.
 The method supports business work, decisions, writing and practical automation.
 Its code guidance and verification stay proportional to the task. Projects own
 their source, engineering standards, design and delivery configuration.
-
-Projects keep their own instructions, engineering standards and delivery tools.
-OSM's standard skills cover context, onboarding, writing and bounded agent
-collaboration.
 
 ## Why I built this
 
@@ -175,8 +171,9 @@ repositories stay valid sources. A legacy folder or vault home is read-only; see
 [Update](skills/osm/references/update.md) for the migration guidance.
 Installation alone creates no context home and grants no source access.
 
-In Codex, open **OSM** in the sidebar to inspect the saved destinations or
-revisit setup. Saved links are navigation, not proof of a working connection.
+In Codex, **OSM** in the sidebar opens a reader for this public method guide.
+It does not display private context or configure your connections. Use Setup in
+the conversation to establish or change your own home.
 For a new or messy workspace, ask:
 
 > Use OSM Setup to set up my context. Start here: [page link]. Help me choose
@@ -187,8 +184,11 @@ Setup adapts the neutral [Data & Context root](skills/osm-data-context/assets/da
 [OSM page](skills/osm-data-context/assets/notion-osm.md) keeps working) with your Spaces and
 working agreements.
 
-Operational records remain in their owning systems. Retain useful context and
-source pointers rather than copying whole libraries. The plugin supplies
+The definition is a gateway: it names each source's purpose, account, access
+route, permitted use and retention. An AI-native accounting tool or CRM can be
+queried directly. Reading a source does not grant permission to copy it into
+Notion, including through a summary or a worker brief. Operational records remain
+in their owning systems. Retain only permitted useful context and source pointers. The plugin supplies
 methods; it does not provision every integration or start a daily pipeline.
 See the [versioned overview](docs/osm.md) and
 [connection and sidebar limits](docs/sidebar.md) for the delivered behavior.
@@ -248,18 +248,17 @@ progress, not installed capabilities. Contributors start with [AGENTS.md](AGENTS
 OSM is open source under the [MIT license](LICENSE).
 
 [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a)
-is the public Notion guide. Its overview, Setup and architecture were updated to
-v0.33.0. The last fully verified version of the public skill catalogue and
-downloads is v0.30.0. Follow the installed skills or their matching Git tag for
-instructions. See the [publication status and activation plan](docs-publisher/ACTIVATION.md).
-Shared Content methods and templates have their own repository, [OSM Content](https://github.com/onlinesourdough/OSM-Content).
+is the public method guide, with setup, the definition template, source handling
+and diagrams. The repository versions the installable plugin and technical
+implementation. Follow the installed skills or their matching Git tag for
+execution. The [publication procedure](docs/publication.md) records the exact
+source bindings and automation limits.
+Shared Content methods and templates have their own repository,
+[OSM Content](https://github.com/onlinesourdough/OSM-Content).
 
-The installed manifest and `docs/osm.md` describe the package you run. For
-host-specific test evidence and limits, see [verification](docs/verification.md)
-and [connection and sidebar limits](docs/sidebar.md). Sidebar reading through
-OSM's own connection was verified on macOS. Browser sign-in and sidebar writes
-are unavailable. Evidence for scheduled Dreaming is recorded separately from
-the sidebar and depends on the configured host and caller.
+For host-specific observations and limits, see [verification](docs/verification.md)
+and [Codex integration](docs/sidebar.md). Evidence for a scheduled Dreaming run
+belongs to the particular installed version, caller, identity and schedule.
 
 Upgrading from AIOS? Use [Earlier names](docs/osm.md#earlier-names) for the
 supported switch and recovery procedure. Existing owner-data filenames and

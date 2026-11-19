@@ -96,21 +96,38 @@ sources between sessions, corrects supported errors and leaves live values in
 their source systems.
 
 ```mermaid
-flowchart LR
-  HOME["Notion · Data & Context<br/>Definition, Knowledge, Memory, Skills"]
-  SOURCES["Original sources<br/>Project files, CRM, finance, work history"]
-  PRIME["Prime"]
-  TASK["Work in your agent"]
-  LOG["Log"]
-  DREAM["Dreaming · daily if scheduled"]
-  COUNCIL["Council · optional second opinion"]
-  HOME --> PRIME --> TASK --> LOG --> HOME
-  SOURCES -->|"Relevant evidence"| PRIME
-  SOURCES -->|"Recent work and due checks"| DREAM
-  HOME -->|"Definition and existing records"| DREAM
-  DREAM -->|"Verified repairs and useful progress"| HOME
-  TASK -.-> COUNCIL
-  COUNCIL -.->|"Findings or bounded help"| TASK
+flowchart TB
+  SETUP["Setup · establish or reuse the home"]
+  SOURCES["Selected original sources<br/>Files, messages, projects, CRM, accounting and native work history"]
+  subgraph AGENT["Your agent app · models, tools, workspace and permissions"]
+    PRIME["Prime"]
+    WORK["Your work"]
+    LOG["Log · meaningful checkpoints"]
+    INTERVIEW["Interview · when direction is unclear"]
+    WRITING["Human Writing · when writing"]
+    COUNCIL["Council · review or bounded help"]
+    PRIME --> WORK --> LOG
+    INTERVIEW -.-> WORK
+    WRITING -.-> WORK
+    WORK <-.-> COUNCIL
+  end
+  subgraph HOME["Your Notion Data & Context home"]
+    DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
+    KNOWLEDGE["Knowledge"]
+    MEMORY["Memory"]
+    SKILLS["Personal or team Skills"]
+    CONTENT["Content · when selected"]
+    DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
+    DEFINITION -.-> CONTENT
+  end
+  DREAM["Dreaming · between sessions<br/>Daily through a selected caller"]
+  SETUP --> HOME
+  HOME -->|"Relevant context"| PRIME
+  SOURCES -->|"Task evidence"| PRIME
+  LOG -->|"Verified lasting context"| HOME
+  HOME -->|"Definition and current records"| DREAM
+  SOURCES -->|"Changed, unfinished or due work"| DREAM
+  DREAM -->|"Recover learning, consolidate and repair"| HOME
 ```
 
 When resuming or migrating, start from the same Notion home and verify its

@@ -684,7 +684,7 @@
      {"expect": "isolation-by-prompt", "data": {"from_positive": true, "override": {"harnesses": {"fict-harness-a": {"isolation": {"basis": "prompt-promise"}}}}}},
      {"expect": "proofs-conflated", "data": {"from_positive": true, "override": {"proofs": {"execution": {"basis": "installed-skills"}}}}},
      {"expect": "harness-claim-untested", "data": {"from_positive": true, "override": {"harnesses": {"fict-harness-b": {"evidence": null}}}}}]},
-  {"id": 56, "name": "selected connection reads the root", "check": "selected-connection-root", "contract": "architecture.md#selected-connection-for-preview-home-and-bootstrap",
+  {"id": 56, "name": "selected connection reads the root", "check": "selected-connection-root", "contract": "architecture.md#selected-connection-and-bootstrap",
    "positive": {"connection": "fict-selected-internal", "root_selected_by": "link",
                 "consumers": {"preview": {"reads_via": "selected", "works_without_broader": true},
                               "home": {"reads_via": "selected", "works_without_broader": true},

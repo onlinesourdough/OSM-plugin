@@ -2,7 +2,7 @@
 name: osm-council
 description: Ask another agent or model for an independent review, a second opinion or bounded work with a scoped delegation brief.
 metadata:
-  version: "3.1.0"
+  version: "3.1.1"
 ---
 
 # OSM:council
@@ -36,6 +36,8 @@ keep the work local.
   that may have changed. If the worker cannot open a source, share a minimal
   excerpt only when authorized for that worker and route. Otherwise ask the
   worker to report the gap and return what it can establish within scope.
+  Honor each source's permitted processing and retention locations. An access
+  grant alone does not authorize copying restricted records into the brief.
 - **Authority.** Name allowed tools, edits and destinations. Keep writes to
   owner Memory with the lead. For implementation or existing tracked work,
   follow the [native tracking rules](../osm/references/lifecycle.md#native-tracking-sop)
