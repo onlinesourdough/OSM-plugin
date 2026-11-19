@@ -24,6 +24,8 @@ JOB_PREFIXES = {
     "osm-manage-data-context": "Retrieve ",
     "osm-manage-skills": "Manage ",
     "osm-dreaming": "Reflect ",
+    "osm-prime": "Start ",
+    "osm-log": "Save ",
     "osm-setup": "Set up or resume ",
     "osm-data-context": "Engineer ",
     "osm-interview": "Interview ",

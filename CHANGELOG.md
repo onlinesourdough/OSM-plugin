@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Add Prime for scoped context at session start and Log for verified capture
+  at meaningful checkpoints. Both use the existing Manage Data & Context method.
+- Dreaming reads the current definition, checks recent work and selected sources,
+  recovers missed decisions and repairs confirmed context errors.
+- Start new Notion homes with the definition and native destinations. New host
+  instructions link to the selected root and call Prime and Log.
+
 ## 0.32.1 — 2026-11-13
 
 Patch release and the first on the stable channel. OSM's mark becomes the O, three instruction clarifications change how an

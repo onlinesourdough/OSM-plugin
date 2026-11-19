@@ -21,9 +21,11 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
   A new root defaults to the title "Data & Context" with a simple neutral icon;
   the owner may choose any title. Identify the root by its stable ID and its role,
   never by title.
-- **The root is the one agent entry.** It holds a short orientation, the
-  complete essential operating rules, ONE Data and Context Definition YAML block
-  and the useful native child destinations. Template:
+- **The root is the one agent entry.** It holds ONE Data and Context Definition
+  YAML block and the useful native child destinations. Put the purpose, exact
+  destinations and write policy in the definition. Name any separate required
+  operating policy by exact ID, and preserve existing owner instructions.
+  Template:
   [data-and-context-root](../assets/data-and-context-root.md).
 - **No extra stores.** No separate mandatory model page, explainer hub,
   architecture database, duplicate definition or empty compatibility scaffolding.
@@ -49,7 +51,7 @@ The storage **roles** are complementary, not mutually exclusive bins. One list:
 
 | Role | Holds | Usual place |
 | --- | --- | --- |
-| Profile and collaboration rules | Who the owner is and how to work together | The root's essential rules; optional short About/Soul page |
+| Profile and collaboration rules | Who the owner is and how to work together | The definition's owner controls and exact references, including an optional short About/Soul page |
 | Curated business knowledge | One independently useful business topic or delivered result per entry, with evidence | The root's own store. #69 calls it the root's own Docs. Default label for a new root is **Knowledge**; an existing owner label (for example Docs) is kept |
 | Memory | Durable decisions, reasons and corrections with provenance | Existing Memory, or a native child of the root |
 | Methods | Personal and team Skills | Native Skills |
@@ -802,6 +804,11 @@ edit, revision or import establishes neither relevance nor truth, and an import
 time is never the comparable evidence time. Conflicts and unknown
 dates are shown honestly, with the reason for the conflict kept. A noncurrent
 history page is labelled as such, and a current answer uses the Summary.
+
+For a date-bound decision recall, query Memory by the relevant topic, scope
+and Source date where supported. Check the selected evidence. For an activity
+recap or unfinished work, use the selected history or project source when
+Memory cannot establish what happened.
 
 ## Host bridge, map, connector and trigger
 

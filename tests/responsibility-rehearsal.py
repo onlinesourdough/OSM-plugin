@@ -16,6 +16,7 @@ EXPECTED = {
     "osm-dreaming", "osm-human-writing", "osm-interview", "osm-manage-data-context", "osm-manage-skills",
     "osm-orchestrate-workers", "osm-review-work", "osm-risky-changes", "osm-setup",
     "osm-ship-work", "osm-spec-work", "osm-triage-improvement", "osm-write-code",
+    "osm-prime", "osm-log",
 }
 RETIRED = {"osm-check", "osm-update", "osm-select-model", "osm-context",
            "osm-maintain-context", "content", "diffusion-studio"}
@@ -23,8 +24,10 @@ RETIRED = {"osm-check", "osm-update", "osm-select-model", "osm-context",
 OWNERS = {
     "conduct onboarding": ("osm-setup/SKILL.md", ["osm/SKILL.md"]),
     "engineer the Notion home": ("osm-data-context/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md"]),
-    "retrieve and curate context": ("osm-manage-data-context/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md", "osm-dreaming/SKILL.md"]),
-    "reflect across completed work": ("osm-dreaming/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md"]),
+    "retrieve and curate context": ("osm-manage-data-context/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md", "osm-prime/SKILL.md", "osm-log/SKILL.md", "osm-dreaming/SKILL.md"]),
+    "start with the selected scope": ("osm-prime/SKILL.md", ["osm/SKILL.md"]),
+    "save lasting changes": ("osm-log/SKILL.md", ["osm/SKILL.md"]),
+    "review recent work and repair context": ("osm-dreaming/SKILL.md", ["osm/SKILL.md", "osm-setup/SKILL.md"]),
     "skill lifecycle": ("osm-manage-skills/SKILL.md", ["osm/SKILL.md", "osm-manage-data-context/SKILL.md", "osm-dreaming/SKILL.md"]),
     "read-only check": ("osm/references/check.md", ["osm/SKILL.md", "osm-manage-skills/SKILL.md"]),
     "update and rollback": ("osm/references/update.md", ["osm/SKILL.md", "osm-setup/references/legacy-parity.md"]),
@@ -33,7 +36,8 @@ OWNERS = {
                       "osm-orchestrate-workers/SKILL.md"]),
     "personal-skill lifecycle": ("osm-manage-skills/references/owner-skills.md", ["osm-setup/SKILL.md"]),
 }
-CHAIN = {"osm-setup", "osm-data-context", "osm-manage-data-context", "osm-manage-skills", "osm-dreaming"}
+CHAIN = {"osm-setup", "osm-data-context", "osm-manage-data-context", "osm-manage-skills",
+         "osm-prime", "osm-log", "osm-dreaming"}
 # Files that may still name retired things, because they explain the retirement.
 HISTORY = {"osm/SKILL.md", "osm/references/update.md", "osm/references/check.md",
            "osm-setup/references/migration.md", "osm-setup/references/legacy-parity.md",
@@ -70,7 +74,9 @@ PINS = (
 TRIGGER_ROWS = {
     "Explain OSM": "osm/SKILL.md", "Set up or resume": "osm-setup/SKILL.md", "Engineer the Notion home": "osm-data-context/SKILL.md",
     "Retrieve, take in": "osm-manage-data-context/SKILL.md", "Create or change a personal": "osm-manage-skills/SKILL.md",
-    "Reflect across completed": "osm-dreaming/SKILL.md",
+    "Start a configured session": "osm-prime/SKILL.md",
+    "Save lasting context": "osm-log/SKILL.md",
+    "Review recent work": "osm-dreaming/SKILL.md",
     "Explore direction": "osm-interview/SKILL.md", "Resolve a work contract": "osm-spec-work/SKILL.md",
     "Implement accepted work": "osm-build-work/SKILL.md", "Inspect the result": "osm-review-work/SKILL.md",
     "Deliver a reviewed": "osm-ship-work/SKILL.md", "Delegate to workers": "osm-orchestrate-workers/SKILL.md",
@@ -81,7 +87,7 @@ TRIGGER_ROWS = {
 }
 # Calls are checked against the skill's own links for the context chain and Interview.
 CALLS_CHECKED = {"osm-setup": None, "osm-data-context": None, "osm-manage-data-context": None, "osm-manage-skills": None,
-                 "osm-interview": None, "osm-dreaming": None}
+                 "osm-interview": None, "osm-prime": None, "osm-log": None, "osm-dreaming": None}
 DISPLAY = {"osm-interview": r"Interview", "osm-data-context": r"(?<!Manage )Data & Context",
            "osm-manage-data-context": r"Manage Data & Context", "osm-manage-skills": r"Manage Skills", "osm-spec-work": r"Spec",
            "osm-dreaming": r"Dreaming"}
@@ -152,6 +158,9 @@ def check(root=ROOT):
             "something calls back into Dreaming")
     require(graph["osm-dreaming"] == {"osm-manage-data-context", "osm-manage-skills"},
             f"Dreaming must call exactly Manage Data & Context and Manage Skills: {graph}")
+    for name in ("osm-prime", "osm-log"):
+        require(graph[name] == {"osm-manage-data-context"},
+                f"{name} must delegate context access to one owner: {graph}")
     require(graph["osm-manage-data-context"] <= {"osm-data-context", "osm-manage-skills"} and
             graph["osm-setup"] == {"osm-data-context", "osm-manage-data-context", "osm-manage-skills", "osm-dreaming"},
             f"unexpected delegation edges: {graph}")
@@ -345,7 +354,7 @@ def negative_controls():
 def main():
     check()
     negative_controls()
-    print("PASS: 18 owners, one owner per operation, acyclic context delegation, no active file-home route")
+    print(f"PASS: {len(EXPECTED)} skills, one owner per operation, acyclic context delegation, no active file-home route")
 
 
 if __name__ == "__main__":

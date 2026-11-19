@@ -36,7 +36,7 @@ test('a 0.29.0 AIOS block stays readable and only its Context line changes', asy
   // Persisted owner state keeps the AIOS markers and wording written by earlier builds.
   const options = await fixture(t);
   const legacy = `<!-- AIOS:BEGIN -->\nContext: ${target}.\nFor work using or changing this context, use AIOS Context and read its\nguidance once per session. Load only what the task needs.\nReport gaps; do not invent context or silently switch sources.\n<!-- AIOS:END -->\n`;
-  assert.match(bridge, /^<!-- AIOS:BEGIN -->\n[\s\S]*use OSM Manage Data & Context[\s\S]*<!-- AIOS:END -->\n$/);
+  assert.match(bridge, /^<!-- AIOS:BEGIN -->\n[\s\S]*Start with OSM Prime[\s\S]*Run OSM Log[\s\S]*<!-- AIOS:END -->\n$/);
   await writeFile(join(options.codexHome, 'AGENTS.md'), legacy);
   const before = await readContextRoute(options);
   assert.equal(before.state, 'configured'); assert.equal(before.target, target);

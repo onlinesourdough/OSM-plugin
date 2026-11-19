@@ -14,7 +14,8 @@ Revision: 2026-11-09
 | Exploratory interview and shared question procedure | Interview owns activation, adaptive questioning, waiting and resumption; Setup and Spec reuse accepted answers |
 | Notion home contract and core stores | Data & Context owns the common contract and engineers the home; Setup conducts onboarding and calls it |
 | Facts, source routes and durable corrections | Manage Data & Context applies the curation procedure under the owner's recorded write policy |
-| Reflection across useful completed work between sessions (#93) | Dreaming selects and reflects, then hands every write to Manage Data & Context and any method change to Manage Skills. Installing it and cutting a live caller over is a separate reviewed step under #73 |
+| Context at task start and after meaningful work (#72) | Prime selects the scope for read-only retrieval. Log selects lasting changes and delegates verified curation to Manage Data & Context |
+| Reflection and repair between sessions (#93) | Dreaming reads the current definition and checks selected work and sources. Manage Data & Context owns context writes and Manage Skills owns method changes. Live caller cutover is reviewed separately under #73 |
 | Consequential-change assessment | `osm-risky-changes`; conditionally routed by Spec and Review |
 | Acceptance and delivery instruction | Reviewer bound to an exact artifact; independent caller acceptance for delegated work |
 | Private Git destination and release | Authorized OSM maintainer or Ship worker |

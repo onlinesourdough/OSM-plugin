@@ -2596,3 +2596,28 @@ nor written.
 Not established, and not changed by this release: the O in a native panel; hosts other than macOS Codex (Windows is a known limit);
 writes through OSM's connection; browser sign-in; the broader behavior qualification of #75 and the first-use acceptance of #69, which stay
 open; and the stopped distribution secret-check work (#60), which stays held with no repository security setting changed.
+
+## Prime, Log and Dreaming context candidate
+
+Local verification on 2026-11-19 against `d87da78`. The candidate keeps the
+existing context connection and daily caller. Prime selects relevant sources,
+Log delegates durable capture to Manage Data & Context, and Dreaming selects
+due sources from the current definition and delegates verified repairs.
+
+- The sidebar build matches the checked-in runtime. All 249 sidebar tests
+  passed. Package and individual skill versions passed against the baseline.
+- Documentation, onboarding, layout, continuity, skill-version, context
+  footprint, responsibility, context architecture, publisher and consumer
+  selection checks passed. The architecture rehearsal exercised 91 cases,
+  79 variants and 474 negative controls. The publisher is inactive.
+- An isolated Claude Fable 5.2 High review and five fictional decision cases
+  supported the narrow root-first route, independent repository isolation,
+  in-place repair, unchanged replay, source scope and revoked-access behavior.
+  They exercised decisions in text with tools disabled. They provide no proof
+  of native plugin invocation, actual writes or scheduled execution.
+- On one selected macOS Notion connection an exact data source ID returned
+  a bounded Memory result. A date-filtered native query and a fresh
+  Prime-to-Log-to-Prime roundtrip on the candidate are still unqualified.
+  A native Codex archive listing returned one bounded item. This proves the
+  desktop listing surface on this host, while the existing daily route still
+  needs an archive-reader qualification and cutover.

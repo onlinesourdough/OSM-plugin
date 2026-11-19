@@ -13,7 +13,7 @@ task; OSM has no model runner, background service or permission system.
 | Skills | Reusable methods, standards and judgment, with references and small helpers as needed |
 | Project workspace | Local requirements, working files, outputs, proof and recovery; Git is selected when useful |
 | Optional System | A separately maintained specialist with its own dependencies or operational needs |
-| Native manifests | Package identity and discovery over the same 18 skills |
+| Native manifests | Package identity and discovery over the shared skill catalog |
 | Codex sidebar | A host-managed local MCP App for numbered source setup and a dashboard; stores private navigation names/links, with no company-content copy or chat handoff |
 
 ## Work and methods
@@ -89,11 +89,14 @@ check, the update/rollback procedure and on-request model advice.
 
 ## Capture, Dreaming and curation
 
-Context enters the home in two ways, and one method writes it. During ordinary
-work an important correction is saved when it happens. Between tasks,
-[Dreaming](../skills/osm-dreaming/SKILL.md) selects useful completed or changed
-work, reflects across it with due or flagged records, and checks what it would
-keep against its source. Both hand the write to
+The home starts with one compact definition and its native databases. The
+host's short entry link selects the home. [Prime](../skills/osm-prime/SKILL.md)
+reads the relevant route and sources when the task needs them.
+[Log](../skills/osm-log/SKILL.md) saves lasting changes at a checkpoint. Between
+tasks, [Dreaming](../skills/osm-dreaming/SKILL.md) uses the current definition
+to select changed, unfinished or archived work and due sources. It recovers
+missed decisions, repairs evidence-backed context errors and surfaces useful
+open progress in its existing destination. Both hand the write to
 [Manage Data & Context](../skills/osm-manage-data-context/SKILL.md), the one
 curation owner. A genuine reusable method change goes to
 [Manage Skills](../skills/osm-manage-skills/SKILL.md); a note does not become a
@@ -142,7 +145,8 @@ flowchart TB
   and leaves unchanged content and its dates alone; see the
   [maintenance loop](../skills/osm-data-context/references/architecture.md#maintenance-loop)
   and [item and stage failures](../skills/osm-data-context/references/architecture.md#item-and-stage-failures)
-  for how an item still active when found stays pending until it completes.
+  for tracking active work. A completed turn can support a status update
+  while its active turn stays pending.
 - **Existing Content is curated like any store.** When the owner has selected a
   Content collection, Manage Data & Context maintains it as a store of context
   with the same lifecycle and write policy, without a Content module and without

@@ -16,27 +16,6 @@ The page starts at the next heading.
 
 # Data & Context
 
-[One or two sentences: whose context this is and what it is used for.]
-
-## How to work here
-
-- Ask for a useful result. The agent reads the definition below, then only the
-  sources the task needs.
-- Records here are curated: evidence, meaning and dates are kept; originals stay
-  in their own systems and libraries.
-- Your own documents and libraries keep their body, structure and authorship.
-  The agent edits one only from your current task, your decision or correction,
-  or a source you selected and it processes under your recorded policy. The edit
-  stays targeted, it never reorganises or overwrites the document, and it
-  implies no new access.
-- Access comes from the connection's actual grants, not from links or labels.
-
-## Essential rules
-
-[The owner's complete essential operating rules: action authority, what the
-recorded write policy allows where, review points, exclusions and forget
-requests. Keep them short; link deeper procedures instead of pasting them.]
-
 ## Data and Context Definition
 
 ```yaml
@@ -45,6 +24,7 @@ definition:
   root:
     title: "[exact root title]"
     role: data-and-context-root
+    purpose: "[whose context this is and what it is used for]"
   contract: osm-context-architecture  # plugin reference; not copied here
   destinations:  # native children, and any other store this home names, by exact ID; labels are the owner's
     knowledge: {label: "Knowledge", id: "[id]"}
@@ -71,5 +51,6 @@ definition:
       agreement: "[pipeline agreement ID, or none]"
       # Readiness is observed state, kept in progress records, never here.
   references:
+    - "[exact owner operating policy ID, when a separate page is required]"
     - "[deeper domain contract or supporting page by ID]"
 ```

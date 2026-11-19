@@ -19,6 +19,7 @@ SKILL_NAMES = {
     "osm-setup", "osm-data-context", "osm-interview", "osm-orchestrate-workers", "osm-review-work",
     "osm-risky-changes", "osm-ship-work", "osm-spec-work", "osm-triage-improvement",
     "osm-human-writing", "osm-write-code", "osm-clarify", "osm-dreaming",
+    "osm-prime", "osm-log",
 }
 # OSM 0.31.0 folded these into `osm` references or moved them out of the package.
 # They get no alias skill; `osm` routes the old names.
@@ -379,9 +380,10 @@ def validate(root=ROOT, release_tag=None):
     lines = bridge.splitlines()
     require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
             "owner bridge markers")
-    require("use OSM Manage Data & Context" in bridge and
-            "Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
-            "legacy bridge route")
+    require("Start with OSM Prime" in bridge and "Run OSM Log" in bridge and
+            "<verified-notion-root-entry-url>" in bridge, "new bridge route")
+    require("Formerly OSM Context and AIOS Context." in skill_fields["osm-data-context"]["description"],
+            "retained context names")
     sidebar_state = (root / "apps/sidebar/sources.mjs").read_text()
     sidebar_route = (root / "apps/sidebar/context-route.mjs").read_text()
     require("['aios', 'panel']" in sidebar_state and "'.aios-lock'" in sidebar_route and
@@ -635,9 +637,13 @@ def negative_controls():
         path = root / "skills/osm-data-context/assets/bridge.md"
         path.write_text(path.read_text().replace("AIOS:BEGIN", "OSM:BEGIN"))
 
-    def dropped_legacy_bridge_route(root):
+    def dropped_retained_context_names(root):
         path = root / "skills/osm-data-context/SKILL.md"
         path.write_text(path.read_text().replace(" Formerly OSM Context and AIOS Context.", ""))
+
+    def dropped_log_trigger(root):
+        path = root / "skills/osm-data-context/assets/bridge.md"
+        path.write_text(path.read_text().replace("Run OSM Log", "Consider writing a note"))
 
     def renamed_panel_storage(root):
         path = root / "apps/sidebar/sources.mjs"
@@ -666,7 +672,8 @@ def negative_controls():
     rejected(disable_after_acceptance, "aios to osm switch procedure")
     rejected(retired_skill_copy, "skill inventory")
     rejected(renamed_bridge_marker, "owner bridge markers")
-    rejected(dropped_legacy_bridge_route, "legacy bridge route")
+    rejected(dropped_retained_context_names, "retained context names")
+    rejected(dropped_log_trigger, "new bridge route")
     rejected(renamed_panel_storage, "persisted sidebar state namespace")
     rejected(prefix_only_classification, "package identity classification")
     rejected(native_version_drift, 'native identity/version drift')
