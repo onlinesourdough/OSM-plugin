@@ -1,17 +1,12 @@
 # The Onlinesourdough Method
 
-**Business first. Productivity built in.**
+<img src="assets/icon.png" alt="OSM" width="56" height="56">
 
-The Onlinesourdough Method (OSM) helps you give your AI assistant a useful
-foundation: relevant data, business context and reusable ways of working.
-It helps the assistant plan work, build it, review the result and retain useful
-decisions. Install it in the app you use. The same skills work from one shared
-source, with native packaging for Codex, Pi, Claude Code, Gemini CLI, Copilot CLI
-and Cursor.
+OSM gives your AI assistant a Notion home for business context, decisions and
+reusable skills. Install it in the agent app you already use and start with
+one useful task.
 
-Small requests stay small. Larger tasks get a clear outcome, the relevant
-specialist method and a review before delivery. Your app still provides the
-models, tools and permissions.
+[Install](#install-in-your-app) · [Try one task](#start-with-a-real-task) · [Public guide](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a)
 
 ## Your data and context
 
@@ -27,7 +22,7 @@ authorized. OSM helps it find that context, apply useful methods and retain
 reviewed learning. It does not upload all your data, connect every account or
 grant access merely because you installed a plugin.
 
-In the current source, Prime finds the smallest relevant context for a task,
+Prime finds the smallest relevant context for a task,
 Log saves lasting changes at a useful checkpoint, and Dreaming checks recent
 work and selected sources between tasks. Your Notion home keeps the definition
 and databases. The short host instructions link to it and prefer the host's

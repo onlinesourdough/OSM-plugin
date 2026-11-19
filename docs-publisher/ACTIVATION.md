@@ -9,7 +9,7 @@ exits non-zero. That is an unmet live gate (G1 below), not a defect to work arou
 
 ## What exists
 
-- `manifest.json`: per-artifact source and ownership, with each artifact's current public writer. Six
+- `manifest.json`: per-artifact source and ownership, with each artifact's current public writer. Seven
   documentation rows are CI-owned working rows. There is no skill row: skills stay Git-owned, and a
   changed skill is reported as pending release propagation, whether or not a class A row maps its folder.
 - `publisher.py`: the impact diff, the reconciliation result, the serialized idempotent publishing

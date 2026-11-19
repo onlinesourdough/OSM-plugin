@@ -1,9 +1,9 @@
 # Start with one useful task
 
-Use this working guide to give your assistant a Notion home for business
+Use this guide to give your assistant a Notion home for business
 knowledge, decisions and methods. Install from the approved edition for your
 app and check its [released capabilities](https://github.com/onlinesourdough/OSM-plugin/releases).
-The Prime and Log walkthrough describes the working candidate.
+The Prime and Log walkthrough requires OSM 0.33.0 or later.
 
 ## 1. Install and connect
 

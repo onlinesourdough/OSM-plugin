@@ -57,7 +57,7 @@ brief and a resumed task get their outcome and criteria.
 | [OSM:spec-work](../skills/osm-spec-work/SKILL.md) | Resolve a substantive OSM work contract |
 | [OSM:triage-improvement](../skills/osm-triage-improvement/SKILL.md) | Route a concrete underlying improvement signal |
 
-Council replaces `osm-orchestrate-workers` in this candidate. If you call it
+Council replaces `osm-orchestrate-workers` in OSM 0.33.0. If you call it
 by identifier in a script or saved prompt, update the caller to `osm-council`
 when you update the installed package.
 
