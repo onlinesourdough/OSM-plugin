@@ -2669,3 +2669,32 @@ scoped to the starter and reported no source change against the same commit.
 All 72 publisher rehearsals and 76 mutation controls passed, including
 source identity for the starter and replay through the fixture transports.
 Public parity still needs the corresponding publication and readback.
+
+### Active owner pilot, 2026-11-19
+
+The pinned candidate at `1f18c65` was installed in the active Codex and
+Claude Code profiles from a frozen export. Installed skill bytes matched the
+export. Codex also recognised the package and all 20 skills in a disposable
+profile and in the active profile. A real Codex task read Prime and Log, saved
+one approved owner preference through the selected Notion writer and read it
+back. A new task read Prime and recovered the same preference with provenance.
+A replay made zero writes. After the manual upkeep run, one row remained with
+matching content hash and last edit time.
+
+Read-only schema inspection and two Fable 5.2 High reviews distinguished a
+client-origin selector from the actual evidence reference. The existing
+Knowledge, Memory and Skills stores provide the required types. Memory's
+Decision and Skills' Personal skill are registered defaults with Needs review
+and unset Key and Space. Knowledge has no registered default. The starter
+documents the types, optional fields and exact shared definition template.
+Existing schemas were preserved.
+
+The existing Dreaming job uses the candidate's verified skill files. Its
+read-only Codex history transport was requalified on the installed CLI for
+active and archived listings and completed-turn reads. The local manifest and
+Notion Runtime binding were reconciled, and a manual run verified candidate
+versions and read back its maintenance result. History and media coverage
+was partial. The temporary schedules produced configuration events but no
+scheduler-originated heartbeat for this candidate. The same job was restored
+to its active daily schedule. Scheduled execution and public release parity
+remain to be observed.
