@@ -1,11 +1,11 @@
 ## Current reference
 
 <synced-block url="https://app.notion.com/p/40d6d2e17f5681f6accff01259bc2ab4#6d01017b2fe949e0ad4548da7e77f404">
-<b>Current stable release</b> · <date start="2026-11-19" />. [OSM v0.33.0](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.33.0) resolves to <code>a9a18caf6f0b8193ab970d996e0ef1f1d88a566f</code>. The guide overview, setup walkthrough and architecture diagram point to this release. Use the [tagged source and 20-skill index](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/docs/skills.md) for the current instructions. The legacy Notion skill catalogue and its downloadable packets remain pending reconciliation.
+<b>Current stable release</b> · <date start="2026-11-19" />. [OSM v0.33.0](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.33.0) resolves to <code>a9a18caf6f0b8193ab970d996e0ef1f1d88a566f</code>. The installed instructions for that release are in its [tagged source and 20-skill index](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/docs/skills.md). This guide is being updated for the seven-skill 0.34.0 candidate. Its public method diagram and conversational setup now describe that direction; the release and skill catalogue are not yet fully reconciled.
 
 <b>Last fully verified reference source: </b>[<b>OSM v0.30.0</b>](https://github.com/onlinesourdough/OSM-plugin/tree/v0.30.0) · commit <code>314dcf17a06014df472a32cdb10f847672cba0be</code>.
 
-<b>Catalogue:</b> 22 released OSM references and five adaptable Content templates marked Draft. Content template edition 2026-11-05.1 uses separate version 0.10.0 packets and retains the earlier design files. Content is an optional tailored extension outside the released OSM package. These are adaptable Draft templates, not installed personal skills.
+<b>Catalogue under review:</b> seven OSM candidate references — Setup, Prime, Log, Dreaming, Interview, Human Writing and Council — and 18 earlier references marked Historical. The seven candidates identify their exact Git instruction source and remain Draft until release reconciliation finishes. Five optional Content templates retain their separate version 0.10.0 packets and design files. They are examples for personal adaptation, outside the OSM plugin.
 
 <b>Guide revision 2026-11-05.2 · 5 November 2026.</b> The updated overview, optional Content setup/configuration, five-template library and representative source packet were checked without login. Content template edition 2026-11-05.1 uses version 0.10.0 packets. The tagged OSM source and its 22 released packets remain unchanged.
 </synced-block>

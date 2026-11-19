@@ -234,6 +234,20 @@ See [native installation, recovery and tested limits](docs/native-installation.m
 before replacing an existing registration. A separately configured owner bridge
 is not removed by the package manager.
 
+## Repository structure
+
+| Folder | Contains |
+| --- | --- |
+| `skills/` | Seven discoverable skills and four supporting reference folders |
+| `apps/notion/` | Public guide reader and optional scoped Notion adapter source |
+| `runtime/notion/` | Reproducible, ready-to-run build |
+| `docs/` | Installed overview, user guides, maintenance and dated evidence |
+| `docs-publisher/` | Public source bindings, frozen originals and export checks |
+| `assets/` | Shared icon and architecture artwork |
+
+Native plugin declarations live in the named host manifest folders at the root.
+The [architecture](docs/architecture.md) explains the responsibilities.
+
 ## More
 
 Start with the [documentation guide](docs/README.md) for method concepts,

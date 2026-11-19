@@ -538,11 +538,11 @@
       "authoritative_for": "Upkeep and recurring work: curation, freshness, Prime, Log and Dreaming, and keeping the guide and repository aligned",
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
-        "revision": "a6aa783dd688a2bd3860e4a9ed89c7b93b689663870c73ad1c7cf782df932bc2",
+        "revision": "5293423a20a3afa3056a80ab4dd138c87e80dfde4dc01f0aee29df38ab4c4e99",
         "edition": "0.34.0",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-19T22:18:19.475Z",
-        "last_edited_time": "2026-11-19T21:57:03.922Z"
+        "read_at": "2026-11-19T22:54:06.327Z",
+        "last_edited_time": "2026-11-19T22:34:54.755Z"
       }
     },
     {
@@ -592,11 +592,11 @@
       "authoritative_for": "The release reference, the guide's own changelog and where documentation lives",
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
-        "revision": "e2af6491c05307ea8520ca72c61b37575f3babe37e93e838126cf90e96212d48",
+        "revision": "cf59dc3b65493acee7562b498a9b21d903bc25870b643f5c6fa8e3b3eb7c1526",
         "edition": "0.34.0",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-19T22:18:19.475Z",
-        "last_edited_time": "2026-11-19T21:05:08.534Z"
+        "read_at": "2026-11-19T22:54:06.327Z",
+        "last_edited_time": "2026-11-19T22:42:07.499Z"
       }
     },
     {
@@ -807,7 +807,7 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content \u00b7 optional extension",
+        "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md"
       }
     ]

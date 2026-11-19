@@ -41,6 +41,9 @@ function show(id, remember = true) {
   back.hidden = history.length === 0;
   const parsed = marked.parse(readable(page.body, page), { gfm: true });
   root.innerHTML = DOMPurify.sanitize(parsed, { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] });
+  for (const heading of root.querySelectorAll('h1')) {
+    if (heading.textContent.trim() === page.title.trim()) heading.remove();
+  }
   for (const slot of root.querySelectorAll('.osm-architecture')) {
     const shadow = slot.attachShadow({ mode: 'open' });
     // This fixed, script-free diagram is a bundled project asset, not remote page markup.

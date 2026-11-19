@@ -31,3 +31,5 @@ Dreaming reviews work between sessions through a selected daily schedule. It inc
 Dreaming reconciles that evidence with the existing Knowledge, Memory and Skills. It can correct a verified Prime or Log error, combine duplicate context, mark a decision that was superseded and repair a supported source route. It preserves the reasons and source dates that matter. A repeated unchanged run adds no duplicate record and makes no content rewrite.
 
 Run the whole selected review under the recorded access and write policy. Unavailable evidence and unresolved choices are reported while independent checks continue. A recent edit alone does not make a fact more authoritative, and an old decision can remain current.
+
+The separation between session notes, selective retrieval and reflection between sessions is informed by [Anthropic’s research on agent memory](https://www.anthropic.com/research/components-of-agent-memory). Keep the always-loaded instructions small, test corrections against their original evidence and retain learning that helps future work instead of duplicating live source state.
