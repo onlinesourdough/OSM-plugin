@@ -45,10 +45,14 @@ skill and no second discovery entry.
 | `osm-check` | [check](references/check.md) |
 | `osm-update` | [update](references/update.md) |
 | `osm-select-model` | [model advice](references/model-advice.md) |
-| Build Work, Create Project, Clarify, Review Work, Risky Changes, Ship Work, Spec Work, Triage Improvement, Write Code | Use the project or host method. Ask [Council](../osm-council/SKILL.md) for an independent review. [Earlier release archive](https://github.com/onlinesourdough/OSM-plugin/tree/v0.33.0/skills) |
+| `osm-build-work`, `osm-create-project`, `osm-spec-work`, `osm-write-code` | Use the project or host method. [Earlier release archive](https://github.com/onlinesourdough/OSM-plugin/tree/v0.33.0/skills) |
+| `osm-review-work`, `osm-risky-changes`, `osm-ship-work`, `osm-triage-improvement` | Use the project or host method. Ask [Council](../osm-council/SKILL.md) for an independent review. |
+| `osm-clarify`, `clarify`, `write-code` | Use the host directly or a specialist already selected for the task. |
+| `human-writing` | [Human Writing](../osm-human-writing/SKILL.md) remains available as `osm-human-writing`. |
 | `content`, `diffusion-studio` | Outside OSM: a separate, tailored Content method. Drafts are history only |
 
-Keep existing pinned scheduled callers on their verified release until a
+See the [AIOS compatibility map](../osm-setup/references/legacy-parity.md) for
+earlier `aios-*` names. Keep existing pinned scheduled callers on their verified release until a
 replacement Dreaming caller has been tested.
 
 Answer stable OSM method facts directly; otherwise select only needed

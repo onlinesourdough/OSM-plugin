@@ -182,7 +182,14 @@ def validate(root=ROOT, release_tag=None):
                 f"skill description: {path}")
         require("disable-model-invocation" not in fields, f"implicit invocation: {path}")
 
-    primary_targets = set(link_targets(skill_root / "osm/index.md"))
+    procedure_index = skill_root / "osm/index.md"
+    primary_targets = set(link_targets(procedure_index))
+    retired_routes = {"osm-build-work", "osm-create-project", "osm-spec-work",
+                      "osm-write-code", "osm-review-work", "osm-risky-changes",
+                      "osm-ship-work", "osm-triage-improvement", "osm-clarify"}
+    procedure_text = procedure_index.read_text()
+    require(all(f"`{name}`" in procedure_text and not (skill_root / name).exists()
+                for name in retired_routes), "retired work skill route")
     for name in ("osm-human-writing", "osm-interview", "osm-setup", "osm-dreaming"):
         require((skill_root / name / "SKILL.md").resolve() in primary_targets,
                 f"built-in method route missing: {name}")
