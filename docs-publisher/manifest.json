@@ -346,7 +346,8 @@
       "edition": "main-working",
       "owner": "git",
       "source_paths": [
-        "docs/starter.md"
+        "docs/starter.md",
+        "skills/osm-data-context/assets/data-and-context-root.md"
       ],
       "target_subtree": "main-working/docs",
       "public_writer": "ci",

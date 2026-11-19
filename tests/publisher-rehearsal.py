@@ -45,6 +45,7 @@ TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
 STARTER = "osm.working.starter"
+ROOT_TEMPLATE = "skills/osm-data-context/assets/data-and-context-root.md"
 W_KEYS = sorted([README, INDEX, OVERVIEW, ARCH, SKILLS, STARTER])
 TESTS = []          # (name, callable, slow)
 
@@ -209,6 +210,7 @@ def working_files(version="v1", readme_lines=4):
     body = lambda name, n=4: "\n".join([f"{name} {version}"] + [f"{name} line {i}" for i in range(n)])
     return {"README.md": body("readme", readme_lines), "docs/README.md": body("index"), "docs/osm.md": body("overview"),
             "docs/architecture.md": body("arch"), "docs/skills.md": body("skills"), "docs/starter.md": body("starter"),
+            ROOT_TEMPLATE: "starter definition template",
             "skills/alpha/SKILL.md": f"alpha {version}", "docs/content-drafts/skills/content/method-draft.md": "old bundled content draft"}
 
 
@@ -817,20 +819,22 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
 
 
 @test
-def starter_uses_one_working_source():
+def starter_uses_the_shared_definition_template():
     starter = next(a for a in pub.expand(MANIFEST) if a["key"] == STARTER)
-    require(starter["class"] == "W" and starter["source_paths"] == ["docs/starter.md"],
-            "the Notion starter is a projection of one working source")
+    require(starter["class"] == "W" and starter["source_paths"] == ["docs/starter.md", ROOT_TEMPLATE],
+            "the Notion starter has the guide and canonical definition as its sources")
     require("](docs/starter.md)" in (ROOT / "README.md").read_text(),
             "the repository entry links to the same source")
     actual = (ROOT / "docs/starter.md").read_text()
-    source = pub.DictSource({"docs/starter.md": actual}, "starter-revision")
+    definition = (ROOT / ROOT_TEMPLATE).read_text()
+    source = pub.DictSource({"docs/starter.md": actual, ROOT_TEMPLATE: definition}, "starter-revision")
     body = pub.render(starter, source)
-    require("Unreleased main working revision" in body and body.endswith(actual),
-            "the projected starter carries the exact source and working edition")
-    result = pub.plan(MANIFEST, source, None, {"docs/starter.md"}, released_source=released_source())
-    require({key for key, value in outcomes(result).items() if value == pub.WOULD_WRITE} == {STARTER},
-            "a starter edit affects only its working row")
+    require("Unreleased main working revision" in body and actual in body and body.endswith(definition),
+            "the projected starter carries the exact sources and working edition")
+    for path in ("docs/starter.md", ROOT_TEMPLATE):
+        result = pub.plan(MANIFEST, source, None, {path}, released_source=released_source())
+        require({key for key, value in outcomes(result).items() if value == pub.WOULD_WRITE} == {STARTER},
+                "a starter or template edit affects only the starter working row")
 
 
 @test

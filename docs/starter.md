@@ -18,7 +18,12 @@ operational systems keep their originals.
 Have Setup reuse suitable pages and databases. The Data & Context page has one
 definition followed by its native destinations. Use the repository's
 [root template](../skills/osm-data-context/assets/data-and-context-root.md)
-for the definition itself.
+for the definition itself. Copy the template, then replace its placeholders
+with the company's actual Notion home, account, databases, selected sources
+and write policy. Keep one active definition. For example, a design studio
+might map client decisions to Memory, methods to Skills, and current invoices
+to its accounting system. Add that last route only after it can be verified
+under the studio's own account and scope.
 
 | Place | What belongs there |
 | --- | --- |
@@ -27,6 +32,31 @@ for the definition itself.
 | Skills | Reusable methods you actually use |
 | Source agreements | The account, scope, reader, authority and freshness of a selected source |
 | Operating policy and checkpoints | The exact route to your write rules and, if selected, the existing run state |
+
+### Database fields to start with
+
+Reuse equivalent fields on an existing database. This table shows suggested
+names and Notion types for a new home.
+
+| Database | Starter fields | Add when useful |
+| --- | --- | --- |
+| Knowledge | Name (Title), Summary (Text), Space (Multi-select), Kind (Select), Temporal scope (Select), Evidence from (Multi-select), Status (Select). For managed entries, Key and Source (Text). | Evidence period, Revised, Review due (Date). Preserve existing Type and Category values. |
+| Memory | Name (Title), Key (Text), Status (Select), Source (Text with the evidence reference), Space (Multi-select). | Type (Select), Source date, Imported, Revised, Review due (Date), Related docs (Relation). Where Source is already a client label, keep it and record the exact reference in Evidence (Text). |
+| Skills | Skill name (Title), Description (Text), Space (Multi-select), Status and Audience (Select). | Files (Files & media), Owner (Person), and Key and Source (Text) for managed skills. |
+
+Use `Current`, `Needs review` and `Superseded` for Status. A verified,
+useful decision can be Current. Leave uncertain evidence visible for review,
+and reference the replacement when marking a record Superseded. Knowledge's
+temporal scope describes the period as Ongoing or Historical. For Skills,
+Audience is Personal or Team. Set Owner when a real maintainer is known.
+Notion sharing determines access. Space, Audience and views help people find
+things. A Key supports deduplication within visible records; check for
+existing matches before creating one.
+
+Use a native New-menu template if you already have one. Keep its body simple:
+Summary and evidence for Knowledge, decision and reason for Memory, and
+trigger, procedure and checks for Skills. Verify the saved template and one
+record created from it if native templates are part of the setup.
 
 Prefer an existing connector or provider sign-in. If the source needs a key,
 use the selected runtime's credential store and
