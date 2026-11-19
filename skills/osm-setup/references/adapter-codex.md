@@ -13,9 +13,10 @@ for a tracking install or the requested reviewed immutable ref for a fixed
 version; never substitute a branch for that ref.
 
 `.codex-plugin/plugin.json` declares the shared skills, native Setup entry and
-OSM sidebar server. Notion stays a separate official plugin; Codex owns its
+optional OSM Notion adapter. Notion stays a separate official plugin; Codex owns its
 authentication and connection UI. Setup verifies selected-home access. OSM
-ships no Notion app binding, auth wrapper or second Notion server.
+ships no Notion app binding or auth wrapper. Its optional internal-connection
+adapter is separate from the official plugin.
 `.agents/plugins/marketplace.json` points to this same package root. For an authorized local pilot, substitute the
 verified repository path:
 

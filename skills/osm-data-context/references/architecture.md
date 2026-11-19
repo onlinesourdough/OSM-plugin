@@ -448,7 +448,7 @@ nothing.
 
 Reader, collector and curator are different roles with different credentials.
 
-- **Recommended internal connection**: grants one selected root and its intended
+- **Optional dedicated connection**: grants one selected root and its intended
   descendants, with content read, insert and update. A root-only credential
   cannot read outside originals merely because the definition links them.
 - **Scope**: both narrowly selected pages/databases and a deliberately broader
@@ -465,9 +465,10 @@ Reader, collector and curator are different roles with different credentials.
   creation work. Trash is qualified separately under explicit action authority:
   no purge and no standing daily delete. No user-directory, comments or
   agent-session permissions by default.
-- **Official connection**: an explicit alternative, never a silent fallback and
-  never evidence for the narrower route. A host that keeps broader tools is not
-  an isolated agent.
+- **Official Notion plugin**: the normal owner-setup route. Verify its actual
+  account and page access. Preserve an existing selected route. It is never
+  evidence for a dedicated connection, and a host that keeps broader tools is
+  not an isolated agent.
 
 These rules are generic. They do not answer the pending concrete read-set and
 access gate for any installation.
@@ -855,29 +856,24 @@ Credential storage and host surfaces are setup choices, not plugin defaults.
 
 ## Root navigation and Home
 
-If the knowledge store (or the existing Docs), Memory and Skills are already
-native children of the root, Setup adds no second manual link list to the same
-objects. Keep one understandable root layout. Home and any other consumer read
-the canonical definition or the native child references by exact ID and readable
-title, expose each destination once by identity, preserve the exact root title
-and report their actual parsing and completeness limits. Dated, verified panel
-shortcuts are a compatibility aid, never a second source of authority.
+The root starts with its Data & Context definition and the native references to
+Knowledge (or existing Docs), Memory and Skills. Keep one understandable
+layout and expose each destination once by verified identity. Add no second
+manual list of databases that are already native children.
 
-### Selected connection for Preview, Home and bootstrap
+### Selected connection and bootstrap
 
-Preview, Home and bootstrap read the root and its sections through the
-customer's selected limited connection. Home reads a projection of the
-definition and currently reports `unsupported_host` on every host; see
-`docs/home-connection.md` in the repository.
+Use the official Notion plugin for the normal owner route, or the dedicated
+connection the owner selected for a team, worker or unattended caller. A denial
+never changes that selection. An available broader connection is not evidence
+of isolation.
 
-- Reading the root never requires an unselected broader Notion connector, and a
-  denial is never retried through one.
-- An optional broader connector may remain on a deliberately separate
-  interactive path (for example a page picker), labelled as such, while the
-  selected route works without it.
-- Implementing the panel's pickers through the selected connection is later Home
-  work. The official connection stays an explicit alternative (see
-  [Access roles](#access-roles)).
+OSM's optional headless adapter reads its selected root and mapped records
+through the existing scoped connection. Its bounded bootstrap read verifies
+the root and the destinations named there before a mapping is saved. The
+compatibility format calls that derived mapping a Home projection; it is not a
+dashboard or a second definition. See the
+[connection mapping procedure](panel-links.md).
 
 ## Readiness and evidence
 
@@ -943,7 +939,7 @@ working until an explicit [migration](migration.md).
 | --- | --- |
 | A separate mandatory AI Operating Model page holding the definition, plus an OSM-branded home ([OSM page](../assets/notion-osm.md)) | One neutral root with one definition ([Root and entry](#root-and-entry)) |
 | A human Business Docs or Document Hub library as the curation destination | The root's own knowledge store; human originals keep their body and structure ([Human originals](#human-originals-and-selected-excerpts)) |
-| The official Notion plugin connection as the setup route | The recommended internal root-only connection; official mode is an explicit alternative ([Access roles](#access-roles)) |
+| An enforced dedicated connection for every owner | The official Notion plugin for normal owner setup; a dedicated connection when its scope is selected ([Access roles](#access-roles)) |
 | Writes allowed by a destination-level allowlist | The owner's recorded write policy, applied by containment ([Home write policy](#home-write-policy)) |
 | Source, index and control records protected from routine writes by their role | Maintained records under the owner's recorded policy; no protected-write refusal is a default ([Maintained controls and Skills](#maintained-controls-and-skills)) |
 | Docs Type = Context/Source/Document, with Status=Current as selection | Knowledge metadata ([Knowledge metadata](#knowledge-metadata)) |
@@ -955,11 +951,11 @@ working until an explicit [migration](migration.md).
 
 The repository's offline rehearsal checks fictional fixtures against these rules.
 That is fixture-level proof only. Real permissions, inheritance, outside denial,
-host isolation, instruction loading, adapters, Home behaviour and actual timed
+host isolation, instruction loading, adapters, scoped adapter behaviour and actual timed
 success each need their own live or native proof.
 Nor does it prove real provider scopes and coverage discovery (adding, removing
 or losing access to objects), format processors and their quality, secret
-stores, any harness's effective tool set, Preview, Home and bootstrap through a
+stores, any harness's effective tool set and bootstrap through a
 selected connection, or any real source's numerical fidelity and completeness,
 mapping behaviour on future events, handling of original states and attachments,
 deduplication at a feed transition, or relevance and exclusion behaviour at

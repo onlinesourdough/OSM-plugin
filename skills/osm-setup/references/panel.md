@@ -1,52 +1,25 @@
-# Codex setup and dashboard
+# Notion access in Codex
 
-The panel opens a saved context on the dashboard. New setups use four visible,
-revisitable sections: Notion, Context (entry and optional Docs), Skills and
-Memory. Skills and Memory each show optional Personal and Team destinations.
-The first context save enables Docs; Continue saves progress and Finish opens
-the dashboard. Apply accepts an edited link into the draft. Section navigation keeps
-unsaved drafts. Settings opens a separate drawer, also available through the
-native settings entrypoint. Save commits edits; closing a changed drawer offers
-a discard choice. Switching context loads that context's own sources.
+Setup runs in the conversation. Check that the official Notion plugin is
+installed, enabled and connected to the intended account, then verify the
+selected Data & Context page with a useful read. Resume the owner's existing
+selection. A connected badge or a saved link does not establish page access.
 
-OSM and the official Notion plugin remain separate. Native status checks
-installation, enablement and connection; Connected does not prove page access
-or a complete business setup. Once connected, choose the Context page from the
-searchable dropdown. Docs, Skills and Memory use the same page selector. Initial
-suggestions include favorites and top-level pages; search finds other accessible
-destinations. Only names and navigation metadata are fetched. Existing saved
-sources and manual links remain available when useful.
-Panel buttons never start a chat or agent.
+Use the official plugin for ordinary owner setup. When a team, worker or daily
+caller needs explicitly selected pages, offer a dedicated connection with the
+actual provider-enforced grants. Explain that another broad connection remains
+available if the host still exposes it. Never change the selected mode after a
+denial or borrow another connector's credentials.
 
-For requested business onboarding, this skill verifies the home, reuses Docs,
-Skills and Memory, preserves Spaces and access, and proves a useful task. Register
-verified personal destinations through Context's
-[dashboard-link procedure](../../osm-data-context/references/panel-links.md).
-A consultant's client task never changes their personal default or its links.
-Personal/Team source labels grant no access. Keep one suitable Memory source;
-add a separate team destination only when the actual setup needs it.
+OSM's optional headless adapter supports the existing macOS Keychain route.
+Verify `osm_connection`, use `osm_context_home` for the selected root's
+bounded bootstrap read, then generate the mapping through the
+[connection mapping procedure](../../osm-data-context/references/panel-links.md).
+Other hosts need their own qualified route. No token is entered in chat or
+Notion, and setup does not rotate an existing credential.
 
-Home's reader uses OSM's own internal Notion connection: a bot limited by Notion
-to the pages and databases explicitly shared with it, and their children. Offer
-it only as the selected-pages option; an owner who chose the official full-user
-connection keeps it and need not create this one. Its token comes only from a supported host secret store, never chat or
-the panel. Hosts without one report Home as unavailable; continue with saved
-links. A scoped connection does not limit any other Notion route the agent can
-use. Record the owner's selected mode and never switch it after a denial. The
-shipped route is the macOS Keychain, turned on per context with
-`osm_save_connection_route` from the owner's recorded selection; `OSM_NOTION_KEYCHAIN=1`
-in the server's environment is the earlier pilot opt-in. Verify in this order: the
-connection (`osm_connection` names why it cannot be used), the bootstrap read of the
-selected root and its named destinations (`osm_context_home`), then Home's projection
-of the definition with Context's
-[dashboard-link procedure](../../osm-data-context/references/panel-links.md#home-projection),
-and only when the root's verified identity and an already recorded definition
-revision exist; otherwise leave it unsaved and pending and keep the saved links.
-Only the private Keychain item and any OS prompt wait on the human. Other hosts
-stay unsupported, and browser sign-in is not part of this route.
-
-The panel stores navigation names and links, and the Home projection's identities and labels. Company information remains
-in its source; shared methods remain in the plugin. Its saved link is not an
-approval of retrieved instructions. Context reads the actual entry before use.
-Earlier saves remain after a later failure. Stale edits keep their draft and
-require reconciliation; they must never silently adopt a new revision.
+The mapping keeps identities, labels and verified field names. Actual Knowledge,
+Memory, Skills and other selected content stay in Notion and their owning systems.
+The wire name `Home projection` remains for compatibility with existing state;
+it does not refer to a dashboard. Source settings use revision-checked tools,
+and a client task never changes the consultant's personal default.

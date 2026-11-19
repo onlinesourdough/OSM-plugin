@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.1.0"
+  version: "3.1.1"
 ---
 
 # OSM:setup
@@ -14,8 +14,7 @@ Codex **Set up** or an explicit request starts this skill. Resume accepted setup
 and connections. Verify access; a badge or saved link is not readiness. For
 package installation or a requested bridge-only change, use the
 [adapter route](references/adapters.md). Installation alone creates no home and
-needs no global instruction edit. Register verified personal sources with the
-[panel](references/panel.md) procedure.
+needs no global instruction edit. Use the [Notion access](references/panel.md) procedure for Codex connection checks.
 Use the [procedure index](../osm/index.md) for earlier names and package recovery.
 
 ## One path

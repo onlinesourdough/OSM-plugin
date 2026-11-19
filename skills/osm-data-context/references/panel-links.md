@@ -1,9 +1,9 @@
-# Codex dashboard links
+# Optional scoped connection mapping
 
-OSM's local MCP owns the panel and a small navigation map. The independent
-Notion connector owns remote reads and writes. The map contains only a context
-title and source names/links, never documents, skills, memories, credentials,
-permissions or company policy. It is not a context home or synchronization.
+The selected Notion definition owns source identities. OSM can retain a small,
+revision-checked mapping for its optional headless adapter. This contains names,
+links and field mappings, never company content or credentials. The official
+Notion plugin works without this local mapping.
 
 After authorized personal onboarding or a requested source-route change:
 
@@ -13,7 +13,7 @@ After authorized personal onboarding or a requested source-route change:
 2. If `osm_sources` is available, read its current context and source revisions.
    Compare the selected context identity. A client task must not overwrite the
    consultant's personal context or its links. If this is not the selected
-   personal default, keep that task scoped and leave this panel alone.
+   personal default, keep that task scoped and leave the personal settings alone.
 3. Call `osm_save_sources` with the selected target, `expectedContextRevision`,
    `expectedRevision`, short context `title`, and `links`. Each link is
    `{ title, target }`; role keys are `docs`, `personalSkills`, `teamSkills`,
@@ -28,7 +28,7 @@ After authorized personal onboarding or a requested source-route change:
 ## Home projection
 
 The AI Operating Model's Data and Context Definition is the one place that holds
-source and query identities. Home stores only a projection generated from one of
+source and query identities. The optional adapter stores only a projection generated from one of
 its revisions; never edit that projection or keep it as a second map.
 
 In a Data & Context root the definition is the root's YAML block (see
@@ -39,7 +39,7 @@ exact root page ID); never fabricate an id. It also needs a definition revision
 already recorded with known provenance under the selected existing rule. The
 block's `version: 1` is its format, not a content revision, and a revision is
 never invented from that version, the generation time or an implicit mapping.
-Without that identity or revision, leave only Home's projection unsaved and
+Without that identity or revision, leave only the adapter's projection unsaved and
 pending, keep the saved links and report one concise gap; Setup and other work
 continue. Existing definitions with a verified id and revision keep working.
 `generatedAt` is the actual time the projection is generated, not a source fact,
@@ -47,9 +47,9 @@ and the YAML need not contain it.
 
 1. Read the definition and its recorded revision. Record the owner's `selectedMode`:
    `official_notion_user` or `internal_selected_pages`. Never switch it, and
-   never create the internal connection only to fill Home. Home reads only
-   through the internal connection; an official projection shows saved links
-   with a note that Home can't read through it yet.
+   create the internal connection only for a selected access need. The optional
+   adapter reads through the internal connection. With official mode selected,
+   use the official plugin for actual Notion reads.
 2. Project each route the definition names into a section: a short `key`, the
    owner's `label`, an explicit `role` (`profile`, `memory`, `documents`,
    `content`, `skills` or `related`) and `order`. Use `content` only for an
@@ -57,7 +57,7 @@ and the YAML need not contain it.
    when the definition has no such route, and never use it for core context,
    control records or memory. Record core rules, the source index,
    writing, access and evidence procedures, maintenance and recovery snapshots as
-   `role: support` with their `kind`, so Home never shows them as context. Never
+   `role: support` with their `kind`, so the adapter never lists them as business context. Never
    infer a role from a title.
 3. Use the definition's real IDs: a data source with its verified field map
    (`title`; optional `description`; for memory `fact`, `decision`, `why`,
@@ -84,8 +84,8 @@ and the YAML need not contain it.
       Settings → Connections), it may be saved with the same call as `manage`
       with the `botId` and `workspaceId` from `osm_connection`; never build a link
       from identifiers, and never use a developer page that shows the credential.
-      Home offers that link only while the live connection is that bot and
-      workspace. On
+      The adapter returns that link only while the live connection is that bot
+      and workspace. On
       `not_connected` the one human step is private: the owner reuses the existing
       selected connection's credential, adding it in macOS Keychain Access (service
       `com.onlinesourdough.osm.notion`, account `osm`), and approves any OS prompt.
@@ -119,20 +119,13 @@ and the YAML need not contain it.
    compatibility view, not native YAML proof. No bodies, records, generated
    descriptions, private defaults or secrets.
 
-If the panel tools are unavailable, the verified context home still works.
-Report the missing panel registration; do not claim that a fresh install has
-loaded new tools. Reopen Codex when its old runtime is still active.
-
-Connected Notion selectors browse and search accessible page names through the
-existing official connector. They fetch navigation metadata, not page bodies.
-Saved names and direct links remain available. Setup's verified business source
-mapping is a separate observation. Connection Refresh checks the official
-plugin/account, not every destination. Picker interaction triggers bounded reads;
-there is no background sync, chat message or agent run. Other panel clicks open
-sources or save navigation.
+If the optional adapter is unavailable, use the already selected official route
+where authorized, or report the concrete missing capability. A denial never
+selects a broader route. Do not claim a fresh installation loaded new tools
+until native discovery confirms it.
 
 Storage is per context identity under `$CODEX_HOME/aios/panel/`, not in the
 system prompt. A new context cannot inherit another context's links. The
 short AGENTS pointer and Notion's guide still govern agent retrieval and Spaces.
-When a verified route changes, update this navigation metadata within that same
+When a verified route changes, update this derived mapping within that same
 authorized change. No background sync, daily task or duplicate company brain.

@@ -72,8 +72,8 @@ methods. Owner data, bridges and saved panel links need no change.
      configuration database wholesale.
    - Without a supported disable control, remove `aios` with its scoped native
      removal at this idle boundary, keeping the tested rollback source.
-4. In a fresh session, verify each declared `osm` skill and the single OSM
-   sidebar server are discovered once, unrelated skills are unchanged, and an
+4. In a fresh session, verify each declared `osm` skill and the single optional OSM
+   Notion adapter are discovered once, unrelated skills are unchanged, and an
    ordinary owner request uses the intended route.
 5. After acceptance, retire the disabled `aios` registration with its native
    removal only when no other active session, workspace or profile still
