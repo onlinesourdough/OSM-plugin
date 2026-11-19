@@ -48,7 +48,7 @@ brief and a resumed task get their outcome and criteria.
 | [OSM:manage-skills](../skills/osm-manage-skills/SKILL.md) | Manage personal and installed skill lifecycles |
 | [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Review changed work and selected sources, repair confirmed context errors and surface open progress between sessions through a manual or existing native caller |
 | [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume the Notion Data & Context foundation, from access to a useful first task |
-| [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent for an independent review, a second opinion or help with bounded work |
+| [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent for a read-only review or delegate bounded work with a scoped brief |
 | [OSM:risky-changes](../skills/osm-risky-changes/SKILL.md) | Assess consequential changes proportionately |
 | [OSM:review-work](../skills/osm-review-work/SKILL.md) | Inspect the final result against its contract; caller acceptance remains separate for delegated work |
 | [OSM:ship-work](../skills/osm-ship-work/SKILL.md) | Deliver an exactly reviewed result under authority |

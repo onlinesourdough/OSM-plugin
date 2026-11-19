@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Split Council into read-only review and bounded delegation with a scoped work brief.
+
 ## 0.33.0 — 2026-11-19
 
 - Add Prime for scoped context at session start and Log for verified capture
