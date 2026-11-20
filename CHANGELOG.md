@@ -12,6 +12,9 @@
   explicit ownership handoff. Keep Notion-authored guide originals read-only.
 - Compare native media by stable Notion identity, so expiring download links
   cannot create false guide changes or enter the versioned documentation.
+- Verify complete public skill text and exact visible catalogue entries in one
+  paced anonymous browser session after the API readback.
+- Preserve newer released packets when an older queued publication run arrives.
 
 ## 0.34.2 — 2026-11-20
 

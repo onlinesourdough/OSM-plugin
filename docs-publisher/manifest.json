@@ -3,12 +3,12 @@
   "purpose": "Per-artifact source and ownership manifest for the public OSM documentation: which side holds the original, how a Notion-authored original is bound to its Git exports, and who may write each public artifact. Not shipped in the package.",
   "activation": {
     "active": true,
-    "live_proof": "coherent-set-and-noop-pending",
-    "note": "Bounded Log import in CI44735665358 verified the native body, six managed properties and all41support files. Its anonymous CI check held; a fresh anonymous IAB observation then matched all34packet lines in order and three prior file references still resolved. All seven exact CI handoffs are now recorded for coherent-set qualification. Full automatic delivery is claimed only after the whole set and a no-op run pass.",
+    "live_proof": "whole-set-and-zero-write-repeat-qualified",
+    "note": "Initial automatic main qualification 44751015131 and independent repeat 44751623179 passed all eight guide originals, all seven released native packets, 251supporting-file observations, six managed properties and the complete anonymous page/catalogue checks. Both runs were unchanged with zero API writes. Earlier failed and interrupted evidence is retained. Each later release still requires its own whole-set readback and public result.",
     "public_reader": {
-      "kind": "isolated-playwright-visible-body/1",
-      "reviewed_in": "CI44731499066 plus actual bounded CI44735665358 and fresh anonymous Log fulltext observation2026-11-20; exact-source follow-up in PR116",
-      "note": "Wait for every expected instruction line and compare the complete text in order; metadata-only observations never complete publication."
+      "kind": "isolated-playwright-visible-native-catalogue/2",
+      "reviewed_in": "PR #120: independent High acceptance of 8f06088; actual secret-free production-path qualification 44750248088; main 44751015131 and zero-write repeat 44751623179.",
+      "note": "One fresh anonymous context; atomic document identity/body capture, complete instruction lines in order and visible catalogue entries bound to the seven actual native Notion row ids. Pacing, server backoff, deadlines and pinned-launcher cleanup fail closed. No credentials or persistent profile enter the child."
     }
   },
   "editions": {
@@ -391,7 +391,7 @@
         "revision": "add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
@@ -412,7 +412,7 @@
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -433,7 +433,7 @@
         "revision": "5709eebd7303c4a78288797eccbe8dc3ae25531b2accd99a3d7d7f91a9b6257c",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
@@ -454,7 +454,7 @@
         "revision": "617224d87648d666abc68cf59d2857fc77ac02c068c2f5b8b8f0d15eca0407fb",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-20T13:16:00.000Z"
       },
       "exports": [
@@ -495,7 +495,7 @@
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
@@ -516,7 +516,7 @@
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -538,7 +538,7 @@
         "revision": "a7d17def8524f7035023d78982a89b70c3f5cc28231704ace5b3840e5407b693",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
+        "read_at": "2026-11-20T14:27:30+00:00",
         "last_edited_time": "2026-11-20T13:33:00.000Z"
       },
       "exports": [
@@ -568,11 +568,11 @@
       "authoritative_for": "The release reference, the guide's own changelog and where documentation lives",
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
-        "revision": "7a7cbadb5440a338178d1df5cbff788c44c17a03962a03f53139b08885b14576",
+        "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
         "edition": "0.34.3",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-20T13:34:28+00:00",
-        "last_edited_time": "2026-11-20T11:05:00.000Z"
+        "read_at": "2026-11-20T14:27:30+00:00",
+        "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
     {

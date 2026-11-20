@@ -1,5 +1,62 @@
 # Verification
 
+## 20 November 2026 — initial automatic public Notion qualification
+
+The dedicated public-only connection is configured and its token is a GitHub
+Actions secret. Its grants cover the public OSM subtree; a private owner-home
+read was denied. Eight guide originals and the seven existing skill pages were
+read through this identity. Private context and its credentials are outside CI.
+
+The bounded Log import in run 44735665358 verified its complete native body,
+41 supporting files and six properties, but its original public check held.
+Earlier failed public checks and interrupted attempts remain retained; they are
+not successful deliveries. Subsequent API readbacks verified all seven packets.
+
+PR #120 fixes two observed browser failures: Notion virtualises lower blocks in a
+normal viewport and returns HTTP 429 when fresh sessions are created too quickly.
+One tall, paced anonymous context now captures each document identity and body
+together. The catalogue check uses the exact visible native collection-row ids
+and names observed in run 44748698317. Probe 44750248088 verified all seven full
+instruction bodies in order and their catalogue entries. The child received only
+CI, HOME and PATH; no account credential or saved browser profile was used.
+
+Automatic main run
+[44751015131](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44751015131)
+and a separate repeat
+[44751623179](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44751623179)
+passed on source `ace36661a07e81f9389446e432f2d09b647f6f02`. Both verified the eight
+unchanged live originals, seven native packets, 251 supporting-file observations,
+all six managed properties and complete anonymous public visibility. Every row
+was unchanged and neither run attempted an API write. The exact-source
+`osm/public-guide-parity` status succeeded. This initial qualification used
+released v0.34.2 at `1e4b2b186d158cd36fa197e0ab9c70cf03521ee0`.
+
+Independent High reviews accepted the corrected browser candidate, the actual
+native catalogue-row contract and the stale-run guard at `8f06088`. The main
+merge has the same tree. The guard's regression reproduced a real fixture
+upload/property-write downgrade without the guard; it now conflicts with zero
+writes while forward upgrades and no-ops still pass. Local checks passed 23
+native-publisher scenarios, 16 parity cases, 16 Node browser cases and seven
+Python boundary cases, including the actual locked Playwright launcher's detached
+process cleanup on exit and timeout. Package CI 44750766130 passed on main.
+
+Accepted PR #121 also preserves the Notion-authored AI-operating-model clarification,
+Setup 3.2.1, the definition-first new-home template and updated diagram. The guide
+and bundled runtime rebuild byte-identically from their declared sources. At
+this checkpoint 0.34.3 remains a source candidate; its release asset, native
+installation and next released-packet delivery require their separate proof.
+Daily Dreaming and Agentic System retain their separate operational proof.
+
+A subsequent deliberate Notion edit added the current home-name and hub-icon
+clarification to Releases & documentation. Run 44753512816 read the eight
+originals at 14:27:30 UTC and held exactly that changed original before native
+publication; no skill checkpoint or write stage was reached. Its actual
+public-only API snapshot was deliberately exported for 0.34.3. The other seven
+original bodies retained their revisions; the generated guide and runtime now
+include the same one-line clarification. This expected drift HOLD is separate
+from the earlier successful whole-set and no-op proof.
+
+
 ## 20 November 2026 — 0.34.1 release and adoption
 
 Stable release v0.34.1 resolves to `4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a`,
