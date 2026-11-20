@@ -541,6 +541,8 @@ def _built_by_ci(packet, seen, prior_packets):
         return None
     if earlier is None or earlier["commit"] == packet["commit"]:
         return None
+    if pub._version(earlier["tag"]) >= pub._version(packet["tag"]):
+        return None  # A delayed or repeated old run cannot replace a newer released packet.
     current = {path: data for path, data in seen["files"].items() if not path.startswith("history/")}
     return earlier["tag"] if _same({**seen, "files": current}, expected({**earlier, "handoff": packet["handoff"]}, {**seen, "files": {}})) else None
 
