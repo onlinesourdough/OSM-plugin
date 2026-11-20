@@ -50,9 +50,9 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.34.1 is the latest stable release. The retained v0.34.0 source tag did not publish a GitHub Release. |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.34.2 is the latest stable release. The retained v0.34.0 source tag did not publish a GitHub Release. |
 
-The manifest binds v0.34.1 to its exact reviewed release commit and seven skill
+The manifest binds v0.34.2 to its exact reviewed release commit and seven skill
 rows. Native adoption, Notion source-packet delivery and public readback are
 recorded separately in [verification](verification.md).
 

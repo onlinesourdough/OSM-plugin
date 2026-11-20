@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.34.3 — 2026-11-20
+
+- Use the OSM project icon from Gustavonline's Current Work section consistently
+  in the plugin and sidebar: the brown hub on a rounded cream tile.
+- Add native whole-skill Notion publication, complete archive readback and
+  explicit ownership handoff. Keep Notion-authored guide originals read-only.
+- Compare native media by stable Notion identity, so expiring download links
+  cannot create false guide changes or enter the versioned documentation.
+
 ## 0.34.2 — 2026-11-20
 
 - Use the website's pixel bread for the plugin and themed sidebar icons, with

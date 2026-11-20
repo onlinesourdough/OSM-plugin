@@ -1,0 +1,6 @@
+{
+  "name": "osm-public-docs-checks",
+  "private": true,
+  "description": "Author-only anonymous browser verification for the public Notion guide.",
+  "devDependencies": { "playwright": "1.65.1" }
+}
