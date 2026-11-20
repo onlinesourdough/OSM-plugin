@@ -40,11 +40,16 @@ the scoped reference/dashboard cleanup. These reviews are separate from live pro
   using this new method binding remains pending; the 19 November noon run is old proof.
 - All seven existing public skill pages are Released reference at 0.34.1 with
   their correct individual versions and exact commit. Native imports preserve
-  historical packets. Downloads verify all seven projected entrypoints and 59
-  supporting files; canonical source ZIPs preserve the exact owning Git folders.
+  historical packets. Native Notion download round trips verify all seven
+  projected entrypoints and 59 supporting files; canonical source ZIPs preserve the exact owning Git folders.
   Native page Markdown is a reading projection, not byte-identical Git.
-- Fresh public views verify the current guide's eight core pages, architecture,
-  wordmark and seven released skill pages. The catalogue has seven Released
+- Fresh public views rendered the guide's core pages, including the gateway
+  definition and current architecture, and all seven released skill pages;
+  supporting samples loaded and were read. The plain OSM wordmark was observed
+  on a fresh public root view. Parity of all eight unchanged originals uses the
+  authenticated same-reader snapshot from 00:53 UTC, before publication; these
+  public views do not claim a post-release whole-body comparison. The catalogue
+  has seven Released
   references, 18 Historical references and five separate optional Content Drafts.
   Notion's readonly Files display supplies filenames; the explicit GitHub source
   asset is the verified anonymous download route. Already-open Notion tabs showed
@@ -54,7 +59,8 @@ the scoped reference/dashboard cleanup. These reviews are separate from live pro
   run 44653959737 succeeded, and the public page displays the new text and `4df5ef1`
   source links. Its repository remains private.
 
-The public reader also passed the in-app browser checks. The already-open old
+The public reader passed in-app browser navigation, narrow-layout and file-link
+checks. The already-open old
 Codex MCP view is not fresh native-sidebar proof; application computer access
 was denied and not bypassed. A native close/reopen observation remains unqualified.
 Automatic public Notion publication remains inactive, tracked in #110: dedicated

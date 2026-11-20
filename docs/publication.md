@@ -100,6 +100,9 @@ The manifest binds released v0.34.1 to `4df5ef1` and seven skill packets.
 The v0.34.0 source tag is retained unchanged; its automated release stopped
 before creating a GitHub Release. The public writer remains inactive; current
 manual packet and public-readback evidence is recorded in [verification](verification.md).
+The reader keeps reviewed ancestor `dd60c9b`: every packaged skill/resource byte
+is identical to the release and guarded by the build. The edition binding does
+not rebuild or change the published runtime.
 
 `tests/publisher-rehearsal.py` covers transport and retry behavior with mutation
 controls. `tests/publisher-parity.py` checks original/export drift, source identities,

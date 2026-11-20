@@ -652,10 +652,10 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content \u00b7 optional extension",
+        "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "96dc9e045fc3860b6e2c3f9b4681404c6298227ec86c90a2aeb1a45cceba2935",
-        "edition": "Optional Content \u00b7 Draft edition 2026-11-05.1"
+        "edition": "Optional Content · Draft edition 2026-11-05.1"
       }
     ]
   }
