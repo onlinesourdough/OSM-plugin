@@ -51,6 +51,15 @@ class Parity(unittest.TestCase):
         self.assertEqual(before, self.path.stat().st_mtime_ns)
         self.assertIn('read and unchanged', self.state(self.read())[1])
 
+    def test_whole_file_export_can_create_its_declared_new_asset(self):
+        self.path.unlink()
+        self.guide['exports'][0]['git'] = None
+        self.export(dry_run=True)
+        self.assertFalse(self.path.exists())
+        self.export()
+        self.assertEqual(self.path.read_text(), 'source: direct\nretention: source-only\n')
+        self.assertEqual(self.state(self.read())[0], pub.REFUSED_NOTION)
+
     def test_newer_original_conflicts_without_repairing_either_side(self):
         self.export()
         before = self.path.read_bytes()
@@ -71,7 +80,7 @@ class Parity(unittest.TestCase):
         outcome, detail = self.state({'error': 'not granted'})
         self.assertEqual(outcome, pub.UNREADABLE)
         outcome, detail = self.state(self.read(reader='another-representation'))
-        self.assertEqual(outcome, pub.REFUSED_NOTION)
+        self.assertEqual(outcome, pub.UNVERIFIED_ORIGINAL)
         self.assertIn('not comparable', detail)
         self.assertNotIn('read and unchanged', detail)
 
@@ -109,6 +118,20 @@ class Parity(unittest.TestCase):
             with self.subTest(patch=patch), self.assertRaises(pub.SetupError):
                 pub.read_snapshot(data, self.manifest)
 
+    def test_unread_or_differently_represented_original_blocks_publication_before_writes(self):
+        from fixture_transport import FixtureTransport
+        self.export()
+        approved = self.manifest['editions']['released']['commit']
+        foreign = copy.deepcopy(self.snapshot)
+        foreign['reader'] = 'unqualified-api-format'
+        for snapshot in (None, foreign):
+            transport = FixtureTransport()
+            with self.subTest(snapshot=bool(snapshot)), self.assertRaises(pub.PublisherError):
+                pub.publish(self.manifest, pub.DirSource(self.root), transport, 'test',
+                            lambda tag: approved, allow_fixture=True, originals=snapshot)
+            self.assertEqual(transport.rows, {})
+            self.assertFalse(any(event[0] in ('upsert', 'status') for event in transport.log))
+
     def test_release_binding_and_new_method_folder_require_an_explicit_mapping(self):
         self.assertTrue(pub.binding_problems(self.manifest, 'v0.34.0'))
         self.export()
@@ -119,6 +142,21 @@ class Parity(unittest.TestCase):
         self.assertTrue(pub.folder_problems(self.manifest, [PATH, 'skills/new/SKILL.md']))
 
 class FolderPages(unittest.TestCase):
+    def test_reader_source_cannot_lag_instructions_or_shared_resources(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('guide_builder', ROOT / 'docs-publisher/build-guide.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        files = {'skills/example/SKILL.md': 'accepted instruction',
+                 'skills/helper/index.md': 'accepted reference'}
+        source = pub.DictSource(files)
+        self.assertEqual(module.skill_source_drift(source, pub.DictSource(dict(files))), [])
+        for path in files:
+            changed = {**files, path: 'changed source'}
+            self.assertEqual(module.skill_source_drift(pub.DictSource(changed), source), [path])
+        added = 'skills/new/SKILL.md'
+        self.assertEqual(module.skill_source_drift(pub.DictSource({**files, added: 'new'}), source), [added])
+
     def test_method_folders_point_to_their_public_skill_pages(self):
         manifest = pub.load_manifest()
         for artifact in manifest['artifacts']:

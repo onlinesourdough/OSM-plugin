@@ -781,9 +781,6 @@
     "assets/": {
       "role": "Package icon and branding"
     },
-    "Paper/": {
-      "role": "Editable design artwork and its notes"
-    },
     ".agents/": {
       "role": "Repository specialist shelf and the Codex marketplace declaration"
     },
@@ -812,7 +809,7 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "13cc2fee3a796563cb4695ebada834e45fee88d4",
+    "skill_source": "dd60c9b065f914526a8867d33f1948f1a7007145",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",

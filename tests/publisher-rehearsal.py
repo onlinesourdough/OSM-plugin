@@ -1301,13 +1301,7 @@ def no_class_c_dependency_private_id_or_cron_in_the_repository():
         require(not re.search(r"^\s*(cron|schedule)\s*:", text, re.M) and "cron:" not in text, f"no schedule in {path.name}")
         for found in ([] if path.name == "public-guide.json" else HEX32.findall(text.replace("-", ""))):
             require(found in RECORDED_IDS, f"unrecorded identifier in {path.name}: {found}")
-    template = (ROOT / "docs-publisher/workflow.template.yml").read_text()
-    triggers = re.search(r"^on:\n((?:  .*\n)+)", template, re.M)
-    require(triggers and len(re.findall(r"^  [a-z_]+:", triggers.group(1), re.M)) == 1, "the template has exactly one trigger")
-    require("secrets." + pub.TOKEN_ENV in template and not re.search(r"secret_[A-Za-z0-9]{8,}|ntn_[A-Za-z0-9]{8,}", template),
-            "the template names the secret, never a value")
-    require(not (ROOT / "docs-publisher/workflow.template.yml").is_relative_to(ROOT / ".github"), "the template is outside .github")
-    require(template.count("if: always()") == 2 and "--out publication.md" in template and "--only" not in template, "both artifacts upload even when a step fails")
+    require(not (ROOT / "docs-publisher/workflow.template.yml").exists(), "no ungated publication workflow is offered")
     release = (ROOT / ".github/workflows/release.yml").read_text()
     require("reconcile --check" in release and "--base" in release and "github.event.pull_request.base.sha" in release, "CI passes a base on pull requests and pushes")
 
@@ -1414,7 +1408,7 @@ MUTATIONS = [
     ("an interrupted run is reported as a plain error", P, [('raise Interrupted(f"{error}; the run stopped', 'raise PublisherError(f"{error}; the run stopped')]),
     ("an interrupted run says nothing was written", P, [("if isinstance(error, Interrupted)", "if False")]),
     ("a skill generator is accepted", P, [('    if manifest.get("generators"):', "    if False:")]),
-    ("any database is accepted", P, [('args.database != manifest["bindings"]["working_subtree"]', "False")]),
+    ("any database is accepted", P, [('(args.database or None) != manifest["bindings"]["working_subtree"]', "False")]),
     ("unused public configuration is accepted", P, [("        if base or catalogue:\n            raise SetupError", "        if False:\n            raise SetupError")]),
     ("a frozen ZIP mismatch is not reported", P, [('elif got != frozen["sha256"]:', "elif False:")]),
     ("the guide check does not say it was not run", P, [('f"{never} | newer-original check: {NOT_CHECKED}: "', '"Notion-authored original | "')]),
