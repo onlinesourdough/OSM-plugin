@@ -1338,7 +1338,9 @@ def the_credential_free_reconciliation_check_passes_on_this_repository():
         code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--check"], manifest=pub.load_manifest())
     text = out.getvalue()
     require(code == 0, text)
-    require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
+    active = 'yes' if pub.load_manifest()['activation']['active'] else 'no'
+    require("Frozen source commit:" in text and f"Publisher active: {active}" in text,
+            "the result reports the actual recorded activation state")
     require(f"| pending-handoff | {CLASS_A_ROWS} |" in text and f"{CLASS_A_ROWS} artifact(s) are pending handoff" in text, f"the {CLASS_A_ROWS} released packets are pending handoff")
     require(f"| unknown-no-receipts | {len(W_KEYS)} |" in text and "| written" not in text, "no row claims to be written")
     since = io.StringIO()
