@@ -721,6 +721,14 @@ def the_next_release_replaces_its_own_packet_and_keeps_the_history():
     require(page["files"][f"history/{old_zip}"] == PACKETS[COUNCIL]["files"][old_zip] and old_zip not in page["files"]
             and all(page["files"][path] == data for path, data in HISTORY.items()) and "agents/openai.yaml" not in page["files"]
             and "osm-council-3.2.0-osm-0.35.0-source.zip" in page["files"], "the earlier source ZIP moved to history and the old history is intact")
+    stale = copy.deepcopy(fake)
+    stale.log.clear()
+    old_run = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(stale), tags.get,
+        prior_packets=lambda tag, commit: packets if tags.get(tag) == commit == "c" * 40 else None,
+        write=True, only=COUNCIL)
+    require(outcomes(old_run) == {COUNCIL: pub.CONFLICT} and not stale.writes()
+            and stale.pages[PACKETS[COUNCIL]["page"]]["props"]["Package version"][1] == "0.35.0",
+            f"a stale run must preserve the newer packet: outcome={outcomes(old_run)}, writes={stale.writes()}, package={stale.pages[PACKETS[COUNCIL]['page']]['props']['Package version'][1]}")
     fake.log.clear()
     again = ns.publish(later, packets, api(fake), tags.get, prior_packets=prior, write=True, only=COUNCIL)
     require(outcomes(again) == {COUNCIL: pub.UNCHANGED} and not fake.writes(), "and the repeat is a no-op")

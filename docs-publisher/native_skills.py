@@ -541,6 +541,8 @@ def _built_by_ci(packet, seen, prior_packets):
         return None
     if earlier is None or earlier["commit"] == packet["commit"]:
         return None
+    if pub._version(earlier["tag"]) >= pub._version(packet["tag"]):
+        return None  # A delayed or repeated old run cannot replace a newer released packet.
     current = {path: data for path, data in seen["files"].items() if not path.startswith("history/")}
     return earlier["tag"] if _same({**seen, "files": current}, expected({**earlier, "handoff": packet["handoff"]}, {**seen, "files": {}})) else None
 
@@ -888,7 +890,8 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None, 
                 raise pub.SetupError("a public address is set but no public reader is qualified in the manifest; refusing unused configuration")
             if args.browser_public_read:
                 from browser_reader import BrowserReader
-                reader = BrowserReader(args.public_base, args.public_catalogue, packets)
+                reader = BrowserReader(args.public_base, args.public_catalogue, packets,
+                                       catalogue_id=manifest["reading_export"]["catalogue"])
             else:
                 reader = pub.PublicReader(args.public_base, args.public_catalogue, opener=opener)
         elif args.command == "publish" and manifest["activation"].get("public_reader") is not None:
