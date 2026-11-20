@@ -1,48 +1,94 @@
-"""Anonymous rendered public reads. No credential or authenticated browser profile is passed."""
+"""One bounded, anonymous browser session per run; no credentials or saved profile."""
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
+from urllib.parse import urlsplit
 import publisher as pub
 from native_skills import plain_lines
+
+SAFE_REASONS = {
+    'URL or markers outside the explicit public page set', 'Public page did not return HTTP 200',
+    'Public page changed host or page identity', 'Public page was oversized or missing its expected content',
+    'Public browser failed during launch', 'Public browser failed during navigation',
+    'Public browser failed during content', 'Oversized public read request', 'Invalid public read request',
+    'Public browser run reached its time limit', 'Public page was rate limited; retry later',
+}
 
 
 class BrowserReader(pub.PublicReader):
     def __init__(self, base, catalogue, packets, runner=subprocess.run):
         super().__init__(base, catalogue)
-        self.runner, self.cache, self.markers = runner, {}, {}
+        self.runner, self.cache, self.markers, self.attempted = runner, {}, {}, False
         for packet in packets.values():
             lines = plain_lines(packet['files']['SKILL.md'].decode())
             markers = [line[at:at+500] for line in lines for at in range(0, len(line), 500)]
             self.markers[f'{self.base}/{packet["page"]}'] = [packet['title'], packet['version'], packet['package'], *markers]
         self.markers[catalogue] = [packet['title'] for packet in packets.values()]
+        self.failure = 'public browser did not verify the page'
 
     def read(self, url):
         if url not in self.markers:
             return pub.FAILED, 'outside the explicit public page set'
-        if url in self.cache:
-            return self.cache[url]
-        # The child gets only browser/runtime paths, never the Notion or GitHub token.
+        if not self.attempted:
+            self.attempted = True
+            self._observe()
+        return self.cache.get(url, (pub.FAILED, self.failure))
+
+    def _observe(self):
+        # All native writes/readbacks finish before public_state calls this reader.
+        # Reuse a single fresh anonymous context only inside this run, never a stored profile.
         env = {key: value for key, value in os.environ.items() if key in
                {'PATH','HOME','TMPDIR','CI','PLAYWRIGHT_BROWSERS_PATH','XDG_CACHE_HOME'}}
-        request = {'url':url, 'allowedUrls':list(self.markers), 'markers':self.markers[url]}
+        request = {'allowedUrls':list(self.markers), 'requests':[
+            {'url':url, 'markers':markers} for url, markers in self.markers.items()]}
         try:
+            source = json.dumps(request)
+            if len(source.encode()) > 256000 or not 1 <= len(self.markers) <= 32:
+                return
             result = self.runner(['node', str(Path(__file__).with_name('public-browser-read.mjs'))],
-                                 input=json.dumps(request), text=True, capture_output=True, timeout=80, env=env)
-            if len(result.stdout.encode()) > 2_010_000:
-                return pub.FAILED, 'public browser did not verify the page'
+                                 input=source, text=True, capture_output=True, timeout=285, env=env)
+            if len(result.stdout.encode()) > len(self.markers) * 2_010_000:
+                return
             body = json.loads(result.stdout)
-            if result.returncode:
+            if not isinstance(body, dict) or result.returncode not in (0, 1):
+                return
+            if 'results' not in body:
                 reason = body.get('reason')
-                safe = {'URL or markers outside the explicit public page set', 'Public page did not return HTTP 200',
-                        'Public page changed host or page identity', 'Public page was oversized or missing its expected content',
-                        'Public browser failed during launch', 'Public browser failed during navigation',
-                        'Public browser failed during content', 'Oversized public read request', 'Invalid public read request'}
-                return pub.FAILED, reason if reason in safe else 'public browser did not verify the page'
-            if body.get('ok') is not True or body.get('url') != url or not isinstance(body.get('text'),str):
-                return pub.FAILED, 'public browser returned no matching content observation'
-            observed = pub.VERIFIED, body['text']
-            self.cache[url] = observed
-            return observed
-        except (OSError, ValueError, subprocess.SubprocessError):
-            return pub.FAILED, 'public browser read was unavailable'
+                self.failure = reason if reason in SAFE_REASONS else self.failure
+                return
+            rows = body['results']
+            if not isinstance(rows, list) or len(rows) != len(self.markers):
+                return
+            seen, observations = set(), {}
+            for row in rows:
+                if not isinstance(row, dict) or row.get('url') not in self.markers or row['url'] in seen or type(row.get('ok')) is not bool:
+                    return
+                url = row['url']
+                seen.add(url)
+                if row['ok']:
+                    text, final = row.get('text'), row.get('finalUrl')
+                    if not isinstance(text, str) or len(text.encode()) > 2_000_000 or not isinstance(final, str):
+                        return
+                    expected, actual = urlsplit(url), urlsplit(final)
+                    # Node checks the origin and exact page id. Keep that identity boundary in the parent too.
+                    expected_id = re.search(r'([a-f0-9]{32})(?:/|$)', expected.path, re.I)
+                    actual_id = re.search(r'([a-f0-9]{32})(?:/|$)', actual.path, re.I)
+                    if (actual.scheme, actual.netloc) != (expected.scheme, expected.netloc) or not expected_id or not actual_id or expected_id[1].lower() != actual_id[1].lower():
+                        return
+                    shown = re.sub(r'[^\w]|_', '', text, flags=re.UNICODE).lower()
+                    if not all(re.sub(r'[^\w]|_', '', marker, flags=re.UNICODE).lower() in shown for marker in self.markers[url]):
+                        return
+                    observations[url] = pub.VERIFIED, text
+                else:
+                    reason = row.get('reason')
+                    if reason not in SAFE_REASONS:
+                        return
+                    observations[url] = pub.FAILED, reason
+            complete = all(row['ok'] for row in rows)
+            if body.get('ok') is not complete or (result.returncode == 0) is not complete:
+                return
+            self.cache = observations
+        except (OSError, ValueError, subprocess.SubprocessError, TypeError):
+            self.failure = 'public browser read was unavailable'

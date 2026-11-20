@@ -44,39 +44,26 @@ jobs:
       - run: npm ci --prefix docs-publisher --ignore-scripts --no-fund
       - run: npx playwright install --only-shell chromium
         working-directory: docs-publisher
-      - name: Read the existing public Log page without authentication
+      - name: Verify all seven complete public skills and their catalogue anonymously
         run: |
-          python3 - <<'PY'
-          import json, subprocess
+          python3 - <<'PYCODE'
+          import json, subprocess, sys
           from pathlib import Path
-          base = 'https://gustavanderson.notion.site/'
-          requests = [
-              {'url':base+'40d6d2e17f56812e9326c206a8b4a66e', 'markers':['OSM:council','3.1.1']},
-              {'url':base+'6abfc738a9604ddc806432721813712b', 'markers':[
-                  'OSM:setup','OSM:prime','OSM:log','OSM:dreaming','OSM:interview','OSM:human-writing','OSM:council']},
-          ]
-          requests.append({'url':base+'40d6d2e17f5681509070fb57ce599bcd','markers':['OSM:human-writing','2.1.0']})
-          results = []
-          for request in requests:
-              request['allowedUrls'] = [row['url'] for row in requests]
-              result = subprocess.run(['node','docs-publisher/public-browser-read.mjs'],
-                  input=json.dumps(request), text=True, capture_output=True, timeout=80)
-              results.append(json.loads(result.stdout))
-          Path('public-browser-proof.json').write_text(json.dumps(results, indent=2))
-          if not all(result.get('ok') is True for result in results):
-              raise SystemExit('Anonymous page/catalogue read did not verify')
-          import sys
           sys.path.insert(0, 'docs-publisher')
           import publisher as pub
           import native_skills as native
           from browser_reader import BrowserReader
+          base = 'https://gustavanderson.notion.site'
+          catalogue = base + '/6abfc738a9604ddc806432721813712b'
           manifest = pub.load_manifest()
           packets = native.build_packets(manifest, pub.GitSource('.', manifest['editions']['released']['commit']))
+          calls = []
           def capture(args, **kwargs):
               request = json.loads(kwargs['input'])
               request['diagnostics'] = True
               kwargs['input'] = json.dumps(request)
               result = subprocess.run(args, **kwargs)
+              calls.append(1)
               try:
                   body = json.loads(result.stdout)
               except ValueError:
@@ -85,12 +72,16 @@ jobs:
                   'returncode':result.returncode, 'body':body,
                   'stderr':result.stderr[-8000:], 'environment_keys':sorted(kwargs['env'])}, indent=2))
               return result
-          reader = BrowserReader(base.rstrip('/'), requests[1]['url'], packets, runner=capture)
-          state, detail = reader.read(requests[0]['url'])
-          print('Exact anonymous subprocess state:', state)
-          if state != pub.VERIFIED:
-              raise SystemExit('Exact publication subprocess did not verify; inspect its secret-free proof')
-          PY
+          reader = BrowserReader(base, catalogue, packets, runner=capture)
+          results = []
+          for packet in packets.values():
+              state, detail = native.public_state(reader, packet)
+              results.append({'key':packet['key'], 'state':state, 'detail':detail})
+          Path('public-browser-proof.json').write_text(json.dumps({'child_processes':len(calls),'rows':results}, indent=2))
+          print(json.dumps(results, indent=2))
+          if len(calls) != 1 or len(results) != 7 or any(row['state'] != pub.VERIFIED for row in results):
+              raise SystemExit('Complete anonymous seven-skill/catalogue verification held; inspect the secret-free proof')
+          PYCODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
