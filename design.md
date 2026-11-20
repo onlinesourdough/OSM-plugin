@@ -8,7 +8,9 @@ from the owner's private Data & Context home. The former private dashboard,
 pickers, settings drawer and record reader are retired. Native behavior must
 be verified before delivery is claimed.
 
-The icon is the plain OSM wordmark without a surrounding circle.
+The icon uses the pixel bread from the onlinesourdough website, without a
+surrounding circle or background. The adjacent label remains OSM. The sidebar
+receives theme-specific glyphs; the package carries a transparent square PNG.
 Its [vector source](assets/branding/osm-icon.svg) remains editable.
 
 Earlier dashboard designs and Paper references remain in the

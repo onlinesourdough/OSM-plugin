@@ -1,6 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" fill="none" stroke="#77716A" aria-label="OSM">
-  <g transform="translate(1.68 1.68) scale(0.86)" stroke-width="1.9">
-    <rect x="4.1" y="8.45" width="3.8" height="7.1" rx="1.9"/>
-    <path d="M14.05 9.08C13.57 8.66 12.89 8.45 12.18 8.45C10.88 8.45 10.02 9.08 10.02 10.03C10.02 11.02 10.84 11.43 12.15 11.83C13.49 12.24 14.27 12.68 14.27 13.7C14.27 14.78 13.36 15.55 12.04 15.55C11.15 15.55 10.37 15.25 9.83 14.74M16.2 15.55V8.45L18.17 12.24L20.14 8.45V15.55" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" fill="#888078" shape-rendering="crispEdges" aria-label="OSM">
+  <title>OSM</title>
+  <desc>The onlinesourdough pixel bread mark, without a background or border.</desc>
+  <g transform="translate(2 5) scale(2)">
+    <rect x="3.09" y="0.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="0.09" width="0.82" height="0.82"/>
+    <rect x="5.09" y="0.09" width="0.82" height="0.82"/>
+    <rect x="6.09" y="0.09" width="0.82" height="0.82"/>
+    <rect x="1.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="2.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="3.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="5.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="6.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="7.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="8.09" y="1.09" width="0.82" height="0.82"/>
+    <rect x="0.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="1.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="2.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="5.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="7.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="8.09" y="2.09" width="0.82" height="0.82"/>
+    <rect x="0.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="1.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="3.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="6.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="7.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="9.09" y="3.09" width="0.82" height="0.82"/>
+    <rect x="0.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="1.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="2.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="3.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="5.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="6.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="7.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="8.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="9.09" y="4.09" width="0.82" height="0.82"/>
+    <rect x="0.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="1.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="2.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="3.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="5.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="6.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="7.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="8.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="9.09" y="5.09" width="0.82" height="0.82"/>
+    <rect x="1.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="2.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="3.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="4.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="5.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="6.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="7.09" y="6.09" width="0.82" height="0.82"/>
+    <rect x="8.09" y="6.09" width="0.82" height="0.82"/>
   </g>
 </svg>

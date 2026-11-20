@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.34.2 — 2026-11-20
+
+- Use the website's pixel bread for the plugin and themed sidebar icons, with
+  the OSM label and no surrounding circle.
+- Explain how to refresh an already open Codex sidebar after updating. The
+  public method guide replaces the former dashboard; Setup remains conversational.
+
 ## 0.34.1 — 2026-11-20
 
 - Correct the credential-free repository rehearsal to use complete bound guide
