@@ -388,15 +388,15 @@
       "authoritative_for": "The method overview: what OSM is, the foundation it builds and where each topic is explained",
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
-        "revision": "f0b88e0173de85016689e6dc30bba9ad7c35710a7f0ed2e59857cdbff4202ea5",
+        "revision": "5696e909d779c13a98913dc40a6a9cfc499c7fefefbf6cad3a3c39250a005c24",
         "edition": "0.34.3",
         "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-20T11:28:22.712Z",
+        "read_at": "2026-11-20T13:07:52.065714+00:00",
+        "last_edited_time": "2026-11-20T12:55:02.729Z",
         "reader_equivalence": {
           "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "f0b88e0173de85016689e6dc30bba9ad7c35710a7f0ed2e59857cdbff4202ea5",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
+            "canonical_revision": "5696e909d779c13a98913dc40a6a9cfc499c7fefefbf6cad3a3c39250a005c24",
+            "reviewed_in": "Fresh full MCP root read matches actual API snapshot from CI44741134621 byte-for-byte after the authored12:55 heading edit; no other body change."
           }
         }
       }
