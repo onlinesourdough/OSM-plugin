@@ -18,6 +18,9 @@ const icons = [['light', '#625B55'], ['dark', '#C2BCB5']].map(([theme, color]) =
   src: 'data:image/svg+xml;base64,' + Buffer.from(glyph.replaceAll('currentColor', color)).toString('base64'),
   mimeType: 'image/svg+xml', sizes: ['24x24'], theme,
 }));
+// MCP clients must support PNG; keep a raster fallback after the themed vectors.
+icons.push({ src: 'data:image/png;base64,' + (await readFile(join(root, 'assets/icon.png'))).toString('base64'),
+  mimeType: 'image/png', sizes: ['512x512'] });
 const architecture = await readFile(join(root, 'assets/diagrams/osm-architecture.html'), 'utf8');
 const diagram = '<style>' + architecture.match(/<style>([\s\S]*?)<\/style>/)[1].replaceAll('body{', ':host{') +
   '</style>' + architecture.match(/<main>[\s\S]*<\/main>/)[0];

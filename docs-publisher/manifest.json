@@ -266,10 +266,10 @@
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
         "revision": "f0b88e0173de85016689e6dc30bba9ad7c35710a7f0ed2e59857cdbff4202ea5",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
-        "last_edited_time": "2026-11-19T21:55:59.387Z"
+        "read_at": "2026-11-20T10:46:00.068Z",
+        "last_edited_time": "2026-11-20T10:25:54.192Z"
       }
     },
     {
@@ -287,9 +287,9 @@
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "81b6fe0c6ac27928a0c43b3eceba17e3dcbec53b3ecb8ee173ba29d71ceb1822",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
+        "read_at": "2026-11-20T10:46:00.068Z",
         "last_edited_time": "2026-11-19T21:05:07.719Z"
       }
     },
@@ -308,9 +308,9 @@
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
         "revision": "4a8c942f08bdf3a569323d4c5727e6c28cc744b4ece595899044236defca53ba",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
+        "read_at": "2026-11-20T10:46:00.068Z",
         "last_edited_time": "2026-11-20T00:46:21.560Z"
       }
     },
@@ -329,9 +329,9 @@
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
         "revision": "bf51db0d6bbfc73712fef0c0ffc1c53927e88116fda94c28cd2ae29e4134e3a1",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
+        "read_at": "2026-11-20T10:46:00.068Z",
         "last_edited_time": "2026-11-20T00:46:20.864Z"
       },
       "exports": [
@@ -370,9 +370,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
+        "read_at": "2026-11-20T10:46:00.068Z",
         "last_edited_time": "2026-11-06T12:00:03.341Z"
       }
     },
@@ -391,9 +391,9 @@
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
+        "read_at": "2026-11-20T10:46:00.068Z",
         "last_edited_time": "2026-11-20T00:46:22.440Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -413,9 +413,9 @@
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
         "revision": "ef69903d9bf9e9e216fc70dea91fd3ec92227d4518a36cc83061d6fe4744a17d",
-        "edition": "0.34.1",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
+        "read_at": "2026-11-20T10:46:00.068Z",
         "last_edited_time": "2026-11-19T21:56:00.299Z"
       },
       "exports": [
@@ -445,11 +445,11 @@
       "authoritative_for": "The release reference, the guide's own changelog and where documentation lives",
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
-        "revision": "aa7cf86861d6f7ea3684e538a1ba801595a354ae22e97f328060081121665fca",
-        "edition": "0.34.1",
+        "revision": "1c3e24d33a4f82f93048ce6b74687f197c3363189bd8059700e05f18a24a432a",
+        "edition": "0.34.2",
         "reader": "notion-mcp-fetch",
-        "read_at": "2026-11-20T00:53:08Z",
-        "last_edited_time": "2026-11-20T00:46:19.806Z"
+        "read_at": "2026-11-20T10:46:00.068Z",
+        "last_edited_time": "2026-11-20T10:44:40.297Z"
       }
     },
     {

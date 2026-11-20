@@ -26,9 +26,9 @@ Use a dedicated public-only connection to read the explicit guide page IDs:
 
 ```sh
 python3 docs-publisher/publisher.py snapshot --out public-originals.json
-python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.1 --dry-run
-python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.1
-python3 docs-publisher/publisher.py reconcile --worktree --snapshot public-originals.json --release-tag v0.34.1 --check
+python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.2 --dry-run
+python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.2
+python3 docs-publisher/publisher.py reconcile --worktree --snapshot public-originals.json --release-tag v0.34.2 --check
 ```
 
 A lead can supply the exact bodies read through the official Notion plugin in the

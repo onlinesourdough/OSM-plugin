@@ -23,7 +23,7 @@ try {
   // One public guide entrypoint; private context tools have no app surface.
   const capabilities = client.getServerCapabilities();
   assert.ok(capabilities.tools); assert.ok(capabilities.resources); assert.equal(capabilities.prompts, undefined);
-  assert.equal(client.getServerVersion().icons.length, 2);
+  assert.equal(client.getServerVersion().icons.length, 3);
   assert.match(client.getInstructions(), /official Notion plugin/);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(tool => tool.name), ['osm_sources', 'osm_save_sources', 'osm_connection', 'osm_context_list', 'osm_context_read',
@@ -42,8 +42,13 @@ try {
   const empty = text(await client.callTool({ name: 'osm_sources', arguments: {} }));
   assert.equal(empty.context.state, 'missing'); assert.equal(empty.home.state, 'missing'); assert.equal(empty.connectionRoute.state, 'missing');
   const entry = tools.find(tool => tool.name === 'osm_guide');
-  assert.deepEqual(entry.icons.map(icon => icon.theme), ['light', 'dark']);
-  assert.ok(entry.icons.every(icon => icon.mimeType === 'image/svg+xml' && icon.src.startsWith('data:image/svg+xml;base64,')));
+  assert.deepEqual(entry.icons.slice(0, 2).map(icon => icon.theme), ['light', 'dark']);
+  assert.ok(entry.icons.slice(0, 2).every(icon => icon.mimeType === 'image/svg+xml' && icon.src.startsWith('data:image/svg+xml;base64,')));
+  assert.equal(entry.icons[2].mimeType, 'image/png');
+  const fallback = Buffer.from(entry.icons[2].src.split(',')[1], 'base64');
+  assert.deepEqual(fallback.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  assert.equal(fallback.readUInt32BE(16), 512);
+  assert.equal(fallback.readUInt32BE(20), 512);
   assert.deepEqual(entry.icons, client.getServerVersion().icons);
   assert.deepEqual(entry._meta.ui.visibility, ['app']);
   assert.deepEqual(entry._meta['openai/ui'].entrypoints, [{ type: 'global' }]);

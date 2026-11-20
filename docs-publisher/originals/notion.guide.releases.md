@@ -16,6 +16,8 @@ Git owns released OSM instructions. Content template packets in Files identify t
 
 Install or update OSM through your agent's plugin system. Then open a fresh conversation and use Setup to check your existing Data & Context home. Your business context stays in your own Notion workspace.
 
+In Codex, close and reopen an existing OSM sidebar view after updating. An open view can retain the earlier dashboard while the updated plugin already provides the public method guide. Setup runs in conversation.
+
 Follow <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> for the supported installation and access choices.
 
 ## Documentation clarification

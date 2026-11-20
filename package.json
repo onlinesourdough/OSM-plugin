@@ -1,6 +1,6 @@
 {
   "name": "osm",
-  "version": "0.34.1",
+  "version": "0.34.2",
   "private": true,
   "description": "Notion context, onboarding, writing and collaboration for AI agents.",
   "license": "MIT",

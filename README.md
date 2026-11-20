@@ -234,6 +234,11 @@ See [native installation, recovery and tested limits](docs/native-installation.m
 before replacing an existing registration. A separately configured owner bridge
 is not removed by the package manager.
 
+After a Codex update, close an already open OSM sidebar view and open OSM again.
+An open view can retain the previous dashboard even after the new guide is
+installed. The current sidebar presents the public method guide; personal
+onboarding runs through Setup in conversation.
+
 ## Repository structure
 
 | Folder | Contains |
