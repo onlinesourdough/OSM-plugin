@@ -455,7 +455,8 @@ def validate(root=ROOT, release_tag=None):
                     'runtime/notion/server.cjs', 'runtime/notion/guide.html', 'runtime/notion/THIRD-PARTY-NOTICES.md'}
                 allowed = (path.suffix in {".md", ".json"} or ui or notion or
                            path.name == "LICENSE" or
-                           path == root / "assets/icon.png")
+                           path == root / "assets/icon.png" or
+                           path == root / "skills/osm-data-context/assets/ai-operating-model.svg")
                 require(allowed, f"unexpected product file: {path}")
 
     documents = [root / "README.md", root / "AGENTS.md", root / "CHANGELOG.md"]
