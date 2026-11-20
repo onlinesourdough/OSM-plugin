@@ -9,6 +9,7 @@ permissions, inheritance, outside denial, host isolation, instruction loading,
 adapters, Home behaviour or timed runs.
 """
 import copy
+import hashlib
 import json
 import re
 import sys
@@ -1929,6 +1930,12 @@ def fictional(value, path="fixture"):
     return problems
 
 
+def diagram_binding_problems(source, wide, mobile, receipt):
+    pairs = ((source, "source_html_sha256"), (wide, "delivered_image_sha256"),
+             (mobile, "mobile_image_sha256"))
+    return [key for data, key in pairs if hashlib.sha256(data).hexdigest() != receipt.get(key)]
+
+
 def main():
     workspaces = {key: json.loads((FIXTURES / f"workspace-{key}.json").read_text()) for key in ("a", "b")}
     cases = json.loads((FIXTURES / "cases.json").read_text())
@@ -1937,6 +1944,21 @@ def main():
         text = (REFERENCES / name).read_text()
         headings[name] = {slug(line.lstrip("#")) for line in text.splitlines() if line.startswith("#")}
     failures, positives, variants, negatives = [], 0, 0, 0
+
+    # A later source edit must not leave a silently stale delivered figure.
+    # This binds bytes, not visual meaning; rendering and review stay separate.
+    receipt = json.loads((ROOT / "docs/evidence/common-architecture-qualification-20261120.json").read_text())
+    diagram_files = [ROOT / "assets/diagrams" / name for name in
+                     ("osm-architecture.html", "osm-architecture.png", "osm-architecture-mobile.png")]
+    diagram_bytes = [path.read_bytes() for path in diagram_files]
+    if diagram_binding_problems(*diagram_bytes, receipt):
+        failures.append("delivered architecture/source hash binding drifted; render and review the changed source")
+    for index in range(3):
+        changed = list(diagram_bytes)
+        changed[index] += b"changed"
+        if not diagram_binding_problems(*changed, receipt):
+            failures.append("diagram hash binding accepted modified source/image")
+    print("DIAGRAM BINDING: current HTML and both delivered PNGs; source/image mutations must be rejected")
 
     for key, workspace in workspaces.items():
         example = ROOT / workspace["example"]

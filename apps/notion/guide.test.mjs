@@ -70,6 +70,36 @@ test('mixed self-closing and paired files preserve intervening prose and both do
   assert.equal(text.match(/Supporting download in Notion/g).length, 2);
 });
 
+test('the delivered architecture image uses the bundled diagram and keeps sources collapsed', () => {
+  const body = '<image source="notion-file-block://block/file?space_id=space&name=osm-architecture.png" />\n\n<toggle>\nEditable relationship map · Mermaid\n\n```mermaid\nflowchart TB\n A-->B\n```\n</toggle>';
+  const text = readable(body, { url: url(other) });
+  assert.match(text, /<div class="osm-architecture"><\/div>/);
+  assert.match(text, /<details><summary>Editable relationship map · Mermaid<\/summary>/);
+  assert.match(text, /```mermaid\nflowchart TB\n A-->B\n```/);
+  assert.doesNotMatch(text, /<details open|View this image in Notion/);
+});
+
+test('toggle rendering preserves fenced examples, nesting, prose and escaped titles', () => {
+  const body = 'Before\n\n```html\n<toggle>\nLiteral example\n</toggle>\n```\n\n<toggle>\nOuter <unsafe> & title\n\n<toggle>\nInner\n\nKeep this text\n</toggle>\n</toggle>\n\nAfter';
+  const text = readable(body, { url: url(other) });
+  assert.match(text, /```html\n<toggle>\nLiteral example\n<\/toggle>\n```/);
+  assert.match(text, /<summary>Outer &lt;unsafe&gt; &amp; title<\/summary>/);
+  assert.match(text, /<summary>Inner<\/summary>/);
+  assert.equal(text.match(/<details>/g).length, 2);
+  assert.equal(text.match(/<\/details>/g).length, 2);
+  assert.match(text, /Before[\s\S]*Keep this text[\s\S]*After/);
+});
+
+test('blank titles and longer closing fences preserve content and later source toggles', () => {
+  const body = '<toggle>\n\nKeep the first child\n</toggle>\n\n```html\n<toggle>\nLiteral\n</toggle>\n````\n\n<toggle>\nHTML source\n\n<embed source="notion-file-block://file?name=osm-architecture.html" />\n</toggle>\n\n<embed source="notion-file-block://legacy?name=osm-architecture.html" />';
+  const text = readable(body, { url: url(other) });
+  assert.match(text, /<summary>Details<\/summary>\n\n\nKeep the first child/);
+  assert.match(text, /```html\n<toggle>\nLiteral\n<\/toggle>\n````/);
+  assert.match(text, /<summary>HTML source<\/summary>/);
+  assert.match(text, /Open the responsive HTML source in Notion/);
+  assert.equal(text.match(/class="osm-architecture"/g).length, 1);
+});
+
 test('same-page media links are copyable, while known other pages navigate internally', () => {
   const pages = { [root]: {}, [other]: {} };
   assert.equal(linkedPage(url(root), pages, root), null);
