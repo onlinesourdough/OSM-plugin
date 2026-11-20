@@ -3,12 +3,12 @@
   "purpose": "Per-artifact source and ownership manifest for the public OSM documentation: which side holds the original, how a Notion-authored original is bound to its Git exports, and who may write each public artifact. Not shipped in the package.",
   "activation": {
     "active": true,
-    "live_proof": "bounded-write-pending",
-    "note": "Only Log is handed over for one bounded qualification import; the other six pages remain with existing upkeep. This is not completed automatic publication.",
+    "live_proof": "coherent-set-and-noop-pending",
+    "note": "Bounded Log import in CI44735665358 verified the native body, six managed properties and all41support files. Its anonymous CI check held; a fresh anonymous IAB observation then matched all34packet lines in order and three prior file references still resolved. All seven exact CI handoffs are now recorded for coherent-set qualification. Full automatic delivery is claimed only after the whole set and a no-op run pass.",
     "public_reader": {
       "kind": "isolated-playwright-visible-body/1",
-      "reviewed_in": "https://github.com/onlinesourdough/OSM-plugin/actions/runs/44731499066",
-      "note": "Secret-free fresh Chromium observed the actual public Log title/version and all seven catalogue titles. Each publication additionally waits for the final instruction and compares the complete skill text in order."
+      "reviewed_in": "CI44731499066 plus actual bounded CI44735665358 and fresh anonymous Log fulltext observation2026-11-20; exact-source follow-up in PR116",
+      "note": "Wait for every expected instruction line and compare the complete text in order; metadata-only observations never complete publication."
     }
   },
   "editions": {
@@ -81,10 +81,27 @@
         "skills/osm-council/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "40d6d2e17f56812e9326c206a8b4a66e",
-      "row_key": "osm:osm-council"
+      "row_key": "osm:osm-council",
+      "handoff": {
+        "native": {
+          "files": "6067cc1ae2c48317b0dc4c16c957c8d84054d2aad4533cb2d7b09cee47cad3b9",
+          "properties": {
+            "Key": "osm:osm-council",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-council/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "3.1.1"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "f09830c8e67b73c10caa71106498b699211a801abb97d9b3ff273992657dabd8",
+          "title": "OSM:council",
+          "version_id": "78fabd3dea52329236328875cf891d8a2c2a0b097a9e6dbda934ce94ee518361"
+        }
+      }
     },
     {
       "key": "osm.released.skill.osm-dreaming",
@@ -95,10 +112,27 @@
         "skills/osm-dreaming/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "41d6d2e17f5681c2a37ed361fd849ba8",
-      "row_key": "osm:osm-dreaming"
+      "row_key": "osm:osm-dreaming",
+      "handoff": {
+        "native": {
+          "files": "0dd10f9d1afd709a9f47a9d79103a317f19e9fc682a720749b9b10cb6e01b6f5",
+          "properties": {
+            "Key": "osm:osm-dreaming",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-dreaming/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "1.4.0"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "8ddfc2944083173871e2b33cfca3bf561994cbbfebcc55e4af00a6a309c9f2c5",
+          "title": "OSM:dreaming",
+          "version_id": "11a7b28b89ce3cf73a4157a171b6a605d5e90ad1b19081036e2f9b64d26282ae"
+        }
+      }
     },
     {
       "key": "osm.released.skill.osm-human-writing",
@@ -109,10 +143,27 @@
         "skills/osm-human-writing/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "40d6d2e17f5681509070fb57ce599bcd",
-      "row_key": "osm:osm-human-writing"
+      "row_key": "osm:osm-human-writing",
+      "handoff": {
+        "native": {
+          "files": "cdcd0a80d1fa9aec197abed6a4bb4ef11f38fb1fcbf8378dfab78cf96fbaf697",
+          "properties": {
+            "Key": "osm:osm-human-writing",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-human-writing/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "2.1.0"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "f722bb15f6e0793caa21e88638dcfd8ce76af5496edc6334bdf45afd842526a3",
+          "title": "OSM:human-writing",
+          "version_id": "f654a863de7845d1c800c3b10bad1bb98e05f50518ef900ce5bf05b5ede1ee27"
+        }
+      }
     },
     {
       "key": "osm.released.skill.osm-interview",
@@ -123,10 +174,27 @@
         "skills/osm-interview/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "40d6d2e17f5681349ac5c2c48acbf6ed",
-      "row_key": "osm:osm-interview"
+      "row_key": "osm:osm-interview",
+      "handoff": {
+        "native": {
+          "files": "50b16b2242717180d1152bdf2b76d3ceeb5d53d360b97220e930ac4561cfbaaf",
+          "properties": {
+            "Key": "osm:osm-interview",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-interview/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "2.1.0"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "f35e8de7c563bd067ba2ea76bfc4db44f6c6371e6f05b03c854d0226ede4833b",
+          "title": "OSM:interview",
+          "version_id": "03160c792510f879980321fd1ba92f6a6144daaa13883337cc13285b81e90265"
+        }
+      }
     },
     {
       "key": "osm.released.skill.osm-log",
@@ -168,10 +236,27 @@
         "skills/osm-prime/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "41d6d2e17f56818e82d9eafc328251bf",
-      "row_key": "osm:osm-prime"
+      "row_key": "osm:osm-prime",
+      "handoff": {
+        "native": {
+          "files": "55849a40f4e12e7064a9dcbf97b4c79ec74898d930aa3333897daa7e720ed6c5",
+          "properties": {
+            "Key": "osm:osm-prime",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-prime/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "1.2.0"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "936f0aaacda3ccf7d868e0ffafadff9e3334bcde59b7661d796f453ea14a01d0",
+          "title": "OSM:prime",
+          "version_id": "533558e1aa9adb7f5560b3847cf097300a22643a04a677d795f3e27ead13f11d"
+        }
+      }
     },
     {
       "key": "osm.released.skill.osm-setup",
@@ -182,10 +267,27 @@
         "skills/osm-setup/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "40d6d2e17f5681f8bdf6c519aee306b5",
-      "row_key": "osm:osm-setup"
+      "row_key": "osm:osm-setup",
+      "handoff": {
+        "native": {
+          "files": "7d4a3ae18535ad643c5afd857a1c8ba1281163727f04ec744af2ae422c90dc0c",
+          "properties": {
+            "Key": "osm:osm-setup",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-setup/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "3.2.0"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "97c804773c1a985a0700bcee6cf701583ee1fcc6814f174bdf842e2e9ed7341e",
+          "title": "OSM:setup",
+          "version_id": "f7796e47c905cb7ca4f42456702e97847314791b0016fab1458e4afd2e9c1c7d"
+        }
+      }
     },
     {
       "key": "osm.working.readme",

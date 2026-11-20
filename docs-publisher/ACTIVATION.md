@@ -1,18 +1,26 @@
 # Documentation automation activation
 
-The native publisher is under bounded qualification. Only the existing Log page
-is handed over to CI for an explicitly keyed one-page import; the other six
-pages remain with existing upkeep. Whole-set automatic publication is not yet
-qualified. No successful live write is claimed by this activation commit.
+The native publisher is under coherent-set qualification. All seven existing
+released skill pages have their exact six-field handoffs from read-only CI
+[44734170998](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44734170998).
+The dedicated public-only token is stored as a GitHub Actions secret. No private
+context or optional Content template is included. Whole-set automatic delivery
+and its no-op rerun are not yet claimed by this commit.
 
-The dedicated public-only connection's token is stored as a GitHub Actions
-secret. Read-only CI [44734170998](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44734170998)
-read all eight guide originals and seven native skills, including their six
-managed properties. The private context root returned 404 in the earlier scope
-probe. Anonymous browser run [44731499066](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44731499066)
-read the public Log page and catalogue without login. The bounded import must
-still establish complete instruction order, all supporting bytes, metadata,
-retained history and existing file links before ownership expands.
+The first bounded Log import in CI
+[44735665358](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44735665358)
+verified the complete native instructions, all 41 supporting files and six
+managed properties. Its anonymous check held on the new introduction; it did
+not complete publicly in that attempt. A fresh anonymous in-app browser then
+matched all 34 new packet lines in order, and all three previous file references
+still resolved. The Source link returned 200 without authentication. The old
+attempt's rerun was cancelled during browser installation before another API
+write; its first-attempt evidence is retained.
+
+The reader now waits for every expected line before capture. API write evidence
+survives a public HOLD, and each CI attempt keeps its own artifacts. The next
+serialized main run must qualify the coherent seven-page set, followed by a run
+that uploads nothing. Only those successful results establish automatic delivery.
 
 ## Who writes what
 

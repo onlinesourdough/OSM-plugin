@@ -555,6 +555,8 @@ def an_unknown_write_is_read_before_any_repeat():
     require(outcomes(result) == {COUNCIL: pub.UNKNOWN_WRITE} and "not applied; not repeated" in result["rows"][0]["detail"]
             and fake.writes() == [("POST", "upload")] and fake.pages[PACKETS[COUNCIL]["page"]] == before,
             f"an import that never arrived is reported, not repeated: {result['rows'][0]}")
+    require(f'Write attempted, final state not verified: {COUNCIL}' in ns.report(result, manifest),
+            'an unknown write is an attempt rather than an API-verified change')
     result = run(fake, manifest, write=True, only=COUNCIL)
     require(result["rows"][0]["after"]["files"] == ns.digest(ns.file_hashes(fake.pages[PACKETS[COUNCIL]["page"]]["files"]))
             and fake.writes().count(("POST", "upload")) == 2, "the next run reads the unchanged page and writes it once")
@@ -582,6 +584,8 @@ def a_cut_run_resumes_from_what_is_on_the_page():
     require(fake.writes() == [("PATCH", "page")] and page["title"] == PACKETS[COUNCIL]["title"] and page["props"]["Status"][1] == "Released"
             and result["rows"][0]["after"]["properties"]["Version"] == PACKETS[COUNCIL]["version"],
             "the rerun restores only the title and properties, including the recorded Status, with no second import")
+    require(f'Written and API-verified: {COUNCIL}' in ns.report(result, manifest),
+            'a verified metadata-only resume is still reported as a write')
     fake.log.clear()
     require(outcomes(run(fake, manifest, write=True, only=COUNCIL)) == {COUNCIL: pub.UNCHANGED} and not fake.writes(), "then it is a no-op")
 
@@ -818,6 +822,23 @@ def a_later_refusal_preserves_earlier_page_evidence_and_stops_the_remaining_set(
             pass
         else:
             raise AssertionError('never upload a packet too large to read back')
+
+
+@test
+def a_mismatched_final_read_is_not_reported_as_an_api_verified_write():
+    fake, manifest = handed_over({COUNCIL})
+    patch_page = fake._page_patch
+    def corrupt_after_restore(request, page_id):
+        response = patch_page(request, page_id)
+        fake.pages[page_id]['files']['LICENSE'] += b' changed after restore'
+        return response
+    fake._page_patch = corrupt_after_restore
+    result = run(fake, manifest, write=True, only=COUNCIL)
+    require(outcomes(result) == {COUNCIL: pub.PARTIAL} and result['rows'][0].get('after'),
+            'the mismatched read is retained as evidence')
+    require(result['rows'][0].get('api_verified') is not True and
+            f'Write attempted, final state not verified: {COUNCIL}' in ns.report(result, manifest),
+            'a readback alone does not prove equality')
 
 
 def main():

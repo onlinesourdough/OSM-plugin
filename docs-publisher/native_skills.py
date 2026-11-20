@@ -736,6 +736,7 @@ def _write(api, packet, row, catalogue):
     row["after"] = evidence(seen)
     if not _same(seen, want):
         return stop(pub.PARTIAL, "the final read differs from the released packet: " + ", ".join(differences(seen, want)[:6]))
+    row['api_verified'] = True
     return True
 
 
@@ -802,8 +803,8 @@ def report(result, manifest):
     qualified = len(rows) == len([a for a in manifest['artifacts'] if a['class'] == 'A']) \
         and bool(activation["active"] and activation.get("public_reader")) and mode == "publish" and not failing(result) \
         and all(row["outcome"] != pub.PENDING_HANDOFF for row in rows)
-    wrote = [row["key"] for row in rows if row.get('write_attempted') and row.get('after')]
-    attempted = [row['key'] for row in rows if row.get('write_attempted') and not row.get('after')]
+    wrote = [row["key"] for row in rows if row.get('write_attempted') and row.get('api_verified') is True]
+    attempted = [row['key'] for row in rows if row.get('write_attempted') and row.get('api_verified') is not True]
     lines = [f"# {title}", "", f"Frozen released commit: `{result['commit']}`",
              "Automatic publication: " + ("active for this run" if qualified else "NOT active or not qualified; this run proves no automatic publication"),
              "Written and API-verified: " + (", ".join(wrote) if wrote else "nothing"),
