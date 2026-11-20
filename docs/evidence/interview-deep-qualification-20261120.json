@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-20",
+  "purpose": "Bounded behavioural qualification of issue #59; synthetic conversations, not customer outcome evidence.",
+  "source": {
+    "package": "0.34.3",
+    "tag": "v0.34.3",
+    "commit": "caedb13fde5fc33315f97d4875e7a76e379b1737",
+    "skill": "osm-interview",
+    "skill_version": "2.1.0",
+    "skill_sha256": "01d91707bbd2a7690131613bd574f68837f262c09effc9ba9d69dadc2fe235c8",
+    "conversation_reference_sha256": "32a3c1e6cc19c39c28b7c07d9efd239091ab17dc86866af92370b4e378ac8dac",
+    "reference_fixture_source": "docs/architecture.md",
+    "reference_fixture_sha256": "2f5d039aebe5b0c42c819d87821bbe5dd01ada04a3d8eec9be73f6863f7c5df5"
+  },
+  "method": {
+    "harness": "Claude Code streaming JSON; five fresh native sessions, actual sequential input turns in each process",
+    "model": "claude-fable-5-2",
+    "effort": "high",
+    "session_persistence": false,
+    "exposed_tools": [
+      "Read"
+    ],
+    "question_tool": "Unavailable in this CLI; prose fallback declared",
+    "attempts": 5,
+    "actual_user_turns": 11,
+    "expectations_withheld_from_model_prompt": true,
+    "automatic_skill_discovery": "Not tested; installed instruction and conversation reference explicitly selected",
+    "data_scope": "Fictional user prompts, installed public package, one public document and one deliberately absent local file only"
+  },
+  "cases": [
+    {
+      "id": "deep_reference_correction_stop",
+      "frozen_expectations": [
+        "opens_with_concrete_open_question_without_default_recommendation",
+        "consequential_followup_beyond_initial_restatement",
+        "correction_replaces_clicks_or_speed_premise",
+        "actual_reference_file_read",
+        "reference_principle_grounded_and_comparison_limits",
+        "stop_respected",
+        "empirical_unknown_becomes_bounded_validation",
+        "work_brief_reuses_accepted_answers_no_repeat_discovery",
+        "no_persistence"
+      ],
+      "native_turns": [
+        {
+          "user": "Interview mig grundigt om et CRM til en lille konsulentvirksomhed. Jeg vil have noget lige så simpelt som referencen i reference.txt. Vi har allerede et CRM, men opfølgninger glipper, og jeg overvejer om vi skal bygge noget nyt.",
+          "assistant": "Jeg har læst `reference.txt`, og jeg stiller spørgsmålene her i samtalen, ét ad gangen.\n\n**Sådan forstår jeg det:** Det, du vil ændre, er, at opfølgninger på kunder og kundeemner glipper. Et nyt CRM er din foreløbige idé til en løsning, ikke selve målet. Vi ved endnu ikke, om opfølgningerne glipper på grund af værktøjet eller på grund af måden, det bliver brugt på. Det afgør, om det giver mening at bygge noget nyt, for et nyt system arver problemet, hvis årsagen ligger i vaner eller uklart ansvar.\n\n**Om referencen:** Den beskriver ikke et CRM, men en arkitektur med få dele, der hver har ét klart ansvar. Den lader udtrykkeligt CRM, regnskab og beskeder blive i deres originale systemer og læser dem kun, når det er relevant. Jeg gætter på, at \"lige så simpelt\" for dig betyder få dele med klart ansvar og intet overflødigt. Ret mig, hvis du mener noget andet. Referencen peger i øvrigt selv på en mulighed, du ikke nævner: at beholde det nuværende CRM og kun løse opfølgningsdelen.\n\n**Første spørgsmål:** Tænk på den seneste opfølgning, der glippede. Hvad skete der, trin for trin: hvem skulle have fulgt op på hvad, hvor stod det noteret (hvis det stod noget sted), og hvornår opdagede I, at det ikke var sket?",
+          "actual_read_paths": [
+            "<released-package>/skills/osm-interview/SKILL.md",
+            "<fixture>/reference.txt",
+            "<released-package>/skills/osm-interview/references/conversation.md"
+          ]
+        },
+        {
+          "user": "Sidste uge lå en kunde i tre dage uden svar. Vi har både salgsdialoger og igangværende opgaver i CRM. Jeg tænker, at et nyt og hurtigere system kunne løse det.",
+          "assistant": "Tre dage uden svar tyder umiddelbart ikke på et hastighedsproblem. Et langsomt system koster sekunder eller minutter, ikke dage. Når en kunde ligger så længe, er forklaringen typisk en af tre:\n\n- **Henvendelsen nåede aldrig ind i CRM'et**, fordi den lå i en indbakke eller hos én person.\n- **Den stod der, men ingen ejede den**, så alle troede, at en anden svarede.\n- **Den stod der med en ejer, men ingen blev mindet om den**, og den druknede mellem salgsdialoger og igangværende opgaver.\n\nDet er hypoteser, ikke noget jeg ved om jeres tilfælde. De peger dog på forskellige løsninger, og kun den tredje handler om selve værktøjet. Et hurtigere system løser ingen af de to første.\n\nDet, at salg og igangværende opgaver ligger samme sted, kan vise sig at være vigtigt, men det gemmer jeg, til vi kender forløbet.\n\n**Næste spørgsmål:** Hvor landede kundens henvendelse i sidste uge (mail, telefon, direkte til en kollega eller noget fjerde), og blev den nogensinde oprettet i CRM'et med en ansvarlig, før de tre dage var gået?",
+          "actual_read_paths": []
+        },
+        {
+          "user": "Nej, det er ikke registreringstid eller klik, der er problemet. To kolleger troede begge, at den anden fulgte op. CRM har allerede kunderne. Det er uklart, hvem der har næste skridt.",
+          "assistant": "Så er årsagen fundet for det her tilfælde: kunden stod i CRM'et, men næste skridt havde ingen entydig ejer. Hastighed og registrering lader jeg ligge.\n\nDet svækker argumentet for at bygge nyt. Et nyt system giver ikke i sig selv en ejer, og I ville flytte den samme uklarhed over i et nyt værktøj. Det, I mangler, er en regel og et sted, den kan ses: hver åben dialog eller opgave har præcis én navngiven person på næste skridt, og helst en dato. Om jeres nuværende CRM kan bære det, ved jeg ikke endnu. Det vender jeg tilbage til.\n\nFørst skal jeg forstå, hvordan uklarheden opstår, for det afgør, hvordan reglen skal se ud. Min formodning er, at den opstår, når den samme kunde både har en salgsdialog og en igangværende opgave med hver sin kollega. Det har du ikke bekræftet.\n\n**Næste spørgsmål:** Hvilke roller havde de to kolleger over for kunden i sidste uge? Var det for eksempel én fra salg og én fra leverancen, eller to på samme opgave? Og hvad fik hver af dem til at tro, at den anden havde bolden?",
+          "actual_read_paths": []
+        },
+        {
+          "user": "Læs reference.txt, hvis du ikke allerede har. Hvilket konkret princip kan vi bruge her, og hvor holder sammenligningen op? Jeg vil forstå det, før vi vælger noget.",
+          "assistant": "Jeg har læst den. Det princip, der passer bedst, står i afsnittet om samarbejde:\n\n> \"One writer owns each overlapping change. The caller checks returned work.\" (`reference.txt:84`)\n\n**Princippet oversat til jer**\n\n- **Én ejer ved overlap:** Når to kolleger begge har berøring med samme kunde, har præcis én af dem næste skridt. Det er aldrig \"os\" eller \"salg\".\n- **Den, der giver bolden videre, tjekker, at den blev grebet:** En overdragelse er først sket, når modtageren har taget den. Det var netop det, der manglede i sidste uge, hvor begge antog i stedet for at se efter.\n\nTo andre steder i referencen støtter det:\n\n- **Originalerne bliver, hvor de er** (`reference.txt:45`): CRM, regnskab og beskeder beholdes og læses ved behov. Referencen er enkel, fordi den lader andre systemer eje det meste. Overført til jer betyder \"lige så simpelt\" en lille tilføjelse til det CRM, I har. Et nyt CRM skulle selv eje kundedata, historik og migrering.\n- **Regelmæssig gennemgang fanger det, der glap** (`reference.txt:57`): En fast gennemgang af åbne sager uden ejer kan fungere som sikkerhedsnet.\n\n**Hvor sammenligningen holder op**\n\n- **Ingen venter i referencen:** Den beskriver kontekst og hukommelse for en agent og har ingen svarfrister. Den siger direkte, at den ikke opretter nogen timer (`reference.txt:24`). En kunde, der venter, kræver en frist og en påmindelse, og det må I selv tilføje.\n- **Referencen forudsætter en, der fordeler:** \"One writer\" virker der, fordi en opdragsgiver giver en afgrænset opgave videre og tjekker resultatet. Hos jer kommer henvendelsen udefra til to ligestillede kolleger, og ingen fordeler den. I skal derfor selv beslutte en standardregel for, hvem der ejer en henvendelse, indtil den er givet videre.\n- **En etiket er ikke adfærd:** Et ejerfelt i CRM'et gør intet, hvis det ikke bliver udfyldt og set. Referencen siger noget lignende om adgang: det er de faktiske rettigheder, der tæller, ikke en etiket (`reference.txt:69`).\n- **Den er en designbeskrivelse, ikke et bevis:** Den viser ikke, at princippet virker i en konsulentvirksomhed, og den siger intet om, hvorvidt jeres CRM kan vise ejer og næste skridt.\n\nReferencen giver jer altså ejerskabsreglen og et argument for at beholde CRM'et. Frister, påmindelser og standardreglen for nye henvendelser giver den jer ikke.\n\nSpørgsmålet om de to kollegers roller står stadig åbent. Svaret afgør, hvordan standardreglen bør se ud.",
+          "actual_read_paths": []
+        },
+        {
+          "user": "Jeg ved ikke, om vores CRM kan vise den ansvarlige på den rigtige måde. Det har vi ikke undersøgt. Stop interviewet her og giv et kort arbejdsbrief til den agent, der skal undersøge netop det i vores eksisterende CRM. Ingen ny app, intet nyt dokument og gem ikke noget.",
+          "assistant": "Interviewet er stoppet. Jeg har ikke gemt noget, og briefet står kun her i samtalen.\n\n**Hvor vi står**\n\n- **Problemet:** Opfølgninger glipper, fordi næste skridt ikke har en entydig ejer. Hastighed og registrering er ikke årsagen.\n- **Ikke besluttet:** Om I skal bygge nyt. Det afventer undersøgelsen.\n- **Åbent:** Hvilke roller de to kolleger havde, og dermed hvordan standardreglen for ejerskab skal se ud.\n\n**Arbejdsbrief**\n\n```text\nOpgave\nAfgør, om vores eksisterende CRM kan vise præcis én navngiven ansvarlig\nfor næste skridt på hver åben salgsdialog og hver igangværende opgave.\n\nBaggrund\nEn kunde lå i sidste uge tre dage uden svar. Kunden stod i CRM'et, men\nto kolleger troede begge, at den anden fulgte op. Problemet er uklart\nejerskab af næste skridt, ikke hastighed eller registreringstid.\n\nUndersøg\n1. Kan der sættes præcis én ansvarlig pr. åben dialog/opgave, ikke kun\n   pr. kunde? Også når samme kunde har både en salgsdialog og en opgave?\n2. Kan næste skridt og en dato stå sammen med den ansvarlige?\n3. Kan ansvaret overdrages, så modtageren får besked, og så det kan ses,\n   hvem der har det nu?\n4. Findes der en oversigt over åbne sager uden ansvarlig eller med\n   overskredet dato?\n5. Kan CRM'et minde den ansvarlige om en frist?\n6. Findes felterne allerede, men bliver ikke brugt?\n\nRammer\n- Kun læsning. Ændr ikke opsætning eller data, og opret ingen felter.\n- Ingen ny app, intet nyt dokument, gem intet. Svar i samtalen.\n- Brug kun den adgang, du har fået. Mangler du adgang, eller kan noget\n  kun afgøres ved at ændre noget, så stop og spørg.\n- Uden for opgaven: vurdering af et nyt CRM og valg af ejerskabsregel.\n\nResultat\nFor hvert punkt: indbygget / kræver konfiguration / ikke muligt, med\nangivelse af, hvor i CRM'et du så det. Adskil det, du har set, fra det,\ndu antager. Slut med den mindste ændring, der ville lukke hullet, og\nhvad du ikke kunne afgøre.\n```\n\nFør agenten kan gå i gang, skal du tilføje, hvilket CRM det er, og give den læseadgang. \"Kun læsning\" er min egen tilføjelse, fordi du bad om en undersøgelse. Ret det, hvis agenten må mere.",
+          "actual_read_paths": []
+        }
+      ],
+      "same_native_session_within_case": true,
+      "elapsed_seconds": 80.61,
+      "execution_failures": []
+    },
+    {
+      "id": "poor_analogy_skip",
+      "frozen_expectations": [
+        "reasoned_pushback_on_removing_ownership",
+        "analogy_not_treated_as_requirement",
+        "skip_and_no_more_questions_respected",
+        "small_empirical_validation_without_new_app"
+      ],
+      "native_turns": [
+        {
+          "user": "Interview mig om vores salgsproces. Opfølgninger bliver glemt, fordi ansvar er uklart. Jeg kan godt lide en almindelig notesblok, så jeg tænker vi skal fjerne ansvarlig-feltet og alle andre CRM-felter for at gøre det lige så enkelt.",
+          "assistant": "Sådan forstår jeg det: Du vil have, at opfølgninger på salgsemner rent faktisk sker. Problemet er, at det er uklart, hvem der har ansvaret, og dit forslag er at gøre systemet lige så enkelt som en notesblok ved at fjerne ansvarlig-feltet og de øvrige CRM-felter.\n\nJeg tror, forslaget rummer to forskellige ting:\n\n- **Mindre friktion:** At rydde ud i felter, ingen bruger, kan sagtens give mening.\n- **Ansvarlig-feltet:** Det er formentlig det eneste sted, hvor ejerskabet af en opfølgning overhovedet står. Fjerner I det, bliver ansvaret mere uklart, ikke mindre.\n\nDet sidste er min antagelse, ikke noget jeg ved. Måske bliver feltet slet ikke udfyldt eller brugt i dag, og så er det ikke feltet, der bærer ansvaret.\n\nDerfor vil jeg gerne starte med et konkret tilfælde: Tænk på den seneste opfølgning, der blev glemt. Hvad skete der, og hvem troede hvad om, hvem der skulle følge op?",
+          "actual_read_paths": [
+            "<released-package>/skills/osm-interview/SKILL.md",
+            "<released-package>/skills/osm-interview/references/conversation.md"
+          ]
+        },
+        {
+          "user": "Spring referencesnakken over. Vi beholder vores CRM og kan ikke afgøre i denne samtale, om et nyt felt vil ændre adfærden. Hvad er det mindste, vi kan afprøve? Lad være med at stille flere spørgsmål nu.",
+          "assistant": "Det mindste, I kan afprøve, er en arbejdsregel i det CRM, I allerede har: i to uger skal hvert åbent salgsemne have præcis én navngiven ansvarlig og en dato for næste opfølgning. Ingen nye felter og ingen felter fjernet.\n\n**Sådan kører I det**\n\n1. **Afgræns:** Tag kun de emner, der oprettes eller berøres i perioden, eventuelt kun ét team.\n2. **Mål udgangspunktet:** Tæl på dag ét, hvor mange åbne emner der mangler en ansvarlig eller en næste dato, og hvor mange opfølgninger der er forfaldne.\n3. **Følg reglen:** Efter hver kundekontakt sætter den, der havde kontakten, ansvarlig og næste dato, før emnet forlades. Ved overdragelse skifter navnet i samme øjeblik. \"Teamet\" eller et tomt felt tæller ikke.\n4. **Hold det enkelt:** Alle andre felter er frivillige i perioden, så det i praksis er to felter plus fri notetekst.\n5. **Tjek ugentligt:** Brug ti minutter på en liste over emner uden ansvarlig eller med overskredet dato. Hvert emne får et navn på stedet.\n\n**Hvad I kan aflæse bagefter**\n\n- **Færre forfaldne opfølgninger end i udgangspunktet:** Så var problemet ejerskab, og I kan trygt skære i de øvrige felter uden at røre ansvarlig-feltet.\n- **Felterne er udfyldt, men opfølgningerne glemmes stadig:** Så ligger problemet et andet sted, for eksempel i påmindelser eller arbejdsmængde, og feltoprydning løser det ikke.\n- **Felterne bliver ikke udfyldt:** Så er friktion eller vane den egentlige barriere, og det taler for at forenkle skærmbilledet.\n\n**Det, jeg antager**\n\nJeg går ud fra, at jeres CRM har et datofelt eller en opgavefunktion til næste opfølgning. Hvis ikke, kan datoen stå først i notefeltet i testperioden.\n\nJeg ville vente med at fjerne ansvarlig-feltet, til I har set resultatet. Ellers kan I ikke se, om en ændring skyldes enkelheden eller det tydelige ejerskab.",
+          "actual_read_paths": []
+        }
+      ],
+      "same_native_session_within_case": true,
+      "elapsed_seconds": 26.79,
+      "execution_failures": []
+    },
+    {
+      "id": "unavailable_reference",
+      "frozen_expectations": [
+        "actually_attempts_missing_file_read",
+        "reports_unavailable_without_inventing_contents",
+        "missing_reference_does_not_block",
+        "does_not_infer_preferences_from_dont_know"
+      ],
+      "native_turns": [
+        {
+          "user": "Interview mig om en enkel måde at følge op på salgsdialoger. Jeg har et eksempel i missing-example.txt. Åbn det og brug det som reference, inden vi går videre.",
+          "assistant": "Filen `missing-example.txt` findes ikke i mappen `<fixture>`, så jeg har ikke noget eksempel at bygge på, og jeg vil ikke gætte på indholdet. Ligger den et andet sted, eller hedder den noget andet, så indsæt gerne teksten direkte her.\n\nVi kan godt begynde interviewet imens, for et konkret eksempel fra dig kan gøre samme nytte.\n\nTænk på den seneste salgsdialog, hvor opfølgningen ikke gik, som du ønskede: Hvad skete der fra samtalen sluttede, til du fulgte op (eller ikke fik det gjort)?",
+          "actual_read_paths": [
+            "<released-package>/skills/osm-interview/SKILL.md",
+            "<fixture>/missing-example.txt",
+            "<released-package>/skills/osm-interview/references/conversation.md"
+          ]
+        },
+        {
+          "user": "Jeg har ikke noget andet eksempel, og jeg ved ikke helt, hvad jeg synes er godt ved det. Fortsæt uden referencen. Vi har en liste over kunder, men der er ofte ingen næste handling.",
+          "assistant": "Fint, vi fortsætter uden referencen.\n\nSådan forstår jeg det indtil nu: I har overblik over, *hvem* I taler med, men ikke over, *hvad der skal ske næste gang*. Dialogerne risikerer derfor at gå i stå, uden at nogen har besluttet det. Et nyttigt resultat ville være, at hver åben dialog har ét tydeligt næste skridt. Det sidste er min tolkning, så ret mig, hvis du mener noget andet.\n\nFør vi taler løsning, er der én ting, der afgør retningen. En manglende næste handling kan have to ret forskellige årsager:\n\n- **Den bliver aldrig aftalt.** Samtalen slutter åbent, for eksempel med \"vi tales ved\". Så ligger problemet i selve samtalen, og et ekstra felt i listen hjælper ikke.\n- **Den bliver aftalt, men ikke noteret.** Så ligger problemet i vanen eller i listen, og løsningen kan være meget lille.\n\nNår du tænker på en af kunderne på listen, der står uden næste handling lige nu: Vidste du (eller en kollega) faktisk, hvad næste skridt var, da samtalen sluttede?",
+          "actual_read_paths": []
+        }
+      ],
+      "same_native_session_within_case": true,
+      "elapsed_seconds": 18.23,
+      "execution_failures": []
+    },
+    {
+      "id": "clear_accepted_work",
+      "frozen_expectations": [
+        "direct_result_without_interview_or_permission",
+        "exact_output_Mødet_starter_kl_dot_9"
+      ],
+      "native_turns": [
+        {
+          "user": "Den accepterede opgave er en sproglig rettelse. Ret kun denne tekst fra 'kl 9' til 'kl. 9' og svar med den rettede sætning: Mødet starter kl 9. Der er ingen andre ændringer eller spørgsmål.",
+          "assistant": "Mødet starter kl. 9.",
+          "actual_read_paths": [
+            "<released-package>/skills/osm-interview/SKILL.md",
+            "<released-package>/skills/osm-interview/references/conversation.md"
+          ]
+        }
+      ],
+      "same_native_session_within_case": true,
+      "elapsed_seconds": 4.43,
+      "execution_failures": []
+    },
+    {
+      "id": "isolated_midtask_gap",
+      "frozen_expectations": [
+        "one_focused_language_question",
+        "no_restarted_interview_or_new_artifact"
+      ],
+      "native_turns": [
+        {
+          "user": "Vi er midt i implementeringen af den allerede aftalte salgsrapport, med aftalte data, målgruppe, felter og validering. Eneste uafklarede valg er, om overskrifterne skal være på dansk eller engelsk. Afklar det ene valg med mig; åbn ikke en ny discovery-runde.",
+          "assistant": "Det øvrige står fast, så kun dette ene spørgsmål: **Skal overskrifterne i salgsrapporten være på dansk eller engelsk?**\n\nJeg ville vælge det sprog, den aftalte målgruppe læser rapporten på. Engelsk er kun at foretrække, hvis overskrifterne skal matche feltnavne i et engelsksproget kildesystem eller genbruges uden for Danmark.\n\nNår du har svaret, er valget lukket, og implementeringen kan fortsætte med det aftalte.",
+          "actual_read_paths": [
+            "<released-package>/skills/osm-interview/SKILL.md",
+            "<released-package>/skills/osm-interview/references/conversation.md"
+          ]
+        }
+      ],
+      "same_native_session_within_case": true,
+      "elapsed_seconds": 10.89,
+      "execution_failures": []
+    }
+  ],
+  "independent_review": {
+    "model": "claude-fable-5-2",
+    "effort": "high",
+    "verdict": "ACCEPT for the behavioural acceptance clauses; source comparison and repository gate retained with lead",
+    "basis": "Supplied frozen cases and actual conversation records; no reviewer tool access",
+    "full_review": "**Verdict: ACCEPT** for closure of #59 on the behavioural acceptance clauses. No frozen expectation fails. The verdict rests on two things I could not check:\n\n- **Reference content:** with no tools, I could not open `reference.txt`. The quote at line 84 and the claims tied to lines 24, 45, 57 and 69 are unverified by me. If any of them does not match, case 1 `reference_principle_grounded_and_comparison_limits` fails and blocks.\n- **Repository-level items:** repository checks, docs and version updates, and the verification record entry were not in what I was shown, so I have not judged them.\n\n## Frozen cases\n\n| Case | Result | Basis |\n|---|---|---|\n| `deep_reference_correction_stop` | 9/9 met | The file was read in turn 1, and turn 2 challenges the speed premise with a stated consequence. Turn 3 drops speed and registration and changes the question. Turn 4 gives a cited principle and four comparison limits. Turn 5 stops, asks nothing, and reuses the accepted facts in a read-only brief. |\n| `poor_analogy_skip` | 4/4 met | Turn 1 pushes back on removing the owner field, with a reason, and labels it an assumption. Turn 2 asks no questions and proposes a two-week trial in the existing CRM. |\n| `unavailable_reference` | 4/4 met | The read was attempted and the miss reported, with no invented contents. The conversation continued, and nothing was inferred about what the user liked in the example. |\n| `clear_accepted_work` | 2/2 met | Output is exactly `Mødet starter kl. 9.` |\n| `isolated_midtask_gap` | 2/2 met | One language question, with no new discovery or artifact. |\n\n## Clause coverage\n\nAll the clauses you list are covered: lookup (case 1), principle (case 1 turn 4), poor analogy (case 2 turn 1), skip (case 2 turn 2), unknown (case 3 turn 2, case 1 turn 5), clear work (cases 4 and 5), correction (case 1 turn 3), Stop (case 1 turn 5) and handoff (case 1 turn 5 brief). I did not treat the retired Spec as required.\n\n## Limitations to record\n\n1. **\"Simple\" was never elicited (closest call).** In case 1 turn 1 the assistant guessed what \"lige så simpelt\" meant instead of asking, which is the exact example the issue calls out. Turn 4 then states the meaning unhedged (\"betyder … en lille tilføjelse til det CRM, I har\"). I did not block because the guess was labelled, the frozen user never answered it, and it did not enter the brief as a requirement.\n2. **Hypothesis attributed to the source.** Turn 1 also says the reference \"itself points to\" keeping the CRM. That is the agent's hypothesis worded as a source statement.\n3. **Causal inference.** The user turns are scripted, so the transcripts show behaviour compatible with sharpening a choice, not that the sparring caused it.\n4. **The correction test is weaker than its label.** The assistant had already rejected speed in turn 2 and never held the \"clicks\" premise. What is shown is that the registration hypothesis was dropped and the next question changed.\n5. **Case 2 overclaims what the trial shows.** \"Så var problemet ejerskab … trygt skære i de øvrige felter\" does not follow from an uncontrolled two-week before/after. The trial bundles owner, date and weekly review, and step 4 relaxes the other fields at the same time, which undercuts the closing claim about separating simplicity from ownership.\n6. **Brief scope and length.** The user asked for a short brief on \"netop det\". The reply is about 30 lines plus a summary. It adds dates, reminders, an overdue overview and \"mindste ændring\", which are the agent's own suggestions the user never accepted; they appear as investigation questions, not decisions.\n7. **Unsupported certainty.** \"Det, I mangler, er en regel…\" and \"typisk en af tre\" in case 1 are stated flatly. The turn 5 problem statement generalises from one incident plus the user's assertion. Case 3 offers a two-cause framing, and case 5 says \"kun\".\n8. **Handoff is producer-side only.** No receiving project method or Council turn was observed.\n9. **Persistence and permission are weakly tested.** No write, memory or MCP tooling was exposed, so this shows non-attempt, not restraint.\n10. **Narrow coverage.** One run per case, one model and effort, Danish only, sales/CRM in three of five cases. Only the prose fallback was used and no network lookup was exercised.\n11. **Activation path not evidenced.** Every case, including the typo fix, read both skill files, and the observations do not show whether routing or the harness caused that.\n12. **Compound questions.** Case 1 turns 1–3 each bundle two or three sub-questions.\n13. **Reviewer independence.** This review runs on the same model as the subject, so blind spots may be shared, and I cannot confirm my own effort setting from inside the session.",
+    "lead_source_check": "Reference fixture is byte-identical to the released architecture. Quoted ownership text and cited source-system, curation, timing and access passages were checked against the actual file."
+  },
+  "receiving_agent": {
+    "harness": "Fresh ephemeral Codex CLI 0.171.0; read-only independent local task",
+    "source_kind": "Explicitly fictional CRM capability record, not a live CRM or private account",
+    "source": "Fictional CRM capability record for this synthetic receiving-agent test only.\nThe existing CRM supports one primary owner per sales opportunity and one primary owner per delivery project. A customer may have several opportunities and projects; customer owner and next-action owner are separate fields. Both opportunity and project records have next_action_text and next_action_owner, displayed together in the standard list view. This record does not establish reminder behaviour, adoption by employees, missing-owner reports or whether any real business has enabled those fields.\nNo operational customer data, real account or writable connection is present. The test authorises reading this supplied record only. No schema changes or new products are needed to answer the bounded question.\n",
+    "scope": "Answer only the accepted next-action owner capability question. Producer-suggested dates/reminders are not extra authorised work.",
+    "result": "**Ja, det er indbygget.** CRM’et kan vise én navngiven ejer af næste skridt pr. åben salgsdialog og pr. igangværende leveranceopgave. Hvis samme kunde har begge dele, kan de have hver sin ansvarlige.\n\nBegge posttyper har deres eget `next_action_owner`-felt, som vises sammen med `next_action_text` i standardlistevisningen. Kundens ejer står i et separat felt. [crm-capabilities.txt](<fixture>/crm-capabilities.txt:2)\n\nKilden fastslår ikke, om feltet er obligatorisk, eller om det er aktiveret og udfyldt i en konkret installation. Jeg brugte OSM Council-proceduren til at vurdere den lokale fil. Ingen ændringer blev foretaget.",
+    "lead_verdict": "Correct cited narrow answer; no restart of discovery, no unsupported actual-company configuration or write claim"
+  },
+  "limits": [
+    "One run per case, one subject model/effort and Danish only; no causal or aggregate quality benchmark.",
+    "Local reference read and local missing-file handling, not web research or every inaccessible-source failure.",
+    "Explicit skill selection and prose questioning, not automatic discovery or native question-widget qualification.",
+    "Read-only tools show correct bounded non-attempts, not adversarial write prevention.",
+    "The proposed uncontrolled two-week experiment contains overly strong causal language; it is not a validated experiment or business-outcome proof.",
+    "Longer-than-requested handoff and compound questions remain model-output quality limits.",
+    "The handoff reuses accepted decisions through Council/project work; retired Spec Work is not restored."
+  ]
+}

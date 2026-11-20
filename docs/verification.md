@@ -1,5 +1,45 @@
 # Verification
 
+## 20 November 2026 — adaptive Interview qualification (#59)
+
+Installed OSM 0.34.3's Interview 2.1.0 was exercised in five fresh native Claude
+Code streaming conversations with eleven actual user turns. All used requested
+Fable 5.2 High, retained one native session within each case and disabled native
+session persistence. Only Read was exposed; no owner context, connector, network
+or model write was authorised. The installed skill and conversation reference
+were selected explicitly, so this is not automatic-discovery proof.
+
+The [public-safe case record](evidence/interview-deep-qualification-20261120.json)
+retains every attempted case, actual user/assistant turn, scoped file read,
+frozen expectation and the independent review. It covers a deepening interview,
+an available named reference and its limits, a poor analogy, correction,
+missing reference, skip, unknown, Stop, clear accepted work and an isolated
+mid-task question. The named reference is byte-identical to the released
+architecture; the cited ownership and source/curation/access passages were
+checked against that file. Five cases and eleven turns completed without an
+execution failure; there is no hidden failed attempt or model fallback.
+
+A separate Fable 5.2 High review accepted the behavioural clauses. It noted
+verbosity, compound questions, speculative certainty and an overstrong causal
+interpretation of a proposed uncontrolled experiment. Those limits remain in
+the record. No actual business outcome, causal improvement, all-model/language
+quality, network lookup or native question-widget qualification is inferred.
+Read-only tool restrictions do not prove restraint with arbitrary write tools.
+
+A fresh ephemeral read-only Codex CLI 0.171.0 recipient then used the produced
+brief and a fictional CRM capability record. It answered the accepted
+next-action-owner question with a source citation, did not restart discovery
+and distinguished a documented feature from an actual company's enabled
+configuration. The caller scoped the producer's extra suggested questions out
+of that test. No real CRM, private source or external write was involved.
+
+Under the accepted seven-skill direction, the former Spec Work handoff means
+reusing accepted answers in the active project method or bounded Council work;
+no retired Spec skill is restored. Interview's released behaviour needed no
+instruction or version change. This evidence addresses #59's bounded scenarios,
+not the separate access, source-curation or scheduled-run requirements.
+
+
 ## 20 November 2026 — completed 0.34.3 Notion delivery
 
 The actual upgrade [44767334193](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44767334193)
@@ -64,7 +104,8 @@ pins match; the private Runtime binding was updated and read back. The actual
 20 November noon invocation used the earlier 0.34.1 pins, was interrupted and
 remains partial. The separately
 repaired CLI 0.171.0 reader and this manual acceptance do not establish a
-completed timed 0.34.3 cycle. Issues #73 and #93 remain open for that proof.
+completed timed 0.34.3 cycle. Issue #73 owns that timed proof; #93 retains
+architecture-view delivery and visual readback.
 
 Resources [PR #54](https://github.com/onlinesourdough/Resources/pull/54) refreshes
 only the OSM README cache and source lock to the actual tag commit. The other
