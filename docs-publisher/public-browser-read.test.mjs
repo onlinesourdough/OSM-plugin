@@ -153,11 +153,11 @@ test('the DOM capture requires native visibility including opacity',async()=>{
     const driver=await browser.launch(),context=await driver.newContext({}),page=await context.newPage();
     page.evaluate=async fn=>{
       globalThis.window={location:{href:url}};
-      globalThis.document={body:{innerText:'OSM:log 1.2.0 OSM:setup'},querySelectorAll:()=>[{
+      globalThis.document={body:{innerText:'OSM:log 1.2.0 OSM:setup'},querySelectorAll:selector=>selector==='a[href]'?[{
         href:other,innerText:'OSM:setup',checkVisibility:options=>{
           assert.deepEqual(options,{checkOpacity:true,checkVisibilityCSS:true});return visible;
         },
-      }]};
+      }]:[]};
       try{return fn();}finally{globalThis.window=previous.window;globalThis.document=previous.document;}
     };
     driver.newContext=async()=>({newPage:async()=>page});return driver;

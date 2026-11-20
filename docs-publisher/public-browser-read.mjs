@@ -63,11 +63,16 @@ async function observe(page, input, timing) {
       return markers.every(marker => text.includes(marker.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase()));
     }, input.markers, {timeout:budget(25000)});
     // One execution turn captures document identity and content together.
-    const observation = await page.evaluate(() => ({
+    const observation = await page.evaluate((selectedEntries = []) => ({
       url:window.location.href, text:document.body?.innerText || '',
       links:[...document.querySelectorAll('a[href]')].slice(0,1000).filter(a => a.checkVisibility({checkOpacity:true, checkVisibilityCSS:true}))
         .map(a => ({url:a.href, title:a.innerText})),
-    }));
+      nativeRows:[...document.querySelectorAll('[data-block-id]')].slice(0,1000)
+        .filter(row => selectedEntries.some(entry => row.getAttribute('data-block-id')?.replace(/-/g,'') === entry.page))
+        .map(row => ({page:row.getAttribute('data-block-id').replace(/-/g,''), tag:row.tagName, role:row.getAttribute('role'),
+          className:typeof row.className === 'string' ? row.className.slice(0,300) : '',
+          visible:row.checkVisibility({checkOpacity:true, checkVisibilityCSS:true}), title:row.innerText.slice(0,1000)})),
+    }), input.entries || []);
     if (remaining() <= 0) throw Error('deadline');
     const finalUrl = observation.url, text = observation.text;
     if (!publicUrl(finalUrl) || new URL(finalUrl).origin !== new URL(input.url).origin || pageId(finalUrl) !== pageId(input.url))
@@ -80,6 +85,7 @@ async function observe(page, input, timing) {
       const failed = {ok:false, url:input.url, reason:'Public catalogue did not show every linked skill entry'};
       if (input.diagnostics === true) {
         failed.linkedEntries = entries;
+        failed.observedNativeRows = observation.nativeRows;
         failed.observedLinks = observation.links.filter(link=>publicUrl(link.url)).map(link=>({page:pageId(link.url),title:link.title.slice(0,200)}));
       }
       return failed;
