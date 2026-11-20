@@ -45,10 +45,24 @@ jobs:
         working-directory: docs-publisher
       - name: Read the existing public Log page without authentication
         run: |
-          python3 - <<'PY' | node docs-publisher/public-browser-read.mjs > public-browser-proof.json
-          import json
-          url = 'https://gustavanderson.notion.site/41d6d2e17f568177bedac9379fb63e89'
-          print(json.dumps({'url':url, 'allowedUrls':[url], 'markers':['OSM:log','1.2.0','0.34.1']}))
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          base = 'https://gustavanderson.notion.site/'
+          requests = [
+              {'url':base+'41d6d2e17f568177bedac9379fb63e89', 'markers':['OSM:log','1.2.0']},
+              {'url':base+'6abfc738a9604ddc806432721813712b', 'markers':[
+                  'OSM:setup','OSM:prime','OSM:log','OSM:dreaming','OSM:interview','OSM:human-writing','OSM:council']},
+          ]
+          results = []
+          for request in requests:
+              request['allowedUrls'] = [row['url'] for row in requests]
+              result = subprocess.run(['node','docs-publisher/public-browser-read.mjs'],
+                  input=json.dumps(request), text=True, capture_output=True, timeout=80)
+              results.append(json.loads(result.stdout))
+          Path('public-browser-proof.json').write_text(json.dumps(results, indent=2))
+          if not all(result.get('ok') is True for result in results):
+              raise SystemExit('Anonymous page/catalogue read did not verify')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
