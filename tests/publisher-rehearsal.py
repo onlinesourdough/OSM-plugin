@@ -34,6 +34,13 @@ from fixture_transport import FakeNotion, FixtureTransport  # noqa: E402
 # General transport scenarios use unbound guide fixtures. Exact, live-shaped original
 # bindings are tested separately in publisher-parity.py, without private data.
 MANIFEST = pub.load_manifest()
+# Generic paragraph-writer fixtures deliberately precede native handoff. The
+# actual deployed state is validated separately, not required to stay inactive.
+MANIFEST['activation'].update(active=False, public_reader=None, live_proof='not-run')
+for _artifact in MANIFEST['artifacts']:
+    if _artifact['class'] == 'A':
+        _artifact.update(public_writer='existing-upkeep', adoption_state='pending-handoff')
+        _artifact.pop('handoff', None)
 for _guide in MANIFEST["artifacts"]:
     if _guide["class"] == "G":
         _guide.pop("original", None)

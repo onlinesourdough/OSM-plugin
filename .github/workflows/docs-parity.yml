@@ -6,6 +6,15 @@ on:
     types: [completed]
     branches: [main]
   workflow_dispatch:
+    inputs:
+      reader_probe:
+        description: 'Anonymous browser qualification only; no Notion token or writes'
+        type: boolean
+        default: false
+      native_write_key:
+        description: 'Bounded proof: the one released skill Key to import (empty: no manual write)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -16,15 +25,59 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  public-reader-probe:
+    if: github.event_name == 'workflow_dispatch' && inputs.reader_probe
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: docs-publisher/package-lock.json
+      - run: npm ci --prefix docs-publisher --ignore-scripts --no-fund
+      - run: npx playwright install --with-deps chromium
+        working-directory: docs-publisher
+      - name: Read the existing public Log page without authentication
+        run: |
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          base = 'https://gustavanderson.notion.site/'
+          requests = [
+              {'url':base+'41d6d2e17f568177bedac9379fb63e89', 'markers':['OSM:log','1.2.0']},
+              {'url':base+'6abfc738a9604ddc806432721813712b', 'markers':[
+                  'OSM:setup','OSM:prime','OSM:log','OSM:dreaming','OSM:interview','OSM:human-writing','OSM:council']},
+          ]
+          results = []
+          for request in requests:
+              request['allowedUrls'] = [row['url'] for row in requests]
+              result = subprocess.run(['node','docs-publisher/public-browser-read.mjs'],
+                  input=json.dumps(request), text=True, capture_output=True, timeout=80)
+              results.append(json.loads(result.stdout))
+          Path('public-browser-proof.json').write_text(json.dumps(results, indent=2))
+          if not all(result.get('ok') is True for result in results):
+              raise SystemExit('Anonymous page/catalogue read did not verify')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: anonymous-public-browser-proof
+          path: public-browser-proof.json
   reconcile:
     if: >-
-      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && !inputs.reader_probe && github.ref == 'refs/heads/main') ||
       (github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.event == 'push' &&
        github.event.workflow_run.head_branch == 'main' &&
        github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     env:
       OSM_DOCS_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
@@ -43,29 +96,73 @@ jobs:
             -f description='Comparing the public guide originals'
       - name: Check the reviewed source without credentials
         run: python3 docs-publisher/publisher.py reconcile --check --out reconciliation.md
+      - name: Build the released skill packets without credentials
+        run: |
+          python3 tests/native-publisher-rehearsal.py
+          python3 docs-publisher/native_skills.py build --out skill-packets.md
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install the isolated anonymous public reader
+        if: vars.OSM_PUBLIC_DOCS_ENABLED == 'true'
+        run: |
+          npm ci --prefix docs-publisher --ignore-scripts --no-fund
+          cd docs-publisher
+          npx playwright install --with-deps chromium
       - name: Inspect activation gates without exposing credentials
         id: gates
         env:
           OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
           OSM_PUBLIC_DOCS_ENABLED: ${{ vars.OSM_PUBLIC_DOCS_ENABLED }}
+          NATIVE_WRITE_KEY: ${{ inputs.native_write_key }}
         run: |
           python3 - <<'PY'
-          import json, os
+          import json, os, re
           from pathlib import Path
           manifest = json.loads(Path('docs-publisher/manifest.json').read_text())
           enabled = os.environ.get('OSM_PUBLIC_DOCS_ENABLED') == 'true'
-          configured = bool(os.environ.get('OSM_PUBLIC_DOCS_TOKEN')) and enabled
+          token = bool(os.environ.get('OSM_PUBLIC_DOCS_TOKEN'))
+          configured = token and enabled
+          active = bool(manifest['activation']['active'])
+          reader = bool(manifest['activation'].get('public_reader'))
           publish = configured and manifest['activation']['active'] and bool(manifest['activation'].get('public_reader'))
+          skills = [a for a in manifest['artifacts'] if a['class'] == 'A']
+          handed = [a['key'] for a in skills if a['public_writer'] == 'ci' and a['adoption_state'] == 'adopted']
+          key = os.environ.get('NATIVE_WRITE_KEY', '').strip()
+          if key and not re.fullmatch(r'[a-z0-9.-]+', key):
+              raise SystemExit('The bounded write Key is not a released skill Key.')
+          # A manual run may import the one named page; an automatic run writes only with every gate recorded.
+          native_write = configured and active and (key in handed if key else reader and len(handed) == len(skills))
+          missing = []
+          if not enabled:
+              missing.append('the repository variable OSM_PUBLIC_DOCS_ENABLED is not "true"')
+          if not token:
+              missing.append('the secret OSM_PUBLIC_DOCS_TOKEN is empty or not available to this run')
+          blocked = list(missing)
+          if not active:
+              blocked.append('activation.active is false in docs-publisher/manifest.json')
+          if len(handed) < len(skills):
+              blocked.append(f'{len(skills) - len(handed)} of {len(skills)} released skill pages are not handed over to CI')
+          if not reader:
+              blocked.append('no public reader is qualified (activation.public_reader is null)')
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write(f'configured={str(configured).lower()}\npublish={str(publish).lower()}\n')
+              out.write(f'native_write={str(bool(native_write)).lower()}\n')
+              out.write('native_args=' + (f'--only {key} --max-writes 1' if key else f'--max-writes {len(skills)}') + '\n')
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
-              out.write('Offline source reconciliation completed.\n\n')
-              out.write('Public-only snapshot access is configured.\n' if configured else
-                        'Live parity is blocked: configure a dedicated public-only credential and enable OSM_PUBLIC_DOCS_ENABLED. No live source was read or written.\n')
-              if not publish:
-                  out.write('Publication is inactive: the writer handoff, public reader and reviewed activation gates must be satisfied.\n')
+              out.write('Offline source reconciliation completed and the released skill packets were built.\n\n')
+              out.write('Public-only access is configured: the bound pages are read.\n' if configured else
+                        'Live parity is blocked. No live source was read or written. Missing: ' + '; '.join(missing) + '.\n')
+              if blocked:
+                  out.write('\nAutomatic publication is NOT active. Missing: ' + '; '.join(blocked) + '.\n')
+              if native_write and key:
+                  out.write(f'\nA bounded manual import of `{key}` is allowed for this run. It proves no automatic publication.\n')
+          for reason in (missing if enabled or token else []):
+              print(f'::error title=Public documentation access::{reason}')
           if enabled and not configured:
               raise SystemExit('Live parity was enabled but its public-only credential is missing.')
+          if key and not native_write:
+              raise SystemExit('The bounded write was requested but its gates are not met: ' + '; '.join(blocked or [f'{key} is not handed over to CI']))
           PY
       - name: Read the public guide originals
         if: steps.gates.outputs.configured == 'true'
@@ -75,8 +172,35 @@ jobs:
       - name: Compare the live originals and declared exports
         if: steps.gates.outputs.configured == 'true'
         run: python3 docs-publisher/publisher.py reconcile --snapshot public-originals.json --check --out live-reconciliation.md
+      - name: Preflight the released skill pages (read-only)
+        if: steps.gates.outputs.configured == 'true' && steps.gates.outputs.native_write != 'true'
+        env:
+          OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
+          OSM_PUBLIC_DOCS_ENABLED: ${{ vars.OSM_PUBLIC_DOCS_ENABLED }}
+          OSM_PUBLIC_DOCS_BASE: ${{ vars.OSM_PUBLIC_DOCS_BASE }}
+          OSM_PUBLIC_DOCS_CATALOGUE: ${{ vars.OSM_PUBLIC_DOCS_CATALOGUE }}
+        # Reports each page and its handoff record. Until the handoff is recorded its rows are blocked by
+        # design, so the result is visible but does not fail the guide parity status.
+        run: |
+          python3 docs-publisher/native_skills.py preflight --browser-public-read --out skill-preflight.md --checkpoint skill-checkpoint.json || code=$?
+          cat skill-preflight.md >> "$GITHUB_STEP_SUMMARY"
+          if [ "${code:-0}" = 3 ]; then exit 3; fi
+      - name: Import the released skill packets after the handoff and every gate
+        if: steps.gates.outputs.native_write == 'true'
+        env:
+          OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
+          OSM_PUBLIC_DOCS_ENABLED: ${{ vars.OSM_PUBLIC_DOCS_ENABLED }}
+          OSM_PUBLIC_DOCS_BASE: ${{ vars.OSM_PUBLIC_DOCS_BASE }}
+          OSM_PUBLIC_DOCS_CATALOGUE: ${{ vars.OSM_PUBLIC_DOCS_CATALOGUE }}
+          NATIVE_ARGS: ${{ steps.gates.outputs.native_args }}
+        run: |
+          python3 docs-publisher/native_skills.py publish --write --browser-public-read $NATIVE_ARGS \
+            --out skill-publication.md --checkpoint skill-checkpoint.json || code=$?
+          cat skill-publication.md >> "$GITHUB_STEP_SUMMARY"
+          exit "${code:-0}"
       - name: Publish only after the explicit handoff and qualified reader
-        if: steps.gates.outputs.publish == 'true'
+        # The paragraph writer serves the optional working projection only; it refuses released skill pages.
+        if: steps.gates.outputs.publish == 'true' && vars.OSM_PUBLIC_DOCS_DATABASE != ''
         env:
           OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
           OSM_PUBLIC_DOCS_DATABASE: ${{ vars.OSM_PUBLIC_DOCS_DATABASE }}
@@ -94,15 +218,20 @@ jobs:
             live-reconciliation.md
             publication.md
             public-originals.json
+            skill-packets.md
+            skill-preflight.md
+            skill-publication.md
+            skill-checkpoint.json
           if-no-files-found: ignore
       - name: Record enabled live parity result
         if: always() && vars.OSM_PUBLIC_DOCS_ENABLED == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           RESULT: ${{ job.status }}
+          COMPLETE_SET: ${{ steps.gates.outputs.publish == 'true' && steps.gates.outputs.native_write == 'true' && inputs.native_write_key == '' }}
         run: |
           state=failure
-          if [ "$RESULT" = success ]; then state=success; fi
+          if [ "$RESULT" = success ] && [ "$COMPLETE_SET" = true ]; then state=success; fi
           gh api --silent --method POST "repos/$GITHUB_REPOSITORY/statuses/$OSM_DOCS_SHA" \
             -f state="$state" -f context='osm/public-guide-parity' \
-            -f description='Public guide original comparison completed'
+            -f description='Guide originals and complete released skill set checked'

@@ -64,6 +64,9 @@ python3 tests/responsibility-rehearsal.py
 python3 tests/context-architecture-rehearsal.py
 python3 tests/publisher-rehearsal.py
 python3 tests/publisher-parity.py
+python3 tests/native-publisher-rehearsal.py
+python3 tests/public-browser-reader.py
+node --test docs-publisher/public-browser-read.test.mjs
 python3 tests/consumer-selection-rehearsal.py
 python3 docs-publisher/publisher.py reconcile --check
 ```

@@ -8,9 +8,10 @@ from the owner's private Data & Context home. The former private dashboard,
 pickers, settings drawer and record reader are retired. Native behavior must
 be verified before delivery is claimed.
 
-The icon uses the pixel bread from the onlinesourdough website, without a
-surrounding circle or background. The adjacent label remains OSM. The sidebar
-receives theme-specific glyphs; the package carries a transparent square PNG.
+The icon uses the OSM project mark from Gustavonline's Current Work section:
+a brown hub on a cream tile. Its corner radius matches the website's 7px at
+28px. The same artwork serves the sidebar, plugin and public Notion guide.
+The adjacent label remains OSM; SVG and PNG use the same colours in both themes.
 Its [vector source](assets/branding/osm-icon.svg) remains editable.
 
 Earlier dashboard designs and Paper references remain in the

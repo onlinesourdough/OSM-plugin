@@ -1,60 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" fill="#888078" shape-rendering="crispEdges" aria-label="OSM">
-  <title>OSM</title>
-  <desc>The onlinesourdough pixel bread mark, without a background or border.</desc>
-  <g transform="translate(2 5) scale(2)">
-    <rect x="3.09" y="0.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="0.09" width="0.82" height="0.82"/>
-    <rect x="5.09" y="0.09" width="0.82" height="0.82"/>
-    <rect x="6.09" y="0.09" width="0.82" height="0.82"/>
-    <rect x="1.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="2.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="3.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="5.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="6.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="7.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="8.09" y="1.09" width="0.82" height="0.82"/>
-    <rect x="0.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="1.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="2.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="5.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="7.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="8.09" y="2.09" width="0.82" height="0.82"/>
-    <rect x="0.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="1.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="3.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="6.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="7.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="9.09" y="3.09" width="0.82" height="0.82"/>
-    <rect x="0.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="1.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="2.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="3.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="5.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="6.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="7.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="8.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="9.09" y="4.09" width="0.82" height="0.82"/>
-    <rect x="0.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="1.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="2.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="3.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="5.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="6.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="7.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="8.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="9.09" y="5.09" width="0.82" height="0.82"/>
-    <rect x="1.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="2.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="3.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="4.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="5.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="6.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="7.09" y="6.09" width="0.82" height="0.82"/>
-    <rect x="8.09" y="6.09" width="0.82" height="0.82"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="-4 -4 28 28">
+  <!-- OSM project mark: gustavonline.com/assets/project-marks/aios.svg.
+       Rounded corners match the website: 7px radius on a 28px icon. -->
+  <rect x="-4" y="-4" width="28" height="28" rx="7" fill="#F8F2E8"/>
+  <g fill="none" stroke="#2B1B12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="10" cy="10" r="3.25" fill="#2B1B12"/>
+    <circle cx="3.75" cy="3.75" r="2"/>
+    <circle cx="16.25" cy="3.75" r="2"/>
+    <circle cx="3.75" cy="16.25" r="2"/>
+    <circle cx="16.25" cy="16.25" r="2"/>
+    <path d="M5.2 5.2l2.4 2.4M14.8 5.2l-2.4 2.4M5.2 14.8l2.4-2.4M14.8 14.8l-2.4-2.4"/>
   </g>
 </svg>

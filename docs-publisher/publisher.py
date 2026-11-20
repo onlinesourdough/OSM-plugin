@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """Source-only publisher and parity check for the public OSM documentation.
 
-Not shipped in the package and not active. Ownership is per artifact. The public Notion guide pages are
+Not shipped in the package. Ownership is per artifact. The public Notion guide pages are
 Notion-authored originals: they are frozen read-only, bound by page id and content revision, exported
 to Git deliberately (`export`) and never written from Git. Git-owned artifacts are written only where
 their public writer is CI. It builds a per-artifact impact diff from a frozen source commit and always
 returns a visible reconciliation result (a no-op is valid); everything else gets a visible refusal
 and no write.
 
-Standard library only. The Notion transport below has run only against the in-memory stand-in in
-fixture_transport.py (never against Notion) and stays fail-closed until the manifest says
-`activation.active` and a dedicated credential exists. No public content reader is qualified, so
-no run can reach `complete` today: public access and catalogue membership are `unsupported`.
+Standard library only. The transport stays fail-closed until the manifest records
+`activation.active` and a dedicated credential exists. Completing publication also needs a
+qualified public reader; actual evidence is recorded separately from fixture results.
+
+Released skill pages (class A) are not written here. native_skills.py delivers them whole through
+Notion's Agent Skills API; the paragraph writer below would replace their files and refuses them.
 """
 
 import argparse
@@ -27,6 +29,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+import urllib.parse
 from collections import Counter
 from pathlib import Path
 
@@ -104,6 +107,13 @@ class SelectionError(PublisherError):
 
 def sha256(data):
     return hashlib.sha256(data if isinstance(data, bytes) else data.encode()).hexdigest()
+
+
+def clean_credential(value):
+    value = value.strip() if isinstance(value, str) else ''
+    if any(char.isspace() or ord(char) < 32 for char in value):
+        raise MissingCredential('The public documentation credential has an invalid format')
+    return value
 
 
 # --- sources --------------------------------------------------------------------------------------
@@ -262,6 +272,12 @@ def binding_shape(a):
     if bound is not None and not (bound.get("notion") == a.get("notion") and digest.fullmatch(str(bound.get("revision")))
                                   and all(isinstance(bound.get(f), str) and bound[f] for f in ("edition", "reader", "read_at"))):
         out.append("an original binding names its page id, content revision, edition, reader and read time")
+    if bound is not None:
+        aliases = bound.get('reader_equivalence', {})
+        if not isinstance(aliases, dict) or any(not isinstance(value, dict) or
+                value.get('canonical_revision') != bound.get('revision') or not value.get('reviewed_in')
+                for value in aliases.values()):
+            out.append('reader equivalence must be reviewed against the bound canonical revision')
     for e in a.get("exports", []):
         path = str(e.get("path") or "")
         if not path or path.startswith("/") or ".." in path.split("/") or path.startswith(ORIGINALS + "/"):
@@ -330,7 +346,7 @@ def git_tag_resolver(repo):
 
 ORIGINALS = "docs-publisher/originals"
 SNAPSHOT_FORMAT = 1
-API_READER = "notion-api-markdown-v2"
+API_READER = "notion-api-markdown-v2-stable-media/1"
 SPLIT_FOLDERS = ("skills", "docs")      # mapped one level down; every other top-level folder is one unit
 SECRET = re.compile(r"(secret_|ntn_)[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----")
 _FENCE = re.compile(r"^([ \t]*)(`{3,})[ \t]*([^`]*?)[ \t]*$")
@@ -340,6 +356,33 @@ _HEADING = re.compile(r"^(#{1,6})[ \t]+(.*?)[ \t]*$")
 def normalise(text):
     """Line endings and the end of the text only; nothing inside a body is rewritten."""
     return text.replace("\r\n", "\n").replace("\r", "\n").rstrip("\n") + "\n"
+
+
+def stable_notion_media(text):
+    """Use Notion's block/file identity instead of an expiring S3 signature.
+
+    Native Markdown supplies the block and workspace in `notion_record` and
+    the immutable file identity in the URL path. All other text stays exact.
+    Unknown temporary links cannot become a supposedly stable source snapshot.
+    """
+    uuid = r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    def replace(match):
+        value = match[0]
+        suffix = ')' if value.endswith(')') else ''
+        url = value[:-1] if suffix else value
+        parsed = urllib.parse.urlsplit(url)
+        if not ('X-Amz-' in parsed.query or parsed.fragment.startswith('notion_record=')):
+            return value
+        record = re.fullmatch(r'notion_record=block\.(' + uuid + r')\.(' + uuid + r')', parsed.fragment)
+        parts = parsed.path.strip('/').split('/')
+        if (not record or parsed.scheme != 'https' or
+                parsed.hostname != 'prod-files-secure.s3.us-west-2.amazonaws.com' or
+                len(parts) != 3 or parts[0].lower() != record[2].lower() or
+                not re.fullmatch(uuid, parts[1]) or not parts[2]):
+            raise NotApplied('an expiring media URL has no qualified stable Notion identity')
+        name = urllib.parse.quote(urllib.parse.unquote(parts[2]), safe='')
+        return f'notion-file-block://{record[1].lower()}/{parts[1].lower()}?space_id={record[2].lower()}&name={name}' + suffix
+    return re.sub(r'https://[^\s<>"\']+', replace, text)
 
 
 def revision(body):
@@ -511,7 +554,13 @@ def original_state(artifact, source, read=None):
         return REFUSED_NOTION, f"{never} | {agree} | newer-original check: {NOT_CHECKED}: no snapshot was supplied"
     if read.get("revision") is None:
         return UNREADABLE, f"{label}; the original is not in the snapshot ({read.get('error')}), so it is not called unchanged"
-    for e in exports:               # the exported region itself compares whatever reader froze the page
+    aliases = bound.get('reader_equivalence', {})
+    equivalent = aliases.get(read['reader'], {}) if isinstance(aliases, dict) else {}
+    if read['reader'] != bound['reader'] and not (
+            isinstance(equivalent, dict) and equivalent.get('canonical_revision') == bound['revision'] and equivalent.get('reviewed_in')):
+        return UNVERIFIED_ORIGINAL, (f"{never} | {agree} | newer-original check: {NOT_CHECKED}: "
+                                    "the reader representations are not comparable until qualified against this original")
+    for e in exports:
         try:
             now = select(read["body"], e.get("notion"))
         except SelectionError as error:
@@ -519,9 +568,6 @@ def original_state(artifact, source, read=None):
         if sha256(now) != e["sha256"]:
             return CONFLICT, (f"a newer original exists in Notion: the selection exported to {e['path']} changed; export it deliberately, "
                               "nothing is overwritten in either direction")
-    if read["reader"] != bound["reader"]:
-        return UNVERIFIED_ORIGINAL, (f"{never} | {agree} with the original as read | newer-original check: {NOT_CHECKED}: bound through "
-                                f"{bound['reader']} and read through {read['reader']}, so the body hashes are not comparable")
     if read["revision"] != bound["revision"]:
         return CONFLICT, (f"a newer original exists in Notion ({read['revision'][:12]}; {label}); export it deliberately, "
                           "nothing is overwritten in either direction")
@@ -1045,7 +1091,8 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
     if any(a.get("original") for a in guide_pages(manifest).values()) and originals is None:
         raise PublisherError("bound guide originals require a comparable snapshot before publication")
     if not allow_fixture and any(a["class"] == "A" and a["public_writer"] == "ci" for a in manifest["artifacts"]):
-        raise PublisherError("native released-skill packet publication is not qualified; class A must stay with existing-upkeep")
+        raise PublisherError("released skill pages are delivered whole by the native skill publisher (native_skills.py); "
+                             "this paragraph writer never writes a class A page")
     resolve_released(manifest, tag_resolver)
     transport.claim_run(run_id)
     try:
@@ -1168,7 +1215,7 @@ class NotionTransport:
     """
 
     def __init__(self, database_id, opener=None, env=None, public_reader=None, api_base=API_BASE, bound=None):
-        token = (env if env is not None else os.environ).get(TOKEN_ENV, "")
+        token = clean_credential((env if env is not None else os.environ).get(TOKEN_ENV, ""))
         if not token or not (database_id or bound is not None):
             raise MissingCredential(f"{TOKEN_ENV} and a public-subtree database id or page bindings are required; nothing was sent")
         self._token, self.database_id, self.api_base = token, database_id or None, api_base
@@ -1348,7 +1395,8 @@ class NotionTransport:
             raise NotApplied("the guide Markdown read is incomplete or has unsupported content")
         title = next(("".join(t.get("plain_text", "") for t in prop.get("title", []))
                       for prop in page.get("properties", {}).values() if prop.get("type") == "title"), "")
-        return {"notion": page_id, "title": title, "last_edited_time": page.get("last_edited_time"), "body": rendered["markdown"]}
+        return {"notion": page_id, "title": title, "last_edited_time": page.get("last_edited_time"),
+                "body": stable_notion_media(rendered["markdown"])}
 
     def set_status(self, key, status, **fields):
         if key in self.bound:

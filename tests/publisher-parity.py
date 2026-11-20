@@ -17,6 +17,26 @@ PATH = 'skills/example/assets/definition.md'
 BODY = '# Definition\n\n```yaml\nsource: direct\nretention: source-only\n```\n'
 
 class Parity(unittest.TestCase):
+    def test_equivalent_reader_requires_review_and_still_detects_changed_content(self):
+        self.export()
+        self.assertEqual(self.state(self.read(reader=pub.API_READER))[0], pub.UNVERIFIED_ORIGINAL)
+        self.guide['original']['reader_equivalence'] = {pub.API_READER: {
+            'canonical_revision': pub.revision(BODY), 'reviewed_in': 'fixture review'}}
+        self.assertEqual(self.state(self.read(reader=pub.API_READER))[0], pub.REFUSED_NOTION)
+        self.assertEqual(self.state(self.read(BODY.replace('direct','another'),reader=pub.API_READER))[0],pub.CONFLICT)
+        self.guide['original']['reader_equivalence'][pub.API_READER]['canonical_revision'] = '0'*64
+        self.assertEqual(self.state(self.read(reader=pub.API_READER))[0], pub.UNVERIFIED_ORIGINAL)
+
+    def test_media_signatures_rotate_without_changing_the_stable_original(self):
+        space='eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee';block='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';file='bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
+        target=f'https://prod-files-secure.s3.us-west-2.amazonaws.com/{space}/{file}/diagram.html?X-Amz-Signature=FIRST#notion_record=block.{block}.{space}'
+        stable=f'notion-file-block://{block}/{file}?space_id={space}&name=diagram.html'
+        self.assertEqual(pub.stable_notion_media(f'<embed source="{target}" />'),f'<embed source="{stable}" />')
+        self.assertEqual(pub.stable_notion_media(target),pub.stable_notion_media(target.replace('FIRST','SECOND')))
+        self.assertNotEqual(pub.stable_notion_media(target),pub.stable_notion_media(target.replace(file,'cccccccc-cccc-cccc-cccc-cccccccccccc')))
+        with self.assertRaises(pub.NotApplied):pub.stable_notion_media(target.replace('prod-files-secure.s3.us-west-2.amazonaws.com','example.invalid'))
+        with self.assertRaises(pub.NotApplied):pub.stable_notion_media(target.replace('#notion_record=block.','#missing='))
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
