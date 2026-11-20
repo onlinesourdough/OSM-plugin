@@ -33,4 +33,4 @@ Select relevant material by scope and task, accepted authority and comparable so
 
 ## Your own AI operating model
 
-Your own Data & Context home holds your company's selected configuration and knowledge. Setup adapts the shared template to that home. Follow <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> for first use and <mention url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">AI operating model</mention> for the definition and database fields.
+Your own AI operating model home holds your company's selected configuration and knowledge. Setup adapts the shared template to that home. Follow <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> for first use and <mention url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">AI operating model</mention> for the definition and database fields.
