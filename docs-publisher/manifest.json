@@ -390,9 +390,9 @@
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
         "revision": "add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T13:16:23.100Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
     {
@@ -411,9 +411,9 @@
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "2dcf3d4953f86be118c1b5a5233445a1ff2556b0cd6fb9608cec87c8809bbe25",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T13:16:24.059Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
     {
@@ -432,9 +432,9 @@
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
         "revision": "5709eebd7303c4a78288797eccbe8dc3ae25531b2accd99a3d7d7f91a9b6257c",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T13:16:22.312Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
     {
@@ -453,9 +453,9 @@
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
         "revision": "617224d87648d666abc68cf59d2857fc77ac02c068c2f5b8b8f0d15eca0407fb",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T13:16:21.387Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       },
       "exports": [
         {
@@ -494,9 +494,9 @@
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-06T12:00:03.341Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
     {
@@ -515,9 +515,9 @@
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T00:46:22.440Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
     },
@@ -537,9 +537,9 @@
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
         "revision": "996d648c7e48905027a70a28df2fe5e75a45dcb69a7432ec1dc65706f88536b6",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T13:21:01.236Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T13:21:00.000Z"
       },
       "exports": [
         {
@@ -570,9 +570,9 @@
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "7a7cbadb5440a338178d1df5cbff788c44c17a03962a03f53139b08885b14576",
         "edition": "0.34.3",
-        "reader": "official-notion-plugin-fetch/notion-flavored-markdown",
-        "read_at": "2026-11-20T13:21:21.322Z",
-        "last_edited_time": "2026-11-20T11:05:19.294Z"
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:30:00+00:00",
+        "last_edited_time": "2026-11-20T11:05:00.000Z"
       }
     },
     {
