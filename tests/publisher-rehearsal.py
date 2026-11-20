@@ -818,7 +818,13 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
     with redirect_stdout(out):
         code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "HEAD"])
     text = out.getvalue()
-    require(code == 0 and "valid no-op" in text and f"| no-source-change | {len(W_KEYS)} |" in text and "would-write" not in text, text)
+    require(code == 0 and f"| no-source-change | {len(W_KEYS)} |" in text and "would-write" not in text, text)
+    native = [a for a in pub.load_manifest()['artifacts'] if a['class'] == 'A' and a['public_writer'] == 'ci']
+    if native:
+        require(f'| unknown-no-receipts | {len(native)} |' in text and 'the impact is unknown' in text,
+                'credential-free reconciliation cannot declare native page state: ' + text)
+    else:
+        require('valid no-op' in text, text)
     table = text.split("| Outcome | Artifacts |")[1].split("\n\n")[0]
     require("| written" not in table and "| unchanged" not in table, "the credential-free result never says written or unchanged")
     base = pub.DictSource(working_files(), "c-1")
