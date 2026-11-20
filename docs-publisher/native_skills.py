@@ -888,7 +888,8 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None, 
                 raise pub.SetupError("a public address is set but no public reader is qualified in the manifest; refusing unused configuration")
             if args.browser_public_read:
                 from browser_reader import BrowserReader
-                reader = BrowserReader(args.public_base, args.public_catalogue, packets)
+                reader = BrowserReader(args.public_base, args.public_catalogue, packets,
+                                       catalogue_id=manifest["reading_export"]["catalogue"])
             else:
                 reader = pub.PublicReader(args.public_base, args.public_catalogue, opener=opener)
         elif args.command == "publish" and manifest["activation"].get("public_reader") is not None:

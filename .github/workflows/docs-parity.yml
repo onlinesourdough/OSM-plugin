@@ -52,17 +52,17 @@ jobs:
           sys.path.insert(0, 'docs-publisher')
           import publisher as pub
           import native_skills as native
-          from browser_reader import BrowserReader
+          from browser_reader import BrowserReader, run_browser
           base = 'https://gustavanderson.notion.site'
-          catalogue = base + '/6abfc738a9604ddc806432721813712b'
           manifest = pub.load_manifest()
+          catalogue = base + '/' + manifest['reading_export']['catalogue']
           packets = native.build_packets(manifest, pub.GitSource('.', manifest['editions']['released']['commit']))
           calls = []
           def capture(args, **kwargs):
               request = json.loads(kwargs['input'])
               request['diagnostics'] = True
               kwargs['input'] = json.dumps(request)
-              result = subprocess.run(args, **kwargs)
+              result = run_browser(args, **kwargs)
               calls.append(1)
               try:
                   body = json.loads(result.stdout)
@@ -72,7 +72,7 @@ jobs:
                   'returncode':result.returncode, 'body':body,
                   'stderr':result.stderr[-8000:], 'environment_keys':sorted(kwargs['env'])}, indent=2))
               return result
-          reader = BrowserReader(base, catalogue, packets, runner=capture)
+          reader = BrowserReader(base, catalogue, packets, catalogue_id=manifest['reading_export']['catalogue'], runner=capture)
           results = []
           for packet in packets.values():
               state, detail = native.public_state(reader, packet)

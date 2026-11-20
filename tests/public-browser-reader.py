@@ -6,13 +6,14 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'docs-publisher'))
 import publisher as pub
-from browser_reader import BrowserReader
+from browser_reader import BrowserReader, run_browser
 
 BASE = 'https://gustavanderson.notion.site'
 PAGE = 'a' * 32
@@ -23,7 +24,7 @@ PACKETS = {'osm-log': {'page': PAGE, 'title': 'OSM:log', 'version': '1.2.0', 'pa
 TEXT = 'OSM:log 1.2.0 0.34.2 Released reference for this edition. Finish here.'
 GOOD = {'ok':True,'results':[
     {'ok':True,'url':URL,'finalUrl':URL,'text':TEXT},
-    {'ok':True,'url':CATALOGUE,'finalUrl':CATALOGUE,'text':'OSM:log'},
+    {'ok':True,'url':CATALOGUE,'finalUrl':CATALOGUE,'text':'OSM:log','entries':[{'page':PAGE,'title':'OSM:log'}]},
 ]}
 
 
@@ -46,7 +47,7 @@ class BrowserBoundary(unittest.TestCase):
             self.assertEqual(kw['timeout'],285)
             return response(GOOD)
         with patch.dict(os.environ, {'OSM_PUBLIC_DOCS_TOKEN':'fixture','GH_TOKEN':'fixture'}):
-            reader=BrowserReader(BASE,CATALOGUE,PACKETS,runner=run)
+            reader=BrowserReader(BASE,CATALOGUE,PACKETS,catalogue_id='b'*32,runner=run)
             self.assertEqual(reader.read(URL),(pub.VERIFIED,TEXT))
             self.assertEqual(reader.read(CATALOGUE),(pub.VERIFIED,'OSM:log'))
             self.assertEqual(reader.read(URL)[0],pub.VERIFIED)
@@ -67,16 +68,17 @@ class BrowserBoundary(unittest.TestCase):
             lambda b:b['results'][0].update(text='Only the title OSM:log'),
             lambda b:b.update(ok=False),
             lambda b:b['results'][0].update(ok=1),
+            lambda b:b['results'][1].update(entries=[]),
         ]:
             body=copy.deepcopy(GOOD);transform(body);bad.append(body)
         bad += [[], {'ok':True,'results':{}}, {'ok':True,'results':[None,None]}]
         for body in bad:
             with self.subTest(size=len(str(body))):
-                reader=BrowserReader(BASE,CATALOGUE,PACKETS,runner=lambda *a,**kw:response(body))
+                reader=BrowserReader(BASE,CATALOGUE,PACKETS,catalogue_id='b'*32,runner=lambda *a,**kw:response(body))
                 self.assertEqual(reader.read(URL)[0],pub.FAILED)
                 self.assertFalse(reader.cache)
         def timeout(*args,**kw):raise subprocess.TimeoutExpired('node',285)
-        self.assertEqual(BrowserReader(BASE,CATALOGUE,PACKETS,runner=timeout).read(URL)[0],pub.FAILED)
+        self.assertEqual(BrowserReader(BASE,CATALOGUE,PACKETS,catalogue_id='b'*32,runner=timeout).read(URL)[0],pub.FAILED)
 
     def test_partial_batch_keeps_only_its_successful_rows_verified_and_never_relaunches(self):
         calls=[]
@@ -84,7 +86,7 @@ class BrowserBoundary(unittest.TestCase):
         body.update(ok=False)
         body['results'][1]={'ok':False,'url':CATALOGUE,'reason':'Public page was rate limited; retry later'}
         def run(*a,**kw):calls.append(1);return response(body,1)
-        reader=BrowserReader(BASE,CATALOGUE,PACKETS,runner=run)
+        reader=BrowserReader(BASE,CATALOGUE,PACKETS,catalogue_id='b'*32,runner=run)
         self.assertEqual(reader.read(URL)[0],pub.VERIFIED)
         self.assertEqual(reader.read(CATALOGUE),(pub.FAILED,'Public page was rate limited; retry later'))
         self.assertEqual(reader.read(CATALOGUE)[0],pub.FAILED)
@@ -93,13 +95,31 @@ class BrowserBoundary(unittest.TestCase):
     def test_failure_reason_is_fixed_and_never_echoes_untrusted_text(self):
         for reason,expected in [('Public browser failed during launch','Public browser failed during launch'),
                                 ('private fixture credential','public browser did not verify the page')]:
-            reader=BrowserReader(BASE,CATALOGUE,PACKETS,runner=lambda *a,**kw:response({'ok':False,'reason':reason},1))
+            reader=BrowserReader(BASE,CATALOGUE,PACKETS,catalogue_id='b'*32,runner=lambda *a,**kw:response({'ok':False,'reason':reason},1))
             self.assertEqual(reader.read(URL),(pub.FAILED,expected))
         body=copy.deepcopy(GOOD);body.update(ok=False)
         body['results'][1]={'ok':False,'url':CATALOGUE,'reason':'private fixture credential'}
-        reader=BrowserReader(BASE,CATALOGUE,PACKETS,runner=lambda *a,**kw:response(body,1))
+        reader=BrowserReader(BASE,CATALOGUE,PACKETS,catalogue_id='b'*32,runner=lambda *a,**kw:response(body,1))
         self.assertEqual(reader.read(URL)[0],pub.FAILED)
         self.assertFalse(reader.cache)
+
+    def test_wrong_configured_catalogue_is_refused_before_launch(self):
+        for catalogue in [BASE+'/'+'c'*32,'https://example.com/'+'b'*32]:
+            with self.assertRaises(pub.SetupError):
+                BrowserReader(BASE,catalogue,PACKETS,catalogue_id='b'*32,runner=lambda *a,**kw:self.fail('launched'))
+
+    def test_timeout_reaps_the_whole_owned_browser_process_group(self):
+        with tempfile.TemporaryDirectory() as folder:
+            pidfile=Path(folder)/'child.pid'
+            code=("import subprocess,sys,time; from pathlib import Path; "
+                  "child=subprocess.Popen([sys.executable,'-c','import time;time.sleep(30)']); "
+                  "Path(sys.argv[1]).write_text(str(child.pid)); time.sleep(30)")
+            with self.assertRaises(subprocess.TimeoutExpired):
+                run_browser([sys.executable,'-c',code,str(pidfile)],input='',text=True,capture_output=True,
+                            timeout=0.5,env={'PATH':os.environ['PATH']})
+            self.assertTrue(pidfile.exists())
+            state=subprocess.run(['ps','-o','stat=','-p',pidfile.read_text()],text=True,capture_output=True).stdout.strip()
+            self.assertTrue(not state or state.startswith('Z'),f'child still running: {state}')
 
 
 if __name__=='__main__': unittest.main()

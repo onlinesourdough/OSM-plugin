@@ -19,7 +19,9 @@ export function allowed(input) {
   return Boolean(input && Array.isArray(input.allowedUrls) && input.allowedUrls.length > 0 && input.allowedUrls.length <= 32 &&
     new Set(input.allowedUrls).size === input.allowedUrls.length && input.allowedUrls.every(publicUrl) &&
     input.allowedUrls.includes(input.url) && Array.isArray(input.markers) && input.markers.length > 0 && input.markers.length <= 1000 &&
-    input.markers.every(value => typeof value === 'string' && letters(value) && value.length <= 1000));
+    input.markers.every(value => typeof value === 'string' && letters(value) && value.length <= 1000) &&
+    (input.entries === undefined || (Array.isArray(input.entries) && input.entries.length <= 32 && input.entries.every(row =>
+      row && /^[a-f0-9]{32}$/.test(row.page) && typeof row.title === 'string' && letters(row.title) && row.title.length <= 1000))));
 }
 
 function batchAllowed(input) {
@@ -46,23 +48,42 @@ async function observe(page, input, timing) {
     if (response?.status() === 429) {
       const pause = retryDelay(response.headers()?.['retry-after'], timing.now());
       if (pause === null || remaining() <= pause + 1000)
-        return {ok:false, url:input.url, reason:'Public page was rate limited; retry later', httpStatus:429};
+        return {ok:false, url:input.url, reason:'Public page was rate limited; retry later', httpStatus:429, stopNavigation:true};
       await timing.sleep(pause);
       response = await page.goto(input.url, {waitUntil:'domcontentloaded', timeout:budget(30000)});
     }
+    if (response?.status() === 429) return {ok:false, url:input.url, reason:'Public page was rate limited; retry later', httpStatus:429, stopNavigation:true};
     if (response?.status() !== 200) return {ok:false, url:input.url, reason:'Public page did not return HTTP 200', httpStatus:response?.status()};
+    const responseUrl = response.url();
+    if (!publicUrl(responseUrl) || new URL(responseUrl).origin !== new URL(input.url).origin || pageId(responseUrl) !== pageId(input.url))
+      return {ok:false, url:input.url, reason:'Public page changed host or page identity'};
     phase = 'content';
     await page.waitForFunction(markers => {
       const text = document.body?.innerText?.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase() || '';
       return markers.every(marker => text.includes(marker.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase()));
     }, input.markers, {timeout:budget(25000)});
-    const finalUrl = page.url();
-    if (new URL(finalUrl).origin !== new URL(input.url).origin || pageId(finalUrl) !== pageId(input.url))
+    // One execution turn captures document identity and content together.
+    const observation = await page.evaluate(() => ({
+      url:window.location.href, text:document.body?.innerText || '',
+      links:[...document.querySelectorAll('a[href]')].slice(0,1000).filter(a => a.getClientRects().length && getComputedStyle(a).visibility !== 'hidden')
+        .map(a => ({url:a.href, title:a.innerText})),
+    }));
+    const finalUrl = observation.url, text = observation.text;
+    if (!publicUrl(finalUrl) || new URL(finalUrl).origin !== new URL(input.url).origin || pageId(finalUrl) !== pageId(input.url))
       return {ok:false, url:input.url, reason:'Public page changed host or page identity'};
-    const text = await page.locator('body').innerText({timeout:budget(5000)});
     if (Buffer.byteLength(text, 'utf8') > 2_000_000 || !input.markers.every(marker => letters(text).includes(letters(marker))))
       return {ok:false, url:input.url, reason:'Public page was oversized or missing its expected content'};
-    return {ok:true, url:input.url, finalUrl, observedAt:new Date(timing.now()).toISOString(), text};
+    const entries = (input.entries || []).filter(entry => observation.links.some(link => publicUrl(link.url) &&
+      new URL(link.url).origin === new URL(input.url).origin && pageId(link.url) === entry.page && letters(link.title) === letters(entry.title)));
+    if (entries.length !== (input.entries || []).length) {
+      const failed = {ok:false, url:input.url, reason:'Public catalogue did not show every linked skill entry'};
+      if (input.diagnostics === true) {
+        failed.linkedEntries = entries;
+        failed.observedLinks = observation.links.filter(link=>publicUrl(link.url)).map(link=>({page:pageId(link.url),title:link.title.slice(0,200)}));
+      }
+      return failed;
+    }
+    return {ok:true, url:input.url, finalUrl, observedAt:new Date(timing.now()).toISOString(), text, entries};
   } catch {
     const diagnostic = {ok:false, url:input.url, reason:remaining() <= 0 ? deadlineReason : `Public browser failed during ${phase}`};
     if (phase === 'content' && remaining() > 0) {
@@ -83,31 +104,46 @@ export async function readPublicBatch(input, launch = defaultLaunch, options = {
   if (!batchAllowed(input)) return {ok:false, reason:invalid};
   const now = options.now || Date.now, sleep = options.sleep || delay;
   const timing = {now, sleep, deadline:now() + 270000};
-  let browser, phase = 'launch';
-  const results = [];
-  try {
+  let browser, phase = 'launch', shutdownTimer, runTimer;
+  const work = async () => {
+    const results = [];
     browser = await launch();
     const context = await browser.newContext({acceptDownloads:false, viewport:{width:1280,height:10000}});
     const page = await context.newPage();
     phase = 'navigation';
+    let stopped = false;
     for (const request of input.requests) {
-      if (results.length && timing.deadline - now() > 15000) await sleep(15000);
-      results.push(timing.deadline <= now()
-        ? {ok:false, url:request.url, reason:deadlineReason}
-        : await observe(page, {...request, diagnostics:input.diagnostics}, timing));
+      if (!stopped && results.length) {
+        if (timing.deadline - now() <= 15000) timing.deadline = now();
+        else await sleep(15000);
+      }
+      const result = stopped
+        ? {ok:false, url:request.url, reason:'Public page was rate limited; retry later'}
+        : timing.deadline <= now() ? {ok:false, url:request.url, reason:deadlineReason}
+        : await observe(page, {...request, diagnostics:input.diagnostics}, timing);
+      if (result.stopNavigation) stopped = true;
+      delete result.stopNavigation;
+      results.push(result);
     }
     return {ok:results.every(row => row.ok), results};
-  } catch {
-    return {ok:false, reason:`Public browser failed during ${phase}`};
-  } finally {
-    // Shutdown cannot hold the author job indefinitely after its observation deadline.
-    if (browser) {
-      let timer;
-      try { await Promise.race([browser.close(), new Promise(resolve => {timer = setTimeout(resolve, 5000);})]); }
-      catch { /* The result already records the bounded observation, never a raw browser exception. */ }
-      finally { clearTimeout(timer); }
-    }
+  };
+  let result;
+  try {
+    result = await Promise.race([work(), new Promise(resolve => {
+      runTimer = setTimeout(() => resolve({ok:false,reason:deadlineReason}), 270000);
+    })]);
+  } catch { result = {ok:false, reason:`Public browser failed during ${phase}`}; }
+  finally { clearTimeout(runTimer); }
+  if (browser) {
+    try {
+      const closed = await Promise.race([browser.close().then(()=>true), new Promise(resolve => {
+        shutdownTimer = setTimeout(()=>resolve(false), options.shutdownMs ?? 5000);
+      })]);
+      if (!closed) result = {ok:false,reason:'Public browser failed during shutdown'};
+    } catch { result = {ok:false,reason:'Public browser failed during shutdown'}; }
+    finally { clearTimeout(shutdownTimer); }
   }
+  return result;
 }
 
 export async function readPublic(input, launch = defaultLaunch, options = {}) {

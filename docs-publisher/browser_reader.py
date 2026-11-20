@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import signal
 import subprocess
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -14,12 +15,40 @@ SAFE_REASONS = {
     'Public browser failed during launch', 'Public browser failed during navigation',
     'Public browser failed during content', 'Oversized public read request', 'Invalid public read request',
     'Public browser run reached its time limit', 'Public page was rate limited; retry later',
+    'Public browser failed during shutdown', 'Public catalogue did not show every linked skill entry',
 }
 
 
+def run_browser(args, *, input, text, capture_output, timeout, env):
+    """Own and reap the anonymous browser's process group, including timeout recovery."""
+    assert text is True and capture_output is True
+    process = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, text=True, env=env, start_new_session=True)
+    try:
+        stdout, stderr = process.communicate(input, timeout=timeout)
+        return subprocess.CompletedProcess(args, process.returncode, stdout, stderr)
+    finally:
+        # Only the session created for this child; never a global browser kill.
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        process.wait()
+        for stream in (process.stdin, process.stdout, process.stderr):
+            if stream is not None:
+                stream.close()
+
+
 class BrowserReader(pub.PublicReader):
-    def __init__(self, base, catalogue, packets, runner=subprocess.run):
+    def __init__(self, base, catalogue, packets, *, catalogue_id, runner=run_browser):
         super().__init__(base, catalogue)
+        self.catalogue_id = str(catalogue_id).replace('-', '').lower()
+        selected = re.search(r'([a-f0-9]{32})(?:/|$)', urlsplit(catalogue).path, re.I)
+        if (self.base != 'https://gustavanderson.notion.site' or
+                urlsplit(catalogue).scheme != 'https' or urlsplit(catalogue).netloc != 'gustavanderson.notion.site' or
+                not re.fullmatch(r'[a-f0-9]{32}', self.catalogue_id) or not selected or selected[1].lower() != self.catalogue_id):
+            raise pub.SetupError('the public catalogue must name the reviewed manifest catalogue')
+        self.entries = [{'page':packet['page'], 'title':packet['title']} for packet in packets.values()]
         self.runner, self.cache, self.markers, self.attempted = runner, {}, {}, False
         for packet in packets.values():
             lines = plain_lines(packet['files']['SKILL.md'].decode())
@@ -42,7 +71,8 @@ class BrowserReader(pub.PublicReader):
         env = {key: value for key, value in os.environ.items() if key in
                {'PATH','HOME','TMPDIR','CI','PLAYWRIGHT_BROWSERS_PATH','XDG_CACHE_HOME'}}
         request = {'allowedUrls':list(self.markers), 'requests':[
-            {'url':url, 'markers':markers} for url, markers in self.markers.items()]}
+            {'url':url, 'markers':markers, **({'entries':self.entries} if url == self.catalogue_url else {})}
+            for url, markers in self.markers.items()]}
         try:
             source = json.dumps(request)
             if len(source.encode()) > 256000 or not 1 <= len(self.markers) <= 32:
@@ -79,6 +109,8 @@ class BrowserReader(pub.PublicReader):
                         return
                     shown = re.sub(r'[^\w]|_', '', text, flags=re.UNICODE).lower()
                     if not all(re.sub(r'[^\w]|_', '', marker, flags=re.UNICODE).lower() in shown for marker in self.markers[url]):
+                        return
+                    if url == self.catalogue_url and row.get('entries') != self.entries:
                         return
                     observations[url] = pub.VERIFIED, text
                 else:

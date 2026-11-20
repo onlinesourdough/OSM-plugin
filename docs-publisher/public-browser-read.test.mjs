@@ -7,7 +7,7 @@ const input = {url,allowedUrls:[url],markers:['OSM:log','1.2.0']};
 const batch = {allowedUrls:[url,other],requests:[{url,markers:input.markers},{url:other,markers:['OSM:setup']}]};
 const fast = {sleep:async()=>{}};
 
-const fake = ({text='OSM:log version 1.2.0 OSM:setup',final,statuses=[200],retryAfter='1',throwContent=false}={}) => {
+const fake = ({text='OSM:log version 1.2.0 OSM:setup',final,statuses=[200],retryAfter='1',throwContent=false,snapshotFinal,links=[]}={}) => {
   const counts = {launch:0,context:0,page:0,goto:0,close:0};
   let current=url, index=0, contextOptions;
   return {counts,options:()=>contextOptions,launch:async()=>{
@@ -15,9 +15,9 @@ const fake = ({text='OSM:log version 1.2.0 OSM:setup',final,statuses=[200],retry
     return {close:async()=>{counts.close++;},newContext:async options=>{
       contextOptions=options;counts.context++;
       return {newPage:async()=>{counts.page++;return {
-        goto:async value=>{current=value;counts.goto++;const status=statuses[Math.min(index++,statuses.length-1)];return {status:()=>status,headers:()=>({'retry-after':retryAfter})};},
+        goto:async value=>{current=value;counts.goto++;const status=statuses[Math.min(index++,statuses.length-1)];return {status:()=>status,headers:()=>({'retry-after':retryAfter}),url:()=>current};},
         waitForFunction:async()=>{if(throwContent)throw Error('fixture-only');},url:()=>final||current,
-        locator:()=>({innerText:async()=>text}),
+        locator:()=>({innerText:async()=>text}), evaluate:async()=>({url:snapshotFinal||final||current,text,links}),
       };}};
     }};
   }};
@@ -90,4 +90,47 @@ test('content failure emits safe indexes and only opt-in public text',async()=>{
     assert.equal(Object.hasOwn(result,'observedText'),diagnostics);
     assert.equal(JSON.stringify(result).includes('fixture-only'),false);
   }
+});
+
+
+test('capture binds the body and its document URL atomically',async()=>{
+  const browser=fake({snapshotFinal:other});
+  assert.equal((await readPublic(input,browser.launch,fast)).reason,'Public page changed host or page identity');
+});
+
+test('catalogue names in prose cannot substitute for visible links to the exact skills',async()=>{
+  const catalogue={...input,entries:[{page:'b'.repeat(32),title:'OSM:setup'}]};
+  assert.equal((await readPublic(catalogue,fake().launch,fast)).ok,false);
+  assert.equal((await readPublic(catalogue,fake({links:[{url:other,title:'OSM:setup'}]}).launch,fast)).ok,true);
+  for(const links of [[{url:url,title:'OSM:setup'}],[{url:other,title:'Unrelated'}]])
+    assert.equal((await readPublic(catalogue,fake({links}).launch,fast)).ok,false);
+});
+
+test('a server backoff that cannot be honoured stops the rest of the batch',async()=>{
+  for(const value of [{statuses:[429],retryAfter:'120'},{statuses:[429,429,200],retryAfter:'45'}]){
+    const browser=fake(value),result=await readPublicBatch(batch,browser.launch,fast);
+    assert.equal(result.ok,false);
+    assert.equal(browser.counts.goto,value.retryAfter==='120'?1:2);
+    assert.ok(result.results.every(row=>row.reason==='Public page was rate limited; retry later'));
+  }
+});
+
+test('a remaining budget shorter than the inter-page delay cannot bypass pacing',async()=>{
+  let clock=0;
+  const browser=fake(),launch=async()=>{
+    const driver=await browser.launch();
+    const context=await driver.newContext({});
+    const page=await context.newPage(),capture=page.evaluate;
+    page.evaluate=async()=>{const result=await capture();clock=260000;return result;};
+    driver.newContext=async()=>({newPage:async()=>page});
+    return driver;
+  };
+  const result=await readPublicBatch(batch,launch,{now:()=>clock,sleep:async ms=>{clock+=ms;}});
+  assert.equal(browser.counts.goto,1);assert.equal(result.results[1].reason,'Public browser run reached its time limit');
+});
+
+test('a stalled graceful close is not returned as verified',async()=>{
+  const browser=fake(),launch=async()=>({...await browser.launch(),close:()=>new Promise(()=>{})});
+  const result=await readPublic(input,launch,{...fast,shutdownMs:1});
+  assert.equal(result.ok,false);assert.equal(result.reason,'Public browser failed during shutdown');
 });
