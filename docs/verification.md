@@ -1,5 +1,56 @@
 # Verification
 
+## 20 November 2026 — 0.34.3 native adoption and Resources
+
+Both actual Codex and Claude Code profiles now use the verified 0.34.3 source
+asset through native marketplace/package controls. All 318 files in each cache
+match the released tag. Exactly seven skill entrypoints remain. Claude Code
+was verified as installed and enabled, without a fresh Claude runtime chat. The primary
+Codex app server was reloaded through its supported configuration method and
+reports OSM 0.34.3 with `ui://osm/guide-v1`. This is backend/source proof, not a
+new screenshot of an already-open panel. The earlier owner reopen observation
+remains dated 0.34.2 evidence.
+
+A fresh ephemeral native Codex chat exercised installed Prime 1.2.0 and Log
+1.2.0 and inspected Setup 3.2.1. It read selected definition revision
+2026-11-20.2 and the exact linked operating policy and Soul. It recovered the
+Numina source-only rule without querying operational records, and Log correctly
+created no redundant Memory record. Setup's local references name the new-home
+default AI operating model, preserve existing home identity/name, and put the
+Data and Context Definition before its databases. Setup itself was not executed
+and no new home was created. The optional selected-page adapter separately
+reported ready and read the current definition with its revision-2 projection.
+
+The existing ACTIVE daily Dreaming job retains its ID, target chat, creation
+time and noon Europe/Copenhagen cadence. Only three immutable method paths
+moved to verified 0.34.3. Their SHA-256 values and the retained source-runtime
+pins match; the private Runtime binding was updated and read back. The actual
+20 November noon invocation used the earlier 0.34.1 pins, was interrupted and
+remains partial. The separately
+repaired CLI 0.171.0 reader and this manual acceptance do not establish a
+completed timed 0.34.3 cycle. Issues #73 and #93 remain open for that proof.
+
+Resources [PR #54](https://github.com/onlinesourdough/Resources/pull/54) refreshes
+only the OSM README cache and source lock to the actual tag commit. The other
+two source entries are unchanged. Its full local gate passed 240 tests across
+29 files. Fable 5.2 High accepted the end-state content; the lead confirmed its
+two remaining checks: the exact two-file diff and README Git blob
+`3657398bf52bf14c27c49a09048722a42432249a`. Main production run
+[44767042392](https://github.com/onlinesourdough/Resources/actions/runs/44767042392)
+passed. Both the custom domain and pages.dev API return the exact pinned source
+and complete generated OSM reader body. The selected reader sections are unchanged;
+the new reopening note is in the full cached README, outside that selection.
+The repository remains private. The separate general sources check failed at
+the unrelated renamed Agentic repository redirect. It is not part of the
+240-test gate or the production run; that source's pin was kept.
+
+Fable 5.2 High separately accepted exact released-source binding `c240326`
+without P1 or P2 findings. Main package checks 44767026229 passed. The automatic
+new seven-packet publication is run 44767334193; at this adoption checkpoint it
+is still in progress. Its final write/API/public result and a separate no-op
+repeat must be recorded in #110 before that issue is closed. Earlier failed or
+interrupted attempts retain their own results.
+
 ## 20 November 2026 — 0.34.3 release and source binding
 
 Fable 5.2 High independently accepted exact commit
