@@ -2,10 +2,14 @@
   "schemaVersion": 2,
   "purpose": "Per-artifact source and ownership manifest for the public OSM documentation: which side holds the original, how a Notion-authored original is bound to its Git exports, and who may write each public artifact. Not shipped in the package.",
   "activation": {
-    "active": false,
-    "live_proof": "not-run",
-    "note": "Source and fixtures only. Set active only in a reviewed activation commit after every item in ACTIVATION.md is done. public_reader stays null until a reader is qualified by the bounded proof; with it null, no live run can reach complete.",
-    "public_reader": null
+    "active": true,
+    "live_proof": "bounded-write-pending",
+    "note": "Only Log is handed over for one bounded qualification import; the other six pages remain with existing upkeep. This is not completed automatic publication.",
+    "public_reader": {
+      "kind": "isolated-playwright-visible-body/1",
+      "reviewed_in": "https://github.com/onlinesourdough/OSM-plugin/actions/runs/44731499066",
+      "note": "Secret-free fresh Chromium observed the actual public Log title/version and all seven catalogue titles. Each publication additionally waits for the final instruction and compares the complete skill text in order."
+    }
   },
   "editions": {
     "released": {
@@ -133,10 +137,27 @@
         "skills/osm-log/"
       ],
       "target_subtree": "released-packets",
-      "public_writer": "existing-upkeep",
-      "adoption_state": "pending-handoff",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
       "notion": "41d6d2e17f568177bedac9379fb63e89",
-      "row_key": "osm:osm-log"
+      "row_key": "osm:osm-log",
+      "handoff": {
+        "native": {
+          "files": "1426688f3680649f168dc64b0aefe2bcc2fa43a4bd283bb188e56c1f31428189",
+          "properties": {
+            "Key": "osm:osm-log",
+            "Package version": "0.34.1",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a/skills/osm-log/SKILL.md",
+            "Source revision": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
+            "Status": "Released reference",
+            "Version": "1.2.0"
+          },
+          "read_at": "2026-11-20T12:15:32Z",
+          "skill": "053eedc5d2af519c134ba81f649a59e50ff8ad36680c825ae131f8b5f6a6dd91",
+          "title": "OSM:log",
+          "version_id": "927bd819f8189aca26319c0146541ef8073d452f87611de2f23ff28794568538"
+        }
+      }
     },
     {
       "key": "osm.released.skill.osm-prime",
