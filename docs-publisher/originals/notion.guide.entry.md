@@ -47,7 +47,7 @@ OSM Skills
 
 The installed plugin contains the shared skills and their supporting instructions. Your own Notion Data & Context home holds the business definition, Knowledge, Memory and personal Skills.
 
-## 🧩 Extensions
+## Extensions
 
 <callout icon="🧩" color="brown_bg">
 <b>Content · optional extension.</b> A separate content method with its own [OSM Content repository](https://github.com/onlinesourdough/OSM-content), setup/database contract, configuration guide and five adaptable skill templates. Use the Content page below as the human and agent entry. Keep your creative process and private configuration in your own foundation. Content is outside the OSM plugin; it is not installed with OSM.
