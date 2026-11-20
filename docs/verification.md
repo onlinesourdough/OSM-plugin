@@ -2,6 +2,17 @@
 
 ## 20 November 2026 — common method diagram and public Notion readback (#93)
 
+The subsequent generic starter-role clarification extends that same diagram.
+Knowledge starts from selected verified business context; Memory can start
+empty; personal or team Skills reuse and adapt useful methods. Actual work
+maintains explanations, adds genuine decisions and improves personal methods.
+The seven shared plugin skills remain separate. Selected upkeep controls name
+write/source agreements and checkpoints without prescribing private control
+records for every owner. Optional Content reuses the foundation and adds
+Source, Content and Edition records from actual work. These are roles, not a
+mandatory set of invented files. The other Content diagrams and historical
+attachments are preserved.
+
 The owner removed the separate private-configuration diagram from this issue.
 Only the common method, template and general requirements are delivered here;
 existing private Paper material is untouched. The current editable HTML and

@@ -2,12 +2,12 @@
 
 Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion AI operating model home and the connected sources.
 
-<image source="notion-file-block://41e6d2e1-7f56-8106-969c-f48a389867f2/1b6cb2b1-3830-45a1-828f-8b02a18f04e8?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
+<image source="notion-file-block://41e6d2e1-7f56-8164-9145-ea76beb84d9a/42b6b502-c954-4788-bf1a-f6f9bac13c0e?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
 
 <toggle>
 Mobile overview
 
-<image source="notion-file-block://41e6d2e1-7f56-8160-a02d-c5e842ab04b3/b7af3e7c-da03-4b65-a8aa-a3ad07efb7e4?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
+<image source="notion-file-block://41e6d2e1-7f56-8144-abc7-cb9e8ad1fdf8/2df63d77-4b19-495b-b9e5-c1672318c6ce?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
 </toggle>
 
 <toggle>
@@ -31,12 +31,14 @@ flowchart TB
   end
   subgraph HOME["Your Notion AI operating model home"]
     DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
-    KNOWLEDGE["Knowledge"]
-    MEMORY["Memory"]
-    SKILLS["Personal or team Skills"]
-    CONTENT["Content · when selected"]
+    KNOWLEDGE["Knowledge<br/>Start from verified business context<br/>Maintain understanding through work"]
+    MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]
+    SKILLS["Personal or team Skills<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
+    CONTENT["Content · when selected<br/>Personal configuration<br/>Source, Content and Edition from real work"]
     DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
     DEFINITION -.-> CONTENT
+    CONTROLS["Selected upkeep controls<br/>Write policy and source agreements<br/>Checkpoints when scheduling is selected"]
+    DEFINITION -.-> CONTROLS
   end
   DREAM["Dreaming · between sessions<br/>Daily through a selected caller"]
   SETUP --> HOME
@@ -50,6 +52,8 @@ flowchart TB
 </toggle>
 
 Prime reads what a task needs. Log saves lasting changes at checkpoints. Dreaming checks recent work and selected sources under the same curation rules. Council is optional.
+
+The diagram separates useful starting context from what grows through actual work. Memory may start empty. Knowledge topics and personal methods are selected for the business; they are not a mandatory file set. The seven shared OSM skills stay in the plugin. The optional Content module reuses the same foundation.
 
 A mobile overview and the editable HTML and relationship sources are available on this page.
 
@@ -68,7 +72,7 @@ Prepare supports pre-production and creating the actual original. Produce / Dist
 <toggle>
 Responsive diagram · editable HTML
 
-<embed source="notion-file-block://41e6d2e1-7f56-8199-90a1-d50b4514046c/f120ad6c-761b-42af-8c47-bec69ffe3747?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
+<embed source="notion-file-block://41e6d2e1-7f56-81cc-87ba-f0411b1cbabf/109f7645-a8c5-4557-b00d-7135d9b56016?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
 </toggle>
 
 Current Content material-flow diagrams: wide and mobile PNG/SVG, renderer, palette and SHA-256 manifest.
