@@ -19,7 +19,7 @@ export async function readPublic(input, launch = async () => (await import('play
   let browser, page, phase = 'launch';
   try {
     browser = await launch();
-    const context = await browser.newContext({acceptDownloads:false});
+    const context = await browser.newContext({acceptDownloads:false, viewport:{width:1280,height:10000}});
     page = await context.newPage();
     phase = 'navigation';
     const response = await page.goto(input.url, {waitUntil:'domcontentloaded', timeout:30000});

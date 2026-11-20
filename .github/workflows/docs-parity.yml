@@ -55,6 +55,7 @@ jobs:
               {'url':base+'6abfc738a9604ddc806432721813712b', 'markers':[
                   'OSM:setup','OSM:prime','OSM:log','OSM:dreaming','OSM:interview','OSM:human-writing','OSM:council']},
           ]
+          requests.append({'url':base+'40d6d2e17f5681509070fb57ce599bcd','markers':['OSM:human-writing','2.1.0']})
           results = []
           for request in requests:
               request['allowedUrls'] = [row['url'] for row in requests]
