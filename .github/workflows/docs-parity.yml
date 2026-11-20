@@ -27,7 +27,7 @@ concurrency:
 jobs:
   public-reader-probe:
     if: github.event_name == 'workflow_dispatch' && inputs.reader_probe
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 8
     permissions:
       contents: read
@@ -41,7 +41,7 @@ jobs:
           cache: npm
           cache-dependency-path: docs-publisher/package-lock.json
       - run: npm ci --prefix docs-publisher --ignore-scripts --no-fund
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --only-shell chromium
         working-directory: docs-publisher
       - name: Read the existing public Log page without authentication
         run: |
@@ -76,7 +76,7 @@ jobs:
        github.event.workflow_run.event == 'push' &&
        github.event.workflow_run.head_branch == 'main' &&
        github.event.workflow_run.head_repository.full_name == github.repository)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
       OSM_DOCS_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
@@ -108,7 +108,7 @@ jobs:
         run: |
           npm ci --prefix docs-publisher --ignore-scripts --no-fund
           cd docs-publisher
-          npx playwright install --with-deps chromium
+          npx playwright install --only-shell chromium
       - name: Inspect activation gates without exposing credentials
         id: gates
         env:
