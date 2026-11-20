@@ -31,7 +31,15 @@ sys.path.insert(0, str(ROOT / "docs-publisher"))
 import native_skills as ns  # noqa: E402
 import publisher as pub  # noqa: E402
 
-REAL = pub.load_manifest()
+RECORDED = pub.load_manifest()
+# These scenarios start before a handoff regardless of the actual operational
+# state. Activation is a reviewed deployment fact, not a perpetual test fixture.
+REAL = copy.deepcopy(RECORDED)
+REAL['activation'].update(active=False, public_reader=None, live_proof='not-run')
+for artifact in REAL['artifacts']:
+    if artifact['class'] == 'A':
+        artifact.update(public_writer='existing-upkeep', adoption_state='pending-handoff')
+        artifact.pop('handoff', None)
 RELEASED = REAL["editions"]["released"]
 GIT = pub.GitSource(ROOT, RELEASED["commit"])
 # The same released bytes held in memory, so a scenario can rebuild the packets without rereading Git.
@@ -701,9 +709,11 @@ def the_next_release_replaces_its_own_packet_and_keeps_the_history():
 
 @test
 def the_recorded_state_stays_off_and_the_workflow_keeps_its_gates():
-    require(not REAL["activation"]["active"] and REAL["activation"]["public_reader"] is None and REAL["activation"]["live_proof"] == "not-run"
-            and all(a["public_writer"] == "existing-upkeep" and not a.get("handoff") for a in REAL["artifacts"] if a["class"] == "A"),
-            "no activation, reader, handoff or live proof is recorded")
+    require(not pub.validate_manifest(RECORDED), 'the recorded ownership and reader bindings validate')
+    for artifact in RECORDED['artifacts']:
+        if artifact['class'] == 'A' and artifact['public_writer'] == 'ci':
+            require(not ns.handoff_problems((artifact.get('handoff') or {}).get('native')),
+                    'a CI-owned row has a complete actual handoff')
     workflow = (ROOT / ".github/workflows/docs-parity.yml").read_text()
     steps = workflow.split("\n      - ")
     secret = [step for step in steps if "secrets.OSM_PUBLIC_DOCS_TOKEN" in step]
@@ -755,6 +765,16 @@ def an_import_preserves_a_concurrent_property_correction():
     require(fake.pages[PACKETS[COUNCIL]['page']]['props']['Source revision'][1] == 'owner correction',
             'the owner correction is preserved')
     require(not any(method == 'PATCH' for method, _ in fake.writes()), 'no property restoration overwrites it')
+
+
+@test
+def a_bounded_proof_never_claims_the_whole_automatic_run_is_qualified():
+    fake, manifest = handed_over(reader=True)
+    result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver,
+                        reader(fake), write=True, only=COUNCIL)
+    require(outcomes(result) == {COUNCIL: pub.WRITTEN}, 'the bounded page is verified')
+    require('Automatic publication: NOT active' in ns.report(result, manifest),
+            'one page does not prove the seven-page automatic run')
 
 
 def main():

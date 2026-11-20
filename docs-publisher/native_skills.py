@@ -786,7 +786,8 @@ def report(result, manifest):
     mode, rows, activation = result["mode"], result["rows"], manifest["activation"]
     title = {"preflight": "Native skill preflight (read-only)", "plan": "Native skill plan (no write)",
              "publish": "Native skill publication"}[mode]
-    qualified = bool(activation["active"] and activation.get("public_reader")) and mode == "publish" and not failing(result) \
+    qualified = len(rows) == len([a for a in manifest['artifacts'] if a['class'] == 'A']) \
+        and bool(activation["active"] and activation.get("public_reader")) and mode == "publish" and not failing(result) \
         and all(row["outcome"] != pub.PENDING_HANDOFF for row in rows)
     wrote = [row["key"] for row in rows if row["outcome"] in (pub.WRITTEN, pub.RESUMED)]
     lines = [f"# {title}", "", f"Frozen released commit: `{result['commit']}`",
