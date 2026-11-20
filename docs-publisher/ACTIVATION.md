@@ -134,6 +134,36 @@ Existing bound pages need no extra working database. Provision one only if a
 separate main-working technical projection is wanted, then record its exact
 identity in `bindings.working_subtree`. Publication refuses another database.
 
+## Rerun the intended exact source
+
+If concurrency superseded or cancelled a parity run, select the full main run
+associated with the reviewed source. Inspect its attempt's `reconciliation.md`:
+**Frozen source commit** records the actual checkout used by the comparison.
+
+```sh
+gh run list --workflow docs-parity.yml --limit 30
+gh run view RUN_ID --json headSha,event,jobs
+gh run download RUN_ID --pattern 'public-documentation-parity-*' --dir parity-proof
+gh run rerun RUN_ID
+```
+
+For [`workflow_run`](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_run),
+GitHub's `GITHUB_SHA` is the default-branch head. Run metadata alone therefore
+need not identify the checked source: this workflow explicitly checks out the
+triggering package run's `head_sha`. Use the recorded frozen source rather than
+assuming a run-list `headSha` or `--commit` filter proves that checkout. If a run
+was cancelled before artifacts existed, rerun its candidate ID and establish
+the actual frozen source from the new attempt before tagging.
+
+Check that `reconcile` ran; an anonymous reader probe or bounded one-page import
+cannot qualify a release. After the rerun, verify all seven rows and
+`osm/public-guide-parity` success on the intended exact SHA. A fresh manual
+dispatch on `main` selects main's source at creation; verify that source too.
+Reruns compare the current live originals and packets: a changed original or
+newer packet remains a HOLD/conflict. Export and review a new candidate when
+needed; never move a published tag, disable a gate or overwrite the newer packet
+to make an old run green.
+
 ## What the checks establish
 
 - Offline reconciliation compares Git, frozen Notion originals and declared
