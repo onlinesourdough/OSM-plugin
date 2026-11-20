@@ -1,4 +1,6 @@
-The foundation consists of data and context. Skills are part of context: reusable ways to do the work. The reference setup organizes both in Notion while keeping operational originals with their owners.
+An AI operating model is how the business puts AI to work: its goals, people and agents, data, working methods, tools and access, responsibilities, review and ongoing learning. OSM helps set up and maintain this arrangement. The Notion home carries its definition and routes; the actual work also depends on people, agents and the connected systems.
+
+Data and context are the shared foundation within that model. Skills are part of context: reusable ways to carry out and review the work. Goals and vision give it direction; they are not a replacement for an AI strategy. Knowledge, Memory and Skills organize the foundation, with Content added when useful.
 
 ## A gateway to your sources
 
@@ -49,9 +51,9 @@ Maintain useful new information, source changes and real review signals. Read be
 
 Keep private context and customer material in their chosen home. This guide contains generic methods and reference material; using it does not require making your own foundation public.
 
-## Data & Context home template
+## AI operating model home template
 
-A new private home starts with its Data and Context Definition, followed by the Knowledge, Memory and Skills databases. Setup fills the definition from the company's actual sources and verified destinations. Its own onboarding explanations stay in the conversation. An optional Content database is added only when selected.
+A new private home is called AI operating model by default and starts with its Data and Context Definition, followed by the Knowledge, Memory and Skills databases. The owner can choose another name. Existing homes keep their identities and names unless a rename is requested. Setup fills the definition from the company's actual sources and verified destinations. Its own onboarding explanations stay in the conversation. An optional Content database is added only when selected.
 
 ```yaml
 definition:

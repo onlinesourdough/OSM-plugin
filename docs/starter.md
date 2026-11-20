@@ -109,7 +109,7 @@ flowchart TB
     WRITING -.-> WORK
     WORK <-.-> COUNCIL
   end
-  subgraph HOME["Your Notion Data & Context home"]
+  subgraph HOME["Your Notion AI operating model home"]
     DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
     KNOWLEDGE["Knowledge"]
     MEMORY["Memory"]

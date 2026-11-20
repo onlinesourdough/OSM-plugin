@@ -2,6 +2,10 @@
 
 ## 0.34.3 — 2026-11-20
 
+- Call new context homes AI operating model, while preserving the Data and
+  Context Definition contract and existing home identities. Clarify the
+  relationship between the operating model, its foundation and OSM, and include
+  an optional tile icon for the home.
 - Use the OSM project icon from Gustavonline's Current Work section consistently
   in the plugin and sidebar: the brown hub on a rounded cream tile.
 - Add native whole-skill Notion publication, complete archive readback and

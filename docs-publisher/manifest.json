@@ -388,17 +388,11 @@
       "authoritative_for": "The method overview: what OSM is, the foundation it builds and where each topic is explained",
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
-        "revision": "5696e909d779c13a98913dc40a6a9cfc499c7fefefbf6cad3a3c39250a005c24",
+        "revision": "add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T13:07:52.065714+00:00",
-        "last_edited_time": "2026-11-20T12:55:02.729Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "5696e909d779c13a98913dc40a6a9cfc499c7fefefbf6cad3a3c39250a005c24",
-            "reviewed_in": "Fresh full MCP root read matches actual API snapshot from CI44741134621 byte-for-byte after the authored12:55 heading edit; no other body change."
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
     {
@@ -415,17 +409,11 @@
       "authoritative_for": "The method explanation: data and context, what each place owns, shared method and personal configuration",
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
-        "revision": "81b6fe0c6ac27928a0c43b3eceba17e3dcbec53b3ecb8ee173ba29d71ceb1822",
+        "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-19T21:05:07.719Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "81b6fe0c6ac27928a0c43b3eceba17e3dcbec53b3ecb8ee173ba29d71ceb1822",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
     {
@@ -442,17 +430,11 @@
       "authoritative_for": "Setup and configuration explanation and its special cases: Notion access choices, provider API keys, agent workspace and tools",
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
-        "revision": "4a8c942f08bdf3a569323d4c5727e6c28cc744b4ece595899044236defca53ba",
+        "revision": "5709eebd7303c4a78288797eccbe8dc3ae25531b2accd99a3d7d7f91a9b6257c",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-20T00:46:21.560Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "4a8c942f08bdf3a569323d4c5727e6c28cc744b4ece595899044236defca53ba",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
     {
@@ -465,21 +447,15 @@
       "public_writer": "notion-authored",
       "adoption_state": "original",
       "notion": "40d6d2e17f56816da06ff15c39dcc038",
-      "title": "Data & context",
+      "title": "AI operating model",
       "authoritative_for": "The Data & Context explanation and the Data & Context definition template (the YAML block)",
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
-        "revision": "bf51db0d6bbfc73712fef0c0ffc1c53927e88116fda94c28cd2ae29e4134e3a1",
+        "revision": "617224d87648d666abc68cf59d2857fc77ac02c068c2f5b8b8f0d15eca0407fb",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-20T00:46:20.864Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "bf51db0d6bbfc73712fef0c0ffc1c53927e88116fda94c28cd2ae29e4134e3a1",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T13:16:00.000Z"
       },
       "exports": [
         {
@@ -518,15 +494,9 @@
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-06T12:00:03.341Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
     {
@@ -545,15 +515,9 @@
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-20T00:46:22.440Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
     },
@@ -571,17 +535,11 @@
       "authoritative_for": "The architecture diagrams, including the working-relationships map (the Mermaid block)",
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
-        "revision": "ef69903d9bf9e9e216fc70dea91fd3ec92227d4518a36cc83061d6fe4744a17d",
+        "revision": "a7d17def8524f7035023d78982a89b70c3f5cc28231704ace5b3840e5407b693",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-19T21:56:00.299Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "ef69903d9bf9e9e216fc70dea91fd3ec92227d4518a36cc83061d6fe4744a17d",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T13:33:00.000Z"
       },
       "exports": [
         {
@@ -592,7 +550,7 @@
           "notion": {
             "fence": "mermaid"
           },
-          "sha256": "0b2f74d13a218165a9c121c6a973046918298ed0d52a92d97238153cbcdf2f73"
+          "sha256": "2b2dcc4b0a430fa83e7582b2383a0c5c0bb2014c306eb2e927655c9720cd2316"
         }
       ]
     },
@@ -612,15 +570,9 @@
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "7a7cbadb5440a338178d1df5cbff788c44c17a03962a03f53139b08885b14576",
         "edition": "0.34.3",
-        "reader": "notion-mcp-fetch/1",
-        "read_at": "2026-11-20T11:51:53Z",
-        "last_edited_time": "2026-11-20T11:05:19.294Z",
-        "reader_equivalence": {
-          "notion-api-markdown-v2-stable-media/1": {
-            "canonical_revision": "7a7cbadb5440a338178d1df5cbff788c44c17a03962a03f53139b08885b14576",
-            "reviewed_in": "Actual dedicated public connection read 2026-11-20T11:31:43Z compared byte-for-byte with fresh complete Notion MCP reads; stable native file identity normalisation tested in publisher-parity.py"
-          }
-        }
+        "reader": "notion-api-markdown-v2-stable-media/1",
+        "read_at": "2026-11-20T13:34:28+00:00",
+        "last_edited_time": "2026-11-20T11:05:00.000Z"
       }
     },
     {
@@ -819,14 +771,14 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "dd60c9b065f914526a8867d33f1948f1a7007145",
+    "skill_source": "75c1f7a17e7edb937a7ceabdff0264a79971b547",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content \u00b7 optional extension",
+        "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "96dc9e045fc3860b6e2c3f9b4681404c6298227ec86c90a2aeb1a45cceba2935",
-        "edition": "Optional Content \u00b7 Draft edition 2026-11-05.1"
+        "edition": "Optional Content · Draft edition 2026-11-05.1"
       }
     ]
   }
