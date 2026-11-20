@@ -4,11 +4,11 @@
   "scope": "Common method, template and general requirements only. Owner explicitly removed a private configuration view. Existing private Papers were not changed or published.",
   "public_page": "https://gustavanderson.notion.site/40d6d2e17f568113a397fb6ecd9b5fff",
   "source_html": "assets/diagrams/osm-architecture.html",
-  "source_html_sha256": "4b979a043a712dad9e2eaaffe3cad3cbdf56d2ee6d404516eb16b158dd12f088",
+  "source_html_sha256": "a21331b9c4fa7d01f0deffea0ab048084b962257096df107ebd9f21b20c24188",
   "delivered_image": "assets/diagrams/osm-architecture.png",
-  "delivered_image_sha256": "58317d0e73b64a0cad87a9847ce39a0fb3f3f082d3cd310c2f7b046c4f1e6d46",
+  "delivered_image_sha256": "7d1e472c8bb4f2eaf80f6e01806f2974dc202cf48a78188f6a8260c5eda59a94",
   "notion_image_download_matches": true,
-  "guide_body_revision": "49717bd626e088231c35b29c98a8561fcfcea0ae57c715d4b0260dc7982d1362",
+  "guide_body_revision": "23b7c62c2b039c2f350786953366b0ba0c3d04045be3b8a3b9ed22eb52f2407d",
   "unchanged_other_guide_originals": 7,
   "unchanged_skill_files_against_v0_34_3": 75,
   "checks": {
@@ -61,21 +61,21 @@
     "Initial tall-figure screenshot attempts clipped or left off-screen regions blank. No complete portrait-in-public-UI capture is claimed. The complete delivered portrait PNG was inspected directly and its Notion download matched byte for byte. The final public mobile screenshot covers one 360 \u00d7 812 viewport; the earlier capture was 360 \u00d7 732."
   ],
   "artifact_sha256": {
-    "osm-architecture-starter-wide.png": "58317d0e73b64a0cad87a9847ce39a0fb3f3f082d3cd310c2f7b046c4f1e6d46",
-    "osm-architecture-starter-mobile.png": "90a8227b9e7caa10109453c2abf1440a3bf9309d7d93112b910014e0bc957f79",
-    "starter-notion-readback-osm-architecture.png": "58317d0e73b64a0cad87a9847ce39a0fb3f3f082d3cd310c2f7b046c4f1e6d46",
-    "starter-notion-readback-osm-architecture-mobile.png": "90a8227b9e7caa10109453c2abf1440a3bf9309d7d93112b910014e0bc957f79",
-    "starter-notion-readback-osm-architecture.html": "4b979a043a712dad9e2eaaffe3cad3cbdf56d2ee6d404516eb16b158dd12f088",
-    "starter-client-desktop.png": "e1e2fe016495ee0a2c60b673e56de7917e90d3b5064e4b8cf1cfd1cb2e44232a",
-    "starter-client-mobile.png": "0a048b21cc46dd3dd0e5b132fa38e7806f15c594048d7a406966d7a3abd8f51b",
-    "starter-public-desktop.png": "1f11fdc90b8498710c5035697ea759c0d8cb2fe1f1f4cea09afc4733d5dc7ab3",
-    "starter-public-mobile-top.png": "a255e5950e2d3b0f990ce5a624d796f068cae883b9eb38c885737ae43ab1e0a3",
-    "starter-public-mobile-viewport.png": "e84c1049fa10a783b18b53eb325fd94da9f07daa43704df524a79b259d254a47"
+    "osm-architecture-starter-wide.png": "7d1e472c8bb4f2eaf80f6e01806f2974dc202cf48a78188f6a8260c5eda59a94",
+    "osm-architecture-starter-mobile.png": "e8fc8a43158a0e0ae50bc9f1e3178ea5bef87b0ddace0091058f2582fcc66200",
+    "starter-final-notion-readback-osm-architecture.png": "7d1e472c8bb4f2eaf80f6e01806f2974dc202cf48a78188f6a8260c5eda59a94",
+    "starter-final-notion-readback-osm-architecture-mobile.png": "e8fc8a43158a0e0ae50bc9f1e3178ea5bef87b0ddace0091058f2582fcc66200",
+    "starter-final-notion-readback-osm-architecture.html": "a21331b9c4fa7d01f0deffea0ab048084b962257096df107ebd9f21b20c24188",
+    "starter-final-client-desktop.png": "15c7f162f61b64a7ea555d4cbc39864464f163b34ce34d622bbda1edf3ca393e",
+    "starter-final-client-mobile.png": "0016e28269223d23e85e190cf68c92d19d66997ef6846ef9989f4d25f27df0e9",
+    "starter-final-public-desktop.png": "02b87415e4e2e937bc4eeff1ae51e79a46c5a79bfa1af0f2b02e4455024639de",
+    "starter-final-public-figure.png": "d3f146b6c6e790825022470cef08642b33b102c9c49206ef384cb9ec6c3cdc04",
+    "starter-final-public-mobile-viewport.png": "3b53e6e789f611f1acd3a5aac04a9e6ed471b5d1d823340407a6a42acfd5eec2"
   },
   "mobile_image": "assets/diagrams/osm-architecture-mobile.png",
-  "mobile_image_sha256": "90a8227b9e7caa10109453c2abf1440a3bf9309d7d93112b910014e0bc957f79",
+  "mobile_image_sha256": "e8fc8a43158a0e0ae50bc9f1e3178ea5bef87b0ddace0091058f2582fcc66200",
   "guide_reader": "notion-api-markdown-v2-stable-media/1",
-  "api_snapshot_run": 44817978832,
+  "api_snapshot_run": 44819102064,
   "api_snapshot_result": "8 complete pages, zero errors; expected old-source drift hold before any skill write",
   "starter_roles": {
     "scope": "Generic selected roles, not mandatory files or private records",
@@ -88,6 +88,6 @@
     "plugin_and_personal_skills_separate": true,
     "actual_work_grows_records": true,
     "content_optional": true,
-    "actual_media_readback": "three exact downloads match 201743-byte wide PNG, 198202-byte portrait PNG and 8638-byte HTML"
+    "actual_media_readback": "three exact downloads match 201680-byte wide PNG, 198579-byte portrait PNG and 8648-byte HTML"
   }
 }

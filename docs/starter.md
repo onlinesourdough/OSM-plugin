@@ -111,9 +111,9 @@ flowchart TB
   end
   subgraph HOME["Your Notion AI operating model home"]
     DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
-    KNOWLEDGE["Knowledge<br/>Start from verified business context<br/>Maintain understanding through work"]
+    KNOWLEDGE["Knowledge<br/>Start from verified direction and goals<br/>Business context and source map<br/>Maintain understanding through work"]
     MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]
-    SKILLS["Personal or team Skills<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
+    SKILLS["Personal or team Skills<br/>May start empty<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
     CONTENT["Content · when selected<br/>Personal configuration<br/>Source, Content and Edition from real work"]
     DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
     DEFINITION -.-> CONTENT

@@ -2,12 +2,12 @@
 
 Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion AI operating model home and the connected sources.
 
-<image source="notion-file-block://41e6d2e1-7f56-8164-9145-ea76beb84d9a/42b6b502-c954-4788-bf1a-f6f9bac13c0e?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
+<image source="notion-file-block://41e6d2e1-7f56-814b-bf1a-e872568b0199/91398776-6d56-4a01-a3eb-e42060f543aa?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
 
 <toggle>
 Mobile overview
 
-<image source="notion-file-block://41e6d2e1-7f56-8144-abc7-cb9e8ad1fdf8/2df63d77-4b19-495b-b9e5-c1672318c6ce?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
+<image source="notion-file-block://41e6d2e1-7f56-8162-b33c-dbfb255d12a2/2e03ec95-772c-4d7c-bab5-9c18b63e3f56?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
 </toggle>
 
 <toggle>
@@ -31,9 +31,9 @@ flowchart TB
   end
   subgraph HOME["Your Notion AI operating model home"]
     DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
-    KNOWLEDGE["Knowledge<br/>Start from verified business context<br/>Maintain understanding through work"]
+    KNOWLEDGE["Knowledge<br/>Start from verified direction and goals<br/>Business context and source map<br/>Maintain understanding through work"]
     MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]
-    SKILLS["Personal or team Skills<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
+    SKILLS["Personal or team Skills<br/>May start empty<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
     CONTENT["Content · when selected<br/>Personal configuration<br/>Source, Content and Edition from real work"]
     DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
     DEFINITION -.-> CONTENT
@@ -72,7 +72,7 @@ Prepare supports pre-production and creating the actual original. Produce / Dist
 <toggle>
 Responsive diagram · editable HTML
 
-<embed source="notion-file-block://41e6d2e1-7f56-81cc-87ba-f0411b1cbabf/109f7645-a8c5-4557-b00d-7135d9b56016?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
+<embed source="notion-file-block://41e6d2e1-7f56-8112-b211-c4d280c68bd6/d6d3e0f0-db64-4182-baf5-fbc421863879?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
 </toggle>
 
 Current Content material-flow diagrams: wide and mobile PNG/SVG, renderer, palette and SHA-256 manifest.
