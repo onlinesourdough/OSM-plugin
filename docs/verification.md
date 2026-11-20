@@ -16,9 +16,9 @@ Subsequent automatic main [44768735214](https://github.com/onlinesourdough/OSM-p
 and independent repeat [44769500886](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44769500886)
 both passed on frozen author source
 `d8dfb2d576a919c02c2389b29dbf0509db6209b1`. They read every saved page first,
-found all seven unchanged and attempted zero writes. For every row, the entire
-instruction digest, all 263 file hashes, title and six properties match the
-actual upgrade's saved readback exactly. Both runs verified each complete ordered
+found all seven unchanged and attempted zero writes. For each row, its instruction digest, complete
+file-hash map, title and six properties match the actual upgrade's saved
+readback exactly (263 file observations across the set). Both runs verified each complete ordered
 instruction body and its exact visible native catalogue entry anonymously.
 Their eight live guide originals agree with the bound exports. The exact-source
 `osm/public-guide-parity` status succeeded.
