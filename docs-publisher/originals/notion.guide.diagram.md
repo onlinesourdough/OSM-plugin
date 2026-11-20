@@ -2,9 +2,10 @@
 
 Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion AI operating model home and the connected sources.
 
-<embed source="notion-file-block://41e6d2e1-7f56-8199-90a1-d50b4514046c/f120ad6c-761b-42af-8c47-bec69ffe3747?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
+<image source="notion-file-block://41e6d2e1-7f56-8106-969c-f48a389867f2/1b6cb2b1-3830-45a1-828f-8b02a18f04e8?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
 
-### The working relationships
+<toggle>
+Editable relationship map · Mermaid
 
 ```mermaid
 flowchart TB
@@ -40,10 +41,11 @@ flowchart TB
   SOURCES -->|"Changed, unfinished or due work"| DREAM
   DREAM -->|"Recover learning, consolidate and repair"| HOME
 ```
+</toggle>
 
 Prime reads what a task needs. Log saves lasting changes at checkpoints. Dreaming checks recent work and selected sources under the same curation rules. Council is optional.
 
-The diagram adapts to the available width. The relationship map above shows the main reading and maintenance paths.
+Open the image to zoom. The responsive HTML diagram and editable relationship map remain available as sources.
 
 The layers describe responsibilities, not a mandatory sequence. The foundation supplies relevant context for useful AI work. Learning and accepted changes help maintain it. Connected systems retain their originals.
 
@@ -56,6 +58,12 @@ The same foundation supports a configurable Content extension. The diagram follo
 Prepare supports pre-production and creating the actual original. Produce / Distribute covers finishing/post-production, useful adaptations and delivery. Response informs the next idea and configuration. Existing material can enter where it needs help; long and short form are choices. Human judgement, analog work and selected tools remain part of the workflow.
 
 ## Editable sources
+
+<toggle>
+Responsive diagram · editable HTML
+
+<embed source="notion-file-block://41e6d2e1-7f56-8199-90a1-d50b4514046c/f120ad6c-761b-42af-8c47-bec69ffe3747?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
+</toggle>
 
 Current Content material-flow diagrams: wide and mobile PNG/SVG, renderer, palette and SHA-256 manifest.
 

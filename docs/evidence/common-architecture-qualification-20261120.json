@@ -1,0 +1,59 @@
+{
+  "format": "osm-common-architecture-qualification/1",
+  "date": "2026-11-20",
+  "scope": "Common method, template and general requirements only. Owner explicitly removed a private configuration view. Existing private Papers were not changed or published.",
+  "public_page": "https://gustavanderson.notion.site/40d6d2e17f568113a397fb6ecd9b5fff",
+  "source_html": "assets/diagrams/osm-architecture.html",
+  "source_html_sha256": "98b542d76b3f884f53411a1b8cbbfd5e546dec97579d40fe0219802113deb209",
+  "delivered_image": "assets/diagrams/osm-architecture.png",
+  "delivered_image_sha256": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
+  "notion_image_download_matches": true,
+  "guide_body_revision": "e2d0e5e14c1bbfc0f59b0442f57c2b35a82afd6f031e2a7c8373656802ccf220",
+  "unchanged_other_guide_originals": 7,
+  "unchanged_skill_files_against_v0_34_3": 75,
+  "checks": {
+    "standalone_html_desktop": [
+      1280,
+      1050
+    ],
+    "standalone_html_mobile": [
+      390,
+      844
+    ],
+    "standalone_mobile_horizontal_overflow": false,
+    "public_notion_anonymous_desktop": true,
+    "public_notion_anonymous_android": [
+      360,
+      812
+    ],
+    "public_notion_primary_image_visible": true,
+    "image_and_editable_source_downloads_match": true,
+    "built_reader_diagram_visible": true,
+    "built_reader_details_closed": 2,
+    "built_reader_visible_mermaid_code_blocks": 0,
+    "built_reader_mobile_width": 390,
+    "built_reader_mobile_horizontal_overflow": false,
+    "native_installed_app_visual_test": false,
+    "public_notion_desktop_viewport": [
+      1200,
+      1800
+    ]
+  },
+  "limits": [
+    "Separate headless contexts, no user browser profile. This is public-page and built-reader render evidence, not a screenshot of the installed Codex side panel.",
+    "A real Android viewport/user agent was tested; physical mobile hardware was not.",
+    "No Setup journey, Notion native-type/permission/revocation, cross-host capture or scheduled Dreaming result is claimed by these checks.",
+    "The existing optional Content material-flow section is preserved."
+  ],
+  "artifact_sha256": {
+    "osm-architecture.png": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
+    "notion-readback-image.png": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
+    "notion-readback-source.html": "98b542d76b3f884f53411a1b8cbbfd5e546dec97579d40fe0219802113deb209",
+    "architecture-desktop.png": "6c60b49b998a45c507cc769caa50952db4f076574877d933930f5c615e778f68",
+    "architecture-mobile.png": "e12809bc1387f0ccc8690cca20393c5ab496ac57fa0ae396011c190455c65faa",
+    "client-common-desktop.png": "b98b7258ada5f60ed26ca9c89dacd047994d6e31549cd8a52f7894f3079334aa",
+    "client-common-mobile.png": "1bfd65ea9f9f9cc763ead03ae700aa6297363157025704d32cb0ba664716ae35",
+    "public-final-mobile-clean.png": "05544ccfe686dfc058d0d3c4218b5d8307f34a9b683998c0726bfbc25a984bdd",
+    "public-final-desktop-clean.png": "5e9c835ea5d1b6e4c01a50064e357f00e288aa8c8960149e390d2cb6ceb2737b"
+  }
+}
