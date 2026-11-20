@@ -24,7 +24,7 @@ Reading instructions, installing a package, connecting an account and proving it
 
 1. Install OSM in your agent app, open a fresh chat and ask it to run OSM Setup.
 2. Have Setup check whether the official Notion plugin is installed and connected. Install and connect it when needed, then verify the intended account and a page you can read.
-3. Describe your business and choose a useful first task. Setup reuses suitable existing pages and databases, then helps build your Data & Context home with its definition and Knowledge, Memory and Skills. The home starts with its definition, followed by the databases.
+3. Describe your business and choose a useful first task. Setup reuses suitable existing pages and databases, then helps build your AI operating model home with its definition and Knowledge, Memory and Skills. The home starts with its definition, followed by the databases.
 4. Let Setup adapt the definition and database properties to your business. Map each original system, its approved access route, permitted use and retention. An AI-native CRM or accounting tool can be queried directly; its records need no Notion copy. Establish the short instructions for your agent app.
 5. Complete the first task, save one lasting decision through Log, and ask for that decision and its source in a fresh chat. Add daily Dreaming when useful.
 
@@ -34,7 +34,7 @@ Prime starts a session with relevant context. Log saves lasting changes at check
 
 ### Data & Context definition template
 
-Use the definition and database guidance in <mention url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">Data & context</mention>. Setup adapts that template to the company's actual sources and existing databases.
+Use the definition and database guidance in <mention url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">AI operating model</mention>. Setup adapts that template to the company's actual sources and existing databases.
 
 Replace the placeholders with identities and routes that have actually been verified. Store credential values in the host or provider credential store.
 

@@ -85,7 +85,7 @@ def build(root=ROOT):
     add(config['catalogue'], 'OSM skills',
         'Shared methods for the context module. Setup conducts onboarding in the conversation. '
         'Prime, Log and Dreaming maintain context; Interview, Human Writing and Council help when relevant.\n\n'
-        + '\n'.join(links) + '\n\nThe source links identify the exact instruction edition. Personal skills belong in your own Data & Context home.\n')
+        + '\n'.join(links) + '\n\nThe source links identify the exact instruction edition. Personal skills belong in your own AI operating model home.\n')
     result = {'format': 'osm-public-guide/1', 'root': config['root'], 'source': PUBLIC + config['root'],
               'reader': 'bound-public-originals-and-exact-git-skills', 'pages': pages}
     if config['root'] not in pages or len(pages) > 80 or len(json.dumps(result).encode()) > 512 * 1024:

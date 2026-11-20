@@ -18,7 +18,7 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
 ## Root and entry
 
 - **One neutral root.** OSM is the method and plugin, not the customer's brand.
-  A new root defaults to the title "Data & Context" with a simple neutral icon;
+  A new root defaults to the title "AI operating model" with a simple neutral icon;
   the owner may choose any title. Identify the root by its stable ID and its role,
   never by title.
 - **The root is the one agent entry.** It holds ONE Data and Context Definition
@@ -38,6 +38,25 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
 - **Existing definitions.** When an existing definition moves into a root, keep
   its compatible field names and extensions. Never regenerate owner choices from
   the template.
+
+## The home and the operating model
+
+An AI operating model is the business's actual way of working with AI: its goals,
+people and agents, information, workflows, tools and access, decision rights,
+review and ongoing improvement. The data and context foundation supports that
+work. Skills describe reusable working and review methods; they do not by
+themselves establish who is accountable. OSM is the method and plugin that help
+set up and maintain this arrangement, not a complete operating model before it
+has been adapted and used. The home carries the definition and routes; operational
+execution and the original systems keep their existing owners.
+
+The default title changes the display name only. Keep the role
+`data-and-context-root`, the Data and Context Definition heading and compatible
+field names. Existing homes retain their names and identities unless the owner
+requests a rename. Do not create an extra model page or migrate databases just
+to adopt the new title. A new home may use the packaged
+[AI operating model icon](../assets/ai-operating-model.svg); preserve an
+existing owner icon unless its change was requested.
 
 ## Areas and storage roles
 

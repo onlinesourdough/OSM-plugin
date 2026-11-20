@@ -10,7 +10,7 @@ runtime.
 1. **Workspace.** A usable Notion account and workspace is a prerequisite
    outside OSM. Do not build account creation or training into the plugin.
 2. **Root.** The owner selects or creates one blank root (suggest
-   "Data & Context"), or explicitly selects an existing compatible home. An
+   "AI operating model"), or explicitly selects an existing compatible home. An
    internal token cannot bootstrap an ungranted first root: the person creates or
    selects that page first, unless a separately authorized existing route can.
    Select the root by its link or ID through the selected connection; reading it
