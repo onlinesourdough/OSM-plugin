@@ -121,5 +121,28 @@ class BrowserBoundary(unittest.TestCase):
             state=subprocess.run(['ps','-o','stat=','-p',pidfile.read_text()],text=True,capture_output=True).stdout.strip()
             self.assertTrue(not state or state.startswith('Z'),f'child still running: {state}')
 
+    def test_pinned_playwright_cleans_its_detached_launcher_on_exit_and_timeout(self):
+        dependency=Path(__file__).resolve().parents[1]/'docs-publisher/node_modules/playwright/index.mjs'
+        if not dependency.exists():
+            self.skipTest('author-only Playwright dependency is not installed')
+        for mode in ('exit','timeout'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as folder:
+                pidfile=Path(folder)/'launcher.pid'
+                fake_browser=("require('fs').writeFileSync(process.argv[1],String(process.pid));"
+                              "setInterval(()=>{},1000)")
+                code=(f"import {{chromium}} from {json.dumps(dependency.as_uri())};"
+                      f"chromium.launch({{executablePath:process.execPath,ignoreDefaultArgs:true,args:['-e',{json.dumps(fake_browser)},{json.dumps(str(pidfile))}],timeout:30000}}).catch(()=>{{}});"
+                      +("setTimeout(()=>process.exit(0),1200);" if mode=='exit' else ''))
+                args=['node','--input-type=module','-e',code]
+                if mode=='exit':
+                    result=run_browser(args,input='',text=True,capture_output=True,timeout=5,env={'PATH':os.environ['PATH']})
+                    self.assertEqual(result.returncode,0)
+                else:
+                    with self.assertRaises(subprocess.TimeoutExpired):
+                        run_browser(args,input='',text=True,capture_output=True,timeout=4,env={'PATH':os.environ['PATH']})
+                self.assertTrue(pidfile.exists(),'the actual pinned launcher must start before the qualification ends')
+                state=subprocess.run(['ps','-o','stat=','-p',pidfile.read_text()],text=True,capture_output=True).stdout.strip()
+                self.assertTrue(not state or state.startswith('Z'),f'detached launcher survived {mode}: {state}')
+
 
 if __name__=='__main__': unittest.main()

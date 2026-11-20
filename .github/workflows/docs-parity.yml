@@ -42,6 +42,10 @@ jobs:
           cache: npm
           cache-dependency-path: docs-publisher/package-lock.json
       - run: npm ci --prefix docs-publisher --ignore-scripts --no-fund
+      - name: Check the anonymous reader and its pinned launcher cleanup
+        run: |
+          python3 tests/public-browser-reader.py
+          node --test docs-publisher/public-browser-read.test.mjs
       - run: npx playwright install --only-shell chromium
         working-directory: docs-publisher
       - name: Verify all seven complete public skills and their catalogue anonymously

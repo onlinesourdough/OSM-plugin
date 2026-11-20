@@ -20,13 +20,27 @@ SAFE_REASONS = {
 
 
 def run_browser(args, *, input, text, capture_output, timeout, env):
-    """Own and reap the anonymous browser's process group, including timeout recovery."""
+    """Own the Node group; the pinned Playwright launcher reaps its browser on exit or interruption."""
     assert text is True and capture_output is True
     process = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, text=True, env=env, start_new_session=True)
     try:
         stdout, stderr = process.communicate(input, timeout=timeout)
         return subprocess.CompletedProcess(args, process.returncode, stdout, stderr)
+    except subprocess.TimeoutExpired:
+        # The pinned Playwright launcher owns a separate browser process group.
+        # Its first SIGINT closes gracefully; a second forces that group down.
+        for _ in range(2):
+            try:
+                os.killpg(process.pid, signal.SIGINT)
+            except ProcessLookupError:
+                break
+            try:
+                process.communicate(timeout=2)
+                break
+            except subprocess.TimeoutExpired:
+                pass
+        raise
     finally:
         # Only the session created for this child; never a global browser kill.
         try:

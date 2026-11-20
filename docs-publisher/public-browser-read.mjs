@@ -46,7 +46,7 @@ async function observe(page, input, timing) {
   try {
     let response = await page.goto(input.url, {waitUntil:'domcontentloaded', timeout:budget(30000)});
     if (response?.status() === 429) {
-      const pause = retryDelay(response.headers()?.['retry-after'], timing.now());
+      const pause = retryDelay(response.headers()?.['retry-after'], Date.now());
       if (pause === null || remaining() <= pause + 1000)
         return {ok:false, url:input.url, reason:'Public page was rate limited; retry later', httpStatus:429, stopNavigation:true};
       await timing.sleep(pause);
@@ -65,16 +65,17 @@ async function observe(page, input, timing) {
     // One execution turn captures document identity and content together.
     const observation = await page.evaluate(() => ({
       url:window.location.href, text:document.body?.innerText || '',
-      links:[...document.querySelectorAll('a[href]')].slice(0,1000).filter(a => a.getClientRects().length && getComputedStyle(a).visibility !== 'hidden')
+      links:[...document.querySelectorAll('a[href]')].slice(0,1000).filter(a => a.checkVisibility({checkOpacity:true, checkVisibilityCSS:true}))
         .map(a => ({url:a.href, title:a.innerText})),
     }));
+    if (remaining() <= 0) throw Error('deadline');
     const finalUrl = observation.url, text = observation.text;
     if (!publicUrl(finalUrl) || new URL(finalUrl).origin !== new URL(input.url).origin || pageId(finalUrl) !== pageId(input.url))
       return {ok:false, url:input.url, reason:'Public page changed host or page identity'};
     if (Buffer.byteLength(text, 'utf8') > 2_000_000 || !input.markers.every(marker => letters(text).includes(letters(marker))))
       return {ok:false, url:input.url, reason:'Public page was oversized or missing its expected content'};
     const entries = (input.entries || []).filter(entry => observation.links.some(link => publicUrl(link.url) &&
-      new URL(link.url).origin === new URL(input.url).origin && pageId(link.url) === entry.page && letters(link.title) === letters(entry.title)));
+      new URL(link.url).origin === new URL(input.url).origin && pageId(link.url) === entry.page && link.title.trim().replace(/\s+/gu,' ') === entry.title));
     if (entries.length !== (input.entries || []).length) {
       const failed = {ok:false, url:input.url, reason:'Public catalogue did not show every linked skill entry'};
       if (input.diagnostics === true) {
@@ -83,7 +84,8 @@ async function observe(page, input, timing) {
       }
       return failed;
     }
-    return {ok:true, url:input.url, finalUrl, observedAt:new Date(timing.now()).toISOString(), text, entries};
+    if (remaining() <= 0) throw Error('deadline');
+    return {ok:true, url:input.url, finalUrl, observedAt:new Date().toISOString(), text, entries};
   } catch {
     const diagnostic = {ok:false, url:input.url, reason:remaining() <= 0 ? deadlineReason : `Public browser failed during ${phase}`};
     if (phase === 'content' && remaining() > 0) {
@@ -102,7 +104,7 @@ async function observe(page, input, timing) {
 
 export async function readPublicBatch(input, launch = defaultLaunch, options = {}) {
   if (!batchAllowed(input)) return {ok:false, reason:invalid};
-  const now = options.now || Date.now, sleep = options.sleep || delay;
+  const now = options.now || (()=>performance.now()), sleep = options.sleep || delay;
   const timing = {now, sleep, deadline:now() + 270000};
   let browser, phase = 'launch', shutdownTimer, runTimer;
   const work = async () => {
@@ -134,6 +136,7 @@ export async function readPublicBatch(input, launch = defaultLaunch, options = {
     })]);
   } catch { result = {ok:false, reason:`Public browser failed during ${phase}`}; }
   finally { clearTimeout(runTimer); }
+  if (timing.deadline <= now() && result.ok) result = {ok:false,reason:deadlineReason};
   if (browser) {
     try {
       const closed = await Promise.race([browser.close().then(()=>true), new Promise(resolve => {
@@ -163,6 +166,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     const input = JSON.parse(source);
     result = await (Object.hasOwn(input, 'requests') ? readPublicBatch(input) : readPublic(input));
   } catch { result = {ok:false,reason:'Invalid public read request'}; }
-  console.log(JSON.stringify(result));
-  process.exitCode = result.ok ? 0 : 1;
+  await new Promise(resolve => process.stdout.write(JSON.stringify(result) + '\n', resolve));
+  // Playwright's pinned exit hook kills its detached browser process groups.
+  process.exit(result.ok ? 0 : 1);
 }

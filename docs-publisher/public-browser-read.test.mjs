@@ -102,7 +102,7 @@ test('catalogue names in prose cannot substitute for visible links to the exact 
   const catalogue={...input,entries:[{page:'b'.repeat(32),title:'OSM:setup'}]};
   assert.equal((await readPublic(catalogue,fake().launch,fast)).ok,false);
   assert.equal((await readPublic(catalogue,fake({links:[{url:other,title:'OSM:setup'}]}).launch,fast)).ok,true);
-  for(const links of [[{url:url,title:'OSM:setup'}],[{url:other,title:'Unrelated'}]])
+  for(const links of [[{url:url,title:'OSM:setup'}],[{url:other,title:'Unrelated'}],[{url:other,title:'osm set-up'}]])
     assert.equal((await readPublic(catalogue,fake({links}).launch,fast)).ok,false);
 });
 
@@ -133,4 +133,36 @@ test('a stalled graceful close is not returned as verified',async()=>{
   const browser=fake(),launch=async()=>({...await browser.launch(),close:()=>new Promise(()=>{})});
   const result=await readPublic(input,launch,{...fast,shutdownMs:1});
   assert.equal(result.ok,false);assert.equal(result.reason,'Public browser failed during shutdown');
+});
+
+
+test('a final capture after the deadline cannot verify',async()=>{
+  let clock=0;
+  const browser=fake(),launch=async()=>{
+    const driver=await browser.launch(),context=await driver.newContext({}),page=await context.newPage(),capture=page.evaluate;
+    page.evaluate=async()=>{const result=await capture();clock=270001;return result;};
+    driver.newContext=async()=>({newPage:async()=>page});return driver;
+  };
+  assert.equal((await readPublic(input,launch,{now:()=>clock,sleep:async()=>{}})).ok,false);
+});
+
+test('the DOM capture requires native visibility including opacity',async()=>{
+  let visible=false;
+  const previous={window:globalThis.window,document:globalThis.document};
+  const browser=fake(),launch=async()=>{
+    const driver=await browser.launch(),context=await driver.newContext({}),page=await context.newPage();
+    page.evaluate=async fn=>{
+      globalThis.window={location:{href:url}};
+      globalThis.document={body:{innerText:'OSM:log 1.2.0 OSM:setup'},querySelectorAll:()=>[{
+        href:other,innerText:'OSM:setup',checkVisibility:options=>{
+          assert.deepEqual(options,{checkOpacity:true,checkVisibilityCSS:true});return visible;
+        },
+      }]};
+      try{return fn();}finally{globalThis.window=previous.window;globalThis.document=previous.document;}
+    };
+    driver.newContext=async()=>({newPage:async()=>page});return driver;
+  };
+  const catalogue={...input,entries:[{page:'b'.repeat(32),title:'OSM:setup'}]};
+  assert.equal((await readPublic(catalogue,launch,fast)).ok,false);
+  visible=true;assert.equal((await readPublic(catalogue,launch,fast)).ok,true);
 });
