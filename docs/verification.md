@@ -47,6 +47,15 @@ this checkpoint 0.34.3 remains a source candidate; its release asset, native
 installation and next released-packet delivery require their separate proof.
 Daily Dreaming and Agentic System retain their separate operational proof.
 
+A subsequent deliberate Notion edit added the current home-name and hub-icon
+clarification to Releases & documentation. Run 44753512816 read the eight
+originals at 14:27:30 UTC and held exactly that changed original before native
+publication; no skill checkpoint or write stage was reached. Its actual
+public-only API snapshot was deliberately exported for 0.34.3. The other seven
+original bodies retained their revisions; the generated guide and runtime now
+include the same one-line clarification. This expected drift HOLD is separate
+from the earlier successful whole-set and no-op proof.
+
 
 ## 20 November 2026 — 0.34.1 release and adoption
 
