@@ -1,6 +1,6 @@
 ## How OSM works
 
-Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion Data & Context home and the connected sources.
+Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion AI operating model home and the connected sources.
 
 <embed source="notion-file-block://41d6d2e1-7f56-816a-8f20-ed64fba397d0/ce0b94ed-e801-4b1a-9b25-a3f72f5b6802?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
 
@@ -22,7 +22,7 @@ flowchart TB
     WRITING -.-> WORK
     WORK <-.-> COUNCIL
   end
-  subgraph HOME["Your Notion Data & Context home"]
+  subgraph HOME["Your Notion AI operating model home"]
     DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
     KNOWLEDGE["Knowledge"]
     MEMORY["Memory"]

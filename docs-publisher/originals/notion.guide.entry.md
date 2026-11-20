@@ -45,7 +45,7 @@ Shared OSM instructions help you establish and maintain the foundation and compl
 OSM Skills
 </database>
 
-The installed plugin contains the shared skills and their supporting instructions. Your own Notion Data & Context home holds the business definition, Knowledge, Memory and personal Skills.
+The installed plugin contains the shared skills and their supporting instructions. Your own Notion AI operating model home holds the Data and Context Definition, Knowledge, Memory and personal Skills. The operating model connects this foundation to your goals, workflows, tools and responsibilities.
 
 ## Extensions
 
@@ -68,7 +68,7 @@ Setup & tools
 </page>
 
 <page url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">
-Data & context
+AI operating model
 </page>
 
 <page url="https://app.notion.com/p/40d6d2e17f56815eaf53cab824a40eb3">
