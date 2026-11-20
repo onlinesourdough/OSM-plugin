@@ -55,7 +55,7 @@ The default title changes the display name only. Keep the role
 field names. Existing homes retain their names and identities unless the owner
 requests a rename. Do not create an extra model page or migrate databases just
 to adopt the new title. A new home may use the packaged
-[AI operating model icon](../../../assets/ai-operating-model.png); preserve an
+[AI operating model icon](../assets/ai-operating-model.png); preserve an
 existing owner icon unless its change was requested.
 
 ## Areas and storage roles
