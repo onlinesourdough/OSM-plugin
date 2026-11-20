@@ -670,6 +670,9 @@ def a_public_answer_without_the_content_is_not_a_pass():
     result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver, reader(fake), write=True, only=COUNCIL)
     require(outcomes(result) == {COUNCIL: pub.HELD} and "establishes nothing" in result["rows"][0]["detail"] and ns.failing(result),
             f"a script shell that answers 200 is a failure: {result['rows'][0]}")
+    require(result['rows'][0].get('write_attempted') is True and
+            f'Written and API-verified: {COUNCIL}' in ns.report(result, manifest),
+            'public failure preserves the fact that a verified API write already happened')
     fake.shell = False
     result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver, reader(fake), write=True, only=COUNCIL)
     require(outcomes(result) == {COUNCIL: pub.UNCHANGED} and result["rows"][0]["public"]["state"] == pub.VERIFIED, "real content is verified")
