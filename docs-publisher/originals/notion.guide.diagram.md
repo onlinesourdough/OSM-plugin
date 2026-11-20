@@ -5,6 +5,12 @@ Your agent uses OSM to find relevant business context, save useful learning and 
 <image source="notion-file-block://41e6d2e1-7f56-8106-969c-f48a389867f2/1b6cb2b1-3830-45a1-828f-8b02a18f04e8?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
 
 <toggle>
+Mobile overview
+
+<image source="notion-file-block://41e6d2e1-7f56-8160-a02d-c5e842ab04b3/b7af3e7c-da03-4b65-a8aa-a3ad07efb7e4?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
+</toggle>
+
+<toggle>
 Editable relationship map · Mermaid
 
 ```mermaid
@@ -45,7 +51,7 @@ flowchart TB
 
 Prime reads what a task needs. Log saves lasting changes at checkpoints. Dreaming checks recent work and selected sources under the same curation rules. Council is optional.
 
-Open the image to zoom. The responsive HTML diagram and editable relationship map remain available as sources.
+A mobile overview and the editable HTML and relationship sources are available on this page.
 
 The layers describe responsibilities, not a mandatory sequence. The foundation supplies relevant context for useful AI work. Learning and accepted changes help maintain it. Connected systems retain their originals.
 

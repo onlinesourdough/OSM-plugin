@@ -10,19 +10,27 @@ Mermaid source remain available in the public architecture page.
 A fresh anonymous browser exposed a real presentation gap: Notion presents HTML
 attachments as file buttons on Android, and the relationship source showed raw
 code alongside the graph. The page now starts with the actual rendered common
-PNG and keeps the two editable sources in closed toggles. Notion's image and HTML
-were downloaded again and matched the local image/source SHA-256 exactly.
+PNG, a portrait mobile overview and the two editable sources in closed toggles.
+Notion's two images and HTML were downloaded again and matched the local
+image/source SHA-256 exactly.
 Only this guide body's content revision changed; the other seven originals and
 all 75 skill files remain byte-identical to v0.34.3.
 
 The built 0.34.4 guide reader uses the same bundled, script-free diagram for the
-image and renders native source toggles as closed details. All 83 adapter tests,
-including fenced examples, nesting and escaped titles, passed. The package
+image and renders native source toggles as closed details. Its HTML source field
+links to the source in Notion instead of displaying a second copy of the diagram.
+All 84 adapter tests, including fenced examples, nesting and escaped or empty
+titles, passed. The package
 validator (v0.34.3 baseline), documentation rehearsal, publisher parity and
-reconciliation of all eight tool-read originals passed. Standalone desktop and
+reconciliation of all eight actual API-read originals passed. The read-only
+snapshot in run 44813193600 completed with eight pages and no read errors; its
+expected old-source drift hold stopped the run before any skill import. The
+revised candidate binds that API reader and the observed body revisions.
+The architecture rehearsal also rejects independent HTML/wide/mobile image
+drift against the bounded receipt. Standalone desktop and
 mobile renders, the anonymous public Notion page, media readback and the built
 reader's 390-pixel render were inspected. The reader had one visible diagram,
-two closed source details, no visible Mermaid code and no horizontal overflow.
+three closed details, no visible Mermaid code and no horizontal overflow.
 
 This is headless browser and source/build evidence, **not** a screenshot of an
 installed Codex side panel or a completed Setup/Dreaming qualification. Release,
