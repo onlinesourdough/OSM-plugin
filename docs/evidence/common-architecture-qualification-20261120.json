@@ -43,17 +43,22 @@
     "guide_tests_passed": 17,
     "built_reader_visible_diagrams": 1,
     "built_reader_html_source_is_link": true,
-    "public_mobile_portrait_full_inspection_viewport": [
+    "public_mobile_previous_capture_viewport": [
       360,
-      4200
-    ]
+      732
+    ],
+    "public_mobile_final_capture_viewport": [
+      360,
+      812
+    ],
+    "public_desktop_bound_sentence_confirmed": true
   },
   "limits": [
     "Separate headless contexts, no user browser profile. This is public-page and built-reader render evidence, not a screenshot of the installed Codex side panel.",
     "A real Android viewport/user agent was tested; physical mobile hardware was not.",
     "No Setup journey, Notion native-type/permission/revocation, cross-host capture or scheduled Dreaming result is claimed by these checks.",
     "The existing optional Content material-flow section is preserved.",
-    "The complete public portrait was additionally inspected in an expanded-height 360 \u00d7 4200 viewport; the ordinary Android viewport observation is 360 \u00d7 812."
+    "Initial tall-figure screenshot attempts clipped or left off-screen regions blank. No complete portrait-in-public-UI capture is claimed. The complete delivered portrait PNG was inspected directly and its Notion download matched byte for byte. The final public mobile screenshot covers one 360 \u00d7 812 viewport; the earlier capture was 360 \u00d7 732."
   ],
   "artifact_sha256": {
     "osm-architecture.png": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
@@ -63,9 +68,8 @@
     "notion-readback-mobile.png": "e12809bc1387f0ccc8690cca20393c5ab496ac57fa0ae396011c190455c65faa",
     "client-common-desktop-revised.png": "2f6d2ffb0ad22cf04bde384ecec56b7908784faf0a1bad5072e34110bf4aa9d4",
     "client-common-mobile-revised.png": "ceb79a023f9119ace9a567389f9626590bbbe7f159426bc96a23b6c459eab963",
-    "public-mobile-viewport-revised.png": "cadebf9c625d8be22281db1beb9b2890f91b3b7b616919e392301f25c9cefb18",
-    "public-mobile-portrait-full-revised.png": "e0c38e623095677ef27b902989cc928643e9465b4d1da39e49473c19fa5f407d",
-    "public-desktop-revised.png": "c7d7216bd099cb293e234e2cd0cc2a0e23a3bf47fac415b4a8712fa8e447e2b3"
+    "public-desktop-bound-final.png": "0f1a24a36e0a5e650ee112251b68b6ddaa65deb1f4abfe4d30add8b0e1b28a10",
+    "public-mobile-final-viewport.png": "cfc6cc4efa098e7cc0ded75e05a6535f20a2a076952bd0b1b2a3560c23a2f87b"
   },
   "mobile_image": "assets/diagrams/osm-architecture-mobile.png",
   "mobile_image_sha256": "e12809bc1387f0ccc8690cca20393c5ab496ac57fa0ae396011c190455c65faa",
