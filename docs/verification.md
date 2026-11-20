@@ -1,5 +1,16 @@
 # Verification
 
+## 20 November 2026 — tag-build correction
+
+The exact reviewed main tree passed CI. Tag run 44651995134 then stopped
+before publication: two repository CLI tests supplied the synthetic transport
+manifest, which intentionally strips guide-original bindings. The real tag
+check correctly rejected those absent bindings. The tests now use the complete
+repository manifest; the production checks remain strict. The v0.34.0 tag is
+retained unchanged and no GitHub Release or final installation is claimed for it.
+The patch candidate is 0.34.1, with the same reviewed skill bodies and methods.
+
+
 ## 20 November 2026 — final seven-skill candidate corrections
 
 Fable 5.2 High independently reviewed exact candidate `436d904`. It reproduced a
