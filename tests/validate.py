@@ -366,7 +366,7 @@ def validate(root=ROOT, release_tag=None):
     # The bundled Notion page is new-customer product copy; existing pages keep theirs.
     root_template = (skill_root / "osm-data-context/assets/data-and-context-root.md").read_text()
     require("\n# AI operating model\n" in root_template, "context root title")
-    root_body = root_template.split("\n# Data & Context\n", 1)[1].lstrip()
+    root_body = root_template.split("\n# AI operating model\n", 1)[1].lstrip()
     require(root_body.startswith("## Data and Context Definition\n\n```yaml\n"),
             "context root starts with definition")
     require(root_body.rstrip().endswith("\n```"), "context root ends with definition")
@@ -615,8 +615,8 @@ def negative_controls():
 
     def introduction_before_definition(root):
         path = root / "skills/osm-data-context/assets/data-and-context-root.md"
-        path.write_text(path.read_text().replace("\n# Data & Context\n",
-                                               "\n# Data & Context\n\nIntroduction.\n", 1))
+        path.write_text(path.read_text().replace("\n# AI operating model\n",
+                                               "\n# AI operating model\n\nIntroduction.\n", 1))
 
     def overlapping_acceptance(root):
         path = root / "docs/osm.md"
