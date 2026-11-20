@@ -4,7 +4,7 @@
   "activation": {
     "active": true,
     "live_proof": "whole-set-and-zero-write-repeat-qualified",
-    "note": "Initial automatic main qualification 44751015131 and independent repeat 44751623179 passed all eight guide originals, all seven released native packets, 251supporting-file observations, six managed properties and the complete anonymous page/catalogue checks. Both runs were unchanged with zero API writes. Earlier failed and interrupted evidence is retained. Each later release still requires its own whole-set readback and public result.",
+    "note": "Initial automatic main qualification 44751015131 and independent repeat 44751623179 passed all eight guide originals, all seven released native packets, 251 supporting-file observations, six managed properties and the complete anonymous page/catalogue checks. Both runs were unchanged with zero API writes. Earlier failed and interrupted evidence is retained. Each later release still requires its own whole-set readback and public result.",
     "public_reader": {
       "kind": "isolated-playwright-visible-native-catalogue/2",
       "reviewed_in": "PR #120: independent High acceptance of 8f06088; actual secret-free production-path qualification 44750248088; main 44751015131 and zero-write repeat 44751623179.",
@@ -13,9 +13,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.34.2",
-      "tag": "v0.34.2",
-      "commit": "1e4b2b186d158cd36fa197e0ab9c70cf03521ee0",
+      "label": "v0.34.3",
+      "tag": "v0.34.3",
+      "commit": "caedb13fde5fc33315f97d4875e7a76e379b1737",
       "approved": true
     },
     "main-working": {
