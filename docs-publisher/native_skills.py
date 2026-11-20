@@ -758,7 +758,8 @@ def publish(manifest, packets, api, tag_resolver, reader=None, prior_packets=Non
         else:
             rows.append(_plan_row(api, packet, catalogue, prior_packets))
     todo = [row for row in rows if row["outcome"] in (pub.WRITTEN, pub.RESUMED)]
-    stopped = [row for row in rows if row["outcome"] not in pub.OK_OUTCOMES]
+    stopped = [row for row in rows if row["outcome"] not in pub.OK_OUTCOMES
+               or (not only and row['outcome'] == pub.PENDING_HANDOFF)]
     result = {"mode": "publish" if write else "plan", "commit": manifest["editions"]["released"]["commit"], "rows": rows}
     if not write or stopped or len(todo) > max_writes:
         why = ("the write gate is off (--write was not given)" if not write
