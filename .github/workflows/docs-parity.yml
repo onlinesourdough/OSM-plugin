@@ -1,0 +1,108 @@
+name: Public documentation parity
+
+on:
+  workflow_run:
+    workflows: ['Package and release']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: osm-documentation-publisher
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OSM_DOCS_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Mark enabled live parity pending on its exact source
+        if: vars.OSM_PUBLIC_DOCS_ENABLED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --silent --method POST "repos/$GITHUB_REPOSITORY/statuses/$OSM_DOCS_SHA" \
+            -f state=pending -f context='osm/public-guide-parity' \
+            -f description='Comparing the public guide originals'
+      - name: Check the reviewed source without credentials
+        run: python3 docs-publisher/publisher.py reconcile --check --out reconciliation.md
+      - name: Inspect activation gates without exposing credentials
+        id: gates
+        env:
+          OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
+          OSM_PUBLIC_DOCS_ENABLED: ${{ vars.OSM_PUBLIC_DOCS_ENABLED }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          manifest = json.loads(Path('docs-publisher/manifest.json').read_text())
+          enabled = os.environ.get('OSM_PUBLIC_DOCS_ENABLED') == 'true'
+          configured = bool(os.environ.get('OSM_PUBLIC_DOCS_TOKEN')) and enabled
+          publish = configured and manifest['activation']['active'] and bool(manifest['activation'].get('public_reader'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write(f'configured={str(configured).lower()}\npublish={str(publish).lower()}\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('Offline source reconciliation completed.\n\n')
+              out.write('Public-only snapshot access is configured.\n' if configured else
+                        'Live parity is blocked: configure a dedicated public-only credential and enable OSM_PUBLIC_DOCS_ENABLED. No live source was read or written.\n')
+              if not publish:
+                  out.write('Publication is inactive: the writer handoff, public reader and reviewed activation gates must be satisfied.\n')
+          if enabled and not configured:
+              raise SystemExit('Live parity was enabled but its public-only credential is missing.')
+          PY
+      - name: Read the public guide originals
+        if: steps.gates.outputs.configured == 'true'
+        env:
+          OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
+        run: python3 docs-publisher/publisher.py snapshot --out public-originals.json
+      - name: Compare the live originals and declared exports
+        if: steps.gates.outputs.configured == 'true'
+        run: python3 docs-publisher/publisher.py reconcile --snapshot public-originals.json --check --out live-reconciliation.md
+      - name: Publish only after the explicit handoff and qualified reader
+        if: steps.gates.outputs.publish == 'true'
+        env:
+          OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
+          OSM_PUBLIC_DOCS_DATABASE: ${{ vars.OSM_PUBLIC_DOCS_DATABASE }}
+          OSM_PUBLIC_DOCS_BASE: ${{ vars.OSM_PUBLIC_DOCS_BASE }}
+          OSM_PUBLIC_DOCS_CATALOGUE: ${{ vars.OSM_PUBLIC_DOCS_CATALOGUE }}
+        run: |
+          python3 docs-publisher/publisher.py publish --database "$OSM_PUBLIC_DOCS_DATABASE" \
+            --snapshot public-originals.json --out publication.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-documentation-parity
+          path: |
+            reconciliation.md
+            live-reconciliation.md
+            publication.md
+            public-originals.json
+          if-no-files-found: ignore
+      - name: Record enabled live parity result
+        if: always() && vars.OSM_PUBLIC_DOCS_ENABLED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ job.status }}
+        run: |
+          state=failure
+          if [ "$RESULT" = success ]; then state=success; fi
+          gh api --silent --method POST "repos/$GITHUB_REPOSITORY/statuses/$OSM_DOCS_SHA" \
+            -f state="$state" -f context='osm/public-guide-parity' \
+            -f description='Public guide original comparison completed'

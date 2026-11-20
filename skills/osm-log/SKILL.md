@@ -2,7 +2,7 @@
 name: osm-log
 description: Save lasting context when meaningful work finishes or the user asks to remember or log something. Use the verified home, read back authorized changes, and resume without logging the same work twice.
 metadata:
-  version: "1.1.2"
+  version: "1.2.0"
 ---
 
 # OSM:log
@@ -17,6 +17,11 @@ The lead retains Log in delegated work. Dreaming uses its own run result.
    checkpoint. Retain what would help the next relevant session act. Leave
    routinely retrievable facts, work artifacts and live status at their
    existing sources.
+   Check source-specific retention as well as destination write authority.
+   Source-only or restricted records stay in their system, even when the
+   agent may read them. Do not copy them into Notion, a log, a worker brief
+   or a paraphrased summary to bypass that rule. Save only the permitted
+   route, decision or learning, with permitted evidence.
 2. Resolve the target and effective write authority from the current task. Use
    the home verified for that scope, even when the host has a different
    personal default. Without a verified destination and authority, keep a

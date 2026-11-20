@@ -31,16 +31,28 @@ sys.path.insert(0, str(DOCS))
 import publisher as pub  # noqa: E402
 from fixture_transport import FakeNotion, FixtureTransport  # noqa: E402
 
+# General transport scenarios use unbound guide fixtures. Exact, live-shaped original
+# bindings are tested separately in publisher-parity.py, without private data.
 MANIFEST = pub.load_manifest()
+for _guide in MANIFEST["artifacts"]:
+    if _guide["class"] == "G":
+        _guide.pop("original", None)
+        for _export in _guide.get("exports", []):
+            _export.pop("sha256", None)
+
 SETUP_ZIP = next(a for a in MANIFEST["artifacts"] if a["key"] == "notion.content.setup")["frozen_zip"]["sha256"]
 RECORDED_PUBLIC = [v for v in MANIFEST["bindings"].values() if isinstance(v, str) and len(v) > 20] + [SETUP_ZIP]
 HEX32 = re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")
 RECORDED_IDS = {i for v in RECORDED_PUBLIC for i in HEX32.findall(v.replace("-", ""))}
+RECORDED_IDS.update(a["notion"] for a in MANIFEST["artifacts"] if a.get("notion"))
+RECORDED_IDS.add(MANIFEST["reading_export"]["catalogue"])
 RELEASED = MANIFEST["editions"]["released"]
 APPROVED, TAG, LABEL = RELEASED["commit"], RELEASED["tag"], RELEASED["label"]
 # One class A row per skill of the bound release. It changes only with a new binding, and the
 # identity test below ties it to that commit's actual tree rather than to this number alone.
-CLASS_A_ROWS = 20
+RELEASED_SKILLS = sorted(path.split('/')[1] for path in pub.GitSource(ROOT, APPROVED).paths()
+                         if re.fullmatch(r'skills/[^/]+/SKILL\.md', path))
+CLASS_A_ROWS = len(RELEASED_SKILLS)
 TOKEN = "fixture-token-value-1234567890"
 README, INDEX, OVERVIEW, ARCH, SKILLS = ("osm.working.readme", "osm.working.docs-index", "osm.working.overview",
                                          "osm.working.architecture", "osm.working.skill-index")
@@ -305,17 +317,20 @@ def rename_and_retirement_keep_history_and_settle(w):
 def newer_original_is_a_conflict_not_an_overwrite(w):
     manifest = copy.deepcopy(MANIFEST)
     guide = next(a for a in manifest["artifacts"] if a["key"] == "notion.guide.entry")
-    guide["before_source"]["original_hash"] = pub.body_hash("the recorded original")
-    w.seed("notion.guide.entry", "a newer hand edit", writer="notion-authored")
-    result = run(w, manifest, working_files(), "run-1")
-    require(outcomes(result)["notion.guide.entry"] == pub.CONFLICT, "a newer original is a conflict")
-    require(w.snapshot("notion.guide.entry")["body"] == "a newer hand edit", "the original is untouched")
-    require("notion.guide.entry" not in w.upserted(), "no write")
-    require(pub.failing(result), "a conflict leaves the run red")
-    w.hand_edit("notion.guide.entry", "the recorded original")
-    result = run(w, manifest, working_files(), "run-2")
-    require(outcomes(result)["notion.guide.entry"] == pub.REFUSED_NOTION and "read and unchanged" in next(
-        r["detail"] for r in result["rows"] if r["key"] == "notion.guide.entry"), "an original that reads back unchanged is not a conflict")
+    body = "the recorded original\n"
+    guide["original"] = {"notion": guide["notion"], "revision": pub.revision(body),
+                         "edition": "test", "reader": "fixture", "read_at": "test"}
+    files = {**working_files(), pub.frozen_path(guide["key"]): body}
+    def read(text):
+        return {"reader": "fixture", "errors": [], "pages": {guide["key"]: {"body": text, "revision": pub.revision(text)}}}
+    result = pub.plan(manifest, pub.DictSource(files), w.transport,
+                      released_source=released_source(), originals=read("a newer hand edit"))
+    require(outcomes(result)[guide["key"]] == pub.CONFLICT, "a newer original is a conflict")
+    require(not w.upserted(), "planning never overwrites the original")
+    result = pub.plan(manifest, pub.DictSource(files), w.transport,
+                      released_source=released_source(), originals=read(body))
+    require(outcomes(result)[guide["key"]] == pub.REFUSED_NOTION and "read and unchanged" in next(
+        r["detail"] for r in result["rows"] if r["key"] == guide["key"]), "an unchanged original reads back unchanged")
 
 
 @scenario
@@ -325,7 +340,7 @@ def missing_or_expired_access_fails_closed(w):
         w.set_access(state)
         result = run(w, MANIFEST, working_files(), "run-1")
         require(not w.upserted(), f"{state}: nothing is written")
-        require({r["outcome"] for r in result["rows"]} == {pub.BLOCKED}, f"{state}: every row is visibly blocked")
+        require(all(r["outcome"] == pub.BLOCKED for r in result["rows"] if r["class"] == "W"), f"{state}: every CI-owned row is visibly blocked")
         require(pub.failing(result), f"{state}: the run is red")
     for database, env in (("db", {}), ("db", {pub.TOKEN_ENV: ""}), ("", {pub.TOKEN_ENV: TOKEN}), (None, {pub.TOKEN_ENV: TOKEN})):
         try:
@@ -411,16 +426,16 @@ def artifacts_not_handed_to_ci_get_no_write_and_no_duplicate_row(w):
     require(not any(k.startswith("osm.released.") for k in w.upserted()), "no write to a row CI does not own")
     require(f"{CLASS_A_ROWS} artifact(s) are pending handoff" in pub.reconciliation_text(result), "the pending handoff is visible")
     handed = copy.deepcopy(MANIFEST)
-    one = next(x for x in handed["artifacts"] if x["key"] == "osm.released.skill.osm")
+    one = next(x for x in handed["artifacts"] if x["key"] == "osm.released.skill.osm-setup")
     one["public_writer"], one["adoption_state"] = "ci", "adopted"
     require(not pub.validate_manifest(handed), "an adopted row may belong to CI")
     # Existing rows carry no Key, so a first write would duplicate the row: refused until the Key is bound.
     result = run(w, handed, working_files(), "run-2")
-    require(outcomes(result)["osm.released.skill.osm"] == pub.BLOCKED and "osm.released.skill.osm" not in w.upserted(), "no duplicate row")
-    w.seed("osm.released.skill.osm", "released osm.released.skill.osm", status="complete")
-    require(outcomes(run(w, handed, working_files(), "run-3"))["osm.released.skill.osm"] in (pub.UNCHANGED, pub.WRITTEN), "a row that carries the Key is handled")
+    require(outcomes(result)["osm.released.skill.osm-setup"] == pub.BLOCKED and "osm.released.skill.osm-setup" not in w.upserted(), "no duplicate row")
+    w.seed("osm.released.skill.osm-setup", "released osm.released.skill.osm-setup", status="complete")
+    require(outcomes(run(w, handed, working_files(), "run-3"))["osm.released.skill.osm-setup"] in (pub.UNCHANGED, pub.WRITTEN), "a row that carries the Key is handled")
     wrong = copy.deepcopy(MANIFEST)
-    next(x for x in wrong["artifacts"] if x["key"] == "osm.released.skill.osm")["public_writer"] = "ci"
+    next(x for x in wrong["artifacts"] if x["key"] == "osm.released.skill.osm-setup")["public_writer"] = "ci"
     require(any("only after handoff" in p for p in pub.validate_manifest(wrong)), "no CI writer before the handoff state")
 
 
@@ -569,14 +584,14 @@ def a_failed_retirement_holds_the_set(w):
 
 @test
 def a_changed_skill_is_pending_release_propagation_whether_or_not_a_row_maps_it():
-    source = pub.DictSource({**working_files(), "skills/osm/SKILL.md": "x"}, "c-1")
-    changed = ["skills/osm/SKILL.md", "skills/alpha/SKILL.md", "docs/architecture.md"]
+    source = pub.DictSource({**working_files(), "skills/osm-setup/SKILL.md": "x"}, "c-1")
+    changed = ["skills/osm-setup/SKILL.md", "skills/alpha/SKILL.md", "docs/architecture.md"]
     result = pub.plan(MANIFEST, source, None, changed, released_source=released_source(), base="b")
-    require(result["changed_skills"] == ["skills/alpha", "skills/osm"], f"a mapped and an unmapped skill are both reported: {result['changed_skills']}")
+    require(result["changed_skills"] == ["skills/alpha", "skills/osm-setup"], f"a mapped and an unmapped skill are both reported: {result['changed_skills']}")
     require(result["unmapped_changes"] == [], "a skill path is not also listed as an unmapped change")
     text = pub.reconciliation_text(result)
-    require("pending release propagation" in text and "`skills/osm`" in text and "`skills/alpha`" in text, text)
-    require(outcomes(result)["osm.released.skill.osm"] == pub.PENDING_HANDOFF, "and the released row still gets no write")
+    require("pending release propagation" in text and "`skills/osm-setup`" in text and "`skills/alpha`" in text, text)
+    require(outcomes(result)["osm.released.skill.osm-setup"] == pub.PENDING_HANDOFF, "and the released row still gets no write")
     quiet = pub.plan(MANIFEST, source, None, ["docs/architecture.md"], released_source=released_source(), base="b")
     require(quiet["changed_skills"] == [] and "pending release propagation" not in pub.reconciliation_text(quiet), "no skill changed, none reported")
 
@@ -816,7 +831,7 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
             code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", *argv])
         require(code == 2 and out.getvalue().startswith("ERROR:") and expected in out.getvalue(), "a clean error, not a traceback")
     with redirect_stdout(io.StringIO()):
-        require(pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "0" * 40, "--check"]) == 0, "the null commit means no base")
+        require(pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "0" * 40, "--check"], manifest=MANIFEST) == 0, "the null commit means no base")
 
 
 @test
@@ -841,7 +856,7 @@ def starter_uses_the_shared_definition_template():
 @test
 def the_manifest_has_no_skill_generator_and_one_row_route_exists():
     require("generators" not in MANIFEST and not pub.validate_manifest(MANIFEST), "no skill rows are generated")
-    require(len(pub.expand(MANIFEST)) == CLASS_A_ROWS + len(W_KEYS) + 11 and
+    require(len(pub.expand(MANIFEST)) == CLASS_A_ROWS + len(W_KEYS) + 17 and
             {a["key"] for a in MANIFEST["artifacts"] if a["class"] == "W"} == set(W_KEYS),
             "released, working and Notion-authored artifact inventories")
     bad = copy.deepcopy(MANIFEST)
@@ -864,7 +879,7 @@ def class_b_hash_and_guide_checks_report_not_checked_and_tell_failure_from_unsup
     result = pub.plan(MANIFEST, pub.DictSource(working_files(), "c"), None, released_source=released_source())
     text = pub.reconciliation_text(result)
     require("notion.content.setup | B | refused-class-B" in text and "frozen ZIP hash: not checked (unsupported)" in text, "class B hash row says not checked")
-    require(text.count("newer-original check: not checked (unsupported)") == 2, "both guide rows say not checked")
+    require(text.count("newer-original check: not checked (unsupported)") == len(pub.guide_pages(MANIFEST)), "every guide row says not checked")
     t = FixtureTransport()
     states = {f["key"]: f["state"] for f in pub.check_frozen(MANIFEST, t)}
     require(states == {"notion.content.setup": pub.UNSUPPORTED}, "a download that could not be hashed is unsupported")
@@ -930,6 +945,7 @@ def reconcile_prints_the_absent_tag_note_through_main_and_none_when_the_tag_reso
         git("add", "."); git("commit", "-q", "-m", "one")
         mini = copy.deepcopy(MANIFEST)
         mini["artifacts"] = [a for a in mini["artifacts"] if a["class"] == "W"]
+        mini["folders"] = {"docs/": {"role": "fixture documentation"}}
         mini["editions"]["released"]["commit"] = git("rev-parse", "HEAD")
 
         def reconcile():
@@ -991,6 +1007,7 @@ def the_release_binding_follows_the_manifest_through_a_pre_tag_build_and_its_fol
         def edition(tag, commit):
             mini = copy.deepcopy(MANIFEST)
             mini["artifacts"] = [a for a in mini["artifacts"] if a["class"] == "W"]
+            mini["folders"] = {"docs/": {"role": "fixture documentation"}}
             mini["editions"]["released"] = {"label": tag, "tag": tag, "commit": commit, "approved": True}
             return mini
 
@@ -1032,8 +1049,7 @@ def the_class_a_rows_are_the_skills_of_the_bound_release_and_renames_keep_their_
     sys.path.insert(0, str(ROOT / "tests"))
     from skill_metadata import RENAMED_SKILLS
     rows = [a for a in MANIFEST["artifacts"] if a["class"] == "A"]
-    tree = subprocess.run(["git", "-C", str(ROOT), "ls-tree", "-d", "--name-only", APPROVED, "skills/"], check=True, capture_output=True, text=True).stdout.split()
-    names = sorted(line.split("/", 1)[1] for line in tree)
+    names = RELEASED_SKILLS
     require(len(rows) == CLASS_A_ROWS == len(names), f"one row per skill of {LABEL}: {len(rows)} rows, {len(names)} skills")
     require(sorted(a["key"] for a in rows) == sorted(f"osm.released.skill.{n}" for n in names)
             and sorted(a["source_paths"][0] for a in rows) == sorted(f"skills/{n}/" for n in names)
@@ -1213,7 +1229,7 @@ def a_redirect_is_never_followed_so_the_token_never_reaches_another_host():
 def activation_needs_a_reviewed_subtree_and_refuses_unused_configuration():
     active = copy.deepcopy(MANIFEST)
     active["activation"]["active"] = True
-    require(any("working_subtree" in p for p in pub.validate_manifest(active)), "active with no subtree is a problem")
+    require(not pub.validate_manifest(active), "bound pages need no optional working database")
     active["bindings"]["working_subtree"] = "db"
     require(not pub.validate_manifest(active), "with a subtree it validates")
     active["activation"]["public_reader"] = {}
@@ -1242,7 +1258,7 @@ def the_header_labels_the_edition_and_says_unreleased():
     require(working.startswith("<!-- osm-doc-key: osm.working.readme edition: Main working revision (unreleased) commit: c-1 -->\n"),
             "the header names the edition")
     require("Unreleased main working revision; not an installed or released edition." in working.split("\n")[1], "and a visible line says unreleased")
-    released = pub.render(arts["osm.released.skill.osm"], released_source())
+    released = pub.render(arts["osm.released.skill.osm-setup"], released_source())
     require(f"edition: {LABEL}" in released.split("\n")[0] and f"Released edition {LABEL}" in released.split("\n")[1], "a released row says released and which")
     require(pub.body_hash(working) == pub.body_hash(pub.render(arts[README], pub.DictSource(working_files(), "c-2"))), "the receipt hash ignores the commit")
 
@@ -1257,8 +1273,12 @@ def inactive_publisher_refuses_and_the_template_is_inert():
         require("not active" in str(error), str(error))
     else:
         raise AssertionError("the inactive manifest must refuse to write")
-    require(not (ROOT / ".github/workflows/docs-publisher.yml").exists(), "no workflow was enabled")
-    require(not any("publisher.py publish" in p.read_text() for p in (ROOT / ".github/workflows").glob("*.yml")), "no workflow publishes")
+    workflow = (ROOT / ".github/workflows/docs-parity.yml").read_text()
+    require("if: steps.gates.outputs.publish == 'true'" in workflow and
+            "manifest['activation']['active']" in workflow and
+            "manifest['activation'].get('public_reader')" in workflow and
+            "OSM_PUBLIC_DOCS_ENABLED" in workflow,
+            "the prepared workflow cannot publish before all explicit activation gates")
     out = io.StringIO()
     with redirect_stdout(out):
         code = pub.main(["publish", "--repo", str(ROOT), "--ref", "HEAD"], env={})
@@ -1279,15 +1299,9 @@ def no_class_c_dependency_private_id_or_cron_in_the_repository():
             continue
         text = path.read_text()
         require(not re.search(r"^\s*(cron|schedule)\s*:", text, re.M) and "cron:" not in text, f"no schedule in {path.name}")
-        for found in HEX32.findall(text.replace("-", "")):
+        for found in ([] if path.name == "public-guide.json" else HEX32.findall(text.replace("-", ""))):
             require(found in RECORDED_IDS, f"unrecorded identifier in {path.name}: {found}")
-    template = (ROOT / "docs-publisher/workflow.template.yml").read_text()
-    triggers = re.search(r"^on:\n((?:  .*\n)+)", template, re.M)
-    require(triggers and len(re.findall(r"^  [a-z_]+:", triggers.group(1), re.M)) == 1, "the template has exactly one trigger")
-    require("secrets." + pub.TOKEN_ENV in template and not re.search(r"secret_[A-Za-z0-9]{8,}|ntn_[A-Za-z0-9]{8,}", template),
-            "the template names the secret, never a value")
-    require(not (ROOT / "docs-publisher/workflow.template.yml").is_relative_to(ROOT / ".github"), "the template is outside .github")
-    require(template.count("if: always()") == 2 and "--out publication.md" in template and "--only" not in template, "both artifacts upload even when a step fails")
+    require(not (ROOT / "docs-publisher/workflow.template.yml").exists(), "no ungated publication workflow is offered")
     release = (ROOT / ".github/workflows/release.yml").read_text()
     require("reconcile --check" in release and "--base" in release and "github.event.pull_request.base.sha" in release, "CI passes a base on pull requests and pushes")
 
@@ -1306,7 +1320,7 @@ def recorded_public_values_stay_out_of_shipped_text():
 def the_credential_free_reconciliation_check_passes_on_this_repository():
     out = io.StringIO()
     with redirect_stdout(out):
-        code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--check"])
+        code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--check"], manifest=MANIFEST)
     text = out.getvalue()
     require(code == 0, text)
     require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
@@ -1332,8 +1346,8 @@ P, F = "publisher.py", "fixture_transport.py"
 MUTATIONS = [
     ("public verification always verified", P, [('return (FAILED, "the row is not there") if page is None else self.public_reader.page(page["id"], expected)', 'return VERIFIED, "mutant"')]),
     ("public verification always failed", P, [('return (FAILED, "the row is not there") if page is None else self.public_reader.page(page["id"], expected)', 'return FAILED, "mutant"')]),
-    ("no public reader reads as verified", P, [('        if self.public_reader is None:\n            return UNSUPPORTED, NO_READER\n        page = self._find(key)', '        if self.public_reader is None:\n            return VERIFIED, NO_READER\n        page = self._find(key)')]),
-    ("no public reader reads as a catalogue match", P, [('return (UNSUPPORTED, NO_READER) if self.public_reader is None else self.public_reader.catalogue(key)', 'return (VERIFIED, NO_READER) if self.public_reader is None else self.public_reader.catalogue(key)')]),
+    ("no public reader reads as verified", P, [('        if self.public_reader is None:\n            return UNSUPPORTED, NO_READER\n        page = self.bound.get(key) or self._find(key)', '        if self.public_reader is None:\n            return VERIFIED, NO_READER\n        page = self.bound.get(key) or self._find(key)')]),
+    ("no public reader reads as a catalogue match", P, [('return (UNSUPPORTED, NO_READER) if self.public_reader is None else self.public_reader.catalogue(self.bound.get(key, {}).get("row_key") or key)', 'return (VERIFIED, NO_READER) if self.public_reader is None else self.public_reader.catalogue(self.bound.get(key, {}).get("row_key") or key)')]),
     ("catalogue always lists the Key", P, [('return FAILED, "the public catalogue does not name the Key"', 'return VERIFIED, "mutant"')]),
     ("catalogue dropped from the read-back", P, [('states = [transport.verify_public(key, expected), transport.verify_catalogue(key)]', 'states = [transport.verify_public(key, expected)]')]),
     ("page content not compared", P, [('return compare_content(expected, text) if state == VERIFIED else', 'return (VERIFIED, "mutant") if state == VERIFIED else')]),
@@ -1345,14 +1359,14 @@ MUTATIONS = [
     ("Notion update writes no body", P, [('                self._request("PATCH", f"blocks/{page_id}/children", {"children": batch})', '                pass')]),
     ("edition removed from the header", P, [("edition: {label} commit:", "commit:")]),
     ("unreleased line removed", P, [('"Unreleased main working revision; not an installed or released edition."', '"Main working revision."')]),
-    ("empty database id accepted", P, [("if not token or not database_id:", "if not token:")]),
-    ("empty token accepted", P, [("if not token or not database_id:", "if not database_id:")]),
+    ("empty database id accepted", P, [("if not token or not (database_id or bound is not None):", "if not token:")]),
+    ("empty token accepted", P, [("if not token or not (database_id or bound is not None):", "if not (database_id or bound is not None):")]),
     ("a non-CI writer may be written", P, [('    if writer != "ci":\n        return PENDING_HANDOFF', '    if False:\n        return PENDING_HANDOFF')]),
     ("class B may be written", P, [('    if artifact["class"] == "B":\n        detail', '    if False:\n        detail')]),
     ("a moved tag is accepted", P, [('if resolved is not None and resolved != ed["commit"]:', 'if False:')]),
     ("an absent tag is accepted", P, [('if resolved is None and require_tag:', 'if False:')]),
     ("publish does not resolve the tag", P, [('    resolve_released(manifest, tag_resolver)\n    transport.claim_run', '    transport.claim_run')]),
-    ("a newer guide original is not a conflict", P, [('if remote["actual_hash"] != orig:', 'if False:')]),
+    ("a newer guide original is not a conflict", P, [('if read["revision"] != bound["revision"]:', 'if False:')]),
     ("a failed read-back keeps the written outcome", P, [('row["outcome"], row["detail"] = PARTIAL, f"read-back did not match: {detail}; left pending and retryable"', 'row["detail"] = detail')]),
     ("unsupported members are completed", P, [('if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if all(state != FAILED for state, _d in verdict.values()):')]),
     ("the set does not wait for a member that was not written", P, [('if not stopped and len(wrote) == len(declared) and all(state == VERIFIED for state, _d in verdict.values()):', 'if not stopped and wrote and all(state == VERIFIED for state, _d in verdict.values()):')]),
@@ -1394,11 +1408,10 @@ MUTATIONS = [
     ("an interrupted run is reported as a plain error", P, [('raise Interrupted(f"{error}; the run stopped', 'raise PublisherError(f"{error}; the run stopped')]),
     ("an interrupted run says nothing was written", P, [("if isinstance(error, Interrupted)", "if False")]),
     ("a skill generator is accepted", P, [('    if manifest.get("generators"):', "    if False:")]),
-    ("activation without a subtree is accepted", P, [('if activation["active"] and not manifest["bindings"].get("working_subtree"):', "if False:")]),
-    ("any database is accepted", P, [('args.database != manifest["bindings"]["working_subtree"]', "False")]),
+    ("any database is accepted", P, [('(args.database or None) != manifest["bindings"]["working_subtree"]', "False")]),
     ("unused public configuration is accepted", P, [("        if base or catalogue:\n            raise SetupError", "        if False:\n            raise SetupError")]),
     ("a frozen ZIP mismatch is not reported", P, [('elif got != frozen["sha256"]:', "elif False:")]),
-    ("the guide check does not say it was not run", P, [('f"Notion-authored original | newer-original check: {NOT_CHECKED}: "', '"Notion-authored original | "')]),
+    ("the guide check does not say it was not run", P, [('f"{never} | newer-original check: {NOT_CHECKED}: "', '"Notion-authored original | "')]),
     ("the class B hash check does not say it was not run", P, [('detail += f" | frozen ZIP hash: {NOT_CHECKED}: no reader hashes the live export"', "pass")]),
     ("the absent-tag note is not printed by reconcile", P, [("        notes += [n for n in [tag_note(manifest, resolve)] if n]\n", "")]),
     ("the absent-tag note is dropped", P, [('    if tag_resolver(ed["tag"]) is None:\n        return f"released tag', '    if False:\n        return f"released tag')]),

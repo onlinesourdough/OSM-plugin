@@ -1,225 +1,90 @@
 # Architecture
 
-OSM combines portable owner context with Agent Skills for onboarding, context, writing
-and collaboration. Native manifests load one root `skills/`
-directory. Focused helpers belong to their skills and run only for a selected
-task; OSM has no model runner, background service or permission system.
+OSM is the data and context module in an agent system. The host supplies
+models, tools, workspace, permissions and scheduling. OSM helps the agent
+retrieve relevant context, preserve lasting learning and keep it useful.
 
-| Boundary | Responsibility |
+The [public diagram](https://gustavanderson.notion.site/40d6d2e17f568113a397fb6ecd9b5fff)
+shows these responsibilities. Its [editable source](../assets/diagrams/osm-architecture.html)
+contains no private routes.
+
+## Seven skills
+
+| Skill | Responsibility |
 | --- | --- |
-| Native harness | Projects, sessions, models, tools, permissions and credentials |
-| Selected context home and its short entry | Relevant context, source links, decisions and personal skills |
-| Spaces | Selectively loaded business or brand context |
-| Skills | Reusable methods, standards and judgment, with references and small helpers as needed |
-| Project workspace | Local requirements, working files, outputs, proof and recovery; Git is selected when useful |
-| Optional System | A separately maintained specialist with its own dependencies or operational needs |
-| Native manifests | Package identity and discovery over the shared skill catalog |
-| Codex sidebar | A host-managed local MCP App for numbered source setup and a dashboard; stores private navigation names/links, with no company-content copy or chat handoff |
+| Setup | Connect the selected route and establish or reuse a useful home |
+| Prime | Read the definition and retrieve context the task needs |
+| Log | Save lasting decisions, corrections and learning at checkpoints |
+| Dreaming | Review recent and unfinished work, check selected sources and maintain context between sessions |
+| Interview | Explore material uncertainty in the goal when needed |
+| Human Writing | Write for the reader while preserving the author's voice and facts |
+| Council | Ask another agent for a review, second opinion or bounded contribution |
 
-## Work and methods
+Prime starts a configured session. Log runs at meaningful checkpoints or on
+request. Dreaming uses a person or an existing selected daily caller; it
+creates no timer. The other skills are selected when useful. The host and
+project own ordinary implementation, testing and delivery methods.
 
-Continue in the current task and workspace. Project instructions own the
-implementation, verification and delivery workflow. Use Council to request
-an independent review or a bounded contribution.
-Visual design uses an installed design method if the host provides one,
-otherwise direct work or a reported missing method. There is no chain
-configuration language, mandatory department model or fixed sequence between
-design and writing. Short writing uses human-writing directly.
+## The Notion home
 
-Content production and Diffusion Studio are not part of the package since 0.31.0.
-Their history stays as non-shipped [Content drafts](content-drafts/README.md); the
-design skills were retired in 0.29.0.
+The root begins with one Data & Context definition, then its native database
+references. The definition names sources, destinations, access, working
+agreements and maintenance routes.
 
-Use project-local `design/` and `content/` for working material and create them
-when needed. Product files belong where the project consumes them. Skill
-packages contain reusable methods and neutral assets, never customer work.
-Domain skills own briefs, evidence, review and handoff details; the core router
-only selects a method. See the [skill index](skills.md), the historical
-[content preservation map](content-preservation.md) and the historical
-[design preservation map](design-preservation.md) for the skills retired in 0.29.0.
+| Store | Responsibility |
+| --- | --- |
+| Knowledge | The person, business, offers, customers, voice, strategy, numbers and team |
+| Memory | Lasting decisions, corrections, constraints and their reasons and evidence |
+| Skills | The owner's reusable ways of working |
+| Content, when selected | Existing editorial context and links under its own workflow |
 
-An optional System is useful for a bounded specialist with independent upkeep,
-such as Power BI and its Windows Desktop workflow. Its repository owns its
-requirements, dependencies, proof and recovery. A script or a long skill alone
-does not require a System. The project chooses its workspace and context. A repository template is optional; it does not add
-a second project identity or copy OSM phases. Create System is retired;
-reusable methods use Manage Skills. Project Foundation was retired in 0.28.0;
-substantial software engineering foundations use a separately selected method,
-such as [Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation),
-or the gap is reported. OSM ships no replacement engineering contract.
+Setup reuses actual identities and suitable native types. Names and fields
+can vary. Source dates, imports, substantive revisions and justified review
+points retain their different meanings.
 
-[Agentic Systems](https://github.com/arcitai/agentic-systems) is a separate package of
-Foundation, AgentOps and ADLC methods for T3 Code and native coding agents.
-The operator may use it with an OSM-assisted project under the project's
-accepted scope. Neither package depends on or installs the other; there is no
-runtime integration, shared credential store or automatic software handoff. The
-selected execution environment owns its controls.
+CRM, accounting, files, messages, projects and histories retain their originals.
+They are read through selected routes when relevant.
 
-## Context and isolation
+## Retrieval and learning
 
-Owner context is selected when the work needs it. Independent repository work
-starts from local instructions and accepted inputs, including repositories
-nested beneath an owner home. No parent instruction file preloads personal data.
-Native project discovery does not depend on an OSM registry. Existing useful
-source indexes can remain ordinary context.
+Prime reads the definition and required controls once, queries relevant
+metadata, then reads selected bodies. Past decisions use scoped Memory;
+unfinished work may need the selected history or project source. Age helps
+compare similar evidence and does not replace relevance or source authority.
 
-Package versions and owner-data formats are separate; installation never
-migrates data. Notion is the only supported context home. A legacy folder, vault
-or `AIOS_FORMAT` home is recognized read-only and preserved; the
-[update reference](../skills/osm/references/update.md#legacy-file-and-vault-homes) gives
-the migration guidance and [legacy-file-home](legacy-file-home/README.md) keeps the
-retired format and Sync records for history.
+Log and Dreaming share the curation procedure. They reconcile existing records,
+preserve meaningful history, verify writes and leave unchanged records alone.
+Verified errors are corrected during work and noted for Dreaming. Daily review
+can recover missed learning and useful progress from unfinished or archived work.
 
-[Data & Context](../skills/osm-data-context/index.md) engineers the Notion home and
-owns the common home contract. A small host pointer supplies fresh-session
-discovery; the entry identifies authoritative sources, Spaces, personal methods
-and maintenance scope. Source systems retain their operational records and access
-control. External systems, local files and repositories are sources, not homes.
+Shared details are reference material, not additional discoverable skills:
+[home structure](../skills/osm-data-context/index.md),
+[retrieval and curation](../skills/osm-manage-data-context/index.md), and
+[personal methods](../skills/osm-manage-skills/index.md).
 
-Docs, Skills and Memory establish a context foundation. An operating model also
-needs workflows, responsibility, review points and evidence of useful outcomes.
-Start from one real workflow and add context where it improves that work. This
-package does not provision an ERP, data integration service or runtime memory engine.
+## Access and execution
 
-One owner per operation: Setup conducts onboarding and calls Data & Context for the
-home; Manage Data & Context retrieves and curates under the owner's recorded write
-policy, and delegates skill or method changes to Manage Skills, which owns
-personal-skill placement and native adoption. The `osm` entry hosts the read-only
-check, the update/rollback procedure and on-request model advice.
+The official Notion plugin is the normal owner route. A dedicated internal
+connection is optional for selected-page access needed by a team, worker or
+daily caller. Actual grants determine access; a label or prompt does not
+restrict another broader tool exposed by the host.
 
-## Capture, Dreaming and curation
+Codex's optional headless adapter is built from `apps/notion` into
+`runtime/notion`. It preserves existing local route and Keychain settings
+and supplies scoped reads and revision-checked mapping settings.
+See [connection contract](home-connection.md).
 
-The home starts with one compact definition and its native databases. The
-host's short entry link selects the home. [Prime](../skills/osm-prime/SKILL.md)
-reads the relevant route and sources when the task needs them.
-[Log](../skills/osm-log/SKILL.md) saves lasting changes at a checkpoint. Between
-tasks, [Dreaming](../skills/osm-dreaming/SKILL.md) uses the current definition
-to select changed, unfinished or archived work and due sources. It recovers
-missed decisions, repairs evidence-backed context errors and surfaces useful
-open progress in its existing destination. Log and Dreaming hand the write to
-[Manage Data & Context](../skills/osm-manage-data-context/index.md), the one
-curation owner. A genuine reusable method change goes to
-[Manage Skills](../skills/osm-manage-skills/index.md); a note does not become a
-skill by itself.
+A short AGENTS.md or CLAUDE.md entry selects Prime and the owner's URL,
+requests Log and prefers the host's built-in workspace. Business facts stay
+in the home. Independent projects retain their own instructions.
 
-```mermaid
-flowchart TB
-  SRC["Native histories and original business systems<br/>(they stay where they are)"]
-  TASK["Work in the host"]
-  PRIME["Prime<br/>find the relevant context"]
-  LOG["Log<br/>save lasting changes"]
-  COUNCIL["Council<br/>optional second opinion or help"]
-  DREAM["Dreaming<br/>select, reflect, check against source"]
-  MDC["Manage Data & Context<br/>the one curation owner"]
-  MSK["Manage Skills<br/>reusable method changes"]
-  NEXT["Next session<br/>reads only what the task needs"]
-  subgraph HOME["Selected Notion Data & Context home"]
-    ENTRY["Thin entry and definition"]
-    K["Knowledge"]
-    M["Memory"]
-    S["Skills"]
-    C["Existing Content<br/>optional, curated like any store"]
-  end
-  SRC -->|"selected evidence"| TASK
-  SRC -->|"completed or changed items"| DREAM
-  ENTRY --> PRIME --> TASK --> LOG
-  TASK -.-> COUNCIL
-  COUNCIL -.->|"findings or bounded work"| TASK
-  LOG -->|"lasting decisions and corrections"| MDC
-  DREAM -->|"proposed or authorized curation"| MDC
-  DREAM -->|"genuine method change"| MSK
-  MDC -->|"verified write"| K
-  MDC -->|"verified write"| M
-  MDC -.->|"verified write, only if selected"| C
-  MSK -->|"verified write"| S
-  ENTRY --> K
-  ENTRY --> M
-  ENTRY --> S
-  ENTRY -.-> C
-  ENTRY -->|"relevant context"| NEXT
-```
+## Collaboration and extensions
 
-- **Originals stay put.** Operational records and original histories keep their
-  own systems and access. Only the history and source routes the host can
-  actually read are used; an unavailable route is a reported gap, and
-  transcripts are never copied wholesale into the home.
-- **Thin entry.** A fresh session starts from the small entry and its
-  definition, then reads by metadata before bodies; see
-  [retrieval](../skills/osm-data-context/references/architecture.md#retrieval).
-- **Dreaming is a caller, not a service.** A person or an existing native
-  caller invokes it. It creates no schedule, store or caller, names no model,
-  and leaves unchanged content and its dates alone; see the
-  [maintenance loop](../skills/osm-data-context/references/architecture.md#maintenance-loop)
-  and [item and stage failures](../skills/osm-data-context/references/architecture.md#item-and-stage-failures)
-  for tracking active work. A completed turn can support a status update
-  while its active turn stays pending.
-- **Existing Content is curated like any store.** When the owner has selected a
-  Content collection, Manage Data & Context maintains it as a store of context
-  with the same lifecycle and write policy, without a Content module and without
-  creating one. Producing or publishing content belongs to the separate Content
-  method, not to Dreaming or to Manage Data & Context.
+Council passes only the task, relevant evidence, constraints, permitted actions
+and expected result. One writer owns each overlapping change. The caller
+checks returned work. A review and a bounded implementation are distinct tasks.
 
-This shows who owns what; it is not a runtime, an ingestion service or a claim
-that any run happened. Observed behavior and its limits are recorded in
-[verification](verification.md), and responsibilities in
-[ownership](ownership.md). The accepted architecture boards remain the design
-basis; this is their repository-native text form.
-
-## Selective loading
-
-The harness discovers skill names and descriptions. Load the selected skill,
-then only the references needed for its operation. Explaining a method does not
-execute its lifecycle. Model advice, only on request, assesses the remaining work under the
-user's configured default; worker orchestration is conditional on a concrete
-gain or a request through [Council](../skills/osm-council/SKILL.md). Shared continuation retains existing action authority.
-Risky Changes applies to consequential changes, without creating routine gates.
-
-Clarify is an included explanation method, separate from visual design. The
-Global Skills and Skills Atlas repositories are retained as public archives.
-Shape Offer and the former guardrail implementation are not included in OSM.
-Explicit protection requests use native harness controls and reviewed maintained
-capabilities; installation and actual active protection are verified separately.
-
-## Documentation and native installation
-
-The product repository owns OSM documentation. Its approved overview at
-`docs/osm.md` ships in the native package and states the matching package
-version. The primary OSM skill points to a small
-[documentation route](../skills/osm/references/documentation.md), which selects
-only the local overview or method reference needed for a question. Including a
-file in the package does not preload it into conversation context.
-
-Current releases, changed external facts and gaps in local documentation use the
-[canonical source route](../skills/osm/references/canonical-sources.md).
-The installed version stays distinct from upstream `main` and newer releases.
-Private source reads use already-authorized access. Local documentation and
-methods remain usable without that access or website availability.
-
-There is no OSM documentation runtime on the Resources domain. A public Notion guide is
-a versioned reference projection of released editions; keeping it aligned is the job of the
-source-only [publication pipeline](publication.md), which is not active.
-The [release procedure](distribution.md#release-and-adoption) checks package,
-overview and tag versions together before publishing a GitHub Release. Customer
-documentation remains in its source system; OSM retains only useful pointers,
-unique facts or explicit gaps. Private owner continuity remains a separate flow.
-
-The technical plugin identity is `osm` from 0.30.0; earlier releases used `aios`.
-The rename covers package, skill, MCP and display names only. Persisted owner
-state keeps its names so earlier builds and existing homes stay readable:
-the `<!-- AIOS:BEGIN -->` bridge block, its `.aios-lock` and
-`backups/aios-context`, and Codex panel links under `CODEX_HOME/aios/panel`; a
-legacy file home also keeps `AIOS.md`, `AIOS_FORMAT` and `~/.AIOS` read-only. Retired OSM 0.1.x packages are a different source;
-installations are classified by source and version, never by name. The README
-distinguishes the shared OSM plugin from the owner's personal context home.
-
-Codex, Pi, Claude Code, Gemini CLI, Copilot CLI and Cursor have native metadata
-for the same source. Installation affects only the chosen harness. It creates
-no owner home, global bridge, tool installation or registration in another app.
-Native removal leaves owner and project data intact. Custom-home routing is an
-optional setup choice. See [native installation](native-installation.md) for
-actual evidence and documented-only routes.
-
-Source tests verify structure and filesystem behavior. They are author tools,
-not proof of model behavior, native UI or future task quality. Historical
-acceptance remains version-specific. Current proof and its limits belong in
-[verification](verification.md).
+OSM Content is a separate optional method and library for shaping personal
+content workflows. Specialists keep their own tools and responsibilities.
+OSM installs no mandatory content editor, cloud service, model runner or
+engineering framework.

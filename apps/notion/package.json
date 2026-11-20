@@ -1,0 +1,23 @@
+{
+  "name": "osm-notion-build",
+  "version": "0.34.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test *.test.mjs && node smoke.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "1.7.5",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "dompurify": "3.4.18",
+    "marked": "18.2.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

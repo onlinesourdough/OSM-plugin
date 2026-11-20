@@ -22,6 +22,8 @@ PLUGIN_ID = "osm@online-sourdough"
 VERSION = json.loads((ROOT / "package.json").read_text())["version"]
 EXPECTED = {p.parent.name for p in (ROOT / "skills").glob("*/SKILL.md")}
 NEXT_VERSION = "99.0.0-rehearsal"
+DISPLAY_NAME = "OSM"
+ICON = "assets/icon.png"
 
 
 def require(condition, message):
@@ -41,20 +43,41 @@ def payload_hashes(root):
 def check_contract():
     plugin = read_json(ROOT / ".claude-plugin/plugin.json")
     market = read_json(ROOT / ".claude-plugin/marketplace.json")
-    require(set(plugin) == {"name", "version", "description", "author", "skills",
-                            "repository", "license"}, "Unexpected plugin fields")
+    require(set(plugin) == {"name", "displayName", "version", "description", "author",
+                            "homepage", "skills", "repository", "license", "keywords",
+                            "icon", "documentationUrl", "supportUrl"},
+            "Unexpected plugin fields")
     require(plugin["name"] == "osm" and plugin["version"] == VERSION,
             "Expected current OSM version")
     require(plugin["skills"] == "./skills/", "Canonical root skills required")
+    # Claude Code reads the display fields; only Anthropic's directory listing
+    # reads icon, documentationUrl and supportUrl.
+    require(plugin["displayName"] == DISPLAY_NAME, "Display name")
+    require(set(plugin["author"]) == {"name", "url"}, "Unexpected author fields")
+    links = [plugin[key] for key in ("homepage", "repository", "documentationUrl",
+                                     "supportUrl")] + [plugin["author"]["url"]]
+    require(all(isinstance(link, str) and link.startswith("https://") for link in links),
+            "Listing links must be https URLs")
+    keywords = plugin["keywords"]
+    require(isinstance(keywords, list) and keywords and
+            all(isinstance(word, str) and word for word in keywords) and
+            len(set(keywords)) == len(keywords), "Keywords must be distinct tags")
+    require(plugin["icon"] == "./" + ICON and (ROOT / ICON).is_file() and
+            not (ROOT / ICON).is_symlink(), "Listing icon must be the packaged file")
     require(set(market) == {"name", "owner", "metadata", "plugins"},
             "Unexpected marketplace fields")
     require(market["name"] == "online-sourdough", "Marketplace identity")
+    require(market["owner"] == plugin["author"],
+            "Marketplace owner differs from plugin author")
     require(len(market["plugins"]) == 1, "One plugin required")
     entry = market["plugins"][0]
     require(set(entry) == {"name", "source", "version", "description"},
             "Marketplace must not redefine components")
-    require(entry["name"] == "osm" and entry["source"] == "./" and
-            entry["version"] == plugin["version"], "Marketplace source/version")
+    # A display field set on the entry would override plugin.json; the entry sets
+    # only these, so the rest of the listing comes from the one manifest.
+    require(entry["source"] == "./" and
+            all(entry[key] == plugin[key] for key in ("name", "version", "description")),
+            "Marketplace source/version/description")
     skills = sorted((ROOT / "skills").glob("*/SKILL.md"))
     require({p.parent.name for p in skills} == EXPECTED, "Expected canonical skills")
     for skill in skills:
@@ -130,7 +153,8 @@ def rehearse(base, claude, install, names):
                     "Native details missing skill: " + name)
 
     inline = run("--plugin-dir", ROOT, "plugin", "details", "osm")
-    require("osm@inline" in inline and f"osm {VERSION}" in inline, "Inline identity/version")
+    require("osm@inline" in inline and f"{DISPLAY_NAME} (osm) {VERSION}" in inline,
+            "Inline display name/identity/version")
     inspect_details(inline)
     print("PASS: native inline discovery reports declared skills and zero agents/hooks/MCP servers")
     if not install:
@@ -143,6 +167,8 @@ def rehearse(base, claude, install, names):
     source.mkdir()
     for name in (".claude-plugin", "skills"):
         shutil.copytree(ROOT / name, source / name)
+    (source / ICON).parent.mkdir()
+    shutil.copy2(ROOT / ICON, source / ICON)
     overview = source / "docs/osm.md"
     overview.parent.mkdir(parents=True)
     shutil.copy2(ROOT / "docs/osm.md", overview)
@@ -169,9 +195,14 @@ def rehearse(base, claude, install, names):
         require(payload_hashes(cache) == payload_hashes(source), "Cached skill bytes differ")
         require((cache / "docs/osm.md").read_bytes() == overview.read_bytes(),
                 "Cached documentation differs")
+        require((cache / ICON).read_bytes() == (ROOT / ICON).read_bytes(),
+                "Cached listing icon differs")
         require(f"OSM version: {version}\n" in overview.read_text(),
                 "Installed documentation version differs")
-        inspect_details(run("plugin", "details", PLUGIN_ID))
+        details = run("plugin", "details", PLUGIN_ID)
+        require(f"{DISPLAY_NAME} (osm) {version}" in details,
+                "Installed display name/identity/version")
+        inspect_details(details)
         preserved()
 
     require(json.loads(run("plugin", "list", "--json")) == [], "Fixture not empty")

@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Source-only publisher for the public OSM documentation projection.
+"""Source-only publisher and parity check for the public OSM documentation.
 
-Not shipped in the package and not active. It builds a per-artifact impact diff from a frozen
-source commit, always returns a visible reconciliation result (a no-op is valid), and writes
-only artifacts whose public writer is CI. Everything else gets a visible refusal and no write.
+Not shipped in the package and not active. Ownership is per artifact. The public Notion guide pages are
+Notion-authored originals: they are frozen read-only, bound by page id and content revision, exported
+to Git deliberately (`export`) and never written from Git. Git-owned artifacts are written only where
+their public writer is CI. It builds a per-artifact impact diff from a frozen source commit and always
+returns a visible reconciliation result (a no-op is valid); everything else gets a visible refusal
+and no write.
 
 Standard library only. The Notion transport below has run only against the in-memory stand-in in
 fixture_transport.py (never against Notion) and stays fail-closed until the manifest says
@@ -12,6 +15,7 @@ no run can reach `complete` today: public access and catalogue membership are `u
 """
 
 import argparse
+import datetime
 import hashlib
 import html
 import html.parser
@@ -44,7 +48,9 @@ CONFLICT, BLOCKED, UNKNOWN_WRITE, RETIRED, PARTIAL = "conflict", "blocked", "unk
 UNSUPPORTED, HELD, UNREADABLE, REJECTED = "unsupported", "held", "unreadable", "rejected"
 REFUSED_UNREPRESENTABLE = "refused-unrepresentable"
 WOULD_WRITE, UNKNOWN_NO_RECEIPTS, NO_SOURCE_CHANGE = "would-write", "unknown-no-receipts", "no-source-change"
-OK_OUTCOMES = {WRITTEN, UNCHANGED, RESUMED, RETIRED, PENDING_HANDOFF, REFUSED_B, REFUSED_NOTION}
+NOT_PROVISIONED = "not-provisioned"
+UNVERIFIED_ORIGINAL = "unverified-original"
+OK_OUTCOMES = {WRITTEN, UNCHANGED, RESUMED, RETIRED, PENDING_HANDOFF, REFUSED_B, REFUSED_NOTION, NOT_PROVISIONED}
 NOT_COMPLETE = {PARTIAL, UNKNOWN_WRITE, UNSUPPORTED, HELD}   # results of a write; never reported with a stored `complete`
 PENDING_LIKE = ("pending", "partial", "unknown-write")
 
@@ -92,6 +98,10 @@ class RunInProgress(PublisherError):
     pass
 
 
+class SelectionError(PublisherError):
+    """A selector names nothing, or more than one thing, in the text it is applied to."""
+
+
 def sha256(data):
     return hashlib.sha256(data if isinstance(data, bytes) else data.encode()).hexdigest()
 
@@ -116,6 +126,14 @@ class GitSource:
     def files(self, prefix):
         names = self._git("ls-tree", "-r", "--name-only", "-z", self.commit, "--", prefix.rstrip("/")).split("\0")
         return {n: self._git("show", f"{self.commit}:{n}", raw=True) for n in names if n}
+
+    def paths(self):
+        return [n for n in self._git("ls-tree", "-r", "--name-only", "-z", self.commit).split("\0") if n]
+
+    def tags_here(self):
+        """Release tags on this commit itself: the release this build is cutting, if any."""
+        out = self._git("tag", "--points-at", self.commit, "--list", "v*").split("\n")
+        return [t for t in out if re.fullmatch(r"v\d+\.\d+\.\d+", t)]
 
     def changed_paths(self, base):
         try:
@@ -145,6 +163,32 @@ class DictSource:
     def files(self, prefix):
         return {k: v for k, v in sorted(self._files.items()) if k == prefix or k.startswith(prefix)}
 
+    def paths(self):
+        return sorted(self._files)
+
+
+class DirSource:
+    """The working tree as it is on disk: what `export` wrote, before it is committed."""
+
+    commit = "working-tree"
+
+    def __init__(self, root):
+        self.root = Path(root)
+
+    def exists(self, path):
+        return (self.root / path).is_file()
+
+    def files(self, prefix):
+        base = self.root / prefix.rstrip("/")
+        found = [base] if base.is_file() else sorted(p for p in base.rglob("*") if p.is_file()) if base.is_dir() else []
+        return {p.relative_to(self.root).as_posix(): p.read_bytes() for p in found}
+
+    def paths(self):
+        listed = subprocess.run(["git", "-C", str(self.root), "ls-files", "-z", "--cached", "--others", "--exclude-standard"], capture_output=True)
+        if listed.returncode == 0:
+            return [n for n in listed.stdout.decode().split("\0") if n and (self.root / n).is_file()]
+        return sorted(p.relative_to(self.root).as_posix() for p in self.root.rglob("*") if p.is_file())
+
 
 # --- manifest -------------------------------------------------------------------------------------
 
@@ -157,15 +201,13 @@ def validate_manifest(manifest):
     problems, keys = [], set()
     classes = set(manifest["classes"])
     for kind in manifest.get("ci_inputs", []):
-        if kind["kind"] not in {"git-commit", "ci-receipt"}:
+        if kind["kind"] not in {"git-commit", "ci-receipt", "notion-original-snapshot"}:
             problems.append(f"ci input outside the public sources: {kind['kind']}")
     if manifest.get("generators"):
         problems.append("a generator of skill rows is not allowed: skills stay Git-owned, with no second skill database")
     if "C" in {a.get("class") for a in manifest["artifacts"]}:
         problems.append("class C (private control) must not appear in the manifest")
     activation = manifest["activation"]
-    if activation["active"] and not manifest["bindings"].get("working_subtree"):
-        problems.append("activation requires bindings.working_subtree (the reviewed public database)")
     reader = activation.get("public_reader")
     if reader is not None and not (isinstance(reader, dict) and reader.get("reviewed_in")):
         problems.append("activation.public_reader must name the review that qualified it (reviewed_in)")
@@ -187,7 +229,48 @@ def validate_manifest(manifest):
             problems.append(f"{a['key']}: working rows are main-working")
         if a["public_writer"] not in manifest["writers"]:
             problems.append(f"{a['key']}: unknown writer")
+        problems += [f"{a['key']}: {problem}" for problem in binding_shape(a)]
+    pages = [a["notion"] for a in manifest["artifacts"] if a.get("notion")]
+    originals = {a["notion"] for a in manifest["artifacts"] if a["class"] == "G" and a.get("notion")}
+    problems += [f"page {page} is bound to more than one artifact" for page in sorted({p for p in pages if pages.count(p) > 1})]
+    problems += [f"{a['key']}: bound to the page of a Notion-authored original, which is never written from Git"
+                 for a in manifest["artifacts"] if a["class"] != "G" and a.get("notion") in originals]
     return problems
+
+
+def _selector_ok(selector):
+    return selector is None or (isinstance(selector, dict) and len({"fence", "section"} & set(selector)) == 1
+                                and not set(selector) - {"fence", "section", "index"})
+
+
+def binding_shape(a):
+    """Static rules of a source binding. A Notion original is bound by page id and content revision; a
+    Git-native artifact carries no provenance it does not have."""
+    out, digest = [], re.compile(r"[0-9a-f]{64}")
+    if a.get("notion") is not None and not re.fullmatch(r"[0-9a-f]{32}", str(a["notion"])):
+        out.append("notion must be a page id of 32 hexadecimal digits")
+    if a["class"] != "G":
+        if a.get("original") or a.get("exports"):
+            out.append("only a Notion-authored guide original carries an original binding or exports; a Git-native artifact needs no provenance")
+        handoff = (a.get("handoff") or {}).get("body_hash")
+        if handoff is not None and not (a.get("notion") and digest.fullmatch(str(handoff))):
+            out.append("a handoff records the body hash of the bound page it relinquishes")
+        return out
+    if a["owner"] != "notion" or a["public_writer"] != "notion-authored" or a["source_paths"] or not a.get("notion"):
+        out.append("a guide original is Notion-authored, bound to its page id, with no Git source path")
+    bound = a.get("original")
+    if bound is not None and not (bound.get("notion") == a.get("notion") and digest.fullmatch(str(bound.get("revision")))
+                                  and all(isinstance(bound.get(f), str) and bound[f] for f in ("edition", "reader", "read_at"))):
+        out.append("an original binding names its page id, content revision, edition, reader and read time")
+    for e in a.get("exports", []):
+        path = str(e.get("path") or "")
+        if not path or path.startswith("/") or ".." in path.split("/") or path.startswith(ORIGINALS + "/"):
+            out.append(f"export path {path!r} is not a repository path outside the frozen originals")
+        if not (_selector_ok(e.get("git")) and _selector_ok(e.get("notion"))):
+            out.append(f"{path}: a selector names one fence or one section")
+        if (e.get("sha256") is None) != (bound is None) or (e.get("sha256") is not None and not digest.fullmatch(str(e["sha256"]))):
+            out.append(f"{path}: an export hash is recorded with its bound original, never without one")
+    return out
 
 
 def expand(manifest, source=None):
@@ -241,6 +324,293 @@ def git_tag_resolver(repo):
                            capture_output=True, text=True)
         return r.stdout.strip() if r.returncode == 0 else None
     return resolve
+
+
+# --- Notion-authored originals: selection, snapshot, parity and export (Notion to Git only) --------
+
+ORIGINALS = "docs-publisher/originals"
+SNAPSHOT_FORMAT = 1
+API_READER = "notion-api-markdown-v2"
+SPLIT_FOLDERS = ("skills", "docs")      # mapped one level down; every other top-level folder is one unit
+SECRET = re.compile(r"(secret_|ntn_)[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----")
+_FENCE = re.compile(r"^([ \t]*)(`{3,})[ \t]*([^`]*?)[ \t]*$")
+_HEADING = re.compile(r"^(#{1,6})[ \t]+(.*?)[ \t]*$")
+
+
+def normalise(text):
+    """Line endings and the end of the text only; nothing inside a body is rewritten."""
+    return text.replace("\r\n", "\n").replace("\r", "\n").rstrip("\n") + "\n"
+
+
+def revision(body):
+    """The content revision of an original: the hash of its readable body as frozen."""
+    return sha256(normalise(body))
+
+
+def _fences(lines):
+    """(language, indent, first content line, closing line) of every closed fenced block."""
+    found, i = [], 0
+    while i < len(lines):
+        opened = _FENCE.match(lines[i])
+        end = opened and next((j for j in range(i + 1, len(lines)) if lines[j].strip() == opened[2]), None)
+        if end:
+            found.append((opened[3].lower(), len(opened[1]), i + 1, end))
+            i = end
+        i += 1
+    return found
+
+
+def _span(lines, selector):
+    """(first line, line after the last, indent) of the one thing a selector names."""
+    fenced = _fences(lines)
+    if "fence" in selector:
+        blocks = [f for f in fenced if f[0] == selector["fence"].lower()]
+        index = selector.get("index")
+        if not blocks or (index is None and len(blocks) > 1) or (index is not None and not 0 <= index < len(blocks)):
+            raise SelectionError(f"{len(blocks)} fenced {selector['fence']} block(s) found; the selector must name exactly one")
+        _language, indent, start, end = blocks[index or 0]
+        return start, end, indent
+    inside = {n for _l, _i, start, end in fenced for n in range(start - 1, end + 1)}
+    heads = [(n, len(m[1]), m[2]) for n, line in enumerate(lines) if n not in inside and (m := _HEADING.match(line))]
+    named = [(n, level) for n, level, title in heads if title == selector["section"]]
+    if len(named) != 1:
+        raise SelectionError(f"{len(named)} heading(s) named {selector['section']!r} found; the selector must name exactly one")
+    at, level = named[0]
+    start, end = at + 1, next((n for n, other, _t in heads if n > at and other <= level), len(lines))
+    while start < end and not lines[start].strip():
+        start += 1
+    while end > start and not lines[end - 1].strip():
+        end -= 1
+    return start, end, 0
+
+
+def select(text, selector=None):
+    """The selected text with one trailing newline; the whole text when there is no selector."""
+    if not selector:
+        return normalise(text)
+    lines = normalise(text).split("\n")[:-1]
+    start, end, indent = _span(lines, selector)
+    return "\n".join(line[indent:] if not line[:indent].strip() else line for line in lines[start:end]) + "\n"
+
+
+def replace_selection(text, selector, new):
+    """`text` with its selection replaced by `new`; everything outside the selection is kept byte for byte."""
+    if not selector:
+        return normalise(new)
+    lines = text.split("\n")
+    start, end, indent = _span(lines, selector)
+    pad = lines[start - 1][:indent] if "fence" in selector else ""
+    return "\n".join(lines[:start] + [pad + line if line else line for line in normalise(new).split("\n")[:-1]] + lines[end:])
+
+
+def guide_pages(manifest):
+    """The Notion-authored guide originals, by Key."""
+    return {a["key"]: a for a in manifest["artifacts"] if a["class"] == "G"}
+
+
+def frozen_path(key):
+    return f"{ORIGINALS}/{key}.md"
+
+
+def read_snapshot(data, manifest):
+    """Originals as read: a lead's exact tool-read bodies, or the output of `snapshot`. Returns pages by Key.
+
+    Only the body is trusted. The content revision is recomputed, and a stated one that differs is refused."""
+    if not isinstance(data, dict) or data.get("format") != SNAPSHOT_FORMAT or not isinstance(data.get("pages"), dict):
+        raise SetupError(f"a snapshot is an object with format {SNAPSHOT_FORMAT} and pages")
+    reader = data.get("reader")
+    if not isinstance(reader, str) or not reader.strip():
+        raise SetupError("a snapshot names the reader that read the bodies")
+    guide = guide_pages(manifest)
+    by_page = {a["notion"]: key for key, a in guide.items()}
+    pages = {}
+    for ref, page in data["pages"].items():
+        key = ref if ref in guide else by_page.get(str(ref).replace("-", "").lower())
+        if key is None:
+            raise SetupError(f"snapshot page {ref} is not a guide original in the manifest")
+        if key in pages:
+            raise SetupError(f"the snapshot names {key} twice")
+        if isinstance(page, dict) and page.get("notion") is not None and str(page["notion"]).replace("-", "").lower() != guide[key]["notion"]:
+            raise SetupError(f"snapshot page {key} names a different page identity")
+        if isinstance(page, dict) and (page.get("truncated") or page.get("unknown_block_ids") or page.get("warnings")):
+            raise SetupError(f"snapshot page {key} is incomplete or has unsupported content")
+        body = page.get("body") if isinstance(page, dict) else None
+        if not isinstance(body, str) or not body.strip():
+            raise SetupError(f"snapshot page {key} has no readable body")
+        if page.get("revision") not in (None, revision(body)):
+            raise SetupError(f"snapshot page {key} states a revision its body does not hash to")
+        pages[key] = {"notion": guide[key]["notion"], "title": page.get("title"), "last_edited_time": page.get("last_edited_time"),
+                      "body": normalise(body), "revision": revision(body)}
+    read_at = data.get("read_at") or datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    return {"format": SNAPSHOT_FORMAT, "reader": reader.strip(), "read_at": read_at, "pages": pages,
+            "errors": [str(e) for e in data.get("errors") or []]}
+
+
+def load_snapshot(path, manifest):
+    try:
+        data = json.loads(Path(path).read_text())
+    except (OSError, ValueError) as error:
+        raise SetupError(f"the snapshot could not be read: {error}") from None
+    return read_snapshot(data, manifest)
+
+
+def freeze(manifest, transport, read_at=None):
+    """Read every guide original through the API. Read-only; an unreadable page is an error entry, never an empty body."""
+    pages, errors = {}, []
+    for key, a in sorted(guide_pages(manifest).items()):
+        try:
+            page = transport.read_original(a["notion"])
+        except PublisherError as error:
+            errors.append(f"{key}: {error}")
+            continue
+        if not page["body"].strip():
+            errors.append(f"{key}: the page read back empty")
+            continue
+        pages[key] = {**page, "revision": revision(page["body"])}
+    read_at = read_at or datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    return {"format": SNAPSHOT_FORMAT, "reader": API_READER, "read_at": read_at, "pages": pages, "errors": errors}
+
+
+def original_as_read(artifact, originals):
+    """The original as a snapshot holds it; None when no snapshot was supplied."""
+    if originals is None:
+        return None
+    page = originals["pages"].get(artifact["key"])
+    if page is not None:
+        return {**page, "reader": originals["reader"]}
+    why = next((e for e in originals["errors"] if e.startswith(artifact["key"] + ":")), "it was not frozen")
+    return {"revision": None, "error": why}
+
+
+def original_state(artifact, source, read=None):
+    """(outcome, detail) for a Notion-authored guide original. Never a write, in either direction.
+
+    Without a snapshot it checks what Git holds: the frozen original hashes to the bound revision and each
+    declared export equals its selection of that original. With one it also compares the original as read."""
+    never, key = "Notion-authored original; never written", artifact["key"]
+    bound, exports = artifact.get("original"), artifact.get("exports", [])
+    if not bound:
+        return REFUSED_NOTION, (f"{never} | newer-original check: {NOT_CHECKED}: "
+                                "no revision is bound, so a later original and export parity are not detected")
+    label = f"bound to revision {bound['revision'][:12]} for {bound['edition']}"
+    frozen = b"".join(source.files(frozen_path(key)).values()).decode()
+    if not frozen or revision(frozen) != bound["revision"]:
+        return CONFLICT, f"{label}, but {frozen_path(key)} is missing or does not hash to it; a frozen original changes only through export"
+    for e in exports:
+        try:
+            want, have = select(frozen, e.get("notion")), select(b"".join(source.files(e["path"]).values()).decode(), e.get("git"))
+        except SelectionError as error:
+            return CONFLICT, f"{e['path']}: {error}"
+        if sha256(want) != e.get("sha256"):
+            return CONFLICT, f"{e['path']}: the recorded export hash is not its selection of the frozen original"
+        if have != want:
+            return CONFLICT, (f"{e['path']} differs from the bound original; a Notion-owned export changes only through export, "
+                              "after the original is edited in Notion")
+    agree = f"{label}; the frozen original and {len(exports)} export(s) agree"
+    if read is None:
+        return REFUSED_NOTION, f"{never} | {agree} | newer-original check: {NOT_CHECKED}: no snapshot was supplied"
+    if read.get("revision") is None:
+        return UNREADABLE, f"{label}; the original is not in the snapshot ({read.get('error')}), so it is not called unchanged"
+    for e in exports:               # the exported region itself compares whatever reader froze the page
+        try:
+            now = select(read["body"], e.get("notion"))
+        except SelectionError as error:
+            return CONFLICT, f"a newer original exists in Notion: it no longer holds the selection exported to {e['path']} ({error}); not overwritten"
+        if sha256(now) != e["sha256"]:
+            return CONFLICT, (f"a newer original exists in Notion: the selection exported to {e['path']} changed; export it deliberately, "
+                              "nothing is overwritten in either direction")
+    if read["reader"] != bound["reader"]:
+        return UNVERIFIED_ORIGINAL, (f"{never} | {agree} with the original as read | newer-original check: {NOT_CHECKED}: bound through "
+                                f"{bound['reader']} and read through {read['reader']}, so the body hashes are not comparable")
+    if read["revision"] != bound["revision"]:
+        return CONFLICT, (f"a newer original exists in Notion ({read['revision'][:12]}; {label}); export it deliberately, "
+                          "nothing is overwritten in either direction")
+    return REFUSED_NOTION, f"{never} | {agree} | read and unchanged"
+
+
+def content_folders(paths):
+    """The folders the map must cover: each top-level folder, with skills/ and docs/ taken one level down."""
+    out = set()
+    for path in paths:
+        parts = path.split("/")
+        if len(parts) > 1:
+            out.add("/".join(parts[:2 if parts[0] in SPLIT_FOLDERS and len(parts) > 2 else 1]) + "/")
+    return out
+
+
+def folder_problems(manifest, paths):
+    """Every method content folder names its public guide page; every technical folder states its role."""
+    folders, guide, out = manifest.get("folders") or {}, guide_pages(manifest), []
+    method_pages = set(guide) | {a["key"] for a in manifest["artifacts"] if a["class"] == "A" and a.get("notion")}
+    needed = content_folders(paths)
+    out += [f"folder {f} has no entry in the folder map: name its guide page or its technical role" for f in sorted(needed - set(folders))]
+    out += [f"folder map entry {f} names no folder at this commit" for f in sorted(set(folders) - needed)]
+    for folder, entry in sorted(folders.items()):
+        page, role = entry.get("page"), entry.get("role")
+        if (page is None) == (role is None) or (role is not None and not str(role).strip()):
+            out.append(f"folder {folder} names exactly one of a guide page or a technical role")
+        elif page is not None and page not in method_pages:
+            out.append(f"folder {folder} names {page}, which is not a bound public method page")
+        elif page is None and folder.startswith("skills/"):
+            out.append(f"folder {folder} is method content: it names its guide page, not a technical role")
+    return out
+
+
+def binding_problems(manifest, tag):
+    """A release being cut carries every guide original bound for that edition."""
+    edition, out = tag.lstrip("v"), []
+    for key, a in sorted(guide_pages(manifest).items()):
+        bound = a.get("original")
+        if not bound or bound["edition"] != edition:
+            out.append(f"release {tag}: {key} is {'bound for ' + bound['edition'] if bound else 'not bound'}; "
+                       f"freeze the guide originals and export them for {edition} before the tag")
+    return out
+
+
+def export_originals(root, manifest, snapshot, edition, keys=None, dry_run=False):
+    """Notion to Git only: bind each selected original (page id and content revision), freeze its readable
+    body and write its declared exports. Nothing is written unless every selected original binds exactly.
+    Returns the report rows; `manifest` is updated in place unless `dry_run`."""
+    root, guide, refused, files, bindings = Path(root), guide_pages(manifest), [], {}, []
+    for key in keys or sorted(snapshot["pages"]):
+        a, page = guide.get(key), snapshot["pages"].get(key)
+        if a is None:
+            refused.append(f"{key}: only a Notion-authored guide original is exported; a Git-owned artifact has no original to bind")
+            continue
+        if page is None:
+            refused.append(f"{key}: not in the snapshot")
+            continue
+        if SECRET.search(page["body"]):
+            refused.append(f"{key}: the body holds secret-like text; nothing is frozen into the repository")
+            continue
+        files[frozen_path(key)] = page["body"]
+        hashes = []
+        for e in a.get("exports", []):
+            try:
+                text = select(page["body"], e.get("notion"))
+                target = root / e["path"]
+                current = files[e["path"]] if e["path"] in files else (
+                    "" if not target.exists() and not e.get("git") else target.read_text())
+                files[e["path"]] = replace_selection(current, e.get("git"), text)
+                hashes.append(sha256(text))
+            except (SelectionError, OSError) as error:
+                refused.append(f"{key}: {e['path']}: {error}")
+        bindings.append((a, hashes, {"notion": a["notion"], "revision": page["revision"], "edition": edition, "reader": snapshot["reader"],
+                                     "read_at": snapshot["read_at"], "last_edited_time": page.get("last_edited_time")}))
+    if refused:
+        raise PublisherError("export refused; nothing was written: " + "; ".join(refused))
+    report = [{"key": a["key"], "notion": a["notion"], "revision": binding["revision"],
+               "previous": (a.get("original") or {}).get("revision")} for a, _h, binding in bindings]
+    changed = sorted(path for path, text in files.items() if not (root / path).is_file() or (root / path).read_text() != text)
+    if not dry_run:
+        for path in changed:
+            (root / path).parent.mkdir(parents=True, exist_ok=True)
+            (root / path).write_text(files[path])
+        for a, hashes, binding in bindings:
+            a["original"] = binding
+            for e, digest in zip(a.get("exports", []), hashes):
+                e["sha256"] = digest
+    return report, changed
 
 
 # --- rendering and the page body ------------------------------------------------------------------
@@ -395,11 +765,17 @@ def _hit(a, changed_paths):
     return any(p == pre or (pre.endswith("/") and p.startswith(pre)) for pre in a["source_paths"] for p in changed_paths)
 
 
+def _owned(a, path):
+    """A changed path that belongs to this artifact: its Git source, or the frozen original and exports of a guide page."""
+    return _hit(a, [path]) or (a["class"] == "G" and path in [frozen_path(a["key"])] + [e["path"] for e in a.get("exports", [])])
+
+
 def decide(artifact, source, remote, offline=None):
     """Outcome for one artifact before any write. Returns (outcome, detail, new_hash).
 
-    `remote` is the row as read (or None). `offline` is None when receipts were read, else
-    "unknown" (no base), "hit" or "miss" (a mapped path did or did not change since the base).
+    `remote` is the row as read (or None); for a Notion-authored guide original it is the original as a
+    snapshot holds it. `offline` is None when receipts were read, else "unknown" (no base), "hit" or
+    "miss" (a mapped path did or did not change since the base).
     """
     writer = artifact["public_writer"]
     if artifact["class"] == "B":
@@ -408,15 +784,7 @@ def decide(artifact, source, remote, offline=None):
             detail += f" | frozen ZIP hash: {NOT_CHECKED}: no reader hashes the live export"
         return REFUSED_B, detail, None
     if writer == "notion-authored":
-        orig = (artifact.get("before_source") or {}).get("original_hash")
-        if not orig or remote is None:
-            return REFUSED_NOTION, (f"Notion-authored original | newer-original check: {NOT_CHECKED}: "
-                                    "no recorded original hash or no readable row, so a later edition is not detected"), None
-        if remote.get("actual_hash") is None:
-            return UNREADABLE, "Notion-authored original could not be read, so it is not called unchanged", None
-        if remote["actual_hash"] != orig:
-            return CONFLICT, "a newer original exists in Notion; not overwritten", None
-        return REFUSED_NOTION, "Notion-authored original, read and unchanged", None
+        return (*original_state(artifact, source, remote), None)
     if writer != "ci":
         return PENDING_HANDOFF, f"public writer is {writer}; CI writes nothing until the handoff", None
     body = render(artifact, source)
@@ -436,6 +804,12 @@ def decide(artifact, source, remote, offline=None):
         if offline == "miss" and artifact["edition"] != "released":
             return NO_SOURCE_CHANGE, "no mapped source path changed since the base", new
         return UNKNOWN_NO_RECEIPTS, "no base or no receipts: whether the row changes is unknown", new
+    if remote is not None and remote.get("unclaimed"):
+        # An existing public page bound by id that carries no CI receipt: only the recorded handoff state is replaced.
+        if not remote.get("handoff_ok"):
+            return BLOCKED, (f"the bound page carries no CI receipt and its body ({str(remote.get('actual_hash'))[:12]}) is not the "
+                             "recorded handoff state; not overwritten"), new
+        return WRITTEN, "first write after the recorded handoff of the bound page", new
     if remote is None:
         if artifact["class"] == "A":
             return BLOCKED, "no row with this Key; an existing row has none, so a first write would duplicate it", new
@@ -460,11 +834,12 @@ def decide(artifact, source, remote, offline=None):
     return WRITTEN, "source changed" if status == "complete" else "source returned for a retired row", new
 
 
-def plan(manifest, source, transport=None, changed_paths=None, released_source=None, only=None, base=None):
+def plan(manifest, source, transport=None, changed_paths=None, released_source=None, only=None, base=None, originals=None):
     """Impact diff and per-artifact outcomes. Reads only; never writes.
 
     `changed_paths` is None when no base was given. Released-edition rows read the frozen released
-    source, never the working commit. `only` limits the run to one Key.
+    source, never the working commit. `only` limits the run to one Key. `originals` is a frozen
+    snapshot of the guide originals, or None. Only a row CI owns is looked up through the transport.
     """
     artifacts = expand(manifest)
     if only:
@@ -479,7 +854,12 @@ def plan(manifest, source, transport=None, changed_paths=None, released_source=N
     for a in artifacts:
         use = (released_source or source) if a["edition"] == "released" else source
         remote = None
-        if transport is not None:
+        if a["public_writer"] == "notion-authored":
+            remote = original_as_read(a, originals) if a["class"] == "G" else None
+        elif transport is not None and a["public_writer"] == "ci":
+            if not a.get("notion") and getattr(transport, "database_id", True) is None:
+                add(a, NOT_PROVISIONED, "the optional working projection has no database (bindings.working_subtree is null); nothing is written for it", None)
+                continue
             try:
                 remote = transport.get(a["key"])
             except (AccessError, DuplicateKey) as error:
@@ -516,7 +896,7 @@ def plan(manifest, source, transport=None, changed_paths=None, released_source=N
                         rows.append({"key": key, "class": "W", "outcome": RETIRED, "hash": None, "remote": row,
                                      "detail": f"renamed to {new_key}" if new_key else "no longer in the source"})
     paths = changed_paths or []
-    unmapped = [p for p in paths if not any(_hit(a, [p]) for a in expand(manifest))]
+    unmapped = [p for p in paths if not any(_owned(a, p) for a in expand(manifest))]
     skills = sorted({"/".join(p.split("/")[:2]) for p in paths if p.startswith("skills/")})
     return {"commit": source.commit, "rows": sorted(rows, key=lambda r: r["key"]), "base": base,
             "unmapped_changes": [p for p in unmapped if not p.startswith("skills/")], "changed_skills": skills,
@@ -566,6 +946,11 @@ def reconciliation_text(result, active=False, title="Documentation reconciliatio
             lines.append("Result: no documentation impact (a valid no-op).")
         if result.get("affected_set"):
             lines.append("Affected set: " + ", ".join(result["affected_set"]))
+    guide = [r for r in rows if r["class"] == "G"]
+    if guide:
+        bound = [r for r in guide if "bound to revision" in r["detail"]]
+        lines += ["", f"Guide originals (Notion-authored, never written): {len(bound)} of {len(guide)} bound to a content revision; "
+                      f"{len([r for r in guide if r['outcome'] not in OK_OUTCOMES])} not in agreement."]
     lines += ["", "| Outcome | Artifacts |", "| --- | --- |"]
     lines += [f"| {k} | {v} |" for k, v in sorted(counts.items())]
     quiet = (UNCHANGED, PENDING_HANDOFF, REFUSED_B, REFUSED_NOTION, NO_SOURCE_CHANGE, UNKNOWN_NO_RECEIPTS)
@@ -606,8 +991,11 @@ def _write_row(transport, a, row, use, run_id):
     # A resume keeps the original before-source; only a verified row's receipt becomes the next before-source.
     before = (remote.get("receipt_before") or None) if remote and remote["status"] in PENDING_LIKE \
         else (remote["receipt_after"] if remote else None)
+    claimed = not (remote or {}).get("unclaimed")
+    if not claimed:
+        before = remote["actual_hash"]      # the handed-over body is the before-source of the first write
     try:
-        if remote:
+        if remote and claimed:
             transport.set_status(a["key"], "pending", receipt_before=before, receipt_after=digest, commit=use.commit, run_id=run_id)
         transport.upsert(a["key"], render(a, use), digest, "ci", use.commit, receipt_before=before, receipt_after=digest)
     except UnknownWrite as error:
@@ -644,7 +1032,7 @@ def _read_back(transport, key, row, expected):
     return (UNSUPPORTED, detail) if any(s == UNSUPPORTED for s, _d in states) else (VERIFIED, detail)
 
 
-def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=False, released_source=None, only=None):
+def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=False, released_source=None, only=None, originals=None):
     """One serialized, idempotent run. Returns the plan rows with their final outcomes.
 
     The released tag is resolved here, not assumed. Order per CI-owned row: mark pending (before/after
@@ -654,10 +1042,17 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
     """
     if not (manifest["activation"]["active"] or allow_fixture):
         raise PublisherError("the publisher is not active; refusing to write")
+    if any(a.get("original") for a in guide_pages(manifest).values()) and originals is None:
+        raise PublisherError("bound guide originals require a comparable snapshot before publication")
+    if not allow_fixture and any(a["class"] == "A" and a["public_writer"] == "ci" for a in manifest["artifacts"]):
+        raise PublisherError("native released-skill packet publication is not qualified; class A must stay with existing-upkeep")
     resolve_released(manifest, tag_resolver)
     transport.claim_run(run_id)
     try:
-        result = plan(manifest, source, transport, released_source=released_source, only=only)
+        result = plan(manifest, source, transport, released_source=released_source, only=only, originals=originals)
+        guide_errors = [r for r in result["rows"] if r["class"] == "G" and r["outcome"] not in OK_OUTCOMES]
+        if guide_errors:
+            raise PublisherError(f"guide original parity failed for {guide_errors[0]['key']}; no publication writes were attempted")
         arts = {a["key"]: a for a in expand(manifest)}
         rows = {r["key"]: r for r in result["rows"]}
         use = lambda a: (released_source or source) if a["edition"] == "released" else source
@@ -739,6 +1134,25 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 API_OPENER = urllib.request.build_opener(_NoRedirect).open
 PROPERTY_NAMES = {"key": "Key", "writer": "Writer", "status": "Status", "receipt_before": "ReceiptBefore",
                   "receipt_after": "ReceiptAfter", "body_hash": "BodyHash", "commit": "Commit"}
+RECEIPT = "osm-doc-receipt"
+READABLE = {"paragraph": "", "heading_1": "# ", "heading_2": "## ", "heading_3": "### ", "bulleted_list_item": "- ",
+            "numbered_list_item": "1. ", "to_do": "- [ ] ", "quote": "> ", "callout": "> "}
+
+
+def receipt_line(fields):
+    """A bound page's receipt: the row fields a database row keeps in properties, as one paragraph of the page."""
+    return " | ".join([RECEIPT] + [f"{name}: {fields.get(name) or '-'}" for name in PROPERTY_NAMES])
+
+
+def parse_receipt(line):
+    pairs = [part.partition(": ") for part in line.split(" | ")[1:]]
+    return {name: "" if value == "-" else value for name, _sep, value in pairs if name in PROPERTY_NAMES}
+
+
+def bound_rows(manifest):
+    """Git-owned rows bound to an existing public page by id. They need no database."""
+    return {a["key"]: {"id": a["notion"], "handoff": (a.get("handoff") or {}).get("body_hash"), "row_key": a.get("row_key")}
+            for a in manifest["artifacts"] if a.get("notion") and a["owner"] == "git"}
 
 
 class NotionTransport:
@@ -747,19 +1161,24 @@ class NotionTransport:
     It has run only against the in-memory stand-in in fixture_transport.py, never against Notion.
     There is no run lock here: serialization rests on the workflow's concurrency group alone.
     Without an enabled `public_reader`, public access and catalogue membership are `unsupported`.
+
+    A row lives in the working database, found by its Key, or on an existing public page bound by id
+    (`bound`), which needs no database: its receipt is one paragraph of that page and its body is every
+    other block. `bound={}` alone allows a database-free transport for bound rows and read-only originals.
     """
 
-    def __init__(self, database_id, opener=None, env=None, public_reader=None, api_base=API_BASE):
+    def __init__(self, database_id, opener=None, env=None, public_reader=None, api_base=API_BASE, bound=None):
         token = (env if env is not None else os.environ).get(TOKEN_ENV, "")
-        if not token or not database_id:
-            raise MissingCredential(f"{TOKEN_ENV} and a public-subtree database id are required; nothing was sent")
-        self._token, self.database_id, self.api_base = token, database_id, api_base
+        if not token or not (database_id or bound is not None):
+            raise MissingCredential(f"{TOKEN_ENV} and a public-subtree database id or page bindings are required; nothing was sent")
+        self._token, self.database_id, self.api_base = token, database_id or None, api_base
         self.public_reader, self._open, self._title = public_reader, opener or API_OPENER, None
+        self.bound = bound if bound is not None else {}
 
-    def _request(self, method, path, payload=None):
+    def _request(self, method, path, payload=None, *, version=None):
         data = json.dumps(payload).encode() if payload is not None else None
         req = urllib.request.Request(self.api_base + path, data=data, method=method, headers={
-            "Authorization": f"Bearer {self._token}", "Notion-Version": NOTION_VERSION, "Content-Type": "application/json"})
+            "Authorization": f"Bearer {self._token}", "Notion-Version": version or NOTION_VERSION, "Content-Type": "application/json"})
         try:
             with self._open(req, timeout=TIMEOUT) as response:
                 raw = response.read() or b"{}"
@@ -791,6 +1210,10 @@ class NotionTransport:
         return self._title
 
     def _find(self, key):
+        if key in self.bound:
+            return {"id": self.bound[key]["id"]}
+        if self.database_id is None:
+            raise AccessError(f"no database is configured and {key} is not bound to a page; nothing was sent for it")
         self._schema()
         found = self._request("POST", f"databases/{self.database_id}/query",
                               {"filter": {"property": "Key", "rich_text": {"equals": key}}, "page_size": 2}).get("results", [])
@@ -811,8 +1234,26 @@ class NotionTransport:
     def _text(props, name):
         return "".join(t.get("plain_text", "") for t in props.get(name, {}).get("rich_text", []))
 
+    def _page_row(self, key):
+        """A row bound to an existing page: (page id, receipt block or None, body blocks)."""
+        page_id = self.bound[key]["id"]
+        blocks = self._children(page_id)
+        receipts = [b for b in blocks if b.get("type") == "paragraph" and block_line(b).startswith(RECEIPT)]
+        if len(receipts) > 1 or (receipts and parse_receipt(block_line(receipts[0])).get("key") != key):
+            raise DuplicateKey(f"the page bound to {key} carries more than one receipt, or another Key's; refusing to choose one")
+        return page_id, (receipts[0] if receipts else None), [b for b in blocks if b not in receipts]
+
+    def _write_receipt(self, block_id, fields):
+        self._request("PATCH", f"blocks/{block_id}", {"paragraph": blocks_for(receipt_line(fields))[0]["paragraph"]})
+
     def get(self, key):
         """The row's properties plus the hash of the page body as actually read (None if it could not be)."""
+        if key in self.bound:
+            _page_id, receipt, body = self._page_row(key)
+            row = {**{field: "" for field in PROPERTY_NAMES}, "actual_hash": body_hash(read_back_text(body)), "body_error": None}
+            if receipt is None:     # an existing page CI has not claimed: only its recorded handoff state may be replaced
+                return {**row, "unclaimed": True, "handoff_ok": row["actual_hash"] == self.bound[key].get("handoff")}
+            return {**row, **parse_receipt(block_line(receipt))}
         page = self._find(key)
         if page is None:
             return None
@@ -825,6 +1266,8 @@ class NotionTransport:
         return row
 
     def list_keys(self):
+        if self.database_id is None:
+            return []       # bound pages are named by the manifest; nothing else on them is CI's to list
         self._schema()
         out, cursor = [], None
         while True:
@@ -841,9 +1284,11 @@ class NotionTransport:
 
     def upsert(self, key, body, digest, writer, commit, receipt_before=None, receipt_after=None):
         """Create the row already pending, or replace an existing row's children; BodyHash is written last."""
-        title, existing = self._schema(), self._find(key)
         blocks = blocks_for(body)
         batches = [blocks[i:i + BATCH] for i in range(0, len(blocks), BATCH)]
+        if key in self.bound:
+            return self._upsert_bound(key, batches, digest, dict(key=key, writer=writer, commit=commit), receipt_before, receipt_after)
+        title, existing = self._schema(), self._find(key)
         if existing is None:
             props = {title: {"title": [{"type": "text", "text": {"content": key}}]},
                      **self._props(key=key, writer=writer, status="pending", commit=commit,
@@ -855,6 +1300,13 @@ class NotionTransport:
             page_id = existing["id"]
             self._request("PATCH", f"pages/{page_id}", {"properties": self._props(key=key, writer=writer, commit=commit)})
             old, rest, changed = [b["id"] for b in self._children(page_id)], batches, False
+        self._replace_body(page_id, old, rest, changed)
+        try:
+            self._request("PATCH", f"pages/{page_id}", {"properties": self._props(body_hash=digest)})
+        except NotApplied as error:
+            raise UnknownWrite(f"the body was written but BodyHash was not recorded: {error}") from None
+
+    def _replace_body(self, page_id, old, rest, changed):
         try:
             for block_id in old:
                 self._request("DELETE", f"blocks/{block_id}")
@@ -866,12 +1318,45 @@ class NotionTransport:
             if changed:
                 raise PartialWrite(f"some of the page body changed before: {error}") from None
             raise
+
+    def _upsert_bound(self, key, batches, digest, fields, receipt_before, receipt_after):
+        """The same order on a bound page: claim or mark the receipt, replace every other block, record the body hash last.
+        The first write after a handoff appends the receipt pending before anything is removed, so a cut run resumes."""
+        page_id, receipt, body = self._page_row(key)
+        if receipt is None:
+            fields = dict(fields, status="pending", receipt_before=receipt_before, receipt_after=receipt_after)
+            receipt = self._request("PATCH", f"blocks/{page_id}/children", {"children": blocks_for(receipt_line(fields))})["results"][0]
+        else:
+            fields = {**parse_receipt(block_line(receipt)), **fields}
+            self._write_receipt(receipt["id"], fields)
+        self._replace_body(page_id, [b["id"] for b in body], batches, False)
         try:
-            self._request("PATCH", f"pages/{page_id}", {"properties": self._props(body_hash=digest)})
+            self._write_receipt(receipt["id"], dict(fields, body_hash=digest))
         except NotApplied as error:
-            raise UnknownWrite(f"the body was written but BodyHash was not recorded: {error}") from None
+            raise UnknownWrite(f"the body was written but the receipt's body hash was not recorded: {error}") from None
+
+    def read_original(self, page_id):
+        """Read one explicit public guide page through Notion's lossless Markdown API.
+
+        The version is explicit. Unsupported/truncated content is a failure, never a
+        complete snapshot; child page links are not recursively followed.
+        """
+        page = self._request("GET", f"pages/{page_id}")
+        rendered = self._request("GET", f"pages/{page_id}/markdown?markdown_version=v2", version="2026-03-11")
+        if (rendered.get("object") != "page_markdown" or not isinstance(rendered.get("markdown"), str)
+                or rendered.get("truncated") or rendered.get("unknown_block_ids") or rendered.get("warnings")):
+            raise NotApplied("the guide Markdown read is incomplete or has unsupported content")
+        title = next(("".join(t.get("plain_text", "") for t in prop.get("title", []))
+                      for prop in page.get("properties", {}).values() if prop.get("type") == "title"), "")
+        return {"notion": page_id, "title": title, "last_edited_time": page.get("last_edited_time"), "body": rendered["markdown"]}
 
     def set_status(self, key, status, **fields):
+        if key in self.bound:
+            _page_id, receipt, _body = self._page_row(key)
+            if receipt is None:
+                raise PublisherError(f"no receipt on the page bound to {key} to mark {status}")
+            current = parse_receipt(block_line(receipt))
+            return self._write_receipt(receipt["id"], {**current, "status": status, **{k: v for k, v in fields.items() if v is not None and k in PROPERTY_NAMES}})
         existing = self._find(key)
         if existing is None:
             raise PublisherError(f"no row with the Key {key} to mark {status}")
@@ -880,11 +1365,11 @@ class NotionTransport:
     def verify_public(self, key, expected):
         if self.public_reader is None:
             return UNSUPPORTED, NO_READER
-        page = self._find(key)
+        page = self.bound.get(key) or self._find(key)
         return (FAILED, "the row is not there") if page is None else self.public_reader.page(page["id"], expected)
 
     def verify_catalogue(self, key):
-        return (UNSUPPORTED, NO_READER) if self.public_reader is None else self.public_reader.catalogue(key)
+        return (UNSUPPORTED, NO_READER) if self.public_reader is None else self.public_reader.catalogue(self.bound.get(key, {}).get("row_key") or key)
 
     def claim_run(self, run_id):
         return None
@@ -913,6 +1398,55 @@ def _emit(text, out):
     sys.stdout.write(text)
 
 
+def _snapshot(args, manifest, problems, opener, env):
+    """Freeze the guide originals through the API. Read-only: page and block GETs, nothing else."""
+    if problems:
+        print("manifest problems:", *problems, sep="\n  ")
+        return 1
+    try:
+        frozen = freeze(manifest, NotionTransport(None, opener=opener, env=env, bound={}))
+    except MissingCredential as error:
+        print(f"MISSING ACCESS: {error} No original was read and no snapshot was written.")
+        return 3
+    Path(args.out).write_text(json.dumps(frozen, indent=1, ensure_ascii=False, sort_keys=True) + "\n")
+    print(f"froze {len(frozen['pages'])} of {len(guide_pages(manifest))} guide originals (read-only); {len(frozen['errors'])} unreadable")
+    for error in frozen["errors"]:
+        print(f"UNREADABLE {error}")
+    return 4 if frozen["errors"] else 0
+
+
+def _export(args, manifest):
+    """Notion to Git only. The one command that changes a frozen original, an export or a binding."""
+    root = Path(args.repo)
+    path = root / "docs-publisher" / "manifest.json"
+    try:
+        manifest = manifest or load_manifest(path)
+        problems = validate_manifest(manifest)
+        if problems:
+            raise PublisherError("manifest problems: " + "; ".join(problems))
+        snapshot = load_snapshot(args.snapshot, manifest)
+        edition = args.edition or json.loads((root / "package.json").read_text())["version"]
+        report, changed = export_originals(root, manifest, snapshot, edition, args.key, args.dry_run)
+        if not args.dry_run:
+            path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+            wrong = [f"{key}: {detail}" for key, (outcome, detail) in ((r["key"], original_state(guide_pages(manifest)[r["key"]], DirSource(root)))
+                                                                      for r in report) if outcome not in OK_OUTCOMES]
+            if wrong:
+                raise PublisherError("the export was written but does not read back in agreement: " + "; ".join(wrong))
+    except (PublisherError, OSError, ValueError, KeyError) as error:
+        print(f"EXPORT REFUSED: {error}")
+        return 1
+    print(f"# Export of guide originals (Notion to Git only){' - dry run, nothing written' if args.dry_run else ''}\n")
+    print(f"Edition: {edition}. Reader: {snapshot['reader']}. Read at: {snapshot['read_at']}.\n")
+    print("| Key | Page id | Content revision | Before |\n| --- | --- | --- | --- |")
+    for r in report:
+        before = "not bound" if r["previous"] is None else "same revision" if r["previous"] == r["revision"] else r["previous"]
+        print(f"| {r['key']} | {r['notion']} | {r['revision']} | {before} |")
+    print("\n" + ("Files that differ from the working tree: " + ", ".join(f"`{c}`" for c in changed) if changed
+                  else "Every frozen original and export already equals the working tree."))
+    return 0
+
+
 def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -923,6 +1457,17 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
     rec.add_argument("--only", help="limit the result to one Key")
     rec.add_argument("--out")
     rec.add_argument("--check", action="store_true", help="exit non-zero on a manifest or source problem")
+    rec.add_argument("--snapshot", help="frozen guide originals (a lead's tool-read bodies or the output of `snapshot`) to compare with their bindings")
+    rec.add_argument("--worktree", action="store_true", help="read the working tree instead of --ref: what `export` wrote, before it is committed")
+    rec.add_argument("--release-tag", help="apply the rule of a release being cut: every guide original is bound for this edition")
+    snap = sub.add_parser("snapshot", help="freeze the guide originals through the API (read-only); fails closed without the credential")
+    snap.add_argument("--out", required=True)
+    exp = sub.add_parser("export", help="Notion to Git only: bind frozen guide originals by page id and content revision and write their exports")
+    exp.add_argument("--repo", default=str(HERE.parent))
+    exp.add_argument("--snapshot", required=True, help="frozen guide originals: the exact bodies as read, by page id or Key")
+    exp.add_argument("--key", action="append", help="limit the export to this guide original (repeatable); default: every page in the snapshot")
+    exp.add_argument("--edition", help="the package edition these originals explain; default: the version in package.json")
+    exp.add_argument("--dry-run", action="store_true", help="report what would be bound and written; write nothing")
     pub = sub.add_parser("publish", help="write CI-owned rows; fails closed without activation and a credential")
     pub.add_argument("--repo", default=str(HERE.parent))
     pub.add_argument("--ref", default="HEAD")
@@ -932,11 +1477,23 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
     pub.add_argument("--run-id", default=os.environ.get("GITHUB_RUN_ID", "local"))
     pub.add_argument("--only", help="the one-row route for a bounded proof: publish only this Key")
     pub.add_argument("--out", help="write the post-publish result here, also when the run fails")
+    pub.add_argument("--snapshot", help="frozen guide originals to compare with their bindings in the same run")
     args = parser.parse_args(argv)
+    if args.command == "export":
+        return _export(args, manifest)
     manifest = manifest or load_manifest()
     problems = validate_manifest(manifest)
-    source = GitSource(args.repo, args.ref)
+    if args.command == "snapshot":
+        return _snapshot(args, manifest, problems, opener, env)
     released = manifest["editions"]["released"]
+    try:
+        originals = load_snapshot(args.snapshot, manifest) if args.snapshot else None
+        if args.command == "reconcile" and args.worktree and args.base:
+            raise SetupError("--worktree reads the files on disk and has no base to compare with")
+    except PublisherError as error:
+        print(f"ERROR: {error}")
+        return 2
+    source = DirSource(args.repo) if args.command == "reconcile" and args.worktree else GitSource(args.repo, args.ref)
     if args.command == "reconcile":
         resolve, notes = git_tag_resolver(args.repo), []
         try:
@@ -945,6 +1502,10 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
             problems.append(str(error))
         notes += [n for n in [tag_note(manifest, resolve)] if n]
         problems += release_problems(manifest, source)
+        problems += folder_problems(manifest, source.paths())
+        cutting = [args.release_tag] if args.release_tag else [t for t in (source.tags_here() if hasattr(source, "tags_here") else [])
+                                                                if _version(t) > _version(released["tag"])]
+        problems += [p for tag in cutting for p in binding_problems(manifest, tag)]
         frozen = GitSource(args.repo, released["commit"])
         for a in manifest["artifacts"]:
             if a["edition"] == "released":
@@ -953,11 +1514,12 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
                         problems.append(f"{a['key']}: nothing at {prefix} in {released['label']}")
         try:
             changed = source.changed_paths(args.base) if args.base and set(args.base) != {"0"} else None
-            result = plan(manifest, source, None, changed, released_source=frozen, only=args.only, base=args.base)
+            result = plan(manifest, source, None, changed, released_source=frozen, only=args.only, base=args.base, originals=originals)
         except PublisherError as error:
             print(f"ERROR: {error}")
             return 2
-        result["notes"] = notes
+        result["notes"] = notes + ([f"guide originals compared with a snapshot read through {originals['reader']} at {originals['read_at']}"] if originals else [])
+        problems += [f"{r['key']}: {r['detail']}" for r in result["rows"] if r["class"] == "G" and r["outcome"] not in OK_OUTCOMES]
         _emit(reconciliation_text(result, manifest["activation"]["active"]), args.out)
         for p in problems:
             print(f"PROBLEM: {p}")
@@ -967,12 +1529,12 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
         return 1
     title = "Documentation publication"
     try:
-        if manifest["activation"]["active"] and args.database != manifest["bindings"]["working_subtree"]:
+        if manifest["activation"]["active"] and (args.database or None) != manifest["bindings"]["working_subtree"]:
             raise SetupError("--database is not the reviewed working subtree recorded in the manifest")
-        transport = NotionTransport(args.database, opener=opener, env=env,
+        transport = NotionTransport(args.database, opener=opener, env=env, bound=bound_rows(manifest),
                                     public_reader=build_reader(manifest, args.public_base, args.public_catalogue, opener))
         result = publish(manifest, source, transport, args.run_id, tag_resolver or git_tag_resolver(args.repo),
-                         released_source=GitSource(args.repo, released["commit"]), only=args.only)
+                         released_source=GitSource(args.repo, released["commit"]), only=args.only, originals=originals)
     except PublisherError as error:
         _emit(f"# {title}\n\nFAIL-CLOSED: {error}\n\n" + ("Rows may have been written before it stopped; read the job log.\n" if isinstance(error, Interrupted)
                                                          else "Nothing was written.\n"), args.out)

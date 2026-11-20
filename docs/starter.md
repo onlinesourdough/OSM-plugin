@@ -37,14 +37,12 @@ under the studio's own account and scope.
 
 ### Database fields to start with
 
-Reuse equivalent fields on an existing database. This table shows suggested
-names and Notion types for a new home.
-
-| Database | Starter fields | Add when useful |
-| --- | --- | --- |
-| Knowledge | Name (Title), Summary (Text), Space (Multi-select), Kind (Select), Temporal scope (Select), Evidence from (Multi-select), Status (Select). For managed entries, Key and Source (Text). | Evidence period, Revised, Review due (Date). Preserve existing Type and Category values. |
-| Memory | Name (Title), Key (Text), Status (Select), Source (Text with the evidence reference), Space (Multi-select). | Type (Select), Source date, Imported, Revised, Review due (Date), Related docs (Relation). Where Source is already a client label, keep it and record the exact reference in Evidence (Text). |
-| Skills | Skill name (Title), Description (Text), Space (Multi-select), Status and Audience (Select). | Files (Files & media), Owner (Person), and Key and Source (Text) for managed skills. |
+Reuse equivalent fields on an existing database. The Notion-authored
+[database field definitions](../skills/osm-data-context/assets/database-fields.md)
+name useful starting fields, optional additions and their meanings. They are
+exported with the definition template; no second starter schema is maintained.
+Preserve an existing Source client label, use Evidence for the actual provenance,
+and keep creating, editing, source, import and revision dates distinct.
 
 Use `Current` for records selected for normal use with supporting evidence,
 `Needs review` when the evidence is missing, disputed or contradicted, and
@@ -96,21 +94,38 @@ sources between sessions, corrects supported errors and leaves live values in
 their source systems.
 
 ```mermaid
-flowchart LR
-  HOME["Notion · Data & Context<br/>Definition, Knowledge, Memory, Skills"]
-  SOURCES["Original sources<br/>Project files, CRM, finance, work history"]
-  PRIME["Prime"]
-  TASK["Work in your agent"]
-  LOG["Log"]
-  DREAM["Dreaming · daily if scheduled"]
-  COUNCIL["Council · optional second opinion"]
-  HOME --> PRIME --> TASK --> LOG --> HOME
-  SOURCES -->|"Relevant evidence"| PRIME
-  SOURCES -->|"Recent work and due checks"| DREAM
-  HOME -->|"Definition and existing records"| DREAM
-  DREAM -->|"Verified repairs and useful progress"| HOME
-  TASK -.-> COUNCIL
-  COUNCIL -.->|"Findings or bounded help"| TASK
+flowchart TB
+  SETUP["Setup · establish or reuse the home"]
+  SOURCES["Selected original sources<br/>Files, messages, projects, CRM, accounting and native work history"]
+  subgraph AGENT["Your agent app · models, tools, workspace and permissions"]
+    PRIME["Prime"]
+    WORK["Your work"]
+    LOG["Log · meaningful checkpoints"]
+    INTERVIEW["Interview · when direction is unclear"]
+    WRITING["Human Writing · when writing"]
+    COUNCIL["Council · review or bounded help"]
+    PRIME --> WORK --> LOG
+    INTERVIEW -.-> WORK
+    WRITING -.-> WORK
+    WORK <-.-> COUNCIL
+  end
+  subgraph HOME["Your Notion Data & Context home"]
+    DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
+    KNOWLEDGE["Knowledge"]
+    MEMORY["Memory"]
+    SKILLS["Personal or team Skills"]
+    CONTENT["Content · when selected"]
+    DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
+    DEFINITION -.-> CONTENT
+  end
+  DREAM["Dreaming · between sessions<br/>Daily through a selected caller"]
+  SETUP --> HOME
+  HOME -->|"Relevant context"| PRIME
+  SOURCES -->|"Task evidence"| PRIME
+  LOG -->|"Verified lasting context"| HOME
+  HOME -->|"Definition and current records"| DREAM
+  SOURCES -->|"Changed, unfinished or due work"| DREAM
+  DREAM -->|"Recover learning, consolidate and repair"| HOME
 ```
 
 When resuming or migrating, start from the same Notion home and verify its

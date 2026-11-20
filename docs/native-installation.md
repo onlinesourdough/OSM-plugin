@@ -148,7 +148,7 @@ the plugin.
 | --- | --- |
 | `docs/osm.md` | Version-matched local overview, selected through the OSM documentation route |
 | `.codex-plugin/plugin.json` | Codex identity, interface and native Setup skill |
-| `.codex-plugin/mcp.json` | Codex sidebar MCP server declaration; the bundled runtime is `runtime/sidebar` |
+| `.codex-plugin/mcp.json` | Optional scoped Notion adapter declaration; bundled as `runtime/notion` |
 | `.agents/plugins/marketplace.json` | Codex repository marketplace |
 | `.claude-plugin/plugin.json` and `marketplace.json` | Claude Code and Copilot-compatible plugin distribution |
 | `.cursor-plugin/plugin.json` | Cursor-format compatibility metadata |
@@ -158,17 +158,18 @@ the plugin.
 Every native declaration selects the same `skills/` source. Codex uses
 `.codex-plugin/plugin.json`, and the package omits a portable root `plugin.json`
 that would take precedence over it. The package ships no `.app.json`, Notion app
-binding, auth wrapper or second Notion server: the optional official Notion
+binding, auth wrapper or second Notion server: the official Notion
 plugin is a separate installation with its own connection, and OSM's own
 connection never adopts its credentials. Claude/Copilot, Cursor, Gemini and Pi
 retain their native metadata. There are no executable extensions, hooks, settings
 payloads or duplicated instruction bodies. See [onboarding evidence](archive/issue-38-onboarding.md).
 
-From 0.21.0, Codex also loads the explicitly declared local sidebar MCP from
-`.codex-plugin/mcp.json`. Node.js 22+ must be on the execution host's PATH;
-connection checks use its signed-in Codex CLI. The panel has no hosted service
-or consumer dependency-install step. Other client manifests still expose skills
-only. See [sidebar setup and recovery](sidebar.md).
+Codex also declares OSM's optional local Notion adapter in
+`.codex-plugin/mcp.json`. Node.js 22+ must be on the host's PATH. The bundled
+adapter serves selected-connection tools without a hosted service or a consumer
+dependency-install step. It is separate from the official Notion plugin and
+never adopts that plugin's credentials. Other client manifests expose skills
+only. See [Notion access and recovery](sidebar.md).
 
 [Data & Context](../skills/osm-data-context/index.md) resolves the chosen home independently
 of installation. Use its [short host pointer](../skills/osm-data-context/assets/bridge.md)

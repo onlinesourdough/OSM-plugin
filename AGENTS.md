@@ -1,6 +1,6 @@
 # OSM
 
-Revision: 2026-10-11
+Revision: 2026-11-19
 
 Build and operate the smallest independent Project that creates this outcome:
 
@@ -26,7 +26,7 @@ Keep one writer per overlapping change and verify the selected checkout first.
 
 - `skills/` holds the shipped product skills. Edit them as product code and
   maintain each skill's metadata [SemVer](docs/skill-versioning.md).
-- `apps/sidebar` is the Codex sidebar source. `runtime/sidebar` is its
+- `apps/notion` contains the public guide reader and optional scoped Notion adapter. `runtime/notion` is its
   reproducible build; never edit it by hand.
 - Native manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`,
   `gemini-extension.json`), `package.json` and `docs/osm.md` keep one
@@ -39,16 +39,18 @@ Keep one writer per overlapping change and verify the selected checkout first.
 
 ## Checks
 
-Sidebar, with Node.js 22 or later:
+Optional Notion adapter, with Node.js 22 or later:
 
 ```sh
-npm ci --prefix apps/sidebar --ignore-scripts
-npm run build --prefix apps/sidebar
-git diff --exit-code -- runtime/sidebar
-npm test --prefix apps/sidebar
+python3 docs-publisher/build-guide.py
+git diff --exit-code -- docs-publisher/public-guide.json
+npm ci --prefix apps/notion --ignore-scripts
+npm run build --prefix apps/notion
+git diff --exit-code -- runtime/notion
+npm test --prefix apps/notion
 ```
 
-The build must leave no `runtime/sidebar` diff. Package and documentation:
+The build must leave no `runtime/notion` diff. Package and documentation:
 
 ```sh
 python3 tests/validate.py
@@ -61,6 +63,7 @@ python3 tests/context-footprint.py
 python3 tests/responsibility-rehearsal.py
 python3 tests/context-architecture-rehearsal.py
 python3 tests/publisher-rehearsal.py
+python3 tests/publisher-parity.py
 python3 tests/consumer-selection-rehearsal.py
 python3 docs-publisher/publisher.py reconcile --check
 ```

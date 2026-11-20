@@ -1,15 +1,12 @@
 # OSM's internal Notion connection
 
-Revision: 2026-11-10
+Revision: 2026-11-19
 
-Home reads the owner's mapped Notion records through the connection mode the
-projection records (#82, #74). This release implements one mode,
-`internal_selected_pages`: OSM's own internal connection. The other mode,
-`official_notion_user`, uses the separate official Notion plugin, which stays
-an optional installation for the user; Home shows that it can't read through it
-in this view yet. That transport is a separate decision tied to #61. Home never
-switches mode, and never routes a read through another connection, including
-after a denial.
+The official Notion plugin is the normal owner-setup route. OSM's optional
+headless adapter reads mapped records through a dedicated internal connection
+when the owner selects `internal_selected_pages`. In `official_notion_user`
+mode, use the separate official plugin. The adapter never changes that choice
+or borrows another connector after a denial.
 
 ## What the connection is
 
@@ -17,8 +14,8 @@ An [internal connection](https://developers.notion.com/guides/get-started/intern
 is a workspace bot that reads only the pages and databases explicitly shared
 with it, and their children. Its
 [capabilities](https://developers.notion.com/reference/capabilities) control
-reading, inserting and updating separately. Home needs **Read content** only.
-That describes this panel alone. Home being a read-only view neither limits nor
+reading, inserting and updating separately. The adapter needs **Read content** only.
+That describes its remote operations alone. The adapter being read-only neither limits nor
 implies the owner's recorded write policy for agents and the maintenance job,
 which the Context Architecture's
 [home write policy](../skills/osm-data-context/references/architecture.md#home-write-policy)
@@ -32,11 +29,11 @@ Grants Setup asks the owner for:
 - the OSM root page, which covers its child pages and child databases;
 - each existing database the model links to outside that root, such as a team
   Memory or Skills database, shared separately. A link from the model is not a
-  grant, and Home reports such a source as inaccessible until it is shared.
-  Even when shared, Home lists it only when its ancestry up to the workspace
+  grant, and the adapter reports such a source as inaccessible until it is shared.
+  Even when shared, the adapter lists it only when its ancestry up to the workspace
   can be read within the support check's bound. Otherwise it is refused as
   unresolved. This is item (a), pending an owner decision; see
-  [Home](sidebar.md#home).
+  [connection limits](sidebar.md#optional-scoped-notion-adapter).
 
 A scoped connection limits only itself. If the same agent can also call a
 broader Notion route, such as the official plugin, OSM's scope does not fence
@@ -51,22 +48,14 @@ for Enterprise ([adding and managing connections](https://www.notion.com/help/ad
 no API to grant an existing internal integration access to pages, and OSM adds none: no
 permission writes, no private endpoint, no admin token and no simulated editor.
 
-Settings → **Manage access in Notion** only opens Notion, through the host's open-link
-contract (the browser by default). It opens the connection's own access page when Setup saved
-a link for it together with the bot and workspace it was verified for, and only while the live
-connection is that same bot and workspace; otherwise it opens the verified home page in Notion
-and says to follow the Settings path. Notion documents no URL for a connection's access page,
-so none is built from identifiers, and a link to a developer page that shows the credential is
-refused. If the host cannot open the link, Settings says so and claims nothing. After a
-successful open, the first real return (a focus or visibility change at least a second and a
-half later) runs one fresh status and access check, never a poll. That check is Manage access's
-only refresh: closing Settings adds none. Whether access changed is what that check reads, not
-what the button did. If OSM is not listed yet, the first share is the
-page's ••• → Connections menu.
+Setup may retain the connection's own access-page link with the bot and workspace
+identity it was verified for. The adapter returns it only while the live identity
+matches. Never construct a credential/developer URL from identifiers. Open native
+Notion pages through the host's built-in workspace when supported.
 
 ## API contract
 
-The adapter (`apps/sidebar/notion-internal.mjs`) sends `Notion-Version:
+The adapter (`apps/notion/notion-internal.mjs`) sends `Notion-Version:
 2026-03-11` ([versioning](https://developers.notion.com/reference/versioning),
 [2026-03-11 upgrade guide](https://developers.notion.com/guides/get-started/upgrade-guide-2026-03-11))
 and uses only these read endpoints:
@@ -81,11 +70,7 @@ and uses only these read endpoints:
 
 Bounds:
 
-- Title search queries use the mapped title property and saved view filter in
-  an AND intersection, with at most five results per mapped source. Page-list
-  search filters verified titles. Related and support routes are never searched;
-  pasted links reveal no metadata before membership/containment pass. No global
-  search or separate connector is used.
+- No global search or fallback to another connector is implemented.
 - Lists read ten results per request and follow `next_cursor` only when asked.
   `request_status.type: "incomplete"` is shown as a partial list, and no total
   is ever computed.
@@ -118,15 +103,14 @@ connection:
 | 429 | retry later. Notion's `Retry-After` is capped at 60 s. There is no automatic retry ([request limits](https://developers.notion.com/reference/request-limits)). |
 | Other | unavailable |
 
-Every Home call reads the identity again. A different bot or workspace from the
-mapping returns `account_changed`, and the panel then clears its lists, bodies
-and sections.
+Every adapter call reads the identity again. A different bot or workspace
+returns `account_changed` and no record data.
 
 ## Host credential route (macOS Keychain)
 
 The route reads one generic-password item from the macOS Keychain, service
 `com.onlinesourdough.osm.notion` and account `osm`, through the absolute system
-`security` executable with a fifteen-second bound (`apps/sidebar/credential.mjs`), long enough for the slower first read after the Keychain was idle or locked (measured at about seven seconds on a real Mac), and short enough to fit a tool call's default sixty-second budget beside the Notion identity read. A read that never answers is stopped and reported as `keychain_timeout`. The
+`security` executable with a fifteen-second bound (`apps/notion/credential.mjs`), long enough for the slower first read after the Keychain was idle or locked (measured at about seven seconds on a real Mac), and short enough to fit a tool call's default sixty-second budget beside the Notion identity read. A read that never answers is stopped and reported as `keychain_timeout`. The
 secret stays in the server closure and never reaches Home, tools, errors or saved
 files. The credential is the existing selected internal connection's own; OSM never
 creates it, copies another tool's, or reads another item.
@@ -166,8 +150,7 @@ in chat, a terminal, the frontend or a file, read or copy the maintenance tool's
 official plugin's credential, or create another connection. This is guidance; OSM
 provisions nothing and asks for no second selection of the mode or the root.
 
-**Why it can or cannot be used.** `osm_connection`, Home's gate and the Settings
-check name the actual reason:
+**Why it can or cannot be used.** `osm_connection` names the actual reason:
 
 | State | Meaning | Next |
 | --- | --- | --- |
@@ -198,18 +181,15 @@ applies the support check and the grant. A root longer than the read bound retur
 `truncated: true`, and nothing is mapped from a partial definition. A damaged projection
 or the official mode never opens this path.
 
-Home and the agent's `osm_connection`, `osm_context_home`, `osm_context_list` and
+The agent's `osm_connection`, `osm_context_home`, `osm_context_list` and
 `osm_context_read` share the same service and identity checks. These are read
 operations only. The source mapping is an application boundary, not a complete
 inventory of Notion grants or a restriction on other installed connectors.
 
-The preferred human onboarding is browser OAuth with OSM's own registered
-integration and Notion's native page picker. The current Connect dialog honestly
-states that browser sign-in is not configured; that does not block the working internal route,
-and the macOS Keychain route above is the supported first-use path today. The registration, owner decisions,
-callback and token-custody proposal, plus why hosted MCP PKCE is not an equivalent
-scope, are in [browser connection architecture](notion-browser-connection.md). No
-shared client secret, new app, account or backend is included or activated here.
+Normal onboarding uses the official Notion plugin. A dedicated connection is
+optional for an actual selected-page access need. OSM implements no browser OAuth
+service. The earlier [browser connection proposal](notion-browser-connection.md)
+is design history and does not describe a required setup step.
 
 ## Proven and unproven
 

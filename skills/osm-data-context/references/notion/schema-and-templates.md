@@ -69,6 +69,12 @@ keys; new managed items may use scoped prefixes. Ordinary documents need no
 artificial key. Source records the exact original source/owner decision and date;
 unknown dates stay unknown. An original Source document can own its provenance.
 Keep source date, import date and last check distinct.
+An existing Memory `Source` may identify the creating agent client rather than
+the evidence. Preserve that meaning and its values; use the existing `Evidence`
+field for provenance and `Last updated by` for the editing client where selected.
+Do not replace those fields with another copy of Source. The guide's bound
+[database field definitions](../../assets/database-fields.md) describe this split
+and the useful starter fields; existing sufficient equivalents remain valid.
 
 Revised and Review due are optional date properties, selected only where the
 owner wants them; the meanings are in the architecture's

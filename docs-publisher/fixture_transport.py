@@ -11,8 +11,8 @@ import io
 import json
 import urllib.error
 
-from publisher import (NO_READER, UNSUPPORTED, AccessError, PartialWrite, PublisherError, RunInProgress, UnknownWrite,
-                       body_hash, catalogue_lists_key, compare_content)
+from publisher import (NO_READER, RECEIPT, UNSUPPORTED, AccessError, PartialWrite, PublisherError, RunInProgress, UnknownWrite,
+                       body_hash, catalogue_lists_key, compare_content, parse_receipt)
 
 
 class FixtureTransport:
@@ -148,7 +148,8 @@ class _Response:
 
 class FakeNotion:
     """A small in-memory opener for `NotionTransport`: a database of pages with rich-text properties and
-    paragraph children. Not Notion. `log` uses the same entries as FixtureTransport.log."""
+    paragraph children, plus existing pages bound by id whose receipt is one paragraph of the page.
+    Not Notion. `log` uses the same entries as FixtureTransport.log."""
 
     PROPS = ("Key", "Writer", "Status", "ReceiptAfter", "ReceiptBefore", "BodyHash", "Commit")
 
@@ -157,6 +158,7 @@ class FakeNotion:
         self.title, self.api_base, self.public_base, self.catalogue_url = title, api_base, public_base, catalogue_url
         self.timeouts = []
         self.pages, self.blocks = {}, {}      # id -> {"props": {name: text}, "children": [ids]} ; id -> block
+        self.kids = {}                        # block id -> child block ids, for a nested block of an original
         self.log, self.requests = [], []      # requests: (method, url, Authorization header)
         self.access = "ok"                    # ok | expired | missing
         self.fail = None                      # ("unknown" | "partial" | "unknown-landed", key)
@@ -176,6 +178,25 @@ class FakeNotion:
         self.blocks[bid] = {"object": "block", "id": bid, "type": "paragraph", "has_children": False, "paragraph": {"rich_text": (
             [{"type": "text", "text": {"content": text}, "plain_text": text}] if text else [])}}
         return bid
+
+    def block(self, kind, text="", children=(), **data):
+        """Any block type, for an original read as text. `children` are block ids."""
+        bid = self._id("b")
+        rich = [{"type": "text", "text": {"content": text}, "plain_text": text}] if text else []
+        self.blocks[bid] = {"object": "block", "id": bid, "type": kind, "has_children": bool(children), kind: {"rich_text": rich, **data}}
+        self.kids[bid] = list(children)
+        return bid
+
+    def existing_page(self, key, lines=(), title=None):
+        """A public page that is not a database row: bound by id. `key` is this stand-in's own bookkeeping, not a property."""
+        pid = self._id("p")
+        self.pages[pid] = {"props": {"Key": key}, "title": title or key, "children": [self._block(line) for line in lines], "bound": True}
+        return pid
+
+    def receipt(self, key):
+        """The receipt fields on a bound page, or None."""
+        lines = [line for line in self.body(key).split("\n") if line.startswith(RECEIPT)]
+        return parse_receipt(lines[0]) if lines else None
 
     def page_for(self, key):
         return next((pid for pid, p in self.pages.items() if p["props"].get("Key") == key), None)
@@ -246,6 +267,12 @@ class FakeNotion:
             return self._create(request, payload)
         if parts[0] == "pages" and method == "PATCH":
             return self._patch_page(request, parts[1], payload)
+        if parts[0] == "pages" and method == "GET" and parts[1] in self.pages:
+            page = self.pages[parts[1]]
+            return _Response({"id": parts[1], "last_edited_time": page.get("edited", "2026-11-19T20:00:00.000Z"),
+                              "properties": {"title": {"type": "title", "title": [{"plain_text": page["title"]}]}}})
+        if parts[0] == "blocks" and len(parts) == 2 and method == "PATCH":
+            return self._patch_block(request, parts[1], payload)
         if parts[0] == "blocks" and parts[2:] == ["children"]:
             return self._children(request, method, parts[1], query, payload)
         if parts[0] == "blocks" and method == "DELETE":
@@ -264,7 +291,7 @@ class FakeNotion:
 
     def _query(self, payload):
         wanted = (payload.get("filter") or {}).get("rich_text", {}).get("equals") if payload.get("filter") else None
-        ids = [pid for pid, p in self.pages.items() if wanted is None or p["props"].get("Key") == wanted]
+        ids = [pid for pid, p in self.pages.items() if not p.get("bound") and (wanted is None or p["props"].get("Key") == wanted)]
         if wanted is not None:
             self.log.append(("get", wanted))
         start = int(payload.get("start_cursor", 0))
@@ -312,17 +339,40 @@ class FakeNotion:
         return _Response({"id": pid})
 
     def _children(self, request, method, pid, query, payload):
-        page, key = self.pages[pid], self.pages[pid]["props"].get("Key")
         if method == "GET":
+            every = self.pages[pid]["children"] if pid in self.pages else self.kids[pid]
             args = dict(p.split("=") for p in query.split("&") if p)
             start, size = int(args.get("start_cursor", 0)), int(args.get("page_size", 100))
-            ids = page["children"][start:start + size]
-            more = start + size < len(page["children"])
+            ids = every[start:start + size]
+            more = start + size < len(every)
             return _Response({"results": [self.blocks[i] for i in ids], "has_more": more, "next_cursor": str(start + size) if more else None})
+        page, key = self.pages[pid], self.pages[pid]["props"].get("Key")
+        texts = ["".join(t["text"]["content"] for t in b["paragraph"]["rich_text"]) for b in payload["children"]]
+        if len(texts) == 1 and texts[0].startswith(RECEIPT):       # a bound page is claimed: the row is created pending
+            page["children"].append(self._block(texts[0]))
+            self.log.append(("status", key, parse_receipt(texts[0])["status"]))
+            return _Response({"results": [self.blocks[page["children"][-1]]]})
         self._mutation(request, key)
-        page["children"] += [self._block("".join(t["text"]["content"] for t in b["paragraph"]["rich_text"])) for b in payload["children"][:len(payload["children"]) - (self.corrupt == key)]]
+        page["children"] += [self._block(text) for text in texts[:len(texts) - (self.corrupt == key)]]
         self.log.append(("upsert", key))
         return _Response({"results": []})
+
+    def _patch_block(self, request, bid, payload):
+        """Only a receipt paragraph is ever updated in place."""
+        owner = next(p for p in self.pages.values() if bid in p["children"])
+        key, old = owner["props"].get("Key"), parse_receipt(self.blocks[bid]["paragraph"]["rich_text"][0]["plain_text"])
+        text = "".join(t["text"]["content"] for t in payload["paragraph"]["rich_text"])
+        new = parse_receipt(text)
+        landed = self.fail and self.fail[0] == "unknown-landed" and self.fail[1] == key and new["body_hash"] != old["body_hash"]
+        self.blocks[bid]["paragraph"]["rich_text"] = [{"type": "text", "text": {"content": text}, "plain_text": text}]
+        if new["body_hash"] != old["body_hash"]:
+            self.log.append(("body-hash", key))
+        if new["status"] != old["status"]:
+            self.log.append(("status", key, new["status"]))
+        if landed:
+            self.fail = None
+            raise urllib.error.URLError("fake connection dropped after the write landed")
+        return _Response({"id": bid})
 
     def _delete(self, request, bid):
         if bid in self.pages:     # archiving a page: nothing in the publisher should ever do this

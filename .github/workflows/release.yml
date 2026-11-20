@@ -37,13 +37,15 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: apps/sidebar/package-lock.json
-      - name: Build and verify the bundled sidebar
+          cache-dependency-path: apps/notion/package-lock.json
+      - name: Build and verify the bundled Notion tools
         run: |
-          npm ci --prefix apps/sidebar --ignore-scripts --no-fund
-          npm run build --prefix apps/sidebar
-          git diff --exit-code -- runtime/sidebar
-          npm test --prefix apps/sidebar
+          python3 docs-publisher/build-guide.py
+          git diff --exit-code -- docs-publisher/public-guide.json
+          npm ci --prefix apps/notion --ignore-scripts --no-fund
+          npm run build --prefix apps/notion
+          git diff --exit-code -- runtime/notion
+          npm test --prefix apps/notion
       - name: Validate package and local documentation
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -58,6 +60,7 @@ jobs:
           python3 tests/responsibility-rehearsal.py
           python3 tests/context-architecture-rehearsal.py
           python3 tests/publisher-rehearsal.py
+          python3 tests/publisher-parity.py
           python3 tests/consumer-selection-rehearsal.py
           python3 docs-publisher/publisher.py reconcile --check ${BASE:+--base "$BASE"}
       - name: Validate release version and main ancestry
@@ -75,7 +78,33 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
+      statuses: read
     steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Require the enabled live guide check for this source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OSM_PUBLIC_DOCS_ENABLED: ${{ vars.OSM_PUBLIC_DOCS_ENABLED }}
+        run: |
+          if [ "$OSM_PUBLIC_DOCS_ENABLED" = true ]; then
+            state=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/status" \
+              --jq '.statuses | map(select(.context == "osm/public-guide-parity")) | first | .state')
+            if [ "$state" != success ]; then
+              echo '::error::This exact source has no successful enabled public-guide parity check. Nothing is released.'
+              exit 1
+            fi
+          else
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('docs-publisher/manifest.json').read_text())
+          dates = sorted({a['original']['read_at'] for a in manifest['artifacts'] if a['class'] == 'G' and a.get('original')})
+          print('Offline public-guide baseline; live CI access is not enabled. Frozen original read times: ' + ', '.join(dates))
+          PY
+          fi
       - name: Publish the validated release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -92,6 +121,9 @@ jobs:
           esac
           # An existing release is never edited, so earlier prerelease flags stay as they are.
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            archive="osm-${RELEASE_TAG#v}-source.zip"
+            git archive --format=zip --prefix="osm-${RELEASE_TAG#v}/" "$RELEASE_TAG" > "$archive"
+            sha256sum "$archive" > "$archive.sha256"
             gh release create "$RELEASE_TAG" --verify-tag "$@" \
-              --title "OSM ${RELEASE_TAG#v}" --generate-notes
+              --title "OSM ${RELEASE_TAG#v}" --generate-notes "$archive" "$archive.sha256"
           fi

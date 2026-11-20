@@ -2,7 +2,7 @@
 name: osm-prime
 description: Start each new session in an OSM-configured profile with the selected Notion context. Keep clearly independent work in its project and retrieve only relevant sources.
 metadata:
-  version: "1.1.1"
+  version: "1.2.0"
 ---
 
 # OSM:prime
@@ -26,6 +26,11 @@ inputs selected by the lead.
    Memory query for a past decision and the selected
    history or project source for unfinished work or an activity recap. Verify
    a live fact at its owning source when the result depends on it.
+   Treat the definition as a gateway, not a request to import every source.
+   Follow each source's permitted use, processing environment and retention
+   rules before reading it. For example, query accounting in its selected
+   accounting tool; do not mirror its records into Notion. Permission to read
+   a source is separate from permission to retain or share its contents.
 4. If you find a verified context error, correct the lookup or conclusion now.
    Use the shared [repair rules](../osm-manage-data-context/references/activity.md#repair-in-the-current-session)
    for an authorized stored repair and a short note for Dreaming.

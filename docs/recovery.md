@@ -2,40 +2,22 @@
 
 Guidance revision: 2026-11-09
 
-## Codex sidebar
+## Codex integration
 
-If the sidebar process fails, use the plugin's native **Set up** entry or ask
-for OSM Setup in a conversation. Check Node.js 22+ and the Codex CLI on the
-execution host; never repair by copying credentials or resetting Notion auth.
-The panel saves the short context pointer in Codex instructions and keeps source
-names/links in private per-context navigation state. Both preserve changed prior
-bytes in backups. See the sidebar recovery procedure; package rollback does not
-roll back these local choices.
-For a rollback to a sidebar that only reads `Context:`, restore that line
-from the matching backup or change the label on the selected URL to
-`Context:`. Preserve the marker block and any later user instructions.
-Business content remains at its source. A package
-rollback to the reviewed 0.20.0 tag removes this Codex runtime and keeps the
-existing home and pointer. Preserve any later customer edits. See
-[sidebar boundaries](sidebar.md).
+Use OSM Setup in a conversation when the adapter is unavailable. Check Node.js
+22+, the selected plugin source and native discovery. The official Notion plugin
+has its own connection; changing that authentication cannot repair another route.
 
-Home's projection is a separate per-context file beside the links, with the
-same backups, and older runtimes ignore it. If Home shows the wrong sources,
-correct the AI Operating Model definition and let Setup regenerate the
-projection from its new revision; never hand-edit it. To stop Home
-reading, revoke OSM's internal connection in Notion. Never copy a token to
-repair it. See [Home connection](home-connection.md).
+The short pointer and compatible local route settings keep their identities and
+revision-checked backups. Correct a changed route in the definition, then let
+Setup regenerate its mapping. Preserve later owner edits. The legacy wire name
+Home projection does not restore the retired dashboard. See
+[connection and recovery](home-connection.md).
 
-For the 9 November Home revision, use Settings → Check again after changing
-OSM's page access in Notion. Returning from a hidden panel also rechecks at most
-once per 30 seconds, when the host emits visibility events; there is no polling.
-If that event is unavailable, the explicit check remains the recovery action.
-Settings → Saved links changes navigation only and cannot repair a grant.
-Search is confined to mapped titles and never falls back to another connector.
-A refused clipboard write leaves a selected URL for manual copy. A local fixture
-that cannot listen in a restricted host is not evidence of a Notion failure;
-restart it on an unused port in a host that permits local listening, preserving
-any existing preview process.
+A rollback to an older runtime that reads only Context: may restore that label
+on the same selected URL. Keep managed markers and unrelated instructions.
+Use the selected older version's supported controls and a compatible verified
+mapping; do not delete private state or installed caches to force startup.
 
 Git history and reviewed tags/commits preserve earlier package versions and
 removed documentation. Do not keep duplicate historical reports in the active
@@ -105,7 +87,6 @@ Restore only the previous owned bridge, plugin selections and personal-skill
 registrations after checking current identities. Preserve Notion pages and any
 new work; reconcile post-cutover decisions before resuming old memory.
 
-The optional Team Memory navigation slot introduced in 0.25 is rejected by older
-panel versions. Before downgrading, clear that slot in 0.25 Settings and save, or
-restore a reviewed earlier map backup after inspecting later edits. This only
-changes local navigation; keep the actual Notion records and permissions.
+Earlier runtimes may reject newer mapping fields. Inspect the selected
+version's migration guidance before downgrading, retain the current state and
+restore only compatible, unchanged outputs from a verified backup.

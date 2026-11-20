@@ -17,22 +17,16 @@ infrastructure and delivery configuration.
 
 ## Your context home
 
-OSM is the shared method; your context home is the Notion home you own for your
-context. In Codex, open **OSM** in the sidebar. Numbered setup steps save your Context,
-Docs, Personal/Team Skills and Memory destinations, then open your dashboard.
-All setup sections remain visible and revisitable. Existing context opens the
-dashboard immediately; Settings opens a separate drawer. Connected Notion
-selectors list accessible pages by name and support search. Saved sources and
-manual links remain available; page listings fetch no page bodies. Selected destinations can read icon
-metadata via the official fetch tool; the remaining response is discarded.
-Clicks open destinations or save links directly; they never send a chat message.
-A saved link does not prove remote access or complete business onboarding.
+Your context home is the Notion page you own for business context. Open a fresh
+conversation and ask for **OSM Setup**, or use the host's **Set up** entry.
+Setup checks the official Notion plugin, connects the intended account, reuses
+suitable pages and databases, and helps complete a useful first task. Preserve
+an existing selected route. A dedicated connection is optional when selected
+page access is needed for a team, worker or unattended caller.
 
-For help organizing a new or messy workspace, explicitly invoke **Set up** or
-ask for OSM Setup. That skill checks access, reuses useful destinations and
-helps with the first task. Personal and Team skills retain actual permissions;
-Audience and Space are not access control. A new Notion entry is called **OSM**
-by default; existing entries and customer names remain theirs.
+The root starts with the Data & Context definition, followed by its native
+Knowledge, Memory and Skills databases. Existing names, content and suitable
+fields are retained. Personal and Team labels are not access controls.
 
 [Data & Context](../skills/osm-data-context/index.md) engineers the Notion home: its
 root, one definition and the core Knowledge, Memory and Skills stores, reusing
@@ -61,12 +55,11 @@ and recovery stay intact, and the [update reference](../skills/osm/references/up
 explains the incompatibility and the owner-led migration choice. Nothing is
 converted, mirrored or cleaned up silently. Shared methods stay in the plugin and
 operational records at their source. No local mirror, hosted server or timer is
-required. The Codex panel is a bundled local MCP process managed by Codex, using
-Node.js 22+ and the installed Codex CLI for connection status. It reads
-connection metadata, the short pointer and a private navigation map of
-names/links scoped to that context. No source bodies are copied. Explicit Setup
-registers verified destinations through OSM MCP after using the Notion
-connector. Data & Context retrieves the actual source when a task needs it.
+required. Codex includes an optional headless Notion adapter for an explicitly
+selected internal connection. It uses Node.js 22+, preserves compatible local
+route settings and macOS Keychain storage, and reads mapped content on request.
+Ordinary owner setup uses the separate official Notion plugin. A source name or
+stored mapping is not proof of live access.
 Installing or updating OSM leaves existing homes intact; use Setup when you
 choose to establish one.
 
@@ -172,8 +165,9 @@ procedures remain with their owning documentation so this overview stays short.
 
 This overview ships with the OSM version named above and is read only when
 needed. Its version travels with the shared methods in the installed package.
-The public guide is a reference projection of released editions; the installed
-package and its skills are the instructions.
+The Notion-authored public guide explains the method, definition template,
+setup cases and architecture. Git versions the installable package and skill
+instructions; use the instructions supplied with the installed edition.
 Native package updates are separate from owner context. There is no OSM
 documentation or skill runtime on the Resources domain. A newer upstream
 release does not replace instructions already read into an active conversation.

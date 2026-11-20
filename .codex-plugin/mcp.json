@@ -2,7 +2,7 @@
   "mcpServers": {
     "osm": {
       "command": "node",
-      "args": ["./runtime/sidebar/server.cjs"],
+      "args": ["./runtime/notion/server.cjs"],
       "cwd": "."
     }
   }

@@ -1,11 +1,25 @@
 {
   "name": "osm",
+  "displayName": "OSM",
   "version": "0.34.0",
   "description": "Notion context, onboarding, writing and collaboration for AI agents.",
   "author": {
-    "name": "onlinesourdough"
+    "name": "onlinesourdough",
+    "url": "https://github.com/onlinesourdough"
   },
+  "homepage": "https://github.com/onlinesourdough/OSM-plugin#readme",
   "skills": "./skills/",
   "repository": "https://github.com/onlinesourdough/OSM-plugin",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "notion",
+    "context",
+    "onboarding",
+    "writing",
+    "collaboration",
+    "skills"
+  ],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/osm.md",
+  "supportUrl": "https://github.com/onlinesourdough/OSM-plugin/issues"
 }

@@ -16,7 +16,7 @@
     "composerIcon": "./assets/icon.png",
     "logo": "./assets/icon.png",
     "shortDescription": "The Onlinesourdough Method",
-    "longDescription": "Open your selected Notion Data & Context page inside Codex. Read its content, browse mapped sources and manage OSM setup from a quiet settings menu. OSM uses its own connection; the optional official Notion plugin page picker is separate. Browser sign-in is not configured yet. Shared skills help with context, writing, code and reviewed delivery.",
+    "longDescription": "Seven skills give agents portable owner context: Setup, Prime, Log, Dreaming, Interview, Human Writing and Council. Setup onboards you in conversation through the official Notion plugin. An optional, existing scoped Notion connection can serve selected team, worker or daily scope through a small set of headless tools.",
     "developerName": "onlinesourdough",
     "category": "Productivity",
     "capabilities": [

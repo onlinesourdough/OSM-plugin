@@ -138,8 +138,8 @@ here converts it.
 ## Shared-method migration
 
 For an explicitly requested System/Project migration, inspect only selected
-repositories for legacy generic phases, technology choice, audit and tracking
-copies. Read their local contracts and classify each method by responsibility,
+repositories for copied legacy OSM/AIOS phase instructions and callers of retired
+OSM names. Read their local contracts and classify each method by responsibility,
 not name alone: domain review/audit methods remain specialist-owned. Preserve
 real local constraints in AGENTS or their existing domain owner before removing
 known generic payloads and callers. Use [migration guidance](shared-lifecycle.md)

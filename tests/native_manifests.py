@@ -1,4 +1,4 @@
-"""Cross-client methods, with one explicitly declared Codex sidebar runtime."""
+"""Cross-client methods, with one explicitly declared headless Codex Notion tools runtime."""
 import json
 
 
@@ -18,7 +18,9 @@ def validate_native(root, require):
     require(all(isinstance(codex[k], str) and codex[k] for k in common - {'author'}) and
             codex['author'] == {'name': 'onlinesourdough'}, 'native metadata types')
     require(set(codex) == common | {'skills', 'interface', 'extensions', 'mcpServers'} and
-            set(claude) == common | {'skills'} and
+            # Claude display and directory-listing metadata; no component field.
+            set(claude) == common | {'skills', 'displayName', 'homepage', 'keywords',
+                                     'icon', 'documentationUrl', 'supportUrl'} and
             set(cursor) == {'name', 'version', 'description', 'skills'} and
             set(gemini) == {'name', 'version', 'description'}, 'unexpected native component field')
     require('apps' not in codex and not (root / '.app.json').exists(),
@@ -44,13 +46,16 @@ def validate_native(root, require):
             'Claude marketplace source/version')
     require(codex['mcpServers'] == './.codex-plugin/mcp.json' and
             read('.codex-plugin/mcp.json') == {'mcpServers': {'osm': {
-                'command': 'node', 'args': ['./runtime/sidebar/server.cjs'], 'cwd': '.'}}},
-            'unexpected sidebar command or server')
-    for name in ('server.cjs', 'index.html', 'THIRD-PARTY-NOTICES.md'):
-        require((root / 'runtime/sidebar' / name).is_file() and
-                not (root / 'runtime/sidebar' / name).is_symlink(), 'missing bundled sidebar')
-    require({p.name for p in (root / 'runtime/sidebar').iterdir()} ==
-            {'server.cjs', 'index.html', 'THIRD-PARTY-NOTICES.md'}, 'extra sidebar runtime file')
+                'command': 'node', 'args': ['./runtime/notion/server.cjs'], 'cwd': '.'}}},
+            'unexpected Notion tools command or server')
+    for name in ('server.cjs', 'guide.html', 'THIRD-PARTY-NOTICES.md'):
+        require((root / 'runtime/notion' / name).is_file() and
+                not (root / 'runtime/notion' / name).is_symlink(), 'missing bundled Notion tools')
+    require({p.name for p in (root / 'runtime/notion').iterdir()} ==
+            {'server.cjs', 'guide.html', 'THIRD-PARTY-NOTICES.md'}, 'extra Notion tools runtime file')
+    # The retired dashboard leaves no source or runtime folder behind.
+    require(not (root / 'runtime/sidebar').exists() and not (root / 'apps/sidebar').exists(),
+            'retired sidebar runtime')
     require(codex['interface']['developerName'] == 'onlinesourdough' and
             read('.agents/plugins/marketplace.json')['interface']['displayName'] == 'onlinesourdough',
             'publisher branding drift')

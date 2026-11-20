@@ -5,7 +5,7 @@ Revision: 2026-11-10
 The release unit is this repository root. Its shipped files are the native manifests
 (`.codex-plugin/`, `.claude-plugin/`, `.cursor-plugin/`), `gemini-extension.json`, `package.json`
 (its `files` list), `assets/icon.png`, `LICENSE`, `README.md`, the single `skills/` source,
-`runtime/sidebar` and `docs/osm.md`; the Codex marketplace file resolves this root. There is
+`runtime/notion` and `docs/osm.md`; the Codex marketplace file resolves this root. There is
 no `.app.json` and no Notion app binding: the optional official Notion plugin is a separate
 installation. The overview
 is package documentation, read only when needed. Other documentation, tests and
@@ -21,9 +21,9 @@ This repository carries no local generic lifecycle skills.
    against the last reviewed release/commit. Prepare [release notes](../CHANGELOG.md).
 2. Run the checks in [verification](verification.md) and inspect the complete
    diff. Runtime observations stay separate from source checks.
-   For the Codex sidebar, run `npm ci --prefix apps/sidebar --ignore-scripts`,
-   `npm run build --prefix apps/sidebar`, `npm test --prefix apps/sidebar` and
-   `git diff --exit-code -- runtime/sidebar` after committing the generated output.
+   For the optional Notion adapter, run `npm ci --prefix apps/notion --ignore-scripts`,
+   `npm run build --prefix apps/notion`, `npm test --prefix apps/notion` and
+   `git diff --exit-code -- runtime/notion` after committing the generated output.
    The runtime is bundled; consumers do not install these author dependencies.
 3. Obtain independent Review of the exact tree to be delivered. Any relevant
    content change invalidates that acceptance.

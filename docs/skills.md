@@ -79,7 +79,7 @@ the earlier routes.
 a new or existing software project, use the separately usable
 [Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
 skill directly in Codex or Claude; T3 Code is not required. OSM has no runtime
-dependency on it, does not install it and contains none of its content. Small
-coding work stays with Write Code; without a selected foundation method, OSM
-reports the gap. Explicit callers of the old name must be updated. The
+dependency on it, does not install it and contains none of its content. Coding
+work uses the project's native or selected engineering methods. Explicit
+callers of the old name must be updated. The
 [Project Foundation note](project-foundation.md) keeps its history.

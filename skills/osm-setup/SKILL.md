@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
 ---
 
 # OSM:setup
@@ -14,8 +14,7 @@ Codex **Set up** or an explicit request starts this skill. Resume accepted setup
 and connections. Verify access; a badge or saved link is not readiness. For
 package installation or a requested bridge-only change, use the
 [adapter route](references/adapters.md). Installation alone creates no home and
-needs no global instruction edit. Register verified personal sources with the
-[panel](references/panel.md) procedure.
+needs no global instruction edit. Use the [Notion access](references/panel.md) procedure for Codex connection checks.
 Use the [procedure index](../osm/index.md) for earlier names and package recovery.
 
 ## One path
@@ -46,6 +45,11 @@ outside that chain):
 3. **Map selected sources and authority.** Record which systems are sources,
    which are working artifacts and who has authority. External systems, local
    files and repositories remain sources or artifacts, never an alternate home.
+   The definition is the business's gateway: record when to use each source,
+   its real access route, permitted actions and processing environment, and
+   what may be retained where. Keep operational originals in their system.
+   An AI-native source normally needs direct lookup, not a Notion importer.
+   Reuse its existing connection and configure the template to the business.
 4. **Reuse or create.** [Data & Context](../osm-data-context/index.md) engineers
    the home, its definition and the core Knowledge, Memory and Skills roles:
    existing stores are reused by actual ID, only missing ones are created, and

@@ -52,6 +52,17 @@ In short:
 
 Sort each input before writing; the class decides where it goes and what is kept.
 
+First apply the source's permitted use, processing and retention rules. The
+definition routes work to its owner; it does not require a Notion copy. Access
+to a source and write access to the home do not authorize retaining that source's
+records. Source-only and restricted material stay there. A useful summary is
+still retained material and needs the same permission. Keep only allowed route
+metadata or learning, without sensitive facts or identifiers where excluded.
+Material found in a transcript or archived chat keeps its originating source's
+handling rules; a different container does not permit a new use or retention.
+The intake classes below describe curation placement. They never loosen a
+source's retention policy.
+
 - **Durable:** a decision, correction, preference, route or fact the owner will act
   on later. Revise its one current record (stable Key, concise explanation and
   Summary) with source evidence and attribution.
@@ -61,8 +72,9 @@ Sort each input before writing; the class decides where it goes and what is kept
 - **Source-only:** useful only as evidence. Keep a route (link or ID, purpose, date)
   at its owner; copy nothing and create no record.
 
-Keep necessary source evidence as that route plus a short excerpt where a claim
-needs one. Placement that two records or stores could own, and an authority
+Keep necessary source evidence as a permitted route plus a short excerpt only
+where the claim needs it and the source's retention permits it. Placement that
+two records or stores could own, and an authority
 conflict the evidence cannot settle, are not merged: keep both and return them as
 flagged results with the question for the owner.
 

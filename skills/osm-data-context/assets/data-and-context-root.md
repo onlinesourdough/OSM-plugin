@@ -62,9 +62,13 @@ definition:
       account: "[exact account or workspace identity, or its verified reference]"
       scope: "[selected objects, or a deliberately broader account/workspace-visible scope, by identity]"
       lifecycle: "[current-recurring | historical-one-off | deferred | excluded]"
-      placement: "[direct | projection | both]"
-      reader: "[route that reads it, or none]"
-      agreement: "[exact pipeline agreement ID; required for recurring work]"
+      placement: "[direct | projection | both]"  # retrieval mode; not permission to retain data
+      purpose: "[questions or work this source supports; what it owns]"
+      reader: "[approved tool or connection that reads it, or none]"
+      permitted_use: "[allowed actions and processing environments]"
+      retention: "[source-only, or exact permitted context/output locations and exclusions]"
+      freshness: "[when to query the live source or use dated evidence]"
+      agreement: "[existing source-handling agreement or this definition section; required for selected recurring checks]"
       # Readiness is observed state, kept in progress records, never here.
   references:
     - "[deeper domain contract or supporting page by ID]"

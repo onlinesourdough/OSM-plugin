@@ -1,5 +1,14 @@
 # OSM browser connection: architecture and dependency
 
+> **Historical, superseded.** This dated proposal was never implemented. It
+> assumed the retired private Home dashboard and its Connect Notion dialog,
+> which are no longer shipped. Current onboarding is conversational: the
+> [Setup skill](../skills/osm-setup/SKILL.md) reuses a working connection or the
+> official Notion plugin, and uses a dedicated connection only for an actual
+> scoped-access need, through [credential setup](../skills/osm-setup/references/credentials.md).
+> OSM implements no browser OAuth service. The dated research below is kept as
+> evidence; it describes no current setup step.
+
 Research checkpoint: 7 November 2026; owner-action proposal added 10 November 2026.
 This is an implementation proposal and capability assessment, not a deployed
 connection or permission grant. Nothing described here is registered, hosted or

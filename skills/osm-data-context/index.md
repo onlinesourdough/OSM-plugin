@@ -11,7 +11,9 @@ the running agent; it is not a background sync.
 
 OSM is an AI-assisted method and framework for solo founders and small teams.
 Data and context are its two foundation parts, and skills sit inside context.
-Notion is where that foundation lives. External systems, local files and
+Notion holds its shared definition and selected business context. The definition
+is a gateway to the actual sources, their access routes and handling rules.
+External systems, local files and
 repositories remain valid sources or working artifacts; they are not alternate
 context homes, and nothing here sets up a folder, vault or other provider home.
 
@@ -34,7 +36,8 @@ context homes, and nothing here sets up a folder, vault or other provider home.
 - Follow [Notion setup](references/notion/setup.md) and its
   [acceptance](references/notion/acceptance.md) for a new or existing workspace,
   the [root template](assets/data-and-context-root.md) for the entry, and the
-  [Home projection procedure](references/panel-links.md) for the panel.
+  [connection mapping procedure](references/panel-links.md) when the optional
+  scoped adapter is selected.
   [Migration](references/migration.md) covers a root change.
 - The owner's recorded [write policy](references/architecture.md#home-write-policy)
   decides what upkeep may write; read it, never hardcode it, and never infer a
@@ -44,7 +47,7 @@ context homes, and nothing here sets up a folder, vault or other provider home.
   changed or placed, Manage Skills owns that lifecycle; this skill only
   provides the role and its properties.
 
-Setup leads onboarding and calls this skill for the engineering step; ongoing
+Setup leads onboarding and uses this reference for the engineering step; ongoing
 retrieval, intake and curation belong to Manage Data & Context. A general
 question or an independent repository task needs no owner-context preload. Do
 not fall back to another home when Notion is unavailable: hold dependent changes
