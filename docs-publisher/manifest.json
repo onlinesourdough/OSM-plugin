@@ -3,12 +3,12 @@
   "purpose": "Per-artifact source and ownership manifest for the public OSM documentation: which side holds the original, how a Notion-authored original is bound to its Git exports, and who may write each public artifact. Not shipped in the package.",
   "activation": {
     "active": true,
-    "live_proof": "coherent-set-and-noop-pending",
-    "note": "Bounded Log import in CI44735665358 verified the native body, six managed properties and all41support files. Its anonymous CI check held; a fresh anonymous IAB observation then matched all34packet lines in order and three prior file references still resolved. All seven exact CI handoffs are now recorded for coherent-set qualification. Full automatic delivery is claimed only after the whole set and a no-op run pass.",
+    "live_proof": "whole-set-and-zero-write-repeat-qualified",
+    "note": "Initial automatic main qualification 44751015131 and independent repeat 44751623179 passed all eight guide originals, all seven released native packets, 251supporting-file observations, six managed properties and the complete anonymous page/catalogue checks. Both runs were unchanged with zero API writes. Earlier failed and interrupted evidence is retained. Each later release still requires its own whole-set readback and public result.",
     "public_reader": {
-      "kind": "isolated-playwright-visible-body/1",
-      "reviewed_in": "CI44731499066 plus actual bounded CI44735665358 and fresh anonymous Log fulltext observation2026-11-20; exact-source follow-up in PR116",
-      "note": "Wait for every expected instruction line and compare the complete text in order; metadata-only observations never complete publication."
+      "kind": "isolated-playwright-visible-native-catalogue/2",
+      "reviewed_in": "PR #120: independent High acceptance of 8f06088; actual secret-free production-path qualification 44750248088; main 44751015131 and zero-write repeat 44751623179.",
+      "note": "One fresh anonymous context; atomic document identity/body capture, complete instruction lines in order and visible catalogue entries bound to the seven actual native Notion row ids. Pacing, server backoff, deadlines and pinned-launcher cleanup fail closed. No credentials or persistent profile enter the child."
     }
   },
   "editions": {

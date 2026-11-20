@@ -772,8 +772,9 @@ def visible_text(markup):
 class PublicReader:
     """Anonymous reads of public pages. Enabled only by `activation.public_reader` in a reviewed commit.
 
-    No reader is qualified today (whether public Notion HTML contains the body is unknown offline), so
-    nothing constructs this in a real run. No credential is ever attached to its requests.
+    This HTML implementation is also used by transport fixtures. Native CI publication
+    selects BrowserReader to observe rendered public content. Neither reader attaches credentials;
+    offline checks alone do not establish what an anonymous visitor can see.
     """
 
     def __init__(self, base, catalogue_url, opener=None):

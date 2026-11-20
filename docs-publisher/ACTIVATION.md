@@ -1,26 +1,39 @@
 # Documentation automation activation
 
-The native publisher is under coherent-set qualification. All seven existing
-released skill pages have their exact six-field handoffs from read-only CI
+Automatic native publication is qualified. Its initial whole-set main run
+[44751015131](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44751015131)
+and independent repeat
+[44751623179](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44751623179)
+passed all eight guide originals, all seven released skill packets, 251 supporting
+file observations, six managed properties per page and anonymous public checks.
+Both runs found the packets unchanged and made zero API writes. The initial
+qualification used v0.34.2 at `1e4b2b1`; the current approved released source stays
+in `manifest.json`. A later release must pass its own readback and public checks.
+
+The dedicated public-only token is stored as a GitHub Actions secret. Its
+public-root grants and a denied private-home read were verified. No private
+context credential or optional Content template enters this workflow. Existing
+upkeep relinquished exactly the seven native pages through the recorded six-field
+handoffs from read-only CI
 [44734170998](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44734170998).
-The dedicated public-only token is stored as a GitHub Actions secret. No private
-context or optional Content template is included. Whole-set automatic delivery
-and its no-op rerun are not yet claimed by this commit.
 
-The first bounded Log import in CI
+The first bounded Log import
 [44735665358](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44735665358)
-verified the complete native instructions, all 41 supporting files and six
-managed properties. Its anonymous check held on the new introduction; it did
-not complete publicly in that attempt. A fresh anonymous in-app browser then
-matched all 34 new packet lines in order, and all three previous file references
-still resolved. The Source link returned 200 without authentication. The old
-attempt's rerun was cancelled during browser installation before another API
-write; its first-attempt evidence is retained.
+verified the complete native instructions, 41 supporting files and six properties.
+Its original anonymous check held; that failed attempt is retained. A fresh
+anonymous observation then matched all 34 packet lines and earlier file links
+still resolved. Later whole-set API checks passed while incomplete browser
+observations still held the run. Those attempts are not relabelled as successes.
 
-The reader now waits for every expected line before capture. API write evidence
-survives a public HOLD, and each CI attempt keeps its own artifacts. The next
-serialized main run must qualify the coherent seven-page set, followed by a run
-that uploads nothing. Only those successful results establish automatic delivery.
+The qualified reader materialises the short method pages in a tall viewport and
+uses one paced anonymous context. Actual public Notion catalogue entries are
+visible native collection rows with the exact page id and title, not HTML
+anchors. Secret-free production-path probe
+[44750248088](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44750248088)
+verified all seven complete instruction bodies and those entries. Independent
+High review accepted exact `8f06088` after the identity, backoff, deadline,
+launcher-cleanup and stale-run findings were fixed. Each CI attempt keeps its own
+artifacts; API write evidence survives a public HOLD.
 
 ## Who writes what
 
@@ -90,23 +103,26 @@ an observation of those archives, not a qualification of this publisher.
    files and skill digests, title, the six property values and the read time.
    The first import replaces exactly that state; a page that differs from it is
    a conflict and is kept. The recorded Status is the one CI restores.
-6. Set `activation.active` in a reviewed commit, then qualify one bounded write:
+6. Qualify the anonymous public read before enabling publication. The manual
+   `reader_probe` workflow input launches one fresh secret-free Chromium context
+   and reads all seven complete released skill pages plus the catalogue. Its
+   subprocess uses the production environment filter and result validation.
+   The tall viewport materialises these short method pages; expected lines must
+   actually be visible and match in order. Pacing and a bounded Retry-After
+   retry respect rate limits; a missing body, wrong page, script shell or 429
+   after the retry holds verification. Record `activation.public_reader` with
+   its review only after the observation establishes the content. A null reader
+   refuses publication when public addresses are supplied; it is never a route
+   to an API-only success.
+7. Set `activation.active` in a reviewed commit, then qualify one bounded write:
    run the workflow manually on `main` with `native_write_key` set to one Key.
-   It imports that page only, restores the canonical title and the six
-   properties, and reads the whole page back. Verify on the real page that files
-   absent from the archive were removed (the documented replace behaviour),
-   that nested folders and `history/` are intact, that earlier file links still
-   resolve, and that the title and properties are as recorded. With
-   `public_reader` null this run ends in a visible HOLD by design.
-7. Qualify the anonymous public read. The manual `reader_probe` workflow input
-   launches a secret-free, isolated Chromium context and checks the existing
-   public Log page's visible title and versions. After qualification,
-   `preflight --browser-public-read --public-base ... --public-catalogue ...`
-   reads every public page and the catalogue without a
-   credential and passes only when the skill text and catalogue entry are
-   actually in the answer. An answer that is only a script shell fails. Record
-   `activation.public_reader` with its review only if that read is shown to
-   establish the content; otherwise the reader stays null and no run completes.
+   It imports that page only, restores the canonical title and six properties,
+   reads the whole archive back and verifies the anonymous page and catalogue.
+   Verify on the real page that files absent from the archive were removed
+   (the documented replace behaviour), nested folders and `history/` are intact,
+   earlier file links still resolve, and title/properties equal the handoff.
+   A failed public check keeps the verified API evidence and visibly holds the
+   run. A bounded run never qualifies the whole automatic set.
 8. Run the serialized workflow, verify the whole set, then verify a repeat run
    that writes nothing. Only then is automatic publication claimed.
 
@@ -156,8 +172,9 @@ whole run when more pages need a write than `--max-writes` allows (one by
 default). Before importing it re-reads the page's `version_id`. A page is
 replaced only when it is the recorded handoff state or the unmodified packet this
 publisher builds for the earlier release named in the page's own `SOURCE.json`.
-Anything else is a conflict and is kept. A change to the packet format therefore
-needs a newly recorded handoff.
+Recognised CI packets must have a strictly older release tag; delayed or repeated
+old runs cannot downgrade a newer packet. Anything else is a conflict and is
+kept. A change to the packet format needs a newly recorded handoff.
 
 - An import with no usable answer is read back before anything else. If the
   packet is on the page the run continues; if the page is unchanged the run
