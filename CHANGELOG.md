@@ -2,6 +2,8 @@
 
 ## 0.34.4 — 2026-11-20
 
+- Show selected starting context and how Knowledge, Memory and personal Skills grow through work, separate from shared plugin skills and optional Content.
+
 - Display the common architecture directly in the public Notion guide, including
   on mobile, with the responsive HTML and editable relationship map kept as sources.
 - Keep source details collapsed in the Codex guide reader and render the shared

@@ -4,17 +4,17 @@
   "scope": "Common method, template and general requirements only. Owner explicitly removed a private configuration view. Existing private Papers were not changed or published.",
   "public_page": "https://gustavanderson.notion.site/40d6d2e17f568113a397fb6ecd9b5fff",
   "source_html": "assets/diagrams/osm-architecture.html",
-  "source_html_sha256": "98b542d76b3f884f53411a1b8cbbfd5e546dec97579d40fe0219802113deb209",
+  "source_html_sha256": "a21331b9c4fa7d01f0deffea0ab048084b962257096df107ebd9f21b20c24188",
   "delivered_image": "assets/diagrams/osm-architecture.png",
-  "delivered_image_sha256": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
+  "delivered_image_sha256": "7d1e472c8bb4f2eaf80f6e01806f2974dc202cf48a78188f6a8260c5eda59a94",
   "notion_image_download_matches": true,
-  "guide_body_revision": "4aa752b35e7b852e3713760cfb4d1fc7b79738d47262efac8903531a5e50273c",
+  "guide_body_revision": "23b7c62c2b039c2f350786953366b0ba0c3d04045be3b8a3b9ed22eb52f2407d",
   "unchanged_other_guide_originals": 7,
   "unchanged_skill_files_against_v0_34_3": 75,
   "checks": {
     "standalone_html_desktop": [
-      1280,
-      1050
+      1000,
+      1200
     ],
     "standalone_html_mobile": [
       390,
@@ -51,7 +51,7 @@
       360,
       812
     ],
-    "public_desktop_bound_sentence_confirmed": true
+    "public_desktop_bound_sentence_confirmed": "starter-role paragraph confirmed"
   },
   "limits": [
     "Separate headless contexts, no user browser profile. This is public-page and built-reader render evidence, not a screenshot of the installed Codex side panel.",
@@ -61,19 +61,33 @@
     "Initial tall-figure screenshot attempts clipped or left off-screen regions blank. No complete portrait-in-public-UI capture is claimed. The complete delivered portrait PNG was inspected directly and its Notion download matched byte for byte. The final public mobile screenshot covers one 360 \u00d7 812 viewport; the earlier capture was 360 \u00d7 732."
   ],
   "artifact_sha256": {
-    "osm-architecture.png": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
-    "notion-readback-image.png": "7aa630b7390a2a1153253b82597c1e2c12de65d44df7b5bddfeeb70ff67f34da",
-    "notion-readback-source.html": "98b542d76b3f884f53411a1b8cbbfd5e546dec97579d40fe0219802113deb209",
-    "architecture-mobile.png": "e12809bc1387f0ccc8690cca20393c5ab496ac57fa0ae396011c190455c65faa",
-    "notion-readback-mobile.png": "e12809bc1387f0ccc8690cca20393c5ab496ac57fa0ae396011c190455c65faa",
-    "client-common-desktop-revised.png": "2f6d2ffb0ad22cf04bde384ecec56b7908784faf0a1bad5072e34110bf4aa9d4",
-    "client-common-mobile-revised.png": "ceb79a023f9119ace9a567389f9626590bbbe7f159426bc96a23b6c459eab963",
-    "public-desktop-bound-final.png": "0f1a24a36e0a5e650ee112251b68b6ddaa65deb1f4abfe4d30add8b0e1b28a10",
-    "public-mobile-final-viewport.png": "cfc6cc4efa098e7cc0ded75e05a6535f20a2a076952bd0b1b2a3560c23a2f87b"
+    "osm-architecture-starter-wide.png": "7d1e472c8bb4f2eaf80f6e01806f2974dc202cf48a78188f6a8260c5eda59a94",
+    "osm-architecture-starter-mobile.png": "e8fc8a43158a0e0ae50bc9f1e3178ea5bef87b0ddace0091058f2582fcc66200",
+    "starter-final-notion-readback-osm-architecture.png": "7d1e472c8bb4f2eaf80f6e01806f2974dc202cf48a78188f6a8260c5eda59a94",
+    "starter-final-notion-readback-osm-architecture-mobile.png": "e8fc8a43158a0e0ae50bc9f1e3178ea5bef87b0ddace0091058f2582fcc66200",
+    "starter-final-notion-readback-osm-architecture.html": "a21331b9c4fa7d01f0deffea0ab048084b962257096df107ebd9f21b20c24188",
+    "starter-final-client-desktop.png": "15c7f162f61b64a7ea555d4cbc39864464f163b34ce34d622bbda1edf3ca393e",
+    "starter-final-client-mobile.png": "0016e28269223d23e85e190cf68c92d19d66997ef6846ef9989f4d25f27df0e9",
+    "starter-final-public-desktop.png": "02b87415e4e2e937bc4eeff1ae51e79a46c5a79bfa1af0f2b02e4455024639de",
+    "starter-final-public-figure.png": "d3f146b6c6e790825022470cef08642b33b102c9c49206ef384cb9ec6c3cdc04",
+    "starter-final-public-mobile-viewport.png": "3b53e6e789f611f1acd3a5aac04a9e6ed471b5d1d823340407a6a42acfd5eec2"
   },
   "mobile_image": "assets/diagrams/osm-architecture-mobile.png",
-  "mobile_image_sha256": "e12809bc1387f0ccc8690cca20393c5ab496ac57fa0ae396011c190455c65faa",
+  "mobile_image_sha256": "e8fc8a43158a0e0ae50bc9f1e3178ea5bef87b0ddace0091058f2582fcc66200",
   "guide_reader": "notion-api-markdown-v2-stable-media/1",
-  "api_snapshot_run": 44813193600,
-  "api_snapshot_result": "8 complete pages, zero errors; expected old-source drift hold before any skill write"
+  "api_snapshot_run": 44819102064,
+  "api_snapshot_result": "8 complete pages, zero errors; expected old-source drift hold before any skill write",
+  "starter_roles": {
+    "scope": "Generic selected roles, not mandatory files or private records",
+    "sources": [
+      "skills/osm-setup/references/business-context.md",
+      "docs-publisher/originals/notion.guide.data-context.md",
+      "OSM-Content v0.12.0 docs/setup.md and docs/configuration.md"
+    ],
+    "memory_may_start_empty": true,
+    "plugin_and_personal_skills_separate": true,
+    "actual_work_grows_records": true,
+    "content_optional": true,
+    "actual_media_readback": "three exact downloads match 201680-byte wide PNG, 198579-byte portrait PNG and 8648-byte HTML"
+  }
 }
