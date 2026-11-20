@@ -1,5 +1,40 @@
 # Verification
 
+## 20 November 2026 — 0.34.3 release and source binding
+
+Fable 5.2 High independently accepted exact commit
+`caedb13fde5fc33315f97d4875e7a76e379b1737` with no P1 or P2 findings.
+The actual annotated-tag rehearsal passed all seven selected commands, including
+72 publisher scenarios, 75 mutation controls and 23 native-publisher scenarios.
+Fresh live parity [44764023879](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44764023879)
+verified that exact source, eight originals and the seven then-released 0.34.2
+packets unchanged, including complete anonymous visibility and zero API writes.
+
+[Stable v0.34.3](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.34.3)
+now resolves to that accepted commit. Tag CI
+[44765870935](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44765870935)
+passed. The actual source ZIP has SHA-256
+`3596f15b49c7133a34ce9292ff812f75b07ff21db6268b778630843bd78ab9ff`, and all 318 tracked files match the tag.
+An independent anonymous download returned the same bytes and checksum.
+
+This follow-up binds the actual published source for the next automatic native
+publication. Its seven new packets, write/public check, zero-write repeat and
+native installation are separate acceptance steps; this binding alone does not
+claim them complete. The sidebar's source pin `75c1f7a` is retained deliberately:
+all 75 packaged skill files are byte-identical to this tag, so no runtime rebuild
+or method change is needed for the binding.
+
+## 20 November 2026 — 0.34.2 asset and native checkpoint
+
+Stable v0.34.2 resolves to `1e4b2b186d158cd36fa197e0ab9c70cf03521ee0`,
+published at 11:01:28 UTC. Its actual 5,209,350-byte source ZIP has SHA-256
+`19cec3d523e50a4357e0034370848b925e491aeab2aae67b843b0c7dd222d39e`.
+All 307 tracked files matched the tag and both actual Codex and Claude Code
+native caches. This checkpoint was rechecked before 0.34.3 promotion; the owner's
+close/reopen test showed the public method guide rather than the former Home.
+The following initial-publication record supplies the separate live packet proof.
+
+
 ## 20 November 2026 — initial automatic public Notion qualification
 
 The dedicated public-only connection is configured and its token is a GitHub
