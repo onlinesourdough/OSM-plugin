@@ -686,9 +686,10 @@ def _write(api, packet, row, catalogue):
         if api.skill(page_id)["version_id"] != seen["version_id"]:
             return stop(pub.CONFLICT, "the page changed after it was read; not overwritten")
         if row["outcome"] == pub.WRITTEN:
+            archive = pack(packet["name"], {**want["files"], "SKILL.md": packet["files"]["SKILL.md"]})
             row["sent"] = True
             try:
-                row["uploaded_version_id"] = api.upload(page_id, packet["name"], pack(packet["name"], {**want["files"], "SKILL.md": packet["files"]["SKILL.md"]}))
+                row["uploaded_version_id"] = api.upload(page_id, packet["name"], archive)
             except pub.UnknownWrite as error:
                 after = again(f"the import got no usable answer ({error})")
                 if after is None:
@@ -735,6 +736,7 @@ def _write(api, packet, row, catalogue):
     row["after"] = evidence(seen)
     if not _same(seen, want):
         return stop(pub.PARTIAL, "the final read differs from the released packet: " + ", ".join(differences(seen, want)[:6]))
+    row['api_verified'] = True
     return True
 
 
@@ -776,7 +778,9 @@ def publish(manifest, packets, api, tag_resolver, reader=None, prior_packets=Non
                     later.pop("_seen"), later.pop("_want")
                 break
     for row in rows:
-        row.pop("_seen", None), row.pop("_want", None), row.pop("sent", None)
+        row.pop("_seen", None), row.pop("_want", None)
+        if row.pop('sent', False):
+            row['write_attempted'] = True
         if row["outcome"] in (pub.WRITTEN, pub.RESUMED, pub.UNCHANGED):
             state, detail = public_state(reader, packets[row["key"]])
             row["public"] = {"state": state, "detail": detail}
@@ -799,10 +803,12 @@ def report(result, manifest):
     qualified = len(rows) == len([a for a in manifest['artifacts'] if a['class'] == 'A']) \
         and bool(activation["active"] and activation.get("public_reader")) and mode == "publish" and not failing(result) \
         and all(row["outcome"] != pub.PENDING_HANDOFF for row in rows)
-    wrote = [row["key"] for row in rows if row["outcome"] in (pub.WRITTEN, pub.RESUMED)]
+    wrote = [row["key"] for row in rows if row.get('write_attempted') and row.get('api_verified') is True]
+    attempted = [row['key'] for row in rows if row.get('write_attempted') and row.get('api_verified') is not True]
     lines = [f"# {title}", "", f"Frozen released commit: `{result['commit']}`",
              "Automatic publication: " + ("active for this run" if qualified else "NOT active or not qualified; this run proves no automatic publication"),
-             "Written: " + (", ".join(wrote) if wrote else "nothing"), "",
+             "Written and API-verified: " + (", ".join(wrote) if wrote else "nothing"),
+             "Write attempted, final state not verified: " + (", ".join(attempted) if attempted else "none"), "",
              "| Key | Outcome | Detail | Anonymous public read |", "| --- | --- | --- | --- |"]
     for row in rows:
         seen = row.get("public") or {}

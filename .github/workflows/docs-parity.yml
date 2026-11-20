@@ -67,7 +67,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: anonymous-public-browser-proof
+          name: anonymous-public-browser-proof-${{ github.run_attempt }}
           path: public-browser-proof.json
   reconcile:
     if: >-
@@ -212,7 +212,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: public-documentation-parity
+          name: public-documentation-parity-${{ github.run_attempt }}
           path: |
             reconciliation.md
             live-reconciliation.md
