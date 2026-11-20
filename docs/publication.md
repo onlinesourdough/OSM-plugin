@@ -96,11 +96,10 @@ content is held, never truncated or called unchanged.
 
 ## Current release alignment
 
-The manifest records reviewed source tag v0.34.0 at `e5b892c`; its tag build
-stopped before creating a GitHub Release. The latest published stable release
-remains v0.33.0. The unchanged guide originals have been exported and bound for
-patch candidate 0.34.1. Public catalogue, source packets and download status
-require actual release readback; this binding alone does not update them.
+The manifest binds released v0.34.1 to `4df5ef1` and seven skill packets.
+The v0.34.0 source tag is retained unchanged; its automated release stopped
+before creating a GitHub Release. The public writer remains inactive; current
+manual packet and public-readback evidence is recorded in [verification](verification.md).
 
 `tests/publisher-rehearsal.py` covers transport and retry behavior with mutation
 controls. `tests/publisher-parity.py` checks original/export drift, source identities,

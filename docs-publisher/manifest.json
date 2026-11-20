@@ -9,9 +9,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.34.0",
-      "tag": "v0.34.0",
-      "commit": "e5b892cf199a1714140ebe89753a240454dcfd3a",
+      "label": "v0.34.1",
+      "tag": "v0.34.1",
+      "commit": "4df5ef1a9d9f49e877ec72ecb20ecf8ff26ae60a",
       "approved": true
     },
     "main-working": {
@@ -652,10 +652,10 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content · optional extension",
+        "title": "Content \u00b7 optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "96dc9e045fc3860b6e2c3f9b4681404c6298227ec86c90a2aeb1a45cceba2935",
-        "edition": "Optional Content · Draft edition 2026-11-05.1"
+        "edition": "Optional Content \u00b7 Draft edition 2026-11-05.1"
       }
     ]
   }
