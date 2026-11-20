@@ -56,8 +56,9 @@ Replace both placeholders with the actual reviewed versions. After the tag exist
 reviewed commit updates the released edition in `docs-publisher/manifest.json` (tag, commit,
 label) and the "is the latest" sentence in `docs/README.md`. `docs-publisher/publisher.py
 reconcile --check` fails on a commit after a newer release tag until both agree. Before the new tag
-exists, the manifest names the previously published release at its exact commit and `docs/README.md`
-says that release is the latest; a tag on the build's own commit is not counted against that build, so
+exists, the manifest names the latest reviewed source tag at its exact commit and `docs/README.md`
+identifies it separately from an actually published GitHub Release. A retained tag whose
+CI failed is still a source tag; it is never relabelled as a successful publication; a tag on the build's own commit is not counted against that build, so
 the tag build passes. The new release's own exact commit is recorded only after its tag exists, and this
 changes the source projection binding, not the public Notion guide. Under the accepted
 release authority, create and push only that version tag:

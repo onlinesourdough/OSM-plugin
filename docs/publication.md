@@ -26,9 +26,9 @@ Use a dedicated public-only connection to read the explicit guide page IDs:
 
 ```sh
 python3 docs-publisher/publisher.py snapshot --out public-originals.json
-python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.0 --dry-run
-python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.0
-python3 docs-publisher/publisher.py reconcile --worktree --snapshot public-originals.json --release-tag v0.34.0 --check
+python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.1 --dry-run
+python3 docs-publisher/publisher.py export --snapshot public-originals.json --edition 0.34.1
+python3 docs-publisher/publisher.py reconcile --worktree --snapshot public-originals.json --release-tag v0.34.1 --check
 ```
 
 A lead can supply the exact bodies read through the official Notion plugin in the
@@ -96,9 +96,11 @@ content is held, never truncated or called unchanged.
 
 ## Current release alignment
 
-The manifest currently binds v0.33.0 to `a9a18ca`. The seven-skill 0.34.0 candidate
-and its guide originals are under review. Public catalogue and download status
-must be verified at the actual release; a manifest edit alone does not update them.
+The manifest records reviewed source tag v0.34.0 at `e5b892c`; its tag build
+stopped before creating a GitHub Release. The latest published stable release
+remains v0.33.0. The unchanged guide originals have been exported and bound for
+patch candidate 0.34.1. Public catalogue, source packets and download status
+require actual release readback; this binding alone does not update them.
 
 `tests/publisher-rehearsal.py` covers transport and retry behavior with mutation
 controls. `tests/publisher-parity.py` checks original/export drift, source identities,

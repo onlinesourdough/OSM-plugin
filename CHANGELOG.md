@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.34.0 — 2026-11-20
+## 0.34.1 — 2026-11-20
+
+- Correct the credential-free repository rehearsal to use complete bound guide
+  metadata during a tag build. The synthetic transport manifest deliberately
+  strips originals and cannot qualify the release check.
+- Deliver the seven-skill changes described below. The v0.34.0 tag is retained
+  unchanged; its automated release stopped before creating a GitHub Release.
+
+## 0.34.0 — 2026-11-20 · source tag; release not published
 
 - Limit default discovery to Setup, Prime, Log, Dreaming, Interview, Human
   Writing and Council. Keep home setup, curation and personal skill maintenance

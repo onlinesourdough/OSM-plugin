@@ -50,10 +50,11 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.33.0 is the latest tagged release, a stable GitHub Release; v0.31.3 and earlier are prereleases |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases). v0.34.0 is the latest reviewed source tag; its tag build stopped before publishing. The latest published stable release remains v0.33.0 while candidate v0.34.1 is prepared. |
 
-The manifest currently binds v0.33.0 to its exact release commit. The seven-skill
-0.34.0 package on the working branch remains a candidate until its checks,
+The manifest records the exact reviewed v0.34.0 source tag, including its seven
+skill rows; that binding does not claim a published GitHub Release. The 0.34.1
+patch remains a candidate until its checks,
 independent review, release and native adoption are complete. A passing fixture
 or a guide update alone does not establish those outcomes.
 

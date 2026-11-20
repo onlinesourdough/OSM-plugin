@@ -830,8 +830,10 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
         with redirect_stdout(out):
             code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", *argv])
         require(code == 2 and out.getvalue().startswith("ERROR:") and expected in out.getvalue(), "a clean error, not a traceback")
+    # Repository CLI checks need real original bindings, including during tag builds.
+    # MANIFEST above deliberately strips those for synthetic transport scenarios.
     with redirect_stdout(io.StringIO()):
-        require(pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "0" * 40, "--check"], manifest=MANIFEST) == 0, "the null commit means no base")
+        require(pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "0" * 40, "--check"], manifest=pub.load_manifest()) == 0, "the null commit means no base")
 
 
 @test
@@ -1320,7 +1322,7 @@ def recorded_public_values_stay_out_of_shipped_text():
 def the_credential_free_reconciliation_check_passes_on_this_repository():
     out = io.StringIO()
     with redirect_stdout(out):
-        code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--check"], manifest=MANIFEST)
+        code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--check"], manifest=pub.load_manifest())
     text = out.getvalue()
     require(code == 0, text)
     require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
