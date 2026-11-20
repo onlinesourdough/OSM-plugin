@@ -437,6 +437,15 @@ def nothing_is_written_without_activation_handoff_and_the_write_gate():
     waiting["activation"]["active"] = True
     require(set(outcomes(run(fake, waiting, PACKETS, write=True, max_writes=7)).values()) == {pub.PENDING_HANDOFF} and not fake.log,
             "pages still with the existing upkeep are not read or written")
+    partial = copy.deepcopy(manifest)
+    for artifact in partial['artifacts']:
+        if artifact['class'] == 'A' and artifact['key'] != COUNCIL:
+            artifact.update(public_writer='existing-upkeep', adoption_state='pending-handoff')
+            artifact.pop('handoff', None)
+    partial_run = run(fake, partial, write=True, max_writes=7)
+    require(outcomes(partial_run)[COUNCIL] == pub.HELD and not fake.writes(),
+            'an active partial handoff with no explicit Key writes zero pages')
+    fake.log.clear()
     planned = run(fake, manifest)
     require(set(outcomes(planned).values()) == {pub.WOULD_WRITE} and not fake.writes(), "without --write the run only plans")
     bounded = run(fake, manifest, write=True)

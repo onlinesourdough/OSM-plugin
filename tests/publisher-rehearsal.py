@@ -818,7 +818,13 @@ def reconcile_check_says_what_it_could_observe_and_names_a_noop():
     with redirect_stdout(out):
         code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "HEAD"])
     text = out.getvalue()
-    require(code == 0 and "valid no-op" in text and f"| no-source-change | {len(W_KEYS)} |" in text and "would-write" not in text, text)
+    require(code == 0 and f"| no-source-change | {len(W_KEYS)} |" in text and "would-write" not in text, text)
+    native = [a for a in pub.load_manifest()['artifacts'] if a['class'] == 'A' and a['public_writer'] == 'ci']
+    if native:
+        require(f'| unknown-no-receipts | {len(native)} |' in text and 'the impact is unknown' in text,
+                'credential-free reconciliation cannot declare native page state: ' + text)
+    else:
+        require('valid no-op' in text, text)
     table = text.split("| Outcome | Artifacts |")[1].split("\n\n")[0]
     require("| written" not in table and "| unchanged" not in table, "the credential-free result never says written or unchanged")
     base = pub.DictSource(working_files(), "c-1")
@@ -1327,14 +1333,24 @@ def recorded_public_values_stay_out_of_shipped_text():
 
 @test(slow=True)
 def the_credential_free_reconciliation_check_passes_on_this_repository():
+    recorded = pub.load_manifest()
     out = io.StringIO()
     with redirect_stdout(out):
         code = pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--check"], manifest=pub.load_manifest())
     text = out.getvalue()
     require(code == 0, text)
-    require("Frozen source commit:" in text and "Publisher active: no" in text, "the result is visible and honest")
-    require(f"| pending-handoff | {CLASS_A_ROWS} |" in text and f"{CLASS_A_ROWS} artifact(s) are pending handoff" in text, f"the {CLASS_A_ROWS} released packets are pending handoff")
-    require(f"| unknown-no-receipts | {len(W_KEYS)} |" in text and "| written" not in text, "no row claims to be written")
+    active = 'yes' if recorded['activation']['active'] else 'no'
+    require("Frozen source commit:" in text and f"Publisher active: {active}" in text,
+            "the result reports the actual recorded activation state")
+    native = sum(a['class'] == 'A' and a['public_writer'] == 'ci' for a in recorded['artifacts'])
+    waiting = CLASS_A_ROWS - native
+    if waiting:
+        require(f"| pending-handoff | {waiting} |" in text and f"{waiting} artifact(s) are pending handoff" in text,
+                'only the remaining rows are pending handoff')
+    else:
+        require('| pending-handoff |' not in text, 'no unhanded native rows remain')
+    require(f"| unknown-no-receipts | {len(W_KEYS) + native} |" in text and "| written" not in text,
+            'working and native row state remains unknown without their readback')
     since = io.StringIO()
     with redirect_stdout(since):
         pub.main(["reconcile", "--repo", str(ROOT), "--ref", "HEAD", "--base", "00d29e2"])

@@ -1,10 +1,18 @@
 # Documentation automation activation
 
-The reconciliation, export and native skill publication code is available. Every
-writer is inactive. On 2026-11-20 a dedicated public-only connection was created
-and its token stored as the GitHub Actions secret. Real read-only qualification
-read all eight guide originals and seven native skill pages; the private context
-root returned 404. No live CI write or completed automatic publication is claimed.
+The native publisher is under bounded qualification. Only the existing Log page
+is handed over to CI for an explicitly keyed one-page import; the other six
+pages remain with existing upkeep. Whole-set automatic publication is not yet
+qualified. No successful live write is claimed by this activation commit.
+
+The dedicated public-only connection's token is stored as a GitHub Actions
+secret. Read-only CI [44734170998](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44734170998)
+read all eight guide originals and seven native skills, including their six
+managed properties. The private context root returned 404 in the earlier scope
+probe. Anonymous browser run [44731499066](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44731499066)
+read the public Log page and catalogue without login. The bounded import must
+still establish complete instruction order, all supporting bytes, metadata,
+retained history and existing file links before ownership expands.
 
 ## Who writes what
 
