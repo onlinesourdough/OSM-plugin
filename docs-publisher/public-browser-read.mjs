@@ -29,7 +29,7 @@ function batchAllowed(input) {
 }
 
 export function retryDelay(value, now) {
-  if (value == null) return 10000;
+  if (value == null) return 30000;
   const ms = /^\d+$/.test(value) ? Number(value) * 1000 : Date.parse(value) - now;
   return Number.isFinite(ms) && ms >= 0 && ms <= 60000 ? Math.max(1000, ms) : null;
 }
@@ -91,7 +91,7 @@ export async function readPublicBatch(input, launch = defaultLaunch, options = {
     const page = await context.newPage();
     phase = 'navigation';
     for (const request of input.requests) {
-      if (results.length && timing.deadline - now() > 1500) await sleep(1500);
+      if (results.length && timing.deadline - now() > 15000) await sleep(15000);
       results.push(timing.deadline <= now()
         ? {ok:false, url:request.url, reason:deadlineReason}
         : await observe(page, {...request, diagnostics:input.diagnostics}, timing));
