@@ -228,9 +228,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RESULT: ${{ job.status }}
+          COMPLETE_SET: ${{ steps.gates.outputs.publish == 'true' && steps.gates.outputs.native_write == 'true' && inputs.native_write_key == '' }}
         run: |
           state=failure
-          if [ "$RESULT" = success ]; then state=success; fi
+          if [ "$RESULT" = success ] && [ "$COMPLETE_SET" = true ]; then state=success; fi
           gh api --silent --method POST "repos/$GITHUB_REPOSITORY/statuses/$OSM_DOCS_SHA" \
             -f state="$state" -f context='osm/public-guide-parity' \
-            -f description='Public guide original comparison completed'
+            -f description='Guide originals and complete released skill set checked'
