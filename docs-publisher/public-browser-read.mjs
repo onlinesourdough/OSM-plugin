@@ -23,7 +23,7 @@ export async function readPublic(input, launch = async () => (await import('play
     page = await context.newPage();
     phase = 'navigation';
     const response = await page.goto(input.url, {waitUntil:'domcontentloaded', timeout:30000});
-    if (response?.status() !== 200) return {ok:false, reason:'Public page did not return HTTP 200'};
+    if (response?.status() !== 200) return {ok:false, reason:'Public page did not return HTTP 200', httpStatus:response?.status()};
     phase = 'content';
     await page.waitForFunction(markers => {
       const text = document.body?.innerText?.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase() || '';
@@ -42,6 +42,7 @@ export async function readPublic(input, launch = async () => (await import('play
       try {
         const text = await page.locator('body').innerText({timeout:1000});
         if (Buffer.byteLength(text,'utf8') <= 2_000_000) {
+          if (input.diagnostics === true) diagnostic.observedText = text;
           diagnostic.expectedMarkers = input.markers.length;
           diagnostic.missingMarkerIndexes = input.markers.flatMap((marker,index)=>letters(text).includes(letters(marker))?[]:[index]);
         }

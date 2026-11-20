@@ -51,7 +51,7 @@ jobs:
           from pathlib import Path
           base = 'https://gustavanderson.notion.site/'
           requests = [
-              {'url':base+'41d6d2e17f568177bedac9379fb63e89', 'markers':['OSM:log','1.2.0']},
+              {'url':base+'40d6d2e17f56812e9326c206a8b4a66e', 'markers':['OSM:council','3.1.1']},
               {'url':base+'6abfc738a9604ddc806432721813712b', 'markers':[
                   'OSM:setup','OSM:prime','OSM:log','OSM:dreaming','OSM:interview','OSM:human-writing','OSM:council']},
           ]
@@ -72,6 +72,9 @@ jobs:
           manifest = pub.load_manifest()
           packets = native.build_packets(manifest, pub.GitSource('.', manifest['editions']['released']['commit']))
           def capture(args, **kwargs):
+              request = json.loads(kwargs['input'])
+              request['diagnostics'] = True
+              kwargs['input'] = json.dumps(request)
               result = subprocess.run(args, **kwargs)
               try:
                   body = json.loads(result.stdout)
