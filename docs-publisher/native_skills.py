@@ -43,7 +43,7 @@ ENABLED_ENV = "OSM_PUBLIC_DOCS_ENABLED"
 SOURCE_FORMAT = "osm-public-skill-source/2"
 MAX_ARCHIVE = 20 * 1024 * 1024          # Notion's documented upload limit
 MAX_UNPACKED, MAX_FILES, MAX_JSON = 25 * 1024 * 1024, 1000, 4 * 1024 * 1024
-MANAGED = ("Key", "Version", "Source revision", "Package version", "Status")
+MANAGED = ("Key", "Version", "Source", "Source revision", "Package version", "Status")
 RESERVED = ("resources", "history", "LICENSE", "SOURCE.json")
 _LINK = re.compile(r"\]\(([^)\s]+)\)")
 _BREAK = re.compile(r"<br\s*/?>")
@@ -517,7 +517,9 @@ def expected(packet, seen):
         files[kept] = data
     status = (packet["handoff"] or {}).get("properties", {}).get("Status", seen["properties"]["Status"])
     return {"files": files, "skill": packet["skill"], "title": packet["title"],
-            "properties": {"Key": packet["row_key"], "Version": packet["version"], "Source revision": packet["commit"],
+            "properties": {"Key": packet["row_key"], "Version": packet["version"],
+                           "Source": f"https://github.com/onlinesourdough/OSM-plugin/blob/{packet['commit']}/skills/{packet['name']}/SKILL.md",
+                           "Source revision": packet["commit"],
                            "Package version": packet["package"], "Status": status}}
 
 

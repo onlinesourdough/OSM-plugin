@@ -129,11 +129,11 @@ class FakeSkills:
 
     # -- state --
     def seed(self, packet, files, body, title=None, **props):
-        values = {"Key": packet["row_key"], "Version": packet["version"], "Source revision": "0" * 40,
+        values = {"Key": packet["row_key"], "Version": packet["version"], "Source": "https://example.invalid/old-source", "Source revision": "0" * 40,
                   "Package version": packet["package"], "Status": "Released", **props}
         self.pages[packet["page"]] = {
             "title": title or packet["title"], "description": "An earlier description.", "body": body, "files": dict(files),
-            "props": {name: ["select" if name == "Status" else "rich_text", value] for name, value in values.items()},
+            "props": {name: ["url" if name == "Source" else "select" if name == "Status" else "rich_text", value] for name, value in values.items()},
             "parent": CATALOGUE, "trashed": False, "edits": 1}
 
     def version(self, page_id):
@@ -201,7 +201,7 @@ class FakeSkills:
         page = self.pages[page_id]
         props = {"Name": {"type": "title", "title": [{"plain_text": page["title"]}]}}
         for name, (kind, value) in page["props"].items():
-            props[name] = {"type": kind, kind: [{"plain_text": value}] if kind == "rich_text" else ({"name": value} if value else None)}
+            props[name] = {"type": kind, kind: value if kind == "url" else [{"plain_text": value}] if kind == "rich_text" else ({"name": value} if value else None)}
         return {"object": "page", "id": dashed(page_id), "in_trash": page["trashed"], "is_skill": True, "properties": props,
                 "last_edited_time": f"2026-11-20T00:00:{page['edits']:02d}.000Z",
                 "parent": {"type": "data_source_id", "data_source_id": "fixture-source", "database_id": dashed(page["parent"])}}
@@ -211,6 +211,8 @@ class FakeSkills:
         for name, value in json.loads(request.data)["properties"].items():
             if name == "Name":
                 page["title"] = "".join(part["text"]["content"] for part in value["title"])
+            elif page["props"][name][0] == "url":
+                page["props"][name][1] = value["url"] or ""
             elif page["props"][name][0] == "select":
                 page["props"][name][1] = (value["select"] or {}).get("name", "")
             else:
@@ -470,7 +472,9 @@ def the_first_import_delivers_the_whole_packet_and_a_rerun_is_a_no_op():
                 "a previous same-named ZIP with different bytes is retained in history")
         require(page["files"] == {**wanted, **HISTORY, **preserved}, f"{packet['name']}: the packet and the earlier history are on the page")
         require(page["title"] == packet["title"] and {n: v for n, (_k, v) in page["props"].items()} == {
-            "Key": packet["row_key"], "Version": packet["version"], "Source revision": RELEASED["commit"],
+            "Key": packet["row_key"], "Version": packet["version"],
+            "Source": f"https://github.com/onlinesourdough/OSM-plugin/blob/{RELEASED['commit']}/skills/{packet['name']}/SKILL.md",
+            "Source revision": RELEASED["commit"],
             "Package version": packet["package"], "Status": "Released"}, f"{packet['name']}: title and properties are restored")
     require("Automatic publication: active for this run" in ns.report(result, manifest), "a fully verified active run says so")
     fake.log.clear()

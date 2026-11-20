@@ -63,20 +63,20 @@ an observation of those archives, not a qualification of this publisher.
    skill-checkpoint.json` (the workflow does this once access is configured).
    It only reads. For each page it checks the identity (the exact page, not in
    the trash, a row of the bound catalogue with one title and the properties
-   Key, Version, Source revision, Package version and Status), downloads the
+   Key, Version, Source, Source revision, Package version and Status), downloads the
    skill archive and reports the page's state. Confirm on real pages that the
    catalogue is the parent recorded as `reading_export.catalogue` and that the
-   five properties are text, select, status or URL properties.
+   six properties are text, select, status or URL properties.
 5. Record the handoff. When a page is in the state the existing upkeep
    relinquishes, copy its `handoff` object from the checkpoint into that
    artifact in `manifest.json`, set `public_writer` to `ci` and
    `adoption_state` to `adopted`, in a reviewed commit. The record holds the
-   files and skill digests, title, the five property values and the read time.
+   files and skill digests, title, the six property values and the read time.
    The first import replaces exactly that state; a page that differs from it is
    a conflict and is kept. The recorded Status is the one CI restores.
 6. Set `activation.active` in a reviewed commit, then qualify one bounded write:
    run the workflow manually on `main` with `native_write_key` set to one Key.
-   It imports that page only, restores the canonical title and the five
+   It imports that page only, restores the canonical title and the six
    properties, and reads the whole page back. Verify on the real page that files
    absent from the archive were removed (the documented replace behaviour),
    that nested folders and `history/` are intact, that earlier file links still
@@ -121,7 +121,7 @@ identity in `bindings.working_subtree`. Publication refuses another database.
 - Publication writes only artifacts assigned to CI. Notion-authored guide
   originals and optional Content templates are never overwritten or repaired.
 - A skill page is unchanged only when its supporting bytes, the meaning of its
-  `SKILL.md`, its title and its five properties all equal the released packet.
+  `SKILL.md`, its title and its six properties all equal the released packet.
   Notion's `version_id` is used as an observation: it must not move between the
   read and the import, and it is kept in the checkpoint. It never decides a no-op.
 - The workflow summary and result state that automatic publication is not
