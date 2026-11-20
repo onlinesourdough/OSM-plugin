@@ -5,7 +5,7 @@
     "url": "https://github.com/onlinesourdough"
   },
   "metadata": {
-    "description": "The Onlinesourdough Method (OSM) for portable owner context and reviewed work."
+    "description": "The Onlinesourdough Method (OSM) : portable Notion context for AI agents."
   },
   "plugins": [
     {

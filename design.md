@@ -13,4 +13,6 @@ Its [vector source](assets/branding/osm-icon.svg) remains editable.
 
 Earlier dashboard designs and Paper references remain in the
 [v0.33.0 design history](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/design.md).
-They do not specify the current interface.
+The retired dashboard's Paper export left the active tree after 0.33.0; its
+unchanged files remain in the [v0.33.0 Paper folder](https://github.com/onlinesourdough/OSM-plugin/tree/v0.33.0/Paper/3438e04fc0d64ffe).
+None of this specifies the current interface.
