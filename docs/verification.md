@@ -1,5 +1,41 @@
 # Verification
 
+## 20 November 2026 — completed 0.34.3 Notion delivery
+
+The actual upgrade [44767334193](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44767334193)
+wrote all seven existing native skill pages and read back their full instruction
+bodies, 263 supporting-file observations including retained history, and six
+managed properties per page. Each page names released commit
+`caedb13fde5fc33315f97d4875e7a76e379b1737`, package 0.34.3 and its own skill
+version. All seven writes were API-verified; none had an unknown final state.
+That run remains a failure: its anonymous browser batch reached its time limit.
+This does not establish why the browser timed out or a passing same-run public
+write/read result.
+
+Subsequent automatic main [44768735214](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44768735214)
+and independent repeat [44769500886](https://github.com/onlinesourdough/OSM-plugin/actions/runs/44769500886)
+both passed on frozen author source
+`d8dfb2d576a919c02c2389b29dbf0509db6209b1`. They read every saved page first,
+found all seven unchanged and attempted zero writes. For every row, the entire
+instruction digest, all 263 file hashes, title and six properties match the
+actual upgrade's saved readback exactly. Both runs verified each complete ordered
+instruction body and its exact visible native catalogue entry anonymously.
+Their eight live guide originals agree with the bound exports. The exact-source
+`osm/public-guide-parity` status succeeded.
+
+Together these receipts qualify the completed saved upgrade, its separate public
+readback and an independent zero-write repeat. The first failed public attempt
+is retained; no packet was uploaded again merely to manufacture a passing write
+run. Guide originals, optional Content Drafts and private owner context were
+not written by CI. The existing private upkeep retains its exact seven-page
+handoff and has no competing native publisher.
+
+The release asset, native profiles, fresh Codex acceptance and Resources production
+have their separate receipts below. The existing daily job's completed timed
+Dreaming cycle, broader first-use/team/host qualifications, Agentic System's
+separate CI activation and OSM Content redesign remain outside this completion.
+Current issue status and any later delivery receipts belong to #110.
+
 ## 20 November 2026 — 0.34.3 native adoption and Resources
 
 Both actual Codex and Claude Code profiles now use the verified 0.34.3 source
@@ -46,10 +82,9 @@ the unrelated renamed Agentic repository redirect. It is not part of the
 
 Fable 5.2 High separately accepted exact released-source binding `c240326`
 without P1 or P2 findings. Main package checks 44767026229 passed. The automatic
-new seven-packet publication is run 44767334193; at this adoption checkpoint it
-is still in progress. Its final write/API/public result and a separate no-op
-repeat must be recorded in #110 before that issue is closed. Earlier failed or
-interrupted attempts retain their own results.
+new seven-packet publication was run 44767334193; at that adoption checkpoint
+it was still in progress. The completed delivery and independent repeat are
+recorded above. Earlier failed or interrupted attempts retain their own results.
 
 ## 20 November 2026 — 0.34.3 release and source binding
 
