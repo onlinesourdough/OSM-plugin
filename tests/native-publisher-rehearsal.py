@@ -24,6 +24,7 @@ import urllib.parse
 import zipfile
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "docs-publisher"))
@@ -775,6 +776,32 @@ def a_bounded_proof_never_claims_the_whole_automatic_run_is_qualified():
     require(outcomes(result) == {COUNCIL: pub.WRITTEN}, 'the bounded page is verified')
     require('Automatic publication: NOT active' in ns.report(result, manifest),
             'one page does not prove the seven-page automatic run')
+
+
+@test
+def a_later_refusal_preserves_earlier_page_evidence_and_stops_the_remaining_set():
+    fake, manifest = handed_over(reader=True)
+    pages = list(PACKETS.values())
+    original = fake._upload_post
+    def refused(request, page_id):
+        if page_id == pages[1]['page']:
+            raise ns.Refused('fixture second-page refusal')
+        return original(request, page_id)
+    fake._upload_post = refused
+    result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver,
+                        reader(fake), write=True, max_writes=7)
+    require(result['rows'][0]['outcome'] == pub.WRITTEN and result['rows'][0].get('after'),
+            'the first verified page stays recorded')
+    require(result['rows'][1]['outcome'] == pub.BLOCKED,
+            'the later refusal is a page result rather than an escaping exception')
+    require(all(row['outcome'] == pub.HELD for row in result['rows'][2:]), 'remaining imports are held')
+    with patch.object(ns, 'MAX_UNPACKED', 1024):
+        try:
+            ns.pack('example', {'SKILL.md':b'a' * 1025})
+        except ns.Refused:
+            pass
+        else:
+            raise AssertionError('never upload a packet too large to read back')
 
 
 def main():

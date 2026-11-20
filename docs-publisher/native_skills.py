@@ -281,12 +281,16 @@ def prove_coverage(packet, sources, licence):
 
 def pack(name, files):
     """The archive Notion imports: one top-level directory named after the skill. Refuses, never truncates."""
+    if sum(len(data) for data in files.values()) > MAX_UNPACKED:
+        raise Refused(f'{name}: the unpacked packet exceeds the readback limit')
     raw = io.BytesIO()
     with tarfile.open(fileobj=raw, mode="w") as tar:
         for path, data in sorted(files.items()):
             info = tarfile.TarInfo(f"{name}/{path}")
             info.size, info.mtime, info.mode = len(data), 0, 0o644
             tar.addfile(info, io.BytesIO(data))
+    if raw.tell() > MAX_UNPACKED:
+        raise Refused(f'{name}: the unpacked packet exceeds the readback limit')
     packed = gzip.compress(raw.getvalue(), mtime=0)
     if len(packed) >= MAX_ARCHIVE or len(files) >= MAX_FILES:
         raise Refused(f"{name}: the packet exceeds Notion's archive limits")
@@ -713,10 +717,12 @@ def _write(api, packet, row, catalogue):
             try:
                 api.update(page_id, changes)
             except pub.PublisherError as error:
-                return stop(pub.PARTIAL, f"the packet is on the page but its title and properties were not restored ({error}); a rerun reads the page and resumes")
+                return stop(pub.PARTIAL, f"the packet is on the page but its title and properties were not restored ({error}); a rerun reads first; unrecognised property values require a reviewed handoff")
             seen = again("the title and properties were restored")
             if seen is None:
                 return False
+    except Refused as error:
+        return stop(pub.BLOCKED, f'{error}; inspect this page before any repeat')
     except pub.AccessError as error:
         return stop(pub.BLOCKED, f"missing access: {error}")
     except pub.NotApplied as error:
