@@ -15,7 +15,7 @@ SAFE_REASONS = {
     'Public browser failed during launch', 'Public browser failed during navigation',
     'Public browser failed during content', 'Oversized public read request', 'Invalid public read request',
     'Public browser run reached its time limit', 'Public page was rate limited; retry later',
-    'Public browser failed during shutdown', 'Public catalogue did not show every linked skill entry',
+    'Public browser failed during shutdown', 'Public catalogue did not show every bound skill entry',
 }
 
 

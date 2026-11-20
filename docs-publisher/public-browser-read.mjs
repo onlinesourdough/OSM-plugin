@@ -80,9 +80,14 @@ async function observe(page, input, timing) {
     if (Buffer.byteLength(text, 'utf8') > 2_000_000 || !input.markers.every(marker => letters(text).includes(letters(marker))))
       return {ok:false, url:input.url, reason:'Public page was oversized or missing its expected content'};
     const entries = (input.entries || []).filter(entry => observation.links.some(link => publicUrl(link.url) &&
-      new URL(link.url).origin === new URL(input.url).origin && pageId(link.url) === entry.page && link.title.trim().replace(/\s+/gu,' ') === entry.title));
+      new URL(link.url).origin === new URL(input.url).origin && pageId(link.url) === entry.page && link.title.trim().replace(/\s+/gu,' ') === entry.title) ||
+      // Qualified against the seven actual public collection rows in CI44748698317.
+      // Notion renders these as DIV navigation rows, not HTML anchors.
+      (observation.nativeRows || []).some(row => row.page === entry.page && row.visible === true && row.tag === 'DIV' &&
+        ['notion-page-block','notion-collection-item'].every(name => row.className.split(/\s+/u).includes(name)) &&
+        row.title.split(/\r?\n/u)[0].trim().replace(/\s+/gu,' ') === entry.title));
     if (entries.length !== (input.entries || []).length) {
-      const failed = {ok:false, url:input.url, reason:'Public catalogue did not show every linked skill entry'};
+      const failed = {ok:false, url:input.url, reason:'Public catalogue did not show every bound skill entry'};
       if (input.diagnostics === true) {
         failed.linkedEntries = entries;
         failed.observedNativeRows = observation.nativeRows;

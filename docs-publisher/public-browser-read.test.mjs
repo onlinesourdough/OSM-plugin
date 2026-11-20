@@ -7,7 +7,7 @@ const input = {url,allowedUrls:[url],markers:['OSM:log','1.2.0']};
 const batch = {allowedUrls:[url,other],requests:[{url,markers:input.markers},{url:other,markers:['OSM:setup']}]};
 const fast = {sleep:async()=>{}};
 
-const fake = ({text='OSM:log version 1.2.0 OSM:setup',final,statuses=[200],retryAfter='1',throwContent=false,snapshotFinal,links=[]}={}) => {
+const fake = ({text='OSM:log version 1.2.0 OSM:setup',final,statuses=[200],retryAfter='1',throwContent=false,snapshotFinal,links=[],nativeRows=[]}={}) => {
   const counts = {launch:0,context:0,page:0,goto:0,close:0};
   let current=url, index=0, contextOptions;
   return {counts,options:()=>contextOptions,launch:async()=>{
@@ -17,7 +17,7 @@ const fake = ({text='OSM:log version 1.2.0 OSM:setup',final,statuses=[200],retry
       return {newPage:async()=>{counts.page++;return {
         goto:async value=>{current=value;counts.goto++;const status=statuses[Math.min(index++,statuses.length-1)];return {status:()=>status,headers:()=>({'retry-after':retryAfter}),url:()=>current};},
         waitForFunction:async()=>{if(throwContent)throw Error('fixture-only');},url:()=>final||current,
-        locator:()=>({innerText:async()=>text}), evaluate:async()=>({url:snapshotFinal||final||current,text,links}),
+        locator:()=>({innerText:async()=>text}), evaluate:async()=>({url:snapshotFinal||final||current,text,links,nativeRows}),
       };}};
     }};
   }};
@@ -165,4 +165,17 @@ test('the DOM capture requires native visibility including opacity',async()=>{
   const catalogue={...input,entries:[{page:'b'.repeat(32),title:'OSM:setup'}]};
   assert.equal((await readPublic(catalogue,launch,fast)).ok,false);
   visible=true;assert.equal((await readPublic(catalogue,launch,fast)).ok,true);
+});
+
+
+test('actual qualified Notion collection rows establish the exact visible catalogue entries',async()=>{
+  const entry={page:'b'.repeat(32),title:'OSM:setup'};
+  const catalogue={...input,entries:[entry]};
+  const row={page:entry.page,visible:true,tag:'DIV',className:'notion-selectable notion-page-block notion-collection-item',
+    title:'OSM:setup\nDescription\nReleased reference\n3.2.0\n0.34.2'};
+  assert.equal((await readPublic(catalogue,fake({nativeRows:[row]}).launch,fast)).ok,true);
+  for(const patch of [{page:'a'.repeat(32)},{visible:false},{tag:'SPAN'},{className:'notion-page-block'},
+    {title:'Removed from this catalogue\nOSM:setup'},{title:'osm set-up\nDescription'}]){
+    assert.equal((await readPublic(catalogue,fake({nativeRows:[{...row,...patch}]}).launch,fast)).ok,false);
+  }
 });
