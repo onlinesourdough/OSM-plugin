@@ -4,6 +4,7 @@ import os
 import subprocess
 from pathlib import Path
 import publisher as pub
+from native_skills import plain_lines
 
 
 class BrowserReader(pub.PublicReader):
@@ -11,7 +12,8 @@ class BrowserReader(pub.PublicReader):
         super().__init__(base, catalogue)
         self.runner, self.cache, self.markers = runner, {}, {}
         for packet in packets.values():
-            self.markers[f'{self.base}/{packet["page"]}'] = [packet['title'], packet['version'], packet['package']]
+            final_line = plain_lines(packet['files']['SKILL.md'].decode())[-1][-500:]
+            self.markers[f'{self.base}/{packet["page"]}'] = [packet['title'], packet['version'], packet['package'], final_line]
         self.markers[catalogue] = [packet['title'] for packet in packets.values()]
 
     def read(self, url):

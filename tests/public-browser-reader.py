@@ -17,7 +17,8 @@ BASE = 'https://gustavanderson.notion.site'
 PAGE = 'a' * 32
 URL = BASE + '/' + PAGE
 CATALOGUE = BASE + '/' + 'b' * 32
-PACKETS = {'osm-log': {'page': PAGE, 'title': 'OSM:log', 'version': '1.2.0', 'package': '0.34.2'}}
+PACKETS = {'osm-log': {'page': PAGE, 'title': 'OSM:log', 'version': '1.2.0', 'package': '0.34.2',
+                       'files': {'SKILL.md': b'Finish here.\n'}}}
 
 
 class BrowserBoundary(unittest.TestCase):
@@ -28,6 +29,7 @@ class BrowserBoundary(unittest.TestCase):
             self.assertNotIn('OSM_PUBLIC_DOCS_TOKEN', kw['env'])
             self.assertNotIn('GH_TOKEN', kw['env'])
             self.assertEqual(json.loads(kw['input'])['url'], URL)
+            self.assertIn('finishhere', json.loads(kw['input'])['markers'])
             return SimpleNamespace(returncode=0, stdout=json.dumps({'ok': True, 'url': URL, 'text': 'visible content'}))
         with patch.dict(os.environ, {'OSM_PUBLIC_DOCS_TOKEN': 'fixture', 'GH_TOKEN': 'fixture'}):
             reader = BrowserReader(BASE, CATALOGUE, PACKETS, runner=run)

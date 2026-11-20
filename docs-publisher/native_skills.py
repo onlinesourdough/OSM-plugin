@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Native whole-skill publisher for the released skill pages (class A, issue #110).
 
-Not shipped in the package and not active. A released skill page is delivered whole through Notion's
+Not shipped in the package. A released skill page is delivered whole through Notion's
 Agent Skills API: `GET ai/skills/{id}` names a temporary signed archive of the page as a skill
 directory, and `POST ai/skills/{id}/upload` imports one gzip tar archive into that existing page
 (title, Description, body and Files). The paragraph writer in publisher.py never writes these pages.
@@ -13,8 +13,9 @@ forward byte for byte. Only the seven pages bound in manifest.json are ever addr
 originals are never touched. Nothing is recorded on the page beyond the packet: the state CI compares
 is the page itself (supporting bytes, the meaning of SKILL.md, title and properties).
 
-Standard library only. This module has run only against the in-memory stand-in in
-tests/native-publisher-rehearsal.py, never against Notion. Read ACTIVATION.md before enabling it.
+The API/packet path uses the standard library; anonymous rendered reads use the isolated browser
+adapter when selected. Activation and actual qualification evidence live in manifest.json and
+ACTIVATION.md. Fixture results alone never establish live publication.
 """
 
 import argparse

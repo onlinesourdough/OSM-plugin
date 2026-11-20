@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """Source-only publisher and parity check for the public OSM documentation.
 
-Not shipped in the package and not active. Ownership is per artifact. The public Notion guide pages are
+Not shipped in the package. Ownership is per artifact. The public Notion guide pages are
 Notion-authored originals: they are frozen read-only, bound by page id and content revision, exported
 to Git deliberately (`export`) and never written from Git. Git-owned artifacts are written only where
 their public writer is CI. It builds a per-artifact impact diff from a frozen source commit and always
 returns a visible reconciliation result (a no-op is valid); everything else gets a visible refusal
 and no write.
 
-Standard library only. The Notion transport below has run only against the in-memory stand-in in
-fixture_transport.py (never against Notion) and stays fail-closed until the manifest says
-`activation.active` and a dedicated credential exists. No public content reader is qualified, so
-no run can reach `complete` today: public access and catalogue membership are `unsupported`.
+Standard library only. The transport stays fail-closed until the manifest records
+`activation.active` and a dedicated credential exists. Completing publication also needs a
+qualified public reader; actual evidence is recorded separately from fixture results.
 
 Released skill pages (class A) are not written here. native_skills.py delivers them whole through
 Notion's Agent Skills API; the paragraph writer below would replace their files and refuses them.
