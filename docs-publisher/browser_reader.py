@@ -29,9 +29,16 @@ class BrowserReader(pub.PublicReader):
         try:
             result = self.runner(['node', str(Path(__file__).with_name('public-browser-read.mjs'))],
                                  input=json.dumps(request), text=True, capture_output=True, timeout=80, env=env)
-            if result.returncode or len(result.stdout.encode()) > 2_010_000:
+            if len(result.stdout.encode()) > 2_010_000:
                 return pub.FAILED, 'public browser did not verify the page'
             body = json.loads(result.stdout)
+            if result.returncode:
+                reason = body.get('reason')
+                safe = {'URL or markers outside the explicit public page set', 'Public page did not return HTTP 200',
+                        'Public page changed host or page identity', 'Public page was oversized or missing its expected content',
+                        'Public browser failed during launch', 'Public browser failed during navigation',
+                        'Public browser failed during content', 'Oversized public read request', 'Invalid public read request'}
+                return pub.FAILED, reason if reason in safe else 'public browser did not verify the page'
             if body.get('ok') is not True or body.get('url') != url or not isinstance(body.get('text'),str):
                 return pub.FAILED, 'public browser returned no matching content observation'
             observed = pub.VERIFIED, body['text']

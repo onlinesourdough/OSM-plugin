@@ -52,6 +52,13 @@ class BrowserBoundary(unittest.TestCase):
             raise subprocess.TimeoutExpired('node', 80)
         self.assertEqual(BrowserReader(BASE, CATALOGUE, PACKETS, runner=timeout).read(URL)[0], pub.FAILED)
 
+    def test_failure_reason_is_fixed_and_never_echoes_untrusted_text(self):
+        for reason, expected in [('Public browser failed during launch', 'Public browser failed during launch'),
+                                 ('private fixture credential', 'public browser did not verify the page')]:
+            reader = BrowserReader(BASE, CATALOGUE, PACKETS, runner=lambda *a, **k:
+                SimpleNamespace(returncode=1, stdout=json.dumps({'ok':False,'reason':reason})))
+            self.assertEqual(reader.read(URL), (pub.FAILED, expected))
+
 
 if __name__ == '__main__':
     unittest.main()

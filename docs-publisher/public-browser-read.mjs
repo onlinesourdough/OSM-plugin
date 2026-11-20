@@ -16,13 +16,15 @@ export function allowed(input) {
 
 export async function readPublic(input, launch = async () => (await import('playwright')).chromium.launch({headless:true})) {
   if (!allowed(input)) return {ok:false, reason:'URL or markers outside the explicit public page set'};
-  let browser;
+  let browser, page, phase = 'launch';
   try {
     browser = await launch();
     const context = await browser.newContext({acceptDownloads:false});
-    const page = await context.newPage();
+    page = await context.newPage();
+    phase = 'navigation';
     const response = await page.goto(input.url, {waitUntil:'domcontentloaded', timeout:30000});
     if (response?.status() !== 200) return {ok:false, reason:'Public page did not return HTTP 200'};
+    phase = 'content';
     await page.waitForFunction(markers => {
       const text = document.body?.innerText?.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase() || '';
       return markers.every(marker => text.includes(marker.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase()));
@@ -35,7 +37,17 @@ export async function readPublic(input, launch = async () => (await import('play
       return {ok:false, reason:'Public page was oversized or missing its expected content'};
     return {ok:true, url:input.url, finalUrl, observedAt:new Date().toISOString(), text};
   } catch {
-    return {ok:false, reason:'Public browser read failed or its expected content was not visible before timeout'};
+    const diagnostic = {ok:false, reason:`Public browser failed during ${phase}`};
+    if (phase === 'content') {
+      try {
+        const text = await page.locator('body').innerText({timeout:1000});
+        if (Buffer.byteLength(text,'utf8') <= 2_000_000) {
+          diagnostic.expectedMarkers = input.markers.length;
+          diagnostic.missingMarkerIndexes = input.markers.flatMap((marker,index)=>letters(text).includes(letters(marker))?[]:[index]);
+        }
+      } catch { /* No raw exception, page content or credentials enter diagnostics. */ }
+    }
+    return diagnostic;
   } finally { await browser?.close(); }
 }
 
