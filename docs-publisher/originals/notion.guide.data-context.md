@@ -6,7 +6,7 @@ The Data & Context definition tells the agent which system owns information, whe
 
 For example, keep the accounting in an AI-native system such as Numina. Prime follows the selected route and the agent queries the relevant current information there. Log may retain a permitted business decision or source pointer; Dreaming may perform a relevant due check. Neither needs a second ledger, invoice archive or recurring report mirror in Notion.
 
-A source can permit a read in an approved environment while prohibiting storage in Notion or another destination. Record that handling rule explicitly. Apply it to Memory, summaries, logs and delegated briefs too. A fictional clinical system could therefore remain the only permitted location for patient records while its definition holds only the approved route and handling requirements. The actual source agreement determines the permitted use; a connection alone does not decide it.
+A source can permit a read in an approved environment while prohibiting storage in Notion or another destination. Record that handling rule explicitly. Apply it to Memory, summaries, logs and delegated briefs too. A fictional clinical system could therefore remain the only permitted location for patient records while its definition holds only the approved route and handling requirements. The actual source agreement determines the permitted use; a connection alone does not decide it. Reading source content already processes it in the AI host. These handling instructions guide the agent; they do not configure technical access controls or establish legal compliance. Use only an environment the source's actual policy permits. Material later found in a transcript keeps its original handling rules.
 
 ## Storage responsibilities
 
@@ -103,15 +103,17 @@ Setup replaces placeholders with verified page and database identities and adapt
 
 ## Database fields
 
-Knowledge covers the selected understanding of the person and business, offers, customers and their language, voice, positioning, strategy, relevant numbers, team and source map. Live operational facts stay with their owning systems. These are useful topics, not a mandatory set of columns or a requirement to copy each system into Notion.
+Knowledge covers the selected understanding of the person and business, offers, customers and their language, voice, positioning, strategy, relevant numbers, team and source map. Live operational facts stay with their owning systems. These are useful topics, not mandatory columns or a requirement to copy each system into Notion.
 
-| Store | Starting properties and Notion types | Add when useful |
+These are useful field meanings, not a compulsory migration. Reuse native properties and sufficient existing equivalents. A known classification or evidence basis can be stated in the body when no separate property is needed.
+
+| Store | Useful starting fields and Notion types | Add when useful |
 | --- | --- | --- |
-| Knowledge | Name (Title), Summary and Source (Text), Kind and Status (Select), Space (Multi-select) or Scope (Text), Key (Text) for managed topics | Evidence from (Multi-select), Temporal scope (Select), Evidence period, Revised and Review due (Date). Preserve existing Type and Category fields. |
-| Memory | Name (Title), Key (Text), Status (Select), Space (Multi-select), and an exact evidence reference in Source or Evidence (Text) | Type (Select), Source date, Imported, Revised and Review due (Date), Related docs (Relation). If Source already names the editing client as a Select, keep it and use Evidence for the actual source. |
-| Skills | Native Skill name (Title), Description (Text), Files (Files & media), Status and Audience (Select), Space (Multi-select) | Owner (Person), Key and Source (Text), Revised and Review due (Date). A method's actual source/version is distinct from its record revision. |
+| Knowledge | Name (Title), Summary and provenance (Text), Kind, Status and Temporal scope (Select), Evidence from (Multi-select), Space (Multi-select) or Scope (Text), Key (Text) for managed topics | Evidence period, Revised and Review due (Date). Preserve existing Type and Category fields. Unknown dates stay blank. |
+| Memory | Name (Title), Key (Text) for managed decisions, Status (Select), Space (Multi-select) or Scope (Text), and an exact evidence reference in Source or Evidence (Text) | Type (Select), Source date, Imported, Revised and Review due (Date), Related docs (Relation). Preserve an existing Source (Select) that identifies the creating agent; use Evidence for provenance and Last updated by for the editing client where selected. |
+| Skills | Native Skill name (Title), Description (Text), supporting Files (Files & media) when the method needs resources, Status and Audience (Select), Space (Multi-select) or Scope (Text) | Accountable Owner (Person), Key and Source (Text), Revised and Review due (Date). The method's source/version is distinct from its record revision. |
 
-Reuse native database types and suitable existing properties. Add a relation only when its meaning and evidence are clear. Review due and substantive revision dates are useful when they change retrieval or maintenance. A label, view or team audience does not grant access. Source dates describe the source; editing or importing a record is a different event.
+Source dates describe the source; importing, substantive revision and technical editing are different events. Review due has a real reason and does not expire a still-valid decision. Add a relation only when its meaning and evidence are clear. A label, view or team audience does not grant access.
 
 ## How the three context skills use this home
 

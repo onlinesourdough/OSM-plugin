@@ -11,13 +11,13 @@ Reading a method to explain it does not start that workflow or load owner data.
 | What OSM is, its concepts and boundaries | [OSM overview](../../../docs/osm.md) |
 | Which OSM version is installed | [Package identity](../../../.codex-plugin/plugin.json); the overview states the same version |
 | How work is selected and carried through | [Routing](routing.md) and the relevant part of [the lifecycle](lifecycle.md) |
-| How interview, setup and delivery methods connect | The overview's [connected work methods](../../../docs/osm.md#connected-work-methods), then the selected skill |
+| How shared methods and owner context connect | The overview's [shared method and owner context](../../../docs/osm.md#shared-method-owner-context), then the selected skill |
 | How installation, updates or removal work in a selected app | [Native adapters](../../osm-setup/references/adapters.md) |
 | How to set up or check a Notion context home | [Setup](../../osm-setup/SKILL.md), [Data & Context](../../osm-data-context/index.md) and [check](check.md) |
 | How Notion context and personal skills work | [Notion operating route](../../osm-manage-data-context/references/operating.md) |
 | How owner context and external sources are maintained | [Context curation](../../osm-manage-data-context/references/curation.md) |
 | How to update OSM or move off a legacy file home | [Update](update.md) |
-| Where the public guide is | The OSM repository's `README.md` links it (that file is not part of the installed package). The guide is a reference projection of a released version, not the installed method; the installed skills stay the instructions |
+| Where the public guide is | The packaged `README.md` links the Notion-authored method guide: the readable explanation, definition template, setup cases and architecture. Git versions the installable skills; use the instructions supplied with the installed edition |
 
 Use already available skill descriptions to select a particular method; open its
 instructions only when the question needs them. For a current release, changed

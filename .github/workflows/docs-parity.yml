@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 concurrency:
   group: osm-documentation-publisher
@@ -24,12 +25,22 @@ jobs:
        github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      OSM_DOCS_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
       - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
+      - name: Mark enabled live parity pending on its exact source
+        if: vars.OSM_PUBLIC_DOCS_ENABLED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --silent --method POST "repos/$GITHUB_REPOSITORY/statuses/$OSM_DOCS_SHA" \
+            -f state=pending -f context='osm/public-guide-parity' \
+            -f description='Comparing the public guide originals'
       - name: Check the reviewed source without credentials
         run: python3 docs-publisher/publisher.py reconcile --check --out reconciliation.md
       - name: Inspect activation gates without exposing credentials
@@ -42,7 +53,8 @@ jobs:
           import json, os
           from pathlib import Path
           manifest = json.loads(Path('docs-publisher/manifest.json').read_text())
-          configured = bool(os.environ.get('OSM_PUBLIC_DOCS_TOKEN')) and os.environ.get('OSM_PUBLIC_DOCS_ENABLED') == 'true'
+          enabled = os.environ.get('OSM_PUBLIC_DOCS_ENABLED') == 'true'
+          configured = bool(os.environ.get('OSM_PUBLIC_DOCS_TOKEN')) and enabled
           publish = configured and manifest['activation']['active'] and bool(manifest['activation'].get('public_reader'))
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write(f'configured={str(configured).lower()}\npublish={str(publish).lower()}\n')
@@ -52,6 +64,8 @@ jobs:
                         'Live parity is blocked: configure a dedicated public-only credential and enable OSM_PUBLIC_DOCS_ENABLED. No live source was read or written.\n')
               if not publish:
                   out.write('Publication is inactive: the writer handoff, public reader and reviewed activation gates must be satisfied.\n')
+          if enabled and not configured:
+              raise SystemExit('Live parity was enabled but its public-only credential is missing.')
           PY
       - name: Read the public guide originals
         if: steps.gates.outputs.configured == 'true'
@@ -81,3 +95,14 @@ jobs:
             publication.md
             public-originals.json
           if-no-files-found: ignore
+      - name: Record enabled live parity result
+        if: always() && vars.OSM_PUBLIC_DOCS_ENABLED == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ job.status }}
+        run: |
+          state=failure
+          if [ "$RESULT" = success ]; then state=success; fi
+          gh api --silent --method POST "repos/$GITHUB_REPOSITORY/statuses/$OSM_DOCS_SHA" \
+            -f state="$state" -f context='osm/public-guide-parity' \
+            -f description='Public guide original comparison completed'

@@ -82,23 +82,22 @@ and its owning phases, not this audit.
   stays outside the plugin. Content is not part of the package; a selected
   existing Content store is checked like any other store, and optional
   specialists are verified only when selected and do not install with OSM.
-- Creation: verified template source and documented creation interface, actual
-  generated identity, local instructions, provenance and recovery. Existing
-  repositories are never reseeded; no secondary project registration is required.
-- Lifecycle: one authorized goal and concise live requirements list, justified
-  owner, verified root, one writer, shared phase methods with local specialist
-  contracts, final-byte proof and exact Ship authority. Direct repository tasks
-  continue in the current session without owner preload, local phase copies or
-  a mandatory lead. Technology and generic audit guidance have one shared owner.
+- Creation: verified context-home template, actual destination identities,
+  selected instructions, provenance and recovery. Existing homes and repositories
+  are reused; no secondary project registration is required.
+- Lifecycle: selected context scope, verified destinations, source-handling rules,
+  one curation writer and readback of authorized changes. Direct repository tasks
+  use their project and native engineering methods without owner preload, copied
+  OSM phases or a mandatory lead.
   For actual delegation only, verify the concrete benefit or user request,
   minimum context, root, worker-goal linkage and caller acceptance through
   Council; ordinary repository work does not load it.
   Sensitive changes retain repository-owned security context, scoped negative
   tests, validated findings and affected deployment/retest proof; optional tools
   do not become required scans for ordinary edits.
-- Learning: curated source-bound corrections; methods owned in the right place;
-  native improvement triage is loaded only for a concrete worker/lead signal;
-  optional external skills remain external; no native-memory dependence.
+- Learning: curated source-bound corrections and methods owned in the right place.
+  Report a useful improvement through the task or project's selected issue route;
+  no OSM triage phase is required. Optional external methods remain external.
 - Personal skill discovery: inspect the acceptance evidence required by
   [Manage Skills](../../osm-manage-skills/references/owner-skills.md#verify-before-saying-ready).
   This check observes the result; that procedure owns any authorized repair.

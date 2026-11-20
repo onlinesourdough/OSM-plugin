@@ -63,6 +63,18 @@ Start with an existing supported plugin or connection. Add an API key when the c
 
 An API key is an authentication credential. Notion remains the context home. External provider records and data stay in the provider's system. A local project can use an ignored environment file when its supported runtime requires it; persistent personal or scheduled credentials should use the runtime's supported secret storage.
 
+## Short agent instructions
+
+Put this pointer in the selected host's instruction file, such as [AGENTS.md](http://AGENTS.md) or [CLAUDE.md](http://CLAUDE.md). Replace the URL with your own verified home; Prime reads the definition there.
+
+```txt
+Always start with the OSM Prime skill.
+Data and Context: [your verified Notion Data & Context URL]
+Always run OSM Log at meaningful checkpoints or when asked.
+Use the host's built-in workspace and tools first, including its side panel when available.
+Use external apps only when built-in tools can't do the work.
+```
+
 ## Agent workspace and tools
 
 Use the host's built-in workspace and tools first, including its browser, terminal and side panel when available. Use external apps when the built-in tools cannot do the work. Keep the same short context pointer in the selected host's instructions, with Prime at session start and Log at meaningful checkpoints or on request.

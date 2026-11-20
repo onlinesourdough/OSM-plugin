@@ -32,8 +32,8 @@ That foundation can support different tasks and AI apps. You can reuse what
 already works, add context when a real task needs it and improve the methods as
 you learn. Start with one useful task rather than organizing everything first.
 
-The method supports business work, decisions, writing and practical automation.
-Its code guidance and verification stay proportional to the task. Projects own
+The method supports business context, decisions, writing and collaboration.
+Projects own
 their source, engineering standards, design and delivery configuration.
 
 ## Why I built this
@@ -205,13 +205,13 @@ Antigravity, Cursor and Pi.
 
 After installation, try:
 
-- “Help me turn this idea into a clear plan.”
-- “Build the agreed change and review the result.”
-- “Turn these sources into a clear article draft.”
+- “Help me understand what we decided about this customer.”
+- “Save this decision for the next conversation.”
+- “Ask another agent to review this result using these sources.”
 - “Make this draft easier to understand without losing its meaning.”
 - “Set up OSM for my work. My current focus is …”
 
-You can use the work methods before setting up a personal context home.
+Writing, Interview and Council can help with supplied inputs before a personal context home is set up.
 Projects keep their own instructions, files, checks and delivery decisions.
 
 ## Update or remove

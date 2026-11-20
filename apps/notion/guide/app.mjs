@@ -1,6 +1,7 @@
 import { App, applyDocumentTheme, applyHostStyleVariables } from '@modelcontextprotocol/ext-apps';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { readable, linkedPage } from './readable.mjs';
 
 const app = new App({ name: 'osm-guide', version: __OSM_VERSION__ }, { availableDisplayModes: ['fullscreen'] });
 const root = document.getElementById('article');
@@ -10,26 +11,7 @@ const linkBox = document.getElementById('source-link');
 let guide = __OSM_PUBLIC_GUIDE__;
 let current = guide.root;
 const history = [];
-const notionId = href => {
-  try {
-    const url = new URL(href);
-    if (!/(^|\.)notion\.(site|so|com)$/.test(url.hostname)) return null;
-    return url.pathname.replaceAll('-', '').match(/[0-9a-f]{32}/i)?.[0]?.toLowerCase() || null;
-  } catch { return null; }
-};
-
-function readable(body, page) {
-  return body
-    .replace(/<embed source="[^"]*osm-architecture\.html"[^>]*\/>/g, '<div class="osm-architecture"></div>')
-    .replace(/<mention\s+url="([^"]+)"[^>]*>([\s\S]*?)<\/mention>/g, (_, url, title) => '[' + title.trim() + '](' + url + ')')
-    .replace(/<(page|database)\s+url="([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g, (_, tag, url, title) => '\n\n[' + title.trim() + '](' + url + ')\n\n')
-    .replace(/<date\s+start="([^"]+)"[^>]*\/>/g, (_, date) => date)
-    .replace(/<image\s+source="[^"]+"[^>]*\/>/g, '\n\n[View this image in Notion](' + page.url + ')\n\n')
-    .replace(/<file\s+source="[^"]+"[^>]*>([\s\S]*?)<\/file>|<file\s+source="[^"]+"[^>]*\/>/g, '\n\n[Supporting download in Notion](' + page.url + ')\n\n')
-    .replace(/<\/?(columns|column|callout|synced-block)(?:\s[^>]*)?>/g, '\n\n')
-    .replace(/<p\s*\/>/g, '\n\n');
-}
-function show(id, remember = true) {
+function show(id, remember = true, resetScroll = true) {
   const page = guide.pages[id];
   if (!page) return;
   if (remember && current !== id) history.push(current);
@@ -38,8 +20,8 @@ function show(id, remember = true) {
   document.getElementById('page-title').textContent = page.title;
   const edition = document.getElementById('reading-edition');
   const readAt = new Date(page.source_read_at || '');
-  edition.hidden = !Number.isFinite(readAt.valueOf());
-  edition.textContent = edition.hidden ? '' : 'Guide snapshot · ' + new Intl.DateTimeFormat('en-GB', {dateStyle:'medium',timeZone:'UTC'}).format(readAt);
+  edition.textContent = page.edition || (Number.isFinite(readAt.valueOf()) ? 'Guide snapshot · ' + new Intl.DateTimeFormat('en-GB', {dateStyle:'medium',timeZone:'UTC'}).format(readAt) : '');
+  edition.hidden = !edition.textContent;
   trail.textContent = id === guide.root ? '' : 'OSM';
   trail.hidden = id === guide.root;
   back.hidden = history.length === 0;
@@ -53,14 +35,14 @@ function show(id, remember = true) {
     // This fixed, script-free diagram is a bundled project asset, not remote page markup.
     shadow.innerHTML = __OSM_ARCHITECTURE__;
   }
-  window.scrollTo(0, 0);
+  if (resetScroll) window.scrollTo(0, 0);
 }
 root.addEventListener('click', event => {
   const link = event.target.closest('a');
   if (!link) return;
   event.preventDefault();
-  const id = notionId(link.href);
-  if (id && guide.pages[id]) { show(id); return; }
+  const id = linkedPage(link.href, guide.pages, current);
+  if (id) { show(id); return; }
   document.getElementById('link-value').value = link.href;
   document.getElementById('link-caption').textContent = link.textContent;
   linkBox.hidden = false;
@@ -77,7 +59,7 @@ app.ontoolresult = result => {
   const next = result?._meta?.['osm/publicGuide'];
   if (next?.format === 'osm-public-guide/1' && next.pages?.[next.root]) {
     guide = next;
-    show(guide.pages[current] ? current : guide.root, false);
+    show(guide.pages[current] ? current : guide.root, false, !guide.pages[current]);
   }
 };
 const theme = context => {

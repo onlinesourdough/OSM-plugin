@@ -23,7 +23,7 @@ try {
   // One public guide entrypoint; private context tools have no app surface.
   const capabilities = client.getServerCapabilities();
   assert.ok(capabilities.tools); assert.ok(capabilities.resources); assert.equal(capabilities.prompts, undefined);
-  assert.equal(client.getServerVersion().icons, undefined);
+  assert.equal(client.getServerVersion().icons.length, 2);
   assert.match(client.getInstructions(), /official Notion plugin/);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(tool => tool.name), ['osm_sources', 'osm_save_sources', 'osm_connection', 'osm_context_list', 'osm_context_read',
@@ -42,6 +42,9 @@ try {
   const empty = text(await client.callTool({ name: 'osm_sources', arguments: {} }));
   assert.equal(empty.context.state, 'missing'); assert.equal(empty.home.state, 'missing'); assert.equal(empty.connectionRoute.state, 'missing');
   const entry = tools.find(tool => tool.name === 'osm_guide');
+  assert.deepEqual(entry.icons.map(icon => icon.theme), ['light', 'dark']);
+  assert.ok(entry.icons.every(icon => icon.mimeType === 'image/svg+xml' && icon.src.startsWith('data:image/svg+xml;base64,')));
+  assert.deepEqual(entry.icons, client.getServerVersion().icons);
   assert.deepEqual(entry._meta.ui.visibility, ['app']);
   assert.deepEqual(entry._meta['openai/ui'].entrypoints, [{ type: 'global' }]);
   const resources = await client.listResources();
@@ -49,8 +52,6 @@ try {
   const view = await client.readResource({ uri: 'ui://osm/guide-v1' });
   const html = view.contents[0].text;
   new Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
-  const guide = await client.callTool({ name: 'osm_guide', arguments: {} });
-  assert.equal(guide._meta['osm/publicGuide'].root, '40d6d2e17f568124af82ceb93dabf77a');
   assert.deepEqual(text(await client.callTool({ name: 'osm_sources', arguments: {} })), empty);
   // Setup records the selected root in the managed instructions block; the fixture writes it the same way.
   const target = 'https://app.notion.com/p/00000000000000000000000000000001';

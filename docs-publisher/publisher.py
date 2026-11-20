@@ -49,6 +49,7 @@ UNSUPPORTED, HELD, UNREADABLE, REJECTED = "unsupported", "held", "unreadable", "
 REFUSED_UNREPRESENTABLE = "refused-unrepresentable"
 WOULD_WRITE, UNKNOWN_NO_RECEIPTS, NO_SOURCE_CHANGE = "would-write", "unknown-no-receipts", "no-source-change"
 NOT_PROVISIONED = "not-provisioned"
+UNVERIFIED_ORIGINAL = "unverified-original"
 OK_OUTCOMES = {WRITTEN, UNCHANGED, RESUMED, RETIRED, PENDING_HANDOFF, REFUSED_B, REFUSED_NOTION, NOT_PROVISIONED}
 NOT_COMPLETE = {PARTIAL, UNKNOWN_WRITE, UNSUPPORTED, HELD}   # results of a write; never reported with a stored `complete`
 PENDING_LIKE = ("pending", "partial", "unknown-write")
@@ -519,7 +520,7 @@ def original_state(artifact, source, read=None):
             return CONFLICT, (f"a newer original exists in Notion: the selection exported to {e['path']} changed; export it deliberately, "
                               "nothing is overwritten in either direction")
     if read["reader"] != bound["reader"]:
-        return REFUSED_NOTION, (f"{never} | {agree} with the original as read | newer-original check: {NOT_CHECKED}: bound through "
+        return UNVERIFIED_ORIGINAL, (f"{never} | {agree} with the original as read | newer-original check: {NOT_CHECKED}: bound through "
                                 f"{bound['reader']} and read through {read['reader']}, so the body hashes are not comparable")
     if read["revision"] != bound["revision"]:
         return CONFLICT, (f"a newer original exists in Notion ({read['revision'][:12]}; {label}); export it deliberately, "
@@ -587,7 +588,9 @@ def export_originals(root, manifest, snapshot, edition, keys=None, dry_run=False
         for e in a.get("exports", []):
             try:
                 text = select(page["body"], e.get("notion"))
-                current = files[e["path"]] if e["path"] in files else (root / e["path"]).read_text()
+                target = root / e["path"]
+                current = files[e["path"]] if e["path"] in files else (
+                    "" if not target.exists() and not e.get("git") else target.read_text())
                 files[e["path"]] = replace_selection(current, e.get("git"), text)
                 hashes.append(sha256(text))
             except (SelectionError, OSError) as error:
@@ -1039,6 +1042,10 @@ def publish(manifest, source, transport, run_id, tag_resolver, allow_fixture=Fal
     """
     if not (manifest["activation"]["active"] or allow_fixture):
         raise PublisherError("the publisher is not active; refusing to write")
+    if any(a.get("original") for a in guide_pages(manifest).values()) and originals is None:
+        raise PublisherError("bound guide originals require a comparable snapshot before publication")
+    if not allow_fixture and any(a["class"] == "A" and a["public_writer"] == "ci" for a in manifest["artifacts"]):
+        raise PublisherError("native released-skill packet publication is not qualified; class A must stay with existing-upkeep")
     resolve_released(manifest, tag_resolver)
     transport.claim_run(run_id)
     try:
@@ -1522,7 +1529,7 @@ def main(argv=None, *, manifest=None, opener=None, env=None, tag_resolver=None):
         return 1
     title = "Documentation publication"
     try:
-        if manifest["activation"]["active"] and args.database != manifest["bindings"]["working_subtree"]:
+        if manifest["activation"]["active"] and (args.database or None) != manifest["bindings"]["working_subtree"]:
             raise SetupError("--database is not the reviewed working subtree recorded in the manifest")
         transport = NotionTransport(args.database, opener=opener, env=env, bound=bound_rows(manifest),
                                     public_reader=build_reader(manifest, args.public_base, args.public_catalogue, opener))

@@ -18,6 +18,12 @@ An automation needs a purpose, source scope, destination, action authority, runt
 
 Context upkeep maintains the selected foundation across its actual descendants. It can include an existing Content collection even when the owner uses a different production workflow.
 
+## Keep personal skills useful
+
+Turn a useful repeated way of working into a personal skill when there is a real reason to reuse it. Keep a clear purpose and trigger, the necessary inputs, short instructions, expected result and checks, and the actual source/version. Add supporting files only when needed. Reuse the existing method's identity when revising it; a saved note does not automatically become a skill.
+
+Keep personal and team methods in their selected destinations. A shared method needs an accountable maintainer and agreed change authority. Verify native skill designation and invocation in the actual host where supported; a readable page alone does not prove it is enabled. Use native sharing for the intended people, since a Team label or view is not a permission boundary.
+
 ## Content responsibilities stay distinct
 
 Idea capture, production, distribution and Content Learn are separate choices. They can be manual, assisted or explicitly scheduled. Learn interprets editorial response against the chosen goals; it does not replace foundation upkeep.

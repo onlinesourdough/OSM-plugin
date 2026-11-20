@@ -17,6 +17,11 @@ PUBLIC = 'https://gustavanderson.notion.site/'
 GIT = 'https://github.com/onlinesourdough/OSM-plugin/blob/'
 
 
+def skill_source_drift(source, pinned):
+    current, bound = source.files('skills/'), pinned.files('skills/')
+    return sorted(path for path in set(current) | set(bound) if current.get(path) != bound.get(path))
+
+
 def skill_body(text, path, ref):
     body = re.sub(r'\A---\n.*?\n---\n', '', text, count=1, flags=re.S).strip()
     def link(match):
@@ -39,6 +44,9 @@ def build(root=ROOT):
     if not re.fullmatch(r'[0-9a-f]{40}', ref):
         raise pub.SetupError('The reader needs an exact skill source commit')
     git = pub.GitSource(root, ref)
+    drift = skill_source_drift(source, git)
+    if drift:
+        raise pub.SetupError('The public reader skill source differs from packaged instructions/resources: ' + ', '.join(drift))
     pages = {}
     def add(id, title, body, **meta):
         if not re.fullmatch(r'[0-9a-f]{32}', id) or id in pages:
@@ -55,7 +63,10 @@ def build(root=ROOT):
         path = extra['path']
         if not path.startswith(pub.ORIGINALS + '/') or '..' in path.split('/'):
             raise pub.SetupError('A supplement must be an explicitly frozen public original')
-        add(extra['id'], extra['title'], (root / path).read_text(), edition='separate optional content')
+        body = (root / path).read_text()
+        if pub.sha256(body) != extra.get('sha256') or not extra.get('edition'):
+            raise pub.SetupError('The optional supplement needs an explicit hash and edition')
+        add(extra['id'], extra['title'], body, edition=extra['edition'])
     links = []
     for artifact in manifest['artifacts']:
         if artifact['class'] != 'A' or not artifact.get('notion'):

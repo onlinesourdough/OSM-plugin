@@ -1,5 +1,60 @@
 # Verification
 
+## 20 November 2026 — final seven-skill candidate corrections
+
+Fable 5.2 High independently reviewed exact candidate `436d904`. It reproduced a
+missing emitted sidebar icon, reader file-tag/link defects and stale reference
+wording. That review rejected tagging the unchanged candidate. The corrections
+now have 81 runtime tests and an offline MCP smoke check: both server info and
+the global guide tool actually emit the two themed SVG icons. Final delta review,
+tag publication and exact-tag adoption remain separate steps.
+
+The guide now includes the literal short host instruction, personal-skill upkeep,
+source-processing limits and one bound database-field definition. The public
+Releases page links to actual GitHub releases without freezing an obsolete
+"current release" into a tagged fallback. A strict original comparison refuses
+an unqualified reader representation; the production legacy publisher refuses
+native released-skill rows. Native packet publication, dedicated CI access and
+writer activation are not qualified by these source checks.
+
+Late live observations, bounded to the owner's selected current Mac:
+
+- Both actual Codex and Claude profiles held the seven-skill `90d00c2` candidate,
+  with all 74 skill-source files matching. Neither active cache retained the old
+  sidebar source/runtime or WordPress skill. This is not final-tag adoption.
+- The already-open native MCP app still displayed the old v0.33.3 onboarding.
+  The public reader worked in the in-app browser, including narrow layout and
+  internal navigation. A fresh native guide entry/icon is still unobserved;
+  application computer-use access was denied and was not bypassed.
+- A fresh Codex chat used Prime 1.2.0 and retrieved the selected source-only
+  accounting decision without parent-chat history or accounting-record reads.
+  A bounded manual Dreaming 1.4.0 run repaired one malformed source-map field
+  link in place and read it back, with no Memory or revision-date write. This is
+  not a full-home audit or a timed invocation.
+- The optional scoped adapter read the complete selected definition and listed
+  the first page of Knowledge, Memory, Skills and Content using its own route,
+  without another connector or changed grants. Its older saved navigation
+  revision still needs regeneration after the final definition update. This
+  proves neither whole-store coverage nor another host or revocation case.
+- The actual 19 November daily run completed at 12:00–12:09 CET on the earlier
+  setup. A later manual trial reported `1f18c65`, Dreaming 1.3.0 and curation
+  3.2.0; that commit's package version is 0.32.1. Do not retroactively assign
+  the later 0.33 method-file pins or the new release to the noon run.
+- Native Notion candidate imports and downloads verified Prime's current source
+  ZIP and Setup's 30-file archive: all 29 supporting files matched, including
+  the preserved historical ZIP. Native page Markdown is a reading projection,
+  not byte-identical Git. All seven released packets still need final delivery.
+  Public Notion shows file names as noninteractive text in its readonly view;
+  public download therefore uses the canonical GitHub release source asset.
+- The actual organization avatar and both repository social previews show plain
+  OSM / OSM C. The public method diagram is rendered in Notion. These browser
+  observations do not prove the freshly reopened Codex sidebar glyph.
+
+The one synthetic three-turn Interview trial followed a correction, reused the
+existing CRM and respected Stop. Human Writing and Paper Copy each have their
+earlier bounded synthetic trials. These are not cross-model benchmarks,
+real-user outcome measurements or Paper canvas qualification.
+
 ## 19 November 2026 · seven-skill candidate and public reader
 
 The subsequent immutable candidate `90d00c2` was installed in the owner's active
