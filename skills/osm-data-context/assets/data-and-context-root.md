@@ -1,10 +1,10 @@
-# Adapting the Data & Context root
+# Adapting the AI operating model home
 
 The neutral starting layout for one customer-owned root. Setup fills it from
 verified sources under the [Context Architecture](../references/architecture.md);
 it does not copy that contract into the page. Replace every bracketed
 instruction or omit its optional line before use. The title is the owner's
-choice; "Data & Context" is only the default. If a root or an older entry already
+choice; "AI operating model" is only the default. If a root or an older entry already
 exists, adapt it: keep its identity, title, icon, local wording and compatible
 definition fields, and never regenerate owner choices from this template.
 
@@ -24,7 +24,7 @@ The body begins with the definition and then the native child databases.
 Keep this template's authoring instructions and all onboarding prose outside
 the generated page body.
 
-# Data & Context
+# AI operating model
 
 ## Data and Context Definition
 
