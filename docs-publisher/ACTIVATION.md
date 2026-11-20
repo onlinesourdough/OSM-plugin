@@ -22,8 +22,10 @@ The first bounded Log import
 verified the complete native instructions, 41 supporting files and six properties.
 Its original anonymous check held; that failed attempt is retained. A fresh
 anonymous observation then matched all 34 packet lines and earlier file links
-still resolved. Later whole-set API checks passed while incomplete browser
-observations still held the run. Those attempts are not relabelled as successes.
+still resolved. The rerun of 44735665358 was cancelled during browser installation,
+before another API write; both attempts retain their own evidence. Later
+whole-set API checks passed while incomplete browser observations still held
+the run. Those attempts are not relabelled as successes.
 
 The qualified reader materialises the short method pages in a tall viewport and
 uses one paced anonymous context. Actual public Notion catalogue entries are
@@ -120,7 +122,9 @@ an observation of those archives, not a qualification of this publisher.
    reads the whole archive back and verifies the anonymous page and catalogue.
    Verify on the real page that files absent from the archive were removed
    (the documented replace behaviour), nested folders and `history/` are intact,
-   earlier file links still resolve, and title/properties equal the handoff.
+   earlier file links still resolve, and the title and release-managed properties
+   equal the approved packet. Status must equal the recorded handoff value;
+   the other handoff values are the pre-import conflict baseline.
    A failed public check keeps the verified API evidence and visibly holds the
    run. A bounded run never qualifies the whole automatic set.
 8. Run the serialized workflow, verify the whole set, then verify a repeat run
