@@ -834,25 +834,26 @@ Memory cannot establish what happened.
 
 Four distinct things:
 
-1. A **host instruction bridge**: the thin global or project pointer, or one
-   durable memory fact when the host has no instruction file (see
-   [the bridge](../assets/bridge.md), the
-   [Claude adapter](../../osm-setup/references/adapter-claude.md#context-setup)
-   and the [Grok Bot adapter](../../osm-setup/references/adapter-grok.md)).
+1. A **host instruction bridge**: the thin pointer in the host's persistent
+   instruction file or, if the host has none, in its built-in persistent
+   memory or standing instructions (see
+   [the bridge](../assets/bridge.md) and the
+   [Claude adapter](../../osm-setup/references/adapter-claude.md#context-setup)).
 2. A **context map**: the definition in the root.
 3. A **source connector**: the adapter route a pipeline uses.
 4. An **execution trigger**: what starts a runner.
 
 Global host instructions stay thin and carry no company data. Pointer
 configuration and observed instruction loading are never proof of credentials,
-tool access, enforced permissions, live ingestion or a timed run. A bridge is reported loaded only with recorded evidence. For an instruction
-file, record the client and version, the instruction files present in the
-working directory and above, the instruction-loading setting and where it was
-set, and an observed load in a fresh session. For a durable memory fact, record
-the client, the single fact and an observed recall in a fresh session. Without
-that evidence the bridge is unverified. During a root change, every selected
-host pointer is reconciled to the new root in the same authorised change
-(procedure: [migration](migration.md#root-change-and-host-pointers)).
+tool access, enforced permissions, live ingestion or a timed run. A bridge is
+reported loaded only with recorded evidence: client and version, the instruction
+files present in the working directory and above, the instruction-loading
+setting and where it was set, and an observed load in a fresh session.
+When the host has no instruction file, record the client and a fresh-session
+recall of its built-in memory or standing instructions instead. Otherwise the
+bridge is unverified. During a root change, every selected host pointer is
+reconciled to the new root in the same authorised change (procedure:
+[migration](migration.md#root-change-and-host-pointers)).
 
 ### Credentials and host surfaces
 

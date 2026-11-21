@@ -20,8 +20,8 @@ runtime.
    host. When installation is authorized, install it through the supported route
    if missing, guide sign-in and verify the account with a scoped safe read.
    Read the selected root through that plugin and record its verified URL in
-   the short host pointer: the host instruction file, or one durable memory
-   fact when the host has no instruction file. A
+   the short host pointer: the host's persistent instruction file or, if the
+   host has none, its built-in persistent memory or standing instructions. A
    dedicated connection is an option when a selected team workflow, worker or
    unattended job needs a distinct identity or access scope. A team member can
    use their own authorized Notion account. For a selected internal connection,
@@ -30,8 +30,7 @@ runtime.
    Choose a secret store suited to the customer's OS and runtime, test
    unattended availability, fail closed on access loss, and define refresh,
    revocation and recovery; one platform's choice is not another's contract.
-   OSM's existing internal route uses macOS Keychain when the selected adapter
-   names that route (see the
+   OSM's existing internal route uses macOS Keychain (see the
    [panel reference](panel.md)): the owner provisions the item privately, reusing
    the existing selected connection's credential without rotating or revoking it,
    and approves the OS prompt. For that route, the agent saves the non-secret route setting from

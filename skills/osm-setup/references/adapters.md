@@ -13,7 +13,6 @@ Read exactly one operation route:
 - [Pi](adapter-pi.md) for its package or discovery;
 - [Claude Code and Copilot](adapter-claude.md) for their native plugins;
 - [Gemini, Cursor and other harnesses](adapter-other.md) for those routes;
-- [Grok Bot](adapter-grok.md) for its catalog install and memory pointer;
 - [package lifecycle](adapter-portability.md) for cross-harness adoption, update or removal.
 
 Select [harness configuration](harness-configuration.md) only for a concrete
@@ -32,12 +31,10 @@ no-op. Multiple/malformed blocks, a changed source or conflicting home require
 reconciliation. Do not change other apps or store owner data in plugin caches.
 
 Use the [context pointer](../../osm-data-context/assets/bridge.md) with the exact
-Notion root guide URL. Verify that guide before activation. The pointer names a
-Notion home only; no local file mirror or file-home bridge exists. A host with
-an instruction file stores the pointer there. A host with no instruction file
-stores the same pointer as one durable memory fact and updates that fact when
-the root moves. Keep the `AIOS:BEGIN` and `AIOS:END` markers.
-[Grok Bot](adapter-grok.md) is the memory-fact route. A legacy
+Notion root guide URL. Verify that guide before activation. Save it in the
+host's persistent instruction file or, if the host has none, in its built-in
+persistent memory or standing instructions. The pointer names a
+Notion home only; no local file mirror or file-home bridge exists. A legacy
 folder or vault pointer already in place is left untouched, read-only; see the
 [legacy-home guidance](../../osm/references/update.md#legacy-file-and-vault-homes).
 

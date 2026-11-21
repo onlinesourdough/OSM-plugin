@@ -2,7 +2,7 @@
 name: osm-council
 description: Ask another agent or model for an independent review, a second opinion or bounded work with a scoped delegation brief.
 metadata:
-  version: "3.1.2"
+  version: "3.1.1"
 ---
 
 # OSM:council
@@ -18,8 +18,7 @@ perspective or separable contribution would materially improve the result.
 - **Hand off the whole task.** Follow the [continuation procedure](../osm/references/continuation.md)
   when another agent or chat takes over, including a user-owned chat.
 
-Choose a native worker the host provides, such as a subagent, or an authorized
-CLI such as Claude Code or OpenCode.
+Choose a native worker or an authorized CLI such as Claude Code or OpenCode.
 Honor the requested model and reasoning effort when available. Report a
 requested route you cannot use. Consult [model advice](../osm/references/model-advice.md)
 if selection is part of the task. For either Council mode, verify the worker's

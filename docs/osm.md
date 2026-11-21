@@ -35,14 +35,15 @@ what exists and creating only what is missing.
 smallest relevant context and [Log](../skills/osm-log/SKILL.md) saves lasting
 changes after meaningful work or on request. [Dreaming](../skills/osm-dreaming/SKILL.md)
 reads the current definition, checks recent work and due sources, and can
-correct proven context errors. It uses an existing caller for a daily run.
+correct proven context errors. It uses the host's scheduler or routines, if
+available, for a daily run.
 [Manage Data & Context](../skills/osm-manage-data-context/index.md) owns
 retrieval and verified curation for all three. The shared
 [host instruction template](../skills/osm-data-context/assets/bridge.md)
+is saved in the host's persistent instruction file or, if the host has none,
+in its built-in persistent memory or standing instructions. It
 prefers the host's built-in workspace and tools, including its side panel
-where available. A host with no instruction file, such as Grok Bot, stores
-that template as one durable memory fact and reads Notion through its built-in
-connector. See the [Grok Bot adapter](../skills/osm-setup/references/adapter-grok.md).
+where available.
 [Council](../skills/osm-council/SKILL.md) is available for an independent
 review or bounded help from another agent. Update saved direct calls to
 `osm-orchestrate-workers` to use `osm-council`.

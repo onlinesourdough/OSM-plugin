@@ -25,8 +25,7 @@ sources and accepted choices. Do not manufacture company facts, empty department
 or a parallel truth store. Notion properties and templates belong in
 the Notion references; actual values and IDs belong in the customer's workspace.
 Use [the thin host pointer](../assets/bridge.md) through the selected native
-[adapter](../../osm-setup/references/adapters.md). A host with no instruction
-file keeps that pointer as one durable memory fact.
+[adapter](../../osm-setup/references/adapters.md).
 
 People should be able to find and edit their work normally. The agent should
 select metadata or an index first, then read only the relevant bodies. The

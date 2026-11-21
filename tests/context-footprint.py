@@ -149,7 +149,7 @@ def validate_routes():
     adapters = (ROOT / "skills/osm-setup/references/adapters.md").read_text()
     required = ("adapter-codex.md", "adapter-codex-desktop.md", "adapter-pi.md",
                 "adapter-portability.md", "adapter-claude.md", "adapter-other.md",
-                "adapter-grok.md", "harness-configuration.md")
+                "harness-configuration.md")
     require(all(target in adapters for target in required), "adapter route coverage")
     require("exactly one operation route" in adapters, "adapter selective-read rule")
 

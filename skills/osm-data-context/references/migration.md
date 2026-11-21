@@ -57,8 +57,7 @@ its own owner authority.
 ## Root change and host pointers
 
 When the agent entry moves to a new root, reconcile every selected host pointer
-in the same authorised change. An instruction file and a durable memory fact
-are both pointers. Each points at the new root, holds no company
+in the same authorised change: each points at the new root, holds no company
 data and is re-verified with loading evidence (see
 [host bridge](architecture.md#host-bridge-map-connector-and-trigger)). A stale
 pointer is an unfinished migration, not a fallback route.

@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.2.2"
+  version: "3.2.1"
 ---
 
 # OSM:setup
@@ -61,15 +61,14 @@ outside that chain):
    policy. Explain onboarding in the conversation, using the public guide's
    durable description when useful.
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
-   assumed. Add the thin host pointer only at the intended scope. On a host
-   with an instruction file, that scope is the file the adapter names. On a
-   host with no instruction file, save the same pointer as one durable memory
-   fact and update that fact when the root moves. The
-   [adapter route](references/adapters.md) selects the surface.
+   assumed. Save the thin host pointer in the host's persistent instruction
+   file or, if the host has none, in its built-in persistent memory or standing
+   instructions. Add it only at the intended scope.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)
    serves manual and task-time curation, and [Dreaming](../osm-dreaming/SKILL.md)
    is the entry for reflection across recent work and scheduled upkeep. Setting
-   up a schedule needs an explicit request and exact authority. Record only
+   up a schedule on the host's scheduler or routines, if available, needs an
+   explicit request and exact authority. Record only
    history and source routes that are actually readable;
    an unavailable or unqualified route stays an explicit gap.
 7. **First useful task.** Complete the agreed result, then check the
