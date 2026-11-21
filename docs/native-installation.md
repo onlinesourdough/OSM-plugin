@@ -49,11 +49,12 @@ available in some apps; use the same scope for later updates and removal.
 
 ## Start with a clean agent workspace
 
-Open the actual project in your host. Keep one short set of OSM instructions
-per profile or project, and one verified route to the selected Notion home.
-Have Setup write the supported instruction file, then check it in a fresh
-session. Prefer the host's own workspace and tools, including its side panel
-when available. Use a desktop app or an external browser only when needed.
+Open the actual project or assistant session in your host. Keep one short set
+of OSM instructions per profile or project, and one verified route to the
+selected Notion home. Have Setup write the supported instruction file, or one
+durable memory fact when the host has no instruction file, then check it in a
+fresh session. Prefer the host's own workspace and tools, including its side
+panel when available. Use a desktop app or an external browser only when needed.
 
 | Host | Instructions | Approvals and tools |
 | --- | --- | --- |
@@ -62,6 +63,7 @@ when available. Use a desktop app or an external browser only when needed.
 | Antigravity | Global or workspace rules. The app, IDE and CLI can read a workspace `AGENTS.md`. | For the CLI, check the active mode and `/permissions`. `accept-edits` permits workspace edits, and `auto` uses the terminal sandbox when supported. App and IDE users should check their own tool settings. [Rules](https://antigravity.google/docs/rules-workflows) · [CLI modes](https://antigravity.google/docs/cli/modes) |
 | Cursor | A root `AGENTS.md` or a project rule in `.cursor/rules/`. | Open **Settings → Agents → Approvals & Execution**. Choose **Auto-review** for sandboxing and review of remaining calls or **Allowlist** for a small known set of calls. [Rules](https://cursor.com/docs/rules) · [Run modes](https://cursor.com/docs/agent/security/run-modes) |
 | Pi | Project `AGENTS.md` plus the selected Pi settings and packages. | Inspect the enabled extensions and tools. Use `--tools` to control the tools available for a session and a separate environment for filesystem isolation. [CLI](https://docs.pi.dev/latest/cli) · [Security](https://docs.pi.dev/latest/security) |
+| Grok Bot | One durable memory fact: the standing instruction the assistant saves. There is no `AGENTS.md` or `CLAUDE.md`. | Use the built-in Notion connector, Slack, GitHub, shell and browser. Grok Bot cannot run hooks and does not use the optional Codex Keychain adapter. A routine calls Dreaming only when requested. A subagent is a Council worker. [Adapter](../skills/osm-setup/references/adapter-grok.md) |
 
 Check one project read and one intended edit on dummy data before enabling
 broader unattended work. For a worker or Council review, give that session
@@ -114,6 +116,7 @@ unpinned source, `pi update --extension SOURCE` updates only that package;
 Claude updates its marketplace and then the plugin at the original scope.
 Gemini and Copilot have native named-package update commands. Cursor manages
 plugins in Customize and refreshes imported sources through its marketplace.
+Grok Bot refreshes or removes OSM in its plugin catalog.
 The [README maintenance table](../README.md#update-or-remove) lists these controls.
 Local sources and pinned sources have different native update semantics;
 an “already up to date” response is not proof of a version change.
@@ -151,7 +154,7 @@ the plugin.
 | `.codex-plugin/mcp.json` | Optional scoped Notion adapter declaration; bundled as `runtime/notion` |
 | `.agents/plugins/marketplace.json` | Codex repository marketplace |
 | `.claude-plugin/plugin.json` and `marketplace.json` | Claude Code and Copilot-compatible plugin distribution |
-| `.cursor-plugin/plugin.json` | Cursor-format compatibility metadata |
+| `.cursor-plugin/plugin.json` | Cursor-format plugin manifest. Grok Bot's catalog installs this same file |
 | `gemini-extension.json` | Gemini CLI extension identity |
 | `package.json` | Pi package with only `pi.skills` |
 
@@ -161,7 +164,8 @@ that would take precedence over it. The package ships no `.app.json`, Notion app
 binding, auth wrapper or second Notion server: the official Notion
 plugin is a separate installation with its own connection, and OSM's own
 connection never adopts its credentials. Claude/Copilot, Cursor, Gemini and Pi
-retain their native metadata. There are no executable extensions, hooks, settings
+retain their native metadata. Grok Bot installs the Cursor-format manifest and
+adds none of its own. There are no executable extensions, hooks, settings
 payloads or duplicated instruction bodies. See [onboarding evidence](archive/issue-38-onboarding.md).
 
 Codex also declares OSM's optional local Notion adapter in
@@ -195,6 +199,7 @@ install does not prove model performance, account access or full onboarding.
 | Copilot CLI | Official compatible manifest and marketplace documentation | CLI unavailable here; native lifecycle untested |
 | Cursor | Portable and Cursor-compatible manifests match official documentation | Private distribution needs a Teams/Enterprise marketplace; installed old CLI has no plugin controls; UI lifecycle untested |
 | OpenCode | Official `skills.paths` configuration can reference the canonical directory | No native instruction-package installer; not plug and play |
+| Grok Bot | Cursor-format manifest reused; memory pointer, routines and subagents documented | Catalog install, discovery and model behavior untested |
 
 Run the author checks from the source repository:
 

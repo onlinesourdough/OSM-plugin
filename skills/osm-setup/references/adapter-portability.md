@@ -9,10 +9,11 @@ home; Notion context reuses the approved guide URL and verifies access separatel
 in each client, without copying a local owner mirror. Personal Notion skills
 use the [Notion lifecycle](../../osm-manage-skills/references/notion-skills.md).
 Thin Codex, Claude/Copilot, Cursor, Gemini and Pi metadata all use
-the same skills. Install separately in each chosen harness; no cross-install
-hook or shared configuration writer runs. Native discovery and model behavior
-need separate evidence in each client. Documentation compatibility is not a
-tested installation claim.
+the same skills. Grok Bot reuses the Cursor-format manifest and stores the
+pointer as a durable memory fact. Install separately in each chosen harness;
+no cross-install hook or shared configuration writer runs. Native discovery
+and model behavior need separate evidence in each client. Documentation
+compatibility is not a tested installation claim.
 
 When work crosses harnesses, hand off the accepted outcome, bounded relevant
 context, exact Project/System root, one-writer and action authority, evidence,

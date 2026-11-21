@@ -158,6 +158,19 @@ setting. It currently has no equivalent native installer for this instruction
 package, so we do not describe that route as plug and play. See the
 [compatibility guide](skills/osm-setup/references/adapter-other.md#opencode).
 
+### Grok Bot
+
+Grok Bot installs the Cursor-format plugin from its plugin catalog. The
+repository's `.cursor-plugin/plugin.json` is the manifest; skills stay in
+`skills/`. After installation, ask Grok Bot to run OSM Setup. Setup stores the
+short context pointer as one durable memory fact, because Grok Bot has no
+`AGENTS.md` or `CLAUDE.md`. Use the built-in Notion connector. Grok Bot cannot
+run hooks and does not use the optional Codex Notion adapter. A routine can
+call Dreaming when you ask for a schedule, and a subagent can do Council work.
+
+See the [Grok Bot adapter](skills/osm-setup/references/adapter-grok.md). This
+catalog route has not been tested locally.
+
 ## Your context home
 
 The shared method and your company context have separate owners and update
@@ -201,7 +214,7 @@ scoped read and checking that a decision survives a fresh chat.
 
 The [agent workspace guide](docs/native-installation.md#start-with-a-clean-agent-workspace)
 covers instructions, tool access and approvals for Codex, Claude Code,
-Antigravity, Cursor and Pi.
+Antigravity, Cursor, Pi and Grok Bot.
 
 After installation, try:
 
@@ -227,6 +240,7 @@ work before changing its methods.
 | Gemini CLI | `gemini extensions update osm` | `gemini extensions uninstall osm` |
 | Copilot CLI | `copilot plugin marketplace update online-sourdough`, then `copilot plugin update osm@online-sourdough` | `copilot plugin uninstall osm@online-sourdough` |
 | Cursor | Refresh the selected marketplace and manage OSM in Customize | Remove OSM in Customize |
+| Grok Bot | Refresh OSM from the plugin catalog | Remove OSM in the plugin catalog |
 
 Pinned versions and local sources need their own update selection. In Pi, use
 the exact registered source from `pi list` when removing a pinned install.

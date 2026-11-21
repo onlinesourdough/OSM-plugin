@@ -344,6 +344,18 @@ def validate(root=ROOT, release_tag=None):
         "Always run OSM Log at meaningful checkpoints or when asked.",
     ],
             "new bridge route")
+    def flat(relative):
+        return re.sub(r"\s+", " ", (skill_root / relative).read_text())
+
+    grok = flat("osm-setup/references/adapter-grok.md")
+    require(all(phrase in grok for phrase in (
+                "durable memory fact", ".cursor-plugin/plugin.json",
+                "AIOS:BEGIN", "AIOS:END", "macOS Keychain", "cannot run hooks")),
+            "Grok Bot host route")
+    require("adapter-grok.md" in flat("osm-setup/references/adapters.md")
+            and all("durable memory fact" in flat(relative) for relative in (
+                "osm-prime/SKILL.md", "osm-log/SKILL.md", "osm-setup/SKILL.md")),
+            "Grok Bot host route")
     require("OSM Context and AIOS Context." in (skill_root / "osm-data-context/index.md").read_text(),
             "retained context names")
     # Saved state keeps its earlier aios/panel names after the sidebar folder became apps/notion.

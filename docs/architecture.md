@@ -75,8 +75,11 @@ and supplies scoped reads and revision-checked mapping settings.
 See [connection contract](home-connection.md).
 
 A short AGENTS.md or CLAUDE.md entry selects Prime and the owner's URL,
-requests Log and prefers the host's built-in workspace. Business facts stay
-in the home. Independent projects retain their own instructions.
+requests Log and prefers the host's built-in workspace. A host with no
+instruction file stores that same entry as one durable memory fact. Business
+facts stay in the home. Independent projects retain their own instructions.
+A personal-assistant session uses the selected home when the task needs owner
+context.
 
 ## Collaboration and extensions
 

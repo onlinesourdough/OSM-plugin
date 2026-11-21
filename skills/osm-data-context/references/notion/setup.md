@@ -156,7 +156,8 @@ Keep detailed source, schema and skill procedures in the shared plugin; retain
 only the owner's actual mappings and exceptions in the guide.
 
 Use the existing setup authority for this guide. Keep the host's persistent
-instruction a thin pointer using [the bridge](../../assets/bridge.md) and the selected
+instruction, or its one durable memory fact when it has no instruction file, a
+thin pointer using [the bridge](../../assets/bridge.md) and the selected
 [native adapter](../../../osm-setup/references/adapters.md). Preserve other
 instructions and repository isolation. Never embed private IDs in plugin source.
 Verify the guide first, then change only the owned bridge and selected plugin

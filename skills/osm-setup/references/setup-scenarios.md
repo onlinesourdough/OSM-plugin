@@ -8,6 +8,7 @@ client entry-point repair. Use the common [acceptance boundary](../../osm/refere
 | Native installation | No home or bridge; other harness settings and skills exist | Declared skills available in the selected harness; no owner files, global bridge, cross-install or discovery filter created |
 | Native removal | Selected package plus another harness install and owner data | Selected package removed; other install, settings and owner data unchanged |
 | Recorded home route | Native OSM skill selected; no bridge; a verified Notion root is recorded in the definition | Resolve that root without a global instruction edit |
+| Memory-host pointer | Authorized adoption on a host with no instruction file; verified Notion root | One durable memory fact holds the bridge, including its `AIOS` markers and the verified root URL; no instruction file is created |
 | Established Notion root | An existing root with its own name or layout | Reuse the established root; do not create or select a second home |
 | Cold onboarding #25 | No home; ordinary setup request; current focus supplied | Notion home built from existing stores, useful first artifact and optional pointer; no Git/service requirement |
 | Source-led context | Sources plus unique owner fact; empty migration page | Verified useful content, short routes/local gaps; no mirror or readiness from title/fetch alone |
