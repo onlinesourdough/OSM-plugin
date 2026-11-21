@@ -17,7 +17,10 @@ inputs selected by the lead.
    General questions without owner context also need no Notion access. Honor
    an explicit project or client context boundary before the personal default.
 2. For other tasks, resolve the Notion root on the `Data and Context:` line
-   (or the existing `Context:` line) through the host's authorized connection.
+   (or the existing `Context:` line). Read that line from the host's persistent
+   instruction file or, if the host has none, from its built-in persistent
+   memory or standing instructions, then open the root through the host's
+   authorized connection.
    If the root is missing or unreadable, identify the missing prerequisite and
    continue independent work. Use only the selected home and account.
 3. Follow [Manage Data & Context](../osm-manage-data-context/index.md) for

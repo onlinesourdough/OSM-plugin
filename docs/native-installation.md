@@ -51,9 +51,12 @@ available in some apps; use the same scope for later updates and removal.
 
 Open the actual project in your host. Keep one short set of OSM instructions
 per profile or project, and one verified route to the selected Notion home.
-Have Setup write the supported instruction file, then check it in a fresh
-session. Prefer the host's own workspace and tools, including its side panel
-when available. Use a desktop app or an external browser only when needed.
+Have Setup write the thin pointer in the host's persistent instruction file
+or, if the host has none, in its built-in persistent memory or standing
+instructions, then check it in a fresh session. Prefer the host's own workspace
+and tools, including its side panel when available. Use a desktop app or an
+external browser only when needed. Hooks and a scheduler are host facilities,
+used only when that host provides them.
 
 | Host | Instructions | Approvals and tools |
 | --- | --- | --- |

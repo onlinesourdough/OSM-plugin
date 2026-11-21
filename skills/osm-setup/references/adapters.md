@@ -31,7 +31,9 @@ no-op. Multiple/malformed blocks, a changed source or conflicting home require
 reconciliation. Do not change other apps or store owner data in plugin caches.
 
 Use the [context pointer](../../osm-data-context/assets/bridge.md) with the exact
-Notion root guide URL. Verify that guide before activation. The pointer names a
+Notion root guide URL. Verify that guide before activation. Save it in the
+host's persistent instruction file or, if the host has none, in its built-in
+persistent memory or standing instructions. The pointer names a
 Notion home only; no local file mirror or file-home bridge exists. A legacy
 folder or vault pointer already in place is left untouched, read-only; see the
 [legacy-home guidance](../../osm/references/update.md#legacy-file-and-vault-homes).

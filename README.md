@@ -201,7 +201,7 @@ scoped read and checking that a decision survives a fresh chat.
 
 The [agent workspace guide](docs/native-installation.md#start-with-a-clean-agent-workspace)
 covers instructions, tool access and approvals for Codex, Claude Code,
-Antigravity, Cursor and Pi.
+Antigravity, Cursor, Pi and Grok Bot.
 
 After installation, try:
 

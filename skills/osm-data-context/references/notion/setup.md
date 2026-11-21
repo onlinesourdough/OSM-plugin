@@ -155,8 +155,9 @@ database each session. No page name is mandatory.
 Keep detailed source, schema and skill procedures in the shared plugin; retain
 only the owner's actual mappings and exceptions in the guide.
 
-Use the existing setup authority for this guide. Keep the host's persistent
-instruction a thin pointer using [the bridge](../../assets/bridge.md) and the selected
+Use the existing setup authority for this guide. Save the thin pointer in the
+host's persistent instruction file or, if the host has none, in its built-in
+persistent memory or standing instructions, using [the bridge](../../assets/bridge.md) and the selected
 [native adapter](../../../osm-setup/references/adapters.md). Preserve other
 instructions and repository isolation. Never embed private IDs in plugin source.
 Verify the guide first, then change only the owned bridge and selected plugin
@@ -177,7 +178,8 @@ See the architecture's [home write policy](../architecture.md#home-write-policy)
 Make [Manage Data & Context](../../../osm-manage-data-context/index.md) usable at natural task
 checkpoints within the recorded read/write policy. No timer is required.
 Setup or general upkeep authority does not authorize a recurring task. Use the
-host's scheduler only for an explicit recurring-work request with bounded
+host's scheduler or routines, if available, only for an explicit recurring-work
+request with bounded
 sources, destinations and cadence; see [maintenance](../../../osm-manage-data-context/references/operating.md#maintenance).
 Skill automatic-use settings do not create scheduled runs.
 

@@ -74,9 +74,11 @@ Codex's optional headless adapter is built from `apps/notion` into
 and supplies scoped reads and revision-checked mapping settings.
 See [connection contract](home-connection.md).
 
-A short AGENTS.md or CLAUDE.md entry selects Prime and the owner's URL,
-requests Log and prefers the host's built-in workspace. Business facts stay
-in the home. Independent projects retain their own instructions.
+A short persistent instruction selects Prime and the owner's URL, requests Log
+and prefers the host's built-in workspace. Save it in the host's instruction
+file, such as AGENTS.md or CLAUDE.md, or, if the host has none, in its built-in
+persistent memory or standing instructions. Business facts stay in the home.
+Independent projects retain their own instructions.
 
 ## Collaboration and extensions
 

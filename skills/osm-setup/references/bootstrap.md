@@ -20,7 +20,8 @@ runtime.
    host. When installation is authorized, install it through the supported route
    if missing, guide sign-in and verify the account with a scoped safe read.
    Read the selected root through that plugin and record its verified URL in
-   the short host pointer. A
+   the short host pointer: the host's persistent instruction file or, if the
+   host has none, its built-in persistent memory or standing instructions. A
    dedicated connection is an option when a selected team workflow, worker or
    unattended job needs a distinct identity or access scope. A team member can
    use their own authorized Notion account. For a selected internal connection,
