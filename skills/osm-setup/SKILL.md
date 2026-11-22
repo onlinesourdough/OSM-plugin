@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.2.1"
+  version: "3.3.0"
 ---
 
 # OSM:setup
@@ -53,7 +53,11 @@ outside that chain):
 4. **Reuse or create.** [Data & Context](../osm-data-context/index.md) engineers
    the home, its definition and the core Knowledge, Memory and Skills roles:
    existing stores are reused by actual ID, only missing ones are created, and
-   replay creates no duplicate. Setup never creates Content. It discovers the actual
+   replay creates no duplicate. For a new home, include the
+   [Content foundation](../osm-data-context/references/notion/content-foundation.md)
+   in the short plan: reuse an existing Notion or authoritative external route,
+   record a deferral, or propose one empty store. Personal Content methods stay
+   optional. Never retrofit an established home on normal resume. It discovers the actual
    types and metadata of existing stores before mapping and follows the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
    A newly generated root body starts with the definition, followed by its

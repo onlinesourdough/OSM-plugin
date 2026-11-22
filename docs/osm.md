@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.34.4
+OSM version: 0.35.0
 
 **Business first. Productivity built in.**
 
@@ -30,7 +30,10 @@ fields are retained. Personal and Team labels are not access controls.
 
 [Data & Context](../skills/osm-data-context/index.md) engineers the Notion home: its
 root, one definition and the core Knowledge, Memory and Skills stores, reusing
-what exists and creating only what is missing.
+what exists and creating only what is missing. New-home Setup also resolves the
+[Content foundation](../skills/osm-data-context/references/notion/content-foundation.md):
+reuse an existing owner, defer, or propose one empty store. Personal Content
+methods remain optional; existing-home resume adds no store.
 [Prime](../skills/osm-prime/SKILL.md) uses the host's short pointer to find the
 smallest relevant context and [Log](../skills/osm-log/SKILL.md) saves lasting
 changes after meaningful work or on request. [Dreaming](../skills/osm-dreaming/SKILL.md)
@@ -105,16 +108,13 @@ have linked procedures. Update older saved calls to a retired entry to use
 the relevant procedure or the project's own workflow. Previous entries remain
 available from [v0.33.0](https://github.com/onlinesourdough/OSM-plugin/tree/v0.33.0/skills).
 
-Content production and video are not part of OSM. Content and Diffusion Studio
-left the package in 0.31.0; their history is kept as non-shipped drafts in the
-source repository's `docs/content-drafts/README.md` (not part of the package), a record of five
-configurable areas (setup, intake, prepare, produce and distribute, learn), not a
-plugin or required pipeline. Shared Content methods and templates have their own Git home,
-[OSM-content](https://github.com/onlinesourdough/OSM-content), which owns their future changes; a Notion
-copy is a projection of a stated source revision. Where an owner chooses a separate Content method,
-Notion editorial and Kit are the current selected tools and HyperFrames is an
-unqualified video candidate only. AIOS 0.29.0 no longer ships design skills;
-existing project `DESIGN.md` and `design/` files are unchanged.
+Core Setup supplies the Content data foundation, not a production method. The
+optional [OSM Content library](https://github.com/onlinesourdough/OSM-Content)
+helps shape the owner's own methods and workflow using existing tools. It
+reuses the registered core route; its personal skills are not automatically
+installed. External originals keep their owners, and selecting a database
+authorises no publication or send. Earlier Content and Diffusion Studio drafts
+remain historical non-shipped material in the source repository.
 
 In Codex, the built-in browser can show local design/application previews.
 Browser surfaces supplement the project files and native tools that perform the

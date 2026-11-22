@@ -22,9 +22,12 @@ context homes, and nothing here sets up a folder, vault or other provider home.
 - Reuse suitable existing or native stores by their actual ID, create only what is
   missing, and never duplicate a home, store, profile or skill by title. A replay
   finds the same objects and writes nothing.
-- Never create Content. Content is a separate, tailored method outside OSM. A
-  Content store the owner already selected stays readable and maintainable
-  through Manage Data & Context without any Content module installed.
+- Resolve the [Content foundation](references/notion/content-foundation.md)
+  during authorised new-home setup: reuse its actual owner, honour deferral,
+  or create one proposed empty store. This foundation is core; tailored Content
+  methods are optional. An established home without Content stays valid and
+  is never retrofitted by resume or update. A selected Content store remains
+  readable and maintainable without the optional module.
 - The definition describes actual roles, IDs, scope, source/destination/authority
   mappings and operational bindings. Host paths are host-specific execution
   bindings, not business data locations. Knowledge owns the business's goals,

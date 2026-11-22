@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.35.0 — 2026-11-22
+
+- Include the Content foundation in authorised new-home setup: reuse an existing
+  Notion or external owner, honour deferral, or propose one empty database.
+  Keep personal Content methods optional and existing homes unchanged.
+- Define a minimal empty-store schema, field equivalents, trigger-aware writes
+  and identity-first recovery; preserve external and source-only originals.
+- Align every setup route with official-Notion-plugin-first guidance and explain
+  separate personal/business homes without merging data or grants.
+- Version the persistent-memory host pointer changes and label unqualified
+  Grok/native observations honestly.
+
+
 ## 0.34.4 — 2026-11-20
 
 - Show selected starting context and how Knowledge, Memory and personal Skills grow through work, separate from shared plugin skills and optional Content.

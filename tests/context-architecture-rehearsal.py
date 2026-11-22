@@ -1930,6 +1930,64 @@ def fictional(value, path="fixture"):
     return problems
 
 
+@check("content-foundation")
+def content_foundation(data, ws):
+    """Check fictional operation traces, not a live agent or Notion runtime."""
+    reasons = []
+    writes = data.get("writes", [])
+    outcome = data.get("outcome")
+    if outcome not in (None, "existing-notion", "external", "deferred", "new-notion"):
+        reasons.append("ambiguous-route")
+    if data.get("invocation") == "install" and writes:
+        reasons.append("install-wrote")
+    if data.get("invocation") in ("install", "ordinary-resume", "update") and data.get("store_creates", 0):
+        reasons.append("implicit-retrofit")
+    if data.get("owners", 0) > 1 and writes:
+        reasons.append("ambiguous-owner-write")
+    if outcome in ("external", "deferred") and (data.get("local_destination") or data.get("store_creates", 0)):
+        reasons.append("parallel-store")
+    if outcome == "deferred" and data.get("asked_again"):
+        reasons.append("deferral-not-preserved")
+    if data.get("store_creates", 0):
+        if outcome != "new-notion" or not data.get("plan_empty_store") or not data.get("authorised"):
+            reasons.append("unplanned-creation")
+        if data.get("store_creates") != 1:
+            reasons.append("duplicate-store")
+    if data.get("new_store"):
+        required = {"title": "title", "key": "rich_text", "type": "select", "status": "select",
+                    "summary": "rich_text", "source_url": "url", "source_date": "date",
+                    "sources": "relation", "derived_from": "relation"}
+        if data.get("field_types") != required or data.get("type_options") != ["Source", "Content", "Edition"]:
+            reasons.append("wrong-native-schema")
+        if data.get("status_options") or data.get("status_default"):
+            reasons.append("invented-workflow")
+    events = data.get("events", [])
+    registered = data.get("registered_before", False)
+    for event in events:
+        if event == "register-ids":
+            registered = True
+        if event == "add-relations" and not registered:
+            reasons.append("relations-before-identity")
+    if "add-relations" in events and data.get("relation_target") != data.get("data_source"):
+        reasons.append("wrong-relation-target")
+    if data.get("existing_store") and data.get("schema_edits"):
+        reasons.append("forced-migration")
+    if data.get("unknown_trigger") and "dependent-write" in writes:
+        reasons.append("unqualified-trigger-write")
+    if data.get("publish_without_authority") or data.get("auto_personal_methods") or data.get("fake_records"):
+        reasons.append("foundation-became-production")
+    if data.get("source_only") and any(data.get(key) for key in
+                                       ("retained_source_body", "retained_summary", "retained_worker_brief")):
+        reasons.append("source-only-copy")
+    if data.get("replay") and (data.get("store_creates", 0) or data.get("duplicate_record") or data.get("frozen_packet_changed")):
+        reasons.append("replay-changed-identity")
+    if data.get("binding_before") and data.get("binding_before") != data.get("binding_after"):
+        reasons.append("binding-drift")
+    if data.get("unchanged") and writes:
+        reasons.append("unchanged-write")
+    return reasons
+
+
 def diagram_binding_problems(source, wide, mobile, receipt):
     pairs = ((source, "source_html_sha256"), (wide, "delivered_image_sha256"),
              (mobile, "mobile_image_sha256"))
@@ -1939,6 +1997,7 @@ def diagram_binding_problems(source, wide, mobile, receipt):
 def main():
     workspaces = {key: json.loads((FIXTURES / f"workspace-{key}.json").read_text()) for key in ("a", "b")}
     cases = json.loads((FIXTURES / "cases.json").read_text())
+    cases += json.loads((FIXTURES / "content-foundation.json").read_text())
     headings = {}
     for name in ("architecture.md", "migration.md"):
         text = (REFERENCES / name).read_text()
@@ -1947,7 +2006,7 @@ def main():
 
     # A later source edit must not leave a silently stale delivered figure.
     # This binds bytes, not visual meaning; rendering and review stay separate.
-    receipt = json.loads((ROOT / "docs/evidence/common-architecture-qualification-20261120.json").read_text())
+    receipt = json.loads((ROOT / "docs/evidence/common-architecture-qualification-20261122.json").read_text())
     diagram_files = [ROOT / "assets/diagrams" / name for name in
                      ("osm-architecture.html", "osm-architecture.png", "osm-architecture-mobile.png")]
     diagram_bytes = [path.read_bytes() for path in diagram_files]
@@ -1970,8 +2029,8 @@ def main():
     failures += problems
 
     ids = [case["id"] for case in cases]
-    if ids != list(range(1, 92)):
-        failures.append(f"case ids are not 1..91: {ids}")
+    if ids != list(range(1, 104)):
+        failures.append(f"case ids are not 1..103: {ids}")
     for case in cases:
         label = f"case {case['id']:>2} {case['name']}"
         document, _, anchor = case["contract"].partition("#")

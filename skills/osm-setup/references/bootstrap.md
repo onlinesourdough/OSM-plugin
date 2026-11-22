@@ -55,6 +55,11 @@ runtime.
    recorded form is read and kept) and give the connector, the job prompt and
    each pointer the same policy by reference. Verify one meaningful first task
    and its replay without duplicate objects.
+   In a new home, include the
+   [Content foundation](../../osm-data-context/references/notion/content-foundation.md)
+   in the short plan. Reuse its actual owner, record deferral, or propose one
+   empty store; register IDs before adding self-relations. Resume preserves
+   the selected route and never upgrades an established home implicitly.
    For each selected source, select its transport and format recipes once,
    including content egress and processor retention, or report the precise
    missing capability. Record its coverage policy: selected objects/channels or

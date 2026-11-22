@@ -58,6 +58,20 @@ to adopt the new title. A new home may use the packaged
 [AI operating model icon](../assets/ai-operating-model.svg); preserve an
 existing owner icon unless its change was requested.
 
+## Separate personal and business homes
+
+A company can own its shared operating model while a teammate has a personal
+home, possibly in another workspace. Each root keeps its own definition,
+account, policy and destinations. A task selects the relevant home explicitly;
+do not merge definitions, automatically load every linked home, copy private
+Memory or switch the default pointer to a client. Record a selected cross-home
+source by its actual owner, account, IDs, reader, permitted use and retention.
+The other workspace must grant that route access. A dedicated connection can
+provide the intended narrower identity; an employee may instead use their own
+authorised official Notion account. Links, team membership and personal scopes
+never create provider grants. Verify each route separately, including denial
+outside its actual scope.
+
 ## Areas and storage roles
 
 The five **areas** are navigation and coverage, not databases: Business and
@@ -87,6 +101,14 @@ physical bronze/silver/gold copies. System-control and reference material
 defaults to the existing maintenance/supporting pages; a legacy one found inside
 the knowledge store keeps its role and is maintained like any other control
 record under the [owner's write policy](#home-write-policy).
+
+## Content foundation
+
+New-home Setup resolves one Content route in its short plan: reuse an
+existing Notion or external owner, honour deferral, or propose one empty
+Notion database. The [foundation procedure](notion/content-foundation.md)
+owns the binding, minimum schema and replay rules. Personal editorial methods
+remain optional. Installation, normal resume and upkeep create no store.
 
 ### Knowledge metadata
 
@@ -759,8 +781,11 @@ Type mapping, with no identical schema forced on all stores:
   automatically. Owner-method upkeep under a recorded grant, including a
   scheduled job, follows the skill lifecycle, and a team method keeps its agreed
   change authority.
-- **A selected existing Content store:** keeps its own workflow fields; OSM
-  neither creates nor ships it. Its editorial Inbox is not a staleness flag.
+- **Content foundation:** new-home Setup resolves the
+  [core route and minimum schema](notion/content-foundation.md). Reuse existing
+  workflow fields; only a proposed new empty store uses the minimum. Its
+  editorial Inbox is not a staleness flag. An existing home without Content
+  stays valid; neither an update nor upkeep creates a missing store.
 - **Plain pages:** stay usable with no added fields.
 - **Released references:** keep their exact source, version and hash contract.
 - **Legacy file and vault homes:** read-only; nothing here applies these semantics

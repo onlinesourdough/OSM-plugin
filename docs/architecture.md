@@ -36,7 +36,14 @@ agreements and maintenance routes.
 | Knowledge | The person, business, offers, customers, voice, strategy, numbers and team |
 | Memory | Lasting decisions, corrections, constraints and their reasons and evidence |
 | Skills | The owner's reusable ways of working |
-| Content, when selected | Existing editorial context and links under its own workflow |
+| Content foundation | Material and production references in the selected existing store, external workflow or proposed empty database; personal methods remain optional |
+
+New-home Setup covers the Content route in its short plan. Reuse an existing
+owner, honour deferral, or propose one empty database. Installation and
+existing-home resume add nothing. The
+[core foundation contract](../skills/osm-data-context/references/notion/content-foundation.md)
+keeps one route and minimum schema; the optional Content library adds adapted
+editorial methods.
 
 Setup reuses actual identities and suitable native types. Names and fields
 can vary. Source dates, imports, substantive revisions and justified review
@@ -73,6 +80,11 @@ Codex's optional headless adapter is built from `apps/notion` into
 `runtime/notion`. It preserves existing local route and Keychain settings
 and supplies scoped reads and revision-checked mapping settings.
 See [connection contract](home-connection.md).
+
+A company and a teammate can keep separate homes, including separate Notion
+workspaces. Each keeps its own definition and account. Record a deliberately
+selected cross-home source with its actual grants and retention; do not merge
+private Memory or infer access from a link.
 
 A short persistent instruction selects Prime and the owner's URL, requests Log
 and prefers the host's built-in workspace. Save it in the host's instruction

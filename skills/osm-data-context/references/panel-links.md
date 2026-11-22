@@ -52,9 +52,10 @@ and the YAML need not contain it.
    use the official plugin for actual Notion reads.
 2. Project each route the definition names into a section: a short `key`, the
    owner's `label`, an explicit `role` (`profile`, `memory`, `documents`,
-   `content`, `skills` or `related`) and `order`. Use `content` only for an
-   existing Content store the definition names; never create one, never map it
-   when the definition has no such route, and never use it for core context,
+   `content`, `skills` or `related`) and `order`. Use `content` only for a
+   selected Content store the definition names. This mapping step creates no
+   store; [core Setup](notion/content-foundation.md) owns foundation creation.
+   Never map it when the definition has no such route, or use it for core context,
    control records or memory. Record core rules, the source index,
    writing, access and evidence procedures, maintenance and recovery snapshots as
    `role: support` with their `kind`, so the adapter never lists them as business context. Never

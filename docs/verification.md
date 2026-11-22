@@ -1,5 +1,42 @@
 # Verification
 
+## 22 November 2026 — Content foundation contract candidate (#131)
+
+The 0.35.0 contract keeps seven discoverable skills. New-home Setup resolves
+an existing Notion or external owner, a persistent deferral, or one proposed
+empty Content store. Personal Content methods stay optional. Installation and
+ordinary existing-home resume create no store. Official-plugin-first and
+separate personal/business-home access are aligned across the setup references.
+
+The new minimum field list and definition were authored in the public Notion
+guide, then read and exported through eight complete API originals. Captures
+45010456269, 45010703134 and 45011354458 held at the expected old-main source
+drift before any released-skill import. They establish source readback, not
+successful live publication. The dated diagram receipt records local desktop
+and mobile renders and exact SHA-256 download equality for both PNGs and HTML;
+it explicitly leaves anonymous and native sidebar render checks unverified.
+
+The architecture rehearsal now exercises 103 positive traces, 79 variants and
+501 negative mutations, including install-only writes, relation registration,
+external ownership, persistent deferral, existing-store replay, publication
+triggers and source-only summary/worker-brief exclusion. These are fictional
+contract traces, not client onboarding, retrieval performance or timed proof.
+The publisher rehearsal passes 72 cases and 75 mutation controls after the
+Notion bindings were committed; its earlier HEAD-versus-worktree failure is
+retained in the task evidence. Adapter tests pass all 84 checks and smoke.
+Package/version, documentation, onboarding, layout, continuity, footprint,
+responsibility, publisher parity, native publisher, public-browser reader,
+consumer-selection and offline reconciliation checks passed.
+
+An actual Neon High inline review found the source-only wording ambiguity and
+small clarity/test gaps; the candidate addresses them. The first earlier
+Neon request timed out without a verdict, and its matching follow-up confirmed
+that it supplied no completed review. Exact-candidate acceptance and live release
+receipts belong to the delivery review, not to a successful invocation alone.
+#69, #72 and #73 remain separate proof gates. No new-client journey or benchmark
+runs until the coordinated core, Content and owner-runtime changes are ready.
+
+
 ## 20 November 2026 — common method diagram and public Notion readback (#93)
 
 The subsequent generic starter-role clarification extends that same diagram.

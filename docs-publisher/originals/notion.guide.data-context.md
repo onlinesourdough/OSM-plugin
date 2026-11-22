@@ -1,6 +1,8 @@
 An AI operating model is how the business puts AI to work: its goals, people and agents, data, working methods, tools and access, responsibilities, review and ongoing learning. OSM helps set up and maintain this arrangement. The Notion home carries its definition and routes; the actual work also depends on people, agents and the connected systems.
 
-Data and context are the shared foundation within that model. Skills are part of context: reusable ways to carry out and review the work. Goals and vision give it direction; they are not a replacement for an AI strategy. Knowledge, Memory and Skills organize the foundation, with Content added when useful.
+Data and context are the shared foundation within that model. Skills are part of context: reusable ways to carry out and review the work. Goals and vision give it direction; they are not a replacement for an AI strategy. Knowledge, Memory and Skills organize the foundation. Setup also resolves where Content belongs; personal editorial methods remain optional.
+
+The Content foundation described below requires OSM 0.35.0 or later. Follow the installed release's Setup instructions; an earlier release does not acquire this default from reading this page.
 
 ## A gateway to your sources
 
@@ -20,6 +22,8 @@ A source can permit a read in an approved environment while prohibiting storage 
 | Content, when selected | Sources, ideas, actual material, channel editions and observed response. |
 
 These are organizational choices, not new pillars. A database may contain evidence and interpreted meaning. A view is a way to find records, not an access boundary.
+
+Keep useful names, native hierarchy and existing icons. For a new home, the optional [sidebar icon examples](https://github.com/onlinesourdough/OSM-Content/blob/818420c98a5e2b1c640e552dd9343254fa0eb8d2/docs/sidebar-icons.md) offer recognizable Knowledge, Memory, Skills and Content motifs. Adapt them to the business or use native Notion icons. They require no Content methods, new databases, brand change or sharing change. Preserve an existing icon unless its change was requested.
 
 ## Create and revise
 
@@ -53,7 +57,9 @@ Keep private context and customer material in their chosen home. This guide cont
 
 ## AI operating model home template
 
-A new private home is called AI operating model by default and starts with its Data and Context Definition, followed by the Knowledge, Memory and Skills databases. The owner can choose another name. Existing homes keep their identities and names unless a rename is requested. Setup fills the definition from the company's actual sources and verified destinations. Its own onboarding explanations stay in the conversation. An optional Content database is added only when selected.
+A new private home is called AI operating model by default and starts with its Data and Context Definition, followed by its native databases. The owner can choose another name. Existing homes keep their identities and names unless a rename is requested. Setup fills the definition from the company's actual sources and verified destinations; onboarding explanations stay in the conversation.
+
+During authorised new-home setup, include Content in the short plan. Reuse an adequate existing Notion store or authoritative external workflow, record deferral, or propose one empty Content database where no suitable owner exists. An external workflow gets no parallel Notion store. Installation and normal existing-home resume create nothing; a deferred choice is not asked again until its condition is met. No personal Content methods or example records are automatically installed.
 
 ```yaml
 definition:
@@ -70,7 +76,12 @@ definition:
     memory: {id: "[id]"}
     skills: {id: "[id]"}
     maintenance: {id: "[id]"}  # pipeline agreements and other control records
-    content: {id: "[id]"}  # optional; only when the owner selects Content
+    content: {id: "[database ID]", data_source: "[data-source ID]"}  # omit for external or deferred
+  content:
+    outcome: "[existing-notion | external | deferred | new-notion]"
+    agreement: "[definition section or exact source agreement; account, scope, field map, retention and triggers]"
+    recorded: "[accepted setup plan or existing owner evidence]"
+    activation: "[deferred: recorded condition or when requested; omit otherwise]"
   # The owner's recorded choice. Setup proposes whole-home and never assumes it.
   write_policy: {choice: "[whole-home | narrower | not yet chosen]", include: ["[exact identities; narrower only]"], exclude: ["[exact identities]"], recorded: "[owner decision source and date]"}
   controls:
@@ -114,8 +125,15 @@ These are useful field meanings, not a compulsory migration. Reuse native proper
 | Knowledge | Name (Title), Summary and provenance (Text), Kind, Status and Temporal scope (Select), Evidence from (Multi-select), Space (Multi-select) or Scope (Text), Key (Text) for managed topics | Evidence period, Revised and Review due (Date). Preserve existing Type and Category fields. Unknown dates stay blank. |
 | Memory | Name (Title), Key (Text) for managed decisions, Status (Select), Space (Multi-select) or Scope (Text), and an exact evidence reference in Source or Evidence (Text) | Type (Select), Source date, Imported, Revised and Review due (Date), Related docs (Relation). Preserve an existing Source (Select) that identifies the creating agent; use Evidence for provenance and Last updated by for the editing client where selected. |
 | Skills | Native Skill name (Title), Description (Text), supporting Files (Files & media) when the method needs resources, Status and Audience (Select), Space (Multi-select) or Scope (Text) | Accountable Owner (Person), Key and Source (Text), Revised and Review due (Date). The method's source/version is distinct from its record revision. |
+| Content: new empty store | Title (Title), Key (Text), Type (Select: Source, Content, Edition), Status (Select: no options or default), Summary (Text), Source URL (URL), Source date (Date), Sources and Derived from (self-relations to the same data source) | Editorial fields, workflow states, views and personal methods only when selected. Reuse sufficient existing native equivalents; no compulsory migration. |
 
 Source dates describe the source; importing, substantive revision and technical editing are different events. Review due has a real reason and does not expire a still-valid decision. Add a relation only when its meaning and evidence are clear. A label, view or team audience does not grant access.
+
+For a new Content database, create the non-relation properties and register its exact database and data-source IDs before adding the self-relations. Read back their types and targets. An interrupted setup reuses these identities and adds only missing properties. If the tool cannot create a required native type, preserve the verified store and report that remaining step; do not create a substitute, fake status or sample post.
+
+The definition or its selected source agreement owns one actual Content route and field map. Before writing to an existing store, inspect integrations and publication triggers and verify a non-publishing path. Unknown triggers hold only dependent writes. The optional Content methods reuse this binding, including when an older setup template is selected; their released packets are not silently rewritten. Source, Content and Edition are record roles, not a compulsory production sequence.
+
+Knowledge holds lasting business direction, audience, offers and voice. Content holds selected production references, actual material and editions. Memory holds lasting decisions. Original media and source-only data stay with their owning system.
 
 ## How the three context skills use this home
 
