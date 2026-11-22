@@ -41,7 +41,7 @@ As the business changes, revise the current explanation where it belongs. Keep m
 
 Shared OSM instructions help you establish and maintain the foundation and complete useful work. Personal skills adapt methods to your own business. Both belong to the context you give an assistant.
 
-<database url="https://app.notion.com/p/6abfc738a9604ddc806432721813712b" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="false" icon="https://raw.githubusercontent.com/gustavonline/gustavonline/d96b79de52f527989afbe0aff3752b576c2749e4/assets/notion-icons/osm/skills.png">
+<database url="https://app.notion.com/p/6abfc738a9604ddc806432721813712b" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="false" icon="https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/skills.png">
 OSM Skills
 </database>
 
