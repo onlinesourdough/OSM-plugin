@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.35.1
+OSM version: 0.35.2
 
 **Business first. Productivity built in.**
 

@@ -2,15 +2,21 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.3.0"
+  version: "3.3.1"
 ---
 
 # OSM:setup
 
 Conduct onboarding from a connected Notion workspace to a verified home and a
-useful first task. Reuse answers; resume at the next gap.
+useful first task. Reuse answers; resume at the next gap. Explain the useful
+result briefly before asking unfamiliar setup questions. Use the conversation's
+language; on a neutral resume, use its recorded preference or working content,
+not the fixed English title, to choose the language.
 
-Codex **Set up** or an explicit request starts this skill. Resume accepted setup
+Codex **Set up**, the **OSM:setup** skill picker entry, or a request naming OSM
+starts this skill. Bare `/setup` can select another plugin; do not claim that
+generic command is OSM's entry or that ordinary Notion setup needs an API key.
+Resume accepted setup
 and connections. Verify access; a badge or saved link is not readiness. For
 package installation or a requested bridge-only change, use the
 [adapter route](references/adapters.md). Installation alone creates no home and
@@ -50,6 +56,8 @@ outside that chain):
    what may be retained where. Keep operational originals in their system.
    An AI-native source normally needs direct lookup, not a Notion importer.
    Reuse its existing connection and configure the template to the business.
+   Locate a named task-relevant source before substituting a generic result;
+   [setup](references/setup.md) owns the minimal follow-up and source agreement.
 4. **Reuse or create.** [Data & Context](../osm-data-context/index.md) engineers
    the home, its definition and the core Knowledge, Memory and Skills roles:
    existing stores are reused by actual ID, only missing ones are created, and
@@ -60,6 +68,10 @@ outside that chain):
    optional. Never retrofit an established home on normal resume. It discovers the actual
    types and metadata of existing stores before mapping and follows the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
+   Give a short concrete plan after resolving the relevant business/source
+   questions, before building. Name a new root **AI operating model** without
+   translating that default; use the public guide's existing icons as described
+   by the [root template](../osm-data-context/assets/data-and-context-root.md).
    A newly generated root body starts with the definition, followed by its
    databases. Changes to an existing root follow the owner's request and write
    policy. Explain onboarding in the conversation, using the public guide's

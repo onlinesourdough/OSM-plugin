@@ -13,6 +13,12 @@ owner, propose **one empty Content database**, with no sample records, as part
 of that concrete plan. Existing setup authority covers the described creation;
 ask only if authority or a material choice is missing. The owner can defer.
 
+An unanswered proposal is not an owner decision. Record `deferred` only from
+the owner's actual choice, with its evidence and activation condition; never
+turn the agent's suggestion to wait into that choice. An unresolved selection
+stays an explicit setup gap, with no invented outcome or destination. Continue
+independent authorised work without silently creating a competing store.
+
 Resolve exactly one outcome; ambiguous ownership creates nothing:
 
 | Outcome | Record and do |
@@ -35,8 +41,9 @@ not in a second editable field map. Record the evidence for the choice, exact
 account and scope, authoritative system, selected reader, allowed actions and
 retention. For Notion, include both database and data-source identities and
 the useful field equivalents; `destinations.content` points only to a selected
-Notion store. For an external outcome, `sources` names the actual system and
-there is no local Content destination. Deferred has neither invented IDs nor
+Notion store. For an external outcome, the definition's sources or linked
+source agreement names the actual system; there is no local Content destination.
+Deferred has neither invented IDs nor
 an unverified reader. Unknown information stays an explicit gap.
 
 Inspect automation, integrations and publication triggers before writes to an

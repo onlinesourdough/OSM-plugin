@@ -8,7 +8,9 @@ The Prime and Log walkthrough requires OSM 0.33.0 or later.
 ## 1. Install and connect
 
 Follow [Install in your app](https://github.com/onlinesourdough/OSM-plugin#install-in-your-app),
-then ask your assistant to set up OSM using your chosen Notion page. Reuse an
+then ask your assistant to set up OSM using your chosen Notion page, or choose
+**OSM:setup** from Codex's skill picker. Name OSM explicitly; bare `/setup` can
+select another plugin. Reuse an
 existing working connection and verify a scoped read in the intended account.
 OSM uses Notion for the context home. Your documents, project files and
 operational systems keep their originals. Use the

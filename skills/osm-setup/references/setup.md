@@ -36,6 +36,15 @@ fallback, pending input and resumption. Reflect a sourced snapshot, reuse
 accepted answers and resolve material corrections. Select and complete a small
 useful result from accepted intent; understanding can itself be that result.
 
+If the owner names a source relevant to that result but its location, purpose
+or handling is unclear, ask the smallest missing question before drafting.
+Help them select an exposed file, share a link or identify a folder; do not
+require a technical path, database ID or schema. Clarify what notes contain
+before treating them as customer records. Reuse already authorised use and
+ask only about unresolved handling. If access is declined or unavailable, name
+the limit and agree a useful alternative; a template-only result is a choice,
+not a substitute for the source-backed task the owner asked for.
+
 ## Home and harness
 
 The home is the Notion Data & Context home that
@@ -75,8 +84,9 @@ cutover also verifies [New Chat](adapter-codex-desktop.md). CLI evidence proves
 no GUI state; report unavailable activation as NOT VERIFIED. Unchanged resumes
 reuse dated proof without repeating cold/optional checks.
 
-Generated context/routes remain provisional until the owner confirms/corrects
-the snapshot. Reuse accepted answers; retain unresolved confirmation and do not
+Show the concise saved business snapshot and invite confirmation or correction
+in the conversation. Generated context/routes remain provisional until the
+owner confirms/corrects the snapshot. Reuse accepted answers; retain unresolved confirmation and do not
 claim full setup acceptance. Return the home link, concise changes, gaps and next
 action.
 

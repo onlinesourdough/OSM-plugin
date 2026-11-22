@@ -1326,6 +1326,15 @@ def recorded_public_values_stay_out_of_shipped_text():
     shipped = [p for p in (ROOT / "skills").rglob("*") if p.is_file()] + [ROOT / "docs/osm.md"]
     for path in shipped:
         text = path.read_text()
+        if path.relative_to(ROOT).as_posix() == ROOT_TEMPLATE:
+            # The owner's requested public method reference is documentation,
+            # not an owner home, credential or CI write target. Permit only
+            # this exact labelled link; every other binding is still checked.
+            guide_id = next(a['notion'] for a in MANIFEST['artifacts']
+                            if a['key'] == 'notion.guide.data-context')
+            reference = f'[AI operating model reference](https://app.notion.com/p/{guide_id})'
+            require(text.count(reference) == 1, 'one explicit public method reference')
+            text = text.replace(reference, '[AI operating model reference](public-method-reference)')
         for value in RECORDED_PUBLIC:
             require(value not in text, f"{path.relative_to(ROOT)} contains a recorded target value")
         require("40d6d2e17f5681" not in text and "gustavanderson.notion.site" not in text, f"public binding in {path.relative_to(ROOT)}")

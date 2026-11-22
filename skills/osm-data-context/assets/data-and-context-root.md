@@ -4,9 +4,22 @@ The neutral starting layout for one customer-owned root. Setup fills it from
 verified sources under the [Context Architecture](../references/architecture.md);
 it does not copy that contract into the page. Replace every bracketed
 instruction or omit its optional line before use. The title is the owner's
-choice; "AI operating model" is only the default. If a root or an older entry already
+choice; the default is exactly **AI operating model**, without translating it
+to match the conversation. Change that name only for an owner choice. If a root or an older entry already
 exists, adapt it: keep its identity, title, icon, local wording and compatible
 definition fields, and never regenerate owner choices from this template.
+
+For a new root and new core stores, use the existing icons in the public guide's
+[AI operating model reference](https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038).
+If that public page is unavailable through the selected tools, use its
+[versioned public reading copy](https://github.com/onlinesourdough/OSM-plugin/blob/545e9a667fcbd6174fbd5ae28b72d69572666d92/docs-publisher/originals/notion.guide.data-context.md)
+without changing a private connection.
+The same guide supplies the durable explanation when onboarding needs it.
+Reuse those actual asset URLs; do not generate new artwork or replace existing
+icons. Apply the appropriate page/database metadata operation and verify the
+actual icon. A wrapper-page acknowledgement alone is not proof a database icon
+changed. If the tool cannot apply or read it, report that cosmetic gap and
+continue useful work without broadening access.
 
 Native child pages and databases (the knowledge store, Memory, Skills and the
 maintenance pages) appear on the root itself. Do not add a second manual link
@@ -18,6 +31,15 @@ scheduled job is selected, verify the route to its existing checkpoint. Name
 coverage gaps explicitly. Refer to the agreement for source authority, cadence
 and freshness details. Map selected chat history as a source with its exact
 host or account, scope and reader.
+
+The YAML below is a starting representation, not a mandatory spelling. Keep
+one discoverable gateway: inline sources or a direct, named link to the owning
+source map/handling agreement. Compatible existing role and query maps remain
+valid. Omit an unused empty source list rather than contradict the selected
+linked agreement, and never maintain a second editable map.
+
+When Content is unresolved, omit its outcome and destination and retain the
+explicit setup gap. Do not fill a template placeholder by inventing deferral.
 
 The next heading supplies the page title property. Omit that heading from the body.
 The body begins with the definition and then the native child databases.

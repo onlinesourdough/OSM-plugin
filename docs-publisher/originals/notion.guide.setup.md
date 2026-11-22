@@ -22,15 +22,21 @@ Reading instructions, installing a package, connecting an account and proving it
 
 ### Set up through a conversation
 
-1. Install OSM in your agent app, open a fresh chat and ask it to run OSM Setup.
-2. Have Setup check whether the official Notion plugin is installed and connected. Install and connect it when needed, then verify the intended account and a page you can read.
-3. Describe your business and choose a useful first task. Setup reuses suitable existing pages and databases, then helps build your AI operating model home with its definition, Knowledge, Memory and Skills. In OSM 0.35.0 or later, its short new-home plan also resolves the Content foundation: reuse the existing Notion or external owner, defer, or propose one empty database. The home starts with its definition, followed by the native databases. Installation and existing-home resume add nothing.
-4. Let Setup adapt the definition and database properties to your business. Map each original system, its approved access route, permitted use and retention. An AI-native CRM or accounting tool can be queried directly; its records need no Notion copy. Establish the short instructions for your agent app.
-5. Complete the first task, save one lasting decision through Log, and ask for that decision and its source in a fresh chat. Add daily Dreaming when useful.
+1. Install OSM in your agent app, open a fresh chat and ask it to run OSM Setup. In Codex you can also select OSM:setup in the skill picker. Bare /setup can select another installed plugin.
+2. Have Setup check whether the official Notion plugin is installed and connected. Install and connect it when needed, then verify the intended account and an existing home or parent page. The ordinary official Notion connection needs no OpenAI API key.
+3. Describe your business and choose a useful first task. Share relevant existing material, or let the agent help find it. If you mention notes, a file or a system needed for that task, Setup clarifies its purpose and location before substituting a generic draft. You do not need to know database IDs, schemas or technical paths.
+4. Review the short concrete plan: what is reused, what is added and where originals stay. Setup then builds or adapts AI operating model with its definition, needed Knowledge, Memory and Skills roles, and the existing method icons. New-home Setup also resolves Content: reuse its existing owner or propose one empty database. Deferral is the owner's choice. Existing homes keep their identities and choices; resume adds nothing by default.
+5. Complete the agreed useful task and check the saved business snapshot. Choose the continuing write policy and intended scope for the short agent instructions. Ask an ordinary question in a fresh chat to verify that the agent can find the relevant context and sources. Add daily Dreaming only when you choose recurring upkeep.
 
 Use the official Notion plugin with a person's authorized account for ordinary work. Select a dedicated connection when a team workflow, delegated worker or unattended job needs a separate identity or a narrower scope. Each person can have their own authorized account. Being a team member alone does not require a new integration. Store credentials in the host or provider credential store.
 
 Prime starts a session with relevant context. Log saves lasting changes at checkpoints. Dreaming reviews recent work and maintains context between sessions. Council brings in another agent for review or bounded work.
+
+### Work through it your way
+
+Use the same conversation on your own, as preparation before a client session, or with a facilitator. Setup reuses accepted answers and saves genuine gaps so you can resume. A facilitated hour can focus on source preparation, a useful task, one correction and fresh-chat recall. The client's own home and app profile remain separate from the facilitator's.
+
+Codex's bundled OSM tools use Node.js 22 or later. If the host does not provide it, Setup helps establish that prerequisite through the supported route. Use the public guide for explanations and the installed skills for the actual procedure.
 
 ### Data & Context definition template
 

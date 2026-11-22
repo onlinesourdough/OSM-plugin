@@ -38,6 +38,9 @@ Notion home only; no local file mirror or file-home bridge exists. A legacy
 folder or vault pointer already in place is left untouched, read-only; see the
 [legacy-home guidance](../../osm/references/update.md#legacy-file-and-vault-homes).
 
+Retain the pointer's Prime, Log and built-in workspace/tools preference when
+adapting its authorised scope; do not silently omit its working defaults.
+
 Verify owner routing and independent repository isolation in fresh tasks.
 Never place owner-context preload in parent/owner-home AGENTS or overrides.
 A pointer supplies no account access or permission grant.

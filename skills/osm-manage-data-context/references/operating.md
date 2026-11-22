@@ -11,6 +11,14 @@ accounting system or existing database. Repository instructions and plans stay
 in Git. Notion's guide routes to them; putting a link in Notion does not make
 the underlying data available or synchronized. Verify the relevant connection.
 
+Keep one discoverable source gateway in the definition or its directly linked
+source agreement. When saving a newly verified route, reconcile that gateway
+with its owner, reader/host, scope, permitted use, retention and live-lookup
+requirements. Do not leave a contradictory empty source list or make a future
+chat search arbitrary Knowledge prose for the agreement. Existing role/query
+maps and linked source tables are valid; no universal YAML field layout or
+second editable map is required.
+
 For a database-based home, use the approved topic/Space/status properties or
 saved views to select metadata before fetching page bodies. Shared context is
 selected when relevant, not preloaded wholesale. A Space is an organizational

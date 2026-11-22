@@ -181,6 +181,13 @@ For a new or messy workspace, ask:
 > Use OSM Setup to set up my context. Start here: [page link]. Help me choose
 > the first useful task and reuse what I already have.
 
+You can also choose **OSM:setup** in Codex's skill picker. Bare `/setup` may
+select a different installed plugin. Setup is a conversation: it asks only
+what is missing, helps locate the material for one useful task, and builds your
+**AI operating model** with the existing method icons. No API key is needed for
+the ordinary official Notion connection. You can work through it yourself,
+prepare before a client session, or continue with a facilitator from saved answers.
+
 Setup adapts the neutral [Data & Context root](skills/osm-data-context/assets/data-and-context-root.md)
 (see the [Context Architecture](skills/osm-data-context/references/architecture.md); an existing
 [OSM page](skills/osm-data-context/assets/notion-osm.md) keeps working) with your Spaces and
