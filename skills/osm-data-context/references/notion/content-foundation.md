@@ -71,8 +71,12 @@ original can stand alone. Knowledge owns lasting business direction, audience,
 offers and voice. Content owns material or references selected for production,
 actual originals and editions; a brief remains a plan rather than finished
 material. Memory owns a genuine lasting decision, not every production event.
-Live media and source-only originals stay in their owning systems. Retain only
-permitted references and meaning; duplicate capture reuses the existing item.
+Live media and source-only originals stay in their owning systems. For
+source-only material, keep only its permitted route; never copy its body,
+summary or sensitive facts into a record, log or worker brief. A transcript
+does not relax the original handling rule. Other retained references and
+meaning require that source's actual permission. Duplicate capture reuses the
+existing item.
 
 ## Reuse through the optional methods
 
