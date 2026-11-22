@@ -20,7 +20,7 @@ back exactly unchanged. Claude's marketplace removal also uninstalled its OSM
 entry; native reinstallation at user scope restored the enabled registration.
 That behavior must not be confused with Codex's registration-only removal.
 
-Automatic main event 45019331596 passed the current eight guide-original
+Automatic main event 45019331596 passed the then-bound eight guide-original
 bindings and all seven released 0.35.0 API/public packets with no writes before
 the 0.35.1 tag. Post-tag run 45021627726 wrote and fully API-verified all seven
 0.35.1 packets, then held at the anonymous browser deadline. Independent run
@@ -34,7 +34,7 @@ new-client and comparative behavior remain #69/#72, with shared #73 cases.
 
 After the separately authored icon update, read-only capture [45026377847](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45026377847) held before any skill import because the guide root named the new immutable catalogue icon. All other seven guide content revisions were unchanged. The root body differs only in that icon URL, from asset commit `d96b79de52f527989afbe0aff3752b576c2749e4` to `2b878911a0ddd8815833d67e7a326bfe186978b2`.
 
-The current-source export and generated reader data now retain that exact API-read metadata. The reader renders the database tag as a text link, so its readable output is unchanged. No skill, schema, permission, scheduler pin or published package is changed by this documentation follow-up; the installed release remains the immutable 0.35.1 asset. The earlier 0.35.1 native/public proofs retain their original source dates. A new main parity run verifies this metadata binding separately.
+The current-source export and generated reader data now retain that exact API-read metadata. The reader renders the database tag as a text link, so its readable output is unchanged. No skill, schema, permission, scheduler pin or published package is changed by this documentation follow-up; the installed release remains the immutable 0.35.1 asset. The earlier 0.35.1 native/public proofs retain their original source dates. A new main parity run is pending to verify this metadata binding separately.
 
 ## 22 November 2026 — 0.35.0 delivery and guide refresh
 
