@@ -220,8 +220,13 @@ def check(root=ROOT):
 
     setup = (skills / "osm-setup/SKILL.md").read_text()
     data = (skills / "osm-data-context/index.md").read_text()
-    require("Setup never creates Content" in setup and "Never create Content" in data,
-            "Content creation boundary")
+    require("[Content foundation]" in setup and "Personal Content methods stay" in setup
+            and "honour deferral" in data and "never retrofitted" in data,
+            "Content foundation/method and existing-home boundary")
+    foundation = (skills / "osm-data-context/references/notion/content-foundation.md").read_text()
+    for rule in ("Installing", "ambiguous ownership", "Save its exact identity", "no sample records",
+                 "unknown trigger holds only", "Frozen older", "Unchanged replay"):
+        require(rule.lower() in foundation.lower(), f"Content foundation rule missing: {rule}")
     router = (skills / "osm/index.md").read_text()
     for old in ("osm-context", "osm-maintain-context", "osm-check", "osm-update",
                 "osm-select-model", "content", "diffusion-studio"):

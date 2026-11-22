@@ -1,0 +1,69 @@
+{
+  "format": "osm-common-architecture-qualification/1",
+  "date": "2026-11-22",
+  "scope": "Generic0.35Contentfoundationroles only; no private sources; no client journey or recall benchmark",
+  "source_html": "assets/diagrams/osm-architecture.html",
+  "source_html_sha256": "850ab0898e39ffe3a906e83e86e83d81a1488dda20304e33869ed5ca7bea62ae",
+  "delivered_image": "assets/diagrams/osm-architecture.png",
+  "delivered_image_sha256": "d87d4b1f4372b4fe28bef8f7359e8dff22493fedf5054bf910b3acedc913ed49",
+  "mobile_image": "assets/diagrams/osm-architecture-mobile.png",
+  "mobile_image_sha256": "c2a3fbaec199c0b4107d0fa9d96cc1abb0f109824efb473a1879b74375ec2d30",
+  "checks": {
+    "standalone_render": [
+      {
+        "name": "wide",
+        "width": 1000,
+        "height": 1100,
+        "dimensions": {
+          "scroll": 1000,
+          "client": 1000,
+          "cards": 4,
+          "height": 1430
+        }
+      },
+      {
+        "name": "mobile",
+        "width": 390,
+        "height": 844,
+        "dimensions": {
+          "scroll": 390,
+          "client": 390,
+          "cards": 4,
+          "height": 2470
+        }
+      }
+    ],
+    "local_wide_and_mobile_visually_inspected": true,
+    "native_notion_diagram_downloads": [
+      {
+        "name": "osm-architecture.png",
+        "local_sha256": "d87d4b1f4372b4fe28bef8f7359e8dff22493fedf5054bf910b3acedc913ed49",
+        "notion_sha256": "d87d4b1f4372b4fe28bef8f7359e8dff22493fedf5054bf910b3acedc913ed49",
+        "match": true,
+        "bytes": 525161
+      },
+      {
+        "name": "osm-architecture-mobile.png",
+        "local_sha256": "c2a3fbaec199c0b4107d0fa9d96cc1abb0f109824efb473a1879b74375ec2d30",
+        "notion_sha256": "c2a3fbaec199c0b4107d0fa9d96cc1abb0f109824efb473a1879b74375ec2d30",
+        "match": true,
+        "bytes": 574534
+      },
+      {
+        "name": "osm-architecture.html",
+        "local_sha256": "850ab0898e39ffe3a906e83e86e83d81a1488dda20304e33869ed5ca7bea62ae",
+        "notion_sha256": "850ab0898e39ffe3a906e83e86e83d81a1488dda20304e33869ed5ca7bea62ae",
+        "match": true,
+        "bytes": 9018
+      }
+    ],
+    "public_anonymous_render": false,
+    "native_codex_sidebar_render": false
+  },
+  "guide_body_revision": "ca166e80c77891e3aee41bd32f74099fb99bd4292cbea35c01f8f30e8261b571",
+  "api_snapshot_run": 45010703134,
+  "limits": [
+    "Source and PNGs rendered locally and exact Notion native downloads verified; public anonymous/native sidebar render still to qualify.",
+    "Content requires0.35.0; older releasedSetup unchanged; optionalpersonalmethods and externalowner preserved."
+  ]
+}

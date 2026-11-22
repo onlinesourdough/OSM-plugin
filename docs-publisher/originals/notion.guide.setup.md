@@ -24,7 +24,7 @@ Reading instructions, installing a package, connecting an account and proving it
 
 1. Install OSM in your agent app, open a fresh chat and ask it to run OSM Setup.
 2. Have Setup check whether the official Notion plugin is installed and connected. Install and connect it when needed, then verify the intended account and a page you can read.
-3. Describe your business and choose a useful first task. Setup reuses suitable existing pages and databases, then helps build your AI operating model home with its definition and Knowledge, Memory and Skills. The home starts with its definition, followed by the databases.
+3. Describe your business and choose a useful first task. Setup reuses suitable existing pages and databases, then helps build your AI operating model home with its definition, Knowledge, Memory and Skills. In OSM 0.35.0 or later, its short new-home plan also resolves the Content foundation: reuse the existing Notion or external owner, defer, or propose one empty database. The home starts with its definition, followed by the native databases. Installation and existing-home resume add nothing.
 4. Let Setup adapt the definition and database properties to your business. Map each original system, its approved access route, permitted use and retention. An AI-native CRM or accounting tool can be queried directly; its records need no Notion copy. Establish the short instructions for your agent app.
 5. Complete the first task, save one lasting decision through Log, and ask for that decision and its source in a fresh chat. Add daily Dreaming when useful.
 
@@ -42,7 +42,7 @@ The reference library preserves tagged instructions and supporting source packet
 
 ## Add Content when useful
 
-The optional Content companion helps adapt the foundation to an existing creative workflow and build personal content skills. Reuse the person's editor, publishing tools and ways of working. Its examples can include Notion for editorial work and a newsletter service for delivery. Choose tools for the actual task and verify the relevant integration before using it.
+The Content foundation is part of authorised new-home Setup in OSM 0.35.0 or later; follow your installed release until that version is available. It does not automatically install editorial methods. The optional Content companion helps adapt that selected foundation to an existing creative workflow and build personal content skills. Reuse the person's editor, publishing tools and ways of working. Its examples can include Notion for editorial work and a newsletter service for delivery. Choose tools for the actual task and verify the relevant integration before using it.
 
 ## Choose the Notion access that fits
 
@@ -54,6 +54,8 @@ The optional Content companion helps adapt the foundation to an existing creativ
 | An unattended daily Dreaming job | Select a route that can authenticate in that job's actual runtime. Verify it can read and make the authorized changes without the owner being present. |
 | You work for several clients | Select the appropriate client's home, account and permissions for the task. Keep each client's context in its own home. |
 | A connection fails or is revoked | Report the affected source and restore the selected connection. A different connected account is a separate choice. |
+
+A company can own its shared AI operating model while employees keep personal homes, including in different Notion workspaces. Each home has its own definition, account, policy and destinations. Record a deliberately selected cross-home source with its actual reader, grants and retention; do not merge private Memory or automatically switch the agent's default home. An employee can use their own authorised Notion account, or a dedicated connection when a narrower identity is needed. A link to the company home creates no access.
 
 A scoped connection limits the pages available through that connection. An agent that can also call a broader account still has that other route. When a workflow needs a technical boundary, configure its actual tools and credentials to match that boundary. Database views and labels help retrieval; Notion sharing controls access.
 

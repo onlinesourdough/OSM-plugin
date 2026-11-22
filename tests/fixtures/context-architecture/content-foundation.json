@@ -1,0 +1,454 @@
+[
+  {
+    "id": 92,
+    "name": "install creates no Content",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "invocation": "install",
+      "store_creates": 0,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "implicit-retrofit",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "store_creates": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 93,
+    "name": "accepted new home has native empty minimum",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "new-notion",
+      "invocation": "authorised-new-home",
+      "owners": 0,
+      "store_creates": 1,
+      "plan_empty_store": true,
+      "authorised": true,
+      "new_store": true,
+      "field_types": {
+        "title": "title",
+        "key": "rich_text",
+        "type": "select",
+        "status": "select",
+        "summary": "rich_text",
+        "source_url": "url",
+        "source_date": "date",
+        "sources": "relation",
+        "derived_from": "relation"
+      },
+      "type_options": [
+        "Source",
+        "Content",
+        "Edition"
+      ],
+      "status_options": [],
+      "status_default": null,
+      "events": [
+        "create-store",
+        "register-ids",
+        "add-relations",
+        "readback"
+      ],
+      "data_source": "fict-content-source",
+      "relation_target": "fict-content-source",
+      "writes": [
+        "create",
+        "relations"
+      ]
+    },
+    "negatives": [
+      {
+        "expect": "unplanned-creation",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "plan_empty_store": false
+          }
+        }
+      },
+      {
+        "expect": "duplicate-store",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "store_creates": 2
+          }
+        }
+      },
+      {
+        "expect": "wrong-native-schema",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "field_types": {
+              "sources": "rich_text"
+            }
+          }
+        }
+      },
+      {
+        "expect": "invented-workflow",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "status_options": [
+              "Inbox"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 94,
+    "name": "relations resume registered identity",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "new-notion",
+      "replay": true,
+      "registered_before": true,
+      "events": [
+        "add-relations",
+        "readback"
+      ],
+      "data_source": "fict-content-source",
+      "relation_target": "fict-content-source",
+      "binding_before": "fict-content-source",
+      "binding_after": "fict-content-source",
+      "writes": [
+        "relations"
+      ]
+    },
+    "negatives": [
+      {
+        "expect": "relations-before-identity",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "registered_before": false
+          }
+        }
+      },
+      {
+        "expect": "wrong-relation-target",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "relation_target": "fict-other-source"
+          }
+        }
+      },
+      {
+        "expect": "binding-drift",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "binding_after": "fict-copy-source"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 95,
+    "name": "deferral persists without nagging",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "deferred",
+      "invocation": "ordinary-resume",
+      "asked_again": false,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "deferral-not-preserved",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "asked_again": true
+          }
+        }
+      },
+      {
+        "expect": "parallel-store",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "local_destination": "fict-content"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 96,
+    "name": "existing equivalents preserve schema",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "existing-notion",
+      "owners": 1,
+      "existing_store": true,
+      "schema_edits": [],
+      "binding_before": "fict-editorial-source",
+      "binding_after": "fict-editorial-source",
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "forced-migration",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "schema_edits": [
+              "rename-Summary"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 97,
+    "name": "ambiguous owners create nothing",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": null,
+      "owners": 2,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "ambiguous-owner-write",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "writes": [
+              "create"
+            ]
+          }
+        }
+      },
+      {
+        "expect": "ambiguous-route",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "outcome": [
+              "existing-notion",
+              "new-notion"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 98,
+    "name": "external owner creates no mirror",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "external",
+      "owners": 1,
+      "store_creates": 0,
+      "local_destination": null,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "parallel-store",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "local_destination": "fict-copy"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 99,
+    "name": "established home needs no retrofit",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": null,
+      "invocation": "ordinary-resume",
+      "store_creates": 0,
+      "unchanged": true,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "implicit-retrofit",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "store_creates": 1
+          }
+        }
+      },
+      {
+        "expect": "unchanged-write",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "writes": [
+              "add-empty-database"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 100,
+    "name": "older Content method reuses binding",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "existing-notion",
+      "replay": true,
+      "binding_before": "fict-content-source",
+      "binding_after": "fict-content-source",
+      "writes": [],
+      "frozen_packet_changed": false
+    },
+    "negatives": [
+      {
+        "expect": "replay-changed-identity",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "frozen_packet_changed": true
+          }
+        }
+      },
+      {
+        "expect": "binding-drift",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "binding_after": "fict-new-source"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 101,
+    "name": "duplicate capture reuses identity",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "existing-notion",
+      "replay": true,
+      "duplicate_record": false,
+      "unchanged": true,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "replay-changed-identity",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "duplicate_record": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "name": "source-only body stays at source",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "external",
+      "source_only": true,
+      "retained_source_body": false,
+      "writes": []
+    },
+    "negatives": [
+      {
+        "expect": "source-only-copy",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "retained_source_body": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 103,
+    "name": "unknown trigger holds only dependent writes",
+    "check": "content-foundation",
+    "contract": "architecture.md#content-foundation",
+    "positive": {
+      "outcome": "existing-notion",
+      "unknown_trigger": true,
+      "writes": [
+        "independent-authorised-work"
+      ],
+      "auto_personal_methods": false,
+      "fake_records": false,
+      "publish_without_authority": false
+    },
+    "negatives": [
+      {
+        "expect": "unqualified-trigger-write",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "writes": [
+              "dependent-write"
+            ]
+          }
+        }
+      },
+      {
+        "expect": "foundation-became-production",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "auto_personal_methods": true
+          }
+        }
+      },
+      {
+        "expect": "foundation-became-production",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "fake_records": true
+          }
+        }
+      },
+      {
+        "expect": "foundation-became-production",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "publish_without_authority": true
+          }
+        }
+      }
+    ]
+  }
+]

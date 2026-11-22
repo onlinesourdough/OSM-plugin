@@ -32,6 +32,7 @@ under the studio's own account and scope.
 | Knowledge | A concise explanation of your offers, audience or how work is done |
 | Memory | Lasting decisions, corrections and their evidence |
 | Skills | Reusable methods you actually use |
+| Content foundation (OSM 0.35.0+) | The selected Notion or external owner, a recorded deferral, or one proposed empty store; personal editorial methods remain optional |
 | Source agreements | The account, scope, reader, authority and freshness of a selected source |
 | Operating policy and checkpoints | The exact route to your write rules and, if selected, the existing run state |
 
@@ -114,7 +115,7 @@ flowchart TB
     KNOWLEDGE["Knowledge<br/>Start from verified direction and goals<br/>Business context and source map<br/>Maintain understanding through work"]
     MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]
     SKILLS["Personal or team Skills<br/>May start empty<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
-    CONTENT["Content · when selected<br/>Personal configuration<br/>Source, Content and Edition from real work"]
+    CONTENT["Content foundation · OSM 0.35.0+<br/>Reuse actual Notion or external owner, defer, or propose one empty store<br/>Personal methods remain optional"]
     DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
     DEFINITION -.-> CONTENT
     CONTROLS["Selected upkeep controls<br/>Write policy and source agreements<br/>Checkpoints when scheduling is selected"]

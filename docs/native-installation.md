@@ -64,6 +64,7 @@ used only when that host provides them.
 | Claude Code | `~/.claude/CLAUDE.md` or the project's `CLAUDE.md`. | Start with `default`; `acceptEdits` reduces prompts for edits. Inspect effective tool rules with `/permissions`. Use `auto` where supported if you want reviewed automation. [Instructions](https://code.claude.com/docs/en/memory) · [Permissions](https://code.claude.com/docs/en/permissions) |
 | Antigravity | Global or workspace rules. The app, IDE and CLI can read a workspace `AGENTS.md`. | For the CLI, check the active mode and `/permissions`. `accept-edits` permits workspace edits, and `auto` uses the terminal sandbox when supported. App and IDE users should check their own tool settings. [Rules](https://antigravity.google/docs/rules-workflows) · [CLI modes](https://antigravity.google/docs/cli/modes) |
 | Cursor | A root `AGENTS.md` or a project rule in `.cursor/rules/`. | Open **Settings → Agents → Approvals & Execution**. Choose **Auto-review** for sandboxing and review of remaining calls or **Allowlist** for a small known set of calls. [Rules](https://cursor.com/docs/rules) · [Run modes](https://cursor.com/docs/agent/security/run-modes) |
+| Grok Bot | Use its supported persistent instructions or built-in memory when no instruction file exists. | Host-neutral pointer support is not a verified native installer. Check the actual model, tools, account, persistence in a fresh conversation and any selected routine; record unavailable controls. |
 | Pi | Project `AGENTS.md` plus the selected Pi settings and packages. | Inspect the enabled extensions and tools. Use `--tools` to control the tools available for a session and a separate environment for filesystem isolation. [CLI](https://docs.pi.dev/latest/cli) · [Security](https://docs.pi.dev/latest/security) |
 
 Check one project read and one intended edit on dummy data before enabling
@@ -183,8 +184,9 @@ Package installation creates no home.
 
 ## Evidence and limits
 
-The table below records 0.8.0 observations. For the integrated 0.9.0 package,
-see [current verification](verification.md).
+The table below is historical evidence from 0.8.0; its 17-skill counts do not
+describe the current seven-skill package. For current release and native
+adoption evidence, use [verification](verification.md).
 
 Native checks are recorded separately from instruction behavior. A successful
 install does not prove model performance, account access or full onboarding.

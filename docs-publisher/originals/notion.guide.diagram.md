@@ -2,12 +2,12 @@
 
 Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion AI operating model home and the connected sources.
 
-<image source="notion-file-block://41e6d2e1-7f56-814b-bf1a-e872568b0199/91398776-6d56-4a01-a3eb-e42060f543aa?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
+<image source="notion-file-block://4206d2e1-7f56-8126-82bb-f17d1ef089a1/9cbc5d1f-f0f0-4437-8a06-786ac92bb619?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
 
 <toggle>
 Mobile overview
 
-<image source="notion-file-block://41e6d2e1-7f56-8162-b33c-dbfb255d12a2/2e03ec95-772c-4d7c-bab5-9c18b63e3f56?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
+<image source="notion-file-block://4206d2e1-7f56-819d-ba84-e027b5b1b7bf/1a3c873f-f933-487f-acda-f78d266078eb?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture-mobile.png" />
 </toggle>
 
 <toggle>
@@ -34,7 +34,7 @@ flowchart TB
     KNOWLEDGE["Knowledge<br/>Start from verified direction and goals<br/>Business context and source map<br/>Maintain understanding through work"]
     MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]
     SKILLS["Personal or team Skills<br/>May start empty<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
-    CONTENT["Content · when selected<br/>Personal configuration<br/>Source, Content and Edition from real work"]
+    CONTENT["Content foundation · OSM 0.35.0+<br/>Reuse actual Notion or external owner, defer, or propose one empty store<br/>Personal methods remain optional"]
     DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
     DEFINITION -.-> CONTENT
     CONTROLS["Selected upkeep controls<br/>Write policy and source agreements<br/>Checkpoints when scheduling is selected"]
@@ -53,29 +53,27 @@ flowchart TB
 
 Prime reads what a task needs. Log saves lasting changes at checkpoints. Dreaming checks recent work and selected sources under the same curation rules. Council is optional.
 
-The diagram separates useful starting context from what grows through actual work. Memory may start empty. Knowledge topics and personal methods are selected for the business; they are not a mandatory file set. The seven shared OSM skills stay in the plugin. The optional Content module reuses the same foundation.
+The diagram separates useful starting context from what grows through actual work. Memory may start empty. Knowledge topics and personal methods are selected for the business; they are not a mandatory file set. The seven shared OSM skills stay in the plugin. New-home Setup resolves the Content foundation in OSM 0.35.0 or later; follow the installed release until that version is available. Its route can stay external or deferred, with no parallel Notion store. The optional Content module reuses that binding.
 
 A mobile overview and the editable HTML and relationship sources are available on this page.
 
 The layers describe responsibilities, not a mandatory sequence. The foundation supplies relevant context for useful AI work. Learning and accepted changes help maintain it. Connected systems retain their originals.
 
-## 🧩 Content · optional extension
+## 🧩 Content · optional methods
 
-The same foundation supports a configurable Content extension. The diagram follows the material: idea → plan/script → actual original → reviewed editions → published outputs → learning. Setup is the foundation beneath the flow.
+The core foundation resolves where Content belongs. The optional Content library helps adapt personal methods to the owner’s existing workflow, using the same registered route. Source, Content and Edition are record roles, not a compulsory sequence; a short original can stand alone. No editorial method or publication is installed automatically.
 
-<image source="notion-file-block://59fa633d-81d7-433f-8059-76d02b192d6f/dc2e09c1-6252-4c3a-9a99-6ecc529afcca?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=content-material-flow-mobile.png" />
-
-Prepare supports pre-production and creating the actual original. Produce / Distribute covers finishing/post-production, useful adaptations and delivery. Response informs the next idea and configuration. Existing material can enter where it needs help; long and short form are choices. Human judgement, analog work and selected tools remain part of the workflow.
+See the current material-flow diagram, examples and editable sources in <mention url="https://app.notion.com/p/40d6d2e17f5681219a81e13317a19339">Content · optional extension</mention>. Direction, audience and voice remain in Knowledge; actual production and channel editions stay with their selected owner.
 
 ## Editable sources
 
 <toggle>
 Responsive diagram · editable HTML
 
-<embed source="notion-file-block://41e6d2e1-7f56-8112-b211-c4d280c68bd6/d6d3e0f0-db64-4182-baf5-fbc421863879?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
+<embed source="notion-file-block://4206d2e1-7f56-81f9-9e51-eea62b99d90b/15940922-6644-45b3-821b-e81b42371880?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
 </toggle>
 
-Current Content material-flow diagrams: wide and mobile PNG/SVG, renderer, palette and SHA-256 manifest.
+Historical Content material-flow bundle; current diagrams and editable sources are maintained in the linked OSM Content guide.
 
 <file source="notion-file-block://d109739d-6ba8-44f8-81b2-b812755c60fe/b610b8b5-77cf-422b-aef0-c22b3e2122cb?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=content-material-diagrams-20261105.zip" />
 

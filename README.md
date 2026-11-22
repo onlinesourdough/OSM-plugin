@@ -81,8 +81,9 @@ install it or copy its content. Without a selected foundation method, OSM
 reports the gap instead of improvising one.
 
 Visual design uses an available design method.
-Content and video production are not part of OSM; the
-[Content drafts](docs/content-drafts/README.md) record where that work stands.
+Content and video production methods live in the optional
+[OSM Content library](https://github.com/onlinesourdough/OSM-Content).
+Core Setup resolves its data foundation without installing editorial methods.
 
 ## Install in your app
 
@@ -95,7 +96,8 @@ GitHub repository; no invitation is required. Your app uses its normal Git
 setup. Never paste access tokens into a chat.
 
 Choose one of the routes below. These commands follow the repository's current
-`main` branch. For a fixed version, select a reviewed tag or commit using the
+`main` branch, which can be ahead of the latest release. For a fixed version,
+including a client qualification, select a reviewed tag or commit using the
 [installation guide](docs/native-installation.md).
 
 ### Codex
