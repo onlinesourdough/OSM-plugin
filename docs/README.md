@@ -50,9 +50,9 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.35.1 is the latest stable release. The retained v0.34.0 source tag did not publish a GitHub Release. |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.35.3 is the latest stable release. The retained v0.34.0 and v0.35.2 source tags did not publish GitHub Releases. |
 
-v0.35.2 is the latest reviewed source tag, at `41b210e22a58569d20cdaa09b247c1c61421ad0b`. Its release check stopped before publication because the matching changelog entry was absent; no 0.35.2 GitHub Release was created. The manifest binds that immutable source and seven skill rows; 0.35.1 remains the latest published stable release. Native adoption, Notion source-packet delivery and public readback are
+v0.35.3 is the latest reviewed source tag and published stable release, at `0522356347ef96240d0baaa5c694da45a0bddf48`. Its release check and GitHub publication passed. The retained v0.35.2 source tag stopped before publication because its changelog entry was absent; no 0.35.2 GitHub Release was created. The manifest binds the immutable 0.35.3 source and seven skill rows. Native adoption, Notion source-packet delivery and public readback are
 recorded separately in [verification](verification.md).
 
 ### Documentation consumers

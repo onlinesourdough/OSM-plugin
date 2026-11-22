@@ -3366,5 +3366,35 @@ stopped because its matching changelog entry was absent. No GitHub Release or
 release asset was created, and the tag was not moved. The 0.35.3 recovery adds
 that history and consistent release metadata; all 76 skill-source files are
 byte-identical to the reviewed v0.35.2 source. Release-tag validation against
-v0.35.1 and the seven documentation rehearsals pass locally. Publication,
-native adoption and the new uncoached client journey remain pending.
+v0.35.1 and the seven documentation rehearsals pass locally. At that recovery-review checkpoint, publication, native adoption and the new
+uncoached client journey remained pending; subsequent delivery is recorded below.
+
+
+### OSM 0.35.3 stable source and package delivery, 2026-11-22
+
+[Release CI](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45073784610)
+published [OSM 0.35.3](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.35.3)
+at `0522356347ef96240d0baaa5c694da45a0bddf48` on 22 November at 21:46:10 UTC.
+The downloaded source ZIP's SHA-256 is
+`7021e00f78226d1b4fabaeca4abedf32096afc463efc90c0c0514afb7817feb2`.
+Its sidecar and GitHub asset digest agree; all 326 file contents and executable
+modes match the exact tag. Rebuilding the Git archive with <code>TZ=UTC</code>
+reproduces the complete published ZIP byte for byte. An earlier local archive
+used Copenhagen ZIP timestamps; its different container digest is retained
+as preparation evidence, not a different release payload.
+
+Codex and Claude Code installed 0.35.3 through their supported marketplace
+controls. Both list OSM enabled, and all 326 cached files match the downloaded
+release export. Existing running views and conversations were not restarted;
+no refreshed primary-app GUI screenshot is claimed.
+
+Pretag run [45072703999](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45072703999)
+wrote and API-verified all seven packets from the retained reviewed source,
+then held on the anonymous browser deadline. No write had an unknown result.
+Independent same-source [45073432803](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45073432803)
+verified all seven complete API/public pages and their catalogue with zero
+writes; the eight guide originals agreed. The first hold remains in history.
+The post-tag binding here advances packet provenance to the actual 0.35.3 tag;
+its own live delivery and repeat need their own receipts. A clean uncoached
+client journey and the remaining #69/#72/#73 cases are not established by these
+release checks.
