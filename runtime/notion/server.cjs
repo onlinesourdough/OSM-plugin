@@ -94,7 +94,7 @@ Releases & documentation
 Resources is the growing library of explanations, lessons and practical examples. [Agentic Systems](https://github.com/arcitai/agentic-systems) is a separately maintained open-source framework for building and operating agentic systems.
 
 <p />
-`,url:"https://gustavanderson.notion.site/40d6d2e17f568124af82ceb93dabf77a",source_revision:"add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f56811885ced64930bb22ba":{id:"40d6d2e17f56811885ced64930bb22ba",title:"OSM definition",body:`OSM is an AI-assisted method for solo founders and small teams to make business data and context useful to AI. The reference setup uses Notion as a shared workspace for the foundation.
+`,url:"https://gustavanderson.notion.site/40d6d2e17f568124af82ceb93dabf77a",source_revision:"add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f56811885ced64930bb22ba":{id:"40d6d2e17f56811885ced64930bb22ba",title:"OSM definition",body:`OSM is an AI-assisted method for solo founders and small teams to make business data and context useful to AI. The reference setup uses Notion as a shared workspace for the foundation.
 
 ## Two parts of one foundation
 
@@ -130,7 +130,7 @@ Select relevant material by scope and task, accepted authority and comparable so
 ## Your own AI operating model
 
 Your own AI operating model home holds your company's selected configuration and knowledge. Setup adapts the shared template to that home. Follow <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> for first use and <mention url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">AI operating model</mention> for the definition and database fields.
-`,url:"https://gustavanderson.notion.site/40d6d2e17f56811885ced64930bb22ba",source_revision:"2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f56812bb597fef2bdc1265d":{id:"40d6d2e17f56812bb597fef2bdc1265d",title:"Setup & tools",body:`Use AI to establish a shared data and context foundation for the way your business works. Notion is OSM's supported context home.
+`,url:"https://gustavanderson.notion.site/40d6d2e17f56811885ced64930bb22ba",source_revision:"2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f56812bb597fef2bdc1265d":{id:"40d6d2e17f56812bb597fef2bdc1265d",title:"Setup & tools",body:`Use AI to establish a shared data and context foundation for the way your business works. Notion is OSM's supported context home.
 
 Use the Setup skill included with your installed OSM plugin. It guides the conversation and opens supporting instructions when needed.
 
@@ -214,7 +214,7 @@ Use external apps only when built-in tools can't do the work.
 Use the host's built-in workspace and tools first, including its browser, terminal and side panel when available. Use external apps when the built-in tools cannot do the work. Keep the same short context pointer in the selected host's instructions, with Prime at session start and Log at meaningful checkpoints or on request.
 
 Full access, action approvals and computer use are host settings. Choose them for the intended task and workspace and verify the effective tools and permissions. [Host setup for Codex, Claude Code, Antigravity, Cursor and Pi](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/native-installation.md#start-with-a-clean-agent-workspace)
-`,url:"https://gustavanderson.notion.site/40d6d2e17f56812bb597fef2bdc1265d",source_revision:"438015c6ecc151bd26e12ddaf07a898f77fbd67d2710d01b08af73413e3da8f5",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f56816da06ff15c39dcc038":{id:"40d6d2e17f56816da06ff15c39dcc038",title:"AI operating model",body:`An AI operating model is how the business puts AI to work: its goals, people and agents, data, working methods, tools and access, responsibilities, review and ongoing learning. OSM helps set up and maintain this arrangement. The Notion home carries its definition and routes; the actual work also depends on people, agents and the connected systems.
+`,url:"https://gustavanderson.notion.site/40d6d2e17f56812bb597fef2bdc1265d",source_revision:"438015c6ecc151bd26e12ddaf07a898f77fbd67d2710d01b08af73413e3da8f5",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f56816da06ff15c39dcc038":{id:"40d6d2e17f56816da06ff15c39dcc038",title:"AI operating model",body:`An AI operating model is how the business puts AI to work: its goals, people and agents, data, working methods, tools and access, responsibilities, review and ongoing learning. OSM helps set up and maintain this arrangement. The Notion home carries its definition and routes; the actual work also depends on people, agents and the connected systems.
 
 Data and context are the shared foundation within that model. Skills are part of context: reusable ways to carry out and review the work. Goals and vision give it direction; they are not a replacement for an AI strategy. Knowledge, Memory and Skills organize the foundation. Setup also resolves where Content belongs; personal editorial methods remain optional.
 
@@ -238,6 +238,8 @@ A source can permit a read in an approved environment while prohibiting storage 
 | Content, when selected | Sources, ideas, actual material, channel editions and observed response. |
 
 These are organizational choices, not new pillars. A database may contain evidence and interpreted meaning. A view is a way to find records, not an access boundary.
+
+Keep useful names, native hierarchy and existing icons. For a new home, the optional [sidebar icon examples](https://github.com/onlinesourdough/OSM-Content/blob/818420c98a5e2b1c640e552dd9343254fa0eb8d2/docs/sidebar-icons.md) offer recognizable Knowledge, Memory, Skills and Content motifs. Adapt them to the business or use native Notion icons. They require no Content methods, new databases, brand change or sharing change. Preserve an existing icon unless its change was requested.
 
 ## Create and revise
 
@@ -352,7 +354,7 @@ Knowledge holds lasting business direction, audience, offers and voice. Content 
 ## How the three context skills use this home
 
 Prime reads the definition and relevant sources at session start. Log saves supported lasting changes at meaningful checkpoints or when asked. Dreaming reviews recent work, unfinished progress and selected connected sources, consolidates useful context and repairs verified drift. Each follows the selected home, account and write authority.
-`,url:"https://gustavanderson.notion.site/40d6d2e17f56816da06ff15c39dcc038",source_revision:"d9b96cf784bce2d8f76f2b0728816a315876839a728c2adfa0baad51e8a9227e",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f56815eaf53cab824a40eb3":{id:"40d6d2e17f56815eaf53cab824a40eb3",title:"Work & evaluation",body:`OSM helps work move from an understood need to a useful, checked result.
+`,url:"https://gustavanderson.notion.site/40d6d2e17f56816da06ff15c39dcc038",source_revision:"9e7d0ee3b869865016e6d25f9bf2e700a6bdee83ed4154dcc36c24cb9c9a3844",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f56815eaf53cab824a40eb3":{id:"40d6d2e17f56815eaf53cab824a40eb3",title:"Work & evaluation",body:`OSM helps work move from an understood need to a useful, checked result.
 
 ## Use the depth the work needs
 
@@ -384,7 +386,7 @@ Keep concrete observations with the actual edition and measurement window. Use t
 ## Choose specialists when needed
 
 Use an appropriate specialist or separately maintained system for the accepted work. Agentic Systems can support engineering projects. The optional Content companion can support editorial production. Neither needs to replace the owner's own process.
-`,url:"https://gustavanderson.notion.site/40d6d2e17f56815eaf53cab824a40eb3",source_revision:"dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f56818bb90ecdc2bf6397ce":{id:"40d6d2e17f56818bb90ecdc2bf6397ce",title:"Automations & upkeep",body:`A maintained foundation helps assistants build on useful knowledge as the business changes.
+`,url:"https://gustavanderson.notion.site/40d6d2e17f56815eaf53cab824a40eb3",source_revision:"dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f56818bb90ecdc2bf6397ce":{id:"40d6d2e17f56818bb90ecdc2bf6397ce",title:"Automations & upkeep",body:`A maintained foundation helps assistants build on useful knowledge as the business changes.
 
 ## One current topic, meaningful history
 
@@ -425,7 +427,7 @@ Dreaming reconciles that evidence with the existing Knowledge, Memory and Skills
 Run the whole selected review under the recorded access and write policy. Unavailable evidence and unresolved choices are reported while independent checks continue. A recent edit alone does not make a fact more authoritative, and an old decision can remain current.
 
 The separation between session notes, selective retrieval and reflection between sessions is informed by [Anthropic\u2019s research on agent memory](https://www.anthropic.com/research/components-of-agent-memory). Keep the always-loaded instructions small, test corrections against their original evidence and retain learning that helps future work instead of duplicating live source state.
-`,url:"https://gustavanderson.notion.site/40d6d2e17f56818bb90ecdc2bf6397ce",source_revision:"91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f568113a397fb6ecd9b5fff":{id:"40d6d2e17f568113a397fb6ecd9b5fff",title:"Architecture diagram",body:`## How OSM works
+`,url:"https://gustavanderson.notion.site/40d6d2e17f56818bb90ecdc2bf6397ce",source_revision:"91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f568113a397fb6ecd9b5fff":{id:"40d6d2e17f568113a397fb6ecd9b5fff",title:"Architecture diagram",body:`## How OSM works
 
 Your agent uses OSM to find relevant business context, save useful learning and keep that context current. The diagram shows the seven skills, your Notion AI operating model home and the connected sources.
 
@@ -511,7 +513,7 @@ Four editable SVG diagrams, the renderer, the observed onlinesourdough palette a
 </file>
 
 Colours were read from the public onlinesourdough website on <date start="2026-11-04" />: warm paper, brown text and the brown brand accent. The diagram layout uses clear layers and nested responsibilities, following the Agentic Systems reference.
-`,url:"https://gustavanderson.notion.site/40d6d2e17f568113a397fb6ecd9b5fff",source_revision:"ca166e80c77891e3aee41bd32f74099fb99bd4292cbea35c01f8f30e8261b571",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f5681f6accff01259bc2ab4":{id:"40d6d2e17f5681f6accff01259bc2ab4",title:"Releases & documentation",body:`## Current reference
+`,url:"https://gustavanderson.notion.site/40d6d2e17f568113a397fb6ecd9b5fff",source_revision:"ca166e80c77891e3aee41bd32f74099fb99bd4292cbea35c01f8f30e8261b571",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f5681f6accff01259bc2ab4":{id:"40d6d2e17f5681f6accff01259bc2ab4",title:"Releases & documentation",body:`## Current reference
 
 <synced-block url="https://app.notion.com/p/40d6d2e17f5681f6accff01259bc2ab4#6d01017b2fe949e0ad4548da7e77f404">
 Get the [latest released OSM plugin](https://github.com/onlinesourdough/OSM-plugin/releases/latest), or browse [earlier releases](https://github.com/onlinesourdough/OSM-plugin/releases). The release contains the complete source package.
@@ -545,7 +547,7 @@ This guide was clarified on <date start="2026-11-04" />: OSM's data/context hier
 - <date start="2026-11-05" /> \u2014 guide 2026-11-05.2 and separate Content template edition 2026-11-05.1: optional extension entry, practical database setup, personal configuration, five version 0.10.0 Draft templates with explicit download blocks and material-flow diagrams. Saved-page/attachment readbacks and anonymous guide/library checks passed. The current content-setup packet was downloaded in private browsing and matched its ZIP and per-file SHA-256 hashes. The private foundation parent remained inaccessible. The released OSM source and its 22 reference packets are unchanged.
 - <date start="2026-11-04" /> \u2014 guide revision 2026-11-04.1: foundation hierarchy and explanation refined; diagrams rebuilt in the onlinesourdough palette; context lifecycle and metadata guidance clarified. Affected explanations, public diagrams, a released skill reference and the editable diagram download were checked without login. This documentation revision does not change the released package.
 - <date start="2026-11-03" /> \u2014 initial reference edition published from the verified v0.30.0 tag. Includes 22 released skill references, five optional Content design snapshots reviewed with Opus 5.5 High, source packets and diagrams. Anonymous access to the overview, supporting pages and representative skill/file was checked.
-`,url:"https://gustavanderson.notion.site/40d6d2e17f5681f6accff01259bc2ab4",source_revision:"59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",source_read_at:"2026-11-22T10:13:55+00:00"},"40d6d2e17f5681219a81e13317a19339":{id:"40d6d2e17f5681219a81e13317a19339",title:"Content \xB7 optional extension",body:`Content is a voluntary extension of The Onlinesourdough Method. Use the same business foundation to turn real work, ideas and sources into useful material, relevant editions and learning from the response.
+`,url:"https://gustavanderson.notion.site/40d6d2e17f5681f6accff01259bc2ab4",source_revision:"59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",source_read_at:"2026-11-22T10:25:03+00:00"},"40d6d2e17f5681219a81e13317a19339":{id:"40d6d2e17f5681219a81e13317a19339",title:"Content \xB7 optional extension",body:`Content is a voluntary extension of The Onlinesourdough Method. Use the same business foundation to turn real work, ideas and sources into useful material, relevant editions and learning from the response.
 
 <callout icon="\u{1F4E6}" color="brown_bg">
 <b>Shared method and template source:</b> [onlinesourdough/OSM-content](https://github.com/onlinesourdough/OSM-content). Content has its own repository outside the OSM plugin, like a specialized method module. Git owns future shared changes; this Notion section is the readable guide. Your actual configuration, original content and adapted personal Skills stay in your private Data & Context home.

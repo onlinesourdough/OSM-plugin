@@ -391,7 +391,7 @@
         "revision": "add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
@@ -412,7 +412,7 @@
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -433,7 +433,7 @@
         "revision": "438015c6ecc151bd26e12ddaf07a898f77fbd67d2710d01b08af73413e3da8f5",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-22T09:59:00.000Z"
       }
     },
@@ -451,11 +451,11 @@
       "authoritative_for": "The Data & Context explanation and the Data & Context definition template (the YAML block)",
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
-        "revision": "d9b96cf784bce2d8f76f2b0728816a315876839a728c2adfa0baad51e8a9227e",
+        "revision": "9e7d0ee3b869865016e6d25f9bf2e700a6bdee83ed4154dcc36c24cb9c9a3844",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
-        "last_edited_time": "2026-11-22T10:13:00.000Z"
+        "read_at": "2026-11-22T10:25:03+00:00",
+        "last_edited_time": "2026-11-22T10:24:00.000Z"
       },
       "exports": [
         {
@@ -495,7 +495,7 @@
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
@@ -516,7 +516,7 @@
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -538,7 +538,7 @@
         "revision": "ca166e80c77891e3aee41bd32f74099fb99bd4292cbea35c01f8f30e8261b571",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-22T10:03:00.000Z"
       },
       "exports": [
@@ -571,7 +571,7 @@
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:13:55+00:00",
+        "read_at": "2026-11-22T10:25:03+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },

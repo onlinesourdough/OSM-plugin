@@ -23,6 +23,8 @@ A source can permit a read in an approved environment while prohibiting storage 
 
 These are organizational choices, not new pillars. A database may contain evidence and interpreted meaning. A view is a way to find records, not an access boundary.
 
+Keep useful names, native hierarchy and existing icons. For a new home, the optional [sidebar icon examples](https://github.com/onlinesourdough/OSM-Content/blob/818420c98a5e2b1c640e552dd9343254fa0eb8d2/docs/sidebar-icons.md) offer recognizable Knowledge, Memory, Skills and Content motifs. Adapt them to the business or use native Notion icons. They require no Content methods, new databases, brand change or sharing change. Preserve an existing icon unless its change was requested.
+
 ## Create and revise
 
 Find the existing topic, stable identity and scope before creating anything. Accepted new information about the same topic updates the current explanation and Summary. Add genuinely new detail in its proper section.
