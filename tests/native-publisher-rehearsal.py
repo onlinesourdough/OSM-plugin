@@ -695,13 +695,17 @@ def the_next_release_replaces_its_own_packet_and_keeps_the_history():
     run(fake, manifest, write=True, only=COUNCIL)
     page = fake.pages[PACKETS[COUNCIL]["page"]]
     files = dict(TREE)
-    files["package.json"] = json.dumps({"version": "0.35.0"}).encode()
+    # The synthetic next release must stay distinct when the real binding advances.
+    major, minor, _ = map(int, json.loads(files["package.json"])["version"].split("."))
+    next_version = f"{major}.{minor + 1}.0"
+    next_tag = f"v{next_version}"
+    files["package.json"] = json.dumps({"version": next_version}).encode()
     files["skills/osm-council/SKILL.md"] = files["skills/osm-council/SKILL.md"].replace(b'version: "3.1.1"', b'version: "3.2.0"') + b"\nA new closing line.\n"
     del files["skills/osm-council/agents/openai.yaml"]
     later = copy.deepcopy(manifest)
-    later["editions"]["released"].update(tag="v0.35.0", label="v0.35.0", commit="c" * 40)
+    later["editions"]["released"].update(tag=next_tag, label=next_tag, commit="c" * 40)
     packets = ns.build_packets(later, pub.DictSource(files, "c" * 40))
-    tags = {"v0.35.0": "c" * 40, RELEASED["tag"]: RELEASED["commit"]}
+    tags = {next_tag: "c" * 40, RELEASED["tag"]: RELEASED["commit"]}
     prior = lambda tag, commit: PACKETS if tags.get(tag) == commit == RELEASED["commit"] else None
     edited = copy.deepcopy(fake)
     edited.pages[PACKETS[COUNCIL]["page"]]["files"]["LICENSE"] += b"\nedited"
@@ -716,18 +720,18 @@ def the_next_release_replaces_its_own_packet_and_keeps_the_history():
             in planned["rows"][0]["detail"] and not fake.writes(), f"the earlier CI packet is recognised: {planned['rows'][0]}")
     result = ns.publish(later, packets, api(fake), tags.get, prior_packets=prior, write=True, only=COUNCIL)
     require(outcomes(result) == {COUNCIL: pub.UNSUPPORTED} and fake.writes().count(("POST", "upload")) == 1 and page["props"]["Version"][1] == "3.2.0" and page["props"]["Source revision"][1] == "c" * 40
-            and page["props"]["Package version"][1] == "0.35.0" and page["title"] == "OSM:council", "the new release is on the page")
+            and page["props"]["Package version"][1] == next_version and page["title"] == "OSM:council", "the new release is on the page")
     old_zip = PACKETS[COUNCIL]["zip"]
     require(page["files"][f"history/{old_zip}"] == PACKETS[COUNCIL]["files"][old_zip] and old_zip not in page["files"]
             and all(page["files"][path] == data for path, data in HISTORY.items()) and "agents/openai.yaml" not in page["files"]
-            and "osm-council-3.2.0-osm-0.35.0-source.zip" in page["files"], "the earlier source ZIP moved to history and the old history is intact")
+            and f"osm-council-3.2.0-osm-{next_version}-source.zip" in page["files"], "the earlier source ZIP moved to history and the old history is intact")
     stale = copy.deepcopy(fake)
     stale.log.clear()
     old_run = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(stale), tags.get,
         prior_packets=lambda tag, commit: packets if tags.get(tag) == commit == "c" * 40 else None,
         write=True, only=COUNCIL)
     require(outcomes(old_run) == {COUNCIL: pub.CONFLICT} and not stale.writes()
-            and stale.pages[PACKETS[COUNCIL]["page"]]["props"]["Package version"][1] == "0.35.0",
+            and stale.pages[PACKETS[COUNCIL]["page"]]["props"]["Package version"][1] == next_version,
             f"a stale run must preserve the newer packet: outcome={outcomes(old_run)}, writes={stale.writes()}, package={stale.pages[PACKETS[COUNCIL]['page']]['props']['Package version'][1]}")
     fake.log.clear()
     again = ns.publish(later, packets, api(fake), tags.get, prior_packets=prior, write=True, only=COUNCIL)
