@@ -1,5 +1,35 @@
 # Verification
 
+## 22 November 2026 — onboarding repair candidate 0.35.2
+
+A native disposable-client run on 0.35.1 established fresh-chat Prime and
+Log recall, source-only CSV use and an unchanged Setup replay. It also exposed
+unconfirmed Content deferral, building before business/source discovery and
+an unfinished source-backed first task. Bare `/setup` invoked another plugin;
+the OSM skill-picker entry worked. Node and sign-in assistance, the discarded
+over-coached attempt, controller UI friction and all subsequent attempts are
+retained separately; this is not a completed #69 journey or a #72 comparison.
+The authorised shared ChatGPT account limits isolation claims to observed
+restraint, not provider enforcement.
+
+Actual tool-less Gemini Neon High reviews covered the full relevant journey,
+ten exact released contracts and then the anonymised production structure and
+definition. The second review completed in 212 seconds with no tool steps.
+It accepted the bounded repair direction with changes, explicitly preserving
+valid linked source agreements and owner-specific schemas rather than imposing
+one YAML spelling or a fixed questionnaire. No private source bodies or
+credentials entered the review.
+
+The candidate keeps seven skills. It aligns discovery before building, resolves
+Content from actual authority and owner choices, follows named task sources,
+retains a findable gateway, and uses the exact default title and approved icons.
+Notion-authored Setup and AI operating model explanations were updated first.
+Capture 45067088976 read all eight originals and safely held on those two changed
+bodies before any skill import; their exact exports are bound to this candidate.
+The prior test home and guest pointer/materials/work directory were removed,
+and the old guest plugin was uninstalled. Clean rerun and remaining access,
+native-capability, comparative and scheduled cases remain separate proof.
+
 ## 22 November 2026 — stable 0.35.1 and native package adoption
 
 Stable 0.35.1 is commit `b644372aa1f6ea1743543a2aaabee9e0424b754f`,
@@ -34,7 +64,7 @@ new-client and comparative behavior remain #69/#72, with shared #73 cases.
 
 After the separately authored icon update, read-only capture [45026377847](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45026377847) held before any skill import because the guide root named the new immutable catalogue icon. All other seven guide content revisions were unchanged. The root body differs only in that icon URL, from asset commit `d96b79de52f527989afbe0aff3752b576c2749e4` to `2b878911a0ddd8815833d67e7a326bfe186978b2`.
 
-The current-source export and generated reader data now retain that exact API-read metadata. The reader renders the database tag as a text link, so its readable output is unchanged. No skill, schema, permission, scheduler pin or published package is changed by this documentation follow-up; the installed release remains the immutable 0.35.1 asset. The earlier 0.35.1 native/public proofs retain their original source dates. A new main parity run is pending to verify this metadata binding separately.
+The current-source export and generated reader data now retain that exact API-read metadata. The reader renders the database tag as a text link, so its readable output is unchanged. No skill, schema, permission, scheduler pin or published package was changed by that documentation follow-up; the installed release remained the immutable 0.35.1 asset. Automatic main parity 45027202453 subsequently verified all eight guide bindings and all seven released API/anonymous packets with zero writes. The earlier 0.35.1 native/public proofs retain their original source dates.
 
 ## 22 November 2026 — 0.35.0 delivery and guide refresh
 

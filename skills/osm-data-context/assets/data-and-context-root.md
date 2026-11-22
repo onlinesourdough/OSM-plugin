@@ -11,6 +11,9 @@ definition fields, and never regenerate owner choices from this template.
 
 For a new root and new core stores, use the existing icons in the public guide's
 [AI operating model reference](https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038).
+If that public page is unavailable through the selected tools, use its
+[versioned public reading copy](https://github.com/onlinesourdough/OSM-plugin/blob/545e9a667fcbd6174fbd5ae28b72d69572666d92/docs-publisher/originals/notion.guide.data-context.md)
+without changing a private connection.
 Reuse those actual asset URLs; do not generate new artwork or replace existing
 icons. Apply the appropriate page/database metadata operation and verify the
 actual icon. A wrapper-page acknowledgement alone is not proof a database icon
