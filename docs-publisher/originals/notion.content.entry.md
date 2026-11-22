@@ -1,96 +1,82 @@
-Content is a voluntary extension of The Onlinesourdough Method. Use the same business foundation to turn real work, ideas and sources into useful material, relevant editions and learning from the response.
+Turn real work, ideas and references into content worth sharing. Keep your own voice, choose a purpose for each edition and learn from the response.
 
-<callout icon="📦" color="brown_bg">
-<b>Shared method and template source:</b> [onlinesourdough/OSM-content](https://github.com/onlinesourdough/OSM-content). Content has its own repository outside the OSM plugin, like a specialized method module. Git owns future shared changes; this Notion section is the readable guide. Your actual configuration, original content and adapted personal Skills stay in your private Data & Context home.
+Content is a separate method kit for OSM. It uses the business foundation in your AI operating model home and can work with your existing tools and personal skills.
 
-Initial repository import: <date start="2026-11-09" /> · [commit b8dc567](https://github.com/onlinesourdough/OSM-content/commit/b8dc567). The five existing v0.10.0 Draft templates are preserved unchanged with file hashes. No new OSM package, editor qualification or personal installation is implied.
+## Make one useful piece
 
-Next shared improvements: [writing-voice calibration](https://github.com/onlinesourdough/OSM-content/issues/1) and [source-to-guide maintenance](https://github.com/onlinesourdough/OSM-content/issues/2). These are tracked work, not delivered capabilities.
-</callout>
+1. Save the idea or reference and what interests you.
+2. Choose the reader, purpose and your own contribution.
+3. Write, record or edit the editions that help.
+4. Review and deliver under your chosen publication authority.
+5. Keep the result and one useful lesson.
 
-<callout icon="🧩" color="brown_bg">
-<b>Add the Content extension.</b> Start from an existing OSM foundation, map or create its Content collection, choose a workable configuration and adapt the useful skill templates into your own Skills. This is a method and starter kit to tailor, not a preinstalled universal Content plugin.
-</callout>
+For a single post, follow the [short-post workflow](https://github.com/onlinesourdough/OSM-Content/blob/842f67e7704ea6c79a48960fcdac364eb372a1a9/docs/post-workflow.md). A short idea can stand alone. Different channels can have different goals; a post may end with its point. A brand mention, link or invitation belongs where it helps the reader.
 
-## Start here
-
-<columns>
-<column ratio="50">
-### 🧱 Set up the foundation
+## Set it up once
 
 <page url="https://app.notion.com/p/40f6d2e17f56819ea683f45a30072086">
 Content setup & database
 </page>
 
-Record types, properties, useful views, media locations and a repeatable setup check.
-</column>
-<column ratio="50">
-### 🎛️ Make it yours
-
 <page url="https://app.notion.com/p/40f6d2e17f5681d68525d83503a457d5">
 Personal configuration
 </page>
 
-Goals, creative process, channels, tools, personal skills and optional automation.
-</column>
-</columns>
+Core OSM 0.35.0 proposes a Content foundation during authorised new-home Setup, with existing Notion, external workflow, deferred or new empty Notion as the four outcomes. Normal resume creates nothing. Its selected Definition owns the route and minimum schema; the editorial methods here remain optional.
 
-## Give this page to your agent
+Reuse the selected Content route. Source keeps references and attribution; Content keeps an idea or production; Edition keeps an independently edited version and its actual delivery. Your private configuration selects goals, audiences, voice, channels, tools and personal skills. Keep media in its selected storage with an access and backup route. Reuse the existing direction/goals, audience and perspective, and voice/style records. Choose a useful role for each active channel, including newsletter/email as its own channel; the Personal configuration page gives examples without requiring every platform.
+
+## Give this to your agent
 
 ```txt
-Use this Content extension to set up or adapt my content workflow. Read the Setup & database contract and Personal configuration pages linked here. My existing Data & Context entry is: [give the agent your own private entry link].
+Use OSM Content to help with my selected idea or workflow.
+My AI operating model home is: [my own context-home link].
 
-Read my selected operating policy and relevant goals, audience, voice and preferences. Inspect the actual existing content collection, personal skills, integrations and media locations. Reuse what works. Map the schema and missing choices; create only the authorized missing structure. Adapt useful templates into my personal Skills, with actual configuration and references. Verify one bounded capture/material handoff and replay without duplicates. Keep publication and schedules within their existing authority. Report what is ready and what is unresolved.
+Read its selected policy and relevant content configuration. Reuse existing records and personal methods. Choose the purpose and reader for each edition, preserve my voice and the source attribution, then prepare the useful draft or material. Keep delivery within the authority I have actually given. Report the next useful action.
 ```
 
-The public guide supplies the method. Your private entry supplies your routes, business context and authority. An agent with no access can explain the plan and name the exact access gap; it must not search another account or invent a successful setup. Read the linked details progressively rather than loading the entire OSM library.
+For initial setup, read the setup and configuration pages above. For ordinary writing, inspect only what the piece needs.
 
-Already using OSM? Find your entry through the context-home link saved during onboarding, your OSM Home/navigation or the host's short OSM instruction pointer. The entry selects the exact Operating policy (the owner's read/write and source rules); read that selection instead of searching for every page called Policy. <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> explains the core setup. For one small content task, read the existing entry/configuration and inspect only the missing schema/key/integration details; do not restart onboarding.
+## Learn from references
 
-## How the material changes
+Save the example with at least one concrete line per link about what you liked, plus a timestamp when relevant. Describe the specific technique and inspect what actually happens. Strengthen your own angle and add your own contribution. When a choice becomes reusable, update the relevant style guide or personal method and use it in the next production. Keep attribution and rejected examples clear.
 
-<image source="notion-file-block://00b75561-a948-4aa2-97c6-65d27c25e9bb/b400c046-3a4b-40ca-abef-0544a95002f4?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=content-material-flow.png" />
+[Reference workflow](https://github.com/onlinesourdough/OSM-Content/blob/842f67e7704ea6c79a48960fcdac364eb372a1a9/docs/reference-library.md)
 
-<toggle>
-For smaller screens
+## Adapt the methods you need
 
-<image source="notion-file-block://9e26ad2b-0493-4a9c-be2d-ffa964122e8d/dc2e09c1-6252-4c3a-9a99-6ecc529afcca?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=content-material-flow-mobile.png" />
-</toggle>
+For your writing voice, select real examples and learn from your corrections. Keep the concise profile in its existing Knowledge home and originals or references in Content. Preserve an existing draft with minimal edits; a rejected candidate or popular post is not automatically an approved voice example. [Writing-voice workflow](https://github.com/onlinesourdough/OSM-Content/blob/842f67e7704ea6c79a48960fcdac364eb372a1a9/docs/writing-voice.md)
 
-An idea becomes a brief or script, then actual written/recorded/visual material, reviewed editions and verified public outputs. Response becomes useful learning for the next round. Setup is the supporting foundation, not a step repeated for each piece. Prepare covers pre-production and support while creating the original; Produce / Distribute covers finishing/post-production, adaptations and delivery. The five responsibilities describe who helps; the material moves through more than five states.
+Setup, Intake, Prepare, Produce / Distribute and Learn are responsibilities. Existing personal skills can cover several; five new agents or skills are not required.
 
-| Responsibility | Useful result |
-| --- | --- |
-| Setup | A reused or new Content collection, actual field map and accepted workflow choices |
-| Intake | Preserved ideas/sources, why they matter and possible angles |
-| Prepare | Brief, writing draft, script or recording plan and support creating actual material |
-| Produce / Distribute | Finished originals, useful editions, review and selected verified delivery |
-| Learn | Dated observations against the chosen goal and one useful next experiment |
-
-Enter where the material needs help. A plan is not footage, a reviewed edition is not publication, and a newsletter can be an original or a synthesis. Good short ideas may stand alone. Preserve human taste, analog work and suitable existing editors.
-
-## 🧰 Personal skill templates
-
-The five templates below are adaptable starting instructions with supporting files. They mirror the method; they are not your personal configuration or a released OSM package. Use an existing suitable skill instead of creating a duplicate. You can adopt one responsibility or several.
-
+- <mention url="https://app.notion.com/p/40d6d2e17f5681578925cdc0774c6db5">content-setup</mention>
 - <mention url="https://app.notion.com/p/40d6d2e17f5681c99020d85e3bc1ff4b">content-intake</mention>
-- <mention url="https://app.notion.com/p/40d6d2e17f5681c784c4d545814fd7a5">content-learn</mention>
 - <mention url="https://app.notion.com/p/40d6d2e17f568141a2c9efa2d04c9268">content-prepare</mention>
 - <mention url="https://app.notion.com/p/40d6d2e17f568122aa82f1dcf83500a7">content-produce</mention>
-- <mention url="https://app.notion.com/p/40d6d2e17f5681578925cdc0774c6db5">content-setup</mention>
+- <mention url="https://app.notion.com/p/40d6d2e17f5681c784c4d545814fd7a5">content-learn</mention>
 
-The filtered library at the bottom shows the same five records as the main catalogue, not another editable copy. Current template packets identify their revision and hashes; earlier v0.7 packets remain history. A template page being visible does not mean it is installed, enabled or exercised in your agent.
+Knowledge owns business context; Content owns sources, productions, editions and feedback. Adapted personal skills and actual preferences remain in the owner's private home. A saved skill is not proof of native installation or use. Choose and qualify tools for the actual task.
 
-## What belongs where
+## Content foundation
 
-Knowledge owns current business goals, audience, offers, voice and working preferences. Content owns sources, ideas/productions, editions and concrete response. Personal Skills implement your chosen workflow. Media and editor projects can live outside Notion at mapped, accessible locations; a Notion link is not a backup. The subscriber system owns live subscriptions and unsubscribes. OSM upkeep keeps the selected foundation current, including an existing Content collection. Content Learn evaluates editorial fit and contribution to goals. Neither automatically starts a production schedule or sends a newsletter.
+Keep the home recognizable with a small consistent set of icons. The [optional sidebar family](https://github.com/onlinesourdough/OSM-Content/blob/842f67e7704ea6c79a48960fcdac364eb372a1a9/docs/sidebar-icons.md) shows Knowledge, Memory, Skills and Content without adding another database or making a dashboard compulsory.
 
-## Tools and status
+<image source="notion-file-block://41e6d2e1-7f56-815f-915e-ec04fff66efc/332ff2b9-793a-4e63-8634-ef981646bdd8?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=content-foundation-mobile.png" />
 
-Notion editorial work and Kit newsletter distribution are a starter recipe. HyperFrames remains a video candidate: practical import/edit/save-reopen/export qualification is still required. Keep suitable existing tools.
+<toggle>
+Wide diagram and editable source
 
-The core OSM reference catalogue continues to describe its exact tagged source, including any earlier bundled Content helpers at that version. This separate template edition does not claim a new OSM release, editor qualification, personal adoption or completed content production.
+<image source="notion-file-block://41e6d2e1-7f56-8107-8085-f696f531b770/10578d38-4c02-48f9-9e27-e1e088da69a3?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=content-foundation-wide.png" />
 
-Template package v0.10.0 = template edition 2026-11-05.1. This is not an OSM release. Each catalogue record identifies its current ZIP filename/hash and earlier packets as history. The method foundation was approved by the owner on <date start="2026-11-05" />; template usefulness still needs real adoption and production evidence.
+[Editable diagram source](https://github.com/onlinesourdough/OSM-Content/blob/f1e9a02b68744abb7b5e744e48683a11e902ca89/assets/diagrams/content-foundation.html)
+</toggle>
+
+## Source and versions
+
+[OSM Content v0.13.1](https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1) is the shared method release. The retained v0.10.0 Draft templates are unchanged frozen packets from edition 2026-11-05.1; their files and history remain in the catalogue. This kit is outside the OSM plugin and starts no publishing schedule.
+
+Keep personal writing, media and configuration in their selected private home.
 
 <database url="https://app.notion.com/p/40f6d2e17f5681368bd9ed1593f45404" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="true"></database>
+
+[Source revision 842f67e](https://github.com/onlinesourdough/OSM-Content/blob/842f67e7704ea6c79a48960fcdac364eb372a1a9/docs/guide.notion.md)

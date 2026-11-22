@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.35.1 — 2026-11-22
+
+- Refresh the public reader with the released Content guide and current common
+  architecture preview; preserve the seven skills and all 0.35.0 method bytes.
+- Align the public Notion section icons with the approved navigation family.
+
 ## 0.35.0 — 2026-11-22
 
 - Include the Content foundation in authorised new-home setup: reuse an existing

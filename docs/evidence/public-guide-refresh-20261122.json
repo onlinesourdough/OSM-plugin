@@ -1,0 +1,60 @@
+{
+  "scope": "OSM 0.35.1 public reading surface; not fresh-client or installed native sidebar proof",
+  "base_release": "v0.35.0",
+  "base_commit": "42782949754f7547687f25e803941411db3629cf",
+  "skill_files_byte_identical": 76,
+  "guide_capture": {
+    "run": 45017698708,
+    "reader": "notion-api-markdown-v2-stable-media/1",
+    "read_at": "2026-11-22T11:31:43+00:00",
+    "pages": 8,
+    "errors": 0,
+    "changed_bodies": [
+      "notion.guide.entry",
+      "notion.guide.diagram"
+    ],
+    "skill_import_skipped": true
+  },
+  "prior_release_public_delivery": {
+    "first_run": 45016372054,
+    "first_api_verified_writes": 7,
+    "first_public_result": "held at anonymous browser deadline",
+    "independent_repeat": 45017013669,
+    "repeat_api_unchanged": 7,
+    "repeat_public_verified": 7,
+    "repeat_write_attempts": 0
+  },
+  "reader_observations": {
+    "surface": "compiled guide.html in Codex built-in browser; localhost preview",
+    "effective_css_widths": [
+      1600,
+      487,
+      390
+    ],
+    "observed_content_widths": [
+      1581,
+      469,
+      371
+    ],
+    "horizontal_overflow": false,
+    "root_diagram_count": 1,
+    "content_navigation": "current 0.13.1 introduction, distinct retained 0.10.0 template edition",
+    "temporary_viewport_reset": true,
+    "installed_primary_sidebar_observed": false
+  },
+  "public_root_visual": {
+    "surface": "Notion public View site in built-in browser",
+    "new_foundation_text_and_png_observed": true,
+    "all_eight_pages_anonymously_verified": false
+  },
+  "screenshots": {
+    "public_root": "9c2201ff535ac36662e4630f11fef5f5cb01cf5be1f00304c8f63c59a100d5f3",
+    "reader_390": "100a370170b962e433b41fd0ec751129157bab3997f161d25592ad0dde4e7f93"
+  },
+  "content_intro": {
+    "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
+    "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
+    "origin": "derived from the separately released Content source; not an independent API capture",
+    "five_template_packets_unchanged": true
+  }
+}
