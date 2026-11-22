@@ -1,7 +1,7 @@
 {
   "format": "osm-common-architecture-qualification/1",
   "date": "2026-11-22",
-  "scope": "Generic0.35Contentfoundationroles only; no private sources; no client journey or recall benchmark",
+  "scope": "Generic 0.35 Content foundation roles only; no private sources, client journey or recall benchmark",
   "source_html": "assets/diagrams/osm-architecture.html",
   "source_html_sha256": "850ab0898e39ffe3a906e83e86e83d81a1488dda20304e33869ed5ca7bea62ae",
   "delivered_image": "assets/diagrams/osm-architecture.png",
@@ -64,6 +64,6 @@
   "api_snapshot_run": 45010703134,
   "limits": [
     "Source and PNGs rendered locally and exact Notion native downloads verified; public anonymous/native sidebar render still to qualify.",
-    "Content requires0.35.0; older releasedSetup unchanged; optionalpersonalmethods and externalowner preserved."
+    "Content requires 0.35.0; older released Setup unchanged; optional personal methods and external owner preserved."
   ]
 }

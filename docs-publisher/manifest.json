@@ -391,7 +391,7 @@
         "revision": "add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-20T13:16:00.000Z"
       }
     },
@@ -412,7 +412,7 @@
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -433,7 +433,7 @@
         "revision": "438015c6ecc151bd26e12ddaf07a898f77fbd67d2710d01b08af73413e3da8f5",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-22T09:59:00.000Z"
       }
     },
@@ -451,11 +451,11 @@
       "authoritative_for": "The Data & Context explanation and the Data & Context definition template (the YAML block)",
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
-        "revision": "093b59986222e1362ef535f9de2492d03cc9da347cef7ccfb7ce88f97259ad0f",
+        "revision": "d9b96cf784bce2d8f76f2b0728816a315876839a728c2adfa0baad51e8a9227e",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
-        "last_edited_time": "2026-11-22T09:59:00.000Z"
+        "read_at": "2026-11-22T10:13:55+00:00",
+        "last_edited_time": "2026-11-22T10:13:00.000Z"
       },
       "exports": [
         {
@@ -466,7 +466,7 @@
           "notion": {
             "fence": "yaml"
           },
-          "sha256": "ccab83130f8e0eeef14b2dff135bcfc607ce6127b6387c0af9c7d7adf7255eb0"
+          "sha256": "68da955ecd08ce8766c5e6aa5239eae76b397bdd373327018118759ec120e5c2"
         },
         {
           "path": "skills/osm-data-context/assets/database-fields.md",
@@ -495,7 +495,7 @@
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
@@ -516,7 +516,7 @@
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -538,7 +538,7 @@
         "revision": "ca166e80c77891e3aee41bd32f74099fb99bd4292cbea35c01f8f30e8261b571",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-22T10:03:00.000Z"
       },
       "exports": [
@@ -571,7 +571,7 @@
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
         "edition": "0.35.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:06:12+00:00",
+        "read_at": "2026-11-22T10:13:55+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -771,7 +771,7 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "d96f7847f0d1a8ede8c3179edb7cda93865f96a4",
+    "skill_source": "17b05b360eb32ab3bdf3ad80d45f2ad2cd06d55b",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",

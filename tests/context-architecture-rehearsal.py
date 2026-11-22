@@ -1938,6 +1938,8 @@ def content_foundation(data, ws):
     outcome = data.get("outcome")
     if outcome not in (None, "existing-notion", "external", "deferred", "new-notion"):
         reasons.append("ambiguous-route")
+    if data.get("invocation") == "install" and writes:
+        reasons.append("install-wrote")
     if data.get("invocation") in ("install", "ordinary-resume", "update") and data.get("store_creates", 0):
         reasons.append("implicit-retrofit")
     if data.get("owners", 0) > 1 and writes:
@@ -1974,7 +1976,8 @@ def content_foundation(data, ws):
         reasons.append("unqualified-trigger-write")
     if data.get("publish_without_authority") or data.get("auto_personal_methods") or data.get("fake_records"):
         reasons.append("foundation-became-production")
-    if data.get("source_only") and data.get("retained_source_body"):
+    if data.get("source_only") and any(data.get(key) for key in
+                                       ("retained_source_body", "retained_summary", "retained_worker_brief")):
         reasons.append("source-only-copy")
     if data.get("replay") and (data.get("store_creates", 0) or data.get("duplicate_record") or data.get("frozen_packet_changed")):
         reasons.append("replay-changed-identity")

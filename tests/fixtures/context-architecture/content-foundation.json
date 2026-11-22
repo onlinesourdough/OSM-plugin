@@ -18,6 +18,17 @@
             "store_creates": 1
           }
         }
+      },
+      {
+        "expect": "install-wrote",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "writes": [
+              "edit-pointer"
+            ]
+          }
+        }
       }
     ]
   },
@@ -390,6 +401,24 @@
           "from_positive": true,
           "override": {
             "retained_source_body": true
+          }
+        }
+      },
+      {
+        "expect": "source-only-copy",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "retained_summary": true
+          }
+        }
+      },
+      {
+        "expect": "source-only-copy",
+        "data": {
+          "from_positive": true,
+          "override": {
+            "retained_worker_brief": true
           }
         }
       }
