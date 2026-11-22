@@ -41,8 +41,9 @@ not in a second editable field map. Record the evidence for the choice, exact
 account and scope, authoritative system, selected reader, allowed actions and
 retention. For Notion, include both database and data-source identities and
 the useful field equivalents; `destinations.content` points only to a selected
-Notion store. For an external outcome, `sources` names the actual system and
-there is no local Content destination. Deferred has neither invented IDs nor
+Notion store. For an external outcome, the definition's sources or linked
+source agreement names the actual system; there is no local Content destination.
+Deferred has neither invented IDs nor
 an unverified reader. Unknown information stays an explicit gap.
 
 Inspect automation, integrations and publication triggers before writes to an

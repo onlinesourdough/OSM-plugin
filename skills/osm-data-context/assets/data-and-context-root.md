@@ -14,6 +14,7 @@ For a new root and new core stores, use the existing icons in the public guide's
 If that public page is unavailable through the selected tools, use its
 [versioned public reading copy](https://github.com/onlinesourdough/OSM-plugin/blob/545e9a667fcbd6174fbd5ae28b72d69572666d92/docs-publisher/originals/notion.guide.data-context.md)
 without changing a private connection.
+The same guide supplies the durable explanation when onboarding needs it.
 Reuse those actual asset URLs; do not generate new artwork or replace existing
 icons. Apply the appropriate page/database metadata operation and verify the
 actual icon. A wrapper-page acknowledgement alone is not proof a database icon
@@ -36,6 +37,9 @@ one discoverable gateway: inline sources or a direct, named link to the owning
 source map/handling agreement. Compatible existing role and query maps remain
 valid. Omit an unused empty source list rather than contradict the selected
 linked agreement, and never maintain a second editable map.
+
+When Content is unresolved, omit its outcome and destination and retain the
+explicit setup gap. Do not fill a template placeholder by inventing deferral.
 
 The next heading supplies the page title property. Omit that heading from the body.
 The body begins with the definition and then the native child databases.

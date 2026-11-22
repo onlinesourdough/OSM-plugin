@@ -18,7 +18,7 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
 ## Root and entry
 
 - **One neutral root.** OSM is the method and plugin, not the customer's brand.
-  A new root defaults to the title "AI operating model" with a simple neutral icon;
+  A new root defaults to the untranslated title "AI operating model";
   the owner may choose any title. Identify the root by its stable ID and its role,
   never by title.
 - **The root is the one agent entry.** It holds ONE Data and Context Definition
@@ -54,9 +54,10 @@ The default title changes the display name only. Keep the role
 `data-and-context-root`, the Data and Context Definition heading and compatible
 field names. Existing homes retain their names and identities unless the owner
 requests a rename. Do not create an extra model page or migrate databases just
-to adopt the new title. A new home may use the packaged
-[AI operating model icon](../assets/ai-operating-model.svg); preserve an
-existing owner icon unless its change was requested.
+to adopt the new title. For a new home's approved default icons, follow the
+[root template](../assets/data-and-context-root.md), which links the single
+public method mapping. Preserve an existing owner icon unless its change was
+requested; do not select a different packaged illustration as the default.
 
 ## Separate personal and business homes
 
