@@ -23,7 +23,17 @@ A source can permit a read in an approved environment while prohibiting storage 
 
 These are organizational choices, not new pillars. A database may contain evidence and interpreted meaning. A view is a way to find records, not an access boundary.
 
-Keep useful names, native hierarchy and existing icons. For a new home, the optional [sidebar icon examples](https://github.com/onlinesourdough/OSM-Content/blob/818420c98a5e2b1c640e552dd9343254fa0eb8d2/docs/sidebar-icons.md) offer recognizable Knowledge, Memory, Skills and Content motifs. Adapt them to the business or use native Notion icons. They require no Content methods, new databases, brand change or sharing change. Preserve an existing icon unless its change was requested.
+Keep useful names, native hierarchy and existing icons. New homes use the existing method icons below by default; the owner can customise them. Preserve an existing icon unless its change was requested. These assets require no Content methods, new databases or sharing change.
+
+| Place | Existing method icon |
+| --- | --- |
+| AI operating model | [Root icon](https://raw.githubusercontent.com/onlinesourdough/OSM-plugin/47c354952b2b0daf9b1b846876d0dfbbe383b65d/assets/icon.png) |
+| Knowledge | [Knowledge icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/knowledge.png) |
+| Memory | [Memory icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/memory.png) |
+| Skills | [Skills icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/skills.png) |
+| Content, when selected | [Content icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
+
+Setup applies the actual page or database icon and checks the result. If a tool cannot set it, keep the working home and report the remaining icon step.
 
 ## Create and revise
 
@@ -57,9 +67,11 @@ Keep private context and customer material in their chosen home. This guide cont
 
 ## AI operating model home template
 
-A new private home is called AI operating model by default and starts with its Data and Context Definition, followed by its native databases. The owner can choose another name. Existing homes keep their identities and names unless a rename is requested. Setup fills the definition from the company's actual sources and verified destinations; onboarding explanations stay in the conversation.
+A new private home is called AI operating model by default, including when the conversation is in another language. It starts with its Data and Context Definition, followed by its native databases. The owner can choose another name. Existing homes keep their identities and names unless a rename is requested. Setup fills the definition from the company's actual sources and verified destinations; onboarding explanations stay in the conversation.
 
-During authorised new-home setup, include Content in the short plan. Reuse an adequate existing Notion store or authoritative external workflow, record deferral, or propose one empty Content database where no suitable owner exists. An external workflow gets no parallel Notion store. Installation and normal existing-home resume create nothing; a deferred choice is not asked again until its condition is met. No personal Content methods or example records are automatically installed.
+During authorised new-home setup, include Content in the short plan. Reuse an adequate existing Notion store or authoritative external workflow, or propose one empty Content database where no suitable owner exists. Record a deferral only when the owner actually chooses it; an unanswered proposal remains an unresolved setup choice. An external workflow gets no parallel Notion store. Installation and normal existing-home resume create nothing; a deferred choice is not asked again until its condition is met. No personal Content methods or example records are automatically installed.
+
+The definition is one discoverable gateway. It can hold source entries directly or link to the selected source map and handling agreements. Existing role, field and query maps remain valid. Keep the actual owner, reader, selected scope, permitted use, retention and live-lookup requirements findable without duplicating an editable map.
 
 ```yaml
 definition:

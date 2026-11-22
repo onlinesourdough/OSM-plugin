@@ -24,7 +24,7 @@
       "commit": "resolved-at-run"
     },
     "guide": {
-      "label": "2026-11-22.2",
+      "label": "2026-11-22.3",
       "state": "Notion-authored originals bound per page and package edition; read times and content revisions are recorded on each artifact.",
       "owner": "notion"
     },
@@ -389,9 +389,9 @@
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
         "revision": "3a69bf2daab35f722457aac9a957b205cfd828f919db2f437485b89e5b753676",
-        "edition": "0.35.1",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T13:14:36+00:00",
+        "read_at": "2026-11-22T20:34:05+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       }
     },
@@ -410,9 +410,9 @@
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
-        "edition": "0.35.1",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
+        "read_at": "2026-11-22T20:34:05+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -430,11 +430,11 @@
       "authoritative_for": "Setup and configuration explanation and its special cases: Notion access choices, provider API keys, agent workspace and tools",
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
-        "revision": "438015c6ecc151bd26e12ddaf07a898f77fbd67d2710d01b08af73413e3da8f5",
-        "edition": "0.35.1",
+        "revision": "ae5c40513c004e971828a238a20a125d556f1af43ac00b4934938150c6fc6790",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
-        "last_edited_time": "2026-11-22T09:59:00.000Z"
+        "read_at": "2026-11-22T20:34:05+00:00",
+        "last_edited_time": "2026-11-22T20:32:00.000Z"
       }
     },
     {
@@ -451,11 +451,11 @@
       "authoritative_for": "The Data & Context explanation and the Data & Context definition template (the YAML block)",
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
-        "revision": "9e7d0ee3b869865016e6d25f9bf2e700a6bdee83ed4154dcc36c24cb9c9a3844",
-        "edition": "0.35.1",
+        "revision": "3d4b6d70c24a7a458a444d57a7dbc2dd4e2d12a6875398bdba35eb5d1c3fa967",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
-        "last_edited_time": "2026-11-22T10:24:00.000Z"
+        "read_at": "2026-11-22T20:34:05+00:00",
+        "last_edited_time": "2026-11-22T20:32:00.000Z"
       },
       "exports": [
         {
@@ -493,9 +493,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
-        "edition": "0.35.1",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
+        "read_at": "2026-11-22T20:34:05+00:00",
         "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
@@ -514,9 +514,9 @@
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
-        "edition": "0.35.1",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
+        "read_at": "2026-11-22T20:34:05+00:00",
         "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -536,9 +536,9 @@
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
         "revision": "51395c5382ae366941c55bddf5a5c2d71b863dc50a0abe28deb547c7138bb7ca",
-        "edition": "0.35.1",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
+        "read_at": "2026-11-22T20:34:05+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       },
       "exports": [
@@ -569,9 +569,9 @@
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
-        "edition": "0.35.1",
+        "edition": "0.35.2",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T11:31:43+00:00",
+        "read_at": "2026-11-22T20:34:05+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },

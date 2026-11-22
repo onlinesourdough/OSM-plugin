@@ -9,8 +9,10 @@ runtime.
 
 1. **Workspace.** A usable Notion account and workspace is a prerequisite
    outside OSM. Do not build account creation or training into the plugin.
-2. **Root.** The owner selects or creates one blank root (suggest
-   "AI operating model"), or explicitly selects an existing compatible home. An
+2. **Select the boundary.** Find the selected existing home or the parent for a
+   new one; this is a read/selection step, not a request to build stores yet.
+   The default new root title is exactly "AI operating model", regardless of
+   the conversation language. Preserve an existing owner's title. An
    internal token cannot bootstrap an ungranted first root: the person creates or
    selects that page first, unless a separately authorized existing route can.
    Select the root by its link or ID through the selected connection; reading it
@@ -19,9 +21,8 @@ runtime.
    For new ordinary user setup, check the official Notion plugin in the selected
    host. When installation is authorized, install it through the supported route
    if missing, guide sign-in and verify the account with a scoped safe read.
-   Read the selected root through that plugin and record its verified URL in
-   the short host pointer: the host's persistent instruction file or, if the
-   host has none, its built-in persistent memory or standing instructions. A
+   Read the selected root or parent through that plugin. Save a thin host
+   pointer only after the home exists and its intended scope is authorised. A
    dedicated connection is an option when a selected team workflow, worker or
    unattended job needs a distinct identity or access scope. A team member can
    use their own authorized Notion account. For a selected internal connection,
@@ -35,26 +36,25 @@ runtime.
    the existing selected connection's credential without rotating or revoking it,
    and approves the OS prompt. For that route, the agent saves the non-secret route setting from
    the recorded selection and reads the root through `osm_context_home`.
-4. **Qualify the runtime.** On the pinned selected runtime, qualify read,
-   create, update and readback once across the selected stores and nested pages;
-   inherited access for new records; and denial of an outside page. Use a useful, real, idempotent write. A connection name, a
-   badge or a readable UI is not end-to-end readiness. Resolve failures without
-   widening access.
-   On each harness claimed as supported, check inherited account and
-   desktop-delivered connectors as well as local MCP/plugin settings, qualify
-   the unattended run's effective tool set in its real launch mode, and report
-   any limit the host cannot enforce.
+4. **Understand and plan.** Reuse known business context and ask only what the
+   first useful task needs. Resolve named relevant sources through
+   [business coverage](business-context.md) and [setup](setup.md), then explain
+   what will be reused or created and where originals remain. Resolve material
+   choices under the existing setup authority; do not invent an owner's choice
+   from an unanswered proposal. A technical structure-only request can proceed
+   with its first-use test explicitly pending.
 5. **Build.** Setup builds or adapts the one definition and only useful
    destinations inside the chosen boundary. A newly generated root body begins
    with the definition and then its native databases. Existing roots follow the
    owner's request and write policy. Explain onboarding in the conversation.
-   Discover actual tools, accounts and
-   canonical owners; ask what the customer uses and which outcomes matter; record
+   Use the verified tools, accounts and canonical owners from the preceding
+   discovery; do not build first and interview afterwards. Record
    each source's placement and lifecycle choice. Record the owner's write policy
    once in the definition (whole-home is proposed, never assumed; an existing
-   recorded form is read and kept) and give the connector, the job prompt and
-   each pointer the same policy by reference. Verify one meaningful first task
-   and its replay without duplicate objects.
+   recorded form is read and kept) and give any selected connector, job prompt
+   and pointer the same policy by reference. Use the
+   [root template](../../osm-data-context/assets/data-and-context-root.md)
+   for the default title and approved icons; preserve existing customisation.
    In a new home, include the
    [Content foundation](../../osm-data-context/references/notion/content-foundation.md)
    in the short plan. Reuse its actual owner, record deferral, or propose one
@@ -70,7 +70,18 @@ runtime.
    seen, record the stable ID or documented composite key its items use, and
    hold a lossy or uncertain mapping; correct historical totals alone do not
    qualify a mapping.
-6. **Show state.** Report current coverage, the qualified reader and source-route
+6. **Qualify useful work.** On the pinned selected runtime, qualify read,
+   create, update and readback once across the selected stores and nested pages;
+   inherited access for new records; and denial of an outside page where that
+   boundary is being claimed. Use a useful, real, idempotent write; do not seed
+   fake Memory or require optional deep checks before independent useful work.
+   A connection name, badge or readable UI is not end-to-end readiness. Resolve
+   failures without widening access. Verify the first task and its replay
+   without duplicate objects. On each harness claimed as supported, check
+   inherited account and desktop-delivered connectors as well as local
+   MCP/plugin settings. A selected unattended caller needs its own effective
+   tool qualification; report any limit the host cannot enforce.
+7. **Show state.** Report current coverage, the qualified reader and source-route
    states and the actual last scheduled result, each as its own readiness state.
    Establish maintenance only under the owner's recurring-work authority. A saved
    schedule, a manual proof and actual timed use are different states; an
