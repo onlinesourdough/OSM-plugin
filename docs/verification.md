@@ -1,5 +1,33 @@
 # Verification
 
+## 22 November 2026 — stable 0.35.1 and native package adoption
+
+Stable 0.35.1 is commit `b644372aa1f6ea1743543a2aaabee9e0424b754f`,
+released by successful tag CI 45019668499. Its downloaded source ZIP SHA-256 is
+`d0faa8cdd7ef0d54cfb75d1978c6e0533dedfd72d9567f24b3d555b20e847072`.
+All 326 source files were compared with the tag. The local extraction first
+misread missing ZIP Unix permissions as mode zero, so native registration
+refused the unreadable catalogue. Git-tree modes were then applied and every
+installed file's bytes and mode were read back. The release payload was not
+changed. All 76 skill-source files are byte-identical to 0.35.0.
+
+Native Codex CLI 0.171.0 and Claude Code 2.1.311 registrations now report enabled
+OSM 0.35.1 from that verified source. Both installed caches match all 76 skill
+files and the released runtime, and expose exactly seven SKILL.md entries.
+Other native plugin and marketplace records are unchanged. The saved OSM
+context selection, navigation, Home projection and connection-route state read
+back exactly unchanged. Claude's marketplace removal also uninstalled its OSM
+entry; native reinstallation at user scope restored the enabled registration.
+That behavior must not be confused with Codex's registration-only removal.
+
+Automatic main event 45019331596 passed the current eight guide-original
+bindings and all seven released 0.35.0 API/public packets with no writes before
+the 0.35.1 tag. The separate post-tag binding qualifies the 0.35.1 packets.
+Actual control of the primary Codex shell is denied by the host's UI safety
+boundary, so an already-open sidebar's refresh is not claimed as observed here.
+The compiled-reader preview and public Notion observations below are separate;
+new-client and comparative behavior remain #69/#72, with shared #73 cases.
+
 ## 22 November 2026 — 0.35.0 delivery and guide refresh
 
 OSM 0.35.0 was released from `42782949754f7547687f25e803941411db3629cf`
