@@ -3347,3 +3347,24 @@ The public Notion overview, Setup and architecture show v0.33.0. The
 saved definition and diagram source match the tag. The legacy Notion skill
 catalogue and downloadable packets are still pending reconciliation. The
 repo publisher remains inactive.
+
+
+### Onboarding source review and release recovery, 2026-11-22
+
+PR #139 merged the independently reviewed conversational onboarding repair at
+`41b210e22a58569d20cdaa09b247c1c61421ad0b`. Gemini 4 Neon High accepted the
+complete, bounded source-review coverage after the initial oversized review
+was explicitly held for truncated input and a conflicting architecture icon
+recommendation. The two complete follow-up packets and peer delta reviews
+closed those source findings. This is source acceptance, not a clean client
+journey pass. All earlier trial failures and controller interventions remain
+part of the test record.
+
+Main checks and pretag public-guide parity passed. The retained v0.35.2 source
+tag's [release check](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45070777091)
+stopped because its matching changelog entry was absent. No GitHub Release or
+release asset was created, and the tag was not moved. The 0.35.3 recovery adds
+that history and consistent release metadata; all 76 skill-source files are
+byte-identical to the reviewed v0.35.2 source. Release-tag validation against
+v0.35.1 and the seven documentation rehearsals pass locally. Publication,
+native adoption and the new uncoached client journey remain pending.

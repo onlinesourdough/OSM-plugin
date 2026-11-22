@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.35.3 — 2026-11-22
+
+- Deliver the reviewed conversational onboarding repair: understand the business
+  and named sources before building, preserve real Content choices, and finish
+  the agreed useful task with one discoverable source gateway.
+- Use the exact default title AI operating model and the approved method icons;
+  preserve existing homes and keep seven broad skills.
+- Complete release metadata without moving the retained 0.35.2 source tag.
+  All skill-source bytes are identical to that independently reviewed source.
+
+## 0.35.2 — 2026-11-22 (unpublished source tag)
+
+- Reviewed onboarding source was tagged at `41b210e22a58569d20cdaa09b247c1c61421ad0b`.
+  Release CI stopped on the missing changelog entry before creating a GitHub
+  Release. The tag and failed run remain historical evidence.
+
 ## 0.35.1 — 2026-11-22
 
 - Refresh the public reader with the released Content guide and current common
