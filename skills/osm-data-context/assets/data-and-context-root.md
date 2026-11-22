@@ -43,7 +43,11 @@ definition:
     memory: {id: "[id]"}
     skills: {id: "[id]"}
     maintenance: {id: "[id]"}  # pipeline agreements and other control records
-    content: {id: "[id]"}  # optional; only when the owner selects Content
+    content: {id: "[id]"}  # selected Notion store only; omit for external or deferred
+  content:
+    outcome: "[existing-notion | external | deferred | new-notion]"
+    agreement: "[definition section or exact source agreement; account, scope, field map, retention and triggers]"
+    recorded: "[accepted setup plan or existing owner evidence]"
   # The owner's recorded choice. Setup proposes whole-home and never assumes it.
   write_policy: {choice: "[whole-home | narrower | not yet chosen]", include: ["[exact identities; narrower only]"], exclude: ["[exact identities]"], recorded: "[owner decision source and date]"}
   controls:

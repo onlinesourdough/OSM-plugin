@@ -15,10 +15,11 @@ Use [operating boundaries](../../../osm-manage-data-context/references/operating
 OSM Setup leads this route. Accept an ordinary request such as
 “Use OSM Setup to set up my Notion; start at [URL].” Stay in this flow; the owner
 need not invoke Context, Manage Skills or Check separately.
-Superseded default: the official plugin as the setup route. New setups use the
-internal root-only connection in the [architecture](../architecture.md#access-roles)
-and Setup's [bootstrap](../../../osm-setup/references/bootstrap.md); the official
-route below stays an explicit alternative, never a fallback.
+For normal owner setup, use the official Notion plugin first. Preserve an
+existing selected route. A dedicated connection is optional when the selected
+team, worker or unattended task needs a separate identity or access scope; see
+[access roles](../architecture.md#access-roles) and Setup's
+[bootstrap](../../../osm-setup/references/bootstrap.md).
 OSM and the official Notion plugin are separate. Use native installation,
 enablement and connection status plus available tools; do not create a second MCP, login page,
 token store or connection tracker. If status is unavailable, say unknown and
@@ -62,7 +63,7 @@ needs only one area. Reuse actual methods and allow Memory to start empty.
 
 Verify the connected workspace/account and available tools. Qualify reads,
 inserts and updates once across the selected stores and their nested pages
-(Knowledge, Memory, Skills, any selected existing Content store and the control records), not per store
+(Knowledge, Memory, Skills, a selected Content store and the control records), not per store
 or per write. Reuse the owner's
 work destinations and memory structure when suitable. A human Business home or
 Docs library keeps its structure and is no longer a curation destination; see
@@ -81,7 +82,10 @@ Preserve Spaces as business/brand scopes within one owner home, including
 sub-brands and shared context. Projects use their native workspaces. Start with
 a Space property and useful views; a separate Space database is conditional.
 For properties, hierarchy, native templates and integrity checks, apply the
-[schema contract](schema-and-templates.md) to the existing workspace.
+[schema contract](schema-and-templates.md) to the existing workspace. New-home
+setup also resolves the [Content foundation](content-foundation.md) once;
+existing external owners and deferrals create no Notion mirror. Keep the
+registered route when an optional Content method is later selected.
 Split large imports into coherent, independently editable topics with clear
 titles, stable source identity and provenance. A view tag does not confer
 native skill status or permissions. Inspect the rendered home and use its

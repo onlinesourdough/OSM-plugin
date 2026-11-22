@@ -15,6 +15,12 @@ account, to spend, or to change configuration.
   only for an unresolved suitability gap, and separate active settings,
   new-task defaults and worker controls.
 
+A named choice such as **Gemini 4 Neon High** is still a request to verify
+the exact model and reasoning controls on the selected authorised route. A
+model-list entry or settings readback alone does not prove inference or tool
+access. Preserve an unavailable route as a gap; a prompt-only review, a file
+review and a delegated writer need their own effective-access evidence.
+
 ## Assess what judgment remains
 
 Take a second look at the accepted Spec and specialist outputs: what is settled,

@@ -104,8 +104,11 @@ labelled line on the maintenance or control record the definition names. An empt
 nothing needed attention in what this run checked, never that the home is healthy;
 there is no global truth, health or freshness score.
 
-A selected existing Content store is maintained like any other store, without any
-Content module and without creating one. Skill or method changes go through
+A selected Content store is maintained under its registered route and actual
+field map, without any Content module. Follow the
+[foundation binding](../osm-data-context/references/notion/content-foundation.md)
+for source ownership, retention and trigger-sensitive writes. Upkeep never
+creates a missing store, activates deferral or starts an editorial workflow. Skill or method changes go through
 [Manage Skills](../osm-manage-skills/index.md), which owns capability lifecycle
 and discovery; do not duplicate or resume skill management here.
 

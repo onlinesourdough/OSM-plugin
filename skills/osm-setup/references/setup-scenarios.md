@@ -48,3 +48,24 @@ client entry-point repair. Use the common [acceptance boundary](../../osm/refere
 | Explicit app denial | Computer Use rejects controlling the client app | No alternate automation, identity trick or internal database edit; precise permitted/manual next step and pending proof |
 | Legacy classification | Stale registration and migration history | Repair authorized active reference; preserve history and unknown fields |
 | Uninstall/update | Product changes; owner data exists in Notion or a legacy folder | Owner data and unrelated configuration remain intact |
+
+## Content foundation cases
+
+For a new authorised home, apply the
+[one-route contract](../../osm-data-context/references/notion/content-foundation.md).
+These checks are separate from the actual fresh-client journey and benchmark.
+
+| Case | Observable outcome |
+| --- | --- |
+| Installation only | Zero Notion writes, no database or personal Content skills. |
+| New home, no store | The short plan proposes one empty Content store; accepted creation has the native minimum fields and no sample record. |
+| Interrupted relations | Registered database and data-source IDs survive; resume adds only missing relations against the same data source. |
+| Deferred | Choice persists with its activation condition; ordinary resume does not ask again or create. |
+| Existing different schema | Actual field equivalents and owner workflow are mapped; no compulsory migration or synonym fields. |
+| Ambiguous owner | No collection is created; keep the exact conflict pending. |
+| External owner | Verified route and source agreement; no parallel Notion database or source-only mirror. |
+| Existing home without Content | Normal resume/update remains valid and unchanged. |
+| Older optional Setup template | It reads the core binding, reuses the same identities and keeps its released packet unchanged. |
+| Repeated reference capture | Existing source identity is reused; no duplicate row or Memory event. |
+| Source-only data | Permitted route only; no record body, summary or worker-brief copy. |
+| Unknown integration trigger | Hold dependent writes and publication; independent reads/work continue through their own authority. |

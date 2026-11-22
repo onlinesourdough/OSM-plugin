@@ -43,6 +43,10 @@ The home is the Notion Data & Context home that
 the root and connection, then [Notion setup](../../osm-data-context/references/notion/setup.md)
 for stores, routes and acceptance. Read before writing and reuse by actual ID.
 External systems, local files and repositories are selected sources, not homes.
+New-home setup includes the [Content foundation](../../osm-data-context/references/notion/content-foundation.md)
+in its short plan. Reuse an existing owner or a deferral; create a proposed
+empty store only within accepted setup authority. Existing-home resume adds
+nothing by default, and personal Content methods remain optional.
 A legacy folder, vault or `AIOS_FORMAT` home is recognized read-only; offer the
 [update reference](../../osm/references/update.md#legacy-file-and-vault-homes)
 guidance and never edit, convert, mirror or clean it up.

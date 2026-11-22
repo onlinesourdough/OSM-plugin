@@ -68,7 +68,9 @@ retained through renames, not a database-enforced unique constraint. Keep existi
 keys; new managed items may use scoped prefixes. Ordinary documents need no
 artificial key. Source records the exact original source/owner decision and date;
 unknown dates stay unknown. An original Source document can own its provenance.
-Keep source date, import date and last check distinct.
+Keep source date, import date and last check distinct. A routine last check
+belongs to the existing run/source receipt; it needs no mandatory database
+property and does not change Revised.
 An existing Memory `Source` may identify the creating agent client rather than
 the evidence. Preserve that meaning and its values; use the existing `Evidence`
 field for provenance and `Last updated by` for the editing client where selected.
@@ -94,6 +96,14 @@ source asserted it, dated where known), kept in an existing notes property or a
 labelled body line. A link without those stays a plain mention, or is not made.
 Resolve exact page IDs; matching titles or Space names is not a foreign-key
 relationship. Links do not synchronize source systems.
+
+## Content foundation
+
+The [core Content foundation contract](content-foundation.md) owns the minimum
+new-store schema and existing field equivalents. Resolve its one actual route
+during new-home setup; optional Content configuration owns chosen workflow
+fields and states. There is no second minimum schema or automatic Content
+method installation here.
 
 ## Native templates for humans and agents
 
