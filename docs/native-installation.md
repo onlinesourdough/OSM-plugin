@@ -122,6 +122,15 @@ The [README maintenance table](../README.md#update-or-remove) lists these contro
 Local sources and pinned sources have different native update semantics;
 an “already up to date” response is not proof of a version change.
 
+Do not apply Codex's registration-only removal procedure to Claude. In the
+observed Claude Code 2.1.311 lifecycle, removing a marketplace also uninstalls
+its plugins and warns that app-managed options, secrets and data may be deleted.
+Use the existing registration's native update controls for ordinary updates.
+Before an authorised source replacement that requires removal, inventory and
+protect any plugin-managed state, then reinstall at the original scope and
+verify its enabled state. The private Notion home and OSM's separate context
+selection are not a backup of a client's own plugin-managed data.
+
 Rollback selects the previous reviewed package through the same native controls.
 It does not restore owner data. After update or rollback, start a fresh session
 and verify the installed version, source and declared skills.
