@@ -1,5 +1,49 @@
 # Verification
 
+## 22 November 2026 — 0.35.0 delivery and guide refresh
+
+OSM 0.35.0 was released from `42782949754f7547687f25e803941411db3629cf`
+after exact-candidate independent Neon High acceptance and release CI
+45013697874. The downloaded source ZIP matched all 325 tagged files and modes;
+its SHA-256 is `9f16c1fd3c8c7b4c84e261dea1857373898c5b38c2766c08543d03df1d3940c4`.
+
+PR #135 binds that actual tag. Its initial rehearsal exposed a synthetic future
+version colliding with the real 0.35.0 binding. Only the fixture's next-version
+selection changed; publisher conflict, history and stale-run guards remain.
+The repaired exact candidate passed 23 native-publisher scenarios, 16 parity
+tests, independent Neon acceptance and CI 45016089146.
+
+Automatic run 45016372054 wrote and fully API-verified all seven released skill
+packets, with no unknown writes, but held at the anonymous browser deadline.
+Independent same-source run 45017013669 then verified all seven unchanged API
+packets and their complete public instruction text/catalogue, without another
+write. Its eight guide originals also matched their bound content revisions.
+The initial hold remains part of the evidence; it was not a first-pass success.
+
+The subsequent 0.35.1 reader candidate binds API snapshot 45017698708, read at
+2026-11-22T11:31:43Z with eight pages and no read errors. That capture deliberately
+held on the older Git bindings before any skill import. Only the entry and
+architecture explanation bodies changed: the current PNG preview replaces the
+old HTML embed, and the Content foundation is distinguished from optional
+personal methods. The Skills catalogue icon is included in the entry's native
+database tag. The six page-header icons were separately applied and read back
+in Notion; no custom Codex navigation-icon renderer is claimed.
+
+Notion's own public View site showed the new entry text and current diagram in
+the built-in browser after an older tab still showed stale content. This is a
+public-root visual observation, not anonymous verification of every guide page.
+The Content introduction is an exact, separately versioned projection of its own
+released source; the five retained 0.10.0 template packets remain unchanged.
+Fresh-client and comparative recall results still belong to #69/#72, with the
+remaining Dreaming behavioral cases coordinated under #73.
+
+The rebuilt reader was exercised in the built-in browser at actual CSS widths
+1600, 487 and 390 pixels: one current root diagram, no horizontal overflow,
+working internal Content navigation and a distinct 0.13.1 method / 0.10.0
+template label. Temporary viewport overrides were reset. These localhost UI
+observations do not prove installation in the primary Codex app. See the
+[bounded reader receipt](evidence/public-guide-refresh-20261122.json).
+
 ## 22 November 2026 — Content foundation contract candidate (#131)
 
 The 0.35.0 contract keeps seven discoverable skills. New-home Setup resolves

@@ -24,7 +24,7 @@
       "commit": "resolved-at-run"
     },
     "guide": {
-      "label": "2026-11-22.1",
+      "label": "2026-11-22.2",
       "state": "Notion-authored originals bound per page and package edition; read times and content revisions are recorded on each artifact.",
       "owner": "notion"
     },
@@ -388,11 +388,11 @@
       "authoritative_for": "The method overview: what OSM is, the foundation it builds and where each topic is explained",
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
-        "revision": "add88aafc0cb20dd7afec41aac0cf8f6aa99f574b87c08e77982048e5ad6ee73",
-        "edition": "0.35.0",
+        "revision": "75c586aff2de6f415cc802a832143d38973eb7880f0e2b9dbe1c278b58f63198",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
-        "last_edited_time": "2026-11-20T13:16:00.000Z"
+        "read_at": "2026-11-22T11:31:43+00:00",
+        "last_edited_time": "2026-11-22T11:26:00.000Z"
       }
     },
     {
@@ -410,9 +410,9 @@
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
-        "edition": "0.35.0",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
+        "read_at": "2026-11-22T11:31:43+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -431,9 +431,9 @@
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
         "revision": "438015c6ecc151bd26e12ddaf07a898f77fbd67d2710d01b08af73413e3da8f5",
-        "edition": "0.35.0",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
+        "read_at": "2026-11-22T11:31:43+00:00",
         "last_edited_time": "2026-11-22T09:59:00.000Z"
       }
     },
@@ -452,9 +452,9 @@
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
         "revision": "9e7d0ee3b869865016e6d25f9bf2e700a6bdee83ed4154dcc36c24cb9c9a3844",
-        "edition": "0.35.0",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
+        "read_at": "2026-11-22T11:31:43+00:00",
         "last_edited_time": "2026-11-22T10:24:00.000Z"
       },
       "exports": [
@@ -493,9 +493,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "dfb6529df0e299436e04e0aa773989733e203a238dbf74521bbcffdc595028f3",
-        "edition": "0.35.0",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
+        "read_at": "2026-11-22T11:31:43+00:00",
         "last_edited_time": "2026-11-06T12:00:00.000Z"
       }
     },
@@ -514,9 +514,9 @@
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "91ff1c289ed89f4bae0ce79cb417906bec4e72c9ed97cf13e0dc16199437093f",
-        "edition": "0.35.0",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
+        "read_at": "2026-11-22T11:31:43+00:00",
         "last_edited_time": "2026-11-20T00:46:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -535,11 +535,11 @@
       "authoritative_for": "The architecture diagrams, including the working-relationships map (the Mermaid block)",
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
-        "revision": "ca166e80c77891e3aee41bd32f74099fb99bd4292cbea35c01f8f30e8261b571",
-        "edition": "0.35.0",
+        "revision": "51395c5382ae366941c55bddf5a5c2d71b863dc50a0abe28deb547c7138bb7ca",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
-        "last_edited_time": "2026-11-22T10:03:00.000Z"
+        "read_at": "2026-11-22T11:31:43+00:00",
+        "last_edited_time": "2026-11-22T11:26:00.000Z"
       },
       "exports": [
         {
@@ -569,9 +569,9 @@
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
-        "edition": "0.35.0",
+        "edition": "0.35.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-22T10:25:03+00:00",
+        "read_at": "2026-11-22T11:31:43+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -643,7 +643,8 @@
       "source_paths": [],
       "target_subtree": "content-templates",
       "public_writer": "notion-authored",
-      "adoption_state": "frozen-export"
+      "adoption_state": "frozen-export",
+      "historical_note": "Retained catalogue mapping for the older Draft template edition. The current reader introduction has its separate exact Content method edition and hash in reading_export.supplements; this row grants the core publisher no write authority."
     },
     {
       "key": "notion.content.setup",
@@ -777,8 +778,11 @@
         "id": "40d6d2e17f5681219a81e13317a19339",
         "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
-        "sha256": "96dc9e045fc3860b6e2c3f9b4681404c6298227ec86c90a2aeb1a45cceba2935",
-        "edition": "Optional Content · Draft edition 2026-11-05.1"
+        "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
+        "edition": "Optional Content · method 0.13.1; retained templates 0.10.0",
+        "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
+        "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1",
+        "body_origin": "Exact projection derived from the separately released Content source; not an independent API capture. The core publisher never writes this page."
       }
     ]
   }

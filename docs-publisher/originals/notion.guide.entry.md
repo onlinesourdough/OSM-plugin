@@ -8,7 +8,7 @@ Notion provides shared context and a map to your tools. Your CRM, accounting, fi
 
 ## Architecture
 
-<embed source="notion-file-block://41d6d2e1-7f56-8126-adef-df80b2b15860/ce0b94ed-e801-4b1a-9b25-a3f72f5b6802?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.html" />
+<image source="notion-file-block://4206d2e1-7f56-8170-ab13-e27a92ce6328/9cbc5d1f-f0f0-4437-8a06-786ac92bb619?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
 
 Prime finds useful context. Log saves lasting decisions and corrections. Dreaming maintains that context between sessions. See <mention url="https://app.notion.com/p/40d6d2e17f568113a397fb6ecd9b5fff">Architecture diagram</mention> for the detailed relationships.
 
@@ -29,7 +29,7 @@ Skills are reusable ways of working within that context.
 </column>
 </columns>
 
-Notion makes selected Knowledge, Memory and Skills findable together and links to the relevant originals. A database organizes material; it is not a separate conceptual pillar.
+Notion makes selected Knowledge, Memory and personal Skills findable together. The definition records the Content route or deferral and links to relevant originals. A database organizes material; it is not a separate conceptual pillar.
 
 ## Put the foundation to work
 
@@ -41,7 +41,7 @@ As the business changes, revise the current explanation where it belongs. Keep m
 
 Shared OSM instructions help you establish and maintain the foundation and complete useful work. Personal skills adapt methods to your own business. Both belong to the context you give an assistant.
 
-<database url="https://app.notion.com/p/6abfc738a9604ddc806432721813712b" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="false">
+<database url="https://app.notion.com/p/6abfc738a9604ddc806432721813712b" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="false" icon="https://raw.githubusercontent.com/gustavonline/gustavonline/d96b79de52f527989afbe0aff3752b576c2749e4/assets/notion-icons/osm/skills.png">
 OSM Skills
 </database>
 
@@ -50,7 +50,7 @@ The installed plugin contains the shared skills and their supporting instruction
 ## Extensions
 
 <callout icon="🧩" color="brown_bg">
-<b>Content · optional extension.</b> A separate content method with its own [OSM Content repository](https://github.com/onlinesourdough/OSM-content), setup/database contract, configuration guide and five adaptable skill templates. Use the Content page below as the human and agent entry. Keep your creative process and private configuration in your own foundation. Content is outside the OSM plugin; it is not installed with OSM.
+<b>Content · optional methods.</b> OSM 0.35.0 or later resolves the Content foundation during new-home Setup. The separate [OSM Content library](https://github.com/onlinesourdough/OSM-Content) reuses that selected route and helps adapt your own workflow, tools and personal methods. Its five templates are optional examples, not automatically installed skills. Use the Content page below as the human and agent entry.
 </callout>
 
 <page url="https://app.notion.com/p/40d6d2e17f5681219a81e13317a19339">

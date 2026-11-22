@@ -53,7 +53,7 @@ flowchart TB
 
 Prime reads what a task needs. Log saves lasting changes at checkpoints. Dreaming checks recent work and selected sources under the same curation rules. Council is optional.
 
-The diagram separates useful starting context from what grows through actual work. Memory may start empty. Knowledge topics and personal methods are selected for the business; they are not a mandatory file set. The seven shared OSM skills stay in the plugin. New-home Setup resolves the Content foundation in OSM 0.35.0 or later; follow the installed release until that version is available. Its route can stay external or deferred, with no parallel Notion store. The optional Content module reuses that binding.
+The diagram separates useful starting context from what grows through actual work. Memory may start empty. Knowledge topics and personal methods are selected for the business; they are not a mandatory file set. The seven shared OSM skills stay in the plugin. New-home Setup resolves the Content foundation in OSM 0.35.0 or later; update the plugin before using that behaviour. Its route can stay external or deferred, with no parallel Notion store. The optional Content module reuses that binding.
 
 A mobile overview and the editable HTML and relationship sources are available on this page.
 
