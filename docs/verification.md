@@ -22,7 +22,17 @@ The existing responsibility gates are preserved; new implementation-mirroring
 string pins from the proposal are omitted. The footprint report separately
 counts the conditional writing reference, with no matched-legacy savings claim.
 
-The repaired source still needs its own final review, rebuilt bindings and CI.
+Gemini 4 Neon High accepted 19 complete source files and the selected new
+changelog prefix, then accepted the exact four-file clarification and reported
+guide-phrase delta. The latter review made two local tool attempts; both were
+blocked by configured denial rules, so no local source read or shell command
+succeeded. Its verdict uses the supplied text. An independent Codex peer also
+accepted the bounded source repair. All fourteen local validation/rehearsal
+groups, 84 adapter tests and 16 anonymous-reader unit tests pass; affected
+checks passed again after the clarifications. The generated guide/runtime
+reproduce byte for byte. These are source and build observations; final CI,
+publication and native adoption need subsequent readbacks.
+
 No installed-host or customer-journey pass is claimed. Public packets remain on
 actual v0.35.3 until the accepted release is published and deliberately bound;
 private Dreaming adoption requires the changed and transitive references.
