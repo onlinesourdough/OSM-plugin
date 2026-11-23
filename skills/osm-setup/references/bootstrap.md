@@ -9,8 +9,9 @@ runtime.
 
 1. **Workspace.** A usable Notion account and workspace is a prerequisite
    outside OSM. Do not build account creation or training into the plugin.
-2. **Select the boundary.** Find the selected existing home or the parent for a
-   new one; this is a read/selection step, not a request to build stores yet.
+2. **Select the boundary.** Find the existing home or the selected workspace
+   for a new one. Use a parent when needed; the official connector can create a
+   private root directly where supported. This selects scope, not stores yet.
    The default new root title is exactly "AI operating model", regardless of
    the conversation language. Preserve an existing owner's title. An
    internal token cannot bootstrap an ungranted first root: the person creates or
@@ -54,7 +55,7 @@ runtime.
    recorded form is read and kept) and give any selected connector, job prompt
    and pointer the same policy by reference. Use the
    [root template](../../osm-data-context/assets/data-and-context-root.md)
-   for the default title and approved icons; preserve existing customisation.
+   for a new root's definition, default title and approved icons; preserve existing customisation.
    In a new home, include the
    [Content foundation](../../osm-data-context/references/notion/content-foundation.md)
    in the short plan. Reuse its actual owner, record deferral, or propose one

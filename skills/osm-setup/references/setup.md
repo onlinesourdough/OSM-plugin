@@ -1,8 +1,7 @@
 # Set up a useful Notion home
 
-Full setup covers context, capabilities, harness fit, useful work and learning.
-Repair stays scoped; resume from the next gap with known answers. No fixed
-interview or account/device scan. Installation is not usable access.
+Setup covers context, capabilities, useful work and learning. Resume the next
+gap with known answers. No fixed interview or device scan; installation is not access.
 
 Business onboarding adds the [coverage check](business-context.md),
 reusing existing sources and answers.
@@ -20,27 +19,24 @@ up. Keep credit/referral copy out of customer context and persistent instruction
 
 ## Context and useful work
 
-Use Manage Data & Context's [framework](../../osm-manage-data-context/references/curation.md)
-for relevant answers, source/scope, confirmation and gaps. Inspect what is
-already known; keep source facts at their owner and missing values unknown.
-Sort what setup learns with its [intake classes](../../osm-manage-data-context/index.md#classify-what-comes-in):
-durable, provisional (the snapshot below until confirmed) or source-only.
+Use the [curation framework](../../osm-manage-data-context/references/curation.md)
+for answers, source/scope, confirmation and gaps. Keep facts at their owner and
+unknowns unknown. Classify learning as [durable, provisional or source-only](../../osm-manage-data-context/index.md#classify-what-comes-in);
+the business snapshot stays provisional until confirmed.
 
 When useful first work needs exploration, use [Interview](../../osm-interview/SKILL.md)
 under its activation rules; its [owner-context guide](../../osm-interview/references/owner-context.md)
 is only for missing foundation. Reuse answers. Established focus and technical
 setup proceed from known facts.
 
-Setup owns connection readiness: inspect exposed connections, explain the useful
-read and guide one authorised native connection step. Verify account and scoped
-safe read. Declined/unavailable access stays a gap; answers and local work can
-continue. Require no vendor/account inventory. No secrets in chat/context;
-access grants no write, send or publish authority.
+Reuse exposed connections; verify account and a scoped safe read. Explain the
+useful read and guide one authorised native connection step. Declined/unavailable
+access stays a gap while independent work continues. No vendor/account inventory
+or secrets in chat/context; access grants no write, send or publish authority.
 
-For individual choices, use Interview's [conversation procedure](../../osm-interview/references/conversation.md)
-without a broader interview. It owns tools, fallback, pending input and resume.
-Reflect a sourced snapshot, reuse answers and resolve material corrections.
-Complete a small useful result from accepted intent; understanding can be it.
+For individual choices, use the [conversation procedure](../../osm-interview/references/conversation.md)
+for tools, fallback and pending input; no broader interview. Reuse answers and
+resolve corrections. A useful result may be understanding.
 
 If the owner names a source relevant to that result but its location, purpose
 or handling is unclear, ask the smallest missing question before drafting.
@@ -53,10 +49,10 @@ not a substitute for the source-backed task the owner asked for.
 
 ## Home and harness
 
-Use [Data & Context](../../osm-data-context/index.md): [bootstrap](bootstrap.md)
-the Notion root/connection, then [Notion setup](../../osm-data-context/references/notion/setup.md)
-for stores, routes and acceptance. Read before writing; reuse actual IDs.
-External systems, files and repositories are sources, not homes.
+Use [Data & Context](../../osm-data-context/index.md), [bootstrap](bootstrap.md)
+and [Notion setup](../../osm-data-context/references/notion/setup.md) for the root,
+stores and acceptance. Read before writing; reuse IDs. External systems, files
+and repositories are sources, not homes.
 New-home setup includes the [Content foundation](../../osm-data-context/references/notion/content-foundation.md)
 in its short plan. Reuse an existing owner or a deferral; create a proposed
 empty store only within accepted setup authority. Existing-home resume adds
@@ -77,10 +73,9 @@ extras need a request/task need. Resume needs no machine audit.
 
 ## Acceptance and continuity
 
-Complete the agreed useful result. Read back home and chosen pointer; check
-routes and gaps. Read needed source content, not just a page, title or migration
-placeholder. Verify retrieval of a needed unique local fact; external facts
-stay at source. Date unavailable-source gaps.
+Read back the home and selected pointer; check routes, icons or cosmetic gaps,
+and retrieval of a needed unique local fact. Read source content, not just
+titles or placeholders; external facts stay at source. Date unavailable gaps.
 
 Codex setup uses [checklist/goal acceptance](codex-tracking-acceptance.md).
 New/changed setup needs a fresh ordinary request without naming OSM; desktop
@@ -88,10 +83,9 @@ cutover also verifies [New Chat](adapter-codex-desktop.md). CLI evidence proves
 no GUI state; report unavailable activation as NOT VERIFIED. Unchanged resumes
 reuse dated proof without repeating cold/optional checks.
 
-Show the saved business snapshot for confirmation/correction. Generated
-context/routes stay provisional until confirmed. Reuse answers; retain pending
-confirmation without claiming full acceptance. Return home link, concise
-changes, gaps and next action.
+Show the short business snapshot for confirmation; unconfirmed context/routes
+stay provisional. Separate first-task proof from unfinished setup and follow
+the conductor's next-action rule. Return the home link and concrete next action.
 
 Notion keeps the home across machines; no setup repository/transfer. On
 interruption retain coverage, answers/source pointers, changes/readback, off

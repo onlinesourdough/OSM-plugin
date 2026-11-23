@@ -389,9 +389,9 @@
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
         "revision": "3a69bf2daab35f722457aac9a957b205cfd828f919db2f437485b89e5b753676",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       }
     },
@@ -410,9 +410,9 @@
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -431,9 +431,9 @@
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
         "revision": "2df8eae33bba5d9223f51679b2b29c22bad844e5145013792ea3b4fecfe37df2",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-23T10:04:00.000Z"
       }
     },
@@ -452,9 +452,9 @@
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
         "revision": "3d4b6d70c24a7a458a444d57a7dbc2dd4e2d12a6875398bdba35eb5d1c3fa967",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-22T20:32:00.000Z"
       },
       "exports": [
@@ -493,9 +493,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "eb4b1c19765ab05857304346bbc9d4b981dd6bdae08eb76bc184126602f60bba",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-23T10:44:00.000Z"
       }
     },
@@ -514,9 +514,9 @@
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "bd1343be84fc40efb26fe969104f7fe03ac21be4c8df3b1887c765432ed627d0",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-23T10:33:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -536,9 +536,9 @@
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
         "revision": "51395c5382ae366941c55bddf5a5c2d71b863dc50a0abe28deb547c7138bb7ca",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       },
       "exports": [
@@ -569,9 +569,9 @@
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
-        "edition": "0.36.0",
+        "edition": "0.36.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:46:04+00:00",
+        "read_at": "2026-11-23T11:40:03+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -776,10 +776,10 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content \u00b7 optional extension",
+        "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
-        "edition": "Optional Content \u00b7 method 0.13.1; retained templates 0.10.0",
+        "edition": "Optional Content · method 0.13.1; retained templates 0.10.0",
         "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
         "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1",
         "body_origin": "Exact projection derived from the separately released Content source; not an independent API capture. The core publisher never writes this page."
