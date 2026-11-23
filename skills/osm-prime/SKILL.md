@@ -39,8 +39,8 @@ inputs selected by the lead.
    for an authorized stored repair and a short note for Dreaming.
 5. Use the relevant result, then proceed with the user's actual request. In
    this session reuse verified context; refresh the affected source only when
-   the task, home, scope, freshness or access changes. For an authorised Notion
-   page or row and its accompanying reply, follow
+   the task, home, scope, freshness or access changes. When writing or revising
+   an authorised Notion page or row, and for its accompanying reply, follow
    [Writing for a person](../osm-manage-data-context/references/human-output.md).
 
 Prime keeps its work inside the selected home and scope. Report concrete gaps

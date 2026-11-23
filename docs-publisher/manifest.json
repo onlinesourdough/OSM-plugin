@@ -391,7 +391,7 @@
         "revision": "3a69bf2daab35f722457aac9a957b205cfd828f919db2f437485b89e5b753676",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       }
     },
@@ -412,7 +412,7 @@
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -433,7 +433,7 @@
         "revision": "2df8eae33bba5d9223f51679b2b29c22bad844e5145013792ea3b4fecfe37df2",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-23T10:04:00.000Z"
       }
     },
@@ -454,7 +454,7 @@
         "revision": "3d4b6d70c24a7a458a444d57a7dbc2dd4e2d12a6875398bdba35eb5d1c3fa967",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-22T20:32:00.000Z"
       },
       "exports": [
@@ -492,11 +492,11 @@
       "authoritative_for": "How work is taken from an understood need to a checked result, and how the result is judged",
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
-        "revision": "cd796c15583e5b63f7edb81c19f0f5e6e5fee582c6308a7ddfcdeac4fca813a2",
+        "revision": "eb4b1c19765ab05857304346bbc9d4b981dd6bdae08eb76bc184126602f60bba",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
-        "last_edited_time": "2026-11-23T10:33:00.000Z"
+        "read_at": "2026-11-23T10:46:04+00:00",
+        "last_edited_time": "2026-11-23T10:44:00.000Z"
       }
     },
     {
@@ -516,7 +516,7 @@
         "revision": "bd1343be84fc40efb26fe969104f7fe03ac21be4c8df3b1887c765432ed627d0",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-23T10:33:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -538,7 +538,7 @@
         "revision": "51395c5382ae366941c55bddf5a5c2d71b863dc50a0abe28deb547c7138bb7ca",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       },
       "exports": [
@@ -571,7 +571,7 @@
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
         "edition": "0.36.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T10:34:05+00:00",
+        "read_at": "2026-11-23T10:46:04+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -772,7 +772,7 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "fbb24d03f3c74fd5013753243a68544c865e95bc",
+    "skill_source": "50b5d55db6f99596b016232156394caca332d525",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",

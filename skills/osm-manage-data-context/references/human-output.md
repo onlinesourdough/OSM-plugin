@@ -1,10 +1,10 @@
 # Writing for a person
 
-Use this for an authorised Notion page or database row and its accompanying
-reply, including outside the context home. The task's authority, source retention
+Use this when writing or revising an authorised Notion page or row and its
+accompanying reply, including outside the context home. The task's authority, source retention
 and verification rules still apply. This grants no read or write permission.
-Source-only and restricted originals stay at their owner; do not copy or
-paraphrase them into Notion to bypass their permitted processing or retention.
+Source-only and restricted originals stay at their owner; do not copy,
+paraphrase or summarise them into Notion to bypass permitted processing or retention.
 
 Outward-facing prose, such as a message, email, post or other text that goes
 out under the author's name, stays with [Human Writing](../../osm-human-writing/SKILL.md),
@@ -51,7 +51,7 @@ and the next step.
 
 Write in plain language a person can scan. Use the same terms the existing
 pages use. Put deeper evidence behind a toggle, a link or a later section
-when the recent pages do. Keep an important limitation or a negative finding
+when the destination's existing format does. Keep an important limitation or a negative finding
 where the reader will see it.
 
 Leave out a log of the steps taken, a file-by-file inventory and repeated

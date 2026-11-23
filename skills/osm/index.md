@@ -7,8 +7,8 @@ If a source is unavailable, report the gap and continue independent work.
 - Onboard or resume: [Setup](../osm-setup/SKILL.md).
 - Engineer the home: [Data & Context](../osm-data-context/index.md).
 - Read at start: [Prime](../osm-prime/SKILL.md).
-- Save durable changes: [Log](../osm-log/SKILL.md). An authorised Notion page
-  and its accompanying reply follow
+- Save durable changes: [Log](../osm-log/SKILL.md).
+- When writing or revising an authorised Notion page and its accompanying reply, use
   [Writing for a person](../osm-manage-data-context/references/human-output.md).
 - Retrieve and curate: [Manage Data & Context](../osm-manage-data-context/index.md).
 - Review and repair between sessions: [Dreaming](../osm-dreaming/SKILL.md).
