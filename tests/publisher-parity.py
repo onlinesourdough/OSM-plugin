@@ -188,6 +188,80 @@ class FolderPages(unittest.TestCase):
         bad['folders']['skills/osm-prime/']['page'] = 'unbound-private-page'
         self.assertTrue(pub.folder_problems(bad, pub.DirSource(ROOT).paths()))
 
+
+class IconDefaults(unittest.TestCase):
+    def setUp(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('icon_guide_builder', ROOT / 'docs-publisher/build-guide.py')
+        self.builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.builder)
+        self.body = ('| Place | Existing method icon |\n| --- | --- |\n' + ''.join(
+            f'| {label} | [Icon](https://raw.githubusercontent.com/onlinesourdough/OSM-plugin/{"a" * 40}/assets/{role}.png) |\n'
+            for label, role in self.builder.ICON_ROLES.items()))
+
+    def fixture(self, body=None):
+        body = self.body if body is None else body
+        key = self.builder.ICON_GUIDE
+        manifest = {'artifacts': [{'key': key, 'class': 'G', 'notion': PAGE, 'owner': 'notion',
+                    'public_writer': 'notion-authored',
+                    'original': {'notion': PAGE, 'revision': pub.revision(body), 'edition': 'fixture'}, 'exports': []}]}
+        return manifest, pub.DictSource({pub.frozen_path(key): body})
+
+    def test_exact_five_roles_and_provenance_are_deterministic(self):
+        manifest, source = self.fixture()
+        data = self.builder.icon_defaults(manifest, source)
+        self.assertEqual(data, self.builder.icon_defaults(manifest, source))
+        parsed = json.loads(data)
+        self.assertEqual(set(parsed['icons']), {'root', 'knowledge', 'memory', 'skills', 'content'})
+        self.assertEqual(parsed['source'], {'page': 'https://app.notion.com/p/' + PAGE,
+                                         'revision': pub.revision(self.body)})
+        self.assertTrue(parsed['generated'])
+
+    def test_missing_duplicate_unknown_mutable_foreign_and_ambiguous_table_refused(self):
+        line = next(row for row in self.body.splitlines(True) if row.startswith('| Memory |'))
+        for bad in [self.body.replace(line, ''), self.body + line,
+                    self.body.replace('| Memory |', '| Unknown |'),
+                    self.body.replace('a' * 40, 'main'),
+                    self.body.replace('raw.githubusercontent.com', 'example.invalid'),
+                    self.body.replace('/assets/root.png', '/assets/../root.png'),
+                    self.body + '\n' + self.body]:
+            with self.subTest(body=bad), self.assertRaises(pub.SetupError):
+                self.builder.icon_defaults(*self.fixture(bad))
+
+    def test_stale_or_unbound_original_cannot_generate_defaults(self):
+        manifest, source = self.fixture()
+        for bound in [None, {'revision': '0' * 64, 'edition': 'fixture'}]:
+            manifest['artifacts'][0]['original'] = bound
+            with self.subTest(bound=bound), self.assertRaises(pub.SetupError):
+                self.builder.icon_defaults(manifest, source)
+
+    def test_ambiguous_or_wrong_original_identity_cannot_generate_defaults(self):
+        for change in [lambda a: a.update(notion='b' * 32),
+                       lambda a: a.update(owner='git'),
+                       lambda a: a.update(public_writer='git'),
+                       lambda a: a['original'].update(notion='b' * 32)]:
+            manifest, source = self.fixture()
+            change(manifest['artifacts'][0])
+            with self.assertRaises(pub.SetupError):
+                self.builder.icon_defaults(manifest, source)
+        manifest, source = self.fixture()
+        manifest['artifacts'].append(copy.deepcopy(manifest['artifacts'][0]))
+        with self.assertRaises(pub.SetupError):
+            self.builder.icon_defaults(manifest, source)
+
+    def test_real_projection_matches_bound_guide_and_hand_edit_blocks_reader_before_git(self):
+        from unittest.mock import patch
+        manifest, source = pub.load_manifest(), pub.DirSource(ROOT)
+        expected = self.builder.icon_defaults(manifest, source)
+        self.assertEqual(source.files(self.builder.ICON_DEFAULTS), {self.builder.ICON_DEFAULTS: expected})
+        original_files = source.files
+        source.files = lambda path: ({path: b'{"icons":{}}\n'} if path == self.builder.ICON_DEFAULTS
+                                     else original_files(path))
+        with patch.object(pub, 'DirSource', return_value=source), \
+                patch.object(pub, 'GitSource', side_effect=AssertionError('Git must not be read')):
+            with self.assertRaisesRegex(pub.SetupError, 'Packaged icon defaults differ'):
+                self.builder.build()
+
 class MarkdownReader(unittest.TestCase):
     def read(self, **response):
         self.requests = []

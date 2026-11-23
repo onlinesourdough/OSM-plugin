@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.36.3 — 2026-11-23
+
+- Include the existing approved root and database icon URLs as a small local
+  resource generated from the bound Notion guide. New-home setup can resolve
+  them without a public-guide reader; existing icons remain the owner's choice.
+- Refuse a missing, hand-edited or ambiguous icon projection during the reader
+  build. This improves URL lookup availability; image hosting, native database
+  metadata and visible rendering still require their own checks.
+
 ## 0.36.2 — 2026-11-23
 
 - Maintain the accepted Setup plan from the start through handback, with verified

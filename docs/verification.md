@@ -3690,3 +3690,79 @@ it is not a timed 0.36.2 cycle. The observed 23 November 0.35.3 timed cycle keep
 its original version and evidence boundary. Clean client onboarding, the matched
 #72 pilot and remaining #73 behavior cases are not passed by these delivery and
 configuration receipts.
+
+## 23 November — bounded 0.36.2 functional checks and local icon candidate
+
+A preregistered clean Sol/high diagnostic on unchanged released 0.36.2 completed
+the basic customer setup and fresh-use slice: four native stores, an explicit
+empty Content choice, a confirmed business profile, canonical host pointer and
+fresh ordinary retrieval. Actual Gemini 4 Neon High and independent peer review
+accepted that bounded result, retaining the undisclosed cosmetic icon gap and
+all earlier low-effort/failed attempts. This is not a causal effort comparison.
+The current evidence is in [#69](https://github.com/onlinesourdough/OSM-plugin/issues/69#issuecomment-7107098734).
+
+Follow-ups reused that unchanged fictional home. Setup replay preserved known
+record bodies and edit times without writes; its initial SQL quota gap remains
+recorded. After an ordinary customer declined a trial, the agent used three
+saved views plus direct Knowledge/Memory fetches, with no upgrade or writes.
+An owner correction updated the existing Knowledge body and Summary, retained
+the old value in one dated Memory decision, and was retrieved correctly in a
+fresh chat. A same-chat conditional repeat wrote nothing; that is not by itself
+cross-session capture deduplication. A fresh selected-source task used a
+controlled change in the original CSV without sending or copying it to Notion.
+Source/draft correctness is controller-attested: originals and the complete
+derived draft were withheld from Council. No source-only value is published here.
+
+Actual Neon High reviewed the 148,625-byte frozen follow-up/source packet
+(`bd961a4e1470a86cbae94f43cfe2a33acac8bea21b754590ad63f7a0d1c6a5a6`)
+in 142.25 seconds model time, with zero tool-step attempts or executed operations.
+It accepted the bounded functional cases and the separate unpublished icon
+source candidate; peer review independently checked the actual bound guide and
+generator. The retained packet overstates the view count as four: the actual
+ledger has three views plus exact page fetches, as recorded above. Same-chat
+no-op and the isolated native history API transition are not production Dreaming
+pickup proof. The historical 0.35.3 timed cycle remains separate valid evidence;
+no new timer, RunNow, private pin or checkpoint change was made for these tests.
+
+The 0.36.3 candidate projects the existing Notion-authored icon table into a lazy
+local resource. A separate disposable scratch page proved the official page
+icon mutation/readback; it did not repair the client home or qualify database
+icons. The generator and normal reader build refuse ambiguous or stale source
+and hand-edited projections. Twenty-one source-parity tests and baseline package
+validation passed; the representative static route remains 42,766 bytes against
+42,793. The new conditional icon resource is additional data, not a runtime token
+or cost-saving claim. All eight selected private method files remain byte-equal
+to released 0.36.2. Metadata, final source binding/build, full CI, exact artifact
+review, actual release/public delivery/install and the affected clean narrow-policy
+and Content-deferral trial remain pending at this source checkpoint. #69/#72/#73
+remain open; the matched pilot has not started.
+
+The first full 0.36.3 check stopped at the shipped-binding guard: the generated
+file's public provenance link needed the same narrow treatment as the existing
+labelled public-guide link. Its initial test-only adaptation then hit a missing
+`original` key in the deliberately stripped rehearsal manifest. Both failures
+are retained. The final test reads the bound manifest afresh, verifies the exact
+source page and revision, and exempts only that provenance field; all other
+recorded-target and private-ID checks remain. Independent exact-delta review
+accepted it. The targeted rerun passed 72 publisher rehearsals and all 75
+mutation controls; this is fixture evidence, not live publication.
+
+All 21 local check commands then completed successfully on `0151f655b650cd5c30253a8175ce8bce86558c8a`:
+the fourteen Python groups (including 21 source-parity and 23 native-publisher
+cases), 16 anonymous-reader checks, 84 adapter checks, offline reconciliation,
+guide generation and an exact runtime rebuild. The instruction source is
+`277fdb5ba2c1b3747cc2c2cabe1b93521740a641`; all 78 packaged skill/resource files
+match it. The additional lazy icon resource is 1,004 bytes. All eight guide
+original bodies are unchanged; their edition binding uses the retained qualified
+API snapshot read at 15:25:50 UTC. The actual stable release remains 0.36.2 until
+the separate reviewed tag, publication and live qualification steps complete.
+
+A later all-kind guest-file inventory also found five internal guardian traces,
+including two from earlier trials. Prior exact parent-chat deletions remain
+verified, but the initial local reset was not exhaustive for legacy guardian
+rollouts. No reads of those legacy IDs were observed in the supplied subject
+action ledger; their effect on inherited context is not established. This
+narrows the reset claim without discarding the concrete functional readbacks.
+It is not a clean-room or matched-comparison certificate. The next reset must
+cover the complete owned parent/child inventory and verify global local rollout
+absence; account/cloud isolation remains a separate limit.
