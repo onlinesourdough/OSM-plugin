@@ -13,9 +13,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.36.2",
-      "tag": "v0.36.2",
-      "commit": "197fdb19ddfc2a51c3394a7381642b225baa1747",
+      "label": "v0.36.3",
+      "tag": "v0.36.3",
+      "commit": "b5d3babd5f9a8cec65b336fa76b4c7bf8b0a4bff",
       "approved": true
     },
     "main-working": {
@@ -776,10 +776,10 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content · optional extension",
+        "title": "Content \u00b7 optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
-        "edition": "Optional Content · method 0.13.1; retained templates 0.10.0",
+        "edition": "Optional Content \u00b7 method 0.13.1; retained templates 0.10.0",
         "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
         "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1",
         "body_origin": "Exact projection derived from the separately released Content source; not an independent API capture. The core publisher never writes this page."
