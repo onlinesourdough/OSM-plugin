@@ -31,8 +31,8 @@ Use the [procedure index](../osm/index.md) for earlier names and package recover
 
 ## One path
 
-Setup conducts the whole flow. Data & Context, Manage Data & Context and Manage
-Skills do not call back into Setup; Interview's new-connection route is separate:
+Setup leads Data & Context, Manage Data & Context and Manage Skills; nothing
+calls back into Setup. Interview's new-connection route is separate:
 
 1. **Connection and access.** Inspect exposed connections first and reuse a
    working connection or recorded choice. For new ordinary setup, check the
