@@ -1,5 +1,21 @@
 # Verification
 
+## 23 November 2026 — 0.36.1 stable source delivery
+
+[Tag CI 45174253960](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45174253960)
+published [0.36.1](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.36.1)
+at 12:27:55 UTC, source <code>f7bb961d127636ec80a10d8eb080d61a52d76664</code>.
+Its tree is exactly the independently reviewed 7de9fb2 candidate. The downloaded
+6,418,415-byte ZIP has SHA-256
+<code>2b61de5f363e7fc78ed34a6a49d8052466641c6314f7e853759c29838f8923eb</code>;
+GitHub's digest, sidecar, complete UTC archive reproduction and all 327 file
+contents/executable bits agree. Pretag automatic parity
+[45173886925](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45173886925)
+checked the eight guide originals and the then-bound 0.36.0 packets; that is
+not delivery of the newly bound 0.36.1 packets. Post-tag packet/public repeat,
+native installation and the reset uncoached customer journey remain separate
+pending observations. The failed 0.36.0 attempt below remains evidence.
+
 ## 23 November 2026 — Setup continuation repair candidate 0.36.1
 
 The clean public-tag 0.36.0 customer attempt used four ordinary turns on the
