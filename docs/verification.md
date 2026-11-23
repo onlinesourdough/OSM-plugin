@@ -1,6 +1,6 @@
 # Verification
 
-## 23 November 2026 — combined human-output and creator-credit candidate 0.36.0
+## 23 November 2026 — combined human-output and creator-credit source 0.36.0
 
 The owner selected PR #142 for integration with the creator credit in PR #143
 before the next customer journey. The 0.35.4 preparation was never tagged,
@@ -36,6 +36,34 @@ publication and native adoption need subsequent readbacks.
 No installed-host or customer-journey pass is claimed. Public packets remain on
 actual v0.35.3 until the accepted release is published and deliberately bound;
 private Dreaming adoption requires the changed and transitive references.
+
+### Stable source delivery
+
+[Tag CI 45161329999](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45161329999)
+published [OSM 0.36.0](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.36.0)
+on 23 November at 11:03:05 UTC, source
+<code>f58bd6ede16b20297b1dc457366ed3687a10eac6</code>.
+The downloaded source ZIP is 6,415,405 bytes, SHA-256
+<code>f440e6aa5e9e1d4813c96d3341ed7c5523c7681cda0482afad03b2acf5ff3a8d</code>.
+GitHub's digest, sidecar, UTC archive reconstruction and all 327 file contents
+and executable modes agree.
+
+Pretag [45160694588](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45160694588)
+matched all eight guide originals and verified the seven then-released 0.35.3
+API/public packets and catalogue with zero writes. The post-tag binding now
+selects actual 0.36.0; its new packet delivery, public repeat and native adoption
+still require separate receipts. No customer-journey or benchmark pass is
+established by this release.
+
+The first post-tag PR check
+[45162653884](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45162653884)
+failed in the next-release publisher fixture: it tried to replace a hard-coded
+Council 3.1.1 version after the binding advanced to Council 3.1.2. The fixture
+now derives both versions from its actual bound packet and requires exactly
+one replacement. Its history, conflict, stale-run and no-write assertions are
+unchanged. All 23 native-publisher fixture scenarios pass locally after this
+repair. No publisher implementation, released skill or runtime file changed;
+new CI and live packet delivery remain separate checks.
 
 ## 22 November 2026 — onboarding repair candidate 0.35.2
 
