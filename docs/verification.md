@@ -1,5 +1,39 @@
 # Verification
 
+## 23 November 2026 — human page format, source candidate 0.36.0
+
+The candidate keeps seven skills. Log 1.3.0, Prime 1.2.2 and Council 3.1.2
+point at one shared writing reference. Before a Notion page is created or
+revised, the agent reads that destination's schema, template and one or two
+recent comparable pages and mirrors them. The page and the reply that hands
+work back lead with the useful point. A guide the destination already treats
+as long may stay long. Human Writing still owns outward prose.
+
+This is source proof only. The package checks below passed on this candidate.
+No installed Codex, Claude Code, Cursor, Gemini or Grok Bot session was run,
+so native selection and page shape are not claimed.
+
+- `python3 tests/validate.py --baseline origin/main` (baseline `8f204a6d215c91ee48edf926a4571367950ebcc6`)
+- `python3 tests/responsibility-rehearsal.py`
+- `python3 tests/context-footprint.py`
+- `python3 tests/documentation-rehearsal.py`
+- `python3 tests/skill-version-rehearsal.py`
+- `python3 tests/onboarding-rehearsal.py`
+- `python3 tests/layout-rehearsal.py`
+- `python3 tests/continuity-rehearsal.py`
+- `python3 tests/context-architecture-rehearsal.py`
+- `python3 tests/publisher-rehearsal.py`
+- `python3 tests/publisher-parity.py`
+- `python3 tests/native-publisher-rehearsal.py`
+- `python3 tests/public-browser-reader.py`
+- `node --test docs-publisher/public-browser-read.test.mjs`
+- `python3 tests/consumer-selection-rehearsal.py`
+- `python3 docs-publisher/publisher.py reconcile --check`
+- `python3 docs-publisher/build-guide.py`, then `git diff --exit-code -- docs-publisher/public-guide.json` against the rebuilt reader. The reader skill source is `6523f00685d6dc15180a54dc88fb12e98ee06a74`. A second build produced the same file.
+- `npm test --prefix apps/notion` (84 passing) and `npm run build --prefix apps/notion`. A second build produced the same `runtime/notion` bytes.
+
+The released Notion skill packets stay on v0.35.3 until a reviewed tag. This reader bind is the local public-guide payload, not a publication.
+
 ## 22 November 2026 — onboarding repair candidate 0.35.2
 
 A native disposable-client run on 0.35.1 established fresh-chat Prime and
