@@ -21,15 +21,17 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
   A new root defaults to the untranslated title "AI operating model";
   the owner may choose any title. Identify the root by its stable ID and its role,
   never by title.
-- **The root is the one agent entry.** It holds ONE Data and Context Definition
-  YAML block and the useful native child destinations. Put the purpose, exact
+- **The root is the one agent entry.** It holds one active Data and Context
+  Definition and the useful native child destinations. YAML is the default
+  representation; an equivalent discoverable section or existing role/query map
+  is valid. Put the purpose, exact
   destinations and write policy in the definition. Name any separate required
   operating policy by exact ID, and preserve existing owner instructions.
   Template:
   [data-and-context-root](../assets/data-and-context-root.md).
 - **No extra stores.** No separate mandatory model page, explainer hub,
   architecture database, duplicate definition or empty compatibility scaffolding.
-  Exactly one active definition exists per root; a second active YAML is a
+  Exactly one active definition exists per root; competing active gateways are a
   conflict to reconcile, never a fallback.
 - **Small entry, deep references.** Detailed semantics, source contracts, field
   dictionaries, writing/recovery and progress rules sit behind references (this
@@ -184,7 +186,7 @@ and what must never set them, is defined once in
 
 ### Structured and finance semantics
 
-These live in referenced domain contracts, not in the entry YAML: units,
+These live in referenced domain contracts, not in the entry definition: units,
 currency and sign; gross versus net; dates and timezone; status mappings that
 keep the original value; null semantics (unknown, not applicable, zero and the
 date-only rule above are different); join keys and cardinality; metric formula,
@@ -483,7 +485,7 @@ An excerpt from an outside original needs an explicitly selected, qualified
 read-only source/collector route with its own actual scope. Each excerpt records
 source and target identity, original authority, provenance, observed revision,
 source date, meaning, uncertainty, chosen coverage and refresh state. No
-whole-library mirror or competing full copy. A link recorded in the YAML grants
+whole-library mirror or competing full copy. A link recorded in the definition grants
 nothing.
 
 ## Access roles

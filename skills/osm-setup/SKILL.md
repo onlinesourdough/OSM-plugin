@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.3.3"
+  version: "3.3.4"
 ---
 
 # OSM:setup
@@ -12,6 +12,14 @@ useful first task. Reuse answers; resume at the next gap. Explain the useful
 result before unfamiliar questions; use [Setup](references/setup.md) for the welcome. Use the conversation's
 language; on a neutral resume, use its recorded preference or working content,
 not the fixed English title, to choose the language.
+
+Maintain the accepted setup plan: known answers, verified work, open decisions
+or proof gaps, and the next action. Use the host's progress control or one
+lightweight task-evidence checklist; Codex follows [tracking](references/codex-tracking-acceptance.md).
+On resume, reuse that state and dated proof. Before handing back, reconcile it
+with [acceptance](references/setup.md#acceptance-and-continuity), then continue
+authorised work or ask the next material question. A completed subtask is not a
+completed plan. Do not create a goal without authority.
 
 Codex **Set up**, the **OSM:setup** skill picker entry, or a request naming OSM
 starts this skill. Bare `/setup` can select another plugin; do not claim that
@@ -79,7 +87,13 @@ outside that chain):
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
    assumed. Save the thin host pointer in the host's persistent instruction
    file or, if the host has none, in its built-in persistent memory or standing
-   instructions. Add it only at the intended scope.
+   instructions. Instantiate the [bridge](../osm-data-context/assets/bridge.md)
+   with the verified root and check its shared lines before saving; refer to
+   the definition for policy instead of copying it. For a home selected as the
+   ordinary-chat default, retain Always Prime: Prime itself excludes independent
+   work before a Notion read. Restrict the pointer's placement only when the
+   owner's selected scope requires it. Preserve unrelated instructions and
+   existing account or dedicated-route choices.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)
    serves manual and task-time curation, and [Dreaming](../osm-dreaming/SKILL.md)
    is the entry for reflection across recent work and scheduled upkeep. Setting
@@ -87,13 +101,12 @@ outside that chain):
    explicit request and exact authority. Record only
    history and source routes that are actually readable;
    an unavailable or unqualified route stays an explicit gap.
-7. **Finish the task and carry setup forward.** Deliver the agreed result,
-   then continue unfinished setup within authority or ask one concrete missing
-   decision. A useful draft or an honest “not yet configured” is not the end
-   of onboarding. Keep the foundation, continuing write policy and pointer
-   choices live; a narrow task/source grant does not settle them. Show the
-   brief snapshot for confirmation and the next action. Honour an actual pause
-   or decline. Check relevant [setup scenarios](references/setup-scenarios.md);
+7. **Check the whole accepted plan.** Deliver the agreed result and verify the
+   foundation, continuing write policy, pointer and brief snapshot confirmation.
+   An explicitly chosen narrow policy is valid; a task grant alone does not
+   settle future writes. Continue remaining authorised work or ask one concrete
+   unresolved choice. Honour a pause, decline or capability limit with its exact
+   remaining state and next action. Check relevant [setup scenarios](references/setup-scenarios.md);
    report unavailable proof. Unchanged resumes need only their task checks.
 
 Use [setup](references/setup.md) for readiness and acceptance and

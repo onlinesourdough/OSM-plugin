@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.36.2 — 2026-11-23
+
+- Maintain the accepted Setup plan from the start through handback, with verified
+  work, genuine open choices and the next action. Reuse task evidence when a
+  native progress control is absent; no extra file or goal is required.
+- Instantiate the shared host pointer instead of rewriting its rules. Prime
+  handles independent work before opening the home; preserve built-in tools,
+  the selected account and explicit dedicated routes.
+- Keep one active Data and Context Definition, with YAML as its default
+  representation and compatible existing structured gateways still valid.
+  This clarifies the contract; fresh native adherence remains a separate check.
+
 ## 0.36.1 — 2026-11-23
 
 - Keep onboarding active after the first useful task: continue the next
