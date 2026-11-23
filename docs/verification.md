@@ -34,6 +34,8 @@ so native selection and page shape are not claimed.
 
 The released Notion skill packets stay on v0.35.3 until a reviewed tag. This reader bind is the local public-guide payload, not a publication.
 
+A review of `d4eef5f` asked to keep home-checkpoint intake off an ordinary authorized page. The follow-up keeps steps 1, 2, 4 and 6 on a home checkpoint, and uses the format contract plus read-back for every other authorized page. The same source checks were run again on that follow-up, and the reader skill source moved to `f7679c385b794c0fc3bef1f59fd379bcfda64ef6`.
+
 ## 22 November 2026 — onboarding repair candidate 0.35.2
 
 A native disposable-client run on 0.35.1 established fresh-chat Prime and
