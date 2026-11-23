@@ -50,9 +50,9 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.36.0 is the latest stable release. The retained v0.34.0 and v0.35.2 source tags did not publish GitHub Releases. |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.36.1 is the latest stable release. The retained v0.34.0 and v0.35.2 source tags did not publish GitHub Releases. |
 
-v0.36.0 is the latest reviewed source tag and published stable release, at `f58bd6ede16b20297b1dc457366ed3687a10eac6`. Its release check and GitHub publication passed. The retained v0.35.2 source tag stopped before publication because its changelog entry was absent; no 0.35.2 GitHub Release was created. The 0.35.4 preparation was not tagged or published; it is included in 0.36.0. The manifest binds the immutable 0.36.0 source and seven skill rows. Native adoption, Notion source-packet delivery and public readback are
+v0.36.1 is the latest reviewed source tag and published stable release, at `f7bb961d127636ec80a10d8eb080d61a52d76664`. Its release check and GitHub publication passed. The retained v0.35.2 source tag stopped before publication because its changelog entry was absent; no 0.35.2 GitHub Release was created. The 0.35.4 preparation was not tagged or published; it is included in 0.36.0. The manifest binds the immutable 0.36.1 source and seven skill rows. Native adoption, Notion source-packet delivery and public readback are
 recorded separately in [verification](verification.md).
 
 ### Documentation consumers
