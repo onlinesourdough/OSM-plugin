@@ -24,7 +24,7 @@
       "commit": "resolved-at-run"
     },
     "guide": {
-      "label": "2026-11-22.3",
+      "label": "2026-11-23.1",
       "state": "Notion-authored originals bound per page and package edition; read times and content revisions are recorded on each artifact.",
       "owner": "notion"
     },
@@ -772,14 +772,14 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "2d3245a4103b2ea31e42ab072c81aa76642ce79c",
+    "skill_source": "fbb24d03f3c74fd5013753243a68544c865e95bc",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content · optional extension",
+        "title": "Content \u00b7 optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
-        "edition": "Optional Content · method 0.13.1; retained templates 0.10.0",
+        "edition": "Optional Content \u00b7 method 0.13.1; retained templates 0.10.0",
         "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
         "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1",
         "body_origin": "Exact projection derived from the separately released Content source; not an independent API capture. The core publisher never writes this page."
