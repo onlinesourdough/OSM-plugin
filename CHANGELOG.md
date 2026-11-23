@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.35.4 — 2026-11-23
+
+- Add a brief creator credit to first-time Setup and an optional route to
+  The Fermentary for hands-on help after a useful result.
+- Identify Gustav Online and onlinesourdough in the README and public Setup
+  guide. Keep onboarding resumable and customer context free of promotional copy.
+
 ## 0.35.3 — 2026-11-22
 
 - Deliver the reviewed conversational onboarding repair: understand the business

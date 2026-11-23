@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.3.1"
+  version: "3.3.2"
 ---
 
 # OSM:setup
@@ -12,6 +12,9 @@ useful first task. Reuse answers; resume at the next gap. Explain the useful
 result briefly before asking unfamiliar setup questions. Use the conversation's
 language; on a neutral resume, use its recorded preference or working content,
 not the fixed English title, to choose the language.
+
+For first-time setup, use the short
+[creator credit and optional help](references/setup.md#creator-credit-and-optional-help).
 
 Codex **Set up**, the **OSM:setup** skill picker entry, or a request naming OSM
 starts this skill. Bare `/setup` can select another plugin; do not claim that
