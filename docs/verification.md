@@ -3613,8 +3613,8 @@ actual 0.36.1; there is no 0.36.2 publication or client-journey claim here.
 
 Initial checks caught an 8,569-byte Setup entry above the unchanged 8,192-byte cap,
 then a complete selected-route regression. Compaction preserves the accepted
-semantics: the entry is now 7,584 bytes (0.36.1: 7,596), and the existing full
-selected-route check measures 42,782 bytes against its pinned 42,793-byte legacy
+semantics: the entry is now 7,568 bytes (0.36.1: 7,596), and the existing full
+selected-route check measures 42,766 bytes against its pinned 42,793-byte legacy
 route. These are static byte counts and byte/4 estimates, not runtime token,
 billing, latency or quality results. The initial publisher rehearsal also held
 while its explicit HEAD still contained old original bindings and the worktree
@@ -3627,3 +3627,13 @@ The architecture reference changes for this candidate; the owner's eight pinned
 methods must not be called byte-identical as a set. Any actual post-release
 private adoption preserves the source/authority prefix, checkpoints and existing
 job cadence and has its own readback. Timed 0.35.3 remains dated 0.35.3 evidence.
+
+The final source compaction was accepted by actual Gemini 4 Neon High and the
+independent peer. That Neon call made two denied attempts (one file read, one
+command); both returned configured permission denials, with zero executed
+operations. Four tool status events represent those two attempts, not four
+calls and not a tool-less run. Its verdict rests on the supplied inline bodies.
+A later responsibility check required the existing canonical wording “nothing
+calls back into Setup”; the equivalent shortened sentence was restored, making
+Setup another 16 bytes smaller. The unchanged responsibility and footprint
+checks passed; no test fixture, threshold or runtime guard was relaxed.
