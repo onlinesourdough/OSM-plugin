@@ -3746,3 +3746,23 @@ source page and revision, and exempts only that provenance field; all other
 recorded-target and private-ID checks remain. Independent exact-delta review
 accepted it. The targeted rerun passed 72 publisher rehearsals and all 75
 mutation controls; this is fixture evidence, not live publication.
+
+All 21 local check commands then completed successfully on `0151f655b650cd5c30253a8175ce8bce86558c8a`:
+the fourteen Python groups (including 21 source-parity and 23 native-publisher
+cases), 16 anonymous-reader checks, 84 adapter checks, offline reconciliation,
+guide generation and an exact runtime rebuild. The instruction source is
+`277fdb5ba2c1b3747cc2c2cabe1b93521740a641`; all 78 packaged skill/resource files
+match it. The additional lazy icon resource is 1,004 bytes. All eight guide
+original bodies are unchanged; their edition binding uses the retained qualified
+API snapshot read at 15:25:50 UTC. The actual stable release remains 0.36.2 until
+the separate reviewed tag, publication and live qualification steps complete.
+
+A later all-kind guest-file inventory also found five internal guardian traces,
+including two from earlier trials. Prior exact parent-chat deletions remain
+verified, but the initial local reset was not exhaustive for legacy guardian
+rollouts. No reads of those legacy IDs were observed in the supplied subject
+action ledger; their effect on inherited context is not established. This
+narrows the reset claim without discarding the concrete functional readbacks.
+It is not a clean-room or matched-comparison certificate. The next reset must
+cover the complete owned parent/child inventory and verify global local rollout
+absence; account/cloud isolation remains a separate limit.
