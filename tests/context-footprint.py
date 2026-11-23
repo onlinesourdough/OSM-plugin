@@ -244,6 +244,9 @@ def main():
         "skills/osm-manage-data-context/references/operating.md",
     )) + startup
     print(f"conditional_notion_owner_route_bytes={notion}")
+    writing = ROOT / "skills/osm-manage-data-context/references/human-output.md"
+    print(f"conditional_notion_write_format_extra_bytes={writing.stat().st_size}")
+    print("NOTE: authorized Notion writes add the format reference; read-only/non-Notion tasks do not. This new capability has no matched legacy route or savings claim")
     contract = ROOT / "skills/osm-data-context/references/home-contract.md"
     print(f"conditional_context_setup_contract_extra_bytes={contract.stat().st_size}")
     print("NOTE: Notion guide, selected cloud sources and MCP tool schemas add workload-dependent bytes; no matched legacy or cost-saving claim")

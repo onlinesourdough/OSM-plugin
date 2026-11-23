@@ -8,6 +8,11 @@ request, a task-time checkpoint and the existing scheduled invocation; the
 scheduled job's prompt is its mandate, and nothing here creates or edits a
 schedule.
 
+Before writing any Notion page or database row, in this home or anywhere else
+the task authorizes, follow [Writing for a person](references/human-output.md).
+Match the destination's existing format. The lifecycle below still decides
+what may be kept and how a current record is revised.
+
 Fetch the root entry once per session and follow the
 [operating route](references/operating.md). Resolve the home within this task's
 owner or client scope; a consultant's client task never changes their personal

@@ -50,10 +50,13 @@ Avoid transcripts, task logs and copies of changing records. Detailed work
 belongs in the chosen project or document destination.
 
 Before writing, fetch the target, inspect its schema/content and reconcile the
-same fact or source identity. Revise the one current entry for the topic and
-scope in place, keeping its section and Summary coherent and its material prior
-reasons as labelled, dated history; never accumulate contradictory copies. A
-duplicate current Key is an explicit conflict, not a blind merge. Preserve ambiguity when evidence cannot
+same fact or source identity. Follow [Writing for a person](human-output.md)
+for the destination's format and proportional, authorised comparison reads.
+For managed home records, revise the one current entry
+for the topic and scope in place, keeping its section and Summary coherent and
+its material prior reasons as labelled, dated history; never accumulate
+contradictory copies, and treat a duplicate current Key as an explicit
+conflict, not a blind merge. Preserve ambiguity when evidence cannot
 resolve it. Read back the result. A known successful operation is not repeated;
 an uncertain result is inspected first, and a retry reuses the same identity. With no transactional compare-and-swap,
 re-fetch before mutation and stop a conflicting write rather than claiming a

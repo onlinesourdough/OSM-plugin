@@ -9,7 +9,7 @@ metadata:
 
 Conduct onboarding from a connected Notion workspace to a verified home and a
 useful first task. Reuse answers; resume at the next gap. Explain the useful
-result briefly before asking unfamiliar setup questions. Use the conversation's
+result before unfamiliar questions; use [Setup](references/setup.md) for the welcome. Use the conversation's
 language; on a neutral resume, use its recorded preference or working content,
 not the fixed English title, to choose the language.
 

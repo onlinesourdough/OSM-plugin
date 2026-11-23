@@ -28,6 +28,9 @@ work and selected sources between tasks. Your Notion home keeps the definition
 and databases. The short host instructions link to it and prefer the host's
 built-in workspace and tools, including its side panel where available.
 
+Authorised Notion pages and their accompanying replies use the destination's
+useful format, with the point first and relevant evidence kept readable.
+
 That foundation can support different tasks and AI apps. You can reuse what
 already works, add context when a real task needs it and improve the methods as
 you learn. Start with one useful task rather than organizing everything first.

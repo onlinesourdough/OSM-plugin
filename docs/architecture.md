@@ -14,14 +14,16 @@ contains no private routes.
 | --- | --- |
 | Setup | Connect the selected route and establish or reuse a useful home |
 | Prime | Read the definition and retrieve context the task needs |
-| Log | Save lasting decisions, corrections and learning at checkpoints |
+| Log | Save lasting decisions, corrections and learning at checkpoints, in the format the destination already uses |
 | Dreaming | Review recent and unfinished work, check selected sources and maintain context between sessions |
 | Interview | Explore material uncertainty in the goal when needed |
 | Human Writing | Write for the reader while preserving the author's voice and facts |
 | Council | Ask another agent for a review, second opinion or bounded contribution |
 
 Prime starts a configured session. Log runs at meaningful checkpoints or on
-request. Dreaming uses a person or an existing selected daily caller; it
+request. A shared writing reference serves authorised Notion pages and their
+accompanying replies across these methods; it adds no global Log hook.
+Dreaming uses a person or an existing selected daily caller; it
 creates no timer. The other skills are selected when useful. The host and
 project own ordinary implementation, testing and delivery methods.
 

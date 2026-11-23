@@ -2,7 +2,7 @@
 name: osm-council
 description: Ask another agent or model for an independent review, a second opinion or bounded work with a scoped delegation brief.
 metadata:
-  version: "3.1.1"
+  version: "3.1.2"
 ---
 
 # OSM:council
@@ -39,7 +39,10 @@ keep the work local.
   Honor each source's permitted processing and retention locations. An access
   grant alone does not authorize copying restricted records into the brief.
 - **Authority.** Name allowed tools, edits and destinations. Keep writes to
-  owner Memory with the lead. For implementation or existing tracked work,
+  owner Memory with the lead. A Notion page the worker creates or revises
+  follows [Writing for a person](../osm-manage-data-context/references/human-output.md):
+  match that destination's existing format, and return a page a person can read.
+  For implementation or existing tracked work,
   follow the [native tracking rules](../osm/references/lifecycle.md#native-tracking-sop)
   and verify the applicable workspace, branch, instructions, permissions and
   goal linkage before edits. Resolve mismatches before work proceeds. Keep
