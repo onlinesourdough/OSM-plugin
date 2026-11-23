@@ -38,7 +38,7 @@ their source, engineering standards, design and delivery configuration.
 
 ## Why I built this
 
-I'm [Gustav](https://gustavonline.com/), the founder of
+I'm [Gustav Online](https://gustavonline.com/), the founder of
 [onlinesourdough](https://onlinesourdough.com/).
 
 I built The Onlinesourdough Method to give AI assistants a useful foundation:

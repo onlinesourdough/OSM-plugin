@@ -13,9 +13,6 @@ result briefly before asking unfamiliar setup questions. Use the conversation's
 language; on a neutral resume, use its recorded preference or working content,
 not the fixed English title, to choose the language.
 
-For first-time setup, use the short
-[creator credit and optional help](references/setup.md#creator-credit-and-optional-help).
-
 Codex **Set up**, the **OSM:setup** skill picker entry, or a request naming OSM
 starts this skill. Bare `/setup` can select another plugin; do not claim that
 generic command is OSM's entry or that ordinary Notion setup needs an API key.
