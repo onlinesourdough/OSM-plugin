@@ -23,7 +23,8 @@ reviewed learning. It does not upload all your data, connect every account or
 grant access merely because you installed a plugin.
 
 Prime finds the smallest relevant context for a task,
-Log saves lasting changes at a useful checkpoint, and Dreaming checks recent
+Log saves lasting changes at a useful checkpoint and writes Notion pages in the
+format those pages already use, and Dreaming checks recent
 work and selected sources between tasks. Your Notion home keeps the definition
 and databases. The short host instructions link to it and prefer the host's
 built-in workspace and tools, including its side panel where available.
@@ -57,7 +58,7 @@ maintain the context it needs.
 | --- | --- |
 | Connect a Notion home and complete a first task | Setup |
 | Retrieve relevant context in a new session | Prime |
-| Save a lasting decision at a useful checkpoint | Log |
+| Save a lasting decision at a useful checkpoint, in the format the page already uses | Log |
 | Review recent work and maintain context between tasks | Dreaming |
 | Explore an unresolved goal or decision | Interview |
 | Draft or edit user-facing prose | Human Writing |

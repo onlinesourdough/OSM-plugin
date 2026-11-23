@@ -36,6 +36,9 @@ context homes, and nothing here sets up a folder, vault or other provider home.
   anything onto them, and keep the owner's local field mappings as small owner
   configuration. The [schema contract](references/notion/schema-and-templates.md)
   and the architecture's record lifecycle carry the rest.
+- A page or row written while engineering the home follows
+  [Writing for a person](../osm-manage-data-context/references/human-output.md).
+  Match an existing database or page area before adding structure.
 - Follow [Notion setup](references/notion/setup.md) and its
   [acceptance](references/notion/acceptance.md) for a new or existing workspace,
   the [root template](assets/data-and-context-root.md) for the entry, and the

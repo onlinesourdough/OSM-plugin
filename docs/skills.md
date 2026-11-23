@@ -14,7 +14,7 @@ is available at [v0.33.0](https://github.com/onlinesourdough/OSM-plugin/blob/v0.
 | [OSM:human-writing](../skills/osm-human-writing/SKILL.md) | Default prose drafting and editing that preserves facts, uncertainty and the user’s voice |
 | [OSM:interview](../skills/osm-interview/SKILL.md) | Explore context, challenge assumptions and find direction when requested or materially needed at the start; no routine interruption of execution |
 | [OSM:prime](../skills/osm-prime/SKILL.md) | Start with the smallest relevant context in the selected scope |
-| [OSM:log](../skills/osm-log/SKILL.md) | Save lasting changes at a meaningful checkpoint or on request |
+| [OSM:log](../skills/osm-log/SKILL.md) | Save lasting changes at a meaningful checkpoint or on request, and write any Notion page in the destination's existing format |
 | [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Review changed work and selected sources, repair confirmed context errors and surface open progress between sessions, manually or through an authorized native schedule |
 | [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume the Notion Data & Context foundation, from access to a useful first task |
 | [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent for a read-only review or delegate bounded work with a scoped brief |

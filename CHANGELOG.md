@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.36.0 — 2026-11-23
+
+- When an agent writes any Notion page or database row, it first reads that
+  destination's schema, template and recent pages and mirrors their structure,
+  names, properties and length.
+- Log and Manage Data & Context share a short output contract for those pages
+  and for the reply that hands work back: the useful point first, plain
+  language, and no log of the agent's own steps. A guide the destination
+  already treats as long may stay long.
+- Human Writing still owns outward-facing prose. The contract is a reference
+  inside the existing write path, so the package still exposes seven skills
+  and no host-specific route.
+
 ## 0.35.3 — 2026-11-22
 
 - Deliver the reviewed conversational onboarding repair: understand the business

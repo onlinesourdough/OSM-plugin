@@ -92,7 +92,8 @@ from. Check that the new chat can find the decision and its evidence.
 ## Keep the setup useful
 
 Prime loads the context a task needs. Log retains useful decisions at
-checkpoints and when you ask. Optional Dreaming checks recent work and due
+checkpoints and when you ask, and writes Notion pages in the format those
+pages already use. Optional Dreaming checks recent work and due
 sources between sessions, corrects supported errors and leaves live values in
 their source systems.
 

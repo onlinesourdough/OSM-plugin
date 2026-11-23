@@ -50,7 +50,11 @@ Avoid transcripts, task logs and copies of changing records. Detailed work
 belongs in the chosen project or document destination.
 
 Before writing, fetch the target, inspect its schema/content and reconcile the
-same fact or source identity. Revise the one current entry for the topic and
+same fact or source identity. Before choosing a shape, follow
+[Writing for a person](human-output.md): read the template and one or two
+recent comparable pages, and mirror their structure, names, properties and
+length. This applies to any Notion page or database the task writes, including
+one outside the home. Revise the one current entry for the topic and
 scope in place, keeping its section and Summary coherent and its material prior
 reasons as labelled, dated history; never accumulate contradictory copies. A
 duplicate current Key is an explicit conflict, not a blind merge. Preserve ambiguity when evidence cannot

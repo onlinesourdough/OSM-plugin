@@ -69,6 +69,17 @@ PINS = (
     ("classification in the contract", "osm-data-context/references/architecture.md",
      "classified durable, provisional or source-only"),
     ("no call back into Setup", "osm-setup/SKILL.md", "nothing calls back"),
+    ("match existing format", "osm-manage-data-context/references/human-output.md",
+     "Mirror their structure, names, property use, section order and length."),
+    ("recent comparable rows", "osm-manage-data-context/references/human-output.md",
+     "one or two recent rows about a comparable kind of thing"),
+    ("useful part first", "osm-manage-data-context/references/human-output.md",
+     "Start with what the reader needs: the outcome, the finding or the decision."),
+    ("long guide may stay long", "osm-manage-data-context/references/human-output.md",
+     "destination already treats as a long document may stay long"),
+    ("any Notion page", "osm-log/SKILL.md", "or you write any Notion page"),
+    ("write path uses the contract", "osm-manage-data-context/index.md",
+     "Before writing any Notion page or database row"),
 )
 # The triggers-and-calls table in docs/skills.md: each row's trigger starts with the key and its Owner
 # column must link the value. Every owner is then pinned, so a deleted or re-assigned row fails.

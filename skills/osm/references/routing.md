@@ -20,6 +20,9 @@ Record a material decision and its rationale in the source that owns the work.
 - [Human writing](../../osm-human-writing/SKILL.md) makes prose clear and natural.
   Editorial production beyond that belongs to a separate Content method the owner
   has chosen; OSM ships none.
+- [Writing for a person](../../osm-manage-data-context/references/human-output.md)
+  applies when the task writes a Notion page or hands a result back. It does
+  not replace Human Writing for outward prose.
 - Follow the project or host method for defining its result, carrying out the
   work and verifying authorized delivery by readback. Use [Council](../../osm-council/SKILL.md) when an
   independent review or bounded contribution would help.

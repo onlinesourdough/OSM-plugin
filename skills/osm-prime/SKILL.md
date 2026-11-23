@@ -2,7 +2,7 @@
 name: osm-prime
 description: Start each new session in an OSM-configured profile with the selected Notion context. Keep clearly independent work in its project and retrieve only relevant sources.
 metadata:
-  version: "1.2.1"
+  version: "1.2.2"
 ---
 
 # OSM:prime
@@ -39,7 +39,10 @@ inputs selected by the lead.
    for an authorized stored repair and a short note for Dreaming.
 5. Use the relevant result, then proceed with the user's actual request. In
    this session reuse verified context; refresh the affected source only when
-   the task, home, scope, freshness or access changes.
+   the task, home, scope, freshness or access changes. Before writing a Notion
+   page or database row this task authorizes, or the reply that hands a piece
+   of work back, follow
+   [Writing for a person](../osm-manage-data-context/references/human-output.md).
 
 Prime keeps its work inside the selected home and scope. Report concrete gaps
 when they affect the result.
