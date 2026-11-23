@@ -2,7 +2,7 @@
 name: osm-log
 description: Save lasting context when meaningful work finishes or the user asks to remember or log something. Use the verified home, read back authorized changes, and resume without logging the same work twice.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # OSM:log
@@ -12,6 +12,8 @@ user asks in ordinary language to save a decision, correction or other learning.
 A chat can continue after Log. Repeated checkpoints review only evidence added
 since the last verified checkpoint.
 The lead retains Log in delegated work. Dreaming uses its own run result.
+
+Before a checkpoint write, follow [Writing for a person](../osm-manage-data-context/references/human-output.md).
 
 1. Review the useful result, decisions and explicit corrections since that
    checkpoint. Retain what would help the next relevant session act. Leave

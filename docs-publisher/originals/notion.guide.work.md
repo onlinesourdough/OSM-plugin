@@ -21,6 +21,12 @@ The proof depends on the work. Read the final text in its intended format. See a
 
 Draft, ready, scheduled and actually delivered are different states. An uncertain send or write should be checked before retrying.
 
+## Write for the reader
+
+Lead with the outcome, finding or decision, in language the reader can use on a first reading. Keep important uncertainty and limitations visible. Put deeper evidence where the destination normally keeps it; include a session or process log only when it belongs there.
+
+For an authorised Notion page, reuse its existing structure, template, properties and useful length. Relevant permitted examples can help establish that format. A short decision stays short; an established long guide may stay long. This applies to pages outside the context home too. Formatting creates no new access, retention or write permission.
+
 ## Evaluate what the goal calls for
 
 For content, views can help diagnose distribution. They do not by themselves establish audience fit, trust or commercial value.

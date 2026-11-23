@@ -1,6 +1,20 @@
 # Changelog
 
-## 0.35.4 — 2026-11-23
+## 0.36.0 — 2026-11-23
+
+- Share one writing reference across authorised Notion-page writes and their
+  accompanying replies: a useful format, plain language and the point first.
+  Log keeps its checkpoint role; the package still exposes seven skills.
+- Reuse known structure for small edits. Inspect schema/template and permitted
+  examples only when needed, without widening access or copying source-only data.
+  Preserve useful history, unknown values, approved prose and long guides.
+- Include the first-time creator credit and optional Fermentary help prepared
+  below. Credit and referral copy stay outside customer context and host instructions.
+
+## Unreleased 0.35.4 preparation — 2026-11-23
+
+This source-only preparation was not tagged or published; its changes are
+included in 0.36.0.
 
 - Add a brief creator credit to first-time Setup and an optional route to
   The Fermentary for hands-on help after a useful result.

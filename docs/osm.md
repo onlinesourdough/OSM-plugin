@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.35.4
+OSM version: 0.36.0
 
 **Business first. Productivity built in.**
 
@@ -36,7 +36,9 @@ reuse an existing owner, defer, or propose one empty store. Personal Content
 methods remain optional; existing-home resume adds no store.
 [Prime](../skills/osm-prime/SKILL.md) uses the host's short pointer to find the
 smallest relevant context and [Log](../skills/osm-log/SKILL.md) saves lasting
-changes after meaningful work or on request. [Dreaming](../skills/osm-dreaming/SKILL.md)
+changes after meaningful work or on request. Authorised Notion pages and their
+handback follow the destination's useful format. Short notes stay short; long
+guides and the author's outward prose keep their purpose. [Dreaming](../skills/osm-dreaming/SKILL.md)
 reads the current definition, checks recent work and due sources, and can
 correct proven context errors. It uses the host's scheduler or routines, if
 available, for a daily run.
