@@ -38,6 +38,17 @@ approved definition YAML and diagram Mermaid into their declared repository
 regions while preserving surrounding source. The database field-definition section
 also exports to the shared schema asset. Check and review the resulting diff.
 
+After binding the guide originals, run
+`python3 docs-publisher/build-guide.py --icon-defaults` before freezing the skill
+source commit. It projects the five approved icon URLs from the bound AI operating
+model table into `skills/osm-data-context/assets/icon-defaults.json`, with its
+source page and revision. Do not edit that generated file or add a second URL
+list. The normal reader build refuses a missing or changed projection, and the
+generator refuses unbound, incomplete or ambiguous tables and non-immutable URLs.
+This is a frozen release resource read only when new-home icons are needed; it
+does not establish live image availability, database metadata support or visual
+rendering. Those remain separate native checks.
+
 The API snapshot reader uses Notion's [Markdown endpoint](https://developers.notion.com/reference/retrieve-page-markdown)
 with an explicit [v2 format](https://developers.notion.com/guides/data-apis/migrate-to-notion-flavored-markdown)
 and refuses truncated or unsupported content. Native media is represented by its

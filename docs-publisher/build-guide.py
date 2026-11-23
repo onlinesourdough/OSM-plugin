@@ -15,6 +15,52 @@ import publisher as pub
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = 'https://gustavanderson.notion.site/'
 GIT = 'https://github.com/onlinesourdough/OSM-plugin/blob/'
+ICON_DEFAULTS = 'skills/osm-data-context/assets/icon-defaults.json'
+ICON_GUIDE = 'notion.guide.data-context'
+ICON_ROLES = {'AI operating model': 'root', 'Knowledge': 'knowledge',
+              'Memory': 'memory', 'Skills': 'skills', 'Content, when selected': 'content'}
+
+
+def icon_defaults(manifest, source):
+    """Project only the five approved URLs from the bound Notion-authored table."""
+    matches = [a for a in manifest['artifacts'] if a['key'] == ICON_GUIDE and a['class'] == 'G']
+    artifact = matches[0] if len(matches) == 1 else None
+    if (not artifact or not artifact.get('original') or artifact.get('owner') != 'notion'
+            or artifact.get('public_writer') != 'notion-authored'
+            or not re.fullmatch(r'[0-9a-f]{32}', artifact.get('notion', ''))
+            or artifact['original'].get('notion') != artifact['notion']):
+        raise pub.SetupError('Icon defaults need the bound Notion-authored guide')
+    outcome, detail = pub.original_state(artifact, source)
+    if outcome != pub.REFUSED_NOTION:
+        raise pub.SetupError('Icon defaults: ' + detail)
+    body = b''.join(source.files(pub.frozen_path(ICON_GUIDE)).values()).decode()
+    header = '| Place | Existing method icon |'
+    if body.splitlines().count(header) != 1:
+        raise pub.SetupError('Icon defaults need exactly one approved icon table')
+    lines = body.splitlines()
+    rows = lines[lines.index(header) + 1:]
+    if not rows or not re.fullmatch(r'\|\s*-+\s*\|\s*-+\s*\|', rows.pop(0)):
+        raise pub.SetupError('The approved icon table has an unsupported header')
+    icons = {}
+    for row in rows:
+        if not row.startswith('|'):
+            break
+        match = re.fullmatch(r'\| ([^|]+) \| \[[^\]\n]+\]\((https://[^\s)]+)\) \|', row)
+        if not match or match[1] not in ICON_ROLES:
+            raise pub.SetupError('The approved icon table has an unknown or ambiguous role')
+        role, url = ICON_ROLES[match[1]], match[2]
+        if role in icons or not re.fullmatch(
+                r'https://raw\.githubusercontent\.com/(?:onlinesourdough/OSM-plugin|gustavonline/gustavonline)/'
+                r'[0-9a-f]{40}/assets/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+\.png', url):
+            raise pub.SetupError('Icon defaults need unique roles and immutable approved public PNG URLs')
+        icons[role] = url
+    if set(icons) != set(ICON_ROLES.values()):
+        raise pub.SetupError('The approved icon table is missing a role')
+    result = {'format': 'osm-icon-defaults/1', 'generated': True,
+              'source': {'page': 'https://app.notion.com/p/' + artifact['notion'],
+                         'revision': artifact['original']['revision']},
+              'icons': icons}
+    return (json.dumps(result, ensure_ascii=False, indent=2) + '\n').encode()
 
 
 def skill_source_drift(source, pinned):
@@ -40,6 +86,8 @@ def build(root=ROOT):
     manifest = pub.load_manifest(root / 'docs-publisher/manifest.json')
     config = manifest['reading_export']
     source = pub.DirSource(root)
+    if source.files(ICON_DEFAULTS) != {ICON_DEFAULTS: icon_defaults(manifest, source)}:
+        raise pub.SetupError('Packaged icon defaults differ from the bound guide; run build-guide.py --icon-defaults')
     ref = config['skill_source']
     if not re.fullmatch(r'[0-9a-f]{40}', ref):
         raise pub.SetupError('The reader needs an exact skill source commit')
@@ -96,6 +144,13 @@ def build(root=ROOT):
 
 
 if __name__ == '__main__':
-    target = ROOT / 'docs-publisher/public-guide.json'
-    target.write_text(json.dumps(build(), ensure_ascii=False, indent=2) + '\n')
-    print('Built the public guide from explicit public originals and exact skill source.')
+    if sys.argv[1:] == ['--icon-defaults']:
+        manifest = pub.load_manifest(ROOT / 'docs-publisher/manifest.json')
+        (ROOT / ICON_DEFAULTS).write_bytes(icon_defaults(manifest, pub.DirSource(ROOT)))
+        print('Projected the bound Notion icon table into the packaged resource.')
+    elif sys.argv[1:]:
+        raise SystemExit('Usage: build-guide.py [--icon-defaults]')
+    else:
+        target = ROOT / 'docs-publisher/public-guide.json'
+        target.write_text(json.dumps(build(), ensure_ascii=False, indent=2) + '\n')
+        print('Built the public guide from explicit public originals and exact skill source.')

@@ -9,12 +9,12 @@ to match the conversation. Change that name only for an owner choice. If a root 
 exists, adapt it: keep its identity, title, icon, local wording and compatible
 definition fields, and never regenerate owner choices from this template.
 
-For a new root and new core stores, use the existing icons in the public guide's
-[AI operating model reference](https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038).
-If that public page is unavailable through the selected tools, use its
-[versioned public reading copy](https://github.com/onlinesourdough/OSM-plugin/blob/545e9a667fcbd6174fbd5ae28b72d69572666d92/docs-publisher/originals/notion.guide.data-context.md)
-without changing a private connection.
-The same guide supplies the durable explanation when onboarding needs it.
+For a new root and new core stores, read the local [icon defaults](icon-defaults.json)
+when applying icons. This generated resource freezes the five approved URLs from
+the Notion-authored [AI operating model reference](https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038)
+at its recorded source revision; it is not a live lookup or an editable second map.
+The public guide supplies the explanation when needed; its availability must not
+block reading the packaged URLs or justify changing a private connection.
 Reuse those actual asset URLs; do not generate new artwork or replace existing
 icons. Apply the appropriate page/database metadata operation and verify the
 actual icon. A wrapper-page acknowledgement alone is not proof a database icon

@@ -55,6 +55,10 @@ Documentation here separates four states, and no text should blur them:
 v0.36.2 is the latest reviewed source tag and published stable release, at `197fdb19ddfc2a51c3394a7381642b225baa1747`. Its release check and GitHub publication passed. The retained v0.35.2 source tag stopped before publication because its changelog entry was absent; no 0.35.2 GitHub Release was created. The 0.35.4 preparation was not tagged or published; it is included in 0.36.0. The manifest binds the immutable 0.36.2 source and seven skill rows. Native adoption, Notion source-packet delivery and public readback are
 recorded separately in [verification](verification.md).
 
+The 0.36.3 source candidate adds a frozen local projection of the existing
+approved icon URLs. It is not published or natively qualified yet; 0.36.2 remains
+the current stable release.
+
 ### Documentation consumers
 
 Keep the existing entrypoints stable when editing the README:
