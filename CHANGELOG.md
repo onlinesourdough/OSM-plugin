@@ -12,6 +12,9 @@
 - Human Writing still owns outward-facing prose. The contract is a reference
   inside the existing write path, so the package still exposes seven skills
   and no host-specific route.
+- A task-authorized page that is not a context checkpoint is written where the
+  task already places it. Home-checkpoint intake applies only to lasting
+  context kept in the home.
 
 ## 0.35.3 — 2026-11-22
 

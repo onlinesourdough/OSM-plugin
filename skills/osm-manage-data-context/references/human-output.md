@@ -15,6 +15,8 @@ that method, and writing a draft does not authorize sending or publishing it.
 
 Read the destination before choosing a shape.
 
+- When revising an existing page, read that page first and keep its structure
+  unless the task asks to reshape it.
 - For a database, read its schema and properties, its template when one
   exists, and one or two recent rows about a comparable kind of thing.
 - For a page area that is not a database, read the parent and one or two
