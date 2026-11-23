@@ -61,8 +61,10 @@ A legacy folder, vault or `AIOS_FORMAT` home is recognized read-only; offer the
 [update reference](../../osm/references/update.md#legacy-file-and-vault-homes)
 guidance and never edit, convert, mirror or clean it up.
 
-Inspect inherited instructions; owner-context AGENTS must not preload independent
-repositories. Repair only authorized owned blocks; unresolved preload fails isolation.
+Inspect inherited instructions: keep company data and unconditional context
+preloads out of independent repositories. The thin global bridge may call Prime;
+Prime resolves independent work before reading the home. Repair only authorized
+owned blocks; unresolved preload fails isolation.
 Use the current workspace for work. [Creation](../../osm/references/creation.md)
 starts a requested new repository; [specialist maintenance](../../osm/references/systems.md)
 handles selected optional installations.

@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.3.3"
+  version: "3.3.4"
 ---
 
 # OSM:setup
@@ -13,11 +13,17 @@ result before unfamiliar questions; use [Setup](references/setup.md) for the wel
 language; on a neutral resume, use its recorded preference or working content,
 not the fixed English title, to choose the language.
 
+Track the accepted plan: known answers, verified work, open choices/proof gaps
+and next action. Use native progress or one task-evidence checklist; Codex follows
+[tracking](references/codex-tracking-acceptance.md). Reuse state and dated proof on resume.
+Before handback, check [acceptance](references/setup.md#acceptance-and-continuity):
+continue authorised work or ask the next material question. A completed subtask
+does not complete Setup. Creating a goal requires authority.
+
 Codex **Set up**, the **OSM:setup** skill picker entry, or a request naming OSM
 starts this skill. Bare `/setup` can select another plugin; do not claim that
 generic command is OSM's entry or that ordinary Notion setup needs an API key.
-Resume accepted setup
-and connections. Verify access; a badge or saved link is not readiness. For
+Reuse accepted setup and connections; verify access, not badges or links. For
 package installation or a requested bridge-only change, use the
 [adapter route](references/adapters.md). Installation alone creates no home and
 needs no global instruction edit. Use the [Notion access](references/panel.md) procedure for Codex connection checks.
@@ -25,16 +31,13 @@ Use the [procedure index](../osm/index.md) for earlier names and package recover
 
 ## One path
 
-Setup is the single conductor. Each step has one owner. In the chain of Setup,
-Data & Context, Manage Data & Context and Manage Skills nothing calls back into
-Setup (Interview links Setup only for a new connection, which is conditional and
-outside that chain):
+Setup leads Data & Context, Manage Data & Context and Manage Skills; nothing
+calls back into Setup. Interview's new-connection route is separate:
 
 1. **Connection and access.** Inspect exposed connections first and reuse a
-   working connection or recorded choice. For new ordinary user setup, check
-   whether the official Notion plugin is installed and connected. When its
-   installation is authorized, install it through the supported host route,
-   guide account connection and verify the intended workspace with a scoped
+   working connection or recorded choice. For new ordinary setup, check the
+   official Notion plugin and connection; install through the supported host
+   route when authorised, guide sign-in and verify the workspace with a scoped
    safe read. Use a
    dedicated connection when the selected team, worker or unattended workflow
    needs its own identity or access scope. Preserve an existing recorded choice.
@@ -48,52 +51,47 @@ outside that chain):
    material context is missing, with its
    [owner-context guide](../osm-interview/references/owner-context.md); never a
    fixed questionnaire.
-3. **Map selected sources and authority.** Record which systems are sources,
-   which are working artifacts and who has authority. External systems, local
-   files and repositories remain sources or artifacts, never an alternate home.
-   The definition is the business's gateway: record when to use each source,
-   its real access route, permitted actions and processing environment, and
-   what may be retained where. Keep operational originals in their system.
-   An AI-native source normally needs direct lookup, not a Notion importer.
-   Reuse its existing connection and configure the template to the business.
-   Locate a named task-relevant source before substituting a generic result;
+3. **Map sources, artifacts and authority.** The definition is the gateway:
+   record each source's purpose, actual account/reader, permitted actions,
+   processing environment and retention. Keep operational originals in their
+   system; normally query an AI-native source directly, reusing its connection.
+   Files and repositories are sources/artifacts, not homes. Locate a named
+   task-relevant source before substituting a generic result;
    [setup](references/setup.md) owns the minimal follow-up and source agreement.
 4. **Reuse or create.** [Data & Context](../osm-data-context/index.md) engineers
-   the home, its definition and the core Knowledge, Memory and Skills roles:
-   existing stores are reused by actual ID, only missing ones are created, and
-   replay creates no duplicate. For a new home, include the
+   the home, definition and core Knowledge, Memory and Skills roles. Reuse actual
+   IDs, create only missing stores, and replay without duplicates. Include the
    [Content foundation](../osm-data-context/references/notion/content-foundation.md)
-   in the short plan: reuse an existing Notion or authoritative external route,
+   in a new home's short plan: reuse an existing Notion or authoritative external route,
    record a deferral, or propose one empty store. Personal Content methods stay
-   optional. Never retrofit an established home on normal resume. It discovers the actual
-   types and metadata of existing stores before mapping and follows the architecture's
+   optional. No retrofit on normal resume. Discover actual store types/metadata
+   before mapping; follow the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
-   Before building, briefly describe the foundation and adoption plan and
-   unresolved choices. Reuse accepted answers. Name a new root **AI operating model** without
-   translating that default; use the [root template](../osm-data-context/assets/data-and-context-root.md)
-   for its definition and existing public-guide icons.
-   A newly generated root body starts with the definition, followed by its
-   databases. Changes to an existing root follow the owner's request and write
-   policy. Explain onboarding in the conversation, using the public guide's
-   durable description when useful.
+   Before building, explain the foundation/adoption plan and open choices,
+   reusing answers. New roots use **AI operating model** untranslated and the
+   [root template](../osm-data-context/assets/data-and-context-root.md) for the
+   definition and existing public-guide icons. Start the body with the definition,
+   then native databases; existing roots follow the owner's request/write policy.
+   Keep onboarding in the conversation, referencing the public guide when useful.
 5. **Adopt.** Record the owner's write policy once: whole-home proposed, never
-   assumed. Save the thin host pointer in the host's persistent instruction
-   file or, if the host has none, in its built-in persistent memory or standing
-   instructions. Add it only at the intended scope.
+   assumed. Save the thin pointer in the host's persistent instruction file,
+   or built-in standing memory/instructions if it has no file.
+   Instantiate the [bridge](../osm-data-context/assets/bridge.md)
+   with the verified root; check its shared lines and refer to policy, never
+   copy it. Keep Always Prime for an ordinary-chat default: Prime excludes
+   independent work before reading Notion. Place the pointer at the authorised
+   scope; preserve unrelated instructions and selected accounts/dedicated routes.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)
-   serves manual and task-time curation, and [Dreaming](../osm-dreaming/SKILL.md)
-   is the entry for reflection across recent work and scheduled upkeep. Setting
-   up a schedule on the host's scheduler or routines, if available, needs an
-   explicit request and exact authority. Record only
-   history and source routes that are actually readable;
-   an unavailable or unqualified route stays an explicit gap.
-7. **Finish the task and carry setup forward.** Deliver the agreed result,
-   then continue unfinished setup within authority or ask one concrete missing
-   decision. A useful draft or an honest “not yet configured” is not the end
-   of onboarding. Keep the foundation, continuing write policy and pointer
-   choices live; a narrow task/source grant does not settle them. Show the
-   brief snapshot for confirmation and the next action. Honour an actual pause
-   or decline. Check relevant [setup scenarios](references/setup-scenarios.md);
+   owns manual/task-time curation; [Dreaming](../osm-dreaming/SKILL.md) reflects
+   across recent work, manually or scheduled. Scheduling through the host needs
+   an explicit request and exact authority. Record only readable history/source
+   routes; unavailable or unqualified routes stay explicit gaps.
+7. **Check the whole accepted plan.** Deliver the agreed result and verify the
+   foundation, continuing write policy, pointer and brief snapshot confirmation.
+   An explicitly chosen narrow policy is valid; a task grant alone does not
+   settle future writes. Continue remaining authorised work or ask one concrete
+   unresolved choice. Honour a pause, decline or capability limit with its exact
+   remaining state and next action. Check relevant [setup scenarios](references/setup-scenarios.md);
    report unavailable proof. Unchanged resumes need only their task checks.
 
 Use [setup](references/setup.md) for readiness and acceptance and
