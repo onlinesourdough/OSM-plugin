@@ -3664,3 +3664,29 @@ This follow-up binds the seven public packets to that actual immutable release.
 Posttag packet delivery, its independent zero-write/public readback, the new
 clean native client journey and #72/#73 remain pending their own evidence.
 The source review, publication and installation do not pass those behaviors.
+
+### Actual posttag delivery and private configuration readback
+
+The pending delivery above was subsequently qualified. First automatic run
+[45199447486](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45199447486)
+uploaded all seven 0.36.2 packets and verified their complete API readback, with
+seven write attempts and no unknown writes. Its anonymous browser deadline held;
+that first failure remains part of the evidence. No payload, reader or guard was
+changed to obtain a later pass.
+
+Rerunning accepted main CI 45199089132 as attempt 2 triggered the real automatic
+[45201395613](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45201395613).
+It passed: all seven packets were unchanged at 0.36.2/source `197fdb19`, all seven
+anonymous pages and the catalogue verified, all eight original bindings agreed,
+and there were zero write attempts. This is actual posttag publication and an
+independent zero-write/public verification, not an inferred pretag result.
+
+The separate private owner adoption also read back successfully: Definition
+2026-11-23.2, the eight actual released references, the preserved source and
+authority prefix, complete Runtime, same identities and routes, and the same
+native job and daily schedule. Only the architecture reference changed among
+those eight methods. This proves saved configuration and affected bindings;
+it is not a timed 0.36.2 cycle. The observed 23 November 0.35.3 timed cycle keeps
+its original version and evidence boundary. Clean client onboarding, the matched
+#72 pilot and remaining #73 behavior cases are not passed by these delivery and
+configuration receipts.
