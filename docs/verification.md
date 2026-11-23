@@ -3578,3 +3578,52 @@ byte for byte. All seven production Dreaming method files remain identical to
 This checkpoint is source evidence. Publication, native adoption and a clean
 uncoached customer journey still require their own subsequent readbacks;
 #69, #72 and #73 are not passed by these checks.
+
+
+## 23 November — 0.36.2 Setup state and canonical pointer candidate
+
+The released 0.36.1 native trial remained incomplete after six ordinary customer
+inputs. Setup continued after the source-based draft, then stopped after saving
+the pointer without the remaining Content choice, snapshot confirmation or next
+action. It also company-gated Prime and dropped the canonical built-in-tool
+priority. The default root title was correct; no icon or cosmetic gap was reported.
+[The #69 observation](https://github.com/onlinesourdough/OSM-plugin/issues/69#issuecomment-7103654864)
+retains the failed reconnect turn, five completed turns, all reported cache-inclusive
+usage and bounded source-only attestation. No source originals or derived draft
+were given to Council. The exact failed guest chat, owned pointer/materials and
+work directories were removed after backup; its Notion home is in recoverable
+Trash. Primary instructions and production automation are byte-unchanged.
+
+Actual Gemini 4 Neon High and independent peer review classified the failures
+mainly as non-adherence to existing rules. The first 227,515-byte review reported
+a truncated tail; a separate 132,083-byte supplement explicitly received the
+complete missing architecture and tail. The shared repair anchors existing
+accepted-plan progress and completion evidence at Setup entry, instantiates the
+canonical bridge and resolves the YAML-versus-equivalent-definition inconsistency.
+It adds no skill, wizard, fixed company schema or broader grant. Exact source
+review and subsequent compaction review remain separate from native behavior.
+
+Public Notion Setup was authored first: one official-connector line preserving
+the selected account and dedicated route. Full official readback matched.
+Capture [45192209104](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45192209104)
+read all eight originals, then held on precisely that known Setup revision drift
+before any writer; seven other original bodies are unchanged. Export deliberately
+binds those complete API originals to 0.36.2. The released edition still names
+actual 0.36.1; there is no 0.36.2 publication or client-journey claim here.
+
+Initial checks caught an 8,569-byte Setup entry above the unchanged 8,192-byte cap,
+then a complete selected-route regression. Compaction preserves the accepted
+semantics: the entry is now 7,584 bytes (0.36.1: 7,596), and the existing full
+selected-route check measures 42,782 bytes against its pinned 42,793-byte legacy
+route. These are static byte counts and byte/4 estimates, not runtime token,
+billing, latency or quality results. The initial publisher rehearsal also held
+while its explicit HEAD still contained old original bindings and the worktree
+manifest had the new capture; rerun on the assembled committed tree is required.
+The other twelve Python groups, 84 adapter tests and 16 reader tests passed at
+that initial check. Final assembled checks, CI, public delivery, native adoption,
+new clean onboarding and #72/#73 qualification remain distinct required evidence.
+
+The architecture reference changes for this candidate; the owner's eight pinned
+methods must not be called byte-identical as a set. Any actual post-release
+private adoption preserves the source/authority prefix, checkpoints and existing
+job cadence and has its own readback. Timed 0.35.3 remains dated 0.35.3 evidence.

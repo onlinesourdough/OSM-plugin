@@ -81,6 +81,7 @@ Data and Context: [your verified Notion Data & Context URL]
 Always run OSM Log at meaningful checkpoints or when asked.
 Use the host's built-in workspace and tools first, including its side panel when available.
 Use external apps only when built-in tools can't do the work.
+Use the official Notion connector when available; preserve the selected account and any explicit dedicated route.
 ```
 
 ## Agent workspace and tools
