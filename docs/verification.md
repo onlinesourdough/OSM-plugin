@@ -3736,3 +3736,13 @@ to released 0.36.2. Metadata, final source binding/build, full CI, exact artifac
 review, actual release/public delivery/install and the affected clean narrow-policy
 and Content-deferral trial remain pending at this source checkpoint. #69/#72/#73
 remain open; the matched pilot has not started.
+
+The first full 0.36.3 check stopped at the shipped-binding guard: the generated
+file's public provenance link needed the same narrow treatment as the existing
+labelled public-guide link. Its initial test-only adaptation then hit a missing
+`original` key in the deliberately stripped rehearsal manifest. Both failures
+are retained. The final test reads the bound manifest afresh, verifies the exact
+source page and revision, and exempts only that provenance field; all other
+recorded-target and private-ID checks remain. Independent exact-delta review
+accepted it. The targeted rerun passed 72 publisher rehearsals and all 75
+mutation controls; this is fixture evidence, not live publication.
