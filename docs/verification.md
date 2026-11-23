@@ -3940,8 +3940,22 @@ added. The rebuild now reproduces with zero generated diff.
 The Notion-tools build and all 84 Node tests plus the runtime smoke passed.
 The full repository suite was run; one pre-existing local test requires `ps`,
 which this thread's sandbox denies (`PermissionError: [Errno 1] Operation not
-permitted: 'ps'` in the browser process-group cleanup test). The full GitHub CI
-result, final local check results and independent Council outcome are recorded
-below after delivery. `scripts/check_release.py` is absent; the applicable
+permitted: 'ps'` in the browser process-group cleanup test). The final local check results and full GitHub CI result are recorded below.
+The independent Council outcome is recorded on [PR #153](https://github.com/onlinesourdough/OSM-plugin/pull/153). `scripts/check_release.py` is absent; the applicable
 release check is `tests/validate.py --baseline origin/main`. No merge, tag,
 release, normal-profile install or public Notion write was performed.
+
+The final local run passed 18 of its 19 commands: package validation (also
+against `origin/main`), documentation, onboarding, layout, continuity, skill
+versions, unslop, footprint, responsibility, context architecture, publisher,
+publisher parity, native publisher, consumer selection, public-browser Node
+checks, publisher reconciliation and `git diff --check`. The only failed
+command was `tests/public-browser-reader.py`, solely at the denied `ps`
+invocation above; an optional live-browser test was skipped locally.
+
+The complete [Package and release CI run 45248577653](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45248577653)
+passed at `9d790a927102d98ac3c9bb77869087d5418174e4`, including the browser
+process-group check. The release job was skipped because this is a PR. The
+following commit records that evidence only; it changes no product source,
+trial result, generated output or release authority. Final-head CI and the
+exact-head Council result remain visible on the PR.
