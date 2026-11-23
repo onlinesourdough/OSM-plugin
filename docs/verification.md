@@ -3637,3 +3637,30 @@ A later responsibility check required the existing canonical wording “nothing
 calls back into Setup”; the equivalent shortened sentence was restored, making
 Setup another 16 bytes smaller. The unchanged responsibility and footprint
 checks passed; no test fixture, threshold or runtime guard was relaxed.
+
+
+## 23 November — actual 0.36.2 publication and native installation
+
+[PR #147](https://github.com/onlinesourdough/OSM-plugin/pull/147) merged as
+`197fdb19ddfc2a51c3394a7381642b225baa1747`, exactly the reviewed tree
+`4735125ff455934cadf1a4ec3ab9523b425f3a4a`. Final PR CI 45194540653,
+main CI 45194932340 and tag CI 45196179745 passed the required checks.
+Pretag live 45195185369 verified all eight original bindings and seven current
+0.36.1 API/public packets with zero writes; that is not 0.36.2 packet delivery.
+
+Stable [0.36.2](https://github.com/onlinesourdough/OSM-plugin/releases/tag/v0.36.2)
+was published at 14:39:08 UTC. Its downloaded 6,420,529-byte source ZIP,
+GitHub digest, sidecar and complete UTC archive reconstruction agree at
+`ecefa11c1d89b22341d03bc8d662f1c51e755a5ff900bd50f35042a91a1fc2c6`.
+All 327 file bodies and executable bits match the reviewed source. Immutable
+extraction and primary Codex/Claude caches match; both user registries read back
+enabled 0.36.2. Instructions and the production automation file were unchanged
+across installation. The guest installed the normal public v0.36.2 tag and
+verified the same 327 payload files/modes, excluding 28 installer Git-metadata
+files; the failed trial pointer, sources and work directory remain absent.
+No refreshed primary-app GUI is claimed.
+
+This follow-up binds the seven public packets to that actual immutable release.
+Posttag packet delivery, its independent zero-write/public readback, the new
+clean native client journey and #72/#73 remain pending their own evidence.
+The source review, publication and installation do not pass those behaviors.
