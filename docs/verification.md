@@ -3766,3 +3766,24 @@ narrows the reset claim without discarding the concrete functional readbacks.
 It is not a clean-room or matched-comparison certificate. The next reset must
 cover the complete owned parent/child inventory and verify global local rollout
 absence; account/cloud isolation remains a separate limit.
+
+### 0.36.3 actual publication · 23 November 2026
+
+[PR #150](https://github.com/onlinesourdough/OSM-plugin/pull/150) merged the exact
+reviewed tree at `b5d3babd5f9a8cec65b336fa76b4c7bf8b0a4bff`.
+PR CI 45226509579 and main CI 45226968151 passed. Pretag live check
+[45227214594](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45227214594)
+verified all eight guide-original bindings and the previously released 0.36.2
+seven-skill API/public set and catalogue with zero writes. It is not 0.36.3
+packet delivery.
+
+Tag CI [45228003507](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45228003507)
+passed and actually published stable 0.36.3 at 17:30:12 UTC. The 6,426,863-byte
+download has SHA-256 `4c1fa9964555332b123a1c9bf17ff56973cf3782a471dd10027ebb758063fa44`;
+GitHub digest, sidecar and full UTC tag reconstruction agree, including all 328
+file contents and executable modes. The immutable local extraction matches.
+The released binding now selects this actual tag; guide/source/runtime bindings
+are unchanged. Native installation, 0.36.3 public packet delivery and the clean
+narrow-policy/real Content-deferral/icon journey are pending separate evidence.
+All eight private Dreaming references are byte-identical to 0.36.2; no private
+repin, new scheduled run or timed-result relabelling is required.

@@ -50,14 +50,14 @@ Documentation here separates four states, and no text should blur them:
 | Declared | Stated in a manifest, skill or document | The file itself |
 | Fixture-tested | A repository check or fixture passes at a recorded commit | [Verification](verification.md); fixture proof is not native or live proof |
 | Native-tested | Observed in an installed app | Only what [verification](verification.md) records for that release |
-| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.36.2 is the latest stable release. The retained v0.34.0 and v0.35.2 source tags did not publish GitHub Releases. |
+| Released | Published as a GitHub Release | [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases); v0.36.3 is the latest stable release. The retained v0.34.0 and v0.35.2 source tags did not publish GitHub Releases. |
 
-v0.36.2 is the latest reviewed source tag and published stable release, at `197fdb19ddfc2a51c3394a7381642b225baa1747`. Its release check and GitHub publication passed. The retained v0.35.2 source tag stopped before publication because its changelog entry was absent; no 0.35.2 GitHub Release was created. The 0.35.4 preparation was not tagged or published; it is included in 0.36.0. The manifest binds the immutable 0.36.2 source and seven skill rows. Native adoption, Notion source-packet delivery and public readback are
+v0.36.3 is the latest reviewed source tag and published stable release, at `b5d3babd5f9a8cec65b336fa76b4c7bf8b0a4bff`. Its release check and GitHub publication passed. The retained v0.35.2 source tag stopped before publication because its changelog entry was absent; no 0.35.2 GitHub Release was created. The 0.35.4 preparation was not tagged or published; it is included in 0.36.0. The manifest binds the immutable 0.36.3 source and seven skill rows. Native adoption, Notion source-packet delivery and public readback are
 recorded separately in [verification](verification.md).
 
-The 0.36.3 source candidate adds a frozen local projection of the existing
-approved icon URLs. It is not published or natively qualified yet; 0.36.2 remains
-the current stable release.
+The 0.36.3 release adds a frozen local projection of the existing approved icon
+URLs. Publication and archive verification are complete; native icon behavior
+and the affected new-home journey still require their own evidence.
 
 ### Documentation consumers
 
