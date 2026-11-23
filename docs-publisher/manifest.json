@@ -683,6 +683,9 @@
   ],
   "folders_note": "Every method content folder names the public guide page that explains it; every technical folder states its own role. skills/ and docs/ are mapped one level down, every other top-level folder as one unit. reconcile --check fails on a folder with no entry.",
   "folders": {
+    "skills/unslop/": {
+      "page": "notion.guide.work"
+    },
     "skills/osm/": {
       "page": "notion.guide.work"
     },
@@ -772,7 +775,7 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "277fdb5ba2c1b3747cc2c2cabe1b93521740a641",
+    "skill_source": "56cd94d661868a973d9440b5485bf78250a2aca5",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
