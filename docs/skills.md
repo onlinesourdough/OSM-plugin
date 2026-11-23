@@ -75,6 +75,13 @@ methods keep their owner's names and permissions. The
 [legacy behavior map](../skills/osm-setup/references/legacy-parity.md) records
 the earlier routes.
 
+At the close of an interview, once the goal is clear, Interview asks one brief
+ambition question before its summary: expert depth, the wider purpose and next
+outcome, or a useful approach from another field. It selects one angle, accepts
+a decline or an answer that changes nothing, and continues. An explicit stop
+or skip still ends the interview. The skill links its inspiration without
+copying the article.
+
 ## Agent text and author text
 
 `unslop` edits the agent's own replies, reports and Notion pages. It fetches

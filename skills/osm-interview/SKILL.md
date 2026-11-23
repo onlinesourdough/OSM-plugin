@@ -2,7 +2,7 @@
 name: osm-interview
 description: "Interview the user when goals or direction are unclear, or when they ask to think something through first."
 metadata:
-  version: "2.1.1"
+  version: "2.2.0"
 ---
 
 # OSM:interview
@@ -72,7 +72,16 @@ accepted is not reopened without new evidence or a user request.
 ## Return to useful work
 
 Stop when the user ends the interview or there is enough shared understanding
-for the agreed next action. Summarize the situation, accepted decisions,
+for the agreed next action.
+
+Once the goal is clear, ask exactly one ambition question before summarizing:
+choose depth (what an expert would add beyond the request), altitude (the
+wider purpose and what follows), or range (a better approach from another
+field), whichever fits best. Use your own words in a few lines. If the user
+declines or the answer changes nothing, move on without a questionnaire.
+Respect an explicit stop or skip.
+
+Summarize the situation, accepted decisions,
 material assumptions or unknowns and next action; resolve only a correction
 that would change that action. Do not require a separate approval of the summary
 when the answers already establish direction and authority.
@@ -86,3 +95,5 @@ Keep project decisions with the project and external facts at their source.
 Only relevant durable owner facts use [Log](../osm-log/SKILL.md)
 under existing authority. Do not save raw transcripts, temporary project plans
 or speculative answers as owner memory. A separate document is optional.
+
+Source: [Felix Rieseberg, “How to be more ambitious: A tutorial for humans with models” (13 October 2026)](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/).

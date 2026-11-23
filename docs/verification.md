@@ -3969,3 +3969,28 @@ provenance labels, not repository links. The present-tense forward reference
 was also replaced with the actual CI result above. Re-review supplies the
 complete diff in bounded parts, including both generated files; no model
 substitution or approval based on the truncated input is claimed.
+
+
+### One ambition question at interview close · 23 November 2026
+
+The owner-approved increment to PR #153 adds exactly one brief ambition question
+once the interview goal is clear and before its summary. Interview chooses the
+fitting depth, altitude or range angle, uses its own words, accepts a decline or
+an answer that changes nothing, and continues. Explicit stops/skips remain
+binding. The trigger description is byte-identical to the earlier PR candidate.
+Only Interview changes its skill version, from 2.1.1 to 2.2.0: this is a compatible
+method capability under `docs/skill-versioning.md`. Package 0.36.4 remains the
+same unreleased candidate; no second package bump is required for this PR edit.
+
+The source is the owner-supplied Felix Rieseberg article, linked by title and
+date in the skill. The built-in browser returned `The browser access host is
+unavailable`; no article text was retrieved, copied or independently verified.
+The instructions are paraphrased from the owner's complete brief. This change
+adds no reference file, host fork or external runtime dependency.
+
+The earlier `ae2d346` acceptance remains historical and does not cover this
+increment. The guide and runtime are regenerated from the new exact skill
+source. Full checks and exact-head Neon High Council acceptance for the
+increment and final state are recorded on [PR #153](https://github.com/onlinesourdough/OSM-plugin/pull/153).
+The existing local `ps` sandbox limit remains a local-test limitation; the full
+GitHub CI result is required. No new native interview-behavior trial is claimed.

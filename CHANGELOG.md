@@ -2,6 +2,11 @@
 
 ## 0.36.4 — 2026-11-23
 
+- Add one brief ambition question before the interview summary once the goal
+  is clear: choose depth, altitude or range to fit the situation, then continue.
+  Respect a decline, stop or unchanged scope. Interview moves to 2.2.0; its
+  trigger description stays as approved. Credit the inspiration by source link.
+
 - Put use cases first in the seven OSM skill descriptions; retain their existing
   boundaries in the bodies and bump each skill patch version.
 - Add `unslop` 1.0.0 for the agent’s own text, fetching Lauren Tan’s MIT pstack
