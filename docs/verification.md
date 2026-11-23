@@ -3959,3 +3959,13 @@ process-group check. The release job was skipped because this is a PR. The
 following commit records that evidence only; it changes no product source,
 trial result, generated output or release authority. Final-head CI and the
 exact-head Council result remain visible on the PR.
+
+The first actual Neon High Council review at `9d790a9` withheld acceptance:
+the native client truncated the oversized inline diff, and the retained fetch
+receipts lacked their input examples, retry command flags and the backing
+statement for Claude's Danish word-list handling. Those evidence fields are
+now embedded in the receipt JSON; temporary trace names are explicitly
+provenance labels, not repository links. The present-tense forward reference
+was also replaced with the actual CI result above. Re-review supplies the
+complete diff in bounded parts, including both generated files; no model
+substitution or approval based on the truncated input is claimed.

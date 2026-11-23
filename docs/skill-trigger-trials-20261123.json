@@ -821,7 +821,8 @@
       ],
       "exit_code": 0,
       "seconds": 10.4,
-      "receipt_file": "claude-new.receipt.json"
+      "local_trace_name": "claude-new.receipt.json",
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "claude",
@@ -844,25 +845,66 @@
       ],
       "exit_code": 0,
       "seconds": 12.1,
-      "receipt_file": "claude-old.receipt.json"
+      "local_trace_name": "claude-old.receipt.json",
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "claude",
       "kind": "upstream-fetch-and-edit",
       "exit_code": 0,
       "seconds": 23.52,
-      "receipt_file": "claude-unslop-retry.receipt.json",
       "attempt": 2,
-      "observed_outcome": "fetch/read and rewrite completed"
+      "observed_outcome": "fetch/read and rewrite completed",
+      "local_trace_name": "claude-unslop-retry.receipt.json",
+      "command": [
+        "claude",
+        "-p",
+        "--no-session-persistence",
+        "--setting-sources",
+        "",
+        "--strict-mcp-config",
+        "--mcp-config",
+        "{\"mcpServers\":{}}",
+        "--tools",
+        "Bash,Read",
+        "--allowedTools",
+        "Bash(curl *),Read",
+        "--permission-mode",
+        "dontAsk",
+        "--output-format",
+        "stream-json",
+        "--verbose"
+      ],
+      "input": "smoke[host].prompt_template + exact candidate skill_source entrypoint; retry adds smoke[host].retry_instruction if present"
     },
     {
       "host": "claude",
       "kind": "upstream-fetch-and-edit",
       "exit_code": 0,
       "seconds": 11.99,
-      "receipt_file": "claude-unslop.receipt.json",
       "attempt": 1,
-      "observed_outcome": "fetch command blocked by dontAsk tool permission; stopped without rewriting"
+      "observed_outcome": "fetch command blocked by dontAsk tool permission; stopped without rewriting",
+      "local_trace_name": "claude-unslop.receipt.json",
+      "command": [
+        "claude",
+        "-p",
+        "--no-session-persistence",
+        "--setting-sources",
+        "",
+        "--strict-mcp-config",
+        "--mcp-config",
+        "{\"mcpServers\":{}}",
+        "--tools",
+        "Bash,Read",
+        "--allowedTools",
+        "Bash(curl *),Read",
+        "--permission-mode",
+        "dontAsk",
+        "--output-format",
+        "stream-json",
+        "--verbose"
+      ],
+      "input": "smoke[host].prompt_template + exact candidate skill_source entrypoint; retry adds smoke[host].retry_instruction if present"
     },
     {
       "host": "codex",
@@ -870,7 +912,25 @@
       "attempt": 2,
       "exit_code": 0,
       "seconds": 22.14,
-      "receipt_file": "codex-new-retry.receipt.json"
+      "local_trace_name": "codex-new-retry.receipt.json",
+      "command": [
+        "codex",
+        "--no-daemon",
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "-s",
+        "read-only",
+        "-m",
+        "gpt-6.1-sol",
+        "--json",
+        "-"
+      ],
+      "environment": {
+        "CODEX_HOME": "disposable directory; auth.json symlinks existing login"
+      },
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "codex",
@@ -890,7 +950,8 @@
       ],
       "exit_code": 1,
       "seconds": 0.61,
-      "receipt_file": "codex-new.receipt.json"
+      "local_trace_name": "codex-new.receipt.json",
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "codex",
@@ -898,7 +959,25 @@
       "attempt": 2,
       "exit_code": 0,
       "seconds": 22.31,
-      "receipt_file": "codex-old-retry.receipt.json"
+      "local_trace_name": "codex-old-retry.receipt.json",
+      "command": [
+        "codex",
+        "--no-daemon",
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "-s",
+        "read-only",
+        "-m",
+        "gpt-6.1-sol",
+        "--json",
+        "-"
+      ],
+      "environment": {
+        "CODEX_HOME": "disposable directory; auth.json symlinks existing login"
+      },
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "codex",
@@ -918,25 +997,62 @@
       ],
       "exit_code": 1,
       "seconds": 0.62,
-      "receipt_file": "codex-old.receipt.json"
+      "local_trace_name": "codex-old.receipt.json",
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "codex",
       "kind": "upstream-fetch-and-edit",
       "exit_code": 0,
       "seconds": 16.31,
-      "receipt_file": "codex-unslop-retry.receipt.json",
       "attempt": 2,
-      "observed_outcome": "fetch/read and rewrite completed"
+      "observed_outcome": "fetch/read and rewrite completed",
+      "local_trace_name": "codex-unslop-retry.receipt.json",
+      "command": [
+        "codex",
+        "--no-daemon",
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "-s",
+        "danger-full-access",
+        "-m",
+        "gpt-6.1-sol",
+        "--json",
+        "-"
+      ],
+      "environment": {
+        "CODEX_HOME": "disposable directory; auth.json symlinks existing login"
+      },
+      "input": "smoke[host].prompt_template + exact candidate skill_source entrypoint; retry adds smoke[host].retry_instruction if present"
     },
     {
       "host": "codex",
       "kind": "upstream-fetch-and-edit",
       "exit_code": 0,
       "seconds": 12.83,
-      "receipt_file": "codex-unslop.receipt.json",
       "attempt": 1,
-      "observed_outcome": "nested host sandbox_apply: Operation not permitted; stopped without rewriting"
+      "observed_outcome": "nested host sandbox_apply: Operation not permitted; stopped without rewriting",
+      "local_trace_name": "codex-unslop.receipt.json",
+      "command": [
+        "codex",
+        "--no-daemon",
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "-s",
+        "workspace-write",
+        "-m",
+        "gpt-6.1-sol",
+        "--json",
+        "-"
+      ],
+      "environment": {
+        "CODEX_HOME": "disposable directory; auth.json symlinks existing login"
+      },
+      "input": "smoke[host].prompt_template + exact candidate skill_source entrypoint; retry adds smoke[host].retry_instruction if present"
     },
     {
       "host": "cursor",
@@ -944,7 +1060,15 @@
       "attempt": 2,
       "exit_code": 1,
       "seconds": 1.29,
-      "receipt_file": "cursor-new-retry.receipt.json"
+      "local_trace_name": "cursor-new-retry.receipt.json",
+      "command": [
+        "cursor-agent",
+        "-p",
+        "--output-format",
+        "json",
+        "<routing prompt supplied as one positional argument>"
+      ],
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "cursor",
@@ -957,7 +1081,8 @@
       ],
       "exit_code": 1,
       "seconds": 0.67,
-      "receipt_file": "cursor-new.receipt.json"
+      "local_trace_name": "cursor-new.receipt.json",
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "cursor",
@@ -965,7 +1090,15 @@
       "attempt": 2,
       "exit_code": 1,
       "seconds": 1.31,
-      "receipt_file": "cursor-old-retry.receipt.json"
+      "local_trace_name": "cursor-old-retry.receipt.json",
+      "command": [
+        "cursor-agent",
+        "-p",
+        "--output-format",
+        "json",
+        "<routing prompt supplied as one positional argument>"
+      ],
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     },
     {
       "host": "cursor",
@@ -978,7 +1111,8 @@
       ],
       "exit_code": 1,
       "seconds": 0.89,
-      "receipt_file": "cursor-old.receipt.json"
+      "local_trace_name": "cursor-old.receipt.json",
+      "input": "routing_request_template + catalogues[arm] + samples derived from cases; old/new prompt templates are identical"
     }
   ],
   "unavailable": {
@@ -1004,6 +1138,13 @@
       "output": {
         "english": "This update may simplify the process. It has not been tested with customers.",
         "danish": "Opdateringen gør muligvis processen enklere. Den er ikke testet med kunder."
+      },
+      "prompt_template": "Use the following candidate skill to edit ONLY these two examples of your own assistant prose. You must fetch upstream at use time using the host tool, read the whole fetched file, and follow it within the stated boundaries. Use curl --fail --silent --show-error --max-time 30 to save the fetch to /private/tmp/osm-upstream-unslop.md, then Read that file. No other URLs, files or account actions. Return the English rewrite and Danish rewrite, preserving all uncertainty.\nEnglish: It is worth noting that this groundbreaking update could potentially streamline the process. It has not been tested with customers.\nDanish: Det er vigtigt at bemærke, at opdateringen muligvis kan gøre processen enklere. Den er ikke testet med kunder.\nCANDIDATE SKILL:\n<exact skills/unslop/SKILL.md at skill_source>",
+      "retry_instruction": "Run a single curl command without echo, semicolons, pipelines or other shell commands. Then use Read. The curl command itself is allowed.",
+      "language_rule_statement": "Danish: I skipped the English word list (rule 7) and applied only the language-neutral rules, as the candidate skill says.",
+      "input": {
+        "english": "It is worth noting that this groundbreaking update could potentially streamline the process. It has not been tested with customers.",
+        "danish": "Det er vigtigt at bemærke, at opdateringen muligvis kan gøre processen enklere. Den er ikke testet med kunder."
       }
     },
     "codex": {
@@ -1025,7 +1166,14 @@
       "output": {
         "english": "The update may simplify the process. It has not been tested with customers.",
         "danish": "Opdateringen kan muligvis gøre processen enklere. Den er ikke testet med kunder."
+      },
+      "prompt_template": "Use the following candidate skill to edit ONLY these two examples of your own assistant prose. You must fetch upstream at use time using the host tool, read the whole fetched file, and follow it within the stated boundaries. Use curl --fail --silent --show-error --max-time 30 to save the fetch to /private/tmp/osm-upstream-unslop-codex.md, then Read that file. No other URLs, files or account actions. Return the English rewrite and Danish rewrite, preserving all uncertainty.\nEnglish: It is worth noting that this groundbreaking update could potentially streamline the process. It has not been tested with customers.\nDanish: Det er vigtigt at bemærke, at opdateringen muligvis kan gøre processen enklere. Den er ikke testet med kunder.\nCANDIDATE SKILL:\n<exact skills/unslop/SKILL.md at skill_source>",
+      "input": {
+        "english": "It is worth noting that this groundbreaking update could potentially streamline the process. It has not been tested with customers.",
+        "danish": "Det er vigtigt at bemærke, at opdateringen muligvis kan gøre processen enklere. Den er ikke testet med kunder."
       }
     }
-  }
+  },
+  "trace_retention": "Local trace names identify temporary stdout/stderr/receipt files, not repository links. Relevant inputs, CLI flags, actions and outputs are embedded here; raw fetched upstream text is deliberately not committed.",
+  "routing_request_template": "This is a read-only description-routing test, not a request to carry out the sample tasks. Use only the supplied skill names and descriptions; do not use tools, load skill bodies, edit files, access accounts, or infer unavailable skills. For each sample decide whether its named target skill should be selected. If the target is absent, use false. Return ONLY JSON {\"decisions\":[{\"id\":\"...\",\"trigger\":true or false},...]}, exactly one decision per id.\nCATALOG:\n<JSON catalogues[arm]>\nSAMPLES:\n<JSON cases expanded in fixture order to objects with id, skill and prompt>"
 }
