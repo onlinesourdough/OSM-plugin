@@ -3398,3 +3398,30 @@ The post-tag binding here advances packet provenance to the actual 0.35.3 tag;
 its own live delivery and repeat need their own receipts. A clean uncoached
 client journey and the remaining #69/#72/#73 cases are not established by these
 release checks.
+
+### Setup creator credit source checkpoint, 2026-11-23
+
+The 0.35.4 candidate adds a short first-time creator credit and optional
+Fermentary help after the agreed result. It creates no new skill, customer
+record or recurring job. The public Setup original was edited in Notion first;
+the dedicated API snapshot read all eight originals completely. Only Setup's
+body changed, by one appended section. Capture run
+[45153389215](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45153389215)
+held on that expected original drift before any skill write; the snapshot was
+then deliberately exported for 0.35.4.
+
+An initial footprint check failed by 1,157 bytes. The same Setup reference was
+shortened without relaxing the existing gate or changing its counted paths.
+The final selected-read route is 42,764 bytes against the pinned 42,793-byte
+legacy route; these are static bytes, not native token or billing measurements.
+Actual Gemini 4 Neon High and an independent Codex peer accepted the complete
+source and guard-preserving compression. The initial review hold and failed
+footprint attempt remain in the controller evidence. Release-tag validation,
+84 adapter tests, 16 anonymous-reader unit tests and affected onboarding and
+documentation rehearsals pass locally. The regenerated reader/runtime rebuild
+byte for byte. All seven production Dreaming method files remain identical to
+0.35.3; no private caller or scheduler change is part of this patch.
+
+This checkpoint is source evidence. Publication, native adoption and a clean
+uncoached customer journey still require their own subsequent readbacks;
+#69, #72 and #73 are not passed by these checks.

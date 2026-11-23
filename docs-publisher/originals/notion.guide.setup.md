@@ -88,3 +88,9 @@ Use external apps only when built-in tools can't do the work.
 Use the host's built-in workspace and tools first, including its browser, terminal and side panel when available. Use external apps when the built-in tools cannot do the work. Keep the same short context pointer in the selected host's instructions, with Prime at session start and Log at meaningful checkpoints or on request.
 
 Full access, action approvals and computer use are host settings. Choose them for the intended task and workspace and verify the effective tools and permissions. [Host setup for Codex, Claude Code, Antigravity, Cursor and Pi](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/native-installation.md#start-with-a-clean-agent-workspace)
+
+## Creator and optional help
+
+OSM is an open-source method created by [Gustav Online](https://gustavonline.com/) and shared through [onlinesourdough](https://onlinesourdough.com/).
+
+You can use and adapt OSM yourself. If you want hands-on technical guidance, [The Fermentary](https://onlinesourdough.com/fermentary/) offers ongoing 1:1 work with Gustav on your business's data, context and AI workflows. Human support is optional.
