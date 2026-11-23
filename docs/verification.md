@@ -3865,3 +3865,156 @@ diagnostic gives no reliability, one-hour SLA or High/Low causal claim. #69,
 #72 and #73 remain open. The matched pilot has not started; prospective revision
 11 fixes the same Sol High setting for both arms and requires live tool/backend
 and cross-arm context verification before execution.
+
+### 0.36.3 functional follow-ups · 23 November 2026
+
+The owner subsequently postponed the matched #72 benchmark and #127 Vault.
+The frozen comparison plan remains preparation; no comparison arm or new login
+is requested. Functional #69/#73 qualification continued on unchanged 0.36.3.
+This checkpoint supersedes earlier dated pending labels, preserving their
+observations and all failed/partial trials.
+
+After the explicit scope/capture recovery, a manual projectless Desktop New Chat
+received only an ordinary question about the business. It loaded Prime, fetched
+the selected test root and scoped Knowledge/Memory, then returned the actual
+saved business facts with a citation. Full root/profile bodies, properties,
+edit timestamps and collection counts were unchanged. Actual Neon High and
+independent peer review accepted this corrected-instance functional slice.
+The initial narrow Setup handoff and earlier placement ambiguity remain partial;
+this later recovery is not a clean unassisted Setup pass.
+
+Four fresh Sol High native Dreaming consumers then exercised a separately
+prepared synthetic source/home/control on the recorded guest reader:
+
+| Phase | Actual result |
+| --- | --- |
+| A | The source was visibly active; the native reader reported interrupted with null completion time. The consumer saved its exact pending identity in the existing control, without reading source items or writing business context. Full independent readback verified it. |
+| B | The predeclared one-item/32-character profile returned a truncated public message and non-null next cursor. The original input cursor remained null and the observed next cursor was not acknowledged. No business record was written. |
+| C | A new root-only invocation read the persisted pending identity before history, verified actual completion, read the complete permitted public projection, checked existing Knowledge/Memory, saved one supported fictional user decision, fully read it back, and only then advanced the same control to saved. |
+| D | Another fresh root-only invocation reread the actual origin, control and existing record. It made zero business or control writes. All five independent response objects—full control, Memory and three saved views—were exactly unchanged from C, including edit timestamps and counts. |
+
+The four task durations were 117,062 / 126,785 / 143,273 / 105,768 ms;
+their event-to-event wall span was about 24m43s within the frozen 30-minute bound.
+Preparation, source creation and reviews are separately retained, not zero cost.
+All sandbox-start failures, the bounded-read parser recovery and the no-op
+validation-index correction remain in the trace. The guest reader required
+scoped host escalation; this is not sandbox-contained or production-route proof.
+The explicit post-creation fixture watermark is not natural account discovery.
+Complete public-message projection excludes hidden reasoning and non-message
+tool bodies. It does not establish quota exhaustion or global exactly-once.
+
+Actual Gemini 4 Neon High reviewed the 106,558-byte A–D packet
+(`03328629b2910daa17a253a7d70d062acee48ee33d0743f922c92c9d11863438`),
+reported all 34 supplied sections received without tail truncation, and accepted
+the bounded cases in 178.194 seconds with zero tool attempts. Independent peer
+review separately checked the action ordering and exact C/D response equality.
+Supplemental notes distinguish page-version/as-of time from edit time and coarse
+completion seconds from event timestamps. No frozen result was overwritten.
+
+Further actual capabilities were checked separately:
+
+| Capability | Evidence and boundary |
+| --- | --- |
+| Native database template | Controller registered a real template through Notion's New menu. Creation with only title and template ID populated the whole template body and In progress status, distinct from the database's Not started default. Repeat full readback was unchanged; this is not idempotent template reapplication or delayed-async proof. |
+| Native Skills | Controller used native skill designation, verified complete download/version and enabled-registry entry. A fresh native named-skill request found and fetched the actual skill and produced the three requested checklist items while keeping unavailable notes unknown; no writes. Registry verification and page-based agent use are separate proofs, not slash-command installation. |
+| Native meeting notes | Controller created a real meeting note and fetched its Notes section on the free account. The special meeting-query tool returned Business entitlement required, operation not executed and no side effects. No retry, trial or upgrade was used. |
+| Account reach | Two deliberate identity probes read one synthetic outside-root page through its owning full-user connection and received object-not-found/404 through the other account. The selected home is a policy scope, not a provider-enforced subtree grant. This was not credential fallback or a test against private owner content. |
+| Source withdrawal and forget | A fresh ordinary owner request disabled the exact selected source, retained an ID-only opt-out, moved its sole derived Memory to recoverable Trash and cleared saved/inspection state. Another fresh neutral Dreaming run made zero history-reader or mutation calls. Independent full root/control/skill/Memory-view readbacks were unchanged; active Memory remained empty. Trash metadata remains known-ID retrievable; no permanent-erasure claim. |
+
+The latter three native agent turns took 27,035 / 155,584 / 67,446 ms. Their
+controller fixture preparations and connector probes are not unassisted-agent
+behaviour. The 99,725-byte follow-up packet
+(`da8f067eef571461b309f29b04dfb6d30084c56ee0ed86622e7e14dc73b43470`)
+received actual Neon High review (167.278 seconds, zero tool attempts) and a
+separate independent peer acceptance. Supplementary retrospective controller
+argument transcriptions, native schema readback and raw 404/CLI-availability
+receipts clarify omitted provenance. Only the independently fetched
+Memory view is claimed unchanged after opt-out; other collection observations
+retain their subject-query provenance.
+
+An additional controller-only native Skills database icon application used the
+already approved immutable PNG through Notion's Upload/Save UI. The actual
+database schema and parent child-reference both exposed the saved attachment.
+Controller-observed Firefox rendering showed the approved glyph; an independent
+peer also inspected the retained screenshot. Uploaded server attachment bytes
+were not independently downloaded and hashed. This resolves that representative
+native-DB capability, without retroactively fixing earlier customer trials or
+equating a page-wrapper acknowledgement with a database mutation.
+
+The historical 0.35.3 timed production cycle remains separately versioned.
+Current adoption/readback, manual guest evidence and mechanical fault fixtures
+do not combine into a new scheduled production pickup pass. Native Claude
+behaviour is unavailable in the guest (no CLI); installed primary payload parity
+alone is not that behaviour. Provider grant revocation, expired credentials,
+physical host offline/wakeup and model quota exhaustion remain explicitly
+unexercised on this route. Shared-account cloud isolation remains unproven.
+No new product patch, release, timer, RDATE, source mirror or production write
+was introduced by these functional tests. Final case/cleanup updates follow
+their actual receipts; #69/#73 are not closed by this checkpoint alone.
+
+### Separate native pagination and current-route preflight · 23 November 2026
+
+A new synthetic source and separate home tested actual non-null cursor
+continuation, preserving the earlier source opt-out. One fresh Sol High consumer
+took 182,732 ms under the frozen one-item/6,000-character/ascending/ten-page
+profile. Its validated temporary workspace wrapper around the same hash-verified
+reader received two populated public-message pages: page two used exactly the
+non-null cursor returned by page one, then returned a null cursor. Actual same-turn
+completion preceded item reads. The filtered-empty-public-page branch and
+cycle/error/page-limit holds were not exercised at runtime.
+
+Two distinct row-mode queries hit the free-account usage limit. The agent fetched
+the actual databases, used their saved views before curation, and disclosed the
+limit; no query retry or upgrade occurred. One supported fictional user decision
+was written to Memory and fully read back before the existing control advanced
+to saved. Independent views contained 0 Knowledge / 1 Memory / 0 Skills with no
+further page. The root body, properties and edit time were unchanged; only its
+fetch as-of header reflected the changed child checkpoint. The initial full-object
+comparison held on that header difference and was reconciled explicitly; no
+runtime normalizer or source guard was changed.
+
+Actual Neon High reviewed the 71,257-byte final packet
+(`8b2ff46406d84d068b19e46810493ba74d411336dd918b03e56fb557bfb38c3e`)
+in 221.582 seconds with zero tool attempts and all 21 sections received.
+Independent peer review checked the exact cursor chain, curation/readback order,
+final view counts and separate icon screenshot. Both accepted the bounded native
+case; the remaining public-prose corrections concern evidence attribution.
+
+The existing production route received a separate **read-only preflight** after
+ordinary local cloud-cache restoration. Initial bounded reads held on dataless
+placeholders and are retained. Apple's native download API materialized only
+the already selected exact files; expected hashes and inodes matched, without
+moving, editing or repinning them. The final receipt verifies 24 expected hashes,
+no pending write journal, complete nontruncated Root/Runtime reads (14,051 and
+53,275 characters, zero unknown blocks), and the actual pinned primary history
+reader's metadata lookup of the known historical 0.35.3 completed turn. The job's
+prompt, identity, cadence, next local-noon time and primary instruction hashes
+matched the approved adoption. No credentials were printed, no business source
+was ingested and no production context/job/configuration write occurred. This
+proves current access/configuration, not a new timed or production pending-item
+lifecycle. Content-free final receipt SHA-256:
+`144d97f294b30f660c001df2fef1bf346538a9233a1b56b269f4e8c9bb6c6674`.
+
+### Verified disposable-fixture cleanup · 23 November 2026
+
+After all native turns completed, the guest app was closed. The complete active
+and archived rollout inventory contained sixteen exact owned test threads,
+including six guardians. All were hash-backed up outside the guest, natively
+deleted child-first, and unavailable to a fresh independent native process;
+both rollout directories contained zero files. Three exact helper/image files
+were backed up and removed, followed by thirty-three empty owned directories.
+The selected guest pointers remained absent.
+
+Eight ordinary fixture pages/rows/templates, seven databases and two roots were
+moved child-first to recoverable Notion Trash. A fresh fetch of every one of
+these seventeen entities marked it deleted; the earlier forgotten Memory was
+already in Trash. The test skill's enabled registry returned empty. No permanent
+erasure, account deletion or provider-wide isolation is claimed: known-ID Trash
+metadata, account/auth state, installed public package and cloud project metadata
+remain. Primary AGENTS, CLAUDE and automation-file hashes were unchanged.
+Controller backups, failures and independent review receipts remain retained.
+
+Local package validation and all seven documentation rehearsals passed for this
+evidence-only append, along with `git diff --check`. No product, generated guide,
+manifest or version change is included. Final required CI and publication are
+separate checks; #69/#73 retain their precise outstanding host/caller cases.
