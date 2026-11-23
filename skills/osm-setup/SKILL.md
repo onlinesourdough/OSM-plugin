@@ -2,7 +2,7 @@
 name: osm-setup
 description: Set up or resume OSM's Notion Data & Context foundation, from installation and access to a useful first task. Check setup, migrate earlier routes or recover an installation.
 metadata:
-  version: "3.3.2"
+  version: "3.3.3"
 ---
 
 # OSM:setup
@@ -68,10 +68,10 @@ outside that chain):
    optional. Never retrofit an established home on normal resume. It discovers the actual
    types and metadata of existing stores before mapping and follows the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
-   Give a short concrete plan after resolving the relevant business/source
-   questions, before building. Name a new root **AI operating model** without
-   translating that default; use the public guide's existing icons as described
-   by the [root template](../osm-data-context/assets/data-and-context-root.md).
+   Before building, briefly describe the foundation and adoption plan and
+   unresolved choices. Reuse accepted answers. Name a new root **AI operating model** without
+   translating that default; use the [root template](../osm-data-context/assets/data-and-context-root.md)
+   for its definition and existing public-guide icons.
    A newly generated root body starts with the definition, followed by its
    databases. Changes to an existing root follow the owner's request and write
    policy. Explain onboarding in the conversation, using the public guide's
@@ -87,16 +87,20 @@ outside that chain):
    explicit request and exact authority. Record only
    history and source routes that are actually readable;
    an unavailable or unqualified route stays an explicit gap.
-7. **First useful task.** Complete the agreed result, then check the
-   [setup scenarios](references/setup-scenarios.md) that apply and report
-   unavailable proof honestly. An unchanged resume needs only its task checks.
+7. **Finish the task and carry setup forward.** Deliver the agreed result,
+   then continue unfinished setup within authority or ask one concrete missing
+   decision. A useful draft or an honest “not yet configured” is not the end
+   of onboarding. Keep the foundation, continuing write policy and pointer
+   choices live; a narrow task/source grant does not settle them. Show the
+   brief snapshot for confirmation and the next action. Honour an actual pause
+   or decline. Check relevant [setup scenarios](references/setup-scenarios.md);
+   report unavailable proof. Unchanged resumes need only their task checks.
 
-Follow [setup](references/setup.md) for the questions, readiness and acceptance
-details, and [bootstrap](references/bootstrap.md) for the first-run sequence of a
-new root. For personal skills during setup, call Manage Skills'
-[personal skill lifecycle](../osm-manage-skills/references/owner-skills.md). When
-an owner asks in ordinary language for local guardrails during autonomous use,
-route that request to [Manage Skills](../osm-manage-skills/index.md); normal setup does not
+Use [setup](references/setup.md) for readiness and acceptance and
+[bootstrap](references/bootstrap.md) for a new root. Manage Skills owns the
+[personal skill lifecycle](../osm-manage-skills/references/owner-skills.md).
+Ordinary-language requests for local autonomous guardrails also go to
+[Manage Skills](../osm-manage-skills/index.md); normal setup does not
 depend on an optional guard implementation.
 
 ## Boundaries

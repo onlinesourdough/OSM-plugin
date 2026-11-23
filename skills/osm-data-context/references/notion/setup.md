@@ -76,8 +76,12 @@ that merely labels pages as skills. Preserve existing pages and unknown blocks.
 Make the home usable by people: preserve ordinary Docs/Document Hub navigation
 and templates. Prefer full-page databases reached from the existing home;
 inline dashboards are optional, not a setup requirement. Reuse a native Skills
-destination and a memory destination when suitable; add only a missing useful
-destination, not an obligatory three-database hierarchy or an extra OSM hub.
+destination and a memory destination when suitable; do not force an existing
+workspace into a three-database hierarchy or add another OSM hub. A new home
+still needs the core Knowledge, Memory and Skills roles resolved by actual
+routes, plus the Content choice below. Missing or unauthorised parts remain
+explicit setup steps; a useful prose page alone does not complete that foundation.
+Create only within the accepted plan and authority.
 Preserve Spaces as business/brand scopes within one owner home, including
 sub-brands and shared context. Projects use their native workspaces. Start with
 a Space property and useful views; a separate Space database is conditional.

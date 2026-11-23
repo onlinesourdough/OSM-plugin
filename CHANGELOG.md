@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.36.1 — 2026-11-23
+
+- Keep onboarding active after the first useful task: continue the next
+  authorised setup step or ask the actual missing decision, respecting a pause.
+- Distinguish a narrow task/source grant from continuing write policy and
+  pointer scope. Keep incomplete foundation choices visible instead of ending
+  with a passive pending statement or inventing permission.
+- Clarify new-home core roles alongside reuse of existing destinations, and
+  allow the official connector's private root without an unnecessary parent.
+  Keep seven skills, existing approved icons and source-only handling.
+
 ## 0.36.0 — 2026-11-23
 
 - Share one writing reference across authorised Notion-page writes and their
