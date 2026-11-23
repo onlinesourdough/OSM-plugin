@@ -3865,3 +3865,83 @@ diagnostic gives no reliability, one-hour SLA or High/Low causal claim. #69,
 #72 and #73 remain open. The matched pilot has not started; prospective revision
 11 fixes the same Sol High setting for both arms and requires live tool/backend
 and cross-arm context verification before execution.
+
+### Trigger-first descriptions and thin unslop candidate · 23 November 2026
+
+Work started in a fresh clone on `docs/skill-triggers-unslop-20261123`, from
+`origin/main` at `50f433a8233c861a9882d419e53b16f1c4484f99`. The older iCloud
+checkout was not used or changed. Package 0.36.4 is a PR candidate, not a tag
+or release. All seven existing descriptions match the approved strings and
+receive independent patch bumps. Their removed discovery details remain in
+the bodies; Interview now explicitly includes isolated questions.
+
+`unslop` 1.0.0 is one short entrypoint, with automatic invocation left enabled.
+It fetches Lauren Tan's MIT pstack method at use time and keeps author-attributed
+text with Human Writing. The repository contains no upstream rulebook, pin,
+sync job, updater or additional host route. `tests/unslop-rehearsal.py` rejects
+bundled sections/lists, extra files and copied source prose, and its optional
+`--upstream` comparison passed against both actual fetched files kept outside
+Git. The existing 240-byte description cap and job prefixes remain in force.
+
+[Cases](../tests/fixtures/skill-trigger-cases.json) contain three positive and
+two negative prompts per skill, 40 total. [Receipts](skill-trigger-trials-20261123.json)
+retain both catalogues, all classifications, attempts, durations, unavailable
+hosts and the bounded fetch results. The old catalogue has seven entries; the
+new one has eight. Each host received one batched, read-only classification
+request per catalogue, with the target named per sample and only names and
+descriptions supplied. These are description-routing trials, not observations
+of autonomous native skill discovery or end-to-end context operations.
+
+| Host | Original seven skills, old → new (35 cases) | unslop, old → new (5 cases) | Fetch and apply upstream |
+| --- | --- | --- | --- |
+| Codex CLI, gpt-6.1-sol | 34/35 → 35/35 | 2/5 → 5/5; absent in old catalogue | Fetched the full file, read it and edited both examples. |
+| Claude Code, claude-opus-5-5 | 35/35 → 35/35 | 2/5 → 5/5; absent in old catalogue | Fetched the full file, read it and edited both examples. |
+| Cursor Agent | Unavailable | Unavailable | Not run: `cursor-agent status` reported `Not logged in`. |
+| Grok Bot | Unavailable | Unavailable | No native host surface or executable exposed. |
+| Gemini CLI | Unavailable | Unavailable | `gemini` executable absent. Antigravity is a separate Council route. |
+
+Codex's old catalogue selected Human Writing for removing AI tells from the
+assistant's own status report. The three positive unslop cases are expected
+inventory misses in the old catalogue. These small, unblinded batches do not
+establish general accuracy, a causal improvement or a performance advantage.
+The first Codex CLI attempts failed to initialize its in-process app server.
+A disposable native `CODEX_HOME`, the existing auth file by symlink and
+`--no-daemon --ephemeral --ignore-user-config` allowed the classification runs
+without writing to the normal profile. Cursor's stdin and positional-prompt
+attempts both exited 1 without a classification; neither is counted as a pass.
+Claude used `--no-session-persistence --setting-sources '' --strict-mcp-config`
+with an empty MCP set, tools disabled for classification and only Bash/Read
+allowed for the fetch trial.
+
+The first fetch trials were also retained: Claude's chained curl/echo command
+was blocked by `dontAsk`; Codex's nested sandbox failed with
+`sandbox_apply: Operation not permitted`. Both stopped without a rewrite.
+Claude then used a single allowed curl command followed by Read. Codex's retry
+used the host's native `danger-full-access` child setting inside this thread's
+unchanged outer filesystem/network sandbox, so that the nested sandbox launcher
+was not needed; this is not a claim about default nested-sandbox execution.
+Both fetched the same source hash recorded in the receipts, preserved the
+untested-with-customers caveat, removed unsupported English praise and returned
+Danish text. Claude explicitly skipped the English word list for Danish.
+Codex retained both “kan” and “muligvis”; the result demonstrates fetching and
+bounded application, not perfect adherence to every upstream editorial rule.
+No live Notion page or author-owned text was changed.
+
+The guide reader is bound to skill-source commit `56cd94d`; its generated
+JSON and `runtime/notion` were rebuilt rather than edited. The existing seven
+public skill-page bindings and released edition remain unchanged; no unslop
+Notion page or public publication is claimed. Its folder uses the existing
+work-guide mapping, and its package boundary is documented in `docs/skills.md`.
+The original local build correctly refused the old reader binding and the
+Notion author-package version mismatch; both were corrected. Publisher parity
+also rejected the unmapped new folder before its existing-guide mapping was
+added. The rebuild now reproduces with zero generated diff.
+
+The Notion-tools build and all 84 Node tests plus the runtime smoke passed.
+The full repository suite was run; one pre-existing local test requires `ps`,
+which this thread's sandbox denies (`PermissionError: [Errno 1] Operation not
+permitted: 'ps'` in the browser process-group cleanup test). The full GitHub CI
+result, final local check results and independent Council outcome are recorded
+below after delivery. `scripts/check_release.py` is absent; the applicable
+release check is `tests/validate.py --baseline origin/main`. No merge, tag,
+release, normal-profile install or public Notion write was performed.
