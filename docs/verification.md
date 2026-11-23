@@ -55,6 +55,16 @@ selects actual 0.36.0; its new packet delivery, public repeat and native adoptio
 still require separate receipts. No customer-journey or benchmark pass is
 established by this release.
 
+The first post-tag PR check
+[45162653884](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45162653884)
+failed in the next-release publisher fixture: it tried to replace a hard-coded
+Council 3.1.1 version after the binding advanced to Council 3.1.2. The fixture
+now derives both versions from its actual bound packet and requires exactly
+one replacement. Its history, conflict, stale-run and no-write assertions are
+unchanged. All 23 native-publisher fixture scenarios pass locally after this
+repair. No publisher implementation, released skill or runtime file changed;
+new CI and live packet delivery remain separate checks.
+
 ## 22 November 2026 — onboarding repair candidate 0.35.2
 
 A native disposable-client run on 0.35.1 established fresh-chat Prime and
