@@ -3787,3 +3787,81 @@ are unchanged. Native installation, 0.36.3 public packet delivery and the clean
 narrow-policy/real Content-deferral/icon journey are pending separate evidence.
 All eight private Dreaming references are byte-identical to 0.36.2; no private
 repin, new scheduled run or timed-result relabelling is required.
+
+### 0.36.3 live delivery and bounded native continuation · 23 November 2026
+
+The first automatic delivery
+[45229575917](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45229575917)
+wrote and completely API-verified all seven packets, with no unknown writes,
+then held at the anonymous browser deadline. The independent automatic
+`workflow_run`
+[45231604331](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45231604331),
+from main CI 45229283257 attempt 2, passed all seven API/public pages and the
+catalogue with zero write requests; all eight guide-original bindings agreed.
+The initial hold is retained. Primary Codex/Claude and guest native installations
+match all 328 released file contents and executable modes. This qualifies
+delivery and installation, not all caller behaviour.
+
+The all-source-kind reset backed up and natively removed fourteen exact owned
+rollouts, including the two previously missed legacy guardians. Fresh native
+reads were unavailable and both complete local rollout directories were empty.
+Owned source copies, pointers and synthetic work files were removed by hash.
+Cloud project/title metadata remained, and the prior home was in recoverable
+Notion Trash. Local body removal is not provider isolation or permanent erasure;
+the earlier broader cleanup claim remains explicitly corrected.
+
+A new ordinary `Start OSM setup.` trial on unchanged 0.36.3 and declared Sol High
+received four actual customer answers. It created the correctly named root and
+three empty native destinations, recorded a real Content deferral and the real
+write-only-on-request policy, and produced the explicitly requested generic,
+source-free Danish welcome template without sending it. The lazy released map
+resolved the approved root icon; official API readback and Firefox visual
+inspection verified it. One Knowledge wrapper-page icon attempt returned only
+a page-ID acknowledgement; subsequent database metadata omitted the icon field,
+and all three database icons still appeared as default table glyphs. Omission
+is not an explicit-null result or proof that every database-icon route fails.
+The final answer did not disclose this cosmetic gap.
+
+The initial 462,811 ms turn is **partial guided onboarding**, not a full pass:
+it reported the pending pointer scope but asked no next material question.
+Task-evidence fallback existed; no business-profile record or pointer existed.
+Actual Neon High and independent peer review accepted the scoped positives and
+retained that completion gap. The first Council packet reported the entire
+sanitized owner-comparison tail truncated; a separate 69,990-byte supplement
+confirmed receipt of that whole brief, with current verified deltas. It found
+no new semantic contradiction requiring another product patch or migration of
+the owner's existing source-map equivalents. Selected architecture excerpts
+remain labelled excerpts, not whole-file review.
+
+A separate ordinary continuation on the same home restored the missing folder
+of a retained registered project and instantiated the canonical local bridge.
+Only after that placement did it ask how to test; the customer chose its option
+to create a test chat. That fresh project chat loaded Prime, fetched the selected
+test root and correctly cited its narrow write policy and three collections.
+The question named the business and requested those Definition facts: this is
+project-pointer retrieval, not a neutral business-profile recall test. The root
+body and edit time, store identities, real deferral and narrow policy remained
+unchanged; three saved views still contained zero rows. The parent took 178,943
+ms including the 27,757 ms child and customer wait, so those durations must not
+be summed as independent elapsed time. Retained project metadata is a scope
+ambiguity for review, not evidence of a clean new-account discovery. The initial
+partial trial is not retroactively promoted to a clean pass.
+
+| Capability | Actual evidence or remaining limit |
+| --- | --- |
+| New foundation and real choices | 0.36.3 root/K/M/S, real deferral, narrow policy and root icon exercised; guided closeout partial. |
+| Existing home and source/correction use | Dated 0.36.2 reuse, saved-view recovery, correction and fresh recall remain bounded evidence; not silently relabelled 0.36.3. |
+| Project entry | Canonical local bridge and fresh Definition lookup exercised; manual New Chat selection and neutral business-profile recall unverified in this narrow case. |
+| Native Skills/templates/meetings | Empty native-shaped Skills designation is not enablement/discovery/execution; template application and relevant meetings paths remain unqualified. |
+| Grants and revocation | Selected-route restraint observed; shared account still exposes other connection/cloud metadata. Full outside-grant/revocation/fair-comparison boundaries unproven. |
+| Other callers and upkeep | Installation is not Claude behavioural parity. Historical 0.35.3 timed upkeep and later configuration readbacks remain separate from remaining #73 native cases. |
+
+All prior failed/partial attempts, recovery and available per-trace usage are
+retained. Cache-inclusive input is not unique context or billed new tokens;
+subscription-dollar cost remains unknown. Five requested one-minute waits in
+the initial trial actually returned about 160.8 seconds in total, four interrupted
+by customer answers; they are not 300 seconds of model-only idle time. One
+diagnostic gives no reliability, one-hour SLA or High/Low causal claim. #69,
+#72 and #73 remain open. The matched pilot has not started; prospective revision
+11 fixes the same Sol High setting for both arms and requires live tool/backend
+and cross-arm context verification before execution.
