@@ -261,7 +261,7 @@ onboarding runs through Setup in conversation.
 
 | Folder | Contains |
 | --- | --- |
-| `skills/` | Seven discoverable skills and four supporting reference folders |
+| `skills/` | Eight discoverable skills and four supporting reference folders |
 | `apps/notion/` | Public guide reader and optional scoped Notion adapter source |
 | `runtime/notion/` | Reproducible, ready-to-run build |
 | `docs/` | Installed overview, user guides, maintenance and dated evidence |

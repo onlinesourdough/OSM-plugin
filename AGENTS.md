@@ -59,6 +59,7 @@ python3 tests/onboarding-rehearsal.py
 python3 tests/layout-rehearsal.py
 python3 tests/continuity-rehearsal.py
 python3 tests/skill-version-rehearsal.py
+python3 tests/unslop-rehearsal.py
 python3 tests/context-footprint.py
 python3 tests/responsibility-rehearsal.py
 python3 tests/context-architecture-rehearsal.py

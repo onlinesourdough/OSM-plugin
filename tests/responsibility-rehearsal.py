@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
 EXPECTED = {
     "osm-council", "osm-dreaming", "osm-human-writing", "osm-interview",
-    "osm-log", "osm-prime", "osm-setup",
+    "osm-log", "osm-prime", "osm-setup", "unslop",
 }
 REFERENCES = {"osm", "osm-data-context", "osm-manage-data-context", "osm-manage-skills"}
 RETIRED = {
@@ -81,6 +81,7 @@ TRIGGER_ROWS = {
     "Explore direction": "osm-interview/SKILL.md",
     "Get another agent’s review": "osm-council/SKILL.md",
     "Write prose": "osm-human-writing/SKILL.md",
+    "Remove AI tells": "unslop/SKILL.md",
     "Inspect installation": "osm/references/check.md", "Update, roll back": "osm/references/update.md",
     "Model advice": "osm/references/model-advice.md",
 }

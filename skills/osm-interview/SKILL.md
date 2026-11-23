@@ -1,8 +1,8 @@
 ---
 name: osm-interview
-description: Interview to explore context, restate goals and the underlying problem, or find direction when requested or materially unclear at the start; clear work and isolated questions continue directly.
+description: "Interview the user when goals or direction are unclear, or when they ask to think something through first."
 metadata:
-  version: "2.1.0"
+  version: "2.1.1"
 ---
 
 # OSM:interview
@@ -21,7 +21,7 @@ reconsider. Understanding or a decision can be the whole requested result.
   direction and cannot be resolved from accepted inputs or authorized sources.
   State the focus briefly and begin; do not add a routine permission question.
 - A new project, agent, automation or plugin installation alone is not a
-  trigger. Clear work proceeds through its existing method. During execution,
+  trigger. Clear work and isolated questions continue directly through their existing method. During execution,
   ask the smallest blocking question; do not silently switch to an interview.
 - If broader reflection would help but is unnecessary for the current result,
   offer it once at a natural pause without holding up independent work. Start
