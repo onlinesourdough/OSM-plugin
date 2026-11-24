@@ -206,7 +206,7 @@ def prose_url_links(text):
     return "".join(output)
 
 
-def project(text, path, commit, tree):
+def project(text, path, commit, tree, *, prose_links=True):
     """A page copy of a Markdown file: every relative link names the exact file of the released commit."""
     resolved = {match.start(): (target, anchor) for match, target, anchor in _targets(text, path)}
 
@@ -218,7 +218,8 @@ def project(text, path, commit, tree):
         if kind is None:
             raise Refused(f"{path} links to {match[1]}, which is not in the released commit")
         return f"]({REPO_URL}/{kind}/{commit}/{target}{anchor})"
-    return prose_url_links(_LINK.sub(link, text))
+    result = _LINK.sub(link, text)
+    return prose_url_links(result) if prose_links else result
 
 
 def _zip(files):
@@ -232,7 +233,7 @@ def _zip(files):
     return stream.getvalue()
 
 
-def build_packets(manifest, source):
+def build_packets(manifest, source, *, legacy_projection=False):
     """One packet per bound released skill, from `source` (the frozen released commit). Pure; no network."""
     released = manifest["editions"]["released"]
     if source.commit != released["commit"]:
@@ -285,18 +286,28 @@ def build_packets(manifest, source):
             inside = path[len(prefix):] if path.startswith(prefix) else "resources/" + path[len("skills/"):]
             if path.startswith(prefix) and (inside.split("/")[0] in RESERVED or inside == zip_name):
                 raise Refused(f"{path} would collide with a reserved name of the packet")
-            files[inside] = project(data.decode(), path, commit, tree).encode() if path.endswith(".md") else data
+            files[inside] = project(data.decode(), path, commit, tree, prose_links=not legacy_projection).encode() if path.endswith(".md") else data
         header, body = sources[prefix + "SKILL.md"].decode()[4:].split("\n---\n", 1)
-        intro = (f"Released reference · OSM {package} · skill {version}\n\n"
+        # The bound edition is a reviewed source tag, which can exist before a
+        # GitHub Release. Never turn that binding into a publication claim or
+        # a download URL for a release asset that may not exist.
+        intro = (f"Source reference · OSM {package} · skill {version}\n\n"
                  f"[Exact instruction source]({REPO_URL}/blob/{commit}/{prefix}SKILL.md) · commit `{commit}`. "
                  "Use the instructions supplied with your installed version. Supporting files are attached to this skill.\n\n"
-                 f"[Download the OSM source package]({REPO_URL}/releases/download/{released['tag']}/osm-{package}-source.zip).\n\n")
+                 f"[Download this exact repository source]({REPO_URL}/archive/{commit}.zip). "
+                 "A source tag is not proof of a published GitHub Release.\n\n")
+        if legacy_projection:
+            # Recognition only: reproduce the old publisher's bytes exactly.
+            intro = (f"Released reference · OSM {package} · skill {version}\n\n"
+                     f"[Exact instruction source]({REPO_URL}/blob/{commit}/{prefix}SKILL.md) · commit `{commit}`. "
+                     "Use the instructions supplied with your installed version. Supporting files are attached to this skill.\n\n"
+                     f"[Download the OSM source package]({REPO_URL}/releases/download/{released['tag']}/osm-{package}-source.zip).\n\n")
         files["SKILL.md"] = (f"---\n{header}\n---\n\n{intro}"
-                             + project(body.strip(), prefix + "SKILL.md", commit, tree) + "\n").encode()
+                             + project(body.strip(), prefix + "SKILL.md", commit, tree, prose_links=not legacy_projection) + "\n").encode()
         if any(pub.SECRET.search(data.decode("utf-8", "ignore")) for data in files.values()):
             raise Refused(f"{name}: secret-like text is refused in a public packet")
         packet = {"key": row["key"], "name": name, "page": row["notion"], "row_key": row["row_key"],
-                  "title": ("OSM:" + name.removeprefix("osm-") if name.startswith("osm-") else name), "version": version, "package": package, "commit": commit,
+                  "title": ("OSM:" + name.removeprefix("osm-") if legacy_projection or name.startswith("osm-") else name), "version": version, "package": package, "commit": commit,
                   "tag": released["tag"], "zip": zip_name, "files": files, "exact": exact, "helpers": sorted(used),
                   "skill": meaning(files["SKILL.md"].decode()), "handoff": (row.get("handoff") or {}).get("native"),
                   "writer": row["public_writer"], "adopted": row["adoption_state"] == "adopted"}
@@ -871,7 +882,14 @@ def _prior_packets(manifest, repo, resolver):
             return None
         earlier = json.loads(json.dumps(manifest))
         earlier["editions"]["released"].update(tag=tag, commit=commit)
-        return build_packets(earlier, pub.GitSource(repo, commit))
+        source = pub.GitSource(repo, commit)
+        names = {p.split('/')[1] for p in source.paths() if re.fullmatch(r'skills/[^/]+/SKILL\.md', p)}
+        # A newly bound row must not prevent recognition of older output. Use
+        # only today's explicitly bound identities that existed at that tag;
+        # build_packets still requires exact coverage of that historical tree.
+        earlier['artifacts'] = [a for a in earlier['artifacts']
+                                if a['class'] != 'A' or a['key'].rsplit('.', 1)[-1] in names]
+        return build_packets(earlier, source, legacy_projection=pub._version(tag) <= pub._version('v0.36.4'))
     return build
 
 

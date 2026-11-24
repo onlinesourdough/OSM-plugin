@@ -128,3 +128,9 @@ historical evidence. No CI implementation guide is added to the public method.
 `tests/publisher-rehearsal.py` covers transport and retry behavior with mutation
 controls. `tests/publisher-parity.py` checks original/export drift, source identities,
 release bindings, dry runs and incomplete Markdown responses. Both use fixtures.
+
+### Reviewed source references and published packages
+
+The manifest's latest reviewed source tag can precede its GitHub Release. Native reading copies therefore say **Source reference**, link the exact commit and its repository archive, and retain the exact per-skill source ZIP. They do not advertise a missing release asset or establish package publication. Actual releases and installed versions retain their separate readbacks.
+
+When recognising prior publisher output, reconstruct only current explicitly bound row identities that existed in the historical tag. The current roster still requires complete coverage. Tags through v0.36.4 use the preserved legacy reading projection for recognition, including their original relative-link formatting and introduction; this is not a rewrite or relaxed comparison of live files. The retained actual v0.36.3 packet digests independently exercise the seven-to-eight transition and reject an edited older packet.

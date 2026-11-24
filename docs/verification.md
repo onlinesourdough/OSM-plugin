@@ -4197,3 +4197,14 @@ and then on the missing eighth binding. All attempts remain retained.
 The final committed candidate, full checks, independent review, CI, publication,
 public whole-set/zero-write evidence and native installation are separate
 completion steps; none is inferred from this preparation note.
+
+
+### 24 November — recovery review catches the historical roster and publication claim
+
+Actual Gemini 4 Neon High reviewed cb2b226 (127,527-byte brief, SHA-256 `143dfebec7f03abed80cdeac33797873be10c018fa91c404c730756eb6715c35`): SUCCESS, REQUIRED CHANGES, 155.129 model seconds, 158.349 process seconds, zero tool attempts. Its four complete source files and five complete diffs are the declared scope; no live/build verification was inferred. The earlier peer acceptance was bounded and did not establish historical upgrade compatibility.
+
+The findings were acted on before merge: historical packet reconstruction now keeps strict current coverage while selecting only currently bound identities that existed at the older source tag; the legacy projection reproduces the earlier file hashes. A regression uses the seven actual v0.36.3 non-history supporting-file digests from qualified run 45470301330, plus edited-packet refusal. Current reading copies say Source reference and link an exact-commit repository archive, rather than claiming an unpublished GitHub Release or linking a missing release asset. Corrected the stale seven-row description and added Unslop to the reader introduction.
+
+The new Unslop Draft's ambiguous Markdown-rendered Source value was deliberately replaced on the same row with plain commit/skill provenance and fully fetched. A first path-shaped value was auto-linked by Notion; inspection preceded the final exact plain value. Complete native archive download then confirmed the unchanged supporting-file and instruction-meaning hashes; the captured handoff has native version `15433456556fd8d32fa61063755301e58bf09296f86d9b1c78224001d98d749c`. No body, Status, other core row or Content row was changed by that metadata preparation. Actual REST preflight and anonymous visibility still precede final publication qualification.
+
+All 19 local command groups completed on cb2b226 across retained attempt3 and its continuation, including 25 native-publisher fixtures, 84 adapter checks, 16 browser-reader checks and generated-data/runtime reproduction. The initial process-group cleanup check returned EPERM; its isolated and complete unchanged reruns passed. This is retained as a transient local observation, not silently erased or a changed cleanup guard. The repaired publisher then passed 27 native fixture cases. PR156's first CI on cb2b226 passed, but that does not approve the newly repaired bytes, publication, native installation or the final public result.

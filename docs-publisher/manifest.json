@@ -8,7 +8,7 @@
     "public_reader": {
       "kind": "isolated-playwright-visible-native-catalogue/2",
       "reviewed_in": "PR #120: independent High acceptance of 8f06088; actual secret-free production-path qualification 44750248088; main 44751015131 and zero-write repeat 44751623179.",
-      "note": "One fresh anonymous context; atomic document identity/body capture, complete instruction lines in order and visible catalogue entries bound to the seven actual native Notion row ids. Pacing, server backoff, deadlines and pinned-launcher cleanup fail closed. No credentials or persistent profile enter the child."
+      "note": "One fresh anonymous context; atomic document identity/body capture, complete instruction lines in order and visible catalogue entries bound to the explicitly bound native Notion row ids. Pacing, server backoff, deadlines and pinned-launcher cleanup fail closed. No credentials or persistent profile enter the child."
     }
   },
   "editions": {
@@ -310,13 +310,13 @@
           "properties": {
             "Key": "osm:unslop",
             "Version": "1.0.0 preparation",
-            "Source": "[https://github.com/onlinesourdough/OSM-plugin/blob/7ea917ebfad811dd2e94ec93403d6236eebec649/skills/unslop/SKILL.md](https://github.com/onlinesourdough/OSM-plugin/blob/7ea917ebfad811dd2e94ec93403d6236eebec649/skills/unslop/SKILL.md)",
+            "Source": "Reviewed source commit 7ea917ebfad811dd2e94ec93403d6236eebec649; Unslop skill; native preparation only",
             "Source revision": "7ea917ebfad811dd2e94ec93403d6236eebec649",
             "Package version": "0.36.5 preparation; not published",
             "Status": "Draft"
           },
-          "version_id": "896dbb5d98b18c4b2e29194a096c15d0fb63bf52dbf8883b2f0511edd6cf1cdb",
-          "read_at": "2026-11-24T19:59:07+00:00"
+          "version_id": "15433456556fd8d32fa61063755301e58bf09296f86d9b1c78224001d98d749c",
+          "read_at": "2026-11-24T20:15:23.652Z"
         }
       }
     },

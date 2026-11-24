@@ -1281,7 +1281,7 @@ For text that is not English, apply the language-neutral rules and skip the Engl
 If the fetch fails, say so and stop. Never use rules from memory.
 
 Credit: Lauren Tan, pstack (cursor/plugins), MIT.
-`,url:"https://gustavanderson.notion.site/4226d2e17f568196a197f5c5618b51f4",source_revision:"c9c37988fc4e809ea0d0c38bc136eef0e3d607e1"},"6abfc738a9604ddc806432721813712b":{id:"6abfc738a9604ddc806432721813712b",title:"OSM skills",body:`Shared methods for the context module. Setup conducts onboarding in the conversation. Prime, Log and Dreaming maintain context; Interview, Human Writing and Council help when relevant.
+`,url:"https://gustavanderson.notion.site/4226d2e17f568196a197f5c5618b51f4",source_revision:"c9c37988fc4e809ea0d0c38bc136eef0e3d607e1"},"6abfc738a9604ddc806432721813712b":{id:"6abfc738a9604ddc806432721813712b",title:"OSM skills",body:`Shared methods for the context module. Setup conducts onboarding in the conversation. Prime, Log and Dreaming maintain context; Interview, Human Writing and Council help when relevant; Unslop removes generic AI phrasing when selected.
 
 - [OSM:council](https://gustavanderson.notion.site/40d6d2e17f56812e9326c206a8b4a66e)
 - [OSM:dreaming](https://gustavanderson.notion.site/41d6d2e17f5681c2a37ed361fd849ba8)

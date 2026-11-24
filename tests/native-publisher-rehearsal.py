@@ -887,6 +887,40 @@ def reading_copy_urls_roundtrip_without_changing_code_or_existing_links():
             'the downloadable source remains the exact reviewed Git bytes')
 
 
+@test
+def historical_seven_packet_output_survives_the_eighth_binding():
+    fixture = json.loads((ROOT / 'tests/fixtures/native-0363-file-digests.json').read_text())
+    prior = ns._prior_packets(RECORDED, ROOT, pub.git_tag_resolver(ROOT))
+    old = prior('v0.36.3', fixture['source_commit'])
+    require(len(old) == 7 and len(PACKETS) == 8, 'the actual seven-to-eight roster transition is exercised')
+    require({k: ns.digest(ns.file_hashes(p['files'])) for k, p in old.items()} == fixture['digests'],
+            'every historical supporting byte matches the retained actual CI readback, not a new URL projection')
+    for key, packet in old.items():
+        seen = ns.expected({**packet, 'handoff': PACKETS[key]['handoff']}, {'files': {}, 'properties': {'Status': 'Released reference'}})
+        require(ns._built_by_ci(PACKETS[key], seen, prior) == 'v0.36.3', 'every unchanged earlier row is recognised')
+        changed = copy.deepcopy(seen)
+        changed['files']['LICENSE'] += b'owner edit'
+        require(ns._built_by_ci(PACKETS[key], changed, prior) is None, 'an edited older packet remains a conflict')
+    incomplete = copy.deepcopy(RECORDED)
+    incomplete['artifacts'] = [a for a in incomplete['artifacts'] if a['key'] != 'osm.released.skill.unslop']
+    try:
+        ns.build_packets(incomplete, SOURCE)
+    except ns.Refused:
+        pass
+    else:
+        raise AssertionError('the current eight-row roster must stay strict')
+
+
+@test
+def source_packets_do_not_imply_a_github_release_or_missing_asset():
+    for packet in PACKETS.values():
+        text = packet['files']['SKILL.md'].decode()
+        require('Source reference · OSM ' in text and 'Released reference · OSM ' not in text,
+                'a reviewed source tag is not advertised as a published release')
+        require(f"{ns.REPO_URL}/archive/{packet['commit']}.zip" in text and '/releases/download/' not in text,
+                'the exact source download does not depend on a GitHub Release existing')
+
+
 def main():
     for function in TESTS:
         function()

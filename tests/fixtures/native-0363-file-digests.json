@@ -1,0 +1,14 @@
+{
+  "source_run": 45470301330,
+  "source_commit": "b5d3babd5f9a8cec65b336fa76b4c7bf8b0a4bff",
+  "scope": "actual seven native packet non-history supporting-file digests; SKILL meaning checked separately",
+  "digests": {
+    "osm.released.skill.osm-council": "b9599b2511f78d937ee5cd0a778011b4b687e216567a4d38b807a7f7022d8f4a",
+    "osm.released.skill.osm-dreaming": "fa82b6aa0a6ea0a36ebb94210a424de472e08769c74999992967957f04cda4bc",
+    "osm.released.skill.osm-human-writing": "da4edb12d8e01d38506aea4a73d7bbc7f5579ab6474a6d1165183cccd090b3cc",
+    "osm.released.skill.osm-interview": "2d3665cdb49e53f4bbfdfea3158c47d89d74011d47d43f5e1182272df361f823",
+    "osm.released.skill.osm-log": "3e7a7ceaf89a7ada400bde6ac0fdfd70c9a3d58c2605cf8eed815de48129c72f",
+    "osm.released.skill.osm-prime": "df287d4d108b83b1eeb944b09ea6abd1322ccb8db40df4fe134908078da0e399",
+    "osm.released.skill.osm-setup": "95b697ab10e785749ce27eb3e1bcde3ad07db6bc0b4f397acd7a69ca2d4e4cf2"
+  }
+}
