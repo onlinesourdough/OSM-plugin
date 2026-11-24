@@ -896,7 +896,11 @@ def historical_seven_packet_output_survives_the_eighth_binding():
     require({k: ns.digest(ns.file_hashes(p['files'])) for k, p in old.items()} == fixture['digests'],
             'every historical supporting byte matches the retained actual CI readback, not a new URL projection')
     for key, packet in old.items():
+        observation = fixture['observations'][key]
+        require(ns.digest(packet['skill']) == observation['skill'], 'historical instruction meaning matches actual readback')
         seen = ns.expected({**packet, 'handoff': PACKETS[key]['handoff']}, {'files': {}, 'properties': {'Status': 'Released reference'}})
+        require(seen['title'] == observation['title'] and seen['properties'] == observation['properties'],
+                'historical title and all managed properties match actual readback')
         require(ns._built_by_ci(PACKETS[key], seen, prior) == 'v0.36.3', 'every unchanged earlier row is recognised')
         changed = copy.deepcopy(seen)
         changed['files']['LICENSE'] += b'owner edit'
