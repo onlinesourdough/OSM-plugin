@@ -1,0 +1,90 @@
+{
+  "osm-council": {
+    "should_trigger": [
+      "Ask another agent for a second opinion on this proposal.",
+      "Get an independent model review of this branch diff.",
+      "Delegate a bounded accessibility review to another agent."
+    ],
+    "should_not_trigger": [
+      "Review this function yourself and explain the bug.",
+      "Draft an email to my colleague asking for their opinion."
+    ]
+  },
+  "osm-dreaming": {
+    "should_trigger": [
+      "Reflect across recent work between tasks and catch missed learnings.",
+      "Run the existing daily reflection and repair verified Notion context drift.",
+      "Review unfinished and archived work for overlooked decisions in this upkeep run."
+    ],
+    "should_not_trigger": [
+      "Remember this one decision in Notion now.",
+      "Create a daily calendar event for my morning walk."
+    ]
+  },
+  "osm-human-writing": {
+    "should_trigger": [
+      "Draft an email from me to the team, in my usual voice.",
+      "Edit my LinkedIn post while preserving my approved opening.",
+      "Write a short SMS from me to thank the host."
+    ],
+    "should_not_trigger": [
+      "Remove AI tells from your own status report.",
+      "Compute the total of these invoice amounts."
+    ]
+  },
+  "osm-interview": {
+    "should_trigger": [
+      "Interview me to clarify what I want from this project.",
+      "I am unsure about the direction; help me think it through first.",
+      "Before building, help me restate my goals and the underlying problem."
+    ],
+    "should_not_trigger": [
+      "Rename this variable to customer_id.",
+      "What does HTTP 404 mean?"
+    ]
+  },
+  "osm-log": {
+    "should_trigger": [
+      "Remember in Notion that I prefer Danish for our meetings.",
+      "Log this lasting decision now that the work is complete.",
+      "Note this correction in our selected context home for future sessions."
+    ],
+    "should_not_trigger": [
+      "Add a debug log statement to this function.",
+      "Summarize this draft in chat without saving it."
+    ]
+  },
+  "osm-prime": {
+    "should_trigger": [
+      "Start this new OSM session with the relevant Notion context.",
+      "Prime our new session from the selected OSM home.",
+      "Load the relevant business context as we begin this OSM conversation."
+    ],
+    "should_not_trigger": [
+      "In this independent repository, fix the typo in README.md.",
+      "Continue this session using the context already loaded."
+    ]
+  },
+  "osm-setup": {
+    "should_trigger": [
+      "Set up OSM and its Notion context home for me.",
+      "Resume our unfinished OSM onboarding from the next gap.",
+      "Check and repair my broken OSM installation."
+    ],
+    "should_not_trigger": [
+      "Set up a Python virtual environment for this script.",
+      "Write a message welcoming a new colleague."
+    ]
+  },
+  "unslop": {
+    "should_trigger": [
+      "Remove AI tells from your own reply.",
+      "Clean up the AI phrasing in the report you wrote as the assistant.",
+      "Edit your own Notion status page to remove AI tells."
+    ],
+    "should_not_trigger": [
+      "Edit this email that will go out under my name.",
+      "Keep this quoted passage exactly as written."
+    ]
+  }
+}

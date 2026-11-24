@@ -1,8 +1,8 @@
 ---
 name: osm-dreaming
-description: "Reflect across completed, unfinished or recently archived work and selected sources between tasks. Recover missed learning, maintain Memory and repair verified context drift. Manual or via an existing daily caller."
+description: "Reflect between tasks or on a daily schedule: review recent work, catch missed learnings and fix drifted Notion context."
 metadata:
-  version: "1.4.0"
+  version: "1.4.1"
 ---
 
 # OSM:dreaming

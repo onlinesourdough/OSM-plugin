@@ -5,19 +5,20 @@ canonical names, for example `osm-setup`. Codex may display the same skill
 as `OSM:setup`. Each entry carries an independent `metadata.version`.
 Repository development methods live separately. [Version maintenance](skill-versioning.md)
 
-The standard package exposes seven skill entries. Context setup, curation and
+The standard package exposes eight skill entries. Context setup, curation and
 personal skill maintenance are linked procedures. The previous 20-skill package
 is available at [v0.33.0](https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/docs/skills.md).
 
 | Skill | Responsibility |
 | --- | --- |
-| [OSM:human-writing](../skills/osm-human-writing/SKILL.md) | Default prose drafting and editing that preserves facts, uncertainty and the user’s voice |
-| [OSM:interview](../skills/osm-interview/SKILL.md) | Explore context, challenge assumptions and find direction when requested or materially needed at the start; no routine interruption of execution |
-| [OSM:prime](../skills/osm-prime/SKILL.md) | Start with the smallest relevant context in the selected scope |
-| [OSM:log](../skills/osm-log/SKILL.md) | Save lasting changes at a meaningful checkpoint or on request |
-| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Review changed work and selected sources, repair confirmed context errors and surface open progress between sessions, manually or through an authorized native schedule |
-| [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume the Notion Data & Context foundation, from access to a useful first task |
-| [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent for a read-only review or delegate bounded work with a scoped brief |
+| [OSM:human-writing](../skills/osm-human-writing/SKILL.md) | Draft or edit an email, SMS, LinkedIn post or other prose so it sounds like the author. |
+| [OSM:interview](../skills/osm-interview/SKILL.md) | Interview the user when goals or direction are unclear, or when they ask to think something through first. |
+| [OSM:prime](../skills/osm-prime/SKILL.md) | Start a new session in an OSM setup by loading only the relevant Notion context. |
+| [OSM:log](../skills/osm-log/SKILL.md) | Save lasting context to Notion when meaningful work ends or the user says remember, log or note this. |
+| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Reflect between tasks or on a daily schedule: review recent work, catch missed learnings and fix drifted Notion context. |
+| [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume OSM and its Notion context home, or check and repair a broken install. |
+| [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent or model for a second opinion, an independent review or bounded help. |
+| [unslop](../skills/unslop/SKILL.md) | Remove AI tells from the agent's own replies, reports and Notion pages. |
 
 Council replaces `osm-orchestrate-workers` in OSM 0.33.0. If you call it
 by identifier in a script or saved prompt, update the caller to `osm-council`
@@ -54,6 +55,7 @@ consistent with the skill text.
 | Explore direction | [OSM:interview](../skills/osm-interview/SKILL.md) | Active specification method when needed, Log (durable owner facts only) |
 | Get another agent’s review or bounded help | [OSM:council](../skills/osm-council/SKILL.md) | Native workers or a selected CLI; model advice when needed |
 | Write prose for its intended reader | [Human Writing](../skills/osm-human-writing/SKILL.md) | None |
+| Remove AI tells from the agent’s own text | [unslop](../skills/unslop/SKILL.md) | Human Writing for text sent under the author’s name |
 | Inspect installation or state (read-only) | [check](../skills/osm/references/check.md) | None |
 | Update, roll back, or move off a legacy home | [update](../skills/osm/references/update.md) | None |
 | Model advice, only on request | [model advice](../skills/osm/references/model-advice.md) | None |
@@ -72,6 +74,27 @@ Plugin namespaces come from the host, for example `osm:osm-setup`. Personal
 methods keep their owner's names and permissions. The
 [legacy behavior map](../skills/osm-setup/references/legacy-parity.md) records
 the earlier routes.
+
+At the close of an interview, once the goal is clear, Interview asks one brief
+ambition question before its summary: expert depth, the wider purpose and next
+outcome, or a useful approach from another field. It selects one angle, accepts
+a decline or an answer that changes nothing, and continues. An explicit stop
+or skip still ends the interview. The skill links its inspiration without
+copying the article.
+
+## Agent text and author text
+
+`unslop` edits the agent's own replies, reports and Notion pages. It fetches
+Lauren Tan's MIT pstack method from `cursor/plugins` main at use time with the
+host's own tool. No upstream rules are bundled or recalled from memory; a
+failed fetch stops that pass. Non-English text uses the language-neutral rules
+and skips the English word lists.
+
+Text sent under the author's name, including an email, SMS or LinkedIn post,
+belongs to `osm-human-writing`, which preserves approved wording, evidence,
+uncertainty and the author's voice. A Notion page written as the agent's report
+uses `unslop`; a page drafted for publication under the author's name uses
+Human Writing. Neither method grants sending or publishing authority.
 
 ## Retired: Project Foundation (0.28.0)
 

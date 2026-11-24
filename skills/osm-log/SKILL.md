@@ -1,8 +1,8 @@
 ---
 name: osm-log
-description: Save lasting context when meaningful work finishes or the user asks to remember or log something. Use the verified home, read back authorized changes, and resume without logging the same work twice.
+description: "Save lasting context to Notion when meaningful work ends or the user says remember, log or note this."
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # OSM:log

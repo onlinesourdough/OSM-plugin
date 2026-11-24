@@ -1,8 +1,8 @@
 ---
 name: osm-human-writing
-description: Draft or revise an SMS, email, LinkedIn post or other prose for its intended reader. Preserve approved wording, facts, uncertainty and the author's voice.
+description: "Draft or edit an email, SMS, LinkedIn post or other prose so it sounds like the author."
 metadata:
-  version: "2.1.0"
+  version: "2.1.1"
 ---
 
 # OSM:human-writing

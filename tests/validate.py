@@ -3,6 +3,7 @@
 from pathlib import Path
 import argparse
 from skill_metadata import RENAMED_SKILLS, parse_frontmatter, skill_version, validate_baseline
+from unslop_contract import check as validate_unslop
 from native_manifests import validate_native
 import json
 import re
@@ -15,7 +16,7 @@ from package_documentation import check as validate_documentation
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_NAMES = {
     "osm-council", "osm-dreaming", "osm-human-writing", "osm-interview",
-    "osm-log", "osm-prime", "osm-setup",
+    "osm-log", "osm-prime", "osm-setup", "unslop",
 }
 REFERENCE_ONLY = {"osm", "osm-data-context", "osm-manage-data-context", "osm-manage-skills"}
 RELEASE_ARCHIVE = "https://github.com/onlinesourdough/OSM-plugin/blob/v0.33.0/skills/"
@@ -113,6 +114,7 @@ def copy_product(root, destination):
 
 def validate(root=ROOT, release_tag=None):
     validate_native(root, require)
+    validate_unslop(root)
     try:
         validate_documentation(root, release_tag)
     except ValueError as error:

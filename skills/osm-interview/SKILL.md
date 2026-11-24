@@ -1,8 +1,8 @@
 ---
 name: osm-interview
-description: Interview to explore context, restate goals and the underlying problem, or find direction when requested or materially unclear at the start; clear work and isolated questions continue directly.
+description: "Interview the user when goals or direction are unclear, or when they ask to think something through first."
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
 ---
 
 # OSM:interview
@@ -21,7 +21,7 @@ reconsider. Understanding or a decision can be the whole requested result.
   direction and cannot be resolved from accepted inputs or authorized sources.
   State the focus briefly and begin; do not add a routine permission question.
 - A new project, agent, automation or plugin installation alone is not a
-  trigger. Clear work proceeds through its existing method. During execution,
+  trigger. Clear work and isolated questions continue directly through their existing method. During execution,
   ask the smallest blocking question; do not silently switch to an interview.
 - If broader reflection would help but is unnecessary for the current result,
   offer it once at a natural pause without holding up independent work. Start
@@ -72,7 +72,16 @@ accepted is not reopened without new evidence or a user request.
 ## Return to useful work
 
 Stop when the user ends the interview or there is enough shared understanding
-for the agreed next action. Summarize the situation, accepted decisions,
+for the agreed next action.
+
+Once the goal is clear, ask exactly one ambition question before summarizing:
+choose depth (what an expert would add beyond the request), altitude (the
+wider purpose and what follows), or range (a better approach from another
+field), whichever fits best. Use your own words in a few lines. If the user
+declines or the answer changes nothing, move on without a questionnaire.
+Respect an explicit stop or skip.
+
+Summarize the situation, accepted decisions,
 material assumptions or unknowns and next action; resolve only a correction
 that would change that action. Do not require a separate approval of the summary
 when the answers already establish direction and authority.
@@ -86,3 +95,5 @@ Keep project decisions with the project and external facts at their source.
 Only relevant durable owner facts use [Log](../osm-log/SKILL.md)
 under existing authority. Do not save raw transcripts, temporary project plans
 or speculative answers as owner memory. A separate document is optional.
+
+Source: [Felix Rieseberg, “How to be more ambitious: A tutorial for humans with models” (13 October 2026)](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/).

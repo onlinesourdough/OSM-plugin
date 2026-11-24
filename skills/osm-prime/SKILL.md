@@ -1,8 +1,8 @@
 ---
 name: osm-prime
-description: Start each new session in an OSM-configured profile with the selected Notion context. Keep clearly independent work in its project and retrieve only relevant sources.
+description: "Start a new session in an OSM setup by loading only the relevant Notion context."
 metadata:
-  version: "1.2.2"
+  version: "1.2.3"
 ---
 
 # OSM:prime

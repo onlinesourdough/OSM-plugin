@@ -1,8 +1,8 @@
 ---
 name: osm-council
-description: Ask another agent or model for an independent review, a second opinion or bounded work with a scoped delegation brief.
+description: "Ask another agent or model for a second opinion, an independent review or bounded help."
 metadata:
-  version: "3.1.2"
+  version: "3.1.3"
 ---
 
 # OSM:council

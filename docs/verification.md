@@ -4018,3 +4018,132 @@ Local package validation and all seven documentation rehearsals passed for this
 evidence-only append, along with `git diff --check`. No product, generated guide,
 manifest or version change is included. Final required CI and publication are
 separate checks; #69/#73 retain their precise outstanding host/caller cases.
+
+### Trigger-first descriptions and thin unslop candidate · 23 November 2026
+
+Work started in a fresh clone on `docs/skill-triggers-unslop-20261123`, from
+`origin/main` at `50f433a8233c861a9882d419e53b16f1c4484f99`. The older iCloud
+checkout was not used or changed. Package 0.36.4 is a PR candidate, not a tag
+or release. All seven existing descriptions match the approved strings and
+receive independent patch bumps. Their removed discovery details remain in
+the bodies; Interview now explicitly includes isolated questions.
+
+`unslop` 1.0.0 is one short entrypoint, with automatic invocation left enabled.
+It fetches Lauren Tan's MIT pstack method at use time and keeps author-attributed
+text with Human Writing. The repository contains no upstream rulebook, pin,
+sync job, updater or additional host route. `tests/unslop-rehearsal.py` rejects
+bundled sections/lists, extra files and copied source prose, and its optional
+`--upstream` comparison passed against both actual fetched files kept outside
+Git. The existing 240-byte description cap and job prefixes remain in force.
+
+[Cases](../tests/fixtures/skill-trigger-cases.json) contain three positive and
+two negative prompts per skill, 40 total. [Receipts](skill-trigger-trials-20261123.json)
+retain both catalogues, all classifications, attempts, durations, unavailable
+hosts and the bounded fetch results. The old catalogue has seven entries; the
+new one has eight. Each host received one batched, read-only classification
+request per catalogue, with the target named per sample and only names and
+descriptions supplied. These are description-routing trials, not observations
+of autonomous native skill discovery or end-to-end context operations.
+
+| Host | Original seven skills, old → new (35 cases) | unslop, old → new (5 cases) | Fetch and apply upstream |
+| --- | --- | --- | --- |
+| Codex CLI, gpt-6.1-sol | 34/35 → 35/35 | 2/5 → 5/5; absent in old catalogue | Fetched the full file, read it and edited both examples. |
+| Claude Code, claude-opus-5-5 | 35/35 → 35/35 | 2/5 → 5/5; absent in old catalogue | Fetched the full file, read it and edited both examples. |
+| Cursor Agent | Unavailable | Unavailable | Not run: `cursor-agent status` reported `Not logged in`. |
+| Grok Bot | Unavailable | Unavailable | No native host surface or executable exposed. |
+| Gemini CLI | Unavailable | Unavailable | `gemini` executable absent. Antigravity is a separate Council route. |
+
+Codex's old catalogue selected Human Writing for removing AI tells from the
+assistant's own status report. The three positive unslop cases are expected
+inventory misses in the old catalogue. These small, unblinded batches do not
+establish general accuracy, a causal improvement or a performance advantage.
+The first Codex CLI attempts failed to initialize its in-process app server.
+A disposable native `CODEX_HOME`, the existing auth file by symlink and
+`--no-daemon --ephemeral --ignore-user-config` allowed the classification runs
+without writing to the normal profile. Cursor's stdin and positional-prompt
+attempts both exited 1 without a classification; neither is counted as a pass.
+Claude used `--no-session-persistence --setting-sources '' --strict-mcp-config`
+with an empty MCP set, tools disabled for classification and only Bash/Read
+allowed for the fetch trial.
+
+The first fetch trials were also retained: Claude's chained curl/echo command
+was blocked by `dontAsk`; Codex's nested sandbox failed with
+`sandbox_apply: Operation not permitted`. Both stopped without a rewrite.
+Claude then used a single allowed curl command followed by Read. Codex's retry
+used the host's native `danger-full-access` child setting inside this thread's
+unchanged outer filesystem/network sandbox, so that the nested sandbox launcher
+was not needed; this is not a claim about default nested-sandbox execution.
+Both fetched the same source hash recorded in the receipts, preserved the
+untested-with-customers caveat, removed unsupported English praise and returned
+Danish text. Claude explicitly skipped the English word list for Danish.
+Codex retained both “kan” and “muligvis”; the result demonstrates fetching and
+bounded application, not perfect adherence to every upstream editorial rule.
+No live Notion page or author-owned text was changed.
+
+The guide reader is bound to skill-source commit `56cd94d`; its generated
+JSON and `runtime/notion` were rebuilt rather than edited. The existing seven
+public skill-page bindings and released edition remain unchanged; no unslop
+Notion page or public publication is claimed. Its folder uses the existing
+work-guide mapping, and its package boundary is documented in `docs/skills.md`.
+The original local build correctly refused the old reader binding and the
+Notion author-package version mismatch; both were corrected. Publisher parity
+also rejected the unmapped new folder before its existing-guide mapping was
+added. The rebuild now reproduces with zero generated diff.
+
+The Notion-tools build and all 84 Node tests plus the runtime smoke passed.
+The full repository suite was run; one pre-existing local test requires `ps`,
+which this thread's sandbox denies (`PermissionError: [Errno 1] Operation not
+permitted: 'ps'` in the browser process-group cleanup test). The final local check results and full GitHub CI result are recorded below.
+The independent Council outcome is recorded on [PR #153](https://github.com/onlinesourdough/OSM-plugin/pull/153). `scripts/check_release.py` is absent; the applicable
+release check is `tests/validate.py --baseline origin/main`. No merge, tag,
+release, normal-profile install or public Notion write was performed.
+
+The final local run passed 18 of its 19 commands: package validation (also
+against `origin/main`), documentation, onboarding, layout, continuity, skill
+versions, unslop, footprint, responsibility, context architecture, publisher,
+publisher parity, native publisher, consumer selection, public-browser Node
+checks, publisher reconciliation and `git diff --check`. The only failed
+command was `tests/public-browser-reader.py`, solely at the denied `ps`
+invocation above; an optional live-browser test was skipped locally.
+
+The complete [Package and release CI run 45248577653](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45248577653)
+passed at `9d790a927102d98ac3c9bb77869087d5418174e4`, including the browser
+process-group check. The release job was skipped because this is a PR. The
+following commit records that evidence only; it changes no product source,
+trial result, generated output or release authority. Final-head CI and the
+exact-head Council result remain visible on the PR.
+
+The first actual Neon High Council review at `9d790a9` withheld acceptance:
+the native client truncated the oversized inline diff, and the retained fetch
+receipts lacked their input examples, retry command flags and the backing
+statement for Claude's Danish word-list handling. Those evidence fields are
+now embedded in the receipt JSON; temporary trace names are explicitly
+provenance labels, not repository links. The present-tense forward reference
+was also replaced with the actual CI result above. Re-review supplies the
+complete diff in bounded parts, including both generated files; no model
+substitution or approval based on the truncated input is claimed.
+
+
+### One ambition question at interview close · 23 November 2026
+
+The owner-approved increment to PR #153 adds exactly one brief ambition question
+once the interview goal is clear and before its summary. Interview chooses the
+fitting depth, altitude or range angle, uses its own words, accepts a decline or
+an answer that changes nothing, and continues. Explicit stops/skips remain
+binding. The trigger description is byte-identical to the earlier PR candidate.
+Only Interview changes its skill version, from 2.1.1 to 2.2.0: this is a compatible
+method capability under `docs/skill-versioning.md`. Package 0.36.4 remains the
+same unreleased candidate; no second package bump is required for this PR edit.
+
+The source is the owner-supplied Felix Rieseberg article, linked by title and
+date in the skill. The built-in browser returned `The browser access host is
+unavailable`; no article text was retrieved, copied or independently verified.
+The instructions are paraphrased from the owner's complete brief. This change
+adds no reference file, host fork or external runtime dependency.
+
+The earlier `ae2d346` acceptance remains historical and does not cover this
+increment. The guide and runtime are regenerated from the new exact skill
+source. Full checks and exact-head Neon High Council acceptance for the
+increment and final state are recorded on [PR #153](https://github.com/onlinesourdough/OSM-plugin/pull/153).
+The existing local `ps` sandbox limit remains a local-test limitation; the full
+GitHub CI result is required. No new native interview-behavior trial is claimed.
