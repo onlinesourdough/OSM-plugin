@@ -4,6 +4,9 @@
 
 - Complete release preparation for the reviewed 0.36.4 skill changes. All
   eight skill entrypoints and supporting method files are byte-identical.
+- Bind Unslop as the eighth native public skill, preserving its canonical
+  name. Reading copies make plain prose URLs explicit for Notion, while
+  source ZIPs, code and existing links keep their exact content.
 - Bind the eight unchanged public guide originals to this package edition
   from their actual API snapshot, then rebuild the bundled reader.
 - Retain v0.36.4 as an unpublished source tag. Its CI stopped because the

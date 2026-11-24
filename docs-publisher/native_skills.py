@@ -9,7 +9,7 @@ directory, and `POST ai/skills/{id}/upload` imports one gzip tar archive into th
 Each packet is built from the frozen released commit only: the projected SKILL.md, every supporting
 file of the skill, the resource-only helper folders it references, LICENSE, SOURCE.json and one
 canonical source ZIP of the exact Git bytes. Files under history/ already on the page are carried
-forward byte for byte. Only the seven pages bound in manifest.json are ever addressed, and the guide
+forward byte for byte. Only the pages explicitly bound in manifest.json are ever addressed, and the guide
 originals are never touched. Nothing is recorded on the page beyond the packet: the state CI compares
 is the page itself (supporting bytes, the meaning of SKILL.md, title and properties).
 
@@ -163,6 +163,49 @@ def _targets(text, path):
         yield match, posixpath.normpath(posixpath.join(posixpath.dirname(path), file)), sep + anchor
 
 
+def prose_url_links(text):
+    """Make standalone prose URLs explicit before Notion serializes them as links.
+
+    Reading copies only: fenced and inline code, existing Markdown links and
+    ambiguous trailing punctuation remain byte-for-byte unchanged.
+    """
+    bare = re.compile(r"(?<!\S)(https?://[^\s<>()\[\]`\"']+)(?=\s|$)")
+
+    def convert(part):
+        def link(match):
+            url = match[1]
+            return match[0] if url.endswith(tuple(".,;:!?")) else f"[{url}]({url})"
+        return bare.sub(link, part)
+
+    output, fence = [], None
+    for line in text.splitlines(keepends=True):
+        marker = re.match(r"^\s*(`{3,}|~{3,})(.*)$", line)
+        if fence:
+            output.append(line)
+            if marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence) and not marker[2].strip():
+                fence = None
+            continue
+        if marker:
+            fence = marker[1]
+            output.append(line)
+            continue
+        at = 0
+        while at < len(line):
+            opening = re.search(r"(?<!\\)`+", line[at:])
+            if not opening:
+                output.append(convert(line[at:]))
+                break
+            start, stop = at + opening.start(), at + opening.end()
+            output.append(convert(line[at:start]))
+            closing = re.search(r"(?<!`)" + re.escape(opening[0]) + r"(?!`)", line[stop:])
+            if not closing:
+                output.append(line[start:])
+                break
+            at = stop + closing.end()
+            output.append(line[start:at])
+    return "".join(output)
+
+
 def project(text, path, commit, tree):
     """A page copy of a Markdown file: every relative link names the exact file of the released commit."""
     resolved = {match.start(): (target, anchor) for match, target, anchor in _targets(text, path)}
@@ -175,7 +218,7 @@ def project(text, path, commit, tree):
         if kind is None:
             raise Refused(f"{path} links to {match[1]}, which is not in the released commit")
         return f"]({REPO_URL}/{kind}/{commit}/{target}{anchor})"
-    return _LINK.sub(link, text)
+    return prose_url_links(_LINK.sub(link, text))
 
 
 def _zip(files):
@@ -253,7 +296,7 @@ def build_packets(manifest, source):
         if any(pub.SECRET.search(data.decode("utf-8", "ignore")) for data in files.values()):
             raise Refused(f"{name}: secret-like text is refused in a public packet")
         packet = {"key": row["key"], "name": name, "page": row["notion"], "row_key": row["row_key"],
-                  "title": "OSM:" + name.removeprefix("osm-"), "version": version, "package": package, "commit": commit,
+                  "title": ("OSM:" + name.removeprefix("osm-") if name.startswith("osm-") else name), "version": version, "package": package, "commit": commit,
                   "tag": released["tag"], "zip": zip_name, "files": files, "exact": exact, "helpers": sorted(used),
                   "skill": meaning(files["SKILL.md"].decode()), "handoff": (row.get("handoff") or {}).get("native"),
                   "writer": row["public_writer"], "adopted": row["adoption_state"] == "adopted"}

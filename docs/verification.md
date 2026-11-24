@@ -4147,3 +4147,53 @@ source. Full checks and exact-head Neon High Council acceptance for the
 increment and final state are recorded on [PR #153](https://github.com/onlinesourdough/OSM-plugin/pull/153).
 The existing local `ps` sandbox limit remains a local-test limitation; the full
 GitHub CI result is required. No new native interview-behavior trial is claimed.
+
+### 0.36.5 release recovery and Unslop native handoff · 24 November 2026
+
+The owner explicitly requested publication, native plugin update and usable
+Notion skills. The reviewed 0.36.4 source at `7ea917e` was tagged only after
+package checks, an exact-source integration review and main CI had passed.
+Actual tag CI [45473832390](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45473832390)
+stopped before publication: the eight guide originals were still bound to
+0.36.3. The release preparation omitted their next-edition binding. No
+0.36.4 GitHub Release exists, and its source tag is retained unchanged.
+
+The 0.36.5 preparation exports the eight original bodies from the actual
+read-only API snapshot at 2026-11-24T19:27:39Z. Every content revision is
+unchanged; only their edition/read metadata advances. All 79 method resource
+files, including eight skill entrypoints, remain byte-identical to 0.36.4.
+Package declarations and bundled reader identify 0.36.5. The reviewed-source
+binding names the retained 0.36.4 tag while the published stable release is
+still 0.36.3; these statements do not claim publication of either candidate.
+The explicit `reconcile --release-tag v0.36.5` check is part of validation.
+
+Binding the eight-skill source also exposed its missing public Unslop row.
+A scoped catalogue view read found the seven existing OSM rows, no more
+pages, and no Unslop. SQL had returned an entitlement limit with no execution;
+no retry, subscription change or alternate account was used. One native
+Unslop Draft row was created in the existing public catalogue, given a
+source-backed instruction/LICENCE seed through native upload, fetched and
+completely downloaded. Its exact files, semantic digest, managed properties
+and native version form the new handoff. The seven old OSM rows and Content
+rows were not edited by this preparation. Status remains Draft until the
+actual release and separately verified promotion.
+
+Actual native export showed two serialization issues for this new wrapper:
+restoring `OSM:unslop` changed its name to `osm-unslop`, and Notion made the
+standalone upstream URL an explicit Markdown link. The native writer and
+reader now retain the canonical name for a skill without the `osm-` prefix.
+Reading-copy projection makes unambiguous standalone prose URLs explicit;
+source ZIP bytes, fenced/inline code, existing links and ambiguous punctuation
+remain unchanged. Comparison and identity guards are not relaxed. Fixtures
+exercise the title/name invariant and this serialization with code-preservation
+and replay cases. The roster is checked against actual source entrypoints;
+the anonymous probe checks the complete bound set, not a stale seven-row count.
+
+The initial upload-prepare call with an undashed ID failed schema validation
+before side effects; the returned dashed ID succeeded. Its title/name mismatch
+was inspected and corrected on the same Draft page before handoff. Earlier
+local publisher checks also held before the new manifest/readme were committed,
+and then on the missing eighth binding. All attempts remain retained.
+The final committed candidate, full checks, independent review, CI, publication,
+public whole-set/zero-write evidence and native installation are separate
+completion steps; none is inferred from this preparation note.

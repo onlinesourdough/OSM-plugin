@@ -46,6 +46,7 @@ GIT = pub.GitSource(ROOT, RELEASED["commit"])
 # The same released bytes held in memory, so a scenario can rebuild the packets without rereading Git.
 TREE = {**{path: b"" for path in GIT.paths()}, **GIT.files("skills/"), **GIT.files("package.json"), **GIT.files("LICENSE")}
 SOURCE = pub.DictSource(TREE, RELEASED["commit"])
+BOUND_SKILLS = sorted(p.split('/')[1] for p in GIT.paths() if re.fullmatch(r'skills/[^/]+/SKILL\.md', p))
 CATALOGUE = REAL["reading_export"]["catalogue"]
 TOKEN, SIGNED = "fixture-token-value-1234567890", "SIGNED-ADDRESS-SECRET"
 API, FILES, SITE = "https://api.notion.com/v1/", "https://files.fixture.invalid/", "https://public.fixture.invalid"
@@ -302,7 +303,7 @@ def handed_over(only=None, **options):
 
 @test
 def packets_cover_every_released_byte_and_are_reproducible():
-    require(len(PACKETS) == 7 and sorted(PACKETS) == sorted(a["key"] for a in REAL["artifacts"] if a["class"] == "A"),
+    require(len(PACKETS) == len(BOUND_SKILLS) and sorted(PACKETS) == sorted(a["key"] for a in REAL["artifacts"] if a["class"] == "A"),
             "one packet per bound released skill")
     sources = GIT.files("skills/")
     helpers = {p.split("/")[1] for p in sources} - {packet["name"] for packet in PACKETS.values()}
@@ -352,7 +353,7 @@ def packets_are_built_only_from_the_approved_release():
     out = io.StringIO()
     with redirect_stdout(out):
         code = ns.main(["build", "--repo", str(ROOT)])
-    require(code == 0 and out.getvalue().count("| osm-") == 7, "the credential-free build command proves the seven packets")
+    require(code == 0 and all(f"| {name} |" in out.getvalue() for name in BOUND_SKILLS), "the credential-free build command proves all bound packets")
 
 
 @test
@@ -404,7 +405,7 @@ def a_notion_readback_means_the_same_and_an_edit_does_not():
 def a_preflight_reads_only_and_names_the_missing_access():
     fake = world()
     result = ns.preflight(REAL, PACKETS, api(fake), reader(fake))
-    require(not fake.writes() and len(result["rows"]) == 7, "seven pages are read and nothing is sent but reads")
+    require(not fake.writes() and len(result["rows"]) == len(BOUND_SKILLS), "all bound pages are read and nothing is sent but reads")
     require(all(row["outcome"] == pub.BLOCKED and "no native handoff is recorded" in row["detail"] for row in result["rows"]),
             "without a recorded handoff every page is reported, none is writable")
     require(all(not ns.handoff_problems(row["handoff"]["native"]) for row in result["rows"]), "each row offers a well-formed handoff record")
@@ -428,21 +429,21 @@ def a_preflight_reads_only_and_names_the_missing_access():
 def nothing_is_written_without_activation_handoff_and_the_write_gate():
     fake, manifest = handed_over()
     try:
-        run(fake, REAL, PACKETS, write=True, max_writes=7)
+        run(fake, REAL, PACKETS, write=True, max_writes=len(BOUND_SKILLS))
     except pub.PublisherError as error:
         require("not active" in str(error) and not fake.log, "the recorded manifest is inactive: nothing is even read")
     else:
         raise AssertionError("the inactive manifest refuses")
     waiting = copy.deepcopy(REAL)
     waiting["activation"]["active"] = True
-    require(set(outcomes(run(fake, waiting, PACKETS, write=True, max_writes=7)).values()) == {pub.PENDING_HANDOFF} and not fake.log,
+    require(set(outcomes(run(fake, waiting, PACKETS, write=True, max_writes=len(BOUND_SKILLS))).values()) == {pub.PENDING_HANDOFF} and not fake.log,
             "pages still with the existing upkeep are not read or written")
     partial = copy.deepcopy(manifest)
     for artifact in partial['artifacts']:
         if artifact['class'] == 'A' and artifact['key'] != COUNCIL:
             artifact.update(public_writer='existing-upkeep', adoption_state='pending-handoff')
             artifact.pop('handoff', None)
-    partial_run = run(fake, partial, write=True, max_writes=7)
+    partial_run = run(fake, partial, write=True, max_writes=len(BOUND_SKILLS))
     require(outcomes(partial_run)[COUNCIL] == pub.HELD and not fake.writes(),
             'an active partial handoff with no explicit Key writes zero pages')
     fake.log.clear()
@@ -470,9 +471,9 @@ def nothing_is_written_without_activation_handoff_and_the_write_gate():
 @test
 def the_first_import_delivers_the_whole_packet_and_a_rerun_is_a_no_op():
     fake, manifest = handed_over(reader=True)
-    result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver, reader(fake), write=True, max_writes=7)
+    result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver, reader(fake), write=True, max_writes=len(BOUND_SKILLS))
     require(set(outcomes(result).values()) == {pub.WRITTEN}, f"every handed-over page is written: {outcomes(result)}")
-    require(fake.writes().count(("POST", "upload")) == 7 and not fake.leaks, "one import per page")
+    require(fake.writes().count(("POST", "upload")) == len(BOUND_SKILLS) and not fake.leaks, "one import per page")
     for packet in PACKETS.values():
         page = fake.pages[packet["page"]]
         wanted = {path: data for path, data in packet["files"].items() if path != "SKILL.md"}
@@ -487,7 +488,7 @@ def the_first_import_delivers_the_whole_packet_and_a_rerun_is_a_no_op():
             "Package version": packet["package"], "Status": "Released"}, f"{packet['name']}: title and properties are restored")
     require("Automatic publication: active for this run" in ns.report(result, manifest), "a fully verified active run says so")
     fake.log.clear()
-    again = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver, reader(fake), write=True, max_writes=7)
+    again = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver, reader(fake), write=True, max_writes=len(BOUND_SKILLS))
     require(set(outcomes(again).values()) == {pub.UNCHANGED} and not fake.writes(), "a repeat run reads and writes nothing")
     require(all(row["before"]["version_id"] != result["rows"][i]["before"]["version_id"] for i, row in enumerate(again["rows"])),
             "the no-op rests on content, not on Notion's version id")
@@ -632,7 +633,7 @@ def a_wrong_identity_is_refused_before_any_write():
     try:
         api(fake).page(CATALOGUE)
     except ns.Refused:
-        require(not fake.log, "a page outside the seven bound pages is never requested")
+        require(not fake.log, "a page outside the bound pages is never requested")
     else:
         raise AssertionError("only the bound pages are addressed")
 
@@ -643,12 +644,12 @@ def the_token_and_the_signed_address_never_leave_their_place():
     with tempfile.TemporaryDirectory() as folder:
         out, checkpoint, stream = Path(folder) / "out.md", Path(folder) / "checkpoint.json", io.StringIO()
         with redirect_stdout(stream):
-            code = ns.main(["publish", "--repo", str(ROOT), "--write", "--max-writes", "7", "--out", str(out), "--checkpoint", str(checkpoint),
+            code = ns.main(["publish", "--repo", str(ROOT), "--write", "--max-writes", str(len(BOUND_SKILLS)), "--out", str(out), "--checkpoint", str(checkpoint),
                             "--public-base", SITE, "--public-catalogue", f"{SITE}/{CATALOGUE}"],
                            manifest=manifest, opener=fake, env={**ENV, "GITHUB_ACTIONS": "true"}, tag_resolver=resolver)
         text = stream.getvalue() + out.read_text() + checkpoint.read_text()
         kept = json.loads(checkpoint.read_text())
-    require(code == 0 and fake.writes().count(("POST", "upload")) == 7, f"the command publishes through the same path: {stream.getvalue()[:400]}")
+    require(code == 0 and fake.writes().count(("POST", "upload")) == len(BOUND_SKILLS), f"the command publishes through the same path: {stream.getvalue()[:400]}")
     require(TOKEN not in text and SIGNED not in text and "X-Amz" not in text and FILES not in text, "no token or signed address is printed or stored")
     require(not fake.leaks and all(row["before"]["version_id"] and row["after"]["file_sha256"] for row in kept["rows"]),
             "the archive was fetched without the token; the checkpoint keeps digests")
@@ -814,7 +815,7 @@ def a_bounded_proof_never_claims_the_whole_automatic_run_is_qualified():
                         reader(fake), write=True, only=COUNCIL)
     require(outcomes(result) == {COUNCIL: pub.WRITTEN}, 'the bounded page is verified')
     require('Automatic publication: NOT active' in ns.report(result, manifest),
-            'one page does not prove the seven-page automatic run')
+            'one page does not prove the whole-set automatic run')
 
 
 @test
@@ -828,7 +829,7 @@ def a_later_refusal_preserves_earlier_page_evidence_and_stops_the_remaining_set(
         return original(request, page_id)
     fake._upload_post = refused
     result = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(fake), resolver,
-                        reader(fake), write=True, max_writes=7)
+                        reader(fake), write=True, max_writes=len(BOUND_SKILLS))
     require(result['rows'][0]['outcome'] == pub.WRITTEN and result['rows'][0].get('after'),
             'the first verified page stays recorded')
     require(result['rows'][1]['outcome'] == pub.BLOCKED,
@@ -858,6 +859,32 @@ def a_mismatched_final_read_is_not_reported_as_an_api_verified_write():
     require(result['rows'][0].get('api_verified') is not True and
             f'Write attempted, final state not verified: {COUNCIL}' in ns.report(result, manifest),
             'a readback alone does not prove equality')
+
+
+
+@test
+def native_titles_keep_the_canonical_skill_identity():
+    for packet in PACKETS.values():
+        title_name = ns.meaning(f"---\nname: {packet['title']}\ndescription: x\n---\nx\n")["name"]
+        require(title_name == packet['skill']['name'],
+                f"restoring the title must not rename {packet['name']} in Notion's exported skill")
+
+
+@test
+def reading_copy_urls_roundtrip_without_changing_code_or_existing_links():
+    url = "https://example.test/method/SKILL.md"
+    source = f"Fetch {url}\nKeep [source]({url}) unchanged.\n"
+    require(ns.prose_url_links(source) == f"Fetch [{url}]({url})\nKeep [source]({url}) unchanged.\n",
+            'a standalone prose URL gets one explicit same-target link')
+    protected = f"```sh\ncurl {url}\n```\nUse `curl {url}` and ``a ` literal {url}``.\n"
+    require(ns.prose_url_links(protected) == protected, 'fenced and nested inline code remain exact')
+    ambiguous = f"See {url}.\nUnclosed `literal {url}\n"
+    require(ns.prose_url_links(ambiguous) == ambiguous, 'ambiguous punctuation and unfinished inline code stay literal')
+    require(ns.prose_url_links(ns.prose_url_links(source)) == ns.prose_url_links(source),
+            'a reading-copy replay never nests or duplicates the link')
+    require(SOURCE.files('skills/unslop/SKILL.md')['skills/unslop/SKILL.md'] ==
+            PACKETS['osm.released.skill.unslop']['exact']['skills/unslop/SKILL.md'],
+            'the downloadable source remains the exact reviewed Git bytes')
 
 
 def main():

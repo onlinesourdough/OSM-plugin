@@ -125,7 +125,7 @@ def build(root=ROOT):
         if list(files) != [path]:
             raise pub.SetupError(f'{name}: the bound skill source is missing')
         text = files[path].decode()
-        title = 'OSM:' + name.removeprefix('osm-')
+        title = 'OSM:' + name.removeprefix('osm-') if name.startswith('osm-') else name
         body = skill_body(text, path, ref)
         intro = f'[Exact instruction source]({GIT}{ref}/{path}) · commit `{ref[:12]}`. Use the instructions supplied with your installed version.\n\n'
         add(artifact['notion'], title, intro + body + '\n', source_revision=ref)

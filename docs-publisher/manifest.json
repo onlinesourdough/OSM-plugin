@@ -290,6 +290,37 @@
       }
     },
     {
+      "key": "osm.released.skill.unslop",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/unslop/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
+      "notion": "4226d2e17f568196a197f5c5618b51f4",
+      "row_key": "osm:unslop",
+      "handoff": {
+        "native": {
+          "files": "ed3bc2fcb778526ac0c1a8cd84c1fae0cf76554d6cc38130b33b8214d7ee435b",
+          "skill": "6e90d23c4ae248abb211dd4535086ad20e82345a7260a13c4c3c9a92c2d88ded",
+          "title": "unslop",
+          "properties": {
+            "Key": "osm:unslop",
+            "Version": "1.0.0 preparation",
+            "Source": "[https://github.com/onlinesourdough/OSM-plugin/blob/7ea917ebfad811dd2e94ec93403d6236eebec649/skills/unslop/SKILL.md](https://github.com/onlinesourdough/OSM-plugin/blob/7ea917ebfad811dd2e94ec93403d6236eebec649/skills/unslop/SKILL.md)",
+            "Source revision": "7ea917ebfad811dd2e94ec93403d6236eebec649",
+            "Package version": "0.36.5 preparation; not published",
+            "Status": "Draft"
+          },
+          "version_id": "896dbb5d98b18c4b2e29194a096c15d0fb63bf52dbf8883b2f0511edd6cf1cdb",
+          "read_at": "2026-11-24T19:59:07+00:00"
+        }
+      }
+    },
+    {
       "key": "osm.working.readme",
       "class": "W",
       "edition": "main-working",
@@ -684,7 +715,7 @@
   "folders_note": "Every method content folder names the public guide page that explains it; every technical folder states its own role. skills/ and docs/ are mapped one level down, every other top-level folder as one unit. reconcile --check fails on a folder with no entry.",
   "folders": {
     "skills/unslop/": {
-      "page": "notion.guide.work"
+      "page": "osm.released.skill.unslop"
     },
     "skills/osm/": {
       "page": "notion.guide.work"

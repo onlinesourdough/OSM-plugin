@@ -48,7 +48,7 @@ jobs:
           node --test docs-publisher/public-browser-read.test.mjs
       - run: npx playwright install --only-shell chromium
         working-directory: docs-publisher
-      - name: Verify all seven complete public skills and their catalogue anonymously
+      - name: Verify all bound public skills and their catalogue anonymously
         run: |
           python3 - <<'PYCODE'
           import json, subprocess, sys
@@ -83,8 +83,8 @@ jobs:
               results.append({'key':packet['key'], 'state':state, 'detail':detail})
           Path('public-browser-proof.json').write_text(json.dumps({'child_processes':len(calls),'rows':results}, indent=2))
           print(json.dumps(results, indent=2))
-          if len(calls) != 1 or len(results) != 7 or any(row['state'] != pub.VERIFIED for row in results):
-              raise SystemExit('Complete anonymous seven-skill/catalogue verification held; inspect the secret-free proof')
+          if len(calls) != 1 or len(results) != len(packets) or any(row['state'] != pub.VERIFIED for row in results):
+              raise SystemExit('Complete anonymous bound-skill/catalogue verification held; inspect the secret-free proof')
           PYCODE
       - uses: actions/upload-artifact@v4
         if: always()

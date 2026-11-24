@@ -88,7 +88,7 @@ Its dedicated public-only connection is separate from the owner's private
 Notion route. Missing access, activation or reader qualification is a visible
 failure, not an offline success presented as live delivery.
 
-`native_skills.py` builds the seven released packets from the immutable approved
+`native_skills.py` builds the bound released packets from the immutable approved
 tag and delivers each to its existing bound Notion page. It compares all
 supporting files by bytes, the complete native instructions by their semantics
 and structure, and the title plus six managed properties by value. Historical
