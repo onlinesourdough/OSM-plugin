@@ -41,9 +41,6 @@ their source, engineering standards, design and delivery configuration.
 
 ## Why I built this
 
-I'm [Gustav Online](https://gustavonline.com/), the founder of
-[onlinesourdough](https://onlinesourdough.com/).
-
 I built The Onlinesourdough Method to give AI assistants a useful foundation:
 relevant data, business context and reusable ways of working, kept in sources
 I control.
@@ -57,8 +54,10 @@ Your context stays in a home you choose, in Notion. The app
 provides the models, tools and permissions; the method helps the assistant find and
 maintain the context it needs.
 
-For optional hands-on help, [The Fermentary](https://onlinesourdough.com/fermentary/)
-offers ongoing 1:1 work with me on your data, context and AI workflows.
+I'm Gustav Online (https://gustavonline.com/), the founder of
+onlinesourdough (https://onlinesourdough.com/). For optional hands-on help,
+The Fermentary (https://onlinesourdough.com/fermentary/) offers ongoing 1:1 work
+with me on your data, context and AI workflows.
 
 ## How OSM helps
 
