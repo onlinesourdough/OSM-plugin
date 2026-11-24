@@ -812,11 +812,12 @@
         "id": "40d6d2e17f5681219a81e13317a19339",
         "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
-        "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
-        "edition": "Optional Content · method 0.13.1; retained templates 0.10.0",
-        "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
-        "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1",
-        "body_origin": "Exact projection derived from the separately released Content source; not an independent API capture. The core publisher never writes this page."
+        "sha256": "680f45ad64c31e1565998b4bb31245ad50027be4d43c1d1ddeedcc0fb5968375",
+        "edition": "Optional Content · method 0.14.0; channel template 0.14.0; retained responsibility templates 0.10.0",
+        "source_commit": "5e5da443a67f68925c8b269d64e6c4b693a934e4",
+        "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.14.0",
+        "body_origin": "Exact renderer projection from the accepted same-version Content publication source; matches actual complete API readback in run 45486941502. This is not an independent raw API capture by Core. Core never writes this page; public qualification is recorded separately.",
+        "method_release_commit": "756cdaba4a325c2923ab0d8899aaf52014d99679"
       }
     ]
   }
