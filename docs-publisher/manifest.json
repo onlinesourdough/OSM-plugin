@@ -13,9 +13,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.36.4",
-      "tag": "v0.36.4",
-      "commit": "7ea917ebfad811dd2e94ec93403d6236eebec649",
+      "label": "v0.36.5",
+      "tag": "v0.36.5",
+      "commit": "fbf7c40845068acc36c4316be699b1e599d335d5",
       "approved": true
     },
     "main-working": {
@@ -304,19 +304,19 @@
       "row_key": "osm:unslop",
       "handoff": {
         "native": {
-          "files": "ed3bc2fcb778526ac0c1a8cd84c1fae0cf76554d6cc38130b33b8214d7ee435b",
-          "skill": "6e90d23c4ae248abb211dd4535086ad20e82345a7260a13c4c3c9a92c2d88ded",
+          "files": "91afeaaedbe975a62778351850ee64680075cc541febc797059be787903ccd04",
+          "skill": "618123b57845eca38cc4d443e29790799c8749f9aa3514d32a91a2d347006be2",
+          "version_id": "a1f1cdd85421f198d1e67f2e8b9434893a5c32cebbeb268a3302079f41f8ee4b",
           "title": "unslop",
           "properties": {
             "Key": "osm:unslop",
-            "Version": "1.0.0 preparation",
-            "Source": "Reviewed source commit 7ea917ebfad811dd2e94ec93403d6236eebec649; Unslop skill; native preparation only",
+            "Version": "1.0.0",
+            "Source": "https://github.com/onlinesourdough/OSM-plugin/blob/7ea917ebfad811dd2e94ec93403d6236eebec649/skills/unslop/SKILL.md",
             "Source revision": "7ea917ebfad811dd2e94ec93403d6236eebec649",
-            "Package version": "0.36.5 preparation; not published",
-            "Status": "Draft"
+            "Package version": "0.36.4",
+            "Status": "Released reference"
           },
-          "version_id": "15433456556fd8d32fa61063755301e58bf09296f86d9b1c78224001d98d749c",
-          "read_at": "2026-11-24T20:15:23.652Z"
+          "read_at": "2026-11-24T21:38:59.676278+00:00"
         }
       }
     },
