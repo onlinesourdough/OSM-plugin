@@ -209,9 +209,11 @@ jobs:
           if [ "${code:-0}" = 3 ]; then exit 3; fi
       - name: Require the complete read-only API plan before any native write
         if: steps.gates.outputs.native_write == 'true'
+        env:
+          NATIVE_WRITE_KEY: ${{ inputs.native_write_key }}
         run: |
           python3 - <<'PY'
-          import json, sys
+          import json, os, sys
           from pathlib import Path
           sys.path.insert(0, 'docs-publisher')
           import publisher as pub
@@ -219,12 +221,15 @@ jobs:
           expected = {a['key'] for a in manifest['artifacts'] if a['class'] == 'A'}
           proof = json.loads(Path('skill-preflight.json').read_text())
           rows = proof.get('rows', [])
+          key = os.environ.get('NATIVE_WRITE_KEY', '').strip()
+          selected = [r for r in rows if not key or r['key'] == key]
           if (proof.get('mode') != 'preflight'
                   or proof.get('commit') != manifest['editions']['released']['commit']
                   or len(rows) != len(expected) or {r['key'] for r in rows} != expected
-                  or any(r['outcome'] not in (pub.WOULD_WRITE, pub.UNCHANGED) for r in rows)):
+                  or not selected or (key and len(selected) != 1)
+                  or any(r['outcome'] not in (pub.WOULD_WRITE, pub.UNCHANGED) for r in selected)):
               raise SystemExit('Read-only native API preflight held; no write is allowed.')
-          print('Every bound native page passed the read-only API plan. Anonymous target-body qualification follows publication separately.')
+          print('The selected native write scope passed the read-only API plan. Anonymous target-body qualification follows publication separately.')
           PY
       - name: Import the released skill packets after the handoff and every gate
         if: steps.gates.outputs.native_write == 'true'
