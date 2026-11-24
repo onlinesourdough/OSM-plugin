@@ -42,6 +42,7 @@ REPO_URL = "https://github.com/onlinesourdough/OSM-plugin"
 SKILLS_VERSION = "2026-03-11"           # the Notion-Version the Agent Skills endpoints are documented for
 ENABLED_ENV = "OSM_PUBLIC_DOCS_ENABLED"
 SOURCE_FORMAT = "osm-public-skill-source/2"
+PROJECTION_FORMAT = "source-reference/2"
 MAX_ARCHIVE = 20 * 1024 * 1024          # Notion's documented upload limit
 MAX_UNPACKED, MAX_FILES, MAX_JSON = 25 * 1024 * 1024, 1000, 4 * 1024 * 1024
 MANAGED = ("Key", "Version", "Source", "Source revision", "Package version", "Status")
@@ -273,7 +274,8 @@ def build_packets(manifest, source, *, legacy_projection=False):
         if fields.get("name") != name or not fields.get("description") or not re.fullmatch(r"\d+\.\d+\.\d+", version or ""):
             raise Refused(f"{prefix}SKILL.md does not carry this skill's name, a description and a version")
         provenance = (json.dumps({
-            "format": SOURCE_FORMAT, "package": package, "tag": released["tag"], "commit": commit, "skill": name,
+            "format": SOURCE_FORMAT, **({} if legacy_projection else {"projection": PROJECTION_FORMAT}),
+            "package": package, "tag": released["tag"], "commit": commit, "skill": name,
             "skill_version": version, "path": prefix, "resource_folders": [f"skills/{folder}/" for folder in sorted(used)],
             "source_sha256": {p: pub.sha256(data) for p, data in sorted(exact.items())}, "license_sha256": pub.sha256(licence),
             "note": "The ZIP beside this file holds these exact Git bytes at their repository paths. The Markdown files "
@@ -590,7 +592,7 @@ def _built_by_ci(packet, seen, prior_packets):
     """Is the page exactly the packet this publisher builds for the earlier release its SOURCE.json names?"""
     try:
         source = json.loads(seen["files"].get("SOURCE.json", b""))
-        earlier = (prior_packets(source["tag"], source["commit"]) or {}).get(packet["key"]) if source.get("format") == SOURCE_FORMAT else None
+        earlier = (prior_packets(source["tag"], source["commit"], source.get("projection")) or {}).get(packet["key"]) if source.get("format") == SOURCE_FORMAT else None
     except (ValueError, KeyError, TypeError, AttributeError, pub.PublisherError):
         return None
     if earlier is None or earlier["commit"] == packet["commit"]:
@@ -877,9 +879,13 @@ def report(result, manifest):
 
 def _prior_packets(manifest, repo, resolver):
     """Packets of an earlier approved release, rebuilt from its tag, to recognise this publisher's own output."""
-    def build(tag, commit):
+    def build(tag, commit, projection=None):
         if not re.fullmatch(r"v\d+\.\d+\.\d+", str(tag)) or resolver(tag) != commit:
             return None
+        if projection not in (None, PROJECTION_FORMAT):
+            return None
+        if projection is None and pub._version(tag) > pub._version('v0.36.4'):
+            return None  # No unmarked legacy format was published after this boundary.
         earlier = json.loads(json.dumps(manifest))
         earlier["editions"]["released"].update(tag=tag, commit=commit)
         source = pub.GitSource(repo, commit)
@@ -889,7 +895,7 @@ def _prior_packets(manifest, repo, resolver):
         # build_packets still requires exact coverage of that historical tree.
         earlier['artifacts'] = [a for a in earlier['artifacts']
                                 if a['class'] != 'A' or a['key'].rsplit('.', 1)[-1] in names]
-        return build_packets(earlier, source, legacy_projection=pub._version(tag) <= pub._version('v0.36.4'))
+        return build_packets(earlier, source, legacy_projection=projection is None)
     return build
 
 

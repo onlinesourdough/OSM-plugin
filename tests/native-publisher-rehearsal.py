@@ -714,13 +714,13 @@ def the_next_release_replaces_its_own_packet_and_keeps_the_history():
     later["editions"]["released"].update(tag=next_tag, label=next_tag, commit="c" * 40)
     packets = ns.build_packets(later, pub.DictSource(files, "c" * 40))
     tags = {next_tag: "c" * 40, RELEASED["tag"]: RELEASED["commit"]}
-    prior = lambda tag, commit: PACKETS if tags.get(tag) == commit == RELEASED["commit"] else None
+    prior = lambda tag, commit, projection=None: PACKETS if tags.get(tag) == commit == RELEASED["commit"] else None
     edited = copy.deepcopy(fake)
     edited.pages[PACKETS[COUNCIL]["page"]]["files"]["LICENSE"] += b"\nedited"
     edited.log.clear()
     result = ns.publish(later, packets, api(edited), tags.get, prior_packets=prior, write=True, only=COUNCIL)
     require(outcomes(result) == {COUNCIL: pub.CONFLICT} and not edited.writes(), "a packet edited since CI wrote it is not replaced")
-    unknown = ns.publish(later, packets, api(fake), tags.get, prior_packets=lambda tag, commit: None, write=True, only=COUNCIL)
+    unknown = ns.publish(later, packets, api(fake), tags.get, prior_packets=lambda tag, commit, projection=None: None, write=True, only=COUNCIL)
     require(outcomes(unknown) == {COUNCIL: pub.CONFLICT}, "a page whose earlier release cannot be rebuilt is not replaced")
     fake.log.clear()
     planned = ns.publish(later, packets, api(fake), tags.get, prior_packets=prior, only=COUNCIL)
@@ -736,7 +736,7 @@ def the_next_release_replaces_its_own_packet_and_keeps_the_history():
     stale = copy.deepcopy(fake)
     stale.log.clear()
     old_run = ns.publish(manifest, ns.build_packets(manifest, SOURCE), api(stale), tags.get,
-        prior_packets=lambda tag, commit: packets if tags.get(tag) == commit == "c" * 40 else None,
+        prior_packets=lambda tag, commit, projection=None: packets if tags.get(tag) == commit == "c" * 40 else None,
         write=True, only=COUNCIL)
     require(outcomes(old_run) == {COUNCIL: pub.CONFLICT} and not stale.writes()
             and stale.pages[PACKETS[COUNCIL]["page"]]["props"]["Package version"][1] == next_version,
@@ -905,6 +905,11 @@ def historical_seven_packet_output_survives_the_eighth_binding():
         changed = copy.deepcopy(seen)
         changed['files']['LICENSE'] += b'owner edit'
         require(ns._built_by_ci(PACKETS[key], changed, prior) is None, 'an edited older packet remains a conflict')
+    current = prior(RELEASED['tag'], RELEASED['commit'], ns.PROJECTION_FORMAT)
+    require({k: p['files'] for k, p in current.items()} == {k: p['files'] for k, p in PACKETS.items()},
+            'the new projection on an older source tag is rebuilt as new, not legacy')
+    require(prior(RELEASED['tag'], RELEASED['commit'], 'unknown-projection') is None,
+            'an unknown historical projection is never guessed')
     incomplete = copy.deepcopy(RECORDED)
     incomplete['artifacts'] = [a for a in incomplete['artifacts'] if a['key'] != 'osm.released.skill.unslop']
     try:
