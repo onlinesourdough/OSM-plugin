@@ -48,7 +48,7 @@ jobs:
           node --test docs-publisher/public-browser-read.test.mjs
       - run: npx playwright install --only-shell chromium
         working-directory: docs-publisher
-      - name: Verify all seven complete public skills and their catalogue anonymously
+      - name: Verify all bound public skills and their catalogue anonymously
         run: |
           python3 - <<'PYCODE'
           import json, subprocess, sys
@@ -83,8 +83,8 @@ jobs:
               results.append({'key':packet['key'], 'state':state, 'detail':detail})
           Path('public-browser-proof.json').write_text(json.dumps({'child_processes':len(calls),'rows':results}, indent=2))
           print(json.dumps(results, indent=2))
-          if len(calls) != 1 or len(results) != 7 or any(row['state'] != pub.VERIFIED for row in results):
-              raise SystemExit('Complete anonymous seven-skill/catalogue verification held; inspect the secret-free proof')
+          if len(calls) != 1 or len(results) != len(packets) or any(row['state'] != pub.VERIFIED for row in results):
+              raise SystemExit('Complete anonymous bound-skill/catalogue verification held; inspect the secret-free proof')
           PYCODE
       - uses: actions/upload-artifact@v4
         if: always()
@@ -197,18 +197,40 @@ jobs:
         if: steps.gates.outputs.configured == 'true'
         run: python3 docs-publisher/publisher.py reconcile --snapshot public-originals.json --check --out live-reconciliation.md
       - name: Preflight the released skill pages (read-only)
-        if: steps.gates.outputs.configured == 'true' && steps.gates.outputs.native_write != 'true'
+        if: steps.gates.outputs.configured == 'true'
         env:
           OSM_PUBLIC_DOCS_TOKEN: ${{ secrets.OSM_PUBLIC_DOCS_TOKEN }}
           OSM_PUBLIC_DOCS_ENABLED: ${{ vars.OSM_PUBLIC_DOCS_ENABLED }}
-          OSM_PUBLIC_DOCS_BASE: ${{ vars.OSM_PUBLIC_DOCS_BASE }}
-          OSM_PUBLIC_DOCS_CATALOGUE: ${{ vars.OSM_PUBLIC_DOCS_CATALOGUE }}
         # Reports each page and its handoff record. Until the handoff is recorded its rows are blocked by
         # design, so the result is visible but does not fail the guide parity status.
         run: |
-          python3 docs-publisher/native_skills.py preflight --browser-public-read --out skill-preflight.md --checkpoint skill-checkpoint.json || code=$?
+          python3 docs-publisher/native_skills.py preflight --out skill-preflight.md --checkpoint skill-preflight.json || code=$?
           cat skill-preflight.md >> "$GITHUB_STEP_SUMMARY"
           if [ "${code:-0}" = 3 ]; then exit 3; fi
+      - name: Require the complete read-only API plan before any native write
+        if: steps.gates.outputs.native_write == 'true'
+        env:
+          NATIVE_WRITE_KEY: ${{ inputs.native_write_key }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'docs-publisher')
+          import publisher as pub
+          manifest = json.loads(Path('docs-publisher/manifest.json').read_text())
+          expected = {a['key'] for a in manifest['artifacts'] if a['class'] == 'A'}
+          proof = json.loads(Path('skill-preflight.json').read_text())
+          rows = proof.get('rows', [])
+          key = os.environ.get('NATIVE_WRITE_KEY', '').strip()
+          selected = [r for r in rows if not key or r['key'] == key]
+          if (proof.get('mode') != 'preflight'
+                  or proof.get('commit') != manifest['editions']['released']['commit']
+                  or len(rows) != len(expected) or {r['key'] for r in rows} != expected
+                  or not selected or (key and len(selected) != 1)
+                  or any(r['outcome'] not in (pub.WOULD_WRITE, pub.UNCHANGED) for r in selected)):
+              raise SystemExit('Read-only native API preflight held; no write is allowed.')
+          print('The selected native write scope passed the read-only API plan. Anonymous target-body qualification follows publication separately.')
+          PY
       - name: Import the released skill packets after the handoff and every gate
         if: steps.gates.outputs.native_write == 'true'
         env:
@@ -244,6 +266,7 @@ jobs:
             public-originals.json
             skill-packets.md
             skill-preflight.md
+            skill-preflight.json
             skill-publication.md
             skill-checkpoint.json
           if-no-files-found: ignore

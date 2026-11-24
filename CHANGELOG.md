@@ -1,6 +1,19 @@
 # Changelog
 
-## 0.36.4 — 2026-11-23
+## 0.36.5 — 2026-11-24
+
+- Complete release preparation for the reviewed 0.36.4 skill changes. All
+  eight skill entrypoints and supporting method files are byte-identical.
+- Bind Unslop as the eighth native public skill, preserving its canonical
+  name. Reading copies make plain prose URLs explicit for Notion, while
+  source ZIPs, code and existing links keep their exact content.
+- Bind the eight unchanged public guide originals to this package edition
+  from their actual API snapshot, then rebuild the bundled reader.
+- Retain v0.36.4 as an unpublished source tag. Its CI stopped because the
+  guide originals were still bound to 0.36.3; no GitHub Release was created.
+  No publisher gate or test is weakened for recovery.
+
+## 0.36.4 — 2026-11-23 · unpublished source tag
 
 - Add one brief ambition question before the interview summary once the goal
   is clear: choose depth, altitude or range to fit the situation, then continue.

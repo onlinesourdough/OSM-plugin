@@ -4147,3 +4147,90 @@ source. Full checks and exact-head Neon High Council acceptance for the
 increment and final state are recorded on [PR #153](https://github.com/onlinesourdough/OSM-plugin/pull/153).
 The existing local `ps` sandbox limit remains a local-test limitation; the full
 GitHub CI result is required. No new native interview-behavior trial is claimed.
+
+### 0.36.5 release recovery and Unslop native handoff · 24 November 2026
+
+The owner explicitly requested publication, native plugin update and usable
+Notion skills. The reviewed 0.36.4 source at `7ea917e` was tagged only after
+package checks, an exact-source integration review and main CI had passed.
+Actual tag CI [45473832390](https://github.com/onlinesourdough/OSM-plugin/actions/runs/45473832390)
+stopped before publication: the eight guide originals were still bound to
+0.36.3. The release preparation omitted their next-edition binding. No
+0.36.4 GitHub Release exists, and its source tag is retained unchanged.
+
+The 0.36.5 preparation exports the eight original bodies from the actual
+read-only API snapshot at 2026-11-24T19:27:39Z. Every content revision is
+unchanged; only their edition/read metadata advances. All 79 method resource
+files, including eight skill entrypoints, remain byte-identical to 0.36.4.
+Package declarations and bundled reader identify 0.36.5. The reviewed-source
+binding names the retained 0.36.4 tag while the published stable release is
+still 0.36.3; these statements do not claim publication of either candidate.
+The explicit `reconcile --release-tag v0.36.5` check is part of validation.
+
+Binding the eight-skill source also exposed its missing public Unslop row.
+A scoped catalogue view read found the seven existing OSM rows, no more
+pages, and no Unslop. SQL had returned an entitlement limit with no execution;
+no retry, subscription change or alternate account was used. One native
+Unslop Draft row was created in the existing public catalogue, given a
+source-backed instruction/LICENCE seed through native upload, fetched and
+completely downloaded. Its exact files, semantic digest, managed properties
+and native version form the new handoff. The seven old OSM rows and Content
+rows were not edited by this preparation. Status remains Draft until the
+actual release and separately verified promotion.
+
+Actual native export showed two serialization issues for this new wrapper:
+restoring `OSM:unslop` changed its name to `osm-unslop`, and Notion made the
+standalone upstream URL an explicit Markdown link. The native writer and
+reader now retain the canonical name for a skill without the `osm-` prefix.
+Reading-copy projection makes unambiguous standalone prose URLs explicit;
+source ZIP bytes, fenced/inline code, existing links and ambiguous punctuation
+remain unchanged. Comparison and identity guards are not relaxed. Fixtures
+exercise the title/name invariant and this serialization with code-preservation
+and replay cases. The roster is checked against actual source entrypoints;
+the anonymous probe checks the complete bound set, not a stale seven-row count.
+
+The initial upload-prepare call with an undashed ID failed schema validation
+before side effects; the returned dashed ID succeeded. Its title/name mismatch
+was inspected and corrected on the same Draft page before handoff. Earlier
+local publisher checks also held before the new manifest/readme were committed,
+and then on the missing eighth binding. All attempts remain retained.
+The final committed candidate, full checks, independent review, CI, publication,
+public whole-set/zero-write evidence and native installation are separate
+completion steps; none is inferred from this preparation note.
+
+
+### 24 November — recovery review catches the historical roster and publication claim
+
+Actual Gemini 4 Neon High reviewed cb2b226 (127,527-byte brief, SHA-256 `143dfebec7f03abed80cdeac33797873be10c018fa91c404c730756eb6715c35`): SUCCESS, REQUIRED CHANGES, 155.129 model seconds, 158.349 process seconds, zero tool attempts. Its four complete source files and five complete diffs are the declared scope; no live/build verification was inferred. The earlier peer acceptance was bounded and did not establish historical upgrade compatibility.
+
+The findings were acted on before merge: historical packet reconstruction now keeps strict current coverage while selecting only currently bound identities that existed at the older source tag; the legacy projection reproduces the earlier file hashes. A regression uses the seven actual v0.36.3 non-history supporting-file digests from qualified run 45470301330, plus edited-packet refusal. Current reading copies say Source reference and link an exact-commit repository archive, rather than claiming an unpublished GitHub Release or linking a missing release asset. Corrected the stale seven-row description and added Unslop to the reader introduction.
+
+The new Unslop Draft's ambiguous Markdown-rendered Source value was deliberately replaced on the same row with plain commit/skill provenance and fully fetched. A first path-shaped value was auto-linked by Notion; inspection preceded the final exact plain value. Complete native archive download then confirmed the unchanged supporting-file and instruction-meaning hashes; the captured handoff has native version `15433456556fd8d32fa61063755301e58bf09296f86d9b1c78224001d98d749c`. No body, Status, other core row or Content row was changed by that metadata preparation. Actual REST preflight and anonymous visibility still precede final publication qualification.
+
+All 19 local command groups completed on cb2b226 across retained attempt3 and its continuation, including 25 native-publisher fixtures, 84 adapter checks, 16 browser-reader checks and generated-data/runtime reproduction. The initial process-group cleanup check returned EPERM; its isolated and complete unchanged reruns passed. This is retained as a transient local observation, not silently erased or a changed cleanup guard. The repaired publisher then passed 27 native fixture cases. PR156's first CI on cb2b226 passed, but that does not approve the newly repaired bytes, publication, native installation or the final public result.
+
+
+The second actual Neon High review of a4b1866 returned REQUIRED CHANGES in 135.562 model seconds, zero tool attempts. It independently found the same cross-stage projection issue identified during the author's follow-through: new source-reference packets may be written for the retained v0.36.4 source tag before the v0.36.5 tag exists. Historical reconstruction must therefore use the observed packet's explicit projection marker, not infer format from tag version. New SOURCE.json records `source-reference/2`; unmarked legacy packets are recognised only through v0.36.4, and unknown projections are refused. Regression now also rebuilds all eight new-format v0.36.4 packets, while preserving the actual seven legacy v0.36.3 supporting digests, instruction meanings, titles and six properties. All 27 native fixture cases passed after this change.
+
+The read-only CI API preflight now runs before every native write phase. A separate gate requires its exact bound roster, source commit and only unchanged/would-write outcomes; the publisher then performs its own fresh plan and per-page revision checks. Nine executions of the actual workflow gate code against synthetic metadata passed: complete and mixed unchanged accepted; wrong mode/commit, missing/duplicate/foreign rows, conflict and unknown outcomes refused. This is not provider execution evidence.
+
+Before any core packet import, a fresh credential-free pinned-browser read actually verified all eight catalogue page identities/titles, including the Draft Unslop row (2.693 seconds, one anonymous request, no writes). An anonymous HEAD also returned HTTP200 for the exact v0.36.4 commit archive. These observations prove current catalogue visibility and source-archive availability, not the desired new instruction bodies, future package assets or completed release. Final CI REST preflight, target-body public readback, actual release and installation remain separate outstanding steps.
+
+
+Neon High then ACCEPTED exact 93cce7d in 109.679 model seconds (112.213 process seconds), zero tool attempts: whole current native publisher/workflow plus complete affected test/publication/verification diffs. Prior REQUIRED CHANGES verdicts remain retained. This is source/protocol acceptance, not execution or the forthcoming Content supplement.
+
+A final workflow compatibility adjustment preserves the existing explicit single-Key manual proof: the preflight artifact still requires the exact complete bound roster and source, while eligible outcomes are required for the selected Key only in a bounded manual run. Automatic whole-set runs still require every row eligible. This does not grant a whole-set parity success to a bounded run. Twelve executions of the actual gate code passed, including the original nine cases, eligible selected row with an unselected pending handoff, selected-row conflict and unknown manual Key. Its exact delta receives separate review before push/merge.
+
+
+### 24 November — bind the current optional Content guide without importing its methods
+
+The separately released Content v0.14.0 tag is 756cdaba4a325c2923ab0d8899aaf52014d99679 (actual stable publication 20:30:53Z). Its accepted same-version publication source is 5e5da443a67f68925c8b269d64e6c4b693a934e4: inline Notion representation and two metadata-derived reference labels were repaired with strict readback, preserving the five older source packets and the new portable channel packet. Actual run 45486941502 confirms nine API-written and fully read-back pages, nine requests and no unknown writes; its anonymous phase timed out. The independent public/zero follow-up is still pending at this freeze and remains a merge/tag prerequisite.
+
+The optional reader supplement now carries the exact 11,224-byte derived root projection, SHA-256 `680f45ad64c31e1565998b4bb31245ad50027be4d43c1d1ddeedcc0fb5968375`, matching that confirmed root API result. Core independently downloaded and asserted the nine-row API receipt and desired root hash. This is derived-body/API-hash parity, not an independent raw after-body API capture. The edition distinguishes method/channel template 0.14.0 from the retained five responsibility templates 0.10.0.
+
+The guide explains the core-owned foundation, optional Content workflow, one adaptable channel method, its portable adoption/quality/schedule resources and a fictional workshop example of Intake, Prepare, Produce/Distribute and Learn. This changes the reader supplement only: all 79 method files, eight native instruction entries, G8 bodies, native publisher code and private context remain unchanged. Rebuild/data checks and independent exact-delta review are separate from final release, installation and public qualification.
+
+
+Subsequently, actual Content workflow_run 45488203986 completed successfully on the same accepted 5e5da443 source: all nine API states unchanged, all nine anonymous pages/catalogue verified, zero write requests and complete whole-set qualification. The canonical API root from this independent repeat is byte-equal to the 11,224-byte supplement at SHA-256 680f45ad64c31e1565998b4bb31245ad50027be4d43c1d1ddeedcc0fb5968375. The Content owner released the shared public writer window after checking that receipt. Earlier anonymous and representation HOLDs remain recorded; they are not rewritten as first-attempt success.
+
+Actual Neon High ACCEPTED a9fe09b's complete optional supplement, metadata and manifest/verification delta in 81.615 model seconds, zero tool attempts. The independent peer read the complete six-file delta and independently confirmed all 79 method files unchanged, only the Content page changing in the 18-page reader, and both compiled guide data objects exactly matching the complete generated JSON. Those are scoped source/data reviews, not fresh native, binary-build or CI execution by either reviewer. Local affected validation/reconciliation, 84 adapter checks, documentation and consumer-selection checks passed. The final evidence-only append does not change the reviewed payload; final CI/public eight-skill delivery/release/native adoption remain required.

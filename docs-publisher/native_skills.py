@@ -9,7 +9,7 @@ directory, and `POST ai/skills/{id}/upload` imports one gzip tar archive into th
 Each packet is built from the frozen released commit only: the projected SKILL.md, every supporting
 file of the skill, the resource-only helper folders it references, LICENSE, SOURCE.json and one
 canonical source ZIP of the exact Git bytes. Files under history/ already on the page are carried
-forward byte for byte. Only the seven pages bound in manifest.json are ever addressed, and the guide
+forward byte for byte. Only the pages explicitly bound in manifest.json are ever addressed, and the guide
 originals are never touched. Nothing is recorded on the page beyond the packet: the state CI compares
 is the page itself (supporting bytes, the meaning of SKILL.md, title and properties).
 
@@ -42,6 +42,7 @@ REPO_URL = "https://github.com/onlinesourdough/OSM-plugin"
 SKILLS_VERSION = "2026-03-11"           # the Notion-Version the Agent Skills endpoints are documented for
 ENABLED_ENV = "OSM_PUBLIC_DOCS_ENABLED"
 SOURCE_FORMAT = "osm-public-skill-source/2"
+PROJECTION_FORMAT = "source-reference/2"
 MAX_ARCHIVE = 20 * 1024 * 1024          # Notion's documented upload limit
 MAX_UNPACKED, MAX_FILES, MAX_JSON = 25 * 1024 * 1024, 1000, 4 * 1024 * 1024
 MANAGED = ("Key", "Version", "Source", "Source revision", "Package version", "Status")
@@ -163,7 +164,50 @@ def _targets(text, path):
         yield match, posixpath.normpath(posixpath.join(posixpath.dirname(path), file)), sep + anchor
 
 
-def project(text, path, commit, tree):
+def prose_url_links(text):
+    """Make standalone prose URLs explicit before Notion serializes them as links.
+
+    Reading copies only: fenced and inline code, existing Markdown links and
+    ambiguous trailing punctuation remain byte-for-byte unchanged.
+    """
+    bare = re.compile(r"(?<!\S)(https?://[^\s<>()\[\]`\"']+)(?=\s|$)")
+
+    def convert(part):
+        def link(match):
+            url = match[1]
+            return match[0] if url.endswith(tuple(".,;:!?")) else f"[{url}]({url})"
+        return bare.sub(link, part)
+
+    output, fence = [], None
+    for line in text.splitlines(keepends=True):
+        marker = re.match(r"^\s*(`{3,}|~{3,})(.*)$", line)
+        if fence:
+            output.append(line)
+            if marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence) and not marker[2].strip():
+                fence = None
+            continue
+        if marker:
+            fence = marker[1]
+            output.append(line)
+            continue
+        at = 0
+        while at < len(line):
+            opening = re.search(r"(?<!\\)`+", line[at:])
+            if not opening:
+                output.append(convert(line[at:]))
+                break
+            start, stop = at + opening.start(), at + opening.end()
+            output.append(convert(line[at:start]))
+            closing = re.search(r"(?<!`)" + re.escape(opening[0]) + r"(?!`)", line[stop:])
+            if not closing:
+                output.append(line[start:])
+                break
+            at = stop + closing.end()
+            output.append(line[start:at])
+    return "".join(output)
+
+
+def project(text, path, commit, tree, *, prose_links=True):
     """A page copy of a Markdown file: every relative link names the exact file of the released commit."""
     resolved = {match.start(): (target, anchor) for match, target, anchor in _targets(text, path)}
 
@@ -175,7 +219,8 @@ def project(text, path, commit, tree):
         if kind is None:
             raise Refused(f"{path} links to {match[1]}, which is not in the released commit")
         return f"]({REPO_URL}/{kind}/{commit}/{target}{anchor})"
-    return _LINK.sub(link, text)
+    result = _LINK.sub(link, text)
+    return prose_url_links(result) if prose_links else result
 
 
 def _zip(files):
@@ -189,7 +234,7 @@ def _zip(files):
     return stream.getvalue()
 
 
-def build_packets(manifest, source):
+def build_packets(manifest, source, *, legacy_projection=False):
     """One packet per bound released skill, from `source` (the frozen released commit). Pure; no network."""
     released = manifest["editions"]["released"]
     if source.commit != released["commit"]:
@@ -229,7 +274,8 @@ def build_packets(manifest, source):
         if fields.get("name") != name or not fields.get("description") or not re.fullmatch(r"\d+\.\d+\.\d+", version or ""):
             raise Refused(f"{prefix}SKILL.md does not carry this skill's name, a description and a version")
         provenance = (json.dumps({
-            "format": SOURCE_FORMAT, "package": package, "tag": released["tag"], "commit": commit, "skill": name,
+            "format": SOURCE_FORMAT, **({} if legacy_projection else {"projection": PROJECTION_FORMAT}),
+            "package": package, "tag": released["tag"], "commit": commit, "skill": name,
             "skill_version": version, "path": prefix, "resource_folders": [f"skills/{folder}/" for folder in sorted(used)],
             "source_sha256": {p: pub.sha256(data) for p, data in sorted(exact.items())}, "license_sha256": pub.sha256(licence),
             "note": "The ZIP beside this file holds these exact Git bytes at their repository paths. The Markdown files "
@@ -242,18 +288,28 @@ def build_packets(manifest, source):
             inside = path[len(prefix):] if path.startswith(prefix) else "resources/" + path[len("skills/"):]
             if path.startswith(prefix) and (inside.split("/")[0] in RESERVED or inside == zip_name):
                 raise Refused(f"{path} would collide with a reserved name of the packet")
-            files[inside] = project(data.decode(), path, commit, tree).encode() if path.endswith(".md") else data
+            files[inside] = project(data.decode(), path, commit, tree, prose_links=not legacy_projection).encode() if path.endswith(".md") else data
         header, body = sources[prefix + "SKILL.md"].decode()[4:].split("\n---\n", 1)
-        intro = (f"Released reference · OSM {package} · skill {version}\n\n"
+        # The bound edition is a reviewed source tag, which can exist before a
+        # GitHub Release. Never turn that binding into a publication claim or
+        # a download URL for a release asset that may not exist.
+        intro = (f"Source reference · OSM {package} · skill {version}\n\n"
                  f"[Exact instruction source]({REPO_URL}/blob/{commit}/{prefix}SKILL.md) · commit `{commit}`. "
                  "Use the instructions supplied with your installed version. Supporting files are attached to this skill.\n\n"
-                 f"[Download the OSM source package]({REPO_URL}/releases/download/{released['tag']}/osm-{package}-source.zip).\n\n")
+                 f"[Download this exact repository source]({REPO_URL}/archive/{commit}.zip). "
+                 "A source tag is not proof of a published GitHub Release.\n\n")
+        if legacy_projection:
+            # Recognition only: reproduce the old publisher's bytes exactly.
+            intro = (f"Released reference · OSM {package} · skill {version}\n\n"
+                     f"[Exact instruction source]({REPO_URL}/blob/{commit}/{prefix}SKILL.md) · commit `{commit}`. "
+                     "Use the instructions supplied with your installed version. Supporting files are attached to this skill.\n\n"
+                     f"[Download the OSM source package]({REPO_URL}/releases/download/{released['tag']}/osm-{package}-source.zip).\n\n")
         files["SKILL.md"] = (f"---\n{header}\n---\n\n{intro}"
-                             + project(body.strip(), prefix + "SKILL.md", commit, tree) + "\n").encode()
+                             + project(body.strip(), prefix + "SKILL.md", commit, tree, prose_links=not legacy_projection) + "\n").encode()
         if any(pub.SECRET.search(data.decode("utf-8", "ignore")) for data in files.values()):
             raise Refused(f"{name}: secret-like text is refused in a public packet")
         packet = {"key": row["key"], "name": name, "page": row["notion"], "row_key": row["row_key"],
-                  "title": "OSM:" + name.removeprefix("osm-"), "version": version, "package": package, "commit": commit,
+                  "title": ("OSM:" + name.removeprefix("osm-") if legacy_projection or name.startswith("osm-") else name), "version": version, "package": package, "commit": commit,
                   "tag": released["tag"], "zip": zip_name, "files": files, "exact": exact, "helpers": sorted(used),
                   "skill": meaning(files["SKILL.md"].decode()), "handoff": (row.get("handoff") or {}).get("native"),
                   "writer": row["public_writer"], "adopted": row["adoption_state"] == "adopted"}
@@ -536,7 +592,7 @@ def _built_by_ci(packet, seen, prior_packets):
     """Is the page exactly the packet this publisher builds for the earlier release its SOURCE.json names?"""
     try:
         source = json.loads(seen["files"].get("SOURCE.json", b""))
-        earlier = (prior_packets(source["tag"], source["commit"]) or {}).get(packet["key"]) if source.get("format") == SOURCE_FORMAT else None
+        earlier = (prior_packets(source["tag"], source["commit"], source.get("projection")) or {}).get(packet["key"]) if source.get("format") == SOURCE_FORMAT else None
     except (ValueError, KeyError, TypeError, AttributeError, pub.PublisherError):
         return None
     if earlier is None or earlier["commit"] == packet["commit"]:
@@ -823,12 +879,23 @@ def report(result, manifest):
 
 def _prior_packets(manifest, repo, resolver):
     """Packets of an earlier approved release, rebuilt from its tag, to recognise this publisher's own output."""
-    def build(tag, commit):
+    def build(tag, commit, projection=None):
         if not re.fullmatch(r"v\d+\.\d+\.\d+", str(tag)) or resolver(tag) != commit:
             return None
+        if projection not in (None, PROJECTION_FORMAT):
+            return None
+        if projection is None and pub._version(tag) > pub._version('v0.36.4'):
+            return None  # No unmarked legacy format was published after this boundary.
         earlier = json.loads(json.dumps(manifest))
         earlier["editions"]["released"].update(tag=tag, commit=commit)
-        return build_packets(earlier, pub.GitSource(repo, commit))
+        source = pub.GitSource(repo, commit)
+        names = {p.split('/')[1] for p in source.paths() if re.fullmatch(r'skills/[^/]+/SKILL\.md', p)}
+        # A newly bound row must not prevent recognition of older output. Use
+        # only today's explicitly bound identities that existed at that tag;
+        # build_packets still requires exact coverage of that historical tree.
+        earlier['artifacts'] = [a for a in earlier['artifacts']
+                                if a['class'] != 'A' or a['key'].rsplit('.', 1)[-1] in names]
+        return build_packets(earlier, source, legacy_projection=projection is None)
     return build
 
 

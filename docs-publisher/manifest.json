@@ -8,14 +8,14 @@
     "public_reader": {
       "kind": "isolated-playwright-visible-native-catalogue/2",
       "reviewed_in": "PR #120: independent High acceptance of 8f06088; actual secret-free production-path qualification 44750248088; main 44751015131 and zero-write repeat 44751623179.",
-      "note": "One fresh anonymous context; atomic document identity/body capture, complete instruction lines in order and visible catalogue entries bound to the seven actual native Notion row ids. Pacing, server backoff, deadlines and pinned-launcher cleanup fail closed. No credentials or persistent profile enter the child."
+      "note": "One fresh anonymous context; atomic document identity/body capture, complete instruction lines in order and visible catalogue entries bound to the explicitly bound native Notion row ids. Pacing, server backoff, deadlines and pinned-launcher cleanup fail closed. No credentials or persistent profile enter the child."
     }
   },
   "editions": {
     "released": {
-      "label": "v0.36.3",
-      "tag": "v0.36.3",
-      "commit": "b5d3babd5f9a8cec65b336fa76b4c7bf8b0a4bff",
+      "label": "v0.36.4",
+      "tag": "v0.36.4",
+      "commit": "7ea917ebfad811dd2e94ec93403d6236eebec649",
       "approved": true
     },
     "main-working": {
@@ -290,6 +290,37 @@
       }
     },
     {
+      "key": "osm.released.skill.unslop",
+      "class": "A",
+      "edition": "released",
+      "owner": "git",
+      "source_paths": [
+        "skills/unslop/"
+      ],
+      "target_subtree": "released-packets",
+      "public_writer": "ci",
+      "adoption_state": "adopted",
+      "notion": "4226d2e17f568196a197f5c5618b51f4",
+      "row_key": "osm:unslop",
+      "handoff": {
+        "native": {
+          "files": "ed3bc2fcb778526ac0c1a8cd84c1fae0cf76554d6cc38130b33b8214d7ee435b",
+          "skill": "6e90d23c4ae248abb211dd4535086ad20e82345a7260a13c4c3c9a92c2d88ded",
+          "title": "unslop",
+          "properties": {
+            "Key": "osm:unslop",
+            "Version": "1.0.0 preparation",
+            "Source": "Reviewed source commit 7ea917ebfad811dd2e94ec93403d6236eebec649; Unslop skill; native preparation only",
+            "Source revision": "7ea917ebfad811dd2e94ec93403d6236eebec649",
+            "Package version": "0.36.5 preparation; not published",
+            "Status": "Draft"
+          },
+          "version_id": "15433456556fd8d32fa61063755301e58bf09296f86d9b1c78224001d98d749c",
+          "read_at": "2026-11-24T20:15:23.652Z"
+        }
+      }
+    },
+    {
       "key": "osm.working.readme",
       "class": "W",
       "edition": "main-working",
@@ -389,9 +420,9 @@
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
         "revision": "3a69bf2daab35f722457aac9a957b205cfd828f919db2f437485b89e5b753676",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-23T12:00:00.000Z"
       }
     },
@@ -410,9 +441,9 @@
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-20T13:32:00.000Z"
       }
     },
@@ -431,9 +462,9 @@
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
         "revision": "7b08fd9735bcb6a2fc599922be9ee4998da61d34a0ba5c63c1d91efea34f4c38",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-23T14:14:00.000Z"
       }
     },
@@ -452,9 +483,9 @@
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
         "revision": "3d4b6d70c24a7a458a444d57a7dbc2dd4e2d12a6875398bdba35eb5d1c3fa967",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-22T20:32:00.000Z"
       },
       "exports": [
@@ -493,9 +524,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "eb4b1c19765ab05857304346bbc9d4b981dd6bdae08eb76bc184126602f60bba",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-23T10:44:00.000Z"
       }
     },
@@ -514,9 +545,9 @@
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "bd1343be84fc40efb26fe969104f7fe03ac21be4c8df3b1887c765432ed627d0",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-23T10:33:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -536,9 +567,9 @@
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
         "revision": "51395c5382ae366941c55bddf5a5c2d71b863dc50a0abe28deb547c7138bb7ca",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-22T11:26:00.000Z"
       },
       "exports": [
@@ -569,9 +600,9 @@
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
-        "edition": "0.36.3",
+        "edition": "0.36.5",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-23T15:25:50+00:00",
+        "read_at": "2026-11-24T19:27:39+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -684,7 +715,7 @@
   "folders_note": "Every method content folder names the public guide page that explains it; every technical folder states its own role. skills/ and docs/ are mapped one level down, every other top-level folder as one unit. reconcile --check fails on a folder with no entry.",
   "folders": {
     "skills/unslop/": {
-      "page": "notion.guide.work"
+      "page": "osm.released.skill.unslop"
     },
     "skills/osm/": {
       "page": "notion.guide.work"
@@ -779,13 +810,14 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content \u00b7 optional extension",
+        "title": "Content · optional extension",
         "path": "docs-publisher/originals/notion.content.entry.md",
-        "sha256": "0f6d0fcf80b1fcc7e2a3a7a6d66e41e8b9df9037a16d7c73984a7c24653f4071",
-        "edition": "Optional Content \u00b7 method 0.13.1; retained templates 0.10.0",
-        "source_commit": "842f67e7704ea6c79a48960fcdac364eb372a1a9",
-        "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.13.1",
-        "body_origin": "Exact projection derived from the separately released Content source; not an independent API capture. The core publisher never writes this page."
+        "sha256": "680f45ad64c31e1565998b4bb31245ad50027be4d43c1d1ddeedcc0fb5968375",
+        "edition": "Optional Content · method 0.14.0; channel template 0.14.0; retained responsibility templates 0.10.0",
+        "source_commit": "5e5da443a67f68925c8b269d64e6c4b693a934e4",
+        "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.14.0",
+        "body_origin": "Exact renderer projection from the accepted same-version Content publication source; matches actual complete API readback in run 45486941502. This is not an independent raw API capture by Core. Core never writes this page; public qualification is recorded separately.",
+        "method_release_commit": "756cdaba4a325c2923ab0d8899aaf52014d99679"
       }
     ]
   }

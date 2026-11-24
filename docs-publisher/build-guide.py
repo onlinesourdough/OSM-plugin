@@ -125,14 +125,14 @@ def build(root=ROOT):
         if list(files) != [path]:
             raise pub.SetupError(f'{name}: the bound skill source is missing')
         text = files[path].decode()
-        title = 'OSM:' + name.removeprefix('osm-')
+        title = 'OSM:' + name.removeprefix('osm-') if name.startswith('osm-') else name
         body = skill_body(text, path, ref)
         intro = f'[Exact instruction source]({GIT}{ref}/{path}) · commit `{ref[:12]}`. Use the instructions supplied with your installed version.\n\n'
         add(artifact['notion'], title, intro + body + '\n', source_revision=ref)
         links.append(f'- [{title}]({PUBLIC}{artifact["notion"]})')
     add(config['catalogue'], 'OSM skills',
         'Shared methods for the context module. Setup conducts onboarding in the conversation. '
-        'Prime, Log and Dreaming maintain context; Interview, Human Writing and Council help when relevant.\n\n'
+        'Prime, Log and Dreaming maintain context; Interview, Human Writing and Council help when relevant; Unslop removes generic AI phrasing when selected.\n\n'
         + '\n'.join(links) + '\n\nThe source links identify the exact instruction edition. Personal skills belong in your own AI operating model home.\n')
     result = {'format': 'osm-public-guide/1', 'root': config['root'], 'source': PUBLIC + config['root'],
               'reader': 'bound-public-originals-and-exact-git-skills', 'pages': pages}
