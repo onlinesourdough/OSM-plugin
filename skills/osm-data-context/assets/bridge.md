@@ -1,5 +1,5 @@
 <!-- AIOS:BEGIN -->
-Always start with the OSM Prime skill.
+Use OSM Prime when relevant context is missing at the start or after resuming.
 Data and Context: <verified-notion-root-entry-url>
 Always run OSM Log at meaningful checkpoints or when asked.
 Use the host's built-in workspace and tools first, including its side panel when available.

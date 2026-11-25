@@ -2006,7 +2006,7 @@ def main():
 
     # A later source edit must not leave a silently stale delivered figure.
     # This binds bytes, not visual meaning; rendering and review stay separate.
-    receipt = json.loads((ROOT / "docs/evidence/common-architecture-qualification-20261122.json").read_text())
+    receipt = json.loads((ROOT / "docs/evidence/diagram-gardening-20261125.json").read_text())
     diagram_files = [ROOT / "assets/diagrams" / name for name in
                      ("osm-architecture.html", "osm-architecture.png", "osm-architecture-mobile.png")]
     diagram_bytes = [path.read_bytes() for path in diagram_files]

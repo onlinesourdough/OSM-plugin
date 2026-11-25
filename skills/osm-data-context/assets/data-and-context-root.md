@@ -21,6 +21,11 @@ actual icon. A wrapper-page acknowledgement alone is not proof a database icon
 changed. If the tool cannot apply or read it, report that cosmetic gap and
 continue useful work without broadening access.
 
+Only when adding a chosen foundation topic, consult the optional
+[foundation icon examples](foundation-icon-examples.json). It is a separate
+projection of the same Notion-owned guide, not a required file set. Preserve
+owner icons and verify any applied metadata as above.
+
 Native child pages and databases (the knowledge store, Memory, Skills and the
 maintenance pages) appear on the root itself. Do not add a second manual link
 list to them; the definition names them by exact ID.

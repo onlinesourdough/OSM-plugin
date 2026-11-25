@@ -322,8 +322,10 @@ def packets_cover_every_released_byte_and_are_reproducible():
                 and inside["LICENSE"] == files["LICENSE"] == GIT.files("LICENSE")["LICENSE"], "the ZIP holds the exact Git bytes and the license")
         require(provenance["commit"] == RELEASED["commit"] and provenance["tag"] == RELEASED["tag"]
                 and provenance["source_sha256"] == {p: pub.sha256(inside[p]) for p in provenance["source_sha256"]}, "provenance names the frozen release")
-        require(f"blob/{RELEASED['commit']}/" in files["SKILL.md"].decode() and "](../" not in files["SKILL.md"].decode(),
-                "relative links name the exact released file")
+        require("](../" not in files["SKILL.md"].decode(), "no unresolved relative skill links")
+        for _match, target, fragment in ns._targets(own[prefix + 'SKILL.md'].decode(), prefix + 'SKILL.md'):
+            require(f"{ns.REPO_URL}/blob/{RELEASED['commit']}/{target}{fragment}" in files['SKILL.md'].decode(),
+                    "each actual relative resource link names the exact released file")
         require(ns.read_archive(ns.pack(packet["name"], files)) == files, "the archive holds the packet")
     require(PACKETS[SETUP]["helpers"] and any(p.startswith("resources/osm/") for p in PACKETS[SETUP]["files"]), "Setup carries the helpers it links")
     again = ns.build_packets(REAL, SOURCE)
@@ -921,13 +923,64 @@ def historical_seven_packet_output_survives_the_eighth_binding():
 
 
 @test
-def source_packets_do_not_imply_a_github_release_or_missing_asset():
+def native_instructions_keep_provenance_outside_the_method():
     for packet in PACKETS.values():
         text = packet['files']['SKILL.md'].decode()
-        require('Source reference · OSM ' in text and 'Released reference · OSM ' not in text,
-                'a reviewed source tag is not advertised as a published release')
-        require(f"{ns.REPO_URL}/archive/{packet['commit']}.zip" in text and '/releases/download/' not in text,
-                'the exact source download does not depend on a GitHub Release existing')
+        raw = packet['exact'][f"skills/{packet['name']}/SKILL.md"].decode()
+        _, body = ns.frontmatter(raw)
+        expected_body = ns.project(body.strip(), f"skills/{packet['name']}/SKILL.md",
+                                   packet['commit'], set(SOURCE.paths())) + '\n'
+        require(ns.frontmatter(text)[1] == '\n' + expected_body,
+                'native instructions are the whole method with resource links, without injected prose')
+        provenance = json.loads(packet['files']['SOURCE.json'])
+        require(provenance['projection'] == ns.PROJECTION_FORMAT and
+                provenance['commit'] == packet['commit'] and
+                provenance['source_sha256'] == {p: pub.sha256(data) for p, data in sorted(packet['exact'].items())},
+                'provenance and exact source hashes remain attached outside instructions')
+
+
+@test
+def explicit_old_and_new_profiles_survive_a_source_tag_transition():
+    prior = ns._prior_packets(RECORDED, ROOT, pub.git_tag_resolver(ROOT))
+    # A new publisher can run before the next release, while the bound source
+    # is still the older tag. Profile choice comes from observed SOURCE.json.
+    old = ns.build_packets(REAL, SOURCE, projection='source-reference/2')
+    new = ns.build_packets(REAL, SOURCE)
+    rebuilt_old = prior(RELEASED['tag'], RELEASED['commit'], 'source-reference/2')
+    rebuilt_new = prior(RELEASED['tag'], RELEASED['commit'], ns.PROJECTION_FORMAT)
+    for key in new:
+        require(rebuilt_old[key]['files'] == old[key]['files'] and rebuilt_new[key]['files'] == new[key]['files'],
+                'each explicitly observed profile reproduces all supporting bytes on the same source tag')
+        require('Source reference · OSM ' in old[key]['files']['SKILL.md'].decode(),
+                'the former explicit profile retains its original introduction')
+        for packet in (old[key],):
+            seen = ns.expected({**packet, 'handoff': PACKETS[key]['handoff']},
+                               {'files': {}, 'properties': {'Status': 'Released reference'}})
+            require(ns._built_by_ci(PACKETS[key], seen, prior) == RELEASED['tag'],
+                    'the declared forward projection upgrade works before the source tag changes')
+            changed = copy.deepcopy(seen)
+            changed['files']['LICENSE'] += b' owner edit'
+            require(ns._built_by_ci(PACKETS[key], changed, prior) is None,
+                    'profile compatibility never accepts owner changes')
+    require(prior(RELEASED['tag'], RELEASED['commit'], 'native-instructions/999') is None,
+            'unknown profiles remain held')
+    future_tree = dict(TREE)
+    package = json.loads(future_tree['package.json'])
+    major, minor, patch = map(int, package['version'].split('.'))
+    package['version'] = f'{major}.{minor}.{patch + 1}'
+    future_tree['package.json'] = json.dumps(package).encode()
+    future_manifest = copy.deepcopy(REAL)
+    future_manifest['editions']['released'].update(tag='v' + package['version'], commit='d' * 40)
+    future = ns.build_packets(future_manifest, pub.DictSource(future_tree, 'd' * 40))
+    for key in new:
+        for packet in (old[key], new[key]):
+            seen = ns.expected({**packet, 'handoff': PACKETS[key]['handoff']},
+                               {'files': {}, 'properties': {'Status': 'Released reference'}})
+            require(ns._built_by_ci(future[key], seen, prior) == RELEASED['tag'],
+                    'both retained explicit profiles survive the subsequent source-tag change')
+        seen_new = ns.expected(new[key], {'files': {}, 'properties': {'Status': 'Released reference'}})
+        require(ns._built_by_ci(old[key], seen_new, prior) is None,
+                'a delayed old-profile run cannot downgrade the same source')
 
 
 def main():

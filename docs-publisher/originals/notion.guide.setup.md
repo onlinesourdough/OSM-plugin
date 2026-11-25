@@ -30,7 +30,7 @@ Reading instructions, installing a package, connecting an account and proving it
 
 Use the official Notion plugin with a person's authorized account for ordinary work. Select a dedicated connection when a team workflow, delegated worker or unattended job needs a separate identity or a narrower scope. Each person can have their own authorized account. Being a team member alone does not require a new integration. Store credentials in the host or provider credential store.
 
-Prime starts a session with relevant context. Log saves lasting changes at checkpoints. Dreaming reviews recent work and maintains context between sessions. Council brings in another agent for review or bounded work.
+Prime loads relevant context when starting or resuming work that needs it. Log saves lasting changes at meaningful checkpoints. Dreaming gardens the selected context home between tasks. Council brings in another agent for review or bounded work.
 
 ### Work through it your way
 
@@ -73,16 +73,18 @@ An API key is an authentication credential. Notion remains the context home. Ext
 
 ## Short agent instructions
 
-Put this pointer in the selected host's instruction file, such as [AGENTS.md](http://AGENTS.md) or [CLAUDE.md](http://CLAUDE.md). Replace the URL with your own verified home; Prime reads the definition there.
+Put this pointer in the selected host's instruction file, such as <code>AGENTS.md</code> or <code>CLAUDE.md</code>. Replace the URL with your own verified home; Prime reads the definition there.
 
 ```txt
-Always start with the OSM Prime skill.
+Use OSM Prime when relevant context is missing at the start or after resuming.
 Data and Context: [your verified Notion Data & Context URL]
 Always run OSM Log at meaningful checkpoints or when asked.
 Use the host's built-in workspace and tools first, including its side panel when available.
 Use external apps only when built-in tools can't do the work.
 Use the official Notion connector when available; preserve the selected account and any explicit dedicated route.
 ```
+
+A short description helps the app select a skill; it does not guarantee that every host will invoke it. Keep the verified Data and Context pointer. Reuse relevant verified context in the same conversation, including after compaction when it remains available. A new task, changed scope or stale source may need a fresh lookup. Provider prompt caching is separate: it can reduce repeated-prefix processing, but cached input still uses context space and matching across fresh chats is not guaranteed.
 
 ## Agent workspace and tools
 

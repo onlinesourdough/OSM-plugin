@@ -2,7 +2,7 @@
 name: osm-setup
 description: "Set up or resume OSM and its Notion context home, or check and repair a broken install."
 metadata:
-  version: "3.3.6"
+  version: "3.4.0"
 ---
 
 # OSM:setup
@@ -78,7 +78,7 @@ calls back into Setup. Interview's new-connection route is separate:
    or built-in standing memory/instructions if it has no file.
    Instantiate the [bridge](../osm-data-context/assets/bridge.md)
    with the verified root; check its shared lines and refer to policy, never
-   copy it. Keep Always Prime for an ordinary-chat default: Prime excludes
+   copy it. Keep its conditional Prime line for ordinary chats: Prime excludes
    independent work before reading Notion. Place the pointer at the authorised
    scope; preserve unrelated instructions and selected accounts/dedicated routes.
 6. **Optional upkeep.** [Manage Data & Context](../osm-manage-data-context/index.md)

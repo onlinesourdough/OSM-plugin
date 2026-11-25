@@ -1,4 +1,4 @@
-A maintained foundation helps assistants build on useful knowledge as the business changes.
+A maintained foundation helps your AI build on useful knowledge as the business changes.
 
 ## One current topic, meaningful history
 
@@ -28,16 +28,32 @@ Keep personal and team methods in their selected destinations. A shared method n
 
 Idea capture, production, distribution and Content Learn are separate choices. They can be manual, assisted or explicitly scheduled. Learn interprets editorial response against the chosen goals; it does not replace foundation upkeep.
 
-## Prime, Log and Dreaming
+## Start, checkpoint and garden
 
-Prime starts the session by reading the selected definition and the context relevant to the task. Log captures supported lasting changes when meaningful work finishes or you ask it to save a decision. You can simply say “remember this decision” or “log this”; a slash command is optional.
+Prime loads the Definition and the context relevant to a new task or a resumed task that needs it. The same conversation reuses verified context until scope, access or freshness changes.
 
-Log and context upkeep also follow the destination's existing format when writing an authorised Notion page. Lead with what a person needs, preserve meaningful evidence, and keep the reply concise. See <mention url="https://app.notion.com/p/40d6d2e17f56815eaf53cab824a40eb3">Work & evaluation</mention> for writing and review guidance.
+Log captures supported lasting changes at meaningful checkpoints, even when a chat continues. You can also ask it to remember a decision. Current understanding belongs in Knowledge; a dated decision and its reasons can belong in Memory. Progress and technical receipts stay with their task or control record. More Memory rows do not necessarily mean better memory.
 
-Dreaming reviews work between sessions through a selected daily schedule. It includes completed work, useful progress in unfinished work and recently archived sessions when the selected history source supports them. It also checks connected sources named in the definition when there is a relevant change or a check is due. This can include a CRM, accounting system, project tracker or editorial source. A due check can use an AI-native source directly; it does not require an importer or a Notion mirror. Follow the definition's permitted use, processing environments and retention rules. Source-only records remain in their system, including when an agent may read them. Keep only permitted context and content-free progress in the run result.
+When writing an authorised Notion page, both Log and upkeep follow its existing format and preserve useful evidence. See <mention url="https://app.notion.com/p/40d6d2e17f56815eaf53cab824a40eb3">Work & evaluation</mention>.
 
-Dreaming reconciles that evidence with the existing Knowledge, Memory and Skills. It can correct a verified Prime or Log error, combine duplicate context, mark a decision that was superseded and repair a supported source route. It preserves the reasons and source dates that matter. A repeated unchanged run adds no duplicate record and makes no content rewrite.
+### Dreaming as context gardening
 
-Run the whole selected review under the recorded access and write policy. Unavailable evidence and unresolved choices are reported while independent checks continue. A recent edit alone does not make a fact more authoritative, and an old decision can remain current.
+Useful context needs tending. Dreaming reviews selected work between tasks, either when you invoke it or through an existing automation you choose to set up in your main workspace. A skill alone starts no background process or timer.
 
-The separation between session notes, selective retrieval and reflection between sessions is informed by [Anthropic’s research on agent memory](https://www.anthropic.com/research/components-of-agent-memory). Keep the always-loaded instructions small, test corrections against their original evidence and retain learning that helps future work instead of duplicating live source state.
+The same AI can help with a task and later tend the place where your shared context lives. That includes research, writing, client delivery, content and operations as well as software. For example, it can update an accepted change to a client brief, repair a broken source link or flag conflicting research notes for review.
+
+Within the selected changed, due or flagged set, Dreaming recovers missed decisions and keeps explanations, titles, Summaries and routes useful. It preserves your chosen voice, navigation and icons. Verified duplicates can be reconciled with their unique evidence and history kept; unresolved conflicts remain visible. Cosmetic tidying never makes an old fact newly verified or changes its Source date. No useful change means no context write.
+
+Dreaming can inspect completed work, useful progress in unfinished work and archived sessions when the selected history source supports them. Connected tools are checked only within the recorded source agreement and run limits. A CRM or accounting system can be queried directly; it does not need to be mirrored into Notion. Source-only material stays with its owner, including in summaries and run reports.
+
+The plugin uses one shared procedure to classify updates, write to the right record and verify the saved result. Dreaming can repair a verified Prime or Log error within the recorded policy; unsupported view, icon, structural or access changes remain specific proposals. A selected Content collection can be maintained without activating a deferred route or starting an editorial workflow.
+
+Keep the review bounded. Report unavailable evidence and unresolved choices while independent work continues. Run history belongs in its selected control or task, rather than a stream of random Memory rows.
+
+## Further reading
+
+[Shann Holmberg on a Context System and AI Factory](https://x.com/shannholmberg/status/2124856045029953584) connects shared business context with repeatable workflows and team learning.
+
+[Nicholas Charrière's Butler agents and gardener agents](https://nicholascharriere.com/blog/butlers-and-gardeners/) ([original post](https://x.com/nichochar/status/2124545461034033258)) offers a useful distinction between helping with a task and tending a shared place. OSM applies that idea across knowledge work, without requiring separate agents or a software-style approval pipeline for every authorised edit.
+
+[Anthropic's research on agent memory](https://www.anthropic.com/research/components-of-agent-memory) also informs the separation between selective retrieval, task-time learning and reflection. These are sources of ideas, not promises about a host's caching, availability or access.

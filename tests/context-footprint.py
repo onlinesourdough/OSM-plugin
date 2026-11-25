@@ -17,8 +17,8 @@ MAX_DESCRIPTION_BYTES = 240
 JOB_PREFIXES = {
     "unslop": "Remove AI tells ",
     "osm-human-writing": "Draft ",
-    "osm-dreaming": "Reflect ",
-    "osm-prime": "Start ",
+    "osm-dreaming": "Keep ",
+    "osm-prime": "Load ",
     "osm-log": "Save ",
     "osm-setup": "Set up or resume ",
     "osm-interview": "Interview ",

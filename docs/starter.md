@@ -107,31 +107,31 @@ flowchart TB
     LOG["Log · meaningful checkpoints"]
     INTERVIEW["Interview · when direction is unclear"]
     WRITING["Human Writing · when writing"]
+    UNSLOP["Unslop · thin writing helper"]
     COUNCIL["Council · review or bounded help"]
     PRIME --> WORK --> LOG
     INTERVIEW -.-> WORK
     WRITING -.-> WORK
+    UNSLOP -.-> WORK
     WORK <-.-> COUNCIL
   end
   subgraph HOME["Your Notion AI operating model home"]
-    DEFINITION["Data & Context definition<br/>Sources, destinations, access and working agreements"]
+    subgraph DEFINITION["Data and Context Definition · route and authority map"]
     KNOWLEDGE["Knowledge<br/>Start from verified direction and goals<br/>Business context and source map<br/>Maintain understanding through work"]
     MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]
     SKILLS["Personal or team Skills<br/>May start empty<br/>Reuse or adapt your own methods<br/>Shared OSM skills stay in the plugin"]
     CONTENT["Content foundation · OSM 0.35.0+<br/>Reuse actual Notion or external owner, defer, or propose one empty store<br/>Personal methods remain optional"]
-    DEFINITION --> KNOWLEDGE & MEMORY & SKILLS
-    DEFINITION -.-> CONTENT
     CONTROLS["Selected upkeep controls<br/>Write policy and source agreements<br/>Checkpoints when scheduling is selected"]
-    DEFINITION -.-> CONTROLS
+    end
   end
-  DREAM["Dreaming · between sessions<br/>Daily through a selected caller"]
+  DREAM["Dreaming · garden selected context between tasks<br/>Manual or through a chosen existing automation"]
   SETUP --> HOME
   HOME -->|"Relevant context"| PRIME
   SOURCES -->|"Task evidence"| PRIME
   LOG -->|"Verified lasting context"| HOME
   HOME -->|"Definition and current records"| DREAM
   SOURCES -->|"Changed, unfinished or due work"| DREAM
-  DREAM -->|"Recover learning, consolidate and repair"| HOME
+  DREAM -->|"Recover learning, keep explanations and routes useful"| HOME
 ```
 
 When resuming or migrating, start from the same Notion home and verify its
