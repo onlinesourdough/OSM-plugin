@@ -19,7 +19,7 @@ JOB_PREFIXES = {
     "osm-human-writing": "Draft ",
     "osm-dreaming": "Keep ",
     "osm-prime": "Load ",
-    "osm-log": "Save ",
+    "osm-log": "Checkpoint or save ",
     "osm-setup": "Set up or resume ",
     "osm-interview": "Interview ",
     "osm-council": "Ask another agent ",
