@@ -125,7 +125,7 @@ where authorized, or report the concrete missing capability. A denial never
 selects a broader route. Do not claim a fresh installation loaded new tools
 until native discovery confirms it.
 
-Storage is per context identity under `$CODEX_HOME/aios/panel/`, not in the
+Storage is per context identity under `$CODEX_HOME/osm/panel/`, not in the
 system prompt. A new context cannot inherit another context's links. The
 short AGENTS pointer and Notion's guide still govern agent retrieval and Spaces.
 When a verified route changes, update this derived mapping within that same

@@ -5,24 +5,37 @@ import { join } from 'node:path';
 import { classifyTarget } from './target.mjs';
 
 const LIMIT = 64 * 1024;
-const contextLine = /^((?:Data and Context|Context):[ \t]*)([^\r\n]*)/gm;
+const legacyRouteLine = /^((?:Data and Context|Context):[ \t]*)([^\r\n]*)/gm;
+const osmRouteLine = /^(Data and Context:[ \t]*)([^\r\n]*)/gm;
 const defaultHome = () => process.env.CODEX_HOME || join(homedir(), '.codex');
 const revision = (text) => createHash('sha256').update(text === null ? 'missing' : 'file:' + text).digest('hex');
+
 export function parseContextRoute(text) {
   text = text.replace(/^\uFEFF/, '');
   const starts = [...text.matchAll(/<!-- AIOS:BEGIN -->/g)];
   const ends = [...text.matchAll(/<!-- AIOS:END -->/g)];
-  if (!starts.length && !ends.length) return { state: 'missing' };
-  if (starts.length !== 1 || ends.length !== 1 || starts[0].index >= ends[0].index) return { state: 'ambiguous' };
-  if (!/^<!-- AIOS:BEGIN -->\r?$/m.test(text) || !/^<!-- AIOS:END -->\r?$/m.test(text)) return { state: 'ambiguous' };
-  const block = text.slice(starts[0].index + starts[0][0].length, ends[0].index);
-  const routes = [...block.matchAll(contextLine)];
+  if (starts.length || ends.length) {
+    if (starts.length !== 1 || ends.length !== 1 || starts[0].index >= ends[0].index) return { state: 'ambiguous' };
+    if (!/^<!-- AIOS:BEGIN -->\r?$/m.test(text) || !/^<!-- AIOS:END -->\r?$/m.test(text)) return { state: 'ambiguous' };
+    const before = text.slice(0, starts[0].index);
+    const block = text.slice(starts[0].index + starts[0][0].length, ends[0].index);
+    const after = text.slice(ends[0].index + ends[0][0].length);
+    if ([...before.matchAll(osmRouteLine)].length || [...after.matchAll(osmRouteLine)].length) return { state: 'ambiguous' };
+    const routes = [...block.matchAll(legacyRouteLine)];
+    if (routes.length !== 1) return { state: 'ambiguous' };
+    const [, prefix, value] = routes[0];
+    const target = value.trim();
+    const route = classifyTarget(prefix.startsWith('Context:') ? target.replace(/\.$/, '') : target);
+    return route ? { state: 'configured', ...route } : { state: 'ambiguous' };
+  }
+  const routes = [...text.matchAll(osmRouteLine)];
+  if (!routes.length) return { state: 'missing' };
   if (routes.length !== 1) return { state: 'ambiguous' };
-  const [, prefix, value] = routes[0];
-  const target = value.trim();
-  const route = classifyTarget(prefix.startsWith('Context:') ? target.replace(/\.$/, '') : target);
+  const [, , value] = routes[0];
+  const route = classifyTarget(value.trim());
   return route ? { state: 'configured', ...route } : { state: 'ambiguous' };
 }
+
 async function snapshot(codexHome) {
   let handle;
   try {
@@ -42,12 +55,14 @@ async function snapshot(codexHome) {
     throw new Error('Context instructions are unavailable. No changes were made.');
   } finally { await handle?.close(); }
 }
+
 export async function readContextRoute({ codexHome = defaultHome() } = {}) {
   try {
     const value = await snapshot(codexHome);
     return { ...parseContextRoute(value.text || ''), revision: value.revision };
   } catch { return { state: 'unavailable' }; }
 }
+
 export function replaceContext(text, target, bridge) {
   const route = classifyTarget(target);
   if (!route || /[<>]/.test(route.target)) throw new Error('Enter a Notion page link.');
@@ -58,13 +73,19 @@ export function replaceContext(text, target, bridge) {
   if (route.kind !== 'notion') throw new Error('Only a Notion page can be the context home. A folder or other link is read-only; see the OSM update guidance.');
   const original = text || '';
   if (current.state === 'configured') {
-    // Preserve every rule; replace only the owned location inside the single routing block.
-    const next = original.replace(/<!-- AIOS:BEGIN -->[\s\S]*?<!-- AIOS:END -->/, (block) =>
-      block.replace(contextLine, (_, prefix, value) => {
+    const hasLegacy = /<!-- AIOS:BEGIN -->/.test(original);
+    // Preserve every rule; replace only the owned location line.
+    const next = hasLegacy
+      ? original.replace(/<!-- AIOS:BEGIN -->[\s\S]*?<!-- AIOS:END -->/, (block) =>
+        block.replace(legacyRouteLine, (_, prefix, value) => {
+          const trimmed = value.trimEnd();
+          const period = prefix.startsWith('Context:') ? '.' : '';
+          return prefix + route.target + period + value.slice(trimmed.length);
+        }))
+      : original.replace(osmRouteLine, (_, prefix, value) => {
         const trimmed = value.trimEnd();
-        const period = prefix.startsWith('Context:') ? '.' : '';
-        return prefix + route.target + period + value.slice(trimmed.length);
-      }));
+        return prefix + route.target + value.slice(trimmed.length);
+      });
     if (parseContextRoute(next).target !== route.target) throw new Error('Existing context instructions need attention. They have been left unchanged.');
     return next;
   }
@@ -72,10 +93,11 @@ export function replaceContext(text, target, bridge) {
   if (parseContextRoute(addition).target !== route.target) throw new Error('Invalid packaged context template.');
   return original + (original && !original.endsWith('\n') ? '\n\n' : original ? '\n' : '') + addition;
 }
+
 export async function saveContextRoute({ target, expectedRevision }, { codexHome = defaultHome(), bridge } = {}) {
   await mkdir(codexHome, { recursive: true, mode: 0o700 });
   const path = join(codexHome, 'AGENTS.md');
-  const lockPath = path + '.aios-lock';
+  const lockPath = path + '.osm-lock';
   let lock, temporary;
   try {
     try { lock = await open(lockPath, 'wx', 0o600); }
@@ -86,7 +108,7 @@ export async function saveContextRoute({ target, expectedRevision }, { codexHome
     if (next === before.text) return readContextRoute({ codexHome });
     if (Buffer.byteLength(next) > LIMIT) throw new Error('Context instructions are too large. No changes were made.');
     if (before.text !== null) {
-      const backupDir = join(codexHome, 'backups', 'aios-context');
+      const backupDir = join(codexHome, 'backups', 'osm-context');
       await mkdir(backupDir, { recursive: true, mode: 0o700 });
       const backupPath = join(backupDir, before.revision + '.md');
       let backup;

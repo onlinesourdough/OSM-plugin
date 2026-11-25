@@ -56,7 +56,7 @@ Close and reopen an existing OSM sidebar view after updating. Its open document
 can retain the earlier dashboard while the installed server already provides
 the new public guide. If reopening does not refresh it, finish active work and
 restart Codex; do not reconnect Notion to repair a stale document.
-Existing bridge markers and `aios/panel/` state names remain compatible.
+Panel state lives under `osm/panel/`, and earlier `AIOS:BEGIN` bridge blocks remain readable.
 Correct source routes in the definition, then let Setup regenerate the mapping.
 Preserve IDs, revision-checked backups and later owner edits.
 See [connection limits](home-connection.md) and [recovery](recovery.md).

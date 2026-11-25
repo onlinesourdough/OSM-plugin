@@ -126,7 +126,7 @@ environment. The route is therefore one small non-secret setting per context, wh
 owner's recorded selection of `internal_selected_pages` turns on through
 `osm_save_connection_route`:
 
-- It is the file `aios/panel/<context hash>.connection.json` under `CODEX_HOME`
+- It is the file `osm/panel/<context hash>.connection.json` under `CODEX_HOME`
   (default `~/.codex`), beside that context's links and projection. It holds the
   format, the context identity, the route name, the mode and `enabled`. No
   credential, identity or page content.

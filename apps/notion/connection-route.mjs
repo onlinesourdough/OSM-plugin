@@ -8,7 +8,7 @@ import { notionId } from './notion-internal.mjs';
 
 // The owner's recorded choice of OSM's own internal connection, read from the macOS
 // Keychain, for one selected context. It is a small non-secret file beside the context's
-// other saved state (aios/panel/<hash>.connection.json under CODEX_HOME), because the
+// other saved state (osm/panel/<hash>.connection.json under CODEX_HOME), because the
 // installed package's MCP declaration sets no environment, so the packaged setup exposed no
 // per-context opt-in. The documentation reviewed does not establish a general override; that
 // is a gap in what it shows, not a claim that none exists. It holds no credential, token,

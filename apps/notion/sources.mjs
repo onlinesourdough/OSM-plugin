@@ -37,10 +37,10 @@ export function normalizeSources({ title, links }) {
 }
 // Each context has its own files here: <hash>.json for navigation links,
 // <hash>.home.json for its generated projection and <hash>.connection.json for its
-// route setting. The aios/panel folder keeps its name so earlier saved state loads.
+// route setting.
 export async function location(codexHome, target, create = false, suffix = '.json') {
   let folder = codexHome;
-  for (const name of ['aios', 'panel']) {
+  for (const name of ['osm', 'panel']) {
     folder = join(folder, name);
     if (create) await mkdir(folder, { mode: 0o700 }).catch(error => { if (error.code !== 'EEXIST') throw error; });
     try { if (!(await lstat(folder)).isDirectory()) throw new Error(unavailable); }

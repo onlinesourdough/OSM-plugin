@@ -2,10 +2,11 @@
 
 Use this only for a requested adoption, rename or migration of the package. New
 clients use [setup](setup.md) directly. A new package version never moves a
-folder, changes a saved Project or grants access. OSM 0.30.0 renamed the package
-and skills only; OSM 0.31.0 makes Notion the only supported context home. The
-`<!-- AIOS:BEGIN -->` bridge markers, Codex panel links and Notion pages keep
-their stored names, so neither update needs a Notion migration.
+folder, changes a saved Project or grants access. OSM 0.30.0 renamed the package and skills only; OSM 0.31.0 makes Notion the only
+supported context home. New setups write the clean six-line bridge without HTML
+comment markers and store panel state under `osm/panel/`; earlier
+`<!-- AIOS:BEGIN -->` blocks and Notion pages remain readable, so
+neither update needs a Notion migration.
 
 This reference decides package and skill identity. It never rewrites owner data.
 A legacy folder, vault or `AIOS_FORMAT` home is recognized read-only; the

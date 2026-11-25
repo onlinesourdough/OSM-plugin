@@ -132,10 +132,10 @@ identify the current procedures for existing callers.
 ## Earlier names
 
 OSM 0.30.0 is the method previously released as AIOS (`aios`, 0.29.0 and
-earlier). It is distinct from the retired OSM 0.1.x packages. Your context home
-keeps its stored names: the `<!-- AIOS:BEGIN -->` instruction block and saved
-Codex panel links, and a legacy file home keeps `AIOS.md`, `AIOS_FORMAT` and
-`~/.AIOS` read-only. Updating needs no Notion migration. At a quiet moment, install `osm@online-sourdough`
+earlier). It is distinct from the retired OSM 0.1.x packages. New setups use the
+clean six-line bridge without HTML comment markers and store Codex panel state
+under `osm/panel/`, while earlier `<!-- AIOS:BEGIN -->` blocks stay readable and
+a legacy file home keeps `AIOS.md`, `AIOS_FORMAT` and `~/.AIOS` read-only. Updating needs no Notion migration. At a quiet moment, install `osm@online-sourdough`
 and check its version, then disable `aios@online-sourdough` with your app's
 supported plugin control (in Claude Code, `claude plugin disable`) before
 starting a fresh chat, so only one copy of each skill is active. Remove `aios`

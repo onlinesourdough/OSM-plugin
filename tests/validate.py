@@ -338,9 +338,9 @@ def validate(root=ROOT, release_tag=None):
                     for path in skill_files),
             "retired package skill name")
     lines = bridge.splitlines()
-    require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
-            "owner bridge markers")
-    require(lines[1:4] == [
+    require("AIOS:BEGIN" not in bridge and "AIOS:END" not in bridge,
+            "clean bridge without legacy AIOS markers")
+    require(lines[0:3] == [
         "Use OSM Prime when relevant context is missing at the start or after resuming.",
         "Data and Context: <verified-notion-root-entry-url>",
         "Always run OSM Log at meaningful checkpoints or when asked.",
@@ -348,12 +348,11 @@ def validate(root=ROOT, release_tag=None):
             "new bridge route")
     require("OSM Context and AIOS Context." in (skill_root / "osm-data-context/index.md").read_text(),
             "retained context names")
-    # Saved state keeps its earlier aios/panel names after the sidebar folder became apps/notion.
+    # Saved panel state uses the osm namespace under CODEX_HOME.
     notion_state = (root / "apps/notion/sources.mjs").read_text()
     notion_route = (root / "apps/notion/context-route.mjs").read_text()
-    require("['aios', 'panel']" in notion_state and "'.aios-lock'" in notion_route and
-            "'backups', 'aios-context'" in notion_route and
-            notion_route.count("<!-- AIOS:BEGIN -->") == 3,
+    require("['osm', 'panel']" in notion_state and "'.osm-lock'" in notion_route and
+            "'backups', 'osm-context'" in notion_route,
             "persisted sidebar state namespace")
     identity = (skill_root / "osm-setup/references/migration.md").read_text()
     require(all(row in identity for row in (
@@ -591,9 +590,9 @@ def negative_controls():
         folder.mkdir()
         (folder / "SKILL.md").write_text("---\nname: osm-build-work\ndescription: Retired.\n---\n")
 
-    def renamed_bridge_marker(root):
+    def legacy_bridge_marker(root):
         path = root / "skills/osm-data-context/assets/bridge.md"
-        path.write_text(path.read_text().replace("AIOS:BEGIN", "OSM:BEGIN"))
+        path.write_text("<!-- AIOS:BEGIN -->\n" + path.read_text() + "<!-- AIOS:END -->\n")
 
     def dropped_retained_context_names(root):
         path = root / "skills/osm-data-context/index.md"
@@ -603,9 +602,9 @@ def negative_controls():
         path = root / "skills/osm-data-context/assets/bridge.md"
         path.write_text(path.read_text().replace("Always run OSM Log", "Consider writing a note"))
 
-    def renamed_panel_storage(root):
+    def reverted_panel_storage(root):
         path = root / "apps/notion/sources.mjs"
-        path.write_text(path.read_text().replace("['aios', 'panel']", "['osm', 'panel']"))
+        path.write_text(path.read_text().replace("['osm', 'panel']", "['aios', 'panel']"))
 
     def prefix_only_classification(root):
         path = root / "skills/osm-setup/references/migration.md"
@@ -635,10 +634,10 @@ def negative_controls():
     rejected(overlapping_acceptance, "aios to osm switch procedure: docs/osm.md")
     rejected(disable_after_acceptance, "aios to osm switch procedure")
     rejected(retired_skill_copy, "skill inventory")
-    rejected(renamed_bridge_marker, "owner bridge markers")
+    rejected(legacy_bridge_marker, "clean bridge without legacy AIOS markers")
     rejected(dropped_retained_context_names, "retained context names")
     rejected(dropped_log_trigger, "new bridge route")
-    rejected(renamed_panel_storage, "persisted sidebar state namespace")
+    rejected(reverted_panel_storage, "persisted sidebar state namespace")
     rejected(prefix_only_classification, "package identity classification")
     rejected(native_version_drift, 'native identity/version drift')
     rejected(native_split_source, 'native split skill source')

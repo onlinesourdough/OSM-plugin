@@ -13,14 +13,16 @@ async function fixture(t) {
   t.after(() => rm(codexHome, { recursive: true, force: true }));
   return { codexHome, bridge };
 }
-test('first-run save persists only the context bridge and can be read after restart', async (t) => {
+test('first-run save persists only the clean six-line context bridge and can be read after restart', async (t) => {
   const options = await fixture(t), before = await readContextRoute(options);
   const after = await saveContextRoute({ target, expectedRevision: before.revision }, options);
   assert.equal(after.target, target); assert.equal(after.state, 'configured');
   assert.deepEqual(await readContextRoute(options), after);
   const saved = await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8');
   assert.equal(saved, bridge.replace('<verified-notion-root-entry-url>', target));
-  assert.deepEqual(saved.split('\n').slice(1, 4), [
+  assert.equal(saved.includes('AIOS:BEGIN'), false);
+  assert.equal(saved.includes('AIOS:END'), false);
+  assert.deepEqual(saved.split('\n').slice(0, 3), [
     'Use OSM Prime when relevant context is missing at the start or after resuming.',
     `Data and Context: ${target}`,
     'Always run OSM Log at meaningful checkpoints or when asked.',
@@ -29,20 +31,18 @@ test('first-run save persists only the context bridge and can be read after rest
 });
 test('changes retain custom policy and unrelated bytes, back up the original and replay without writes', async (t) => {
   const options = await fixture(t);
-  const configured = bridge.replace('<verified-notion-root-entry-url>', target)
-    .replace('<!-- AIOS:END -->', 'Extra approved rule.\n<!-- AIOS:END -->');
+  const configured = bridge.replace('<verified-notion-root-entry-url>', target) + 'Extra approved rule.\n';
   const original = 'Unrelated rule\n' + configured + '\nAnother rule\n';
   await writeFile(join(options.codexHome, 'AGENTS.md'), original);
   const before = await readContextRoute(options), nextTarget = moved;
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), original.replace(target, nextTarget));
-  const backupDir = join(options.codexHome, 'backups/aios-context');
+  const backupDir = join(options.codexHome, 'backups/osm-context');
   assert.equal(await readFile(join(backupDir, before.revision + '.md'), 'utf8'), original);
   assert.deepEqual(await saveContextRoute({ target: nextTarget, expectedRevision: after.revision }, options), after);
   assert.equal((await readdir(backupDir)).length, 1);
 });
-test('a 0.29.0 AIOS block stays readable and only its Context line changes', async (t) => {
-  // Persisted owner state keeps the AIOS markers and wording written by earlier builds.
+test('a legacy 0.29.0 AIOS block stays readable and only its Context line changes', async (t) => {
   const options = await fixture(t);
   const legacy = `<!-- AIOS:BEGIN -->\nContext: ${target}.\nFor work using or changing this context, use AIOS Context and read its\nguidance once per session. Load only what the task needs.\nReport gaps; do not invent context or silently switch sources.\n<!-- AIOS:END -->\n`;
   await writeFile(join(options.codexHome, 'AGENTS.md'), legacy);
@@ -51,7 +51,7 @@ test('a 0.29.0 AIOS block stays readable and only its Context line changes', asy
   const nextTarget = moved;
   await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), legacy.replace(target, nextTarget));
-  assert.equal(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md'), 'utf8'), legacy);
+  assert.equal(await readFile(join(options.codexHome, 'backups/osm-context', before.revision + '.md'), 'utf8'), legacy);
 });
 test('concurrent saves and external edits cannot overwrite a newer observed revision', async (t) => {
   const options = await fixture(t), before = await readContextRoute(options);
@@ -65,7 +65,7 @@ test('concurrent saves and external edits cannot overwrite a newer observed revi
 });
 test('ambiguous, oversized and symlinked instructions remain untouched', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
-  for (const text of ['<!-- AIOS:BEGIN -->broken', 'x'.repeat(65537)]) {
+  for (const text of ['<!-- AIOS:BEGIN -->broken', `Data and Context: ${target}\nData and Context: ${moved}\n`, 'x'.repeat(65537)]) {
     await writeFile(path, text); const before = await readContextRoute(options);
     await assert.rejects(saveContextRoute({ target, expectedRevision: before.revision }, options));
     assert.equal(await readFile(path, 'utf8'), text);
@@ -95,13 +95,15 @@ test('only a Notion page can be set or changed; old routes stay readable and rea
   const after = await saveContextRoute({ target: moved, expectedRevision: before.revision }, options);
   assert.equal(after.target, moved); assert.equal(after.kind, 'notion');
 });
-test('malformed same-line markers and empty duplicate routes never change instructions', async (t) => {
+test('malformed legacy markers and duplicate routes never change instructions', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
   for (const original of [
     `<!-- AIOS:BEGIN -->Context: https://old.example/.\n<!-- AIOS:END -->`,
     `<!-- AIOS:BEGIN -->\nContext: https://old.example/.<!-- AIOS:END -->`,
     `<!-- AIOS:BEGIN -->\nContext:\nContext: https://old.example/.\n<!-- AIOS:END -->`,
     `<!-- AIOS:BEGIN -->\nData and Context: ${target}\nContext: ${moved}.\n<!-- AIOS:END -->`,
+    `Data and Context: ${target}\n<!-- AIOS:BEGIN -->\nData and Context: ${moved}\n<!-- AIOS:END -->`,
+    `Data and Context:\n`,
   ]) {
     await writeFile(path, original); const before = await readContextRoute(options);
     await assert.rejects(saveContextRoute({ target, expectedRevision: before.revision }, options), /need attention/);
@@ -115,7 +117,7 @@ test('BOM and CRLF bytes survive both backup and context replacement', async (t)
   const nextTarget = moved;
   await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));
-  assert.deepEqual(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md')), original);
+  assert.deepEqual(await readFile(join(options.codexHome, 'backups/osm-context', before.revision + '.md')), original);
 });
 test('a BOM immediately before the context block is read and preserved on save', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
@@ -128,11 +130,14 @@ test('a BOM immediately before the context block is read and preserved on save',
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(after.target, nextTarget);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));
-  assert.deepEqual(await readFile(join(options.codexHome, 'backups/aios-context', before.revision + '.md')), original);
+  assert.deepEqual(await readFile(join(options.codexHome, 'backups/osm-context', before.revision + '.md')), original);
 });
 
 const block = (route) => `unrelated private instructions\n<!-- AIOS:BEGIN -->\nContext: ${route}.\nOnly load relevant context.\n<!-- AIOS:END -->\nmore private instructions`;
-test('reads only the exact routing block and rejects ambiguous legacy instructions', () => {
+test('reads clean Data and Context lines or legacy blocks and rejects ambiguous instructions', () => {
+  assert.deepEqual(parseContextRoute(`Data and Context: https://app.notion.com/p/example\n`), {
+    state: 'configured', target: 'https://app.notion.com/p/example', kind: 'notion',
+  });
   assert.deepEqual(parseContextRoute(block('https://app.notion.com/p/example')), {
     state: 'configured', target: 'https://app.notion.com/p/example', kind: 'notion',
   });
