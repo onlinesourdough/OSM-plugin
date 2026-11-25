@@ -112,6 +112,7 @@ depend on an optional guard implementation.
   authority. Do not install anything or change global settings unless the
   current task authorizes it. Preserve unrelated instructions, secrets and
   configuration keys.
-- New setups use the clean six-line bridge without HTML comment markers and store
-  panel state under `osm/panel/`. Earlier `AIOS:BEGIN` blocks and `aios/panel/`
-  files remain readable automatically and migrate to `osm/panel/` when updated.
+- New setups use the clean six-line bridge without HTML comment markers; the
+  official Notion plugin requires no local state files. Optional adapter state
+  uses the brand-neutral `context-state/` directory while earlier `AIOS:BEGIN`
+  blocks and `aios/panel/` or `osm/panel/` files remain readable automatically.

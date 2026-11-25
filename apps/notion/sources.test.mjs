@@ -24,16 +24,16 @@ test('source links persist independently of instructions and repeating the save 
   assert.deepEqual(saved.links,links); assert.deepEqual(await readSources(target,options),saved);
   assert.deepEqual(await readFile(join(options.codexHome,'AGENTS.md')),before);
   assert.deepEqual(await saveSources({...args,expectedRevision:saved.revision},options),saved);
-  assert.equal((await readdir(join(options.codexHome,'osm/panel'))).length,1);
+  assert.equal((await readdir(join(options.codexHome,'context-state'))).length,1);
 });
-test('links saved under CODEX_HOME/osm/panel load cleanly', async t => {
+test('links saved under CODEX_HOME/context-state load cleanly', async t => {
   const {options}=await fixture(t), identity=contextIdentity(target);
   const name=createHash('sha256').update(identity).digest('hex')+'.json';
-  await mkdir(join(options.codexHome,'osm/panel'),{recursive:true});
-  await writeFile(join(options.codexHome,'osm/panel',name),JSON.stringify({version:1,contextIdentity:identity,title:'Our OSM',links},null,2)+'\n');
+  await mkdir(join(options.codexHome,'context-state'),{recursive:true});
+  await writeFile(join(options.codexHome,'context-state',name),JSON.stringify({version:1,contextIdentity:identity,title:'Our Context',links},null,2)+'\n');
   const read=await readSources(target,options);
-  assert.equal(read.state,'saved'); assert.equal(read.title,'Our OSM'); assert.deepEqual(read.links,links);
-  assert.deepEqual(await readdir(options.codexHome),['AGENTS.md','osm']);
+  assert.equal(read.state,'saved'); assert.equal(read.title,'Our Context'); assert.deepEqual(read.links,links);
+  assert.deepEqual((await readdir(options.codexHome)).sort(),['AGENTS.md','context-state']);
 });
 test('different contexts cannot inherit sources; copied Notion URLs preserve page identity', async t => {
   const {options,args,context}=await fixture(t); await saveSources(args,options);
@@ -53,8 +53,8 @@ test('concurrent writes and stale revisions preserve the winner and backup earli
   await assert.rejects(saveSources(args,options),/changed/);
   const after=await saveSources({...args,expectedRevision:saved.revision,links:{...links,teamSkills:{title:'Team',target:'https://example.com/team'}}},options);
   assert.ok(after.links.teamSkills);
-  const names=await readdir(join(options.codexHome,'osm/panel'));
-  const backup=JSON.parse(await readFile(join(options.codexHome,'osm/panel',names.find(n=>n.endsWith('.bak'))),'utf8'));
+  const names=await readdir(join(options.codexHome,'context-state'));
+  const backup=JSON.parse(await readFile(join(options.codexHome,'context-state',names.find(n=>n.endsWith('.bak'))),'utf8'));
   assert.deepEqual(backup.links,saved.links);
 });
 test('missing roles stay empty, never become a fake source; unsafe input is rejected', async t => {
@@ -67,7 +67,7 @@ test('missing roles stay empty, never become a fake source; unsafe input is reje
 });
 test('corrupt files and symlinked state directories stop writes without replacing data', async t => {
   const {options,args}=await fixture(t); await saveSources(args,options);
-  const dir=join(options.codexHome,'osm/panel'), path=join(dir,(await readdir(dir))[0]);
+  const dir=join(options.codexHome,'context-state'), path=join(dir,(await readdir(dir))[0]);
   await writeFile(path,'invalid json'); assert.equal((await readSources(target,options)).state,'unavailable');
   await assert.rejects(saveSources(args,options)); assert.equal(await readFile(path,'utf8'),'invalid json');
   await rm(dir,{recursive:true}); await symlink(options.codexHome,dir);
@@ -89,29 +89,29 @@ test('optional team memory can be added without changing personal memory or inst
   assert.deepEqual(await readFile(join(options.codexHome,'AGENTS.md')),before);
 });
 
-test('existing CODEX_HOME/aios/panel state stays readable and writes migrate cleanly to osm/panel', async t => {
+test('existing CODEX_HOME/aios/panel and osm/panel state stay readable and writes migrate cleanly to context-state', async t => {
   const {options,context,args}=await fixture(t), identity=contextIdentity(target);
   const hash=createHash('sha256').update(identity).digest('hex');
   const legacyDir=join(options.codexHome,'aios/panel');
   await mkdir(legacyDir,{recursive:true});
-  const legacyLinks=JSON.stringify({version:1,contextIdentity:identity,title:'Legacy OSM',links},null,2)+'\n';
+  const legacyLinks=JSON.stringify({version:1,contextIdentity:identity,title:'Legacy Context',links},null,2)+'\n';
   await writeFile(join(legacyDir,hash+'.json'),legacyLinks);
   await writeFile(join(legacyDir,hash+'.connection.json'),JSON.stringify({
     format:routeFormat,contextIdentity:identity,route:'macos-keychain',mode:routeMode,enabled:true,
   },null,2)+'\n');
 
   const read=await readSources(target,options);
-  assert.equal(read.state,'saved'); assert.equal(read.title,'Legacy OSM'); assert.deepEqual(read.links,links);
+  assert.equal(read.state,'saved'); assert.equal(read.title,'Legacy Context'); assert.deepEqual(read.links,links);
   const route=await readConnectionRoute(target,options);
   assert.equal(route.state,'saved'); assert.equal(route.enabled,true);
 
-  const updated=await saveSources({...args,expectedRevision:read.revision,title:'Migrated OSM'},options);
-  assert.equal(updated.title,'Migrated OSM');
-  assert.equal((await readSources(target,options)).title,'Migrated OSM');
+  const updated=await saveSources({...args,expectedRevision:read.revision,title:'Migrated Context'},options);
+  assert.equal(updated.title,'Migrated Context');
+  assert.equal((await readSources(target,options)).title,'Migrated Context');
   assert.equal(await readFile(join(legacyDir,hash+'.json'),'utf8'),legacyLinks);
-  const osmFiles=await readdir(join(options.codexHome,'osm/panel'));
-  assert.ok(osmFiles.includes(hash+'.json'));
-  assert.ok(osmFiles.some(name=>name.endsWith('.bak')));
+  const stateFiles=await readdir(join(options.codexHome,'context-state'));
+  assert.ok(stateFiles.includes(hash+'.json'));
+  assert.ok(stateFiles.some(name=>name.endsWith('.bak')));
 
   const disabled=await saveConnectionRoute({
     target,expectedContextRevision:context.revision,expectedRevision:route.revision,

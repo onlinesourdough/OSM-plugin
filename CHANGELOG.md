@@ -3,8 +3,8 @@
 ## 0.38.0
 
 - Align the packaged host instruction template (`bridge.md`) 1:1 with the public Notion Setup guide as clean six-line prose with no HTML wrapper markers, and validate both marker-free prose and Setup-guide parity generally in `tests/validate.py`.
-- Move new Codex panel state, context route locks and backups to the `osm` namespace (`osm/panel/`, `.osm-lock`, `backups/osm-context`) while reading existing `aios/panel/` files and earlier `AIOS:BEGIN` blocks automatically without data loss.
-- Update `osm-setup` (`4.0.0`) and package docs for the clean markerless bridge and seamless `osm/panel/` transition, and bind the unchanged Notion guide originals to `0.38.0`.
+- Decouple optional local Codex adapter storage, route locks and backups from brand names by moving writes to `context-state/`, `.context-route.lock` and `backups/context-route`, while reading existing `aios/panel/` or `osm/panel/` files and earlier `AIOS:BEGIN` blocks automatically without data loss.
+- Make native zero-local-state operation explicit for the official Notion plugin, update `osm-setup` (`4.0.0`) and package docs, and bind the unchanged Notion guide originals to `0.38.0`.
 
 ## 0.37.0
 

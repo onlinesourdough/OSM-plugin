@@ -2,13 +2,13 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { readContextRoute } from './context-route.mjs';
 import { readHomeProjection } from './home-projection.mjs';
-import { contextIdentity, location, legacyLocation, readPanelSnapshot, stateRevision, replaceState } from './sources.mjs';
+import { contextIdentity, location, legacyLocations, readPanelSnapshot, stateRevision, replaceState } from './sources.mjs';
 import { classifyTarget } from './target.mjs';
 import { notionId } from './notion-internal.mjs';
 
 // The owner's recorded choice of OSM's own internal connection, read from the macOS
 // Keychain, for one selected context. It is a small non-secret file beside the context's
-// other saved state (osm/panel/<hash>.connection.json under CODEX_HOME), because the
+// other saved state (context-state/<hash>.connection.json under CODEX_HOME), because the
 // installed package's MCP declaration sets no environment, so the packaged setup exposed no
 // per-context opt-in. The documentation reviewed does not establish a general override; that
 // is a gap in what it shows, not a claim that none exists. It holds no credential, token,
@@ -82,10 +82,10 @@ export async function saveConnectionRoute({ target, expectedContextRevision, exp
   if (current.revision !== expectedRevision) throw new Error('OSM’s connection route changed. Refresh before saving again.');
   const link = manage === undefined ? current.manage : manage === null ? undefined : normalizeManage(manage);
   const path = await location(codexHome, target, true, '.connection.json');
-  const legacyPath = await legacyLocation(codexHome, target, '.connection.json');
+  const legacyPaths = await legacyLocations(codexHome, target, '.connection.json');
   const text = JSON.stringify({ format: routeFormat, contextIdentity: contextIdentity(target), route: routeName, mode: routeMode, enabled, ...(link && { manage: link }) }, null, 2) + '\n';
   let previous;
-  const written = await replaceState(path, { expectedRevision, text, limit, legacyPath,
+  const written = await replaceState(path, { expectedRevision, text, limit, legacyPaths,
     decode: value => (previous = decode(value, target)),
     same: value => value.enabled === enabled && sameManage(value.manage, link),
     matches: async () => matches(await readContextRoute({ codexHome })),

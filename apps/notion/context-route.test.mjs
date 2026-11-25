@@ -37,7 +37,7 @@ test('changes retain custom policy and unrelated bytes, back up the original and
   const before = await readContextRoute(options), nextTarget = moved;
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), original.replace(target, nextTarget));
-  const backupDir = join(options.codexHome, 'backups/osm-context');
+  const backupDir = join(options.codexHome, 'backups/context-route');
   assert.equal(await readFile(join(backupDir, before.revision + '.md'), 'utf8'), original);
   assert.deepEqual(await saveContextRoute({ target: nextTarget, expectedRevision: after.revision }, options), after);
   assert.equal((await readdir(backupDir)).length, 1);
@@ -51,7 +51,7 @@ test('a legacy 0.29.0 AIOS block stays readable and only its Context line change
   const nextTarget = moved;
   await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(await readFile(join(options.codexHome, 'AGENTS.md'), 'utf8'), legacy.replace(target, nextTarget));
-  assert.equal(await readFile(join(options.codexHome, 'backups/osm-context', before.revision + '.md'), 'utf8'), legacy);
+  assert.equal(await readFile(join(options.codexHome, 'backups/context-route', before.revision + '.md'), 'utf8'), legacy);
 });
 test('concurrent saves and external edits cannot overwrite a newer observed revision', async (t) => {
   const options = await fixture(t), before = await readContextRoute(options);
@@ -117,7 +117,7 @@ test('BOM and CRLF bytes survive both backup and context replacement', async (t)
   const nextTarget = moved;
   await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));
-  assert.deepEqual(await readFile(join(options.codexHome, 'backups/osm-context', before.revision + '.md')), original);
+  assert.deepEqual(await readFile(join(options.codexHome, 'backups/context-route', before.revision + '.md')), original);
 });
 test('a BOM immediately before the context block is read and preserved on save', async (t) => {
   const options = await fixture(t), path = join(options.codexHome, 'AGENTS.md');
@@ -130,7 +130,7 @@ test('a BOM immediately before the context block is read and preserved on save',
   const after = await saveContextRoute({ target: nextTarget, expectedRevision: before.revision }, options);
   assert.equal(after.target, nextTarget);
   assert.deepEqual(await readFile(path), Buffer.from(original.toString().replace(target, nextTarget)));
-  assert.deepEqual(await readFile(join(options.codexHome, 'backups/osm-context', before.revision + '.md')), original);
+  assert.deepEqual(await readFile(join(options.codexHome, 'backups/context-route', before.revision + '.md')), original);
 });
 
 const block = (route) => `unrelated private instructions\n<!-- AIOS:BEGIN -->\nContext: ${route}.\nOnly load relevant context.\n<!-- AIOS:END -->\nmore private instructions`;

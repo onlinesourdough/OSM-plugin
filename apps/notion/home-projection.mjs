@@ -2,7 +2,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { classifyTarget } from './target.mjs';
 import { readContextRoute } from './context-route.mjs';
-import { contextIdentity, location, legacyLocation, readPanelSnapshot, stateRevision, replaceState } from './sources.mjs';
+import { contextIdentity, location, legacyLocations, readPanelSnapshot, stateRevision, replaceState } from './sources.mjs';
 import { notionId } from './notion-internal.mjs';
 
 // The Home projection is generated from one revision of the AI Operating Model's
@@ -10,7 +10,7 @@ import { notionId } from './notion-internal.mjs';
 // what OSM's own connection may list and read. Setup generates it; it is replaced whole
 // when that revision changes, refused without a revision, and never edited here or
 // field by field. It is saved beside the context's navigation links as
-// osm/panel/<hash>.home.json (earlier aios/panel files remain readable until updated). Format
+// context-state/<hash>.home.json (earlier osm/panel and aios/panel files remain readable until updated). Format
 // osm-home-projection/1 is OSM's reviewed product contract; owner-preview schemas and
 // legacy or custom models map into it through Setup. It holds identities, labels,
 // verified field names, safe links, the selected connection mode and dated
@@ -173,12 +173,12 @@ export async function saveHomeProjection({ target, expectedContextRevision, expe
     && contextIdentity(context.target) === contextIdentity(target);
   if (!matches(await readContextRoute({ codexHome }))) throw new Error('Your context changed. Refresh before saving the Home projection.');
   const path = await location(codexHome, target, true, '.home.json');
-  const legacyPath = await legacyLocation(codexHome, target, '.home.json');
+  const legacyPaths = await legacyLocations(codexHome, target, '.home.json');
   const text = JSON.stringify({ format: projectionFormat, contextIdentity: contextIdentity(target), projection: clean }, null, 2) + '\n';
   // The reader's bound is in UTF-8 bytes; replaceState enforces the same check.
   if (Buffer.byteLength(text, 'utf8') > limit) invalid('too large');
   let previous;
-  const written = await replaceState(path, { expectedRevision, text, limit, legacyPath,
+  const written = await replaceState(path, { expectedRevision, text, limit, legacyPaths,
     decode: value => {
       previous = decode(value, target);
       const before = previous.projection?.definition;

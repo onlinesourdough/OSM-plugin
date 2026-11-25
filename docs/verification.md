@@ -4305,15 +4305,16 @@ this metadata commit. The native CLI fixture's approval HOLD, unqualified
 Definition-specific cache attribution, and separate Codex 0.172 history HOLD
 remain bounded limitations. This is no new timed 0.37.0 proof or benchmark.
 
-### 25 November: 0.38.0 candidate — clean markerless bridge and `osm/panel/` storage
+### 25 November: 0.38.0 candidate — clean markerless bridge and brand-neutral `context-state/` storage
 
 Aligned `skills/osm-data-context/assets/bridge.md` 1:1 with the bound Notion
 Setup guide (`docs-publisher/originals/notion.guide.setup.md`, six lines without
 HTML wrapper markers), generalized `tests/validate.py` to enforce marker-free
-bridge prose and Setup-guide parity, and moved new Codex panel state, route
-locks and backups to `osm/panel/`, `.osm-lock` and `backups/osm-context` with
-read-only fallback for existing `aios/panel/` files and `AIOS:BEGIN` blocks.
-Bound the eight unchanged guide originals to `0.38.0`, rebuilt
+bridge prose and Setup-guide parity, made zero-local-state official Notion usage
+explicit, and moved optional local Codex adapter state, route locks and backups
+to brand-neutral `context-state/`, `.context-route.lock` and `backups/context-route`
+with read-only fallback for existing `aios/panel/` and `osm/panel/` files and
+`AIOS:BEGIN` blocks. Bound the eight unchanged guide originals to `0.38.0`, rebuilt
 `docs-publisher/public-guide.json` and `runtime/notion/`, and ran the full local
 suite (`npm test --prefix apps/notion`, `tests/validate.py --release-tag v0.38.0 --baseline v0.37.0`,
 all 16 rehearsal/parity/reader checks, and `docs-publisher/publisher.py reconcile --check --release-tag v0.38.0`):

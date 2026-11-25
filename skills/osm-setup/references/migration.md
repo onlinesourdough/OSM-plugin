@@ -4,9 +4,10 @@ Use this only for a requested adoption, rename or migration of the package. New
 clients use [setup](setup.md) directly. A new package version never moves a
 folder, changes a saved Project or grants access. OSM 0.30.0 renamed the package and skills only; OSM 0.31.0 makes Notion the only
 supported context home. New setups write the clean six-line bridge without HTML
-comment markers and store panel state under `osm/panel/`; earlier
-`<!-- AIOS:BEGIN -->` blocks, `aios/panel/` files and Notion pages remain
-readable (panel updates write to `osm/panel/` without deleting prior files), so
+comment markers and need no local state when using the official Notion plugin.
+Optional adapter state uses the brand-neutral `context-state/` directory; earlier
+`<!-- AIOS:BEGIN -->` blocks, `aios/panel/` or `osm/panel/` files and Notion pages remain
+readable (updates write to `context-state/` without deleting prior files), so
 neither update needs a Notion migration.
 
 This reference decides package and skill identity. It never rewrites owner data.

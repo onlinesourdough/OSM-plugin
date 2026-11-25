@@ -97,7 +97,7 @@ export function replaceContext(text, target, bridge) {
 export async function saveContextRoute({ target, expectedRevision }, { codexHome = defaultHome(), bridge } = {}) {
   await mkdir(codexHome, { recursive: true, mode: 0o700 });
   const path = join(codexHome, 'AGENTS.md');
-  const lockPath = path + '.osm-lock';
+  const lockPath = path + '.context-route.lock';
   let lock, temporary;
   try {
     try { lock = await open(lockPath, 'wx', 0o600); }
@@ -108,7 +108,7 @@ export async function saveContextRoute({ target, expectedRevision }, { codexHome
     if (next === before.text) return readContextRoute({ codexHome });
     if (Buffer.byteLength(next) > LIMIT) throw new Error('Context instructions are too large. No changes were made.');
     if (before.text !== null) {
-      const backupDir = join(codexHome, 'backups', 'osm-context');
+      const backupDir = join(codexHome, 'backups', 'context-route');
       await mkdir(backupDir, { recursive: true, mode: 0o700 });
       const backupPath = join(backupDir, before.revision + '.md');
       let backup;
