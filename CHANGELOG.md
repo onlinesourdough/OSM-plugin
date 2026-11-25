@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.38.1
+
+- Keep external operational systems (such as accounting and established CRM) and heavy media at their owner with lightweight, non-granting references in Notion across plans, unless the owner explicitly chooses Notion as that media's home (`osm-setup` `4.0.1`, `osm-prime` `1.2.5`, `architecture.md`, `content-foundation.md`).
+- Clarify multi-host access boundaries in `credentials.md`: map canonical location to existing `scope` and host-scoped access/paths to `reader`, prefer per-host native access over shared credentials, ban self-granting share/signed links (pinned in `tests/responsibility-rehearsal.py`), and forbid exporting sessions, cookies or tokens across hosts.
+- Bind the eight unchanged Notion guide originals to `0.38.1` and rebuild the bundled public guide and optional Notion runtime.
+
 ## 0.38.0
 
 - Align the packaged host instruction template (`bridge.md`) 1:1 with the public Notion Setup guide as clean six-line prose with no HTML wrapper markers, and validate both marker-free prose and Setup-guide parity generally in `tests/validate.py`.

@@ -1,6 +1,6 @@
 {
   "name": "osm",
-  "version": "0.38.0",
+  "version": "0.38.1",
   "description": "Notion context, onboarding, writing and collaboration for AI agents.",
   "skills": "./skills"
 }
