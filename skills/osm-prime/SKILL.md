@@ -2,7 +2,7 @@
 name: osm-prime
 description: "Load relevant Notion Data and Context when starting or resuming work."
 metadata:
-  version: "1.2.4"
+  version: "1.2.5"
 ---
 
 # OSM:prime
@@ -32,8 +32,10 @@ inputs selected by the lead.
    Treat the definition as a gateway, not a request to import every source.
    Follow each source's permitted use, processing environment and retention
    rules before reading it. For example, query accounting in its selected
-   accounting tool; do not mirror its records into Notion. Permission to read
-   a source is separate from permission to retain or share its contents.
+   accounting tool and reference heavy media where it lives; do not mirror
+   records or upload binary files into Notion. Permission to read a source is
+   separate from permission to retain or share its contents. Report a
+   registered source this host cannot reach rather than working around it.
 4. If you find a verified context error, correct the lookup or conclusion now.
    Use the shared [repair rules](../osm-manage-data-context/references/activity.md#repair-in-the-current-session)
    for an authorized stored repair and a short note for Dreaming.

@@ -463,6 +463,40 @@ and which outcomes matter. An installed connector, an accessible archive or a
 new login activates nothing; an inactive archive is not a missing daily
 pipeline, and a deferred source is shown as deferred, not empty.
 
+### External data, media storage and host access
+
+OSM treats Notion as the lightweight definition, curation and routing home, not
+as a bulk file host or a forced migration target.
+
+- **Data and heavy media stay at their owner.** Operational systems (such as
+  accounting software or an established CRM) and binary/media stores (images,
+  raw video footage, audio, PDFs in external cloud or local storage) stay in
+  their owning systems, registered as sources with the owner's chosen placement
+  and retention. Notion pages and database rows (including Content and
+  Knowledge) keep lightweight references rather than binary uploads or system
+  mirrors, unless the owner explicitly chooses Notion as that media's home;
+  existing files already in Notion are not migrated out. This keeps uploads
+  within the workspace's file and storage limits across plans; workspace block
+  limits still apply. Selected attachments may still yield a permitted excerpt
+  or transcript under the [preparation lifecycle](#preparation-lifecycle),
+  never a duplicate raw binary upload.
+- **Non-granting identity in existing fields.** Record a source's canonical
+  location by provider identity in `scope` (provider, account, folder, album or
+  item ID) and its host-scoped access in `reader` (including the host name for
+  any local path, mount, browser session or built-in credential store). Never
+  record a link that grants access on its own (public share, signed or expiring
+  link), and never store credentials, tokens or password-manager item names in
+  Notion. A recorded route never grants access by itself. See
+  [credentials](../../osm-setup/references/credentials.md#access-across-multiple-hosts)
+  for multi-host access boundaries.
+- **Honest gap on missing host access.** When an agent on the current host
+  needs a registered source or media store, it checks its own host's native
+  access first. If access lives only on another host or lacks a grant here, the
+  agent reports the exact gap and offers the smallest next step (authorize on
+  this host, share the specific file, run on the host that already has access,
+  or adopt a route this host can connect to). It never uploads heavy media,
+  mirrors external records or stores secrets in Notion as a workaround.
+
 ## Human originals and selected excerpts
 
 Human originals are original source or library artifacts and retained original
