@@ -4283,3 +4283,24 @@ The first alignment CI 45620000129 stopped at the existing discovery-job
 prefix assertion (`Save `). Only Log's expected prefix was aligned to the
 reviewed `Checkpoint or save ` wording; the size caps, measured paths and
 other skill checks are unchanged. The failed attempt is retained.
+
+### 25 November: actual 0.37.0 publication and existing-profile adoption
+
+Release `v0.37.0` was published at 2026-11-25T13:24:35Z from
+`3ceb6a0ef1f3781a85a667fd066e53cfbded1791`. The downloaded ZIP is 6,540,724 bytes, SHA-256
+`bf8cd76c17fce2a24fb0c5d82c65cd5648b8a8a04a1a8b1422ef1789d5246d5f`; GitHub digest, sidecar, full UTC archive and all
+336 tracked contents/executable modes agree. Its immutable local extraction
+was independently rehashed. Existing Codex and Claude user installations
+report 0.37.0 enabled; all 80 skill files, eight entries and the bundled runtime
+match the release. The installer preserved both global instruction files and
+the existing automation TOML byte for byte; explicit later bridge/method
+adoption is separate. A fresh desktop conversation is not claimed here.
+
+The pretag public gate still delivered immutable 0.36.5 source packets under
+the new native-instructions/3 projection, not 0.37.0 instructions. The first
+45618084010 run held before writes at the observed Log description; its exact
+handoff/source alignment is recorded above. Posttag 0.37.0 packet delivery,
+public verification and independent zero-write replay remain pending at
+this metadata commit. The native CLI fixture's approval HOLD, unqualified
+Definition-specific cache attribution, and separate Codex 0.172 history HOLD
+remain bounded limitations. This is no new timed 0.37.0 proof or benchmark.
