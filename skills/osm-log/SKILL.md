@@ -1,8 +1,8 @@
 ---
 name: osm-log
-description: "Save lasting context to Notion when meaningful work ends or the user says remember, log or note this."
+description: "Save lasting Notion context at checkpoints, or when asked to remember, log or note it."
 metadata:
-  version: "1.3.1"
+  version: "1.3.2"
 ---
 
 # OSM:log

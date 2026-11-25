@@ -419,11 +419,11 @@
       "authoritative_for": "The method overview: what OSM is, the foundation it builds and where each topic is explained",
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
-        "revision": "3a69bf2daab35f722457aac9a957b205cfd828f919db2f437485b89e5b753676",
-        "edition": "0.36.5",
+        "revision": "94ac801636ec3ae773db8aa116bfcec5b0cbaf27c8ba5c77e82636251928609e",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
-        "last_edited_time": "2026-11-23T12:00:00.000Z"
+        "read_at": "2026-11-25T12:05:04+00:00",
+        "last_edited_time": "2026-11-25T11:51:00.000Z"
       }
     },
     {
@@ -440,11 +440,11 @@
       "authoritative_for": "The method explanation: data and context, what each place owns, shared method and personal configuration",
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
-        "revision": "2b53bf5783955cb829aded7b2a998c3762b8cb47aaf8cb15dcfe947bef34759b",
-        "edition": "0.36.5",
+        "revision": "847060feb76d6891d29c5a2f27029eaeb582c642856453d5b700d5bc52a20c33",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
-        "last_edited_time": "2026-11-20T13:32:00.000Z"
+        "read_at": "2026-11-25T12:05:04+00:00",
+        "last_edited_time": "2026-11-25T11:52:00.000Z"
       }
     },
     {
@@ -461,11 +461,11 @@
       "authoritative_for": "Setup and configuration explanation and its special cases: Notion access choices, provider API keys, agent workspace and tools",
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
-        "revision": "7b08fd9735bcb6a2fc599922be9ee4998da61d34a0ba5c63c1d91efea34f4c38",
-        "edition": "0.36.5",
+        "revision": "522924fe48f35fa9a38c6663acc47d1fd6fc38ec760ac222c21d5632074784fd",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
-        "last_edited_time": "2026-11-23T14:14:00.000Z"
+        "read_at": "2026-11-25T12:05:04+00:00",
+        "last_edited_time": "2026-11-25T12:03:00.000Z"
       }
     },
     {
@@ -482,11 +482,11 @@
       "authoritative_for": "The Data & Context explanation and the Data & Context definition template (the YAML block)",
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
-        "revision": "3d4b6d70c24a7a458a444d57a7dbc2dd4e2d12a6875398bdba35eb5d1c3fa967",
-        "edition": "0.36.5",
+        "revision": "8f9f47cfd2c13a27ff75ca6192556f83ce83410465acc13355e3d3bd0104c37c",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
-        "last_edited_time": "2026-11-22T20:32:00.000Z"
+        "read_at": "2026-11-25T12:05:04+00:00",
+        "last_edited_time": "2026-11-25T11:52:00.000Z"
       },
       "exports": [
         {
@@ -524,9 +524,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "eb4b1c19765ab05857304346bbc9d4b981dd6bdae08eb76bc184126602f60bba",
-        "edition": "0.36.5",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
+        "read_at": "2026-11-25T12:05:04+00:00",
         "last_edited_time": "2026-11-23T10:44:00.000Z"
       }
     },
@@ -544,11 +544,11 @@
       "authoritative_for": "Upkeep and recurring work: curation, freshness, Prime, Log and Dreaming, and keeping the guide and repository aligned",
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
-        "revision": "bd1343be84fc40efb26fe969104f7fe03ac21be4c8df3b1887c765432ed627d0",
-        "edition": "0.36.5",
+        "revision": "6d879f7b53032a0f7c08de00c38a7209871ba4c6304fdf2470516c67f5cf7876",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
-        "last_edited_time": "2026-11-23T10:33:00.000Z"
+        "read_at": "2026-11-25T12:05:04+00:00",
+        "last_edited_time": "2026-11-25T11:52:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
     },
@@ -566,11 +566,11 @@
       "authoritative_for": "The architecture diagrams, including the working-relationships map (the Mermaid block)",
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
-        "revision": "51395c5382ae366941c55bddf5a5c2d71b863dc50a0abe28deb547c7138bb7ca",
-        "edition": "0.36.5",
+        "revision": "75dbe7733f1a234990a6145e4a24ec4792a4926bd8b97012d7cb88a80fbc56d3",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
-        "last_edited_time": "2026-11-22T11:26:00.000Z"
+        "read_at": "2026-11-25T12:05:04+00:00",
+        "last_edited_time": "2026-11-25T11:56:00.000Z"
       },
       "exports": [
         {
@@ -581,7 +581,7 @@
           "notion": {
             "fence": "mermaid"
           },
-          "sha256": "a32f707fe201d11e6e78cf0681789b7749d944287a30c8853d41761acdfe79db"
+          "sha256": "03f71d608fda2cdee3daf2756663cada774c916bcc5c8a3e26a097f3a5dc9ef6"
         }
       ]
     },
@@ -600,9 +600,9 @@
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
-        "edition": "0.36.5",
+        "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-24T19:27:39+00:00",
+        "read_at": "2026-11-25T12:05:04+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -810,7 +810,7 @@
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
-        "title": "Content · optional extension",
+        "title": "Content build your own setup",
         "path": "docs-publisher/originals/notion.content.entry.md",
         "sha256": "680f45ad64c31e1565998b4bb31245ad50027be4d43c1d1ddeedcc0fb5968375",
         "edition": "Optional Content · method 0.14.0; channel template 0.14.0; retained responsibility templates 0.10.0",

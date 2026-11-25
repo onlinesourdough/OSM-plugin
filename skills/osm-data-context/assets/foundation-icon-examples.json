@@ -1,0 +1,27 @@
+{
+  "format": "osm-foundation-icon-examples/1",
+  "generated": true,
+  "source": {
+    "page": "https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038",
+    "revision": "8f9f47cfd2c13a27ff75ca6192556f83ce83410465acc13355e3d3bd0104c37c"
+  },
+  "icons": {
+    "about": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png",
+    "soul": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png",
+    "vision": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/architecture.png",
+    "principles": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png",
+    "audience": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/knowledge.png",
+    "offers": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/knowledge.png",
+    "brand": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png",
+    "voice": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png",
+    "priorities": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/work-evaluation.png",
+    "editorial-direction": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png",
+    "cadence": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/automation-upkeep.png",
+    "formats": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png",
+    "quality-gate": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/work-evaluation.png",
+    "linkedin": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png",
+    "x": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png",
+    "newsletter": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png",
+    "source-map": "https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/architecture.png"
+  }
+}

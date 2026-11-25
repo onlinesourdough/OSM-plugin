@@ -42,7 +42,8 @@ REPO_URL = "https://github.com/onlinesourdough/OSM-plugin"
 SKILLS_VERSION = "2026-03-11"           # the Notion-Version the Agent Skills endpoints are documented for
 ENABLED_ENV = "OSM_PUBLIC_DOCS_ENABLED"
 SOURCE_FORMAT = "osm-public-skill-source/2"
-PROJECTION_FORMAT = "source-reference/2"
+PROJECTION_FORMAT = "native-instructions/3"
+KNOWN_PROJECTIONS = ("source-reference/2", PROJECTION_FORMAT)
 MAX_ARCHIVE = 20 * 1024 * 1024          # Notion's documented upload limit
 MAX_UNPACKED, MAX_FILES, MAX_JSON = 25 * 1024 * 1024, 1000, 4 * 1024 * 1024
 MANAGED = ("Key", "Version", "Source", "Source revision", "Package version", "Status")
@@ -234,8 +235,10 @@ def _zip(files):
     return stream.getvalue()
 
 
-def build_packets(manifest, source, *, legacy_projection=False):
+def build_packets(manifest, source, *, legacy_projection=False, projection=PROJECTION_FORMAT):
     """One packet per bound released skill, from `source` (the frozen released commit). Pure; no network."""
+    if projection not in KNOWN_PROJECTIONS:
+        raise Refused("unknown native instruction projection")
     released = manifest["editions"]["released"]
     if source.commit != released["commit"]:
         raise Refused(f"packets are built only from the approved released commit {released['commit']}, not {source.commit}")
@@ -274,7 +277,7 @@ def build_packets(manifest, source, *, legacy_projection=False):
         if fields.get("name") != name or not fields.get("description") or not re.fullmatch(r"\d+\.\d+\.\d+", version or ""):
             raise Refused(f"{prefix}SKILL.md does not carry this skill's name, a description and a version")
         provenance = (json.dumps({
-            "format": SOURCE_FORMAT, **({} if legacy_projection else {"projection": PROJECTION_FORMAT}),
+            "format": SOURCE_FORMAT, **({} if legacy_projection else {"projection": projection}),
             "package": package, "tag": released["tag"], "commit": commit, "skill": name,
             "skill_version": version, "path": prefix, "resource_folders": [f"skills/{folder}/" for folder in sorted(used)],
             "source_sha256": {p: pub.sha256(data) for p, data in sorted(exact.items())}, "license_sha256": pub.sha256(licence),
@@ -304,6 +307,10 @@ def build_packets(manifest, source, *, legacy_projection=False):
                      f"[Exact instruction source]({REPO_URL}/blob/{commit}/{prefix}SKILL.md) · commit `{commit}`. "
                      "Use the instructions supplied with your installed version. Supporting files are attached to this skill.\n\n"
                      f"[Download the OSM source package]({REPO_URL}/releases/download/{released['tag']}/osm-{package}-source.zip).\n\n")
+        elif projection == PROJECTION_FORMAT:
+            # Native instructions carry the method only. SOURCE.json, the exact
+            # source ZIP, LICENSE and managed page properties retain provenance.
+            intro = ""
         files["SKILL.md"] = (f"---\n{header}\n---\n\n{intro}"
                              + project(body.strip(), prefix + "SKILL.md", commit, tree, prose_links=not legacy_projection) + "\n").encode()
         if any(pub.SECRET.search(data.decode("utf-8", "ignore")) for data in files.values()):
@@ -595,10 +602,16 @@ def _built_by_ci(packet, seen, prior_packets):
         earlier = (prior_packets(source["tag"], source["commit"], source.get("projection")) or {}).get(packet["key"]) if source.get("format") == SOURCE_FORMAT else None
     except (ValueError, KeyError, TypeError, AttributeError, pub.PublisherError):
         return None
-    if earlier is None or earlier["commit"] == packet["commit"]:
+    if earlier is None:
         return None
-    if pub._version(earlier["tag"]) >= pub._version(packet["tag"]):
-        return None  # A delayed or repeated old run cannot replace a newer released packet.
+    if earlier["commit"] == packet["commit"] and earlier["tag"] == packet["tag"]:
+        # A projection upgrade can happen before the next source release. Only
+        # this declared forward transition is allowed, never the reverse.
+        target = json.loads(packet["files"]["SOURCE.json"])
+        if (source.get("projection"), target.get("projection")) != ("source-reference/2", PROJECTION_FORMAT):
+            return None
+    elif pub._version(earlier["tag"]) >= pub._version(packet["tag"]):
+        return None  # A delayed old run cannot replace a newer source packet.
     current = {path: data for path, data in seen["files"].items() if not path.startswith("history/")}
     return earlier["tag"] if _same({**seen, "files": current}, expected({**earlier, "handoff": packet["handoff"]}, {**seen, "files": {}})) else None
 
@@ -882,7 +895,7 @@ def _prior_packets(manifest, repo, resolver):
     def build(tag, commit, projection=None):
         if not re.fullmatch(r"v\d+\.\d+\.\d+", str(tag)) or resolver(tag) != commit:
             return None
-        if projection not in (None, PROJECTION_FORMAT):
+        if projection is not None and projection not in KNOWN_PROJECTIONS:
             return None
         if projection is None and pub._version(tag) > pub._version('v0.36.4'):
             return None  # No unmarked legacy format was published after this boundary.
@@ -895,7 +908,8 @@ def _prior_packets(manifest, repo, resolver):
         # build_packets still requires exact coverage of that historical tree.
         earlier['artifacts'] = [a for a in earlier['artifacts']
                                 if a['class'] != 'A' or a['key'].rsplit('.', 1)[-1] in names]
-        return build_packets(earlier, source, legacy_projection=projection is None)
+        return build_packets(earlier, source, legacy_projection=projection is None,
+                             projection=projection or PROJECTION_FORMAT)
     return build
 
 

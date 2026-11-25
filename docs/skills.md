@@ -13,9 +13,9 @@ is available at [v0.33.0](https://github.com/onlinesourdough/OSM-plugin/blob/v0.
 | --- | --- |
 | [OSM:human-writing](../skills/osm-human-writing/SKILL.md) | Draft or edit an email, SMS, LinkedIn post or other prose so it sounds like the author. |
 | [OSM:interview](../skills/osm-interview/SKILL.md) | Interview the user when goals or direction are unclear, or when they ask to think something through first. |
-| [OSM:prime](../skills/osm-prime/SKILL.md) | Start a new session in an OSM setup by loading only the relevant Notion context. |
-| [OSM:log](../skills/osm-log/SKILL.md) | Save lasting context to Notion when meaningful work ends or the user says remember, log or note this. |
-| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Reflect between tasks or on a daily schedule: review recent work, catch missed learnings and fix drifted Notion context. |
+| [OSM:prime](../skills/osm-prime/SKILL.md) | Load relevant Notion Data and Context when starting or resuming work. |
+| [OSM:log](../skills/osm-log/SKILL.md) | Save lasting Notion context at checkpoints, or when asked to remember, log or note it. |
+| [OSM:dreaming](../skills/osm-dreaming/SKILL.md) | Keep the Notion context home useful, readable and current between tasks. |
 | [OSM:setup](../skills/osm-setup/SKILL.md) | Set up or resume OSM and its Notion context home, or check and repair a broken install. |
 | [OSM:council](../skills/osm-council/SKILL.md) | Ask another agent or model for a second opinion, an independent review or bounded help. |
 | [unslop](../skills/unslop/SKILL.md) | Remove AI tells from the agent's own replies, reports and Notion pages. |

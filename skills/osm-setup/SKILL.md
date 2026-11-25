@@ -2,7 +2,7 @@
 name: osm-setup
 description: "Set up or resume OSM and its Notion context home, or check and repair a broken install."
 metadata:
-  version: "3.3.6"
+  version: "3.4.0"
 ---
 
 # OSM:setup

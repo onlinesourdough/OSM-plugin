@@ -6,7 +6,9 @@ The Content foundation described below requires OSM 0.35.0 or later. Follow the 
 
 ## A gateway to your sources
 
-The Data & Context definition tells the agent which system owns information, when to use it, which approved account and tool can reach it, and what may be processed or retained where. Notion provides a common foundation; it does not need to store every record.
+The Data and Context Definition is a compact map inside your AI operating model. It tells the agent which system owns information, when to use it, which approved account and tool can reach it, and what may be processed or retained where. Notion provides a common foundation; it does not need to store every record.
+
+A structured block such as YAML makes the selected routes explicit and consistently readable. Read it once for the relevant scope, then follow the routes the task needs. Reuse verified context while it remains applicable. The block is not executable access control, and formatting it as code does not make an AI host cache it automatically. Provider prompt caching, when available, reuses matching prompt prefixes; cached input still occupies context.
 
 For example, keep the accounting in an AI-native system such as Numina. Prime follows the selected route and the agent queries the relevant current information there. Log may retain a permitted business decision or source pointer; Dreaming may perform a relevant due check. Neither needs a second ledger, invoice archive or recurring report mirror in Notion.
 
@@ -34,6 +36,30 @@ Keep useful names, native hierarchy and existing icons. New homes use the existi
 | Content, when selected | [Content icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
 
 Setup applies the actual page or database icon and checks the result. If a tool cannot set it, keep the working home and report the remaining icon step.
+
+## Optional foundation page icons
+
+When you choose foundation topics, these examples reuse the same rounded icon family. They are not a required starter-file set or permission to overwrite your icons. Preserve the actual topic, title and owner choice. Apply an icon through the supported page or database route and verify it; if that route is unavailable, report the remaining step.
+
+| Foundation topic example | Existing family icon |
+| --- | --- |
+| About | [About icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png) |
+| Soul | [Soul icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png) |
+| Vision | [Vision icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/architecture.png) |
+| Principles | [Principles icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png) |
+| Audience | [Audience icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/knowledge.png) |
+| Offers | [Offers icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/knowledge.png) |
+| Brand | [Brand icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png) |
+| Voice | [Voice icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/definition.png) |
+| Priorities | [Priorities icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/work-evaluation.png) |
+| Editorial direction | [Editorial direction icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
+| Cadence | [Cadence icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/automation-upkeep.png) |
+| Formats | [Formats icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
+| Quality gate | [Quality gate icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/work-evaluation.png) |
+| LinkedIn | [LinkedIn icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
+| X | [X icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
+| Newsletter | [Newsletter icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/content.png) |
+| Source map | [Source map icon](https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/architecture.png) |
 
 ## Create and revise
 
@@ -149,4 +175,4 @@ Knowledge holds lasting business direction, audience, offers and voice. Content 
 
 ## How the three context skills use this home
 
-Prime reads the definition and relevant sources at session start. Log saves supported lasting changes at meaningful checkpoints or when asked. Dreaming reviews recent work, unfinished progress and selected connected sources, consolidates useful context and repairs verified drift. Each follows the selected home, account and write authority.
+Prime reads the Definition and relevant sources when starting or resuming work that needs them, reusing verified context in the same conversation. Log saves supported lasting changes at meaningful checkpoints or when asked. Dreaming gardens the selected home between tasks: it reviews useful work, recovers missed learning and repairs supported drift in explanations and routes. Each follows the selected home, account and write authority. Your own source records stay with their owner.

@@ -235,6 +235,24 @@ class IconDefaults(unittest.TestCase):
             with self.subTest(bound=bound), self.assertRaises(pub.SetupError):
                 self.builder.icon_defaults(manifest, source)
 
+    def test_optional_topic_examples_do_not_change_the_five_store_roles(self):
+        examples = ('\n| Foundation topic example | Existing family icon |\n| --- | --- |\n' + ''.join(
+            f'| {label} | [Icon](https://raw.githubusercontent.com/onlinesourdough/OSM-plugin/{"b" * 40}/assets/topic.png) |\n'
+            for label in self.builder.FOUNDATION_ROLES))
+        manifest, source = self.fixture(self.body + examples)
+        core = json.loads(self.builder.icon_defaults(manifest, source))
+        topics = json.loads(self.builder.foundation_icons(manifest, source))
+        self.assertEqual(set(core['icons']), set(self.builder.ICON_ROLES.values()))
+        self.assertEqual(set(topics['icons']), set(self.builder.FOUNDATION_ROLES.values()))
+        self.assertEqual(core['source'], topics['source'])
+        self.assertNotEqual(core['format'], topics['format'])
+        for bad in [examples + examples, examples.replace('| About |', '| Unknown |'),
+                    examples.replace('b' * 40, 'main'), examples.replace('| About |', '| Soul |')]:
+            with self.subTest(table=bad), self.assertRaises(pub.SetupError):
+                self.builder.foundation_icons(*self.fixture(self.body + bad))
+        with self.assertRaises(pub.SetupError):
+            self.builder.foundation_icons(*self.fixture())
+
     def test_ambiguous_or_wrong_original_identity_cannot_generate_defaults(self):
         for change in [lambda a: a.update(notion='b' * 32),
                        lambda a: a.update(owner='git'),

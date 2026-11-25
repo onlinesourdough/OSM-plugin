@@ -1,18 +1,8 @@
-OSM helps solo founders and small teams give their AI assistants useful business data and context. This guide explains the method, setup, templates and practical examples.
+OSM helps solo founders and small teams give their AI useful business data and context. This guide explains the method, setup, templates and practical examples.
 
-Notion provides shared context and a map to your tools. Your CRM, accounting, files and other systems retain their original records. The Data & Context definition tells the agent when to use each source, how to access it and what may be kept where.
+Notion provides shared context and a map to your tools. Your CRM, accounting, files and other systems keep their original records. Read the guide here, then use <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> to get started with the plugin.
 
-<callout icon="🧭" color="brown_bg">
-<b>Give this guide to your agent.</b> Read the method here, then follow <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> for setup/adoption. Use the owner's actual Data & Context entry and selected policy for private routes and authority. Use the relevant guide page and the skills supplied with your installed plugin. A guide or downloaded skill is not an installed setup.
-</callout>
-
-## Architecture
-
-<image source="notion-file-block://4206d2e1-7f56-8170-ab13-e27a92ce6328/9cbc5d1f-f0f0-4437-8a06-786ac92bb619?space_id=eee27a39-7e8a-48e6-9bd4-f3bc51a333fe&name=osm-architecture.png" />
-
-Prime finds useful context. Log saves lasting decisions and corrections. Dreaming maintains that context between sessions. See <mention url="https://app.notion.com/p/40d6d2e17f568113a397fb6ecd9b5fff">Architecture diagram</mention> for the detailed relationships.
-
-## Start with the foundation
+## Understand the foundation
 
 <columns>
 <column ratio="50">
@@ -24,44 +14,34 @@ The material your business works with: records, documents, messages, recordings 
 ### Context
 
 What matters and how you work: goals, customers, offers, decisions, relationships, voice and working preferences.
-
-Skills are reusable ways of working within that context.
 </column>
 </columns>
 
-Notion makes selected Knowledge, Memory and personal Skills findable together. The definition records the Content route or deferral and links to relevant originals. A database organizes material; it is not a separate conceptual pillar.
+Without that foundation, each new chat starts with gaps. Useful context helps your AI ask better questions, find the right source and build on decisions you have already made.
 
-## Put the foundation to work
+Notion makes selected Knowledge, Memory and personal Skills easy for people and AI to find and maintain together. The Data and Context Definition maps their actual destinations, the chosen Content route and external sources, including what may be read or kept. Notion complements your working tools; a filtered view is not an access boundary.
 
-Use the methods a task needs: understand the situation, define the outcome, do the work, review and deliver it. Keep your own judgement, tools and working habits. Small requests stay small.
+## Turn context into useful work
 
-As the business changes, revise the current explanation where it belongs. Keep meaningful history separately. Relevance, accepted decisions and source quality guide retrieval; a recent edit alone does not make a page more useful.
+For example, when drafting a client proposal, your AI can find your current offer and voice, verify the client's brief at its source and apply your proposal method. You review the result. An accepted change to how you work can then help the next task.
 
-## Methods and skills
+Use the methods a task needs: understand the situation, define a good result, do the work, review, deliver and learn. Keep your judgement, tools and working habits. Small requests stay small.
 
-Shared OSM instructions help you establish and maintain the foundation and complete useful work. Personal skills adapt methods to your own business. Both belong to the context you give an assistant.
+## Skills
+
+Skills are reusable ways of working. The shared OSM skills help establish and tend your context and support useful work. Prime finds relevant context, Log saves lasting changes and Dreaming gardens the selected home between tasks.
+
+Your personal skills turn that foundation into methods for your business: a research brief, a sales conversation, a newsletter or a service handover. Start from a real need and improve the method as you learn.
 
 <database url="https://app.notion.com/p/6abfc738a9604ddc806432721813712b" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="false" icon="https://raw.githubusercontent.com/gustavonline/gustavonline/2b878911a0ddd8815833d67e7a326bfe186978b2/assets/notion-icons/osm/skills.png">
 OSM Skills
 </database>
 
-The installed plugin contains the shared skills and their supporting instructions. Your own Notion AI operating model home holds the Data and Context Definition, Knowledge, Memory and personal Skills. The operating model connects this foundation to your goals, workflows, tools and responsibilities.
+The installed plugin supplies the shared skills and supporting instructions. Your own AI operating model connects the Definition, Knowledge, Memory, personal Skills and selected Content foundation with your goals, tools and responsibilities.
 
-## Extensions
+## Explore
 
-<callout icon="🧩" color="brown_bg">
-<b>Content · optional methods.</b> OSM 0.35.0 or later resolves the Content foundation during new-home Setup. The separate [OSM Content library](https://github.com/onlinesourdough/OSM-Content) reuses that selected route and helps adapt your own workflow, tools and personal methods. Its five templates are optional examples, not automatically installed skills. Use the Content page below as the human and agent entry.
-</callout>
-
-<page url="https://app.notion.com/p/40d6d2e17f5681219a81e13317a19339">
-Content · optional extension
-</page>
-
-## Explore OSM
-
-<page url="https://app.notion.com/p/40d6d2e17f56811885ced64930bb22ba">
-OSM definition
-</page>
+Start with setup, then explore how the pieces fit together. Content helps you build a personal editorial setup on the foundation you already have. Channels, voice, formats and production effort differ, so adapt the workflow with your agent rather than installing a fixed bundle of personal methods.
 
 <page url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">
 Setup & tools
@@ -69,6 +49,10 @@ Setup & tools
 
 <page url="https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038">
 AI operating model
+</page>
+
+<page url="https://app.notion.com/p/40d6d2e17f56811885ced64930bb22ba">
+OSM definition
 </page>
 
 <page url="https://app.notion.com/p/40d6d2e17f56815eaf53cab824a40eb3">
@@ -79,6 +63,10 @@ Work & evaluation
 Automations & upkeep
 </page>
 
+<page url="https://app.notion.com/p/40d6d2e17f5681219a81e13317a19339">
+Content build your own setup
+</page>
+
 <page url="https://app.notion.com/p/40d6d2e17f568113a397fb6ecd9b5fff">
 Architecture diagram
 </page>
@@ -87,10 +75,10 @@ Architecture diagram
 Releases & documentation
 </page>
 
-## Learn and build on it
+## Share, learn and build together
 
-[OSM source and installation](https://github.com/onlinesourdough/OSM-plugin) · [onlinesourdough](https://onlinesourdough.com/) · [Resources](https://resources.onlinesourdough.com/)
+[Resources](https://resources.onlinesourdough.com/) brings together explanations, lessons and practical examples. Use them to learn the method, share what works and build on other people's experience.
 
-Resources is the growing library of explanations, lessons and practical examples. [Agentic Systems](https://github.com/arcitai/agentic-systems) is a separately maintained open-source framework for building and operating agentic systems.
+[OSM source and installation](https://github.com/onlinesourdough/OSM-plugin) contains installation details, versioned skills and technical documentation for people and agents. [onlinesourdough](https://onlinesourdough.com/) is the wider home. [Agentic Systems](https://github.com/arcitai/agentic-systems) is a separately maintained open-source framework for building and operating agentic systems.
 
 <p />

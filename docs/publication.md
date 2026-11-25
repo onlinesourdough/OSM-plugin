@@ -9,7 +9,7 @@ identifies technical or historical folders. It is not a second task tracker.
 
 | Material | Original and permitted direction |
 | --- | --- |
-| Released skills (A) | Exact approved Git tag → seven existing public skill pages through the CI native packet writer after their recorded handoffs |
+| Released skills (A) | Exact approved Git tag → the eight bound public skill pages through the CI native packet writer after their recorded handoffs |
 | Method guide (G) | Notion page and content revision → frozen Git original and declared exports |
 | Optional Content templates (B) | Their stated separate source/edition; this publisher does not rewrite them |
 | Working technical docs (W) | Git; an optional labelled Notion projection needs a database only if selected |
@@ -45,6 +45,8 @@ model table into `skills/osm-data-context/assets/icon-defaults.json`, with its
 source page and revision. Do not edit that generated file or add a second URL
 list. The normal reader build refuses a missing or changed projection, and the
 generator refuses unbound, incomplete or ambiguous tables and non-immutable URLs.
+The separate optional Foundation-topic table projects to `foundation-icon-examples.json`, read lazily only when applying an icon to a chosen topic. It is not another required store-default schema or a mandatory starter-file set. Both resources bind the same owning guide revision, so even unchanged default URLs are regenerated when that page changes. Neither generated file is a second editable map.
+
 This is a frozen release resource read only when new-home icons are needed; it
 does not establish live image availability, database metadata support or visual
 rendering. Those remain separate native checks.
@@ -74,7 +76,7 @@ Codex receives a checked public guide export and a bundled fallback. It is a
 reading surface, not a private context dashboard or a full Notion editor. The
 public export contains no account credential or owner context.
 `python3 docs-publisher/build-guide.py` builds it from the bound guide originals,
-the explicitly frozen optional Content introduction and seven exact Git skill
+the explicitly frozen optional Content introduction and eight exact Git skill
 sources. The virtual skill index links those same public page identities.
 The build checks this export before bundling the reader. See
 [Codex integration](sidebar.md) for runtime behavior and native qualification.
@@ -96,7 +98,7 @@ source packets remain in the archive. An unrecognised edit or attachment is held
 for inspection. The legacy paragraph writer refuses these native skill pages;
 it serves only the optional working projection, which is not provisioned.
 
-After all writes and API readbacks, an isolated browser reads all seven pages
+After all writes and API readbacks, an isolated browser reads all eight pages
 and the catalogue in one fresh anonymous session. It receives no Notion or
 GitHub credential and retains no profile between runs. Visible instruction
 lines must match in order; a title, login shell or HTTP 200 alone cannot pass.
@@ -106,7 +108,7 @@ retains the API write evidence and holds the run.
 Unknown writes are read before any retry. A rerun reads current content and
 resumes at the same page identity, without uploading an already verified packet.
 The workflow serializes runs; the previous upkeep has relinquished these exact
-seven pages. Guide originals, optional Content templates and private context
+eight pages. Guide originals, optional Content templates and private context
 remain outside its write scope. See [activation](../docs-publisher/ACTIVATION.md)
 for the recorded gates, recovery rules and actual qualification evidence.
 
@@ -131,6 +133,6 @@ release bindings, dry runs and incomplete Markdown responses. Both use fixtures.
 
 ### Reviewed source references and published packages
 
-The manifest's latest reviewed source tag can precede its GitHub Release. Native reading copies therefore say **Source reference**, link the exact commit and its repository archive, and retain the exact per-skill source ZIP. They do not advertise a missing release asset or establish package publication. Actual releases and installed versions retain their separate readbacks.
+The manifest's latest reviewed source tag can precede its GitHub Release. Native instructions contain the complete method and projected resource links, without an injected source introduction. Managed properties, LICENSE, SOURCE.json and the exact per-skill source ZIP retain provenance and version identity. The ZIP preserves canonical Git bytes; attached Markdown is a reading projection. Neither establishes a published GitHub Release. Actual releases and installed versions retain separate readbacks.
 
-When recognising prior publisher output, reconstruct only current explicitly bound row identities that existed in the historical tag. The current roster still requires complete coverage. Unmarked packets through v0.36.4 use the preserved legacy reading projection for recognition, including their original relative-link formatting and introduction; new packets record their explicit projection in SOURCE.json independently of the source tag, and unknown projections are refused; this is not a rewrite or relaxed comparison of live files. The retained actual v0.36.3 packet digests independently exercise the seven-to-eight transition and reject an edited older packet.
+When recognising prior publisher output, reconstruct only current explicitly bound row identities that existed in the historical tag. The current roster still requires complete coverage. Unmarked packets through v0.36.4 use the preserved legacy reading projection for recognition, including their original relative-link formatting and introduction; explicit `source-reference/2` retains its original introduction and URL projection independently of source tag age. New `native-instructions/3` removes only the injected introduction. Both profiles are reconstructed exactly from the observed SOURCE.json. The one declared same-source transition is 2 → 3; a delayed run cannot downgrade it. Unknown projections are refused; this is not a rewrite or relaxed comparison of live files. The retained actual v0.36.3 packet digests independently exercise the seven-to-eight transition and reject an edited older packet.

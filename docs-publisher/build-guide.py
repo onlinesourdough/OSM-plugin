@@ -19,10 +19,26 @@ ICON_DEFAULTS = 'skills/osm-data-context/assets/icon-defaults.json'
 ICON_GUIDE = 'notion.guide.data-context'
 ICON_ROLES = {'AI operating model': 'root', 'Knowledge': 'knowledge',
               'Memory': 'memory', 'Skills': 'skills', 'Content, when selected': 'content'}
+FOUNDATION_ICONS = 'skills/osm-data-context/assets/foundation-icon-examples.json'
+FOUNDATION_ROLES = {name: name.lower().replace(' ', '-') for name in (
+    'About', 'Soul', 'Vision', 'Principles', 'Audience', 'Offers', 'Brand', 'Voice',
+    'Priorities', 'Editorial direction', 'Cadence', 'Formats', 'Quality gate',
+    'LinkedIn', 'X', 'Newsletter', 'Source map')}
 
 
 def icon_defaults(manifest, source):
     """Project only the five approved URLs from the bound Notion-authored table."""
+    return _icon_table(manifest, source, '| Place | Existing method icon |',
+                       ICON_ROLES, 'osm-icon-defaults/1')
+
+
+def foundation_icons(manifest, source):
+    """Optional topic examples; never the required store-default schema."""
+    return _icon_table(manifest, source, '| Foundation topic example | Existing family icon |',
+                       FOUNDATION_ROLES, 'osm-foundation-icon-examples/1')
+
+
+def _icon_table(manifest, source, header, roles, format):
     matches = [a for a in manifest['artifacts'] if a['key'] == ICON_GUIDE and a['class'] == 'G']
     artifact = matches[0] if len(matches) == 1 else None
     if (not artifact or not artifact.get('original') or artifact.get('owner') != 'notion'
@@ -34,7 +50,6 @@ def icon_defaults(manifest, source):
     if outcome != pub.REFUSED_NOTION:
         raise pub.SetupError('Icon defaults: ' + detail)
     body = b''.join(source.files(pub.frozen_path(ICON_GUIDE)).values()).decode()
-    header = '| Place | Existing method icon |'
     if body.splitlines().count(header) != 1:
         raise pub.SetupError('Icon defaults need exactly one approved icon table')
     lines = body.splitlines()
@@ -46,17 +61,17 @@ def icon_defaults(manifest, source):
         if not row.startswith('|'):
             break
         match = re.fullmatch(r'\| ([^|]+) \| \[[^\]\n]+\]\((https://[^\s)]+)\) \|', row)
-        if not match or match[1] not in ICON_ROLES:
+        if not match or match[1] not in roles:
             raise pub.SetupError('The approved icon table has an unknown or ambiguous role')
-        role, url = ICON_ROLES[match[1]], match[2]
+        role, url = roles[match[1]], match[2]
         if role in icons or not re.fullmatch(
                 r'https://raw\.githubusercontent\.com/(?:onlinesourdough/OSM-plugin|gustavonline/gustavonline)/'
                 r'[0-9a-f]{40}/assets/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+\.png', url):
             raise pub.SetupError('Icon defaults need unique roles and immutable approved public PNG URLs')
         icons[role] = url
-    if set(icons) != set(ICON_ROLES.values()):
+    if set(icons) != set(roles.values()):
         raise pub.SetupError('The approved icon table is missing a role')
-    result = {'format': 'osm-icon-defaults/1', 'generated': True,
+    result = {'format': format, 'generated': True,
               'source': {'page': 'https://app.notion.com/p/' + artifact['notion'],
                          'revision': artifact['original']['revision']},
               'icons': icons}
@@ -88,6 +103,8 @@ def build(root=ROOT):
     source = pub.DirSource(root)
     if source.files(ICON_DEFAULTS) != {ICON_DEFAULTS: icon_defaults(manifest, source)}:
         raise pub.SetupError('Packaged icon defaults differ from the bound guide; run build-guide.py --icon-defaults')
+    if source.files(FOUNDATION_ICONS) != {FOUNDATION_ICONS: foundation_icons(manifest, source)}:
+        raise pub.SetupError('Packaged foundation icon examples differ from the bound guide; run build-guide.py --icon-defaults')
     ref = config['skill_source']
     if not re.fullmatch(r'[0-9a-f]{40}', ref):
         raise pub.SetupError('The reader needs an exact skill source commit')
@@ -147,6 +164,7 @@ if __name__ == '__main__':
     if sys.argv[1:] == ['--icon-defaults']:
         manifest = pub.load_manifest(ROOT / 'docs-publisher/manifest.json')
         (ROOT / ICON_DEFAULTS).write_bytes(icon_defaults(manifest, pub.DirSource(ROOT)))
+        (ROOT / FOUNDATION_ICONS).write_bytes(foundation_icons(manifest, pub.DirSource(ROOT)))
         print('Projected the bound Notion icon table into the packaged resource.')
     elif sys.argv[1:]:
         raise SystemExit('Usage: build-guide.py [--icon-defaults]')

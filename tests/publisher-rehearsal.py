@@ -1335,7 +1335,9 @@ def recorded_public_values_stay_out_of_shipped_text():
             reference = f'[AI operating model reference](https://app.notion.com/p/{guide_id})'
             require(text.count(reference) == 1, 'one explicit public method reference')
             text = text.replace(reference, '[AI operating model reference](public-method-reference)')
-        elif path.relative_to(ROOT).as_posix() == 'skills/osm-data-context/assets/icon-defaults.json':
+        elif path.relative_to(ROOT).as_posix() in (
+                'skills/osm-data-context/assets/icon-defaults.json',
+                'skills/osm-data-context/assets/foundation-icon-examples.json'):
             # Only the generated resource's exact public provenance field is
             # exempt, like the labelled guide link above. All other values,
             # including the icon URLs, still pass through the binding checks.

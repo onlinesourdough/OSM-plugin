@@ -341,7 +341,7 @@ def validate(root=ROOT, release_tag=None):
     require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
             "owner bridge markers")
     require(lines[1:4] == [
-        "Always start with the OSM Prime skill.",
+        "Use OSM Prime when relevant context is missing at the start or after resuming.",
         "Data and Context: <verified-notion-root-entry-url>",
         "Always run OSM Log at meaningful checkpoints or when asked.",
     ],
