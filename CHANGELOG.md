@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.38.0
+
+- Align the packaged host instruction template (`bridge.md`) 1:1 with the public Notion Setup guide as clean six-line prose with no HTML wrapper markers, and validate both marker-free prose and Setup-guide parity generally in `tests/validate.py`.
+- Decouple optional local Codex adapter storage, route locks and backups from brand names by moving writes to `context-state/`, `.context-route.lock` and `backups/context-route`, while reading existing `aios/panel/` or `osm/panel/` files and earlier `AIOS:BEGIN` blocks automatically without data loss.
+- Make native zero-local-state operation explicit for the official Notion plugin, update `osm-setup` (`4.0.0`) and package docs, and bind the unchanged Notion guide originals to `0.38.0`.
+
 ## 0.37.0
 
 - Make the Notion guide a human-first introduction to the foundation, useful work and personal skills. Keep Content in Explore and clarify the Definition as a route map inside the AI operating model.

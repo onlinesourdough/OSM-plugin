@@ -376,7 +376,7 @@ test('the credential is absent from every result, error and saved mapping', asyn
   for (const value of outputs) assert.equal(reveals(value, credentialA), false);
   const { options, args } = await contextFixture(t);
   await saveHomeProjection({ ...args, projection: studioProjection() }, options);
-  for (const name of await readdir(join(options.codexHome, 'aios/panel'))) assert.equal((await readFile(join(options.codexHome, 'aios/panel', name), 'utf8')).includes(credentialA), false);
+  for (const name of await readdir(join(options.codexHome, 'context-state'))) assert.equal((await readFile(join(options.codexHome, 'context-state', name), 'utf8')).includes(credentialA), false);
   assert.throws(() => normalizeProjection({ ...studioProjection(), connection: { ...studioProjection().connection, token: credentialA } }), /connection/);
 });
 
@@ -407,9 +407,9 @@ test('the Home mapping is a separate revisioned file; saved links keep loading u
   assert.deepEqual(await readSources(context, options), sources);
   assert.deepEqual(await saveHomeProjection({ ...args, expectedRevision: saved.revision, projection: studioProjection() }, options), saved);
   await assert.rejects(saveHomeProjection({ ...args, projection: studioProjection() }, options), /changed/);
-  const names = await readdir(join(options.codexHome, 'aios/panel'));
+  const names = await readdir(join(options.codexHome, 'context-state'));
   assert.equal(names.filter(name => name.endsWith('.home.json')).length, 1); assert.equal(names.filter(name => name.endsWith('.json')).length, 2);
-  const file = JSON.parse(await readFile(join(options.codexHome, 'aios/panel', names.find(name => name.endsWith('.home.json'))), 'utf8'));
+  const file = JSON.parse(await readFile(join(options.codexHome, 'context-state', names.find(name => name.endsWith('.home.json'))), 'utf8'));
   assert.equal(JSON.stringify(file).includes('Lead with'), false);
 });
 
@@ -446,8 +446,8 @@ test('a changed context cannot reuse or overwrite another context mapping', asyn
 test('the projection is replaced only by a new definition revision and refused without one', async t => {
   const { options, args } = await contextFixture(t);
   const first = await saveHomeProjection({ ...args, projection: studioProjection() }, options);
-  const file = name => readFile(join(options.codexHome, 'aios/panel', name), 'utf8');
-  const name = (await readdir(join(options.codexHome, 'aios/panel'))).find(item => item.endsWith('.home.json'));
+  const file = name => readFile(join(options.codexHome, 'context-state', name), 'utf8');
+  const name = (await readdir(join(options.codexHome, 'context-state'))).find(item => item.endsWith('.home.json'));
   const saved = JSON.parse(await file(name));
   assert.equal(saved.format, projectionFormat); assert.equal(saved.projection.definition.revision, 'fictional-r1');
   console.log(`PROJECTION_BYTES ${Buffer.byteLength(await file(name))}`);
@@ -713,10 +713,10 @@ test('an oversized multibyte projection is refused and the previous one stays re
     destination: { type: 'pages', title: 'Fictional', link: notionLink(hex(0x400)), pages: Array.from({ length: 6 }, (_, m) => ({ id: hex(0x400 + n * 8 + m), title: '界'.repeat(100), link: notionLink(hex(0x400)) })) } }));
   const text = JSON.stringify({ format: projectionFormat, contextIdentity: 'x', projection: normalizeProjection(big) }, null, 2);
   assert.ok(text.length <= 32768 && Buffer.byteLength(text, 'utf8') > 32768, 'fits in UTF-16 units, not in UTF-8 bytes');
-  const name = (await readdir(join(options.codexHome, 'aios/panel'))).find(item => item.endsWith('.home.json'));
-  const before = await readFile(join(options.codexHome, 'aios/panel', name), 'utf8');
+  const name = (await readdir(join(options.codexHome, 'context-state'))).find(item => item.endsWith('.home.json'));
+  const before = await readFile(join(options.codexHome, 'context-state', name), 'utf8');
   await assert.rejects(saveHomeProjection({ ...args, expectedRevision: first.revision, projection: big }, options), /too large/);
-  assert.equal(await readFile(join(options.codexHome, 'aios/panel', name), 'utf8'), before);
+  assert.equal(await readFile(join(options.codexHome, 'context-state', name), 'utf8'), before);
   assert.deepEqual(await readHomeProjection(context, options), first);
 });
 
@@ -838,7 +838,7 @@ test('definition order is deterministic whatever order the sections arrive in', 
 const routeArgs = (route, over = {}) => ({ target: context, expectedContextRevision: route.revision, selectedMode: 'internal_selected_pages', enabled: true, ...over });
 test('OSM’s Keychain route setting is a non-secret per-context file: revisioned, idempotent, recoverable', async t => {
   const { options, route, args } = await contextFixture(t);
-  const file = async () => join(options.codexHome, 'aios/panel', (await readdir(join(options.codexHome, 'aios/panel'))).find(name => name.endsWith('.connection.json')));
+  const file = async () => join(options.codexHome, 'context-state', (await readdir(join(options.codexHome, 'context-state'))).find(name => name.endsWith('.connection.json')));
   const missing = await readConnectionRoute(context, options);
   assert.deepEqual([missing.state, missing.enabled], ['missing', false]);
   const on = await saveConnectionRoute(routeArgs(route, { expectedRevision: missing.revision }), options);
@@ -847,7 +847,7 @@ test('OSM’s Keychain route setting is a non-secret per-context file: revisione
   assert.deepEqual(Object.keys(JSON.parse(await readFile(await file(), 'utf8'))), ['format', 'contextIdentity', 'route', 'mode', 'enabled']);
   // The same setting is a no-op; a stale revision, another context revision and another mode are refused.
   assert.deepEqual(await saveConnectionRoute(routeArgs(route, { expectedRevision: on.revision }), options), on);
-  assert.equal((await readdir(join(options.codexHome, 'aios/panel'))).some(name => name.endsWith('.bak')), false);
+  assert.equal((await readdir(join(options.codexHome, 'context-state'))).some(name => name.endsWith('.bak')), false);
   await assert.rejects(saveConnectionRoute(routeArgs(route, { expectedRevision: missing.revision, enabled: false }), options), /changed/);
   await assert.rejects(saveConnectionRoute(routeArgs(route, { expectedRevision: on.revision, expectedContextRevision: '0'.repeat(64) }), options), /context changed/);
   await assert.rejects(saveConnectionRoute(routeArgs(route, { expectedRevision: on.revision, selectedMode: 'official_notion_user' }), options), /internal selected-pages/);
@@ -862,7 +862,7 @@ test('OSM’s Keychain route setting is a non-secret per-context file: revisione
   assert.deepEqual([repaired.state, repaired.enabled], ['saved', true]);
   const off = await saveConnectionRoute(routeArgs(route, { expectedRevision: repaired.revision, enabled: false }), options);
   assert.equal(off.enabled, false);
-  assert.ok((await readdir(join(options.codexHome, 'aios/panel'))).filter(name => name.endsWith('.bak')).length >= 2, 'each replaced setting is backed up');
+  assert.ok((await readdir(join(options.codexHome, 'context-state'))).filter(name => name.endsWith('.bak')).length >= 2, 'each replaced setting is backed up');
   // The saved projection's mode wins: an official projection blocks turning the route on, never off.
   const again = await saveConnectionRoute(routeArgs(route, { expectedRevision: off.revision }), options);
   const official = studioProjection(); official.selectedMode = 'official_notion_user'; delete official.connection;
@@ -1018,7 +1018,7 @@ test('the access link is saved only for Notion pages that are not developer page
   const link = 'https://www.notion.so/fictional-connection-access', manage = { link, botId: ids.bot, workspaceId: ids.ws };
   const first = await saveConnectionRoute(routeArgs(route, { expectedRevision: (await readConnectionRoute(context, options)).revision, manage }), options);
   assert.deepEqual(first.manage, manage);
-  const file = JSON.parse(await readFile(join(options.codexHome, 'aios/panel', (await readdir(join(options.codexHome, 'aios/panel'))).find(name => name.endsWith('.connection.json'))), 'utf8'));
+  const file = JSON.parse(await readFile(join(options.codexHome, 'context-state', (await readdir(join(options.codexHome, 'context-state'))).find(name => name.endsWith('.connection.json'))), 'utf8'));
   assert.deepEqual(Object.keys(file), ['format', 'contextIdentity', 'route', 'mode', 'enabled', 'manage']);
   // Left out, the saved link stays, also when the route is turned off; null removes it.
   const kept = await saveConnectionRoute(routeArgs(route, { expectedRevision: first.revision }), options);

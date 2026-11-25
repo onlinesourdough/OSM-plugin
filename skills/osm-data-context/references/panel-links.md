@@ -1,11 +1,14 @@
 # Optional scoped connection mapping
 
-The selected Notion definition owns source identities. OSM can retain a small,
-revision-checked mapping for its optional headless adapter. This contains names,
-links and field mappings, never company content or credentials. The official
-Notion plugin works without this local mapping.
+The selected Notion definition owns source identities. The official Notion
+plugin works natively with zero local state: the Notion definition and the
+clean six-line pointer in the host instruction file are sufficient. OSM retains
+a small, revision-checked local mapping only when the optional headless adapter
+or an explicit local link update is used; it holds names, links and field
+mappings, never company content or credentials.
 
-After authorized personal onboarding or a requested source-route change:
+Only when the optional scoped adapter is selected or the owner asks to update
+saved local source links:
 
 1. Verify the selected entry and the actual Docs, Personal Skills, optional
    Team Skills, default/personal Memory and optional Team Memory destinations through the existing Notion tools.
@@ -125,8 +128,10 @@ where authorized, or report the concrete missing capability. A denial never
 selects a broader route. Do not claim a fresh installation loaded new tools
 until native discovery confirms it.
 
-Storage is per context identity under `$CODEX_HOME/aios/panel/`, not in the
-system prompt. A new context cannot inherit another context's links. The
-short AGENTS pointer and Notion's guide still govern agent retrieval and Spaces.
-When a verified route changes, update this derived mapping within that same
-authorized change. No background sync, daily task or duplicate company brain.
+Storage is per context identity under the brand-neutral
+`$CODEX_HOME/context-state/` directory (earlier `osm/panel/` and `aios/panel/`
+files stay readable until updated), not in the system prompt. A new context
+cannot inherit another context's links. The short AGENTS pointer and Notion's
+guide still govern agent retrieval and Spaces. When a verified route changes,
+update this derived mapping only if it is in use. No background sync, daily task
+or duplicate company brain.

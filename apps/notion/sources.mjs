@@ -37,16 +37,39 @@ export function normalizeSources({ title, links }) {
 }
 // Each context has its own files here: <hash>.json for navigation links,
 // <hash>.home.json for its generated projection and <hash>.connection.json for its
-// route setting. The aios/panel folder keeps its name so earlier saved state loads.
-export async function location(codexHome, target, create = false, suffix = '.json') {
+// route setting. New writes always use the brand-neutral context-state directory;
+// earlier osm/panel and aios/panel files stay readable until updated.
+export const PRIMARY_STATE_DIR = ['context-state'];
+export const LEGACY_STATE_DIRS = [['osm', 'panel'], ['aios', 'panel']];
+
+async function namespaceLocation(codexHome, namespace, target, create = false, suffix = '.json') {
   let folder = codexHome;
-  for (const name of ['aios', 'panel']) {
+  for (const name of namespace) {
     folder = join(folder, name);
     if (create) await mkdir(folder, { mode: 0o700 }).catch(error => { if (error.code !== 'EEXIST') throw error; });
     try { if (!(await lstat(folder)).isDirectory()) throw new Error(unavailable); }
     catch (error) { if (error.code !== 'ENOENT' || create) throw error; }
   }
   return join(folder, digest(contextIdentity(target)) + suffix);
+}
+export async function location(codexHome, target, create = false, suffix = '.json') {
+  return namespaceLocation(codexHome, PRIMARY_STATE_DIR, target, create, suffix);
+}
+export async function legacyLocations(codexHome, target, suffix = '.json') {
+  const paths = [];
+  for (const namespace of LEGACY_STATE_DIRS) {
+    paths.push(await namespaceLocation(codexHome, namespace, target, false, suffix));
+  }
+  return paths;
+}
+export async function readPanelSnapshot(codexHome, target, suffix = '.json', limit = 16384) {
+  const primary = await snapshot(await location(codexHome, target, false, suffix), limit);
+  if (primary.text !== null) return primary;
+  for (const path of await legacyLocations(codexHome, target, suffix)) {
+    const legacy = await snapshot(path, limit);
+    if (legacy.text !== null) return legacy;
+  }
+  return primary;
 }
 export async function snapshot(path, limit = 16384) {
   let handle;
@@ -72,13 +95,22 @@ export const stateRevision = revision;
 // Returns false when the decoded state already matches and nothing was written.
 // I4: the new bytes must fit the same UTF-8 byte limit snapshot() reads with, checked
 // before anything is locked or written, so a save never leaves a file the reader refuses.
-export async function replaceState(path, { expectedRevision, decode, same, text, matches, limit = 16384, copy }) {
+export async function replaceState(path, { expectedRevision, decode, same, text, matches, limit = 16384, copy, legacyPaths = [] }) {
   if (Buffer.byteLength(text, 'utf8') > limit) throw new Error(copy.large || 'This is too large to save. Nothing was changed.');
+  const currentBefore = async () => {
+    const primary = await snapshot(path, limit);
+    if (primary.text !== null || !legacyPaths.length) return primary;
+    for (const candidate of legacyPaths) {
+      const legacy = await snapshot(candidate, limit);
+      if (legacy.text !== null) return legacy;
+    }
+    return primary;
+  };
   let lock, temporary;
   try {
     try { lock = await open(path + '.lock', 'wx', 0o600); }
     catch { throw new Error(copy.busy); }
-    const before = await snapshot(path, limit), previous = decode(before);
+    const before = await currentBefore(), previous = decode(before);
     if (before.revision !== expectedRevision) throw new Error(copy.changed);
     if (same(previous)) return false;
     if (before.text !== null) {
@@ -90,7 +122,7 @@ export async function replaceState(path, { expectedRevision, decode, same, text,
     temporary = path + '.' + randomUUID() + '.tmp';
     const file = await open(temporary, 'wx', 0o600);
     try { await file.writeFile(text); await file.sync(); } finally { await file.close(); }
-    if (!(await matches()) || (await snapshot(path, limit)).revision !== before.revision) throw new Error('Your setup changed. Refresh before saving again.');
+    if (!(await matches()) || (await currentBefore()).revision !== before.revision) throw new Error('Your setup changed. Refresh before saving again.');
     await rename(temporary, path); temporary = undefined;
     return true;
   } finally {
@@ -106,7 +138,7 @@ function decode(value, target) {
   return { state: 'saved', revision: value.revision, ...normalizeSources(data), ...(generated && { definitionRevision: generated }) };
 }
 export async function readSources(target, { codexHome = home() } = {}) {
-  try { return decode(await snapshot(await location(codexHome, target)), target); }
+  try { return decode(await readPanelSnapshot(codexHome, target), target); }
   catch { return { state: 'unavailable', title: '', links: {} }; }
 }
 export async function saveSources({ target, expectedContextRevision, expectedRevision, title, links, definitionRevision: generatedFrom }, { codexHome = home() } = {}) {
@@ -117,9 +149,10 @@ export async function saveSources({ target, expectedContextRevision, expectedRev
     && contextIdentity(context.target) === contextIdentity(target);
   if (!matches(await current())) throw new Error('Your context changed. Refresh before saving source links.');
   const path = await location(codexHome, target, true);
+  const legacyPaths = await legacyLocations(codexHome, target);
   const text = JSON.stringify({ version: 1, contextIdentity: contextIdentity(target), ...clean, ...(generatedFrom && { definitionRevision: generatedFrom }) }, null, 2) + '\n';
   let previous;
-  const written = await replaceState(path, { expectedRevision, text,
+  const written = await replaceState(path, { expectedRevision, text, legacyPaths,
     decode: value => (previous = decode(value, target)),
     same: value => value.state === 'saved' && value.definitionRevision === (generatedFrom || undefined) && JSON.stringify({ title: value.title, links: value.links }) === JSON.stringify(clean),
     matches: async () => matches(await current()),

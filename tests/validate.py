@@ -112,6 +112,22 @@ def copy_product(root, destination):
             shutil.copy2(source, target)
 
 
+def setup_guide_bridge(root):
+    setup_guide = (root / "docs-publisher/originals/notion.guide.setup.md").read_text()
+    section = re.search(
+        r"^## Short agent instructions\n(.*?)(?=^## |\Z)",
+        setup_guide,
+        flags=re.M | re.S,
+    )
+    require(section is not None, "setup guide short agent instructions section")
+    block = re.search(r"```txt\n(.*?)\n```", section.group(1), flags=re.S)
+    require(block is not None, "setup guide short agent instructions code block")
+    return block.group(1).replace(
+        "[your verified Notion Data & Context URL]",
+        "<verified-notion-root-entry-url>",
+    ).strip()
+
+
 def validate(root=ROOT, release_tag=None):
     validate_native(root, require)
     validate_unslop(root)
@@ -332,29 +348,24 @@ def validate(root=ROOT, release_tag=None):
     require(len(bridge.splitlines()) <= 14 and "<verified-notion-root-entry-url>" in bridge,
             "bridge scope")
 
-    # OSM 0.30.0 renamed the package, not the owner state. Persisted names stay
-    # readable by earlier builds; renamed skills have exactly one current copy.
+    # The packaged host bridge is plain instruction prose (no HTML comment wrappers)
+    # and stays aligned 1:1 with the bound public Setup guide.
     require(not any(path.parent.name.startswith("aios") or path.parent.name in RENAMED_SKILLS.values()
                     for path in skill_files),
             "retired package skill name")
     lines = bridge.splitlines()
-    require(lines[0] == "<!-- AIOS:BEGIN -->" and lines[-1] == "<!-- AIOS:END -->",
-            "owner bridge markers")
-    require(lines[1:4] == [
+    require(not re.search(r"<!--|-->", bridge),
+            "bridge wrapper markers")
+    require(lines[0:3] == [
         "Use OSM Prime when relevant context is missing at the start or after resuming.",
         "Data and Context: <verified-notion-root-entry-url>",
         "Always run OSM Log at meaningful checkpoints or when asked.",
     ],
             "new bridge route")
+    require(bridge.strip() == setup_guide_bridge(root),
+            "bridge parity with public setup guide")
     require("OSM Context and AIOS Context." in (skill_root / "osm-data-context/index.md").read_text(),
             "retained context names")
-    # Saved state keeps its earlier aios/panel names after the sidebar folder became apps/notion.
-    notion_state = (root / "apps/notion/sources.mjs").read_text()
-    notion_route = (root / "apps/notion/context-route.mjs").read_text()
-    require("['aios', 'panel']" in notion_state and "'.aios-lock'" in notion_route and
-            "'backups', 'aios-context'" in notion_route and
-            notion_route.count("<!-- AIOS:BEGIN -->") == 3,
-            "persisted sidebar state namespace")
     identity = (skill_root / "osm-setup/references/migration.md").read_text()
     require(all(row in identity for row in (
                 "| Package `osm` 0.31.0 or later", "| Package `aios` 0.29.x or earlier",
@@ -591,9 +602,13 @@ def negative_controls():
         folder.mkdir()
         (folder / "SKILL.md").write_text("---\nname: osm-build-work\ndescription: Retired.\n---\n")
 
-    def renamed_bridge_marker(root):
+    def wrapped_bridge_markers(root):
         path = root / "skills/osm-data-context/assets/bridge.md"
-        path.write_text(path.read_text().replace("AIOS:BEGIN", "OSM:BEGIN"))
+        path.write_text("<!-- OSM:BEGIN -->\n" + path.read_text() + "<!-- OSM:END -->\n")
+
+    def bridge_guide_drift(root):
+        path = root / "skills/osm-data-context/assets/bridge.md"
+        path.write_text(path.read_text().replace("built-in tools can't do the work.", "built-in tools are unavailable."))
 
     def dropped_retained_context_names(root):
         path = root / "skills/osm-data-context/index.md"
@@ -602,10 +617,6 @@ def negative_controls():
     def dropped_log_trigger(root):
         path = root / "skills/osm-data-context/assets/bridge.md"
         path.write_text(path.read_text().replace("Always run OSM Log", "Consider writing a note"))
-
-    def renamed_panel_storage(root):
-        path = root / "apps/notion/sources.mjs"
-        path.write_text(path.read_text().replace("['aios', 'panel']", "['osm', 'panel']"))
 
     def prefix_only_classification(root):
         path = root / "skills/osm-setup/references/migration.md"
@@ -635,10 +646,10 @@ def negative_controls():
     rejected(overlapping_acceptance, "aios to osm switch procedure: docs/osm.md")
     rejected(disable_after_acceptance, "aios to osm switch procedure")
     rejected(retired_skill_copy, "skill inventory")
-    rejected(renamed_bridge_marker, "owner bridge markers")
+    rejected(wrapped_bridge_markers, "bridge wrapper markers")
+    rejected(bridge_guide_drift, "bridge parity with public setup guide")
     rejected(dropped_retained_context_names, "retained context names")
     rejected(dropped_log_trigger, "new bridge route")
-    rejected(renamed_panel_storage, "persisted sidebar state namespace")
     rejected(prefix_only_classification, "package identity classification")
     rejected(native_version_drift, 'native identity/version drift')
     rejected(native_split_source, 'native split skill source')

@@ -25,7 +25,7 @@ Resolve owner/client scope. Client setup uses task guidance or a
 verified client-only instruction scope; preserve the personal default. Global
 routing requires an authorized default-home change. Codex's
 [adapter](adapter-codex.md) identifies its global path and overrides.
-Preserve unrelated instructions and every byte outside the AIOS marker pair.
+Preserve unrelated instructions and every byte outside the OSM route line (or an existing legacy AIOS marker pair).
 Record the pre-edit hash, reread before patching and make identical replay a
 no-op. Multiple/malformed blocks, a changed source or conflicting home require
 reconciliation. Do not change other apps or store owner data in plugin caches.

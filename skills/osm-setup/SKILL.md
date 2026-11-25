@@ -2,7 +2,7 @@
 name: osm-setup
 description: "Set up or resume OSM and its Notion context home, or check and repair a broken install."
 metadata:
-  version: "3.4.0"
+  version: "4.0.0"
 ---
 
 # OSM:setup
@@ -112,6 +112,7 @@ depend on an optional guard implementation.
   authority. Do not install anything or change global settings unless the
   current task authorizes it. Preserve unrelated instructions, secrets and
   configuration keys.
-- Keep the product version and the owner's stored compatibility names separate.
-  Persisted names such as `AIOS:BEGIN` blocks and the panel's `aios` directory
-  remain readable; they are compatibility keys, not branding.
+- New setups use the clean six-line bridge without HTML comment markers; the
+  official Notion plugin requires no local state files. Optional adapter state
+  uses the brand-neutral `context-state/` directory while earlier `AIOS:BEGIN`
+  blocks and `aios/panel/` or `osm/panel/` files remain readable automatically.
