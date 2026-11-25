@@ -24,7 +24,7 @@
       "commit": "resolved-at-run"
     },
     "guide": {
-      "label": "2026-11-23.2",
+      "label": "2026-11-25.1",
       "state": "Notion-authored originals bound per page and package edition; read times and content revisions are recorded on each artifact.",
       "owner": "notion"
     },
@@ -422,7 +422,7 @@
         "revision": "94ac801636ec3ae773db8aa116bfcec5b0cbaf27c8ba5c77e82636251928609e",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
+        "read_at": "2026-11-25T12:16:23+00:00",
         "last_edited_time": "2026-11-25T11:51:00.000Z"
       }
     },
@@ -443,7 +443,7 @@
         "revision": "847060feb76d6891d29c5a2f27029eaeb582c642856453d5b700d5bc52a20c33",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
+        "read_at": "2026-11-25T12:16:23+00:00",
         "last_edited_time": "2026-11-25T11:52:00.000Z"
       }
     },
@@ -461,11 +461,11 @@
       "authoritative_for": "Setup and configuration explanation and its special cases: Notion access choices, provider API keys, agent workspace and tools",
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
-        "revision": "522924fe48f35fa9a38c6663acc47d1fd6fc38ec760ac222c21d5632074784fd",
+        "revision": "291dea42227ba19760fa0891a79826724378bc7d6863dc2aebe29ba38b32467b",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
-        "last_edited_time": "2026-11-25T12:03:00.000Z"
+        "read_at": "2026-11-25T12:16:23+00:00",
+        "last_edited_time": "2026-11-25T12:15:00.000Z"
       }
     },
     {
@@ -485,7 +485,7 @@
         "revision": "8f9f47cfd2c13a27ff75ca6192556f83ce83410465acc13355e3d3bd0104c37c",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
+        "read_at": "2026-11-25T12:16:23+00:00",
         "last_edited_time": "2026-11-25T11:52:00.000Z"
       },
       "exports": [
@@ -526,7 +526,7 @@
         "revision": "eb4b1c19765ab05857304346bbc9d4b981dd6bdae08eb76bc184126602f60bba",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
+        "read_at": "2026-11-25T12:16:23+00:00",
         "last_edited_time": "2026-11-23T10:44:00.000Z"
       }
     },
@@ -544,11 +544,11 @@
       "authoritative_for": "Upkeep and recurring work: curation, freshness, Prime, Log and Dreaming, and keeping the guide and repository aligned",
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
-        "revision": "6d879f7b53032a0f7c08de00c38a7209871ba4c6304fdf2470516c67f5cf7876",
+        "revision": "896f1822728540d9b23054cb0ca854b4730b767cfe2115cf0d3a3a21e20e7b1e",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
-        "last_edited_time": "2026-11-25T11:52:00.000Z"
+        "read_at": "2026-11-25T12:16:23+00:00",
+        "last_edited_time": "2026-11-25T12:15:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
     },
@@ -569,7 +569,7 @@
         "revision": "75dbe7733f1a234990a6145e4a24ec4792a4926bd8b97012d7cb88a80fbc56d3",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
+        "read_at": "2026-11-25T12:16:23+00:00",
         "last_edited_time": "2026-11-25T11:56:00.000Z"
       },
       "exports": [
@@ -602,7 +602,7 @@
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
         "edition": "0.37.0",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:05:04+00:00",
+        "read_at": "2026-11-25T12:16:23+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },
@@ -806,7 +806,7 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "1228e6ec470874bab38b6770c45510b4343c1f39",
+    "skill_source": "0ea9b16dd822f3a2d6f884abab8d46712002676d",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
