@@ -4265,3 +4265,16 @@ A two-case native CLI probe used staged skills, a fictional local MCP connection
 Content PR21 merged as `667544af9380335956e42fea95b97375f5d43f7e` after CI45614274472; main CI45614451258 passed. Actual Neon High accepted the four-file same-version 0.14.0 native-title projection repair, with all method/template sources and 18 native packet inputs unchanged. First run45614481593 verified nine API writes before a whole-browser timeout. Independent run45615498904 passed all nine API/public reads with nine unchanged states and zero writes; its complete raw API root body matches the refreshed reader supplement SHA-256 `5507c6548b6a4114469f0366535fda19766ad6265ac3dbabe2e46042662e1f58`. Both rebuilt runtime guide objects equal the generator JSON in full, with 18 public pages.
 
 The new Core tag, installation and post-tag public delivery remain pending. Historical-reader qualification, benchmark and Vault work retain their separate status.
+
+### 25 November: existing Log description aligned before release
+
+The first pretag read-only run 45618084010 stopped before every write: seven
+rows were eligible and Log was a conflict. Its downloaded native archive had
+the existing owner description “Checkpoint or save meaningful context when
+needed or work ends”; the instruction body meaning and every supporting byte
+matched the released 0.36.5 source-reference/2 packet. The next 0.37.0 source
+adopts that 59-character wording, with its unchanged Log body and version
+1.3.2. The exact current native observation is the explicit Log handoff.
+No equality guard, incoming normalizer or live page was changed. A pretag
+0.36.5 publication still represents its immutable source; delivery of the new
+wording belongs to the actual 0.37.0 binding after publication.

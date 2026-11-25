@@ -1,6 +1,6 @@
 ---
 name: osm-log
-description: "Save lasting Notion context at checkpoints, or when asked to remember, log or note it."
+description: "Checkpoint or save meaningful context when needed or work ends"
 metadata:
   version: "1.3.2"
 ---
