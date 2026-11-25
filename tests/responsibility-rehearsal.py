@@ -69,6 +69,8 @@ PINS = (
     ("classification in the contract", "osm-data-context/references/architecture.md",
      "classified durable, provisional or source-only"),
     ("no call back into Setup", "osm-setup/SKILL.md", "nothing calls back"),
+    ("no self-granting links", "osm-data-context/references/architecture.md",
+     "Never record a link that grants access on its own"),
 )
 # The triggers-and-calls table in docs/skills.md: each row's trigger starts with the key and its Owner
 # column must link the value. Every owner is then pinned, so a deleted or re-assigned row fails.

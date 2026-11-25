@@ -27,6 +27,29 @@ or writer, result and date. Use the existing source agreement and run result
 for these details. If verification fails, report the specific failure:
 missing credential, denied account or destination, or an unsupported action.
 
+## Access across multiple hosts
+
+The Notion definition records *where* a source or media store lives in `scope`
+(by provider identity, never a public share or signed link) and how a host
+reaches it in `reader`. It never stores credentials, tokens, recovery keys or
+password-manager item names, and a recorded route never grants access by itself.
+
+- **Per-host native access first:** When multiple hosts or apps share one AI
+  operating model, prefer access each host obtains on its own (its own
+  connector/OAuth grant or sign-in) over sharing one credential across hosts.
+  If the owner already uses an external password or secrets manager, record
+  only its non-secret route and policy — never expose a personal password
+  manager broadly to an agent, and never provision a new service or account
+  unasked.
+- **Host-local access and paths:** One app's built-in credential store or
+  browser session, and any local file path, synced folder path, NAS or USB
+  mount, are host-scoped: two apps on one machine or the same app on two
+  machines do not automatically share sessions, credential stores or mount
+  paths. Never export a session, cookie or token to another host or worker
+  brief. Name the host in `reader`; if another host needs the source, report
+  the gap rather than copying records, uploading heavy media or storing secrets
+  in Notion.
+
 ## Rotate or recover
 
 Before switching an existing route, test the replacement in the intended

@@ -2,7 +2,7 @@
 name: osm-setup
 description: "Set up or resume OSM and its Notion context home, or check and repair a broken install."
 metadata:
-  version: "4.0.0"
+  version: "4.0.1"
 ---
 
 # OSM:setup
@@ -52,11 +52,12 @@ calls back into Setup. Interview's new-connection route is separate:
    [owner-context guide](../osm-interview/references/owner-context.md); never a
    fixed questionnaire.
 3. **Map sources, artifacts and authority.** The definition is the gateway:
-   record each source's purpose, actual account/reader, permitted actions,
-   processing environment and retention. Keep operational originals in their
-   system; normally query an AI-native source directly, reusing its connection.
-   Files and repositories are sources/artifacts, not homes. Locate a named
-   task-relevant source before substituting a generic result;
+   record each source's purpose, scope, actual account/reader, permitted
+   actions, processing environment and retention. Keep operational originals
+   and heavy media at their owner; Notion keeps non-granting references, never
+   credentials. Normally query an AI-native source directly, reusing its
+   connection. Files and repositories are sources/artifacts, not homes. Locate
+   a named task-relevant source before substituting a generic result;
    [setup](references/setup.md) owns the minimal follow-up and source agreement.
 4. **Reuse or create.** [Data & Context](../osm-data-context/index.md) engineers
    the home, definition and core Knowledge, Memory and Skills roles. Reuse actual
