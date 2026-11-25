@@ -46,7 +46,7 @@ Within the selected changed, due or flagged set, Dreaming recovers missed decisi
 
 Dreaming can inspect completed work, useful progress in unfinished work and archived sessions when the selected history source supports them. Connected tools are checked only within the recorded source agreement and run limits. A CRM or accounting system can be queried directly; it does not need to be mirrored into Notion. Source-only material stays with its owner, including in summaries and run reports.
 
-Manage Data & Context supplies the shared curation and readback procedure. Dreaming can repair a verified Prime or Log error within the recorded policy; unsupported view, icon, structural or access changes remain specific proposals. A selected Content collection can be maintained without activating a deferred route or starting an editorial workflow.
+The plugin uses one shared procedure to classify updates, write to the right record and verify the saved result. Dreaming can repair a verified Prime or Log error within the recorded policy; unsupported view, icon, structural or access changes remain specific proposals. A selected Content collection can be maintained without activating a deferred route or starting an editorial workflow.
 
 Keep the review bounded. Report unavailable evidence and unresolved choices while independent work continues. Run history belongs in its selected control or task, rather than a stream of random Memory rows.
 

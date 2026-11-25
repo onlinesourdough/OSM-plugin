@@ -3,7 +3,7 @@
 ## 0.37.0
 
 - Make the Notion guide a human-first introduction to the foundation, useful work and personal skills. Keep Content in Explore and clarify the Definition as a route map inside the AI operating model.
-- Keep Prime and Log descriptions short. Extend Dreaming with bounded context gardening across research, writing, content, operations and software, preserving source dates, owner choices and zero-write replay.
+- Keep Prime, Log and Dreaming descriptions short. Extend Dreaming with bounded context gardening across research, writing, content, operations and software, preserving source dates, owner choices and zero-write replay.
 - Keep native Notion skill instructions free of injected provenance paragraphs. Preserve exact source ZIPs, metadata, licensing and strict historical projection recognition, including the explicit same-source forward upgrade.
 - Derive optional foundation-page icon examples from the same Notion-owned guide as the five store defaults; retain a separate lazy resource and no mandatory starter-file set.
 

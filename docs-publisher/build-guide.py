@@ -165,7 +165,7 @@ if __name__ == '__main__':
         manifest = pub.load_manifest(ROOT / 'docs-publisher/manifest.json')
         (ROOT / ICON_DEFAULTS).write_bytes(icon_defaults(manifest, pub.DirSource(ROOT)))
         (ROOT / FOUNDATION_ICONS).write_bytes(foundation_icons(manifest, pub.DirSource(ROOT)))
-        print('Projected the bound Notion icon table into the packaged resource.')
+        print('Projected the bound Notion icon tables into the packaged resources.')
     elif sys.argv[1:]:
         raise SystemExit('Usage: build-guide.py [--icon-defaults]')
     else:

@@ -73,7 +73,7 @@ An API key is an authentication credential. Notion remains the context home. Ext
 
 ## Short agent instructions
 
-Put this pointer in the selected host's instruction file, such as [AGENTS.md](http://AGENTS.md) or [CLAUDE.md](http://CLAUDE.md). Replace the URL with your own verified home; Prime reads the definition there.
+Put this pointer in the selected host's instruction file, such as <code>AGENTS.md</code> or <code>CLAUDE.md</code>. Replace the URL with your own verified home; Prime reads the definition there.
 
 ```txt
 Use OSM Prime when relevant context is missing at the start or after resuming.
