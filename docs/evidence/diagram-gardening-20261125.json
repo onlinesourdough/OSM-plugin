@@ -1,0 +1,55 @@
+{
+  "format": "osm-diagram-binding/1",
+  "date": "2026-11-25",
+  "scope": "Definition map and bounded context gardening; no native model/host/public delivery claim",
+  "source_html": "assets/diagrams/osm-architecture.html",
+  "delivered_image": "assets/diagrams/osm-architecture.png",
+  "mobile_image": "assets/diagrams/osm-architecture-mobile.png",
+  "checks": {
+    "standalone_render": [
+      {
+        "name": "osm-architecture.png",
+        "width": 1000,
+        "contentWidth": 1000,
+        "height": 1506,
+        "stores": 4
+      },
+      {
+        "name": "osm-architecture-mobile.png",
+        "width": 390,
+        "contentWidth": 390,
+        "height": 2637,
+        "stores": 4
+      }
+    ],
+    "local_wide_and_mobile_visually_inspected": true,
+    "native_upload_acknowledged": true,
+    "notion_download_byte_match": true,
+    "public_anonymous_render": false,
+    "native_notion_diagram_downloads": [
+      {
+        "name": "osm-architecture.png",
+        "bytes": 551792,
+        "sha256": "785d01a5fe1dc28ca16cba7f02df8720bcaeb1135476213965526a7f8c7145da",
+        "match": true
+      },
+      {
+        "name": "osm-architecture-mobile.png",
+        "bytes": 611474,
+        "sha256": "17a39c77e6758752e6c9c3135dbb953338ae460d5569fac6f409884d61c58c92",
+        "match": true
+      },
+      {
+        "name": "osm-architecture.html",
+        "bytes": 9350,
+        "sha256": "40c21ada7c2f217d8eed33b26e52bf2804d30bdf90429a7a302f3c81293c9baf",
+        "match": true
+      }
+    ]
+  },
+  "guide_body_revision": "75dbe7733f1a234990a6145e4a24ec4792a4926bd8b97012d7cb88a80fbc56d3",
+  "api_snapshot_run": 45610233062,
+  "source_html_sha256": "40c21ada7c2f217d8eed33b26e52bf2804d30bdf90429a7a302f3c81293c9baf",
+  "delivered_image_sha256": "785d01a5fe1dc28ca16cba7f02df8720bcaeb1135476213965526a7f8c7145da",
+  "mobile_image_sha256": "17a39c77e6758752e6c9c3135dbb953338ae460d5569fac6f409884d61c58c92"
+}
