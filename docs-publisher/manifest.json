@@ -812,11 +812,11 @@
         "id": "40d6d2e17f5681219a81e13317a19339",
         "title": "Content build your own setup",
         "path": "docs-publisher/originals/notion.content.entry.md",
-        "sha256": "680f45ad64c31e1565998b4bb31245ad50027be4d43c1d1ddeedcc0fb5968375",
+        "sha256": "5507c6548b6a4114469f0366535fda19766ad6265ac3dbabe2e46042662e1f58",
         "edition": "Optional Content · method 0.14.0; channel template 0.14.0; retained responsibility templates 0.10.0",
-        "source_commit": "5e5da443a67f68925c8b269d64e6c4b693a934e4",
+        "source_commit": "667544af9380335956e42fea95b97375f5d43f7e",
         "source_release": "https://github.com/onlinesourdough/OSM-Content/releases/tag/v0.14.0",
-        "body_origin": "Exact renderer projection from the accepted same-version Content publication source; matches actual complete API readback in run 45486941502. This is not an independent raw API capture by Core. Core never writes this page; public qualification is recorded separately.",
+        "body_origin": "Exact renderer projection from the accepted same-version Content publication source; whole SHA matches complete API readback in run 45614481593. This is not an independent raw API capture by Core. Core never writes this page; public qualification is recorded separately.",
         "method_release_commit": "756cdaba4a325c2923ab0d8899aaf52014d99679"
       }
     ]

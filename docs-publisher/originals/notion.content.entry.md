@@ -1,5 +1,3 @@
-# Build your own content setup
-
 OSM Content is an optional operating model beside OSM-plugin: general requirements, best practices, templates and skill skeletons. Use it to turn real work, ideas and references into useful content. You choose the channels, creative process and sustainable effort. The module provides a backbone for your setup.
 
 Notion is the default runtime. Existing editors and external originals can stay; the same responsibilities work with equivalent records and review evidence outside Notion. Installing the plugin or reading this guide starts no content workflow.
@@ -41,7 +39,7 @@ Personal configuration
 
 Existing skills may already cover responsibilities. Adapt only what helps. The primary <mention url="https://app.notion.com/p/4226d2e17f568142a957f3c3577e106b">content-channel</mention> is read and replicated by an agent for your selected channel or format. Newsletter, LinkedIn, X and YouTube are existing thin example copies, not a growing catalogue to install. Each working method links to your context, explains assembly and hands the result to the shared quality-gate skill. The optional newsletter-to-posts helper coordinates reuse when you select it; no channel is mandatory upstream.
 
-[Channel methods and starter chain](https://github.com/onlinesourdough/OSM-Content/blob/5e5da443a67f68925c8b269d64e6c4b693a934e4/docs/channel-skills.md)
+[Channel methods and starter chain](https://github.com/onlinesourdough/OSM-Content/blob/667544af9380335956e42fea95b97375f5d43f7e/docs/channel-skills.md)
 
 Start with the current <b>content-channel</b> entry below. Open its <mention url="https://app.notion.com/p/4226d2e17f568131a04eee2fcda94904">references</mention> for <code>adaptation.md</code>, <code>quality-gate.md</code> and <code>schedule.md</code>, or download the complete skill packet from Files. The five original responsibility templates remain frozen <b>v0.10.0 Drafts</b>, useful as responsibility examples rather than five required installations:
 
@@ -60,7 +58,7 @@ Start with the current <b>content-channel</b> entry below. Open its <mention url
 5. You mark approval of the final version and destinations. A gate pass or Ready does not approve publication. Delivery also needs the actual authority you gave and a verified result. Changed material needs renewed approval.
 6. Keep feedback with the work and update a lasting choice once at its existing owner. Retain replaced guidance as Superseded history rather than deleting it.
 
-A schedule helps make workload and upcoming review visible. The [schedule skeleton](https://github.com/onlinesourdough/OSM-Content/blob/5e5da443a67f68925c8b269d64e6c4b693a934e4/templates/content-schedule/SKILL.md) reads your cadence entry in Knowledge or its equivalent and proposes a plan. You choose the rhythm, optional horizon and review route; no posting days or volume are prescribed. A plan creates no scheduler job.
+A schedule helps make workload and upcoming review visible. The [schedule skeleton](https://github.com/onlinesourdough/OSM-Content/blob/667544af9380335956e42fea95b97375f5d43f7e/templates/content-schedule/SKILL.md) reads your cadence entry in Knowledge or its equivalent and proposes a plan. You choose the rhythm, optional horizon and review route; no posting days or volume are prescribed. A plan creates no scheduler job.
 
 An optional best practice from the first real run is a short approval window for the next few days, with review ping-pong: the assistant prepares and checks, you comment, the assistant revises and resolves addressed comments, then you review again and mark final approval. Choose the rhythm yourself; no minutes, named statuses or posting times are prescribed. A bank replenished on your chosen cycle and owner-defined value-category caps can also help. These are not prerequisites for a draft.
 
@@ -77,7 +75,7 @@ These responsibilities are a loop, not a compulsory sequence of five skills. One
 
 ## Practical starting points
 
-For one piece, use the [short-post workflow](https://github.com/onlinesourdough/OSM-Content/blob/5e5da443a67f68925c8b269d64e6c4b693a934e4/docs/post-workflow.md). Learn from selected evidence and exact corrections with the [writing-voice workflow](https://github.com/onlinesourdough/OSM-Content/blob/5e5da443a67f68925c8b269d64e6c4b693a934e4/docs/writing-voice.md). Keep a concrete reason and relevant timestamp for creative references using the [reference workflow](https://github.com/onlinesourdough/OSM-Content/blob/5e5da443a67f68925c8b269d64e6c4b693a934e4/docs/reference-library.md).
+For one piece, use the [short-post workflow](https://github.com/onlinesourdough/OSM-Content/blob/667544af9380335956e42fea95b97375f5d43f7e/docs/post-workflow.md). Learn from selected evidence and exact corrections with the [writing-voice workflow](https://github.com/onlinesourdough/OSM-Content/blob/667544af9380335956e42fea95b97375f5d43f7e/docs/writing-voice.md). Keep a concrete reason and relevant timestamp for creative references using the [reference workflow](https://github.com/onlinesourdough/OSM-Content/blob/667544af9380335956e42fea95b97375f5d43f7e/docs/reference-library.md).
 
 Give your agent your private context-home link and a selected task. Ask it to reuse existing records, read relevant policy, preserve your originals and prepare a reviewable result. A complete setup interview or style calibration is not required for every request. A saved skill alone does not prove native adoption or an editor's capabilities.
 
@@ -105,4 +103,4 @@ This repository is outside OSM-plugin. Personal content, media, configuration an
 
 <database url="https://app.notion.com/p/40f6d2e17f5681368bd9ed1593f45404" data-source-url="collection://6ff724a0-558c-4845-a0e1-a2e7fab86642" inline="true"></database>
 
-[Source revision 5e5da44](https://github.com/onlinesourdough/OSM-Content/blob/5e5da443a67f68925c8b269d64e6c4b693a934e4/docs/guide.notion.md)
+[Source revision 667544a](https://github.com/onlinesourdough/OSM-Content/blob/667544af9380335956e42fea95b97375f5d43f7e/docs/guide.notion.md)
