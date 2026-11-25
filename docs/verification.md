@@ -4269,11 +4269,11 @@ The new Core tag, installation and post-tag public delivery remain pending. Hist
 ### 25 November: existing Log description aligned before release
 
 The first pretag read-only run 45618084010 stopped before every write: seven
-rows were eligible and Log was a conflict. Its downloaded native archive had
-the existing owner description “Checkpoint or save meaningful context when
+rows were eligible and Log was a conflict. Its downloaded native archive already had
+the description “Checkpoint or save meaningful context when
 needed or work ends”; the instruction body meaning and every supporting byte
 matched the released 0.36.5 source-reference/2 packet. The next 0.37.0 source
-adopts that 59-character wording, with its unchanged Log body and version
+adopts that 62-character wording, matching the owner's requested short form, with its unchanged Log body and version
 1.3.2. The exact current native observation is the explicit Log handoff.
 No equality guard, incoming normalizer or live page was changed. A pretag
 0.36.5 publication still represents its immutable source; delivery of the new
