@@ -4278,3 +4278,8 @@ adopts that 62-character wording, matching the owner's requested short form, wit
 No equality guard, incoming normalizer or live page was changed. A pretag
 0.36.5 publication still represents its immutable source; delivery of the new
 wording belongs to the actual 0.37.0 binding after publication.
+
+The first alignment CI 45620000129 stopped at the existing discovery-job
+prefix assertion (`Save `). Only Log's expected prefix was aligned to the
+reviewed `Checkpoint or save ` wording; the size caps, measured paths and
+other skill checks are unchanged. The failed attempt is retained.
