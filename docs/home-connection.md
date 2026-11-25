@@ -127,7 +127,8 @@ owner's recorded selection of `internal_selected_pages` turns on through
 `osm_save_connection_route`:
 
 - It is the file `osm/panel/<context hash>.connection.json` under `CODEX_HOME`
-  (default `~/.codex`), beside that context's links and projection. It holds the
+  (default `~/.codex`), beside that context's links and projection (earlier
+  `aios/panel/` files stay readable until updated). It holds the
   format, the context identity, the route name, the mode and `enabled`. No
   credential, identity or page content.
 - It is saved with the same guards as the links and projection: whole replacement,

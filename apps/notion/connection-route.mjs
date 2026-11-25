@@ -2,7 +2,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { readContextRoute } from './context-route.mjs';
 import { readHomeProjection } from './home-projection.mjs';
-import { contextIdentity, location, snapshot, stateRevision, replaceState } from './sources.mjs';
+import { contextIdentity, location, legacyLocation, readPanelSnapshot, stateRevision, replaceState } from './sources.mjs';
 import { classifyTarget } from './target.mjs';
 import { notionId } from './notion-internal.mjs';
 
@@ -61,7 +61,7 @@ function decode(value, target) {
   return { state: 'invalid', revision: value.revision, enabled: false };
 }
 export async function readConnectionRoute(target, { codexHome = process.env.CODEX_HOME || join(homedir(), '.codex') } = {}) {
-  try { return decode(await snapshot(await location(codexHome, target, false, '.connection.json'), limit), target); }
+  try { return decode(await readPanelSnapshot(codexHome, target, '.connection.json', limit), target); }
   catch { return { state: 'unavailable', enabled: false }; }
 }
 
@@ -82,9 +82,10 @@ export async function saveConnectionRoute({ target, expectedContextRevision, exp
   if (current.revision !== expectedRevision) throw new Error('OSM’s connection route changed. Refresh before saving again.');
   const link = manage === undefined ? current.manage : manage === null ? undefined : normalizeManage(manage);
   const path = await location(codexHome, target, true, '.connection.json');
+  const legacyPath = await legacyLocation(codexHome, target, '.connection.json');
   const text = JSON.stringify({ format: routeFormat, contextIdentity: contextIdentity(target), route: routeName, mode: routeMode, enabled, ...(link && { manage: link }) }, null, 2) + '\n';
   let previous;
-  const written = await replaceState(path, { expectedRevision, text, limit,
+  const written = await replaceState(path, { expectedRevision, text, limit, legacyPath,
     decode: value => (previous = decode(value, target)),
     same: value => value.enabled === enabled && sameManage(value.manage, link),
     matches: async () => matches(await readContextRoute({ codexHome })),

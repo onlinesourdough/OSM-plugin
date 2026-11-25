@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.38.0
+
+- Align the packaged host instruction template (`bridge.md`) 1:1 with the public Notion Setup guide as clean six-line prose with no HTML wrapper markers, and validate both marker-free prose and Setup-guide parity generally in `tests/validate.py`.
+- Move new Codex panel state, context route locks and backups to the `osm` namespace (`osm/panel/`, `.osm-lock`, `backups/osm-context`) while reading existing `aios/panel/` files and earlier `AIOS:BEGIN` blocks automatically without data loss.
+- Update `osm-setup` (`4.0.0`) and package docs for the clean markerless bridge and seamless `osm/panel/` transition, and bind the unchanged Notion guide originals to `0.38.0`.
+
 ## 0.37.0
 
 - Make the Notion guide a human-first introduction to the foundation, useful work and personal skills. Keep Content in Explore and clarify the Definition as a route map inside the AI operating model.

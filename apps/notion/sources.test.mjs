@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { readContextRoute, saveContextRoute } from './context-route.mjs';
 import { readSources, saveSources, contextIdentity } from './sources.mjs';
+import { readConnectionRoute, saveConnectionRoute, routeFormat, routeMode } from './connection-route.mjs';
 const bridge = await readFile(new URL('../../skills/osm-data-context/assets/bridge.md', import.meta.url), 'utf8');
 const target = 'https://app.notion.com/p/00000000000000000000000000000001';
 const links = { docs: { title: 'Documents', target: 'https://example.com/docs' }, personalSkills: { title: 'My skills', target: 'https://example.com/skills' }, memory: { title: 'Decisions', target: 'https://example.com/memory' } };
@@ -86,4 +87,36 @@ test('optional team memory can be added without changing personal memory or inst
   assert.equal(removed.links.teamMemory,undefined);
   assert.deepEqual(removed.links.memory,links.memory);
   assert.deepEqual(await readFile(join(options.codexHome,'AGENTS.md')),before);
+});
+
+test('existing CODEX_HOME/aios/panel state stays readable and writes migrate cleanly to osm/panel', async t => {
+  const {options,context,args}=await fixture(t), identity=contextIdentity(target);
+  const hash=createHash('sha256').update(identity).digest('hex');
+  const legacyDir=join(options.codexHome,'aios/panel');
+  await mkdir(legacyDir,{recursive:true});
+  const legacyLinks=JSON.stringify({version:1,contextIdentity:identity,title:'Legacy OSM',links},null,2)+'\n';
+  await writeFile(join(legacyDir,hash+'.json'),legacyLinks);
+  await writeFile(join(legacyDir,hash+'.connection.json'),JSON.stringify({
+    format:routeFormat,contextIdentity:identity,route:'macos-keychain',mode:routeMode,enabled:true,
+  },null,2)+'\n');
+
+  const read=await readSources(target,options);
+  assert.equal(read.state,'saved'); assert.equal(read.title,'Legacy OSM'); assert.deepEqual(read.links,links);
+  const route=await readConnectionRoute(target,options);
+  assert.equal(route.state,'saved'); assert.equal(route.enabled,true);
+
+  const updated=await saveSources({...args,expectedRevision:read.revision,title:'Migrated OSM'},options);
+  assert.equal(updated.title,'Migrated OSM');
+  assert.equal((await readSources(target,options)).title,'Migrated OSM');
+  assert.equal(await readFile(join(legacyDir,hash+'.json'),'utf8'),legacyLinks);
+  const osmFiles=await readdir(join(options.codexHome,'osm/panel'));
+  assert.ok(osmFiles.includes(hash+'.json'));
+  assert.ok(osmFiles.some(name=>name.endsWith('.bak')));
+
+  const disabled=await saveConnectionRoute({
+    target,expectedContextRevision:context.revision,expectedRevision:route.revision,
+    selectedMode:routeMode,enabled:false,
+  },options);
+  assert.equal(disabled.enabled,false);
+  assert.equal((await readConnectionRoute(target,options)).enabled,false);
 });

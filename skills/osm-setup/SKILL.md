@@ -113,4 +113,5 @@ depend on an optional guard implementation.
   current task authorizes it. Preserve unrelated instructions, secrets and
   configuration keys.
 - New setups use the clean six-line bridge without HTML comment markers and store
-  panel state under `osm/panel/`. Earlier `AIOS:BEGIN` blocks remain readable.
+  panel state under `osm/panel/`. Earlier `AIOS:BEGIN` blocks and `aios/panel/`
+  files remain readable automatically and migrate to `osm/panel/` when updated.
