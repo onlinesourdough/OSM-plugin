@@ -13,9 +13,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.38.0",
-      "tag": "v0.38.0",
-      "commit": "69eb3905fea3486bed0dd15d131cf8a26adffabf",
+      "label": "v0.38.1",
+      "tag": "v0.38.1",
+      "commit": "7f2bf3b6ef9ee933d64515ab440903a993a1323e",
       "approved": true
     },
     "main-working": {
