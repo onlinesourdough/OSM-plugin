@@ -1,14 +1,15 @@
 ---
 name: unslop
-description: Remove AI tells from the agent's own replies, reports and Notion pages.
+description: "Cut AI tells from any writing — replies, reports, posts, docs and Notion pages."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # unslop
 
-Use this for the agent's own text. Text sent under the author's name belongs
-to [osm-human-writing](../osm-human-writing/SKILL.md).
+Use this to cut AI tells from any writing — replies, reports, posts, docs and
+Notion pages. For drafting or editing prose sent under a specific author's
+name and voice, pair it with [osm-human-writing](../osm-human-writing/SKILL.md).
 
 At use time, fetch https://raw.githubusercontent.com/cursor/plugins/main/pstack/skills/unslop/SKILL.md
 with the host's own tool, preferably curl. The upstream repository has no

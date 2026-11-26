@@ -18,6 +18,7 @@
     "shortDescription": "The Onlinesourdough Method",
     "longDescription": "Eight skills cover context, writing and collaboration: Setup, Prime, Log, Dreaming, Interview, Human Writing, Council and unslop. Setup onboards you in conversation through the official Notion plugin. An optional, existing scoped Notion connection can serve selected team, worker or daily scope through a small set of headless tools.",
     "developerName": "onlinesourdough",
+    "websiteURL": "https://onlinesourdough.com/",
     "category": "Productivity",
     "capabilities": [
       "Interactive"

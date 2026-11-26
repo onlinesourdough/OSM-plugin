@@ -2,7 +2,7 @@
 name: osm-human-writing
 description: "Draft or edit an email, SMS, LinkedIn post or other prose so it sounds like the author."
 metadata:
-  version: "2.1.1"
+  version: "2.1.2"
 ---
 
 # OSM:human-writing
@@ -123,7 +123,9 @@ also correct.
 
 Read the finished text once for ease of understanding, unnecessary complexity,
 meaning drift, voice and fit, then return the requested
-draft or revision. Include an editorial note only when a material ambiguity or
+draft or revision. When cutting AI tells, you can also run
+[OSM:unslop](../unslop/SKILL.md) as a final pass while preserving the author's
+voice and approved wording. Include an editorial note only when a material ambiguity or
 change needs the reader's attention. A writing request authorizes the draft;
 it supplies no sending or publishing authority. Do not claim that wording proves
 human authorship or will evade a detector.

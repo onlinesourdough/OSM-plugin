@@ -7,7 +7,7 @@ UPSTREAM = "https://raw.githubusercontent.com/cursor/plugins/main/pstack/skills/
 
 def check(root, upstream=None):
     folder = Path(root) / "skills/unslop"
-    assert sorted(p.relative_to(folder).as_posix() for p in folder.rglob("*") if p.is_file()) == ["SKILL.md"], "unslop must contain only its thin entrypoint"
+    assert sorted(p.relative_to(folder).as_posix() for p in folder.rglob("*") if p.is_file()) == ["SKILL.md", "agents/openai.yaml"], "unslop must contain only its thin entrypoint and UI display name"
     text = (folder / "SKILL.md").read_text()
     body = text.split("---", 2)[2]
     assert len(text.encode()) <= 1600, "unslop bundles rules instead of a thin fetch wrapper"

@@ -2,7 +2,7 @@
 name: osm-prime
 description: "Load relevant Notion Data and Context when starting or resuming work."
 metadata:
-  version: "1.2.5"
+  version: "1.2.6"
 ---
 
 # OSM:prime
