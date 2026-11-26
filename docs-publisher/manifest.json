@@ -13,9 +13,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.39.0",
-      "tag": "v0.39.0",
-      "commit": "a0047deb282e90923766f685371314c3b896c5e4",
+      "label": "v0.39.1",
+      "tag": "v0.39.1",
+      "commit": "1261e5f46839356593f3853c38c687e767d885f2",
       "approved": true
     },
     "main-working": {
@@ -806,7 +806,7 @@
   "reading_export": {
     "root": "40d6d2e17f568124af82ceb93dabf77a",
     "catalogue": "6abfc738a9604ddc806432721813712b",
-    "skill_source": "f2409bb88210a507f7f01b42ec7150f25b91caaa",
+    "skill_source": "31baf3b3d9374dbf85313b2669e6bbe7d00e5dac",
     "supplements": [
       {
         "id": "40d6d2e17f5681219a81e13317a19339",
