@@ -168,6 +168,18 @@ setting. It currently has no equivalent native installer for this instruction
 package, so we do not describe that route as plug and play. See the
 [compatibility guide](skills/osm-setup/references/adapter-other.md#opencode).
 
+### MCP server (OpenBot, Grok Bot and other MCP apps)
+
+Apps that support MCP without the plugin formats above can load the exact same
+reviewed GitHub release through the open-source [OSM MCP server](docs/mcp-server.md)
+(`apps/mcp/`). It is **public, stateless, read-only and login-free**: it stores
+no user data, logs no requests, rejects credentials/cookies, and never accesses
+Notion. Your official Notion MCP remains separate and owns your Notion home.
+
+Run it offline over stdio (`node apps/mcp/stdio.mjs`), locally over Streamable
+HTTP (`node apps/mcp/http.mjs`), or deploy the included zero-dependency
+Cloudflare Worker (`apps/mcp/wrangler.jsonc`). See [apps/mcp/README.md](apps/mcp/README.md).
+
 ## Your context home
 
 The shared method and your company context have separate owners and update
@@ -261,6 +273,7 @@ onboarding runs through Setup in conversation.
 | Folder | Contains |
 | --- | --- |
 | `skills/` | Eight discoverable skills and four supporting reference folders |
+| `apps/mcp/` | Zero-dependency, login-free MCP server (Cloudflare Worker + local stdio/HTTP) |
 | `apps/notion/` | Public guide reader and optional scoped Notion adapter source |
 | `runtime/notion/` | Reproducible, ready-to-run build |
 | `docs/` | Installed overview, user guides, maintenance and dated evidence |

@@ -28,6 +28,9 @@ Keep one writer per overlapping change and verify the selected checkout first.
   maintain each skill's metadata [SemVer](docs/skill-versioning.md).
 - `apps/notion` contains the public guide reader and optional scoped Notion adapter. `runtime/notion` is its
   reproducible build; never edit it by hand.
+- `apps/mcp` contains the zero-dependency, public, login-free OSM MCP server
+  (Cloudflare Worker + local stdio/HTTP). `apps/mcp/bundle.generated.mjs` is its
+  reproducible build; never edit it by hand.
 - Native manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`,
   `gemini-extension.json`), `package.json` and `docs/osm.md` keep one
   consistent identity and version. See [distribution](docs/distribution.md).
