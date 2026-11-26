@@ -1,7 +1,7 @@
 {
   "name": "osm",
   "displayName": "OSM",
-  "version": "0.38.1",
+  "version": "0.39.0",
   "description": "Notion context, onboarding, writing and collaboration for AI agents.",
   "author": {
     "name": "onlinesourdough",

@@ -4,6 +4,12 @@
   "main": "worker.mjs",
   "compatibility_date": "2026-11-01",
   "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "mcp.onlinesourdough.com",
+      "custom_domain": true
+    }
+  ],
   "observability": {
     "enabled": false
   }
