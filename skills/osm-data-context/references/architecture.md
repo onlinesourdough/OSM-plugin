@@ -488,7 +488,8 @@ as a bulk file host or a forced migration target.
   link), and never store credentials, tokens or password-manager item names in
   Notion. A recorded route never grants access by itself. See
   [credentials](../../osm-setup/references/credentials.md#access-across-multiple-hosts)
-  for multi-host access boundaries.
+  for multi-host access boundaries and optional connector-first / separate-vault
+  best practices.
 - **Honest gap on missing host access.** When an agent on the current host
   needs a registered source or media store, it checks its own host's native
   access first. If access lives only on another host or lacks a grant here, the
