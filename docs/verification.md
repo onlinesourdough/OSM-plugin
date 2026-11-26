@@ -176,7 +176,7 @@ credentials entered the review.
 The candidate keeps seven skills. It aligns discovery before building, resolves
 Content from actual authority and owner choices, follows named task sources,
 retains a findable gateway, and uses the exact default title and approved icons.
-Notion-authored Setup and AI operating model explanations were updated first.
+Notion-authored Setup and AI Operating Model explanations were updated first.
 Capture 45067088976 read all eight originals and safely held on those two changed
 bodies before any skill import; their exact exports are bound to this candidate.
 The prior test home and guest pointer/materials/work directory were removed,
@@ -440,7 +440,7 @@ A fresh ephemeral native Codex chat exercised installed Prime 1.2.0 and Log
 2026-11-20.2 and the exact linked operating policy and Soul. It recovered the
 Numina source-only rule without querying operational records, and Log correctly
 created no redundant Memory record. Setup's local references name the new-home
-default AI operating model, preserve existing home identity/name, and put the
+default AI Operating Model, preserve existing home identity/name, and put the
 Data and Context Definition before its databases. Setup itself was not executed
 and no new home was created. The optional selected-page adapter separately
 reported ready and read the current definition with its revision-2 projection.

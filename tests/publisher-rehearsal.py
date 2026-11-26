@@ -1332,9 +1332,9 @@ def recorded_public_values_stay_out_of_shipped_text():
             # this exact labelled link; every other binding is still checked.
             guide_id = next(a['notion'] for a in MANIFEST['artifacts']
                             if a['key'] == 'notion.guide.data-context')
-            reference = f'[AI operating model reference](https://app.notion.com/p/{guide_id})'
+            reference = f'[AI Operating Model reference](https://app.notion.com/p/{guide_id})'
             require(text.count(reference) == 1, 'one explicit public method reference')
-            text = text.replace(reference, '[AI operating model reference](public-method-reference)')
+            text = text.replace(reference, '[AI Operating Model reference](public-method-reference)')
         elif path.relative_to(ROOT).as_posix() in (
                 'skills/osm-data-context/assets/icon-defaults.json',
                 'skills/osm-data-context/assets/foundation-icon-examples.json'):

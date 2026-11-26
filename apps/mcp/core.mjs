@@ -24,17 +24,17 @@ export const PRIVACY_POLICY = Object.freeze({
 export const SERVER_INSTRUCTIONS =
   'Public, read-only, login-free MCP server for The Onlinesourdough Method (OSM). ' +
   'Call osm_list_skills to see all 8 discoverable OSM skills (tiny summary) before loading a full body with osm_get_skill. ' +
-  'Call osm_get_setup_guide when setting up or resuming an AI operating model in Notion. ' +
+  'Call osm_get_setup_guide when setting up or resuming an AI Operating Model in Notion. ' +
   'Call osm_get_reference to read one specific supporting reference or docs/osm.md. ' +
   'On hosts without local OSM skill files, this server is where the short OSM host instructions resolve: when they say "Use OSM Prime" or "run OSM Log" (or name another OSM skill), load that skill with osm_get_skill (for example osm-prime or osm-log) and follow it against the Data and Context URL in those instructions. ' +
-  'If no such instructions exist yet, offer OSM Setup (osm_get_setup_guide) to create the AI operating model home and the six-line pointer. ' +
+  'If no such instructions exist yet, offer OSM Setup (osm_get_setup_guide) to create the AI Operating Model home and the six-line pointer. ' +
   'This server never authenticates, never stores or logs user data, and never accesses Notion — use your official Notion connector for workspace access.';
 
 const TOOL_DEFINITIONS = [
   {
     name: 'osm_get_setup_guide',
     description:
-      'Return the official OSM setup guide (osm-setup SKILL.md and optional short host bridge) to set up or resume an AI operating model in Notion. Public, read-only, no login.',
+      'Return the official OSM setup guide (osm-setup SKILL.md and optional short host bridge) to set up or resume an AI Operating Model in Notion. Public, read-only, no login.',
     inputSchema: {
       type: 'object',
       additionalProperties: false,
@@ -457,7 +457,7 @@ export function handleJsonRpcMessage(message, bundle = OSM_BUNDLE) {
       prompts: [
         {
           name: 'osm-setup',
-          description: 'Set up or resume your Notion AI operating model using The Onlinesourdough Method.',
+          description: 'Set up or resume your Notion AI Operating Model using The Onlinesourdough Method.',
           arguments: [],
         },
       ],

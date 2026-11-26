@@ -18,7 +18,7 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
 ## Root and entry
 
 - **One neutral root.** OSM is the method and plugin, not the customer's brand.
-  A new root defaults to the untranslated title "AI operating model";
+  A new root defaults to the untranslated title "AI Operating Model";
   the owner may choose any title. Identify the root by its stable ID and its role,
   never by title.
 - **The root is the one agent entry.** It holds one active Data and Context
@@ -43,7 +43,7 @@ separate-entry layouts remain supported; see [superseded defaults](#superseded-d
 
 ## The home and the operating model
 
-An AI operating model is the business's actual way of working with AI: its goals,
+An AI Operating Model is the business's actual way of working with AI: its goals,
 people and agents, information, workflows, tools and access, decision rights,
 review and ongoing improvement. The data and context foundation supports that
 work. Skills describe reusable working and review methods; they do not by

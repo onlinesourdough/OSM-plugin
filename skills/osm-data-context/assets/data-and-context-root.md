@@ -1,17 +1,17 @@
-# Adapting the AI operating model home
+# Adapting the AI Operating Model home
 
 The neutral starting layout for one customer-owned root. Setup fills it from
 verified sources under the [Context Architecture](../references/architecture.md);
 it does not copy that contract into the page. Replace every bracketed
 instruction or omit its optional line before use. The title is the owner's
-choice; the default is exactly **AI operating model**, without translating it
+choice; the default is exactly **AI Operating Model**, without translating it
 to match the conversation. Change that name only for an owner choice. If a root or an older entry already
 exists, adapt it: keep its identity, title, icon, local wording and compatible
 definition fields, and never regenerate owner choices from this template.
 
 For a new root and new core stores, read the local [icon defaults](icon-defaults.json)
 when applying icons. This generated resource freezes the five approved URLs from
-the Notion-authored [AI operating model reference](https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038)
+the Notion-authored [AI Operating Model reference](https://app.notion.com/p/40d6d2e17f56816da06ff15c39dcc038)
 at its recorded source revision; it is not a live lookup or an editable second map.
 The public guide supplies the explanation when needed; its availability must not
 block reading the packaged URLs or justify changing a private connection.
@@ -51,7 +51,7 @@ The body begins with the definition and then the native child databases.
 Keep this template's authoring instructions and all onboarding prose outside
 the generated page body.
 
-# AI operating model
+# AI Operating Model
 
 ## Data and Context Definition
 

@@ -107,7 +107,7 @@ Choose the channel that matches your app:
 
 - **Use the native plugin** when your app supports native plugins or skill packages (Codex, Claude Code, Pi, Gemini CLI, Copilot CLI, Cursor) for offline `SKILL.md` discovery and native skill pickers.
 - **Use the public OSM MCP server** (`https://mcp.onlinesourdough.com/mcp`) in MCP-capable apps without those plugin formats (such as OpenBot, Grok Bot or custom MCP clients).
-- **Keep your official Notion connection separate** in both cases — OSM supplies the public method, while your official Notion plugin/MCP owns access to your private `AI operating model`.
+- **Keep your official Notion connection separate** in both cases — OSM supplies the public method, while your official Notion plugin/MCP owns access to your private `AI Operating Model`.
 
 The plugin commands below follow the repository's current `main` branch, which can be ahead of the latest release. For a fixed version, including a client qualification, select a reviewed tag or commit using the [installation guide](docs/native-installation.md).
 
@@ -179,7 +179,7 @@ Apps that support MCP without the plugin formats above can connect directly to t
 - **Pinned release:** `https://mcp.onlinesourdough.com/v0.39.1/mcp`
 - **Health & SHA-256 verification:** `https://mcp.onlinesourdough.com/health`
 
-It is **public, stateless, read-only and login-free**: it stores no user data, logs no requests, rejects credentials/cookies, and never accesses Notion. Your official Notion MCP remains separate and owns your Notion home. Because MCP-only apps do not install local `SKILL.md` files, keep the same six-line short host instructions (from `osm_get_setup_guide`) in the app's persistent instructions or standing memory as the backbone pointing to your `AI operating model`.
+It is **public, stateless, read-only and login-free**: it stores no user data, logs no requests, rejects credentials/cookies, and never accesses Notion. Your official Notion MCP remains separate and owns your Notion home. Because MCP-only apps do not install local `SKILL.md` files, keep the same six-line short host instructions (from `osm_get_setup_guide`) in the app's persistent instructions or standing memory as the backbone pointing to your `AI Operating Model`.
 
 You can also run it offline over stdio (`node apps/mcp/stdio.mjs`), locally over Streamable HTTP (`node apps/mcp/http.mjs`), or self-host the included zero-dependency Cloudflare Worker (`apps/mcp/wrangler.jsonc`). See [apps/mcp/README.md](apps/mcp/README.md).
 
@@ -207,7 +207,7 @@ For a new or messy workspace, ask:
 You can also choose **OSM:setup** in Codex's skill picker. Bare `/setup` may
 select a different installed plugin. Setup is a conversation: it asks only
 what is missing, helps locate the material for one useful task, and builds your
-**AI operating model** with the existing method icons. No API key is needed for
+**AI Operating Model** with the existing method icons. No API key is needed for
 the ordinary official Notion connection. You can work through it yourself,
 prepare before a client session, or continue with a facilitator from saved answers.
 
