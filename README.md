@@ -292,8 +292,8 @@ The [architecture](docs/architecture.md) explains the responsibilities.
 Start with the [documentation guide](docs/README.md) for method concepts,
 installation, contributor material and dated evidence. The
 [versioned overview](docs/osm.md) travels with the plugin, so agents can read
-it locally without depending on a website. Resources can display selected
-repo-owned documentation; it does not supply the running agent's skills.
+it locally without depending on a website. The public setup page on Resources
+is written in Notion. It does not supply the running agent's skills.
 
 [GitHub Releases](https://github.com/onlinesourdough/OSM-plugin/releases) owns
 published versions. Open issues and draft pull requests describe work in
@@ -301,8 +301,10 @@ progress, not installed capabilities. Contributors start with [AGENTS.md](AGENTS
 OSM is open source under the [MIT license](LICENSE).
 
 [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a)
-is the public method guide, with setup, the definition template, source handling
-and diagrams. The repository versions the installable plugin and technical
+is the public method guide, with the definition template, source handling
+and diagrams. The human setup page is the
+[OSM setup guide](https://resources.onlinesourdough.com/collection/in-practice/osm-setup-guide/)
+on Resources. The repository versions the installable plugin and technical
 implementation. Follow the installed skills or their matching Git tag for
 execution. The [publication procedure](docs/publication.md) records the exact
 source bindings and automation limits.
