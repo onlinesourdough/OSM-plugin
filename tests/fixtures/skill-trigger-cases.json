@@ -78,12 +78,12 @@
   },
   "unslop": {
     "should_trigger": [
-      "Remove AI tells from your own reply.",
-      "Clean up the AI phrasing in the report you wrote as the assistant.",
-      "Edit your own Notion status page to remove AI tells."
+      "Cut AI tells from this draft before I share it.",
+      "Clean up the AI phrasing in this report and Notion page.",
+      "Remove AI-sounding filler from this post and reply."
     ],
     "should_not_trigger": [
-      "Edit this email that will go out under my name.",
+      "Compute the total of these invoice amounts.",
       "Keep this quoted passage exactly as written."
     ]
   }
