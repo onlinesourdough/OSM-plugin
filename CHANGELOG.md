@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.39.0
+## 0.39.1
+
+- Bind the updated Notion `Setup & tools` guide original (hybrid Native Plugin vs. public OSM MCP server guidance and MCP-only host backbone) to `0.39.1` and rebuild `docs-publisher/public-guide.json`, `runtime/notion/*`, and `apps/mcp/bundle.generated.mjs`.
+- Retain `v0.39.0` as an unpublished source tag: its release job stopped by design because the live Notion `Setup & tools` page had been updated before enabled public-guide parity ran on `a0047de`. All skill-source bytes are identical.
+
+## 0.39.0 — unpublished source tag
 
 - Add a minimal, zero-dependency, login-free [OSM MCP server](docs/mcp-server.md) (`apps/mcp/`) supporting Streamable HTTP (Cloudflare Workers and local Node) and offline stdio so MCP-capable apps without native plugin support (such as OpenBot, Grok Bot and custom MCP clients) can consume the exact reviewed GitHub release at `https://mcp.onlinesourdough.com/mcp` (and pinned `/v0.39.0/mcp`) while keeping the official Notion MCP separate.
 - Clarify hybrid distribution across `README.md`, `docs/osm.md`, `docs/mcp-server.md`, `docs/native-installation.md` and `apps/mcp/README.md`: when to use native plugins vs. public OSM MCP vs. official Notion MCP, and how the six-line short host instructions serve as the backbone on MCP-only hosts.

@@ -11,7 +11,7 @@ OSM ships one reviewed method from GitHub (`skills/` and `docs/osm.md`) through 
 ## Live endpoint and version pinning
 
 - **Latest reviewed release:** `https://mcp.onlinesourdough.com/mcp`
-- **Pinned release:** `https://mcp.onlinesourdough.com/v0.39.0/mcp` (refuses mismatched versions with `404` instead of silently serving different instructions)
+- **Pinned release:** `https://mcp.onlinesourdough.com/v0.39.1/mcp` (refuses mismatched versions with `404` instead of silently serving different instructions)
 - **Health and checksum:** `https://mcp.onlinesourdough.com/health`
 
 ## Backbone on MCP-only apps (OpenBot, Grok Bot and similar)
