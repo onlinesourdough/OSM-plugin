@@ -50,6 +50,42 @@ password-manager item names, and a recorded route never grants access by itself.
   the gap rather than copying records, uploading heavy media or storing secrets
   in Notion.
 
+## Recommended access and vault pattern (optional)
+
+This is optional, vendor-neutral best-practice guidance — not a mandatory tool
+or a live-qualified third-party integration.
+
+1. **Official connectors first.** Use the host app's official connector or MCP
+   (such as Notion, GitHub or Cloudflare) whenever it covers the required scope.
+   Do not place a third-party credential aggregator in front of services that
+   already have an official connector.
+2. **Separate human and machine access for everything else.** Never connect an
+   agent broadly to a personal password vault:
+   - **Model-blind filling vs. blast radius:** Model-blind vaults (such as a
+     host's built-in browser vault or approved autofill) keep raw passwords out
+     of the model context, which prevents plaintext password leaks during prompt
+     injection — it does **not** prevent an injected agent from misusing an
+     already signed-in session or touching unrelated accounts. Limit which
+     accounts and scopes an agent can reach.
+   - **Interactive website logins:** Sites without a connector or API stay in a
+     human-approved browser session or that host's built-in vault (for example,
+     OpenBot Vault or Grok Bot Vault). Built-in app vaults are host-local and
+     are not shared across apps; CLI/IDE agents such as Codex, Claude Code,
+     Cursor and OpenCode rely on OS keychains or external vault/MCP setups
+     rather than a shared free cross-app login vault.
+   - **Shared API keys across hosts:** Keep unattended or cross-host API keys in
+     a separate machine-scoped store (such as a dedicated machine project in a
+     secrets manager like Bitwarden Secrets Manager or a separate 1Password
+     Service Account vault, never the personal vault). Environment-variable
+     injection into a child process reduces secret sprawl in files, but is not
+     model isolation if the agent can run unrestricted shell commands. Never use
+     a password manager's broad personal-vault MCP server as an agent default.
+
+There is not yet one free, plug-and-play, model-blind shared vault across all
+agent apps for both browser logins and API keys. OSM keeps Notion strictly for
+non-secret routing metadata (`provider`, `account`, `scope`, `reader`) and
+revisits this recommendation as native standards mature.
+
 ## Rotate or recover
 
 Before switching an existing route, test the replacement in the intended
