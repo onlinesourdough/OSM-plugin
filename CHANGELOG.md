@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.39.0
+
+- Add a minimal, zero-dependency, login-free [OSM MCP server](docs/mcp-server.md) (`apps/mcp/`) supporting Streamable HTTP (Cloudflare Workers and local Node) and offline stdio so MCP-capable apps without native plugin support (such as OpenBot, Grok Bot and custom MCP clients) can consume the exact reviewed GitHub release at `https://mcp.onlinesourdough.com/mcp` (and pinned `/v0.39.0/mcp`) while keeping the official Notion MCP separate.
+- Clarify hybrid distribution across `README.md`, `docs/osm.md`, `docs/mcp-server.md`, `docs/native-installation.md` and `apps/mcp/README.md`: when to use native plugins vs. public OSM MCP vs. official Notion MCP, and how the six-line short host instructions serve as the backbone on MCP-only hosts.
+- Document optional connector-first and separate-vault credential best practices (`osm-setup` `4.0.2`, `skills/osm-setup/references/credentials.md`, `skills/osm-data-context/references/architecture.md`) without tying OSM to a specific third-party vault or proxy vendor.
+- Align Codex skill display names (`OSM:log`, `OSM:prime`, `OSM:unslop` via `agents/openai.yaml`), broaden `unslop` (`1.1.0`) to cut AI tells across any writing and link it from `osm-human-writing` (`2.1.2`), and set `https://onlinesourdough.com/` in plugin metadata (`websiteURL` / `homepage`).
+- Bind the eight unchanged Notion guide originals to `0.39.0` and rebuild `apps/mcp/bundle.generated.mjs`, the bundled public guide and the optional Notion runtime.
+
 ## 0.38.1
 
 - Keep external operational systems (such as accounting and established CRM) and heavy media at their owner with lightweight, non-granting references in Notion across plans, unless the owner explicitly chooses Notion as that media's home (`osm-setup` `4.0.1`, `osm-prime` `1.2.5`, `architecture.md`, `content-foundation.md`).

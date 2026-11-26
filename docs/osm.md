@@ -1,6 +1,6 @@
 # The Onlinesourdough Method
 
-OSM version: 0.38.1
+OSM version: 0.39.0
 
 **Business first. Productivity built in.**
 
@@ -146,7 +146,14 @@ once OSM works and nothing still uses it. If OSM fails, disable it and enable
 has the details for each app.
 
 OSM supplies one skill library with native installation metadata for several
-agent apps. Install it separately in each app you choose; installation in one
+agent apps, plus a public, stateless, login-free
+[OSM MCP server](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/mcp-server.md)
+(`https://mcp.onlinesourdough.com/mcp`, or offline via `apps/mcp/`) for
+MCP-capable apps without native plugin support (such as OpenBot, Grok Bot or
+custom MCP clients). Choose the native plugin when your app supports native
+plugin discovery, and choose OSM MCP when it does not; both pair with your
+separate official Notion connection and the same six-line host instruction
+backbone. Install it separately in each app you choose; installation in one
 does not configure the others. Each route needs its own verification of
 discovery, access, and behavior. The native harness owns the
 model, tools, credentials, permissions, settings, and user interface. OSM

@@ -103,10 +103,13 @@ OSM is open source under the MIT license. Install directly from this public
 GitHub repository; no invitation is required. Your app uses its normal Git
 setup. Never paste access tokens into a chat.
 
-Choose one of the routes below. These commands follow the repository's current
-`main` branch, which can be ahead of the latest release. For a fixed version,
-including a client qualification, select a reviewed tag or commit using the
-[installation guide](docs/native-installation.md).
+Choose the channel that matches your app:
+
+- **Use the native plugin** when your app supports native plugins or skill packages (Codex, Claude Code, Pi, Gemini CLI, Copilot CLI, Cursor) for offline `SKILL.md` discovery and native skill pickers.
+- **Use the public OSM MCP server** (`https://mcp.onlinesourdough.com/mcp`) in MCP-capable apps without those plugin formats (such as OpenBot, Grok Bot or custom MCP clients).
+- **Keep your official Notion connection separate** in both cases — OSM supplies the public method, while your official Notion plugin/MCP owns access to your private `AI operating model`.
+
+The plugin commands below follow the repository's current `main` branch, which can be ahead of the latest release. For a fixed version, including a client qualification, select a reviewed tag or commit using the [installation guide](docs/native-installation.md).
 
 ### Codex
 
@@ -170,15 +173,15 @@ package, so we do not describe that route as plug and play. See the
 
 ### MCP server (OpenBot, Grok Bot and other MCP apps)
 
-Apps that support MCP without the plugin formats above can load the exact same
-reviewed GitHub release through the open-source [OSM MCP server](docs/mcp-server.md)
-(`apps/mcp/`). It is **public, stateless, read-only and login-free**: it stores
-no user data, logs no requests, rejects credentials/cookies, and never accesses
-Notion. Your official Notion MCP remains separate and owns your Notion home.
+Apps that support MCP without the plugin formats above can connect directly to the public, open-source [OSM MCP server](docs/mcp-server.md):
 
-Run it offline over stdio (`node apps/mcp/stdio.mjs`), locally over Streamable
-HTTP (`node apps/mcp/http.mjs`), or deploy the included zero-dependency
-Cloudflare Worker (`apps/mcp/wrangler.jsonc`). See [apps/mcp/README.md](apps/mcp/README.md).
+- **Latest release:** `https://mcp.onlinesourdough.com/mcp`
+- **Pinned release:** `https://mcp.onlinesourdough.com/v0.39.0/mcp`
+- **Health & SHA-256 verification:** `https://mcp.onlinesourdough.com/health`
+
+It is **public, stateless, read-only and login-free**: it stores no user data, logs no requests, rejects credentials/cookies, and never accesses Notion. Your official Notion MCP remains separate and owns your Notion home. Because MCP-only apps do not install local `SKILL.md` files, keep the same six-line short host instructions (from `osm_get_setup_guide`) in the app's persistent instructions or standing memory as the backbone pointing to your `AI operating model`.
+
+You can also run it offline over stdio (`node apps/mcp/stdio.mjs`), locally over Streamable HTTP (`node apps/mcp/http.mjs`), or self-host the included zero-dependency Cloudflare Worker (`apps/mcp/wrangler.jsonc`). See [apps/mcp/README.md](apps/mcp/README.md).
 
 ## Your context home
 
@@ -256,6 +259,7 @@ work before changing its methods.
 | Gemini CLI | `gemini extensions update osm` | `gemini extensions uninstall osm` |
 | Copilot CLI | `copilot plugin marketplace update online-sourdough`, then `copilot plugin update osm@online-sourdough` | `copilot plugin uninstall osm@online-sourdough` |
 | Cursor | Refresh the selected marketplace and manage OSM in Customize | Remove OSM in Customize |
+| MCP server (OpenBot, Grok Bot, MCP apps) | `https://mcp.onlinesourdough.com/mcp` tracks the latest published release; switch `/vX.Y.Z/mcp` when pinning a release | Remove the `osm` MCP server entry in your app |
 
 Pinned versions and local sources need their own update selection. In Pi, use
 the exact registered source from `pi list` when removing a pinned install.
