@@ -46,6 +46,11 @@ jobs:
           npm run build --prefix apps/notion
           git diff --exit-code -- runtime/notion
           npm test --prefix apps/notion
+      - name: Build and verify the OSM MCP server
+        run: |
+          node apps/mcp/build.mjs
+          git diff --exit-code -- apps/mcp/bundle.generated.mjs
+          node --test apps/mcp/mcp.test.mjs
       - name: Validate package and local documentation
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
