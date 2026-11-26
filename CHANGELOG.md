@@ -3,6 +3,7 @@
 ## 0.39.1
 
 - Bind the updated Notion `Setup & tools` guide original (hybrid Native Plugin vs. public OSM MCP server guidance and MCP-only host backbone) to `0.39.1` and rebuild `docs-publisher/public-guide.json`, `runtime/notion/*`, and `apps/mcp/bundle.generated.mjs`.
+- OSM MCP server instructions now tell MCP-only hosts that the six-line host instructions resolve through this server ("Use OSM Prime" / "run OSM Log" → `osm_get_skill`), and to offer Setup when no pointer exists yet.
 - Retain `v0.39.0` as an unpublished source tag: its release job stopped by design because the live Notion `Setup & tools` page had been updated before enabled public-guide parity ran on `a0047de`. All skill-source bytes are identical.
 
 ## 0.39.0 — unpublished source tag
