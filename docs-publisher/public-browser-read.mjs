@@ -61,7 +61,7 @@ async function observe(page, input, timing) {
     await page.waitForFunction(markers => {
       const text = document.body?.innerText?.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase() || '';
       return markers.every(marker => text.includes(marker.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase()));
-    }, input.markers, {timeout:budget(25000)});
+    }, input.markers, {timeout:budget(45000)});
     // One execution turn captures document identity and content together.
     const observation = await page.evaluate((selectedEntries = []) => ({
       url:window.location.href, text:document.body?.innerText || '',
