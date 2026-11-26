@@ -299,6 +299,13 @@ is written in Notion. It does not supply the running agent's skills.
 published versions. Open issues and draft pull requests describe work in
 progress, not installed capabilities. Contributors start with [AGENTS.md](AGENTS.md).
 OSM is open source under the [MIT license](LICENSE).
+Inspired by layered data refinement, including the medallion pattern associated
+with Databricks, and by semantic models as used in Microsoft Fabric and Power BI.
+The Data and Context Definition is OSM's small agreement about meaning, source
+ownership and retention. This is an independent method. It does not reproduce a
+lakehouse, a warehouse or a metric layer, and it does not claim those products'
+guarantees. The [Context Architecture](skills/osm-data-context/references/architecture.md)
+keeps the working rule.
 
 [The Onlinesourdough Method](https://gustavanderson.notion.site/The-Onlinesourdough-Method-40d6d2e17f568124af82ceb93dabf77a)
 is the public method guide, with the definition template, source handling
