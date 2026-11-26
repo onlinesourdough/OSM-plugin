@@ -419,11 +419,11 @@
       "authoritative_for": "The method overview: what OSM is, the foundation it builds and where each topic is explained",
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
-        "revision": "94ac801636ec3ae773db8aa116bfcec5b0cbaf27c8ba5c77e82636251928609e",
+        "revision": "184fc9e272cf951cd4b4e07269ab72cefb58def206794b6be5ffb1321aeb8c9a",
         "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-26T10:27:48+00:00",
-        "last_edited_time": "2026-11-25T11:51:00.000Z"
+        "read_at": "2026-11-26T10:57:34+00:00",
+        "last_edited_time": "2026-11-26T10:55:00.000Z"
       }
     },
     {
@@ -440,11 +440,11 @@
       "authoritative_for": "The method explanation: data and context, what each place owns, shared method and personal configuration",
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
-        "revision": "847060feb76d6891d29c5a2f27029eaeb582c642856453d5b700d5bc52a20c33",
+        "revision": "606e04faf3e96aba859549180706038473527bc9ac8e5b97849b6cbe3469e834",
         "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-26T10:27:48+00:00",
-        "last_edited_time": "2026-11-25T11:52:00.000Z"
+        "read_at": "2026-11-26T10:57:34+00:00",
+        "last_edited_time": "2026-11-26T10:55:00.000Z"
       }
     },
     {

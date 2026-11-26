@@ -1,4 +1,4 @@
-OSM helps solo founders and small teams give their AI useful business data and context. It is a method for setting up that foundation, putting it to work and keeping it useful. The reference setup uses Notion as a shared workspace.
+OSM helps founders and small teams give their AI useful business data and context. It is a method for setting up that foundation, putting it to work and keeping it useful. The reference setup uses Notion as a shared workspace.
 
 ## Two parts of one foundation
 
