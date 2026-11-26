@@ -1,4 +1,4 @@
-OSM helps solo founders and small teams give their AI useful business data and context. This guide explains the method, setup, templates and practical examples.
+OSM helps founders and small teams give their AI useful business data and context. This guide explains the method, setup, templates and practical examples.
 
 Notion provides shared context and a map to your tools. Your CRM, accounting, files and other systems keep their original records. Read the guide here, then use <mention url="https://app.notion.com/p/40d6d2e17f56812bb597fef2bdc1265d">Setup & tools</mention> to get started with the plugin.
 
