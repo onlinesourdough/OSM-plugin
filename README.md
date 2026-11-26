@@ -74,16 +74,16 @@ with me on your data, context and AI workflows.
 Use the [skill index](docs/skills.md) for entrypoints and the
 [architecture](docs/architecture.md) for the shared context procedures.
 
-[Agentic Systems](https://github.com/arcitai/agentic-systems) is an open-source framework for
+[Agentic System](https://github.com/arcitai/agentic-system) is an open-source framework for
 building and operating agentic systems. It brings Foundation, AgentOps and domain
 methods together across software, BI, defence and research, using T3 Code and
-native coding agents where appropriate. The method and Agentic Systems are
+native coding agents where appropriate. The method and Agentic System are
 independent; neither depends on nor installs the other. The project carries its
 accepted scope and relevant sources between them, while the selected environment
 owns tools, access and execution protection.
 
 For engineering preparation of a new or existing software project, use
-[Agentic Foundation](https://github.com/arcitai/agentic-systems/tree/main/foundation/agentic-foundation)
+[Agentic Foundation](https://github.com/arcitai/agentic-system/tree/main/foundation/agentic-foundation)
 directly in Codex or Claude; T3 Code is not required for that. OSM does not
 install it or copy its content. Without a selected foundation method, OSM
 reports the gap instead of improvising one.
