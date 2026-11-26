@@ -7,13 +7,13 @@ A minimal, open-source, zero-dependency **Model Context Protocol (MCP)** server 
 OSM uses the same hybrid model proven by Notion:
 
 - **Plugin-capable apps** (Codex, Claude Code, Cursor, Gemini CLI, Copilot CLI, Pi) keep the official native OSM plugin from GitHub for native auto-triggering and offline `SKILL.md` discovery.
-- **MCP-capable apps without that plugin format** (OpenBot, Grok Bot, custom MCP clients) connect once to the public OSM MCP server (`https://mcp.onlinesourdough.com/mcp`, or pinned `/v0.39.0/mcp`) and receive the exact same reviewed GitHub release — no manual ZIP repackaging, no stale local copies.
+- **MCP-capable apps without that plugin format** (OpenBot, Grok Bot, custom MCP clients) connect once to the public OSM MCP server (`https://mcp.onlinesourdough.com/mcp`, or pinned `/v0.39.1/mcp`) and receive the exact same reviewed GitHub release — no manual ZIP repackaging, no stale local copies.
 - **Keep the short host instructions as your backbone:** Because MCP-only apps do not store local `SKILL.md` files, put the six-line host bridge (from `osm_get_setup_guide`) in the app's persistent instructions or standing memory, alongside your separate official Notion MCP connection.
 
 ## Public hosted endpoint
 
 - Latest release: `https://mcp.onlinesourdough.com/mcp`
-- Pinned release: `https://mcp.onlinesourdough.com/v0.39.0/mcp`
+- Pinned release: `https://mcp.onlinesourdough.com/v0.39.1/mcp`
 - Health and bundle checksum: `https://mcp.onlinesourdough.com/health`
 
 ## Privacy and security guarantee
@@ -55,7 +55,7 @@ Run locally over Streamable HTTP:
 ```sh
 node apps/mcp/http.mjs
 # POST http://127.0.0.1:8787/mcp
-# POST http://127.0.0.1:8787/v0.39.0/mcp
+# POST http://127.0.0.1:8787/v0.39.1/mcp
 # GET  http://127.0.0.1:8787/health
 ```
 

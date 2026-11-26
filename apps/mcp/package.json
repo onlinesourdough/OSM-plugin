@@ -1,6 +1,6 @@
 {
   "name": "osm-mcp-server",
-  "version": "0.39.0",
+  "version": "0.39.1",
   "private": true,
   "type": "module",
   "description": "Public, stateless, login-free MCP server exposing The Onlinesourdough Method skills, setup guide, references and release metadata.",

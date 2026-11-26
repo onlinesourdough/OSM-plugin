@@ -176,7 +176,7 @@ package, so we do not describe that route as plug and play. See the
 Apps that support MCP without the plugin formats above can connect directly to the public, open-source [OSM MCP server](docs/mcp-server.md):
 
 - **Latest release:** `https://mcp.onlinesourdough.com/mcp`
-- **Pinned release:** `https://mcp.onlinesourdough.com/v0.39.0/mcp`
+- **Pinned release:** `https://mcp.onlinesourdough.com/v0.39.1/mcp`
 - **Health & SHA-256 verification:** `https://mcp.onlinesourdough.com/health`
 
 It is **public, stateless, read-only and login-free**: it stores no user data, logs no requests, rejects credentials/cookies, and never accesses Notion. Your official Notion MCP remains separate and owns your Notion home. Because MCP-only apps do not install local `SKILL.md` files, keep the same six-line short host instructions (from `osm_get_setup_guide`) in the app's persistent instructions or standing memory as the backbone pointing to your `AI operating model`.

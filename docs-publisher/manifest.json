@@ -13,9 +13,9 @@
   },
   "editions": {
     "released": {
-      "label": "v0.38.1",
-      "tag": "v0.38.1",
-      "commit": "7f2bf3b6ef9ee933d64515ab440903a993a1323e",
+      "label": "v0.39.0",
+      "tag": "v0.39.0",
+      "commit": "a0047deb282e90923766f685371314c3b896c5e4",
       "approved": true
     },
     "main-working": {
@@ -420,9 +420,9 @@
       "original": {
         "notion": "40d6d2e17f568124af82ceb93dabf77a",
         "revision": "94ac801636ec3ae773db8aa116bfcec5b0cbaf27c8ba5c77e82636251928609e",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-25T11:51:00.000Z"
       }
     },
@@ -441,9 +441,9 @@
       "original": {
         "notion": "40d6d2e17f56811885ced64930bb22ba",
         "revision": "847060feb76d6891d29c5a2f27029eaeb582c642856453d5b700d5bc52a20c33",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-25T11:52:00.000Z"
       }
     },
@@ -461,11 +461,11 @@
       "authoritative_for": "Setup and configuration explanation and its special cases: Notion access choices, provider API keys, agent workspace and tools",
       "original": {
         "notion": "40d6d2e17f56812bb597fef2bdc1265d",
-        "revision": "291dea42227ba19760fa0891a79826724378bc7d6863dc2aebe29ba38b32467b",
-        "edition": "0.39.0",
+        "revision": "26f4ceb64668c7c1ef06d0f46f42a9589ce97f3072cc5711da534d65dcc8926f",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
-        "last_edited_time": "2026-11-25T12:15:00.000Z"
+        "read_at": "2026-11-26T10:27:48+00:00",
+        "last_edited_time": "2026-11-26T10:28:00.000Z"
       }
     },
     {
@@ -483,9 +483,9 @@
       "original": {
         "notion": "40d6d2e17f56816da06ff15c39dcc038",
         "revision": "8f9f47cfd2c13a27ff75ca6192556f83ce83410465acc13355e3d3bd0104c37c",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-25T11:52:00.000Z"
       },
       "exports": [
@@ -524,9 +524,9 @@
       "original": {
         "notion": "40d6d2e17f56815eaf53cab824a40eb3",
         "revision": "eb4b1c19765ab05857304346bbc9d4b981dd6bdae08eb76bc184126602f60bba",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-23T10:44:00.000Z"
       }
     },
@@ -545,9 +545,9 @@
       "original": {
         "notion": "40d6d2e17f56818bb90ecdc2bf6397ce",
         "revision": "896f1822728540d9b23054cb0ca854b4730b767cfe2115cf0d3a3a21e20e7b1e",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-25T12:15:00.000Z"
       },
       "description": "Prime, Log, Dreaming and personal-method upkeep for the selected context home."
@@ -567,9 +567,9 @@
       "original": {
         "notion": "40d6d2e17f568113a397fb6ecd9b5fff",
         "revision": "75dbe7733f1a234990a6145e4a24ec4792a4926bd8b97012d7cb88a80fbc56d3",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-25T11:56:00.000Z"
       },
       "exports": [
@@ -600,9 +600,9 @@
       "original": {
         "notion": "40d6d2e17f5681f6accff01259bc2ab4",
         "revision": "59d48bc4365d26bfca566ec0b38906f235c167cbea5e980f1e88ae2ee87b8367",
-        "edition": "0.39.0",
+        "edition": "0.39.1",
         "reader": "notion-api-markdown-v2-stable-media/1",
-        "read_at": "2026-11-25T12:16:23+00:00",
+        "read_at": "2026-11-26T10:27:48+00:00",
         "last_edited_time": "2026-11-20T14:26:00.000Z"
       }
     },

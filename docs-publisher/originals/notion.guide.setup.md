@@ -18,7 +18,17 @@ Reading instructions, installing a package, connecting an account and proving it
 
 ## Install and use OSM
 
-[Install OSM](https://github.com/onlinesourdough/OSM-plugin#install-in-your-app) · [Workspace setup](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/native-installation.md#start-with-a-clean-agent-workspace)
+[Install OSM](https://github.com/onlinesourdough/OSM-plugin#install-in-your-app) · [OSM MCP server](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/mcp-server.md) · [Workspace setup](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/native-installation.md#start-with-a-clean-agent-workspace)
+
+### Choose how to connect OSM
+
+OSM distributes the same reviewed method from GitHub through two complementary channels, always paired with your separate official Notion connection:
+
+| Option | What it provides | When to use it |
+| --- | --- | --- |
+| <b>Native plugin</b> | Local <code>SKILL.md</code> files, native pickers/slash commands and offline discovery | <b>Best default</b> for plugin-capable apps (Codex, Claude Code, Pi, Gemini CLI, Copilot CLI, Cursor). |
+| <b>Public OSM MCP server</b> (<code>https://mcp.onlinesourdough.com/mcp</code>) | Read-only MCP access to the exact same reviewed GitHub release — zero login, zero user data, no manual ZIP upkeep (pin with <code>/vX.Y.Z/mcp</code> when needed) | <b>Best fit</b> for MCP-capable apps without those plugin formats (such as OpenBot, Grok Bot or custom MCP clients). |
+| <b>Official Notion connector / MCP</b> | Authorized read/write access to your private Notion workspace and <code>AI operating model</code> | <b>Always separate.</b> OSM MCP only serves the public method and never touches Notion. |
 
 ### Set up through a conversation
 
@@ -73,7 +83,7 @@ An API key is an authentication credential. Notion remains the context home. Ext
 
 ## Short agent instructions
 
-Put this pointer in the selected host's instruction file, such as <code>AGENTS.md</code> or <code>CLAUDE.md</code>. Replace the URL with your own verified home; Prime reads the definition there.
+Put this pointer in the selected host's instruction file (such as <code>AGENTS.md</code> or <code>CLAUDE.md</code>) or, on MCP-only apps without a local instruction file (such as OpenBot or Grok Bot), in the app's persistent instructions or standing memory. When you use OSM via MCP instead of local skill files, these six lines act as the backbone connecting OSM MCP to your verified Notion home. Replace the URL with your own verified home; Prime reads the definition there.
 
 ```txt
 Use OSM Prime when relevant context is missing at the start or after resuming.
@@ -90,7 +100,7 @@ A short description helps the app select a skill; it does not guarantee that eve
 
 Use the host's built-in workspace and tools first, including its browser, terminal and side panel when available. Use external apps when the built-in tools cannot do the work. Keep the same short context pointer in the selected host's instructions, with Prime at session start and Log at meaningful checkpoints or on request.
 
-Full access, action approvals and computer use are host settings. Choose them for the intended task and workspace and verify the effective tools and permissions. [Host setup for Codex, Claude Code, Antigravity, Cursor and Pi](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/native-installation.md#start-with-a-clean-agent-workspace)
+Full access, action approvals and computer use are host settings. Choose them for the intended task and workspace and verify the effective tools and permissions. [Host setup for Codex, Claude Code, Antigravity, Cursor, Pi, OpenBot and Grok Bot](https://github.com/onlinesourdough/OSM-plugin/blob/main/docs/native-installation.md#start-with-a-clean-agent-workspace)
 
 ## Creator and optional help
 
