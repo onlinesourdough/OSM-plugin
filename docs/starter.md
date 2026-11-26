@@ -115,7 +115,7 @@ flowchart TB
     UNSLOP -.-> WORK
     WORK <-.-> COUNCIL
   end
-  subgraph HOME["Your Notion AI operating model home"]
+  subgraph HOME["Your Notion AI Operating Model home"]
     subgraph DEFINITION["Data and Context Definition · route and authority map"]
     KNOWLEDGE["Knowledge<br/>Start from verified direction and goals<br/>Business context and source map<br/>Maintain understanding through work"]
     MEMORY["Memory<br/>May start empty<br/>Keep genuine decisions and corrections"]

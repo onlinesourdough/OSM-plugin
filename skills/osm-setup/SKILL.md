@@ -69,7 +69,7 @@ calls back into Setup. Interview's new-connection route is separate:
    before mapping; follow the architecture's
    [record lifecycle](../osm-data-context/references/architecture.md#record-lifecycle).
    Before building, explain the foundation/adoption plan and open choices,
-   reusing answers. New roots use **AI operating model** untranslated and the
+   reusing answers. New roots use **AI Operating Model** untranslated and the
    [root template](../osm-data-context/assets/data-and-context-root.md) for the
    definition and existing public-guide icons. Start the body with the definition,
    then native databases; existing roots follow the owner's request/write policy.

@@ -40,7 +40,7 @@ changes. Read the destination before changing it.
 Match useful length: a short decision stays short; a long guide may stay long.
 Do not imitate bloated agent logs or broken recent examples. The selected root
 template and schema govern new home structures; an incidental neighbour does
-not replace the AI operating model title, definition-first layout or approved icons.
+not replace the AI Operating Model title, definition-first layout or approved icons.
 
 ## Say the useful part first
 

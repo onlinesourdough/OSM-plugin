@@ -6,7 +6,7 @@ OSM ships one reviewed method from GitHub (`skills/` and `docs/osm.md`) through 
 | --- | --- | --- |
 | **Native plugin** (`.codex-plugin`, `.claude-plugin`, `.cursor-plugin`, `gemini-extension.json`, Pi) | Local `SKILL.md` files, native pickers/slash commands and offline discovery | **Best default** for apps with native plugin support (Codex, Claude Code, Pi, Gemini CLI, Copilot CLI, Cursor). |
 | **Public OSM MCP server** (`https://mcp.onlinesourdough.com/mcp`) | Live read-only access to the exact same reviewed GitHub release over MCP, with zero login and no manual ZIP repackaging | **Best fit** for MCP-capable apps without those native plugin formats (such as OpenBot, Grok Bot or custom MCP clients). |
-| **Official Notion MCP / connector** (separate) | Authorized read/write access to your private Notion workspace and `AI operating model` | **Always separate.** OSM MCP only serves the public method; your official Notion connection owns your private context. |
+| **Official Notion MCP / connector** (separate) | Authorized read/write access to your private Notion workspace and `AI Operating Model` | **Always separate.** OSM MCP only serves the public method; your official Notion connection owns your private context. |
 
 ## Live endpoint and version pinning
 
@@ -20,7 +20,7 @@ Because MCP-only apps do not install local `SKILL.md` files, they still need a l
 
 1. Connect the public OSM MCP server (`https://mcp.onlinesourdough.com/mcp`) — no account or API key required.
 2. Connect your official Notion MCP / connector separately.
-3. Put the same six-line short host instructions (returned by `osm_get_setup_guide` and kept in [`skills/osm-data-context/assets/bridge.md`](../skills/osm-data-context/assets/bridge.md)) in the app's persistent instructions or standing memory (for example OpenBot agent instructions / `AGENTS.md` or Grok Bot persistent instructions), pointing `Data and Context:` to your verified Notion `AI operating model` URL.
+3. Put the same six-line short host instructions (returned by `osm_get_setup_guide` and kept in [`skills/osm-data-context/assets/bridge.md`](../skills/osm-data-context/assets/bridge.md)) in the app's persistent instructions or standing memory (for example OpenBot agent instructions / `AGENTS.md` or Grok Bot persistent instructions), pointing `Data and Context:` to your verified Notion `AI Operating Model` URL.
 
 That way the agent loads OSM Prime, Setup, Log, Dreaming, Human Writing, Unslop, Interview or Council on demand from OSM MCP and reads/updates your private context through your own official Notion connection.
 
@@ -28,7 +28,7 @@ That way the agent loads OSM Prime, Setup, Log, Dreaming, Human Writing, Unslop,
 
 - **Zero login and zero authentication.** You never sign in to OSM MCP, and HTTP requests carrying `Authorization` or `Cookie` headers are rejected with `400`.
 - **Zero user data and zero logging.** The server is stateless and read-only; it serves only the public, open-source OSM method text compiled from the reviewed repository release.
-- **Separate from your Notion workspace.** OSM MCP never receives Notion tokens or customer context. Your official Notion MCP remains a separate connection that owns access to your AI operating model.
+- **Separate from your Notion workspace.** OSM MCP never receives Notion tokens or customer context. Your official Notion MCP remains a separate connection that owns access to your AI Operating Model.
 - **Verifiable bytes.** Every file and the full bundle carry SHA-256 digests (`osm_version`), and versioned endpoints (`/vX.Y.Z/mcp`) refuse mismatched versions instead of silently serving different instructions.
 
 ## Tools

@@ -20,7 +20,7 @@ OSM uses the same hybrid model proven by Notion:
 
 - **No login, no authentication, no accounts.** HTTP requests carrying `Authorization` or `Cookie` headers are explicitly rejected with `400`.
 - **No user data, no request logging, no tracking.** Worker observability logging is disabled; the server is 100% stateless and read-only.
-- **Method-only.** This server never touches Notion or customer workspaces. Your official Notion MCP stays separate and owns your AI operating model.
+- **Method-only.** This server never touches Notion or customer workspaces. Your official Notion MCP stays separate and owns your AI Operating Model.
 - **Reproducible from GitHub.** `node apps/mcp/build.mjs` compiles `skills/` and `docs/osm.md` into `bundle.generated.mjs` with per-file SHA-256 checksums and an overall bundle SHA-256 digest. Pinned version routes (`/vX.Y.Z/mcp`) reject mismatched versions with `404`.
 
 ## Exposed MCP tools

@@ -12,7 +12,7 @@ runtime.
 2. **Select the boundary.** Find the existing home or the selected workspace
    for a new one. Use a parent when needed; the official connector can create a
    private root directly where supported. This selects scope, not stores yet.
-   The default new root title is exactly "AI operating model", regardless of
+   The default new root title is exactly "AI Operating Model", regardless of
    the conversation language. Preserve an existing owner's title. An
    internal token cannot bootstrap an ungranted first root: the person creates or
    selects that page first, unless a separately authorized existing route can.
