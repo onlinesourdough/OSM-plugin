@@ -9,7 +9,7 @@ properties and useful views, access and readiness; "guide" in these references
 means the root entry. OSM supplies the method, never company data. A skill guides
 the running agent; it is not a background sync.
 
-OSM is an AI-assisted method and framework for solo founders and small teams.
+OSM is an AI-assisted method and framework for founders and small teams.
 Data and context are its two foundation parts, and skills sit inside context.
 Notion holds its shared definition and selected business context. The definition
 is a gateway to the actual sources, their access routes and handling rules.

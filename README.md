@@ -54,7 +54,7 @@ Your context stays in a home you choose, in Notion. The app
 provides the models, tools and permissions; the method helps the assistant find and
 maintain the context it needs.
 
-I'm Gustav Online (https://gustavonline.com/), the founder of
+I am Gustav Online (https://gustavonline.com/), the founder of
 onlinesourdough (https://onlinesourdough.com/). For optional hands-on help,
 The Fermentary (https://onlinesourdough.com/fermentary/) offers ongoing 1:1 work
 with me on your data, context and AI workflows.
